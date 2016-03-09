@@ -1,0 +1,74 @@
+\useoutertheme[right]{}
+
+    
+    \newenvironment{hframe}[0]{\begin{frame}\setRL}{\end{frame}}
+    \newcommand{\hframetitle}[1]{\frametitle{\hfill\RL{#1}}}
+    \newcommand{\hframesubtitle}[1]{\framesubtitle{\hfill\RL{#1}}}
+    \newcommand{\hsection}[1]{\section{\RL{#1}}}
+    \newcommand{\hsubsection}[1]{\subsection{\RL{#1}}}
+    \newcommand{\hsubsubsection}[1]{\subsubsection{\RL{#1}}}
+    \newtheorem{hclaim}[theorem]{\RL{טענה}}
+    
+    
+    \begin{document}
+		
+		\begin{frame}{My frame}
+			Text
+		\end{frame}
+
+		\begin{frame}{My RTL  frame}
+		\begin{RTL}
+			\begin{itemize}
+				\item First item 
+				\item Second item 
+				\item Third item 
+				\item
+פריט רביעי
+        \item עוד פריט ארוך במיוחד!
+			\end{itemize}
+		\end{RTL}
+		\end{frame}
+
+		\begin{RTL}
+		\begin{frame}{My frame inside RTL}
+			\begin{itemize}
+				\item First item 
+				\item Second item 
+				\item Third item 
+				\item פריט רביעי
+			\end{itemize}
+		\end{frame}
+		\end{RTL}
+
+		\begin{frame}{My RIGHT TO LEFT frame}
+			\setRTL
+		 	First second third fourth	
+		\end{frame}
+
+	
+
+    
+    \begin{hframe}
+		\htitle{זהו השקף הקראשון}
+    \end{hframe}
+    
+    \hsection{הקדמה}
+    \hsubsection{מבט על beamer}
+    
+    \begin{hframe}
+      \hframetitle{תכונות של המחלקה בימר}
+      \begin{itemize}
+      \item<1->  מחלקת LaTeX רגילה.
+      \item<2-> מעברים קצת בעייתיים.
+      \item<3-> לא דרושה תוכנה חיצונית.      
+      \end{itemize}
+    \end{hframe}
+    
+    \begin{hframe}
+    \begin{hclaim}[עברית ב-Beamer]
+    העברית ב-\LaTeX-Beamer סבירה למדי.
+    \end{hclaim}
+    ואפשר גם לכתוב טקסט מחוץ לבלוק.
+    \end{hframe}
+    
+    \end{document}

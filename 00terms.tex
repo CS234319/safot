@@ -1,0 +1,105 @@
+\newglossary{engheb}{eh}{eho}{\RL{מילון מונחים (אנגלית/עברית)}}
+\newglossary{hebeng}{he}{heo}{\RL{מילון מונחים (עברית/אנגלית)}}
+\makeglossaries
+\defglsdisplayfirst[hebeng]{#1\glsadd{#2}\footnote{\glslabel=\LR{#2}}}
+
+\newcommand\newPhrase[2]{%
+  \newglossaryentry{#1}{type=hebeng,name=#1,description=#2}%
+  \newglossaryentry{#2}{type=engheb,name=#2,description=\RL{#1},nonumberlist}%
+}
+\newcommand\newTerm[3]{%
+  \newPhrase{#1}{#3}%
+  \expandafter\def\csname#1\endcsname{\gls{#1}\xspace}%
+  \expandafter\def\csname#2\endcsname{\glsdisp{#1}{#2}\xspace}%
+}
+
+\newcommand\term[2][\relax]{\ifx#1\relax\gls{#2}\else\glsdisp{#1}{#2}\fi}
+\let⌘מונח=⌘term
+\let⌘צירוף␣חדש=\newPhrase
+\let\מונח␣חדש=\newTerm
+⌘מונח␣חדש{גופן}{גופנים}{font}
+⌘מונח␣חדש{הסתרה}{הסתרות}{hiding}
+⌘מונח␣חדש{העמסה}{העמסות}{overloading}
+⌘מונח␣חדש{הגדרה}{הגדרות}{definition}
+⌘מונח␣חדש{הכרזה}{הכרזות}{declaration}
+⌘מונח␣חדש{סביבה}{סביבות}{environment}
+⌘מונח␣חדש{ביטוי}{ביטויים}{expression}
+⌘מונח␣חדש{בריח}{בריחים}{opener}
+⌘מונח␣חדש{גדר}{גדרות}{delimiter}
+⌘מונח␣חדש{הערה}{הערות}{comment}
+⌘מונח␣חדש{הצבה}{הצבה}{assignment}
+⌘מונח␣חדש{טיפוס}{טיפוסים}{type}
+⌘מונח␣חדש{טכסט}{טכסטים}{text}
+⌘מונח␣חדש{יבוא}{יבואים}{import}
+⌘מונח␣חדש{ישות}{ישויות}{entity}
+⌘מונח␣חדש{כוכבית}{כוכביות}{asterisk}
+⌘מונח␣חדש{לוכסן}{לוכסנים}{slash character}
+⌘מונח␣חדש{מהדר}{מהדרים}{compiler}
+⌘מונח␣חדש{מוסכמה}{מוסכמות}{convention}
+⌘מונח␣חדש{מזהה}{מזהים}{identifier}
+⌘מונח␣חדש{מחלקה}{מחלקות}{class}
+⌘מונח␣חדש{מילה שמורה}{מילים שמורות}{reserved word}
+⌘מונח␣חדש{מילוט}{מילוטים}{escaping}
+⌘מונח␣חדש{מילולון}{מילולונים}{literal}
+⌘מונח␣חדש{מפריד}{מפרידים}{separator}
+⌘מונח␣חדש{מפרש}{מפרשים}{interpreter}
+⌘מונח␣חדש{משתנה}{משתנים}{variable}
+⌘מונח␣חדש{סדרית}{סדריות}{string}
+⌘מונח␣חדש{סולמית}{סולמיות}{hash sign}
+⌘מונח␣חדש{סטאטית}{סטאטיות}{static}
+⌘מונח␣חדש{ספריה}{ספריות}{library}
+⌘מונח␣חדש{עורך}{עורכים}{text editor}
+⌘מונח␣חדש{פקודה}{פקודות}{command}
+⌘מונח␣חדש{פתיח}{פתיחים}{closer}
+⌘מונח␣חדש{קבוע}{קבועים}{constant}
+⌘מונח␣חדש{קינון}{קינונים}{nesting}
+⌘מונח␣חדש{שגרה}{שגרות}{routine}
+⌘מונח␣חדש{תו ממלט}{תוים ממלטים}{escaping character}
+⌘צירוף␣חדש{מזהה שמור}{reserved identifier}
+⌘צירוף␣חדש{קבוע הולרית'}{Hollerith constant}
+⌘צירוף␣חדש{מילת מפתח}{keyword}
+⌘צירוף␣חדש{קבוצה מוגדרת רקורסיבית}{recursively defined set}
+⌘צירוף␣חדש{שרשור}{concatenation}
+⌘צירוף␣חדש{גופן ברוחב קבוע}{monospace font}
+⌘צירוף␣חדש{גופן יחסי}{proportional font}
+⌘צירוף␣חדש{הזחה}{indentation}
+⌘צירוף␣חדש{גידור הגדר}{delimiter collision}
+⌘מונח␣חדש{זרז}{זרזים}{prompt}
+⌘צירוף␣חדש{טבלת ערבול}{hash table}
+⌘צירוף␣חדש{טיפוס מורכב}{compound type}
+⌘צירוף␣חדש{לוכסן הפוך}{backslash}
+⌘צירוף␣חדש{מזהים מוגדרים מראש}{predefined identifier}
+⌘צירוף␣חדש{יבילה}{portable}
+⌘צירוף␣חדש{מזהי ספריה}{library identifier}
+⌘צירוף␣חדש{מטבע לשון תכנותית}{programmatic idiom}
+⌘צירוף␣חדש{מעבד מקדים}{preprocessor}
+⌘צירוף␣חדש{מעטפת פקודות}{command shell}
+⌘צירוף␣חדש{מערכת הפעלה}{operating system}
+⌘צירוף␣חדש{סביבת פיתוח אינטראקטיבית}{IDE: Interactive Development Environment}
+⌘צירוף␣חדש{עיבוד מקדים}{preprocessing}
+⌘צירוף␣חדש{פלט סטנדרטי}{standard output}
+⌘צירוף␣חדש{קלט סטנדרטי}{standard input}
+⌘צירוף␣חדש{תו קו תחתון}{underscocre}
+
+
+
+    
+⌘פקודה␣חדשה⌘אוקאם{אוקאם⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘אייפל{אייפל⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘אלגול{אלגול⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘גאוה{גָ'וָה⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘גו{⌘אנגלית{⌘Go}⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘דואל{דואר אלקטרוני⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘טיורינג{טיורינג⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘לינוקס{גנו/לינוקס⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘פורטרן{פורטרן⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘פייתון{פיית'ון⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘פלט{פלט⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘פסקל{פסקל⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘פרולוג{פרולוג⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘צרץ{צ'רץ⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘קלט{קלט⌘שמר␣רווחים}
+⌘פקודה␣חדשה⌘סי{%
+\unskip~\LR{C}⌘xspace}
+
+
