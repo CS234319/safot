@@ -12,7 +12,7 @@ LATEX          = $(LATEX_COMMAND) $(LATEX_FLAGS)
 LOCALTEXMF     =  ~/texmf   #  Comment or  change  if necessary.
 MAIN           =  00
 SOURCES        =  $(wildcard *.sty *.tex) $(LISTINGS) Makefile
-TARGETS        =  $(MAIN).pdf
+TARGETS        =  $(MAIN).pdf 
 TMP 					 := $(shell mktemp -d)
 
 # This is our first target. It would become your default if you include this
@@ -144,6 +144,7 @@ garbage := $(sort $(wildcard \
 	*.maf                    \
 	*.mtc                    \
 	*.mtc[0-9]               \
+	*.mtc[0-9][0-9]          \
 	*.o                      \
 	*.out                    \
 	*.run.xml                \
@@ -152,6 +153,7 @@ garbage := $(sort $(wildcard \
 	*.synctex.gz             \
 	$(TARGETS)               \
 	*.toc                    \
+	hello.c                  \
 	*.vtc                    \
 ))
 G0 := $(words $(garbage)) # 0th moment, i.e., garbage count

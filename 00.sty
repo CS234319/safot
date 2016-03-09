@@ -1,0 +1,149 @@
+% Global packages:
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[toc,section=section,footnote]{glossaries}
+\usepackage{glossary-long}
+\usepackage{yogi-unicode}
+
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{url} \def\UrlFont{\ttfamilylatin}
+\usepackage{xcolor}
+
+  \usepackage[tight]{minitoc}
+    \renewcommand\stctitle{תֹּכֶן הָעִנְיָנִים}
+    \renewcommand\ptctitle{\stctitle}
+    \renewcommand\mtctitle{\stctitle}
+
+  \usepackage{polyglossia}
+  \setmainlanguage[calendar=hebrew]{hebrew}
+  \setotherlanguage{english}
+  \setmainfont{Comic Sans MS}%Liberation Serif
+  \setromanfont{Comic Sans MS}
+  \setmonofont{DejaVu Sans Mono}
+  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+  \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+  \setromanfont{David CLM}
+  \let\hebrewfonttt\ttfamily
+
+% Fix section numbering
+\renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
+
+\newfontfamily\listingsfont[
+            Extension=.otf,
+						UprightFont=*-Regular,
+						BoldFont=*-Bold,
+						ItalicFont=*-Italic,
+						BoldItalicFont=*-BoldItalic,
+]{UMTypewriter}
+\setmonofont{UMTypewriter-Regular.otf}
+
+
+   \newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+   \usepackage{enumitem}
+% \setmainfont[
+%    Ligatures=TeX,
+%    Extension=.otf,
+%    UprightFont= *-regular,
+%    BoldFont=*-bold,
+%    ItalicFont=*-italic,
+%    BoldItalicFont=*-bolditalic]{AntykwaTorunska}
+\usepackage[unique,dir=00]{bashful}
+\usepackage{yogi-code}
+\usepackage{yogi-lang}
+
+\let\ttfamily=\listingsfont
+  \lstdefinestyle{bashfulScript}{basicstyle=\listingsfont\small,keywords={}}
+  \lstdefinestyle{bashfulStdout}{basicstyle=\sl\listingsfont\small,keywords={}}
+  \newenvironment{interaction}%
+    {\parskip0pt\par\hrulefill\par}{\parskip0pt\par\hrulefill\par}
+\lstdefinestyle{numbered}{
+    backgroundcolor=\color{blue!20},
+    style=display,
+    numbers=right,
+    stepnumber=1,
+    numbersep=-6pt,
+    xleftmargin=3ex,
+    xrightmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    frame=trBL,
+}
+
+\newenvironment{Output}{%
+\setLTR
+\quote
+\vskip 1ex%
+\qquad\qquad
+\large\bfseries\itshape\underline{Output}%
+}{\endquote\setRTL}
+
+\usepackage{sukkar}
+
+% Tune header
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[RO]{\slshape \rightmark}
+\fancyhead[LE]{\slshape \leftmark}
+\fancyfoot[C]{\thepage}
+\headheight26pt
+
+⌘newfloat{תכנית}{!htbp}{lop}[chapter]
+⌘floatname{תכנית}{תכנית}
+
+%\usepackage{unicode-math}
+
+\catcode"2026=\active % …: U+2026 HORIZONTAL ELLIPSIS
+\let…=\ldots
+\lstdefinelanguage{Pascalx}{
+  language=Pascal,
+  morestring=[b]",
+  deletekeywords={writeln,output,integer},
+  morekeywords={[2]WriteLn,output,integer},
+  keywordstyle={[2]\color{blue}\listingsfont\bfseries\itshape}}
+⌘let⌘קד=⌘cd
+⌘let⌘מש=⌘kw
+⌘let⌘שי=⌘LR
+\def\predefined#1{{\lstset{language=Pascalx}\lstinline!#1!}}
+\let⌘מוגדרת␣מראש=\predefined
+
+
+\newenvironment{קוד}{%
+  \begingroup
+  \quote
+  \minipage{\linewidth}%
+  \setLTR
+  }{%
+  \endminipage
+  \endquote
+  \endgroup
+}
+
+\renewcommand\floatpagefraction{.9}
+\renewcommand\topfraction{.9}
+\renewcommand\bottomfraction{.9}
+\renewcommand\textfraction{.1}   
+\setcounter{totalnumber}{50}
+\setcounter{topnumber}{50}
+\setcounter{bottomnumber}{50}
+
+\input{00terms}
+
+
+\usepackage{cf}
+  ⌘הצב⌘עע=⌘cf
+
+
+\parskip 0.75ex plus 0.25ex minus -0.25ex
+
+
+
+
+
+
+
+
