@@ -1,7 +1,8 @@
 # Weirdos // vim: +,/^\s*$/-1!sort -u
 ~$*
 __.*
-_.*
+
+#_.*
 _*
 -*
 :
@@ -31,6 +32,10 @@ $.*
 *.cachefile
 *.class
 *.csv
+*.eho
+*.heo
+*.mtc
+*.mtc0
 *.db
 *.dvi
 *.eml
