@@ -1,0 +1,75 @@
+⌘ada
+⌘bash
+⌘bash[script]
+⌘bash[script,stdout]
+⌘bash[script,stdout,ignoreStderr]
+⌘bash[stdout]
+⌘bash[verbose,script]
+⌘bash[verbose,script,scriptFile=make-hello-c.sh]
+⌘bash[verbose,script,stdout]
+⌘begin
+⌘cpp
+⌘end
+⌘lstinputlisting
+⌘lstinputlisting[language=AWK,style=Numbered]
+⌘lstinputlisting[language=bash,keywords=
+⌘lstinputlisting[language=C++,style=display]
+⌘lstinputlisting[language=C++,style=Numbered]
+⌘lstinputlisting[language=Java,style=display]
+⌘lstinputlisting[language=Java,style=Numbered]
+⌘lstinputlisting[language=Pascalx,style=display]
+⌘lstinputlisting[language=Pascalx,style=Numbered]
+⌘setLTR
+⌘setRTL
+⌘גאוה
+-לכתוב ג'ואה (בעברית מנוקד)
+
+⌘הערת␣שוליים{ההערה}
+-מציין את ההערת שוליים
+
+⌘כיתוב
+-בא מתחת לתוכנית או איור או דומה לזה
+
+⌘מוגדרת␣מראש
+-סגנון עיצוב לדברים מוגדרים מראש (כחול זוהר)
+
+⌘מונח[המונח האופציונלי]{המונח על אמת}
+
+⌘מש
+-סגנן כמילה שמורה
+
+⌘סי
+-שפת התכנות C
+
+⌘עע
+-אזכר תגית?
+
+⌘פרק
+-כנראה לציין כותרת פרק חדש
+
+⌘קד
+-לסגנן בצורת קוד
+
+⌘שי
+-שם של משהו או מילולון
+
+⌘תגית
+-תגית לאזכור! ל- ⌘עע!
+
+⌘תחילת
+⌘סוף
+
+
+ציון מושגים:
+⌘מילולון
+⌘מילולונים
+⌘מוסכמות
+⌘מזהה
+⌘מזהים
+⌘ספריות
+⌘שגרה
+⌘הערות
+⌘ישות
+⌘לוכסן
+⌘פקודה
+⌘קינון
