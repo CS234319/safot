@@ -7,13 +7,13 @@
 \ifxetex\unicodetrue\fi
 \ifluatex\unicodetrue\fi
 
-%\ifunicode
-%  \newcommand\DeclareUnicodeCharacter[2]{%
-%    \begingroup\lccode`|=\string"#1\relax
-%    \lowercase{\endgroup\newunicodechar{|}}{#2} %
-%  }
-%\else
-%\fi
+\ifunicode
+  \newcommand\DeclareUnicodeCharacter[2]{%
+    \begingroup\lccode`|=\string"#1\relax
+    \lowercase{\endgroup\newunicodechar{|}}{#2} %
+  }
+\else
+\fi
 
 %!}column  -t  |  sort  -n  |  sort  -u
 
