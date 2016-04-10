@@ -155,3 +155,48 @@
  \Large{#1}
 \normalsize{}}
 
+
+\newcommand{⌘הכנס␣קוד}[3]{
+⌘setLTR{}
+
+\lstinputlisting[
+language=#2,belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=single,frameround=tttt,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  backgroundcolor=\color{white},
+  columns=flexible
+,title={#3},
+]{#1}
+
+⌘setRTL{}
+}
+
+
+\newcommand{⌘הכנס␣קוד␣נקי}[2]{
+⌘setLTR{}
+
+\lstinputlisting[
+language=#2,belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=single,frameround=tttt,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  backgroundcolor=\color{white},
+  columns=flexible,
+]{#1}
+
+⌘setRTL{}
+}
+
