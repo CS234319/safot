@@ -12,9 +12,11 @@
 \usepackage{listings}
 \usepackage{multicol}
 \usepackage{url} \def\UrlFont{\ttfamilylatin}
-\usepackage{xcolor}
-
+\usepackage[table]{xcolor}
 \usepackage{pbox}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{multirow}
 
   \usepackage[tight]{minitoc}
     \renewcommand\stctitle{תֹּכֶן הָעִנְיָנִים}
@@ -147,7 +149,6 @@
 
 
 
-
 \newcommand{⌘גיבור}[1] {
  \textbf{#1}}
 
@@ -170,7 +171,7 @@ language=#2,belowcaptionskip=1\baselineskip,
   commentstyle=\itshape\color{purple!40!black},
   identifierstyle=\color{blue},
   stringstyle=\color{orange},
-  backgroundcolor=\color{white},
+  backgroundcolor=\color{gray!10},
   columns=flexible
 ,title={#3},
 ]{#1}
@@ -193,10 +194,19 @@ language=#2,belowcaptionskip=1\baselineskip,
   commentstyle=\itshape\color{purple!40!black},
   identifierstyle=\color{blue},
   stringstyle=\color{orange},
-  backgroundcolor=\color{white},
+  backgroundcolor=\color{gray!10},
   columns=flexible,
 ]{#1}
 
 ⌘setRTL{}
 }
+
+
+\newtcolorbox{mybox}{colback=red!5!white,
+colframe=red!75!black}
+
+% Musn't have an empty new line before it
+\newcommand{⌘הכרח␣שורה␣חדשה}{\\*\hfill\\}
+
+
 
