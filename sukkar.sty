@@ -1,0 +1,292 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sukkar}[2011/02/07 
+Hebrew names for common LaTeX commands.
+]
+%\RequirePackage{polyglossia}
+\RequirePackage{xspace}
+\RequirePackage{xifthen}
+\RequirePackage{enumitem}
+\RequirePackage{unisugar}
+
+% Allow Hebrew alphabetical characters in commands.
+\catcode"05D0=11 % א: U+05D0 HEBREW LETTER ALEF
+\catcode"05D1=11 % ב: U+05D1 HEBREW LETTER BET
+\catcode"05D2=11 % ג: U+05D2 HEBREW LETTER GIMEL
+\catcode"05D3=11 % ד: U+05D3 HEBREW LETTER DALET
+\catcode"05D4=11 % ה: U+05D4 HEBREW LETTER HE
+\catcode"05D5=11 % ו: U+05D5 HEBREW LETTER VAV
+\catcode"05D6=11 % ז: U+05D6 HEBREW LETTER ZAYIN
+\catcode"05D7=11 % ח: U+05D7 HEBREW LETTER HET
+\catcode"05D8=11 % ט: U+05D8 HEBREW LETTER TET
+\catcode"05D9=11 % י: U+05D9 HEBREW LETTER YOD
+\catcode"05DA=11 % ך: U+05DA HEBREW LETTER FINAL KAF
+\catcode"05DB=11 % כ: U+05DB HEBREW LETTER KAF
+\catcode"05DC=11 % ל: U+05DC HEBREW LETTER LAMED
+\catcode"05DD=11 % ם: U+05DD HEBREW LETTER FINAL MEM
+\catcode"05DE=11 % מ: U+05DE HEBREW LETTER MEM
+\catcode"05DF=11 % ן: U+05DF HEBREW LETTER FINAL NUN
+\catcode"05E0=11 % נ: U+05E0 HEBREW LETTER NUN
+\catcode"05E1=11 % ס: U+05E1 HEBREW LETTER SAMEKH
+\catcode"05E2=11 % ע: U+05E2 HEBREW LETTER AYIN
+\catcode"05E3=11 % ף: U+05E3 HEBREW LETTER FINAL PE
+\catcode"05E4=11 % פ: U+05E4 HEBREW LETTER PE
+\catcode"05E5=11 % ץ: U+05E5 HEBREW LETTER FINAL TSADI
+\catcode"05E6=11 % צ: U+05E6 HEBREW LETTER TSADI
+\catcode"05E7=11 % ק: U+05E7 HEBREW LETTER QOF
+\catcode"05E8=11 % ר: U+05E8 HEBREW LETTER RESH
+\catcode"05E9=11 % ש: U+05E9 HEBREW LETTER SHIN
+\catcode"05EA=11 % ת: U+05EA HEBREW LETTER TAV
+
+% Rebaptize common environemnts with a Hebrew name.
+
+\newenvironment{מסמך}{\document}{\enddocument}
+
+% List
+\newenvironment{ציינון}{\begingroup\itemize}{\enditemize\endgroup}
+\newenvironment{תיאור}{\begingroup\itemize}{\enditemize\endgroup}
+\newenvironment{ספרור}{\begingroup\enumerate}{\endenumerate\endgroup}
+\newenvironment{אבגוד}{%
+\begingroup
+\setenumerate[1]{label=\texthebrew{\protect\hebrewnumeral{\value{enumi}}}.}%
+\setenumerate[2]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumii}}}.}%
+\setenumerate[3]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumiii}}}.}%
+\setenumerate[4]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumiv}}}.}%
+\enumerate}{\endenumerate\endgroup}
+
+
+
+\newenvironment{מובאה}{\begingroup\quote}{\endquote\endgroup}
+
+% Floats.
+\newenvironment{טבלה}{\begingroup\table}{\endtable\endgroup}
+\newenvironment{טבלא}{\begingroup\table}{\endtable\endgroup}
+\newenvironment{איור}{\begingroup\figure}{\endfigure\endgroup}
+
+\newcommand\@translate[2]{\expandafter\let\csname#2\endcsname=#1}
+
+%\@translate\a{}
+\@translate\addcontentsline{הוסף␣שורה␣לתוכן␣העניינים}
+\@translate\address{כתובת}
+\@translate\addtocontents{הוסף␣לתוכן␣העניינים}
+%\@translate\addtocounter{}
+%\@translate\addtolength{}
+%\@translate\addvspace{}
+%\@translate\Alph{}
+%\@translate\alph{}
+\@translate\appendix{נספחים}
+%\@translate\arabic{}
+\@translate\author{מחבר}
+%\@translate\backslash{}
+\@translate\begin{תחילת}
+%\@translate\bfseries{}
+\@translate\bibitem{פריט␣ביבליוגרפי}
+\@translate\bibliography{ביבליוגרפיה}
+\@translate\bibliographystyle{סגנון␣ביבליוגרפיה}
+\@translate\bigskip{דילוג␣גדול}
+\@translate\caption{כיתוב}
+\@translate\relax{מאומה}
+\@translate\cc{העתק}
+%\@translate\cdots{}
+\@translate\centering{}
+\@translate\chapter{פרק}
+%\@translate\circle{}
+\@translate\cite{ציטוט}
+\@translate\cleardoublepage{נקה␣עמוד␣כפול}
+\@translate\clearpage{נקה␣עמוד}
+\@translate\cline{עמודה␣מרובה}
+\@translate\closing{סגירה}
+\@translate\protect{שמור}
+\@translate\let{הצב}
+\@translate\let{הגדר}
+%\@translate\COLON{}
+%\@translate\dashbox{}
+\@translate\date{תאריך}
+%\@translate\ddots{}
+%\@translate\depth{}
+%\@translate\documentclass{}
+%\@translate\dotfill{}
+\@translate\emph{הדגש}
+\@translate\encl{לוט}
+\@translate\end{סוף}
+\@translate\enlargethispage{הגדל␣עמוד␣זה}
+\@translate\fbox{}
+\@translate\flushbottom{נקה␣עמוד}
+%\@translate\fnsymbol{}
+%\@translate\fontencoding{}
+%\@translate\fontfamily{}
+%\@translate\fontseries{}
+%\@translate\fontshape{}
+%\@translate\fontsize{}
+\@translate\RTLfootnote{הערת␣שוליים}
+%\@translate\footnotemark{}
+\@translate\footnotesize{גודל␣הערת␣שוליים}
+%\@translate\footnotetext{}
+%\@translate\frac{}
+\@translate\frame{מסגרת}
+\@translate\framebox{}
+\@translate\frontmatter{חומר␣מקדים}
+\@translate\mainmatter{חומר␣עיקרי}
+\@translate\backmatter{חומר␣אחורי}
+\@translate\fussy{טרחני}
+%\@translate\height{}
+\@translate\hebrewtoday{תאריך␣עברי␣של␣היום}
+\@translate\hfill{}
+\@translate\hline{}
+\@translate\hrulefill{}
+%\@translate\hspace{}
+\@translate\Huge{ענקמוני}
+\@translate\huge{ענק}
+\@translate\hyphenation{מיקוף}
+\@translate\include{טול}
+\@translate\includeonly{טול␣כעת}
+\@translate\indent{הזחה}
+\@translate\input{כלול}
+\@translate\item{פריט}
+%\@translate\itshape{}
+\@translate\kill{בטל}
+\@translate\label{תגית}
+\@translate\LARGE{גדול␣מאוד␣מאוד}
+\@translate\Large{גדול␣מאוד}
+\@translate\large{גדול}
+%\@translate\ldots{}
+\@translate\lefteqn{}
+\@translate\line{}
+\@translate\linebreak{}
+\@translate\linethickness{}
+\@translate\listoffigures{רשימת␣איורים}
+\@translate\listoftables{רשימת␣טבלאות}
+\@translate\location{מיקום}
+\@translate\makebox{}
+%\@translate\makebox{}
+%\@translate\makelabels{}
+\@translate\maketitle{עשה␣כותרת}
+\@translate\markboth{}
+\@translate\markright{}
+%\@translate\mathbf{}
+%\@translate\mathcal{}
+%\@translate\mathit{}
+%\@translate\mathnormal{}
+%\@translate\mathrm{}
+%\@translate\mathsf{}
+%\@translate\mathtt{}
+%\@translate\mathversion{}
+\@translate\mbox{תיבה}
+%\@translate\mdseries{}
+\@translate\medskip{דילוג␣בינוני}
+\@translate\multicolumn{}
+%\@translate\multiput{}
+\@translate\name{שם}
+\@translate\newcommand{פקודה␣חדשה}
+%\@translate\newcounter{}
+\@translate\newenvironment{סביבה␣חדשה}
+%\@translate\newfont{}
+%\@translate\newlength{}
+\@translate\newline{שורה␣חדשה}
+\@translate\newpage{עמוד␣חדש}
+%\@translate\newsavebox{}
+%\@translate\newtheorem{}
+\@translate\nocite{ללא␣ציטוט}
+%\@translate\nofiles{}
+\@translate\noindent{ללא␣הזחה}
+\@translate\nolinebreak{אין␣לשבור␣שורה}
+\@translate\nopagebreak{אין␣לשבור␣עמוד}
+%\@translate\normalfont{}
+\@translate\normalsize{גודל␣רגיל}
+\@translate\onecolumn{עמודה␣אחת}
+\@translate\opening{פתיחה}
+%\@translate\oval{}
+%\@translate\overbrace{}
+%\@translate\overline{}
+\@translate\pagebreak{שבירת␣עמוד}
+\@translate\pagenumbering{מספור␣עמודים}
+\@translate\pageref{פנה␣לעמוד}
+%\@translate\pagestyle{}
+\@translate\par{פיסקה␣חדשה}
+\@translate\paragraph{פיסקה}
+\@translate\parbox{}
+%\@translate\ps{}
+%\@translate\pushtabs{}
+%\@translate\put{}
+\@translate\raggedbottom{}
+\@translate\raggedleft{}
+\@translate\raggedright{}
+\@translate\raisebox{}
+\@translate\ref{פנה}
+%\@translate\refstepcounter{}
+\@translate\renewcommand{חדש␣פקודה}
+\@translate\renewenvironment{חדש␣סביבה}
+%\@translate\rmfamily{}
+%\@translate\Roman{}
+%\@translate\roman{}
+\@translate\rule{}
+\@translate\savebox{}
+\@translate\sbox{}
+\@translate\scriptsize{}
+%\@translate\scshape{}
+%\@translate\selectfont{}
+%\@translate\setcounter{}
+%\@translate\setlength{}
+\@translate\setRTL{ימין␣שמאל}
+\@translate\setLTR{שמאל␣ימין}
+\@translate\textenglish{אנגלית}
+%\@translate\settodepth{}
+%\@translate\settoheight{}
+%\@translate\settowidth{}
+%\@translate\sffamily{}
+%\@translate\shortstack{}
+\@translate\signature{חתימה}
+\@translate\sloppy{רשלני}
+%\@translate\slshape{}
+\@translate\small{קטן}
+\@translate\smallskip{דילוג␣קטן}
+%\@translate\sqrt{}
+\@translate\startbreaks{איסור␣שבירת␣עמוד}
+%\@translate\stepcounter{}
+\@translate\stopbreaks{סוף␣איסור␣שבירת␣עמוד}
+\@translate\section{סעיף}
+\@translate\subparagraph{תת␣פסקה}
+\@translate\subsection{תת␣סעיף}
+\@translate\subsubsection{תת␣תת␣סעיף}
+%\@translate\symbol{}
+\@translate\tableofcontents{תוכן␣העניינים}
+\@translate\telephone{טלפון}
+\@translate\textbf{כתב␣עבה}
+\@translate\textit{טקסט␣מסולסל}
+\@translate\textmd{טקסט␣בינוני}
+\@translate\textnormal{כתב␣רגיל}
+%\@translate\textrm{}
+%\@translate\textsc{}
+\@translate\textsf{כתב␣נטול␣תגיות}
+\@translate\textsl{כתב␣נטוי}
+\@translate\texttt{כתב␣מכונה}
+\@translate\textup{כתב␣ישר}
+\@translate\thanks{תודות}
+\@translate\thispagestyle{סגנון␣עמוד␣זה}
+\@translate\tiny{זעיר}
+\@translate\title{כותרת}
+\@translate\today{היום}
+%\@translate\totalheight{}
+%\@translate\ttfamily{}
+\@translate\twocolumn{שתי␣עמודות}
+%\@translate\typein{}
+%\@translate\typeout{}
+%\@translate\underbrace{}
+\@translate\underline{קו␣תחתון}
+%\@translate\upshape{}
+\@translate\usebox{}
+%\@translate\usecounter{}
+%\@translate\usefont{}
+\@translate\usepackage{כלול␣חבילה}
+\@translate\usepackage{השתמש␣בחבילה}
+%\@translate\value{}
+\@translate\vdots{}
+%\@translate\vector{}
+\@translate\verb{כפשוטו}
+\@translate\vfill{}
+%\@translate\vline{}
+%\@translate\vspace{}
+%\@translate\width{}
+\@translate\xspace{שמר␣רווחים}
+
+
+

@@ -1,0 +1,4720 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language hebrew
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement h
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=Prolog,keywordstyle={\color{blue}},commentstyle={\color{magenta}\itshape},emphstyle={\color{red}},breaklines=true"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+פרולוג לפרולוג
+\end_layout
+
+\begin_layout Standard
+פרולוג )
+\begin_inset Formula $\text{PROgramming LOGic}$
+\end_inset
+
+(היא שפת תכנות המשתייכת לפרדיגמה הלוגית, ומכאן נגזר שמה.
+ התכנות בפרולוג עלול להיות שונה מהותית מהתכנות בשפות המוכרות לקורא שאינו
+ התנסה בתכנות לוגי מימיו.
+ אנו ננסה במבוא זה לתת פתח לשפת התכנות פרולוג בפרט, ולתכנות בפרדיגמה הלוגית
+ בכלל.
+\end_layout
+
+\begin_layout Section
+תכנות בפרולוג
+\end_layout
+
+\begin_layout Standard
+פרולוג היא שפה הצהרתית, ובה אנו איננו מתארים את אופן פיתרון הבעיה )כלומר,
+ האלגוריתם לפיתרון(, אלא את הבעיה עצמה.
+ תיאור הבעיה מתבצע באמצעות עובדות, כלל היסק, ושאילתות )הנקראות לעיתים "מטרת
+ החישוב"(.
+\end_layout
+
+\begin_layout Standard
+במדריך זה אנו נעבוד עם המפרש 
+\begin_inset Formula $\text{SWI\_PROLOG}$
+\end_inset
+
+.
+ במפרש זה, לפני פקודה ראשית יופיעו התווים 
+\begin_inset Formula $"?-"$
+\end_inset
+
+, ולפני פקודה משנית יופיע התו 
+\begin_inset Formula $"|"$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+עובדות
+\end_layout
+
+\begin_layout Standard
+בפרולוג, עובדות יכולות להתייחס למספר שונה של איברים.
+ עובדה המתייחסת לאיבר אחד תכונה "נשוא" )פרדיקט(, עובדה המתייחסת למספר רב
+ )גדול מאחד( של איברים תכונה "יחס", ועובדה המתייחסת לאפס איברים תכונה "אטום".
+ נסתכל על הדוגמא הבאה המציגה את סוגי העובדות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Genesis.
+\end_layout
+
+\begin_layout Plain Layout
+
+male(abraham).
+\end_layout
+
+\begin_layout Plain Layout
+
+female(sarah).
+\end_layout
+
+\begin_layout Plain Layout
+
+female(hagar).
+\end_layout
+
+\begin_layout Plain Layout
+
+male(issac).
+\end_layout
+
+\begin_layout Plain Layout
+
+male(ishmael).
+\end_layout
+
+\begin_layout Plain Layout
+
+parent(abraham,issac).
+\end_layout
+
+\begin_layout Plain Layout
+
+parent(sarah,issac).
+\end_layout
+
+\begin_layout Plain Layout
+
+parent(abraham,ishmael).
+\end_layout
+
+\begin_layout Plain Layout
+
+parent(hagar,ishmael).
+\end_layout
+
+\end_inset
+
+כמו שניתן לראות בדוגמא זו, הגדרנו שלושה סוגי יחסים:
+\end_layout
+
+\begin_layout Enumerate
+אטום המגדיר באיזה חומש אנו עוסקים - בראשית.
+\end_layout
+
+\begin_layout Enumerate
+נשוא המציין את מין הנושא - זכר או נקיבה )נשוא שונה לכל מין(.
+\end_layout
+
+\begin_layout Enumerate
+יחס הורות, המציין האם א' הוא הורה של ב'.
+\end_layout
+
+\begin_layout Subsection
+שאילתות
+\end_layout
+
+\begin_layout Standard
+שאילתה היא הדרך שלנו "להשיג" את המידע מהתוכנית.
+ נבקש מפרולוג לענות לנו על השאלה - האם אברהם הוא זכר?
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?- male(abraham).
+\end_layout
+
+\begin_layout Plain Layout
+
+true.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כצפוי, המהדר מחזיר לנו תשובה חיובית.
+ ננסה את כוחנו בשאילתה נוספת:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-parent(sarah,ishmael).
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+גם פה, קיבלנו את התשובה לה ציפינו.
+ נשים לב, שתשובה שלילית אין משמעותה - "הטענה אינה נכונה", אלא - "לא ניתן
+ להגיד האם הטענה נכונה, על סמך המידע הנתון".
+ לכן, עבור השאילות הבאות נקבל תשובה שלילית:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-married(abraham,sarah).
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\begin_layout Plain Layout
+
+?-parent(amtelay_bat_karnevo,abraham).
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בשאילתה הראשונה, התוכנית אינה מכירה את היחס, ובשאילתה השניה, התוכנית אינה
+ מכירה את אחד האיברים, ולכן ברור שלא ניתן על סמך הנתונים הקיימים להחזיר
+ תשובה חיובית.
+\end_layout
+
+\begin_layout Standard
+יכולת שימושית של פרולוג, היא השימוש ב"משתנה" במקום ב"איבר".
+ במקרה כזה, התוכנית תחפש איבר שאם נציב אותו במקום המשתנה, תשובת התוכנית
+ תהיה חיובית.
+ לדוגמא:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-parent(sarah,X).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = issac.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נשים לב כי בפרולוג, כל מילה שמתחילה באות גדולה היא משתנה, כאשר אנו שולחים
+ משתנה בשאילתה, ניתן להשתמש בפקודה "
+\begin_inset Formula $;$
+\end_inset
+
+".
+ פקודה זו מתפרשת כך: "אם יש איבר נוסף שניתן להציב, החזר אותו.
+ אחרת, החזר תשובה שלילית".
+ לדוגמא:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-parent(X,ishmael).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = abraham.
+\end_layout
+
+\begin_layout Plain Layout
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+X = hagar.
+\end_layout
+
+\begin_layout Plain Layout
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+פרולוג גם מאפשר לנו להביע שאילתות המכילות את קשר הגימום )המסומן ע"י "
+\begin_inset Formula $,$
+\end_inset
+
+"( ואת קשר האיווי )המסומן ע"י "
+\begin_inset Formula $;$
+\end_inset
+
+"(:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-parent(X,issac),female(X).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = sarah.
+\end_layout
+
+\begin_layout Plain Layout
+
+?-parent(sarah,X);parent(hagar,X).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = ishmael.
+\end_layout
+
+\begin_layout Plain Layout
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+X = issac.
+\end_layout
+
+\begin_layout Plain Layout
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+כללי היסק
+\end_layout
+
+\begin_layout Standard
+ניתן להגדיר לתוכנית כללי היסק, כאשר התוכנית תוכל להסיק על פיהם מסקנות, בהתאם
+ לכלל ההיסק מודוס פוננס
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+ע"פ כלל זה, בהינתן האבחנות הבאות:
+\end_layout
+
+\begin_layout Enumerate
+א' גורר ב'
+\end_layout
+
+\begin_layout Enumerate
+א' נכון
+\end_layout
+
+\begin_layout Plain Layout
+ניתן להסיק כי ב' נכון.
+\end_layout
+
+\end_inset
+
+.
+ נראה כיצד ניתן להשתמש באמצעות כלל ההיסק, כדי להגדיר את תכונת האבהות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+father(X,Y):-male(X),parent(X,Y).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בכלל זה אנו מגדירים ש
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ הוא אב של 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+, אם 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ הוא זכר, וגם 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ הוא הורה של 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+.
+ באמצעות יחס זה, יהיה ניתן לבדוק אבהות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-father(X,issac).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = abraham.
+\end_layout
+
+\begin_layout Plain Layout
+
+?-father(X,ishmael).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = abraham.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כללי היסק אף יכולים להיות רקורסיביים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ancestor(X,Y):- parent(X,Y).
+\end_layout
+
+\begin_layout Plain Layout
+
+ancestor(X,Y):- parent(X,Z), ancestor(Z,Y).
+\end_layout
+
+\begin_layout Plain Layout
+
+parent(issac,jacob).
+\end_layout
+
+\end_inset
+
+כאשר תוכנית זו תקבל שאילתת אב קדמון לגבי שני משתנים 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ ו-
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+, היא תבדוק האם ניתן להסיק ש
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ הוא הורה של 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+.
+ אם לא ניתן להסיק זו, התוכנית תנסה לראות האם קיים איבר 
+\begin_inset Formula $\text{Z}$
+\end_inset
+
+, כך ש
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ הוא הורה של 
+\begin_inset Formula $\text{Z}$
+\end_inset
+
+, וכן 
+\begin_inset Formula $\text{Z}$
+\end_inset
+
+ הוא אב קדמון של 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+.
+ לדוגמא:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-ancestor(X,jacob).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = issac.
+\end_layout
+
+\begin_layout Plain Layout
+
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+X = abraham.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+כתיבת התוכנית
+\end_layout
+
+\begin_layout Subsection
+מאגר מידע ומפרש 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:מאגר-מידע-ומפרש"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כמו שראינו, תוכנית בפרולוג מורכבת ממאגר מידע )יחסים ועובדות(, ושאילתות.
+ השאילתות נכתבות במפרש, בעוד את מאגר המידע ניתן להגדיר בשתי דרכים שונות:
+\end_layout
+
+\begin_layout Enumerate
+כתיבת מאגר המידע בקובץ, לדוגמא 
+\begin_inset Formula $\text{"c:\textbackslash1\textbackslash prog.pl"}$
+\end_inset
+
+, ולאחר מכן טעינה של מאגר המידע באמצעות הפקודה 
+\begin_inset Formula $\text{consult('c:\textbackslash\textbackslash1\textbackslash\textbackslash1prog.pl')}$
+\end_inset
+
+ במפרש.
+\end_layout
+
+\begin_layout Enumerate
+טעינה של עובדות ויחסים ישירות מתוך המפרש, באחת מהצורות הבאות:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+באמצעות הפקודה 
+\begin_inset Formula $\text{assert}$
+\end_inset
+
+:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+assert((parent(terah,abraham))).
+\end_layout
+
+\end_inset
+
+פקודה זו תמיד מסיימת בהצלחה.
+\end_layout
+
+\begin_layout Enumerate
+באמצעות הפקודה 
+\begin_inset Formula $\text{retract}$
+\end_inset
+
+:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+retract((parent(terah,abraham))).
+\end_layout
+
+\end_inset
+
+פקודה זו עלולה להיכשל.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+שאילתות לעומת זאת, יכולות להיכתב רק במפרש.
+\end_layout
+
+\begin_layout Subsection
+תחביר השפה
+\end_layout
+
+\begin_layout Subsubsection
+אטומים
+\end_layout
+
+\begin_layout Standard
+שמות אטומים יכולים להיכתב באחד משלושה אופנים:
+\end_layout
+
+\begin_layout Enumerate
+סדרית של אותיות, ספרות, וקו-תחתון, שמתחילה עם אות קטנה
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+aharon		moshe_rabenu
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+סדרית של תווים מיוחדים.
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<---->		::==		.:.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+סדרית של תווים שמגודרת באמצעות גרש בודד.
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+'Adam'		'x_>:'
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מספרים יכולים להיות ממשיים או שלמים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+3.14	-0.573	2.4e3
+\end_layout
+
+\begin_layout Plain Layout
+
+23	5777	-42
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+משתנים
+\end_layout
+
+\begin_layout Standard
+ישנם שני סוגי משתנים:
+\end_layout
+
+\begin_layout Enumerate
+משתנים רגילים, ששמם מתחיל באות גדולה או בקו תחתון:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+X_25		_result
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+משתנה אנונימי, שמיוצג באמצעות קו תחתון:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+has_kids(X):-parent(X,_).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+התאמה ופעולות אריתמטיות
+\end_layout
+
+\begin_layout Subsubsection
+התאמה
+\end_layout
+
+\begin_layout Standard
+ביטויים בשפה יחשבו תואמים אם מתקיים אחד מהשניים:
+\end_layout
+
+\begin_layout Enumerate
+הם זהים.
+\end_layout
+
+\begin_layout Enumerate
+לכל משתנה קיים מושג, כך שאם נחליף את המשתנה במושג, הביטויים יהיו זהים.
+\end_layout
+
+\begin_layout Standard
+האופרטור באמצעותו מבצעים את פעולת ההתאמה, הוא האופרטור '=':
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-course(pl,Semester,95) = course(pl,spring,Grade).
+\end_layout
+
+\begin_layout Plain Layout
+
+Grade = 95,
+\end_layout
+
+\begin_layout Plain Layout
+
+Semester = spring.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+?-course(pl,Semester,95) = course(pl,spring,96).
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+?-course(algo) = seminar(algo).
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם ההתאמה מצליחה, היא תמיד תחזיר את האתחול הכי כללי שיש למשתנים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-course(N,M,82) = course(N1,winter,G).
+\end_layout
+
+\begin_layout Plain Layout
+
+N = N1,
+\end_layout
+
+\begin_layout Plain Layout
+
+M = winter,
+\end_layout
+
+\begin_layout Plain Layout
+
+G = 82.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ואלו הם חוקי ההתאמה המלאים:
+\end_layout
+
+\begin_layout Enumerate
+אם א' וב' הם מושג, אז א' מתאים לב' אממ הם אותו אטום, או אותו מספר.
+\end_layout
+
+\begin_layout Enumerate
+אם א' הוא משתנה וב' הוא מושג, אז א' מאותחל להיות ב'.
+ כך גם באופן הפוך - אם ב' הוא משתנה וא' הוא מושג, אז ב' מאותחל להיות א'
+ )אם שניהם משתנים, אנו נגיד שהם "חולקים את ערכיהם", והם לא יאותחלו(.
+\end_layout
+
+\begin_layout Enumerate
+אם א' וב' הם ביטויים מורכבים, אזי הם מתאימים אממ:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+הם מאותו סוג מבנה )או יחס( ויש להם את אותו מספר ארגומנטים.
+\end_layout
+
+\begin_layout Enumerate
+כל ארגומנט תואם לארגומנט המקביל לו.
+\end_layout
+
+\begin_layout Enumerate
+אתחול המשתנים תואם.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+ונסיים בדוגמא מעט יותר מורכבת:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+triangle(point(1,Z), A, point(2,3)) = triangle(X, point(4,Y), point(2,Z)).
+\end_layout
+
+\begin_layout Plain Layout
+
+Z = 3,
+\end_layout
+
+\begin_layout Plain Layout
+
+A = point(4, Y),
+\end_layout
+
+\begin_layout Plain Layout
+
+X = point(1, 3).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+אריתמטיקה
+\end_layout
+
+\begin_layout Standard
+האופרטורים המתמטיים המוכרים לנו, משמשים בפרולוג גם כיחס רגיל:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-X = 1 + 2.
+\end_layout
+
+\begin_layout Plain Layout
+
+X = 1+2.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כדי שפרולוג ישערך את הביטויים, אנו צריכים להשתמש במילה השמורה 
+\begin_inset Formula $\text{is}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-X is 1 + 2.
+\end_layout
+
+\begin_layout Plain Layout
+
+X = 3.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+גם אופרטורי ההשוואה מכריחים שיערוך של ביטויים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?- 145 * 34 > 100.
+\end_layout
+
+\begin_layout Plain Layout
+
+true.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מלבד אופרטורי ההשוואה המוכרים )>,>=,<,=<(, קיימים שני אופרטורים נוספים:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\text{X =:=Y}$
+\end_inset
+
+ - מחזיר 
+\begin_inset Formula $\text{true}$
+\end_inset
+
+ אם 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ שווה ל
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\text{X =\textbackslash=Y}$
+\end_inset
+
+ - מחזיר 
+\begin_inset Formula $\text{true}$
+\end_inset
+
+ אם 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ שונה מ
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+ננסה באמצעות התוכנית הבאה, להדגים את ההבדל בין אופרטור ההתאמה לאופרטור ההשוואה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?- 1 + 2 =:= 2 + 1.
+\end_layout
+
+\begin_layout Plain Layout
+
+true.
+\end_layout
+
+\begin_layout Plain Layout
+
+?- 1 + 2 = 2 + 1.
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\begin_layout Plain Layout
+
+?- 1 + A = B + 2.
+\end_layout
+
+\begin_layout Plain Layout
+
+A = 2, B = 1.
+\end_layout
+
+\begin_layout Plain Layout
+
+?- 1 + A =:= B + 2.
+\end_layout
+
+\begin_layout Plain Layout
+
+ERROR: =:=/2: Arguments are not sufficiently instantiated
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+תוכנית לדוגמא ושימוש בפונקציית המעקב
+\end_layout
+
+\begin_layout Standard
+בהינתן 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ ו
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+, המחלק המשותף הגדול ביותר 
+\begin_inset Formula $\text{D}$
+\end_inset
+
+ )להלן: ממג"ב( יחושב באופן הבא:
+\end_layout
+
+\begin_layout Enumerate
+אם 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ ו
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+ שווים, אז 
+\begin_inset Formula $\text{D}$
+\end_inset
+
+ שווה ל
+\begin_inset Formula $\text{X}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+אם 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ קטן מ 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+, אז 
+\begin_inset Formula $\text{D}$
+\end_inset
+
+ הוא הממג"ב של 
+\begin_inset Formula $\text{X}$
+\end_inset
+
+ ו
+\begin_inset Formula $\text{Y-X}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+אם 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+ קטן מ
+\begin_inset Formula $\text{X}$
+\end_inset
+
+, בצע את סעיף
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\numeric off
+, עם החלפה של המשתנים.
+\end_layout
+
+\begin_layout Standard
+נראה כיצד לנסח אלגוריתם זה באמצעות תוכנית פרולוג:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+gcd(X,X,X).
+                %1
+\end_layout
+
+\begin_layout Plain Layout
+
+gcd(X,Y,D):- X < Y,		%2
+\end_layout
+
+\begin_layout Plain Layout
+
+			 Y1 is Y - X,  %3	
+\end_layout
+
+\begin_layout Plain Layout
+
+			 gcd(X,Y1,D).
+  %4
+\end_layout
+
+\begin_layout Plain Layout
+
+gcd(X,Y,D):- Y < X,		%5
+\end_layout
+
+\begin_layout Plain Layout
+
+			 gcd(Y,X,D).
+   %6
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ננסה לתאר את מה שמתרחש "מאחורי הקלעים" של הרצת תוכנית זו עבור מציאת הממג"ב
+ של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+12
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ו
+\numeric on
+20
+\numeric off
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+[debug] 12 ?- trace,gcd(12,20,D).
+\end_layout
+
+\begin_layout Plain Layout
+
+Call: (8) gcd(12, 20, _G1895) ?
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (9) 12<20 ? ^  Exit: (9) 12<20 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (9) _L206 is 20-12 ? ^  Exit: (9) 8 is 20-12 ? %3
+\end_layout
+
+\begin_layout Plain Layout
+
+   Call: (9) gcd(12, 8, _G1895) ? %4
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (10) 12<8 ? ^  Fail: (10) 12<8 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+   Redo: (9) gcd(12, 8, _G1895) ? %5
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (10) 8<12 ? ^  Exit: (10) 8<12 ? %5
+\end_layout
+
+\begin_layout Plain Layout
+
+   Call: (10) gcd(8, 12, _G1895) ? %6
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (11) 8<12 ? ^  Exit: (11) 8<12 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (11) _L236 is 12-8 ?	^  Exit: (11) 4 is 12-8 ? %3
+\end_layout
+
+\begin_layout Plain Layout
+
+   Call: (11) gcd(8, 4, _G1895) ? %4
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (12) 8<4 ? ^  Fail: (12) 8<4 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+   Redo: (11) gcd(8, 4, _G1895) ? %5
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (12) 4<8 ? ^  Exit: (12) 4<8 ? %5
+\end_layout
+
+\begin_layout Plain Layout
+
+   Call: (12) gcd(4, 8, _G1895) ? %6
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (13) 4<8 ? ^  Exit: (13) 4<8 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (13) _L266 is 8-4 ? ^  Exit: (13) 4 is 8-4 ? %3
+\end_layout
+
+\begin_layout Plain Layout
+
+   Call: (13) gcd(4, 4, _G1895) ? %4
+\end_layout
+
+\begin_layout Plain Layout
+
+   Exit: (13) gcd(4, 4, 4) ?
+\end_layout
+
+\begin_layout Plain Layout
+
+   Exit: (12) gcd(4, 8, 4) ?    Exit: (11) gcd(8, 4, 4) ?
+\end_layout
+
+\begin_layout Plain Layout
+
+   Exit: (10) gcd(8, 12, 4) ?    Exit: (9) gcd(12, 8, 4) ?
+\end_layout
+
+\begin_layout Plain Layout
+
+   Exit: (8) gcd(12, 20, 4) ? D = 4
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נסביר את ששת השורות הראשונות של ריצת 
+\begin_inset Formula $\text{trace}$
+\end_inset
+
+, שורה אחרי שורה, וניתן לקורא הנבון להשלים בעצמו את ההמשך )על מנת להקל על
+ ההבנה, בסוף כל שורה של הפלט, נוספה הפניה למסיפור השורה במאגר המידע שאותה
+ מנסים כעת לספק.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Call: (8) gcd(12, 20, _G1895) ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+התוכנית מציבה "משתנה מדומה" במקום שבו שמנו משתנה, ומתחיל לבדוק כיצד ניתן
+ לאתחל אותו.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Call: (9) 12<20 ? ^  Exit: (9) 12<20 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+התוכנית מוודאת שמתקיים התנאי בשורה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\numeric off
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Call: (9) _L206 is 20-12 ? ^  Exit: (9) 8 is 20-12 ? %3
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+התוכנית בודקת איך ניתן לספק את המשתנה המדומה כך שהיחס בשורה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+3
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+יסופק.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Call: (9) gcd(12, 8, _G1895) ? %4
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+התוכנית מנסה לספק את היחס בשורה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\numeric off
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Call: (10) 12<8 ? ^  Fail: (10) 12<8 ? %2
+\end_layout
+
+\begin_layout Plain Layout
+
+Redo: (9) gcd(12, 8, _G1895) ? %5
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כדי לספק את היחס בשורה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\numeric off
+, אנחנו חוזרים על אותו מהלך: התוכנית בודקת האם מתקיים התנאי בשורה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\numeric off
+.
+ התנאי לא מתקיים, ולכן ננסה לספק אותו באמצעות היחס בשורה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+5
+\numeric off
+.
+\end_layout
+
+\begin_layout Section
+רשימות
+\end_layout
+
+\begin_layout Subsection
+רשימות בפרולוג
+\end_layout
+
+\begin_layout Standard
+גם פרולוג, כמו במרבית שפות התכנות, משתמש במבנה הנתונים "רשימה".
+ רשימה היא רצף של מספר כלשהו של איברים, הבנוי באופן רקורסיבי ע"י אחד משני
+ הכללים הבאים:
+\end_layout
+
+\begin_layout Enumerate
+רשימה ריקה - 
+\begin_inset Formula $\text{[]}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+איבר המשורשר לרשימה קיימת.
+\end_layout
+
+\begin_layout Standard
+לדוגמא, נסתכל על הרשימה הבסיסית הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+(a,(b,[])).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+רשימה זו נראית בצורה גרפית כך:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ../../introduction-to-prolog/attachments/Capture1.JPG
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+מבנה רשימה
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר חלק שמאל של כל רשימה הוא ראש הרשימה - האיבר הראשון באותה רשימה, ואילו
+ חלק ימין של כל רשימה הוא זנב הרשימה - הרשימה כולה מלבד האיבר הראשון.
+\end_layout
+
+\begin_layout Standard
+בגלל יעילותן והשימוש הרב בהן, קיים בפרולוג ממתק תחבירי שנועד להקל עלינו
+ ליצור רשימות, כך שאת הרשימה 
+\begin_inset Formula $\text{(a,(b,(c,[])))}$
+\end_inset
+
+ לדוגמא, ניתן לייצג בדרכים נוספות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+[a,b,c]
+\end_layout
+
+\begin_layout Plain Layout
+
+[a|[b,c]]
+\end_layout
+
+\begin_layout Plain Layout
+
+[a,b,[c]]
+\end_layout
+
+\begin_layout Plain Layout
+
+[a,b,c|[]]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+איברי הרשימה לא חייבים להיות מאותו טיפוס:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+[a,[1,2,3],yonatan,1991,sher,course(pl,spring,100)]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+פעולות על רשימות
+\end_layout
+
+\begin_layout Subsubsection
+אורך רשימה
+\end_layout
+
+\begin_layout Standard
+אורך של רשימה מוגדר באופן הבא:
+\end_layout
+
+\begin_layout Itemize
+אם הרשימה ריקה, אזי אורכה הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+\end_layout
+
+\begin_layout Itemize
+אם הרשימה אינה ריקה, אז בהכרח הרשימה מורכבת מראש )איבר בודד( וזנב )שאר הרשימה(.
+ אורכה של הרשימה יהיה שווה לאורך הזנב ועוד
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+.
+\end_layout
+
+\begin_layout Standard
+ננסה להגדיר פונקציה זו
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+יש לשים לב שפונקציה בשם זה כבר מוגדרת בפרולוג, לכן אם ברצוננו לממש פונקציה
+ זו, יש לעשות זאת תחת שם אחר.
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+length([],0).
+\end_layout
+
+\begin_layout Plain Layout
+
+length([_|Tail],N) :- length(Tail,N1),
+\end_layout
+
+\begin_layout Plain Layout
+
+					  N is 1 + N1.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וכעת נוכל לכתוב:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?- length([a,b,[c,d],e],N).
+\end_layout
+
+\begin_layout Plain Layout
+
+N = 4.
+\end_layout
+
+\begin_layout Plain Layout
+
+?- length(L,4).
+\end_layout
+
+\begin_layout Plain Layout
+
+L = [_G672, _G675, _G678, _G681].
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+יש לשים לב שבשאילה השניה, בעצם ביקשנו מפרולוג שימצא לנו רשימה כלשהי, באורך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\numeric off
+, וזה אכן מה שקיבלנו )עם תוכן זבל כלשהו(.
+\end_layout
+
+\begin_layout Subsubsection
+פעולות נוספות
+\end_layout
+
+\begin_layout Standard
+נגדיר מספר פעולות נוספות על רשימות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+/* is_list(L) - checks if L is a list (predefined).
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+is_list([]).
+\end_layout
+
+\begin_layout Plain Layout
+
+is_list([X|Xs]):-is_list(Xs).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* member(X, L) - checks if X is a member of L (predefined).
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+member(X, [X|Xs]).
+\end_layout
+
+\begin_layout Plain Layout
+
+member(X, [Y|Ys]) :-member(X, Ys).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* prefix(L1, L2) - checks if L1  is a prefix of L2.
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+prefix([], L).
+\end_layout
+
+\begin_layout Plain Layout
+
+prefix([X|Xs], [X|Ys]) :-prefix(Xs, Ys).
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* suffix(L1, L2) - checks if L1  is a suffix of L2.
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+suffix(Xs, Xs).
+\end_layout
+
+\begin_layout Plain Layout
+
+suffix(Xs, [Y|Ys]) :-suffix(Xs, Ys).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* del(X,L1,L2) - cheks if L2 is similar to L1 after deleting the first
+ occurence of X in L1.
+ */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+del(X, [X|Xs], Xs).
+\end_layout
+
+\begin_layout Plain Layout
+
+del(X, [Y|Ys], [Y|Zs]) :-del(X, Ys, Zs).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* append(Xs,Ys,Zs) checks if Zs is the concatenation of Xs to Ys.
+ */
+\end_layout
+
+\begin_layout Plain Layout
+
+append([], Ys, Ys).
+\end_layout
+
+\begin_layout Plain Layout
+
+append([X|Xs], Ys, [X|Zs]) :-append(Xs, Ys, Zs).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נראה מספר דוגמאות לשימוש בפונקציה 
+\begin_inset Formula $\text{append}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-append( [a,b,c], [1,2,3], L).
+\end_layout
+
+\begin_layout Plain Layout
+
+L = [a,b,c,1,2,3]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+?-append( L1, L2, [a,b,c] ).
+\end_layout
+
+\begin_layout Plain Layout
+
+L1 = [] L2 = [a,b,c];
+\end_layout
+
+\begin_layout Plain Layout
+
+L1 = [a] L2 = [b,c];
+\end_layout
+
+\begin_layout Plain Layout
+
+L1 = [a,b] L2 = [c];
+\end_layout
+
+\begin_layout Plain Layout
+
+L1 = [a,b,c] L2 = [];
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+?-append( Before, [4|After], [1,2,3,4,5,6,7]).
+\end_layout
+
+\begin_layout Plain Layout
+
+Before = [1,2,3],
+\end_layout
+
+\begin_layout Plain Layout
+
+After = [5,6,7].
+\end_layout
+
+\begin_layout Plain Layout
+
+?-append(_, [Pred, 4, Succ |_], [1,2,3,4,5,6,7]).
+\end_layout
+
+\begin_layout Plain Layout
+
+Pred = 3,
+\end_layout
+
+\begin_layout Plain Layout
+
+Succ = 5.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כעת ננסה להבין איך באמצעות היכולות של פרולוג, ניתן להגדיר פונקציה שמכניסה
+ איבר למקום כלשהו ברשימה.
+ נסתכל על התוכנית הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+del(a, Xs, [1,2,3]).
+\end_layout
+
+\begin_layout Plain Layout
+
+Xs = [a,1,2,3];
+\end_layout
+
+\begin_layout Plain Layout
+
+Xs = [1,a,2,3];
+\end_layout
+
+\begin_layout Plain Layout
+
+Xs = [1,2,a,3];
+\end_layout
+
+\begin_layout Plain Layout
+
+Xs = [1,2,3,a];
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+אנו רואים שהתוכנית מחזירה את כל הרשימות 
+\begin_inset Formula $\text{Xs}$
+\end_inset
+
+, שאחרי שנמחק מהם האיבר 
+\begin_inset Formula $\text{a}$
+\end_inset
+
+, הן זהות לרשימה 
+\begin_inset Formula $\text{[1,2,3]}$
+\end_inset
+
+.
+ כעת, נוכל להגדיר את הפונקציה 
+\begin_inset Formula $\text{insert}$
+\end_inset
+
+ כך:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+insert(X, List, BiggerList) :- del(X, BiggerList, List).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+גם באמצעות הפונקציה 
+\begin_inset Formula $\text{append}$
+\end_inset
+
+ ניתן להגדיר באופן אחר פונקציות שכבר הגדרנו, ואף להגדיר באמצעותן פונקציות
+ נוספות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+member(X, Xs) :-append(_, [X|_], Xs).
+\end_layout
+
+\begin_layout Plain Layout
+
+prefix(Xs, Ys) :-append(Xs, _, Ys).
+\end_layout
+
+\begin_layout Plain Layout
+
+suffix(Xs, Ys) :-append(_, Bs, Ys).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* checks if Xs is a sublist of Ys */
+\end_layout
+
+\begin_layout Plain Layout
+
+/* 3 possible different implementation: */ 
+\end_layout
+
+\begin_layout Plain Layout
+
+sublist(Xs, Ys):- append(As, Bs, Ys),append(Xs, Cs, Bs).
+\end_layout
+
+\begin_layout Plain Layout
+
+sublist(Xs, Ys) :- prefix(Ps, Ys),
+\end_layout
+
+\begin_layout Plain Layout
+
+					suffix(Xs, Ps).
+\end_layout
+
+\begin_layout Plain Layout
+
+sublist(Xs, Ys) :- prefix(Xs, Ss),
+\end_layout
+
+\begin_layout Plain Layout
+
+					suffix(Ss, Ys).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+גישוש נסוג וגיזומים
+\end_layout
+
+\begin_layout Subsection
+הבעיה
+\end_layout
+
+\begin_layout Standard
+מנוע ההוכחה הפנימי של פרולוג משתמש בגישוש נסוג.
+ דבר זה מקנה לו כח רב, אך גם פותח פתח לחולשתו הגדולה - מנגנון זה עשוי לגרום
+ לחוסר יעילות, ולגרום לתוכנית לבצע חישובים לא מועילים לשוא.
+\end_layout
+
+\begin_layout Standard
+נסתכל על הפונקציה הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(x)=\begin{cases}
+0 & x<3\\
+2 & 3<=x<6\\
+4 & x>=6
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+תרגום של פונקציה זו לקוד פרולוג יראה כך:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+f(X,0):- X < 3.
+\end_layout
+
+\begin_layout Plain Layout
+
+f(X,2):- 3 =< X, X < 6.
+\end_layout
+
+\begin_layout Plain Layout
+
+f(X,4):- X >=6.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כעת נסתכל מה קורה כאשר נריץ את השאילתה הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-f(1,Y), Y>2.
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+התוכנית עובדת, ומחזירה תשובה נכונה.
+ אך אם נסתכל מאחורי הקלעים, נראה שמתבצע בזבוז גדול של משאבים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?- trace, f(1,Y),Y>2.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+ Call: (8) f(1, _G920) ? 
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (9) 1<3 ? ^  Exit: (9) 1<3 ?    Exit: (8) f(1, 0) ?    Redo: (8)
+ f(1, _G920) ? 
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (9) 1>=3 ? ^  Fail: (9) 1>=3 ?    
+\end_layout
+
+\begin_layout Plain Layout
+
+Redo: (8) f(1, _G920) ? ^  Call: (9) 1>=6 ?
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Fail: (9) 1>=6 ? false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם נשים לב, שלושת התנאים של הפונקציה זרים זה לזה - לא יכול להיות שאותו משתנה
+ יתאים לשני מקרים שונים בפונקציה.
+ לכן אחרי שהיינו רואים שהכלל 
+\begin_inset Formula $\text{f(1,Y)}$
+\end_inset
+
+ מסתפק, היינו מצפים שלא נחזור ונבדוק אותו שוב, מכיוון שיש לכל היותר התאמה
+ אחת שמספקת אותו.
+ אך ניתן לראות במעקב שביצענו שחלק גדול מהחישוב עושה בדיוק את מה שמפניו חששנו!
+ זהו כוח חישוב רב שיורד לטימיון.
+\end_layout
+
+\begin_layout Subsection
+הפיתרון - גיזומים
+\end_layout
+
+\begin_layout Standard
+כדי להגדיל את כוחו של המתכנת, ניתן להשתמש בפרולוג בגיזומים - הוראה לתוכנית
+ מתי אין להמשיך בגישוש
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+הוספת הגיזומים לשפה, הייתה מקור לוויכוחים רבים.
+ הגיזום מאפשר, כמו שהזכרנו, הגדלת יעילות הריצה ע"י הוראות של המתכנת שיכול
+ לדעת מתי גישוש אינה אפשרות רצויה מבחינתו.
+ מאידך, גיזום פוגע בתחביר ההצהרתי של השפה - גיזומים עלולים לגרום לכך שהסדר
+ שבו מוגדרים היחסים ישפיע על תוצאות הריצה )ראה פרק 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:גיזומים-אדומים-וירוקים"
+
+\end_inset
+
+ על גיזומים ירוקים ואדומים(, תופעה שאינה שייכת לשפה הצהרתית טהורה.
+ ויכוח זה היווה חלק מהגורמים ליצירתה של תת-השפה )חלקית ממש( דטלוג, שבה אין
+ גיזומים.
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+גיזום, המיוצג ע"י התו '!', הוא תנאי שתמיד "מצליח" - אך כזה שהגישוש לא יכול
+ ליסוג דרכו.
+ נראה כעת את הקוד המכיל את הגיזומים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+f(X,0):- X < 3, !.
+\end_layout
+
+\begin_layout Plain Layout
+
+f(X,2):- 3 =< X, X < 6, !.
+\end_layout
+
+\begin_layout Plain Layout
+
+f(X,4):- X >=6.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+לאחר שהתוכנית מתאימה בין 
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+ ל-
+\numeric on
+0
+\numeric off
+, היא לא מנסה יותר ערכים שונים ל
+\begin_inset Formula $\text{Y}$
+\end_inset
+
+, וזהו הערך שיתקבע מעתה.
+ מיד לאחר מכן, כשהתוכנית תגיד לתנאי 
+\begin_inset Formula $\text{2<Y}$
+\end_inset
+
+, היא תיכשל, ולא תנסה עוד התאמות.
+ כעת נראה את ריצת התוכנית לאחר הוספת הגיזומים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?- trace, f(1,Y),2<Y.
+\end_layout
+
+\begin_layout Plain Layout
+
+   Call: (8) f(1, _G1051) ?
+\end_layout
+
+\begin_layout Plain Layout
+
+^  Call: (9) 1<3 ? ^  Exit: (9) 1<3 ?
+\end_layout
+
+\begin_layout Plain Layout
+
+   Exit: (8) f(1, 0) ? false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אנו רואים שחסכנו חלק גדול מזמן הריצה של התוכנית, באמצעות השימוש בגיזומים.
+\end_layout
+
+\begin_layout Subsection
+גיזומים ירוקים ואדומים
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:גיזומים-אדומים-וירוקים"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+לאחר שראינו את השימוש בגיזומים, ניתן לראות שהתוכנית יכולה להיכתב בצורה חסכונית
+ יותר:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+f(X,0):- X < 3, !.
+\end_layout
+
+\begin_layout Plain Layout
+
+f(X,2):- X < 6, !.
+\end_layout
+
+\begin_layout Plain Layout
+
+f(X,4).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ניתן לראות שהלוגיקה לא השתנתה, וכלל ההיסק עדיין מייצגים נאמנה את הפונקציה
+ שאותה ראינו.
+ אבל, מה יקרה עם נריץ את התוכנית הנ"ל, ללא הגיזומים? נסתכל על התשובות לשאילתה
+ הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+f(1,Y).
+\end_layout
+
+\begin_layout Plain Layout
+
+Y = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+Y = 2;
+\end_layout
+
+\begin_layout Plain Layout
+
+Y = 4.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אנו רואים שכעת לא רק ששינינו את 
+\series bold
+אופן כתיבת
+\series default
+ התוכנית, ואת 
+\series bold
+ריצת
+\series default
+ התוכנית - שינינו גם את 
+\series bold
+משמעות
+\series default
+ התוכנית.
+ חתכים אלו המשנים את משמעות התוכנית, עלולים להיות מסוכנים ביותר.
+\end_layout
+
+\begin_layout Standard
+בעיה זו תביא אותנו להגדרת נושא הפרק - גיזומים ירוקים ואדומים:
+\end_layout
+
+\begin_layout Itemize
+כאשר לגיזום אין השפעה על משמעות התוכנית, הוא נקרא "גיזום ירוק".
+ בקריאה של התוכנית, ניתן להתעלם מגיזומים כאלו.
+\end_layout
+
+\begin_layout Itemize
+כאשר לגיזום יש השפעה על משמעות התוכנית, הוא יקרא "גיזום אדום".
+ גיזומים כאלו עושים את התוכנית קשה להבנה, וצריכים להיות זהירים ביותר כאשר
+ משתמשים בהם.
+\end_layout
+
+\begin_layout Subsection
+משמעות הגיזום
+\end_layout
+
+\begin_layout Standard
+כשמתבצע גיזום, הגיזום מחייב את התוכנית לכל הבחירות שהיא עשתה מזמן שכלל ההיסק
+ הופעל, עד הרגע שהגענו לגיזום.
+ נסתכל על הדוגמא הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+C :-P, Q, R, !, S, T, U.
+\end_layout
+
+\begin_layout Plain Layout
+
+C :-V.
+\end_layout
+
+\begin_layout Plain Layout
+
+A :-B, C, D.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וננתח את אופן פעולת התוכנית עבור השאילתה הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-A.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+במקרה זה, השפעות הגיזום תהיינה כדלקמן:
+\end_layout
+
+\begin_layout Itemize
+יתקיים גישוש על 
+\begin_inset Formula $\text{P,Q,R}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+לאחר שהם יסתפקו ונגיע לגיזום, הפיתרון הנוכחי ל
+\begin_inset Formula $\text{P,Q,R}$
+\end_inset
+
+ יבחר, וכל הפתרונות האפשריים האחרים יזרקו.
+\end_layout
+
+\begin_layout Itemize
+גם הכלל 
+\begin_inset Formula $\text{C:-V}$
+\end_inset
+
+ יזרק.
+\end_layout
+
+\begin_layout Itemize
+הגישוש ימשיך על 
+\begin_inset Formula $\text{S,T,U}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+ראש כלל ההיסק בו הפועל הגיזום הוא 
+\begin_inset Formula $\text{C}$
+\end_inset
+
+, ולכן הכלל 
+\begin_inset Formula $\text{A:-B,C,D}$
+\end_inset
+
+ ימשיך להיות מנותח כרגיל - גישוש יהיה אפשרי גם אחרי שנבחר 
+\begin_inset Formula $\text{C}$
+\end_inset
+
+ כלשהו.
+\end_layout
+
+\begin_layout Subsection
+דוגמאות לשימוש בגיזום
+\end_layout
+
+\begin_layout Itemize
+הוספת איבר לרשימה ללא כפילות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+add(X, L, L):- member(X, L), !.
+\end_layout
+
+\begin_layout Plain Layout
+
+add(X, L, [X|L]).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+חישוב היחס גדול או שווה )בהנחה שלכל איבר מתקיים שהוא גדול, בינוני או קטן(:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+boe(X,Y):- small(X), !, small(Y).
+\end_layout
+
+\begin_layout Plain Layout
+
+boe(X,Y):- big(Y),!, big(X).
+\end_layout
+
+\begin_layout Plain Layout
+
+boe(X,Y).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+שלילה
+\end_layout
+
+\begin_layout Standard
+כעת נראה כיצד ניתן לממש את אופרטור השלילה בשפת פרולוג.
+ שפת פרולוג מכילה שני ביטויים מיוחדים:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\text{true}$
+\end_inset
+
+ - ביטוי שתמיד מצליח.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\text{fail}$
+\end_inset
+
+ - ביטוי שתמיד נכשל.
+\end_layout
+
+\begin_layout Standard
+נסתכל על הדוגמא הבאה, בה אנו משתמשים ב
+\begin_inset Formula $\text{fail}$
+\end_inset
+
+ בשביל הגדרת יחס השונות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+different(X, X) :-!, fail.
+\end_layout
+
+\begin_layout Plain Layout
+
+different(X, Y).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+באמצעות 
+\begin_inset Formula $\text{fail}$
+\end_inset
+
+ נוכל גם להגדיר את אופרטור השלילה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+not(P) :-P, !, fail.
+\end_layout
+
+\begin_layout Plain Layout
+
+not(P).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אנו רואים שאם ניתן לספק את 
+\begin_inset Formula $\text{P}$
+\end_inset
+
+, אז ממילא הכלל 
+\begin_inset Formula $\text{not(P)}$
+\end_inset
+
+ לא יוכל להסתפק, ולהיפך.
+\end_layout
+
+\begin_layout Standard
+כעת גם ניתן להגדיר מחדש את יחס השונות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+different(X,Y):- not(X=Y).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נזכיר, כי כאשר תוכנית בפרולוג מחזירה 
+\begin_inset Formula $\text{false}$
+\end_inset
+
+, אין הכוונה שהעובדה או היחס אינם נכונים, אלא שאין מספיק מידע כדי להוכיח
+ את נכונותם.
+ מכך גם נובעת המשמעות של אופרטור השלילה - כאשר תנאי שלילה כלשהו מחזיר תשובה
+ חיובית, אין הכוונה שהעובדה או היחס אינם נכונים - האופרטור רק מיידע אותנו
+ שאין מספיק מידע בתוכנית כדי להוכיח את נכונותם.
+\end_layout
+
+\begin_layout Standard
+תרגיל - האם תוכלו להסביר את הקוד הבא?
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Prolog,keywordstyle={\color{blue}}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+?-assert( r(a) ).
+\end_layout
+
+\begin_layout Plain Layout
+
+?-assert( q(b) ).
+\end_layout
+
+\begin_layout Plain Layout
+
+?-assert( p(X) :-not(r(X)) ).
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+?-q(X), p(X).
+\end_layout
+
+\begin_layout Plain Layout
+
+X = b.
+\end_layout
+
+\begin_layout Plain Layout
+
+?-p(X), q(X).
+\end_layout
+
+\begin_layout Plain Layout
+
+false.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+תזכורת - על הפקודה 
+\begin_inset Formula $\text{assert}$
+\end_inset
+
+ למדנו בפרק 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:מאגר-מידע-ומפרש"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+דוגמאות מתקדמות
+\end_layout
+
+\begin_layout Subsection
+שאילתות מאגרי מידע ומבנים
+\end_layout
+
+\begin_layout Standard
+נראה כיצד ניתן לייצג מסדי נתונים בשפת פרולוג.
+ נסתכל על מאגר מידע המכיל משפחות.
+ מבנה של משפחה יהיה כדלקמן:
+\end_layout
+
+\begin_layout Itemize
+לכל משפחה יש אבא, אמא וילדים.
+\end_layout
+
+\begin_layout Itemize
+הילדים מיוצגים כרשימה.
+\end_layout
+
+\begin_layout Itemize
+לכל אדם יש שם, שם משפחה, תאריך לידה ועבודה.
+\end_layout
+
+\begin_layout Itemize
+עבודה יכול להגדיר מקום עבודה ושכר, או אדם שאינו מועסק.
+\end_layout
+
+\begin_layout Standard
+לדוגמא:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+family( 
+\end_layout
+
+\begin_layout Plain Layout
+
+person(tom, fox, date(7,may,1950), works(bbc,15200)),
+\end_layout
+
+\begin_layout Plain Layout
+
+person(ann, fox, date(9,jan,1949), works(ibm,20000)),
+\end_layout
+
+\begin_layout Plain Layout
+
+[ person(pat, fox, date(1,feb,1973), unemployed),
+\end_layout
+
+\begin_layout Plain Layout
+
+person(jim, fox, date(4,may,1976), unemployed)]).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+שאילתות לדוגמא:
+\end_layout
+
+\begin_layout Itemize
+האם קיימת משפחה ספציפית:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+family( person(_,armstrong,_,_),_,_).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+האם קיימות משפחות עם שלושה ילדים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+family(_,_,[_,_,_]).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+שמות של משפחות עם שלושה ילדים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+family(person(_,Name,_,_),_,[_,_,_]).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+כל הנשים הנשואות שיש להם לפחות שני ילדים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+family(_,person(Name,Surname,_,_),[_,_|_]).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כללי היסק שימושיים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+/* checks if X is a husband */
+\end_layout
+
+\begin_layout Plain Layout
+
+husband(X) :-family(X,_,_).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* checks if X is a wife */
+\end_layout
+
+\begin_layout Plain Layout
+
+wife(X) :-family(_,X,_).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* checks if X is a child */
+\end_layout
+
+\begin_layout Plain Layout
+
+/* "member" is already defined */
+\end_layout
+
+\begin_layout Plain Layout
+
+child(X) :- family(_,_,Children), member(X, Children).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* checks if the person X exists */
+\end_layout
+
+\begin_layout Plain Layout
+
+exists(Person) :-
+\end_layout
+
+\begin_layout Plain Layout
+
+			husband(Person); wife(Person); child(Person).
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* checks who was born in specific Date */
+\end_layout
+
+\begin_layout Plain Layout
+
+dateofbirth(person(_,_,Date,_),Date).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* cheks whose salary is S */
+\end_layout
+
+\begin_layout Plain Layout
+
+salary(person(_,_,_,works(_,S)), S).salary(person(_,_,_,unemployed, 0).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נראה שאילתות נוספות שניתן לשאול באמצעות כללי היסק אלו:
+\end_layout
+
+\begin_layout Itemize
+שמות כל האנשים במאגר המידע:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+person(Name,Surname,_,_)).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+כל הנשים שאינן עובדות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+wife(person(Name,Surname,_,works(_,_))).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+מובטלים שנולדו לפני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1933
+\numeric off
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+exists(person(Name,Surname,date(_,_,Year),unemployed)), Year < 1933.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+אנשים שנולדו לפני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1948
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ששכרם הוא פחות מ
+\numeric on
+8000
+\numeric off
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+exists(Person),dateofbirth(Person,date(_,_,Year)),Year < 1948,salary(Person,
+ Salary),Salary < 8000.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+ערימה בינומית
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+לקורא הנבון שאינו מכיר את מבנה הנתונים "ערימה בינומית", מומלץ לחפש את תיאור
+ המבנה במרשתת, שכן בפרק זה אנו נסביר רק את המימוש.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כתרגיל סיום, נראה כיצד ניתן להשתמש בכוח הרב של מנגנון ההוכחה של פרולוג,
+ ונבנה ערימה בינומית בפחות מ
+\numeric on
+20
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שורות קוד
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+מימוש זה הוצע ע"י עשהאל רייטר וניצן טור, סטודנטים בפקולטה למתמטיקה.
+\end_layout
+
+\end_inset
+
+.
+ ע"י מימוש של ערימה בינומית, "נרוויח" את היכולת למיין רשימה בקלות.
+ נביא את הקוד במלואו, ולאחר מכן נפרק אותו לחלקים ונסביר אותם אחד אחד:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+/*  
+\end_layout
+
+\begin_layout Plain Layout
+
+* Some implementaion details:  
+\end_layout
+
+\begin_layout Plain Layout
+
+* a binomial tree of order ORD, with root value R and children C_0,C_1,...,C_(ORD-1
+)  
+\end_layout
+
+\begin_layout Plain Layout
+
+* (such that C_i is a binomial tree of order i), is represented by:  
+\end_layout
+
+\begin_layout Plain Layout
+
+* tree(ORD,R,[C_0,C_1,...,C_(ORD-1)])  
+\end_layout
+
+\begin_layout Plain Layout
+
+*  
+\end_layout
+
+\begin_layout Plain Layout
+
+* a binomial heap, is represented by a list of its trees, sorted (in ascending
+ order) according to the orders.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+*   
+\end_layout
+
+\begin_layout Plain Layout
+
+* Note that the third field of a binomial tree is a valid binomial heap.
+  */
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeTrees(tree(ORD,R1,C1),tree(ORD,R2,C2),tree(NORD,R1,NC)) :-R1=<R2,!,NORD
+ is ORD+1,append(C1,[tree(ORD,R2,C2)],NC).
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeTrees(tree(ORD,R1,C1),tree(ORD,R2,C2),X) :- R1>R2,mergeTrees(tree(ORD,R2,C2
+),tree(ORD,R1,C1),X).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH([],X,X) :- !.
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(X,[],X) :- !.
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(A,B,RES) :- A=[tree(O1,R1,C1)|AS],B=[tree(O2,_,_)|_],O1<O2,!,mergeBH(AS,
+B,D),RES=[tree(O1,R1,C1)|D].
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(A,B,RES) :- B=[tree(O1,R1,C1)|BS],A=[tree(O2,_,_)|_],O1<O2,!,mergeBH(BS,
+A,D),RES=[tree(O1,R1,C1)|D].
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(A,B,RES) :- A=[At|AS],B=[Bt|BS],mergeTrees(At,Bt,RESt),!,mergeBH(RESt,AS
+,BS,RES).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% when merging with carry, the order of the carry tree must not exceed the
+ order of any tree in A and B.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(tree(ORD,R,C),A,B,RES) :- A=[tree(ORD,_,_)|_],B=[tree(ORD,_,_)|_],!,merg
+eBH(A,B,RESS),RES=[tree(ORD,R,C)|RESS].
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(tree(ORD,R,C),A,B,RES) :- A=[tree(ORD,_,_)|_],!,mergeBH(A,[tree(ORD,R,C)
+|B],RES).
+ mergeBH(T,A,B,RES) :- mergeBH([T|A],B,RES).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* Functionality */
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% checks if the BH is empty
+\end_layout
+
+\begin_layout Plain Layout
+
+emptyBH([]).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% add element to the BH
+\end_layout
+
+\begin_layout Plain Layout
+
+add(What,BeforeBH,AfterBH) :- mergeBH([tree(0,What,[])],BeforeBH,AfterBH).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% checks who's the minimum in the BH
+\end_layout
+
+\begin_layout Plain Layout
+
+lowerBound(_,[]).
+\end_layout
+
+\begin_layout Plain Layout
+
+lowerBound(Val,[tree(_,R,_)|BHS]) :- Val=<R,lowerBound(Val,BHS).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% fetching the minimum
+\end_layout
+
+\begin_layout Plain Layout
+
+fetchMin(Into, BeforeBH, AfterBH) :- member(tree(ORD,R,C),BeforeBH),lowerBound(R
+,BeforeBH),!, 		Into=R,delete(BeforeBH,tree(ORD,R,C),D),mergeBH(C,D,AfterBH).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+ייצוג הערימה
+\end_layout
+
+\begin_layout Standard
+לשם ייצוג של ערימה, נתחיל בתיאור של ייצוג של עץ:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+/*  
+\end_layout
+
+\begin_layout Plain Layout
+
+* Some implementaion details:  
+\end_layout
+
+\begin_layout Plain Layout
+
+* a binomial tree of order ORD, with root value R and children C_0,C_1,...,C_(ORD-1
+)  
+\end_layout
+
+\begin_layout Plain Layout
+
+* (such that C_i is a binomial tree of order i), is represented by:  
+\end_layout
+
+\begin_layout Plain Layout
+
+* tree(ORD,R,[C_0,C_1,...,C_(ORD-1)])  
+\end_layout
+
+\begin_layout Plain Layout
+
+*  
+\end_layout
+
+\begin_layout Plain Layout
+
+* a binomial heap, is represented by a list of its trees, sorted (in ascending
+ order) according to the orders.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+*   
+\end_layout
+
+\begin_layout Plain Layout
+
+* Note that the third field of a binomial tree is a valid binomial heap.
+  */
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עץ בינומי מיוצג כשלשה:
+\end_layout
+
+\begin_layout Itemize
+דרגת העץ )
+\begin_inset Formula $\text{ORD}$
+\end_inset
+
+(.
+\end_layout
+
+\begin_layout Itemize
+ערכו של השורש )
+\begin_inset Formula $(\text{R}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+רשימה של הילדים, כאשר כל ילד הוא עץ בינומי )שיכול להיות ריק( שדרגתם מ
+\numeric on
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+עד 
+\begin_inset Formula $\text{ORD-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+כעת, ערימה בינומית תהיה רשימה של עצים בינומיים, המסודרים בסדר עולה לפי דרגתם.
+ יש לשים לב שע"פ הגדרה זו, גם האיבר השלישי בכל עץ הוא ערימה בינומית )רשימה
+ של עצים בינומיים(.
+\end_layout
+
+\begin_layout Standard
+בהינתן שאנו מקבלים כעת כקופסא שחורה את קיום היחס 
+\begin_inset Formula $\text{mergeBH(A,B,RES)}$
+\end_inset
+
+, שממזג שתי ערימות קיימות לתוך ערימה חדשה, תכנון השימושיות של הערימה הוא
+ טריויאלי ולא נתעכב עליו.
+\end_layout
+
+\begin_layout Subsubsection
+מיזוג ערימות
+\end_layout
+
+\begin_layout Standard
+זהו לב ליבה של הערימה, ומרגע שנבין כיצד לממש יחס זה, נוכל לרוץ על מימוש
+ הערימה כולה.
+\end_layout
+
+\begin_layout Standard
+לשם מיזוג של ערימות, נממש קודם מיזוג של שני עצים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+mergeTrees(tree(ORD,R1,C1),tree(ORD,R2,C2),tree(NORD,R1,NC)) :-
+\end_layout
+
+\begin_layout Plain Layout
+
+		R1=<R2,!,
+\end_layout
+
+\begin_layout Plain Layout
+
+		NORD is ORD+1,
+\end_layout
+
+\begin_layout Plain Layout
+
+		append(C1,[tree(ORD,R2,C2)],NC).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר אנחנו ממזגים שתי ערימות, מיזוג עצים נדרש רק כאשר יש בשתי הערימות עצים
+ מאותה רמה )תזכורת - מיזוג ערימות דומה לחיבור מספרים בינארים, ולכן כאשר
+ אין עצים באותה רמה בשתי הרשימות, זה מקביל לחיבור של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ו-
+\numeric on
+1
+\numeric off
+.
+ הבעיה נוצרת כאשר יש 
+\begin_inset Formula $\text{carry}$
+\end_inset
+
+ - בחיבור של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ו-
+\numeric on
+1
+\numeric off
+(.
+\end_layout
+
+\begin_layout Standard
+במקרה כזה, יווצר לנו עץ חדש, שדרגתו גדולה באחד מדרגת העצים שחיברנו.
+ כל מה שנותר לנו לעשות הוא לבחור איזה שורש יהיה השורש של העץ החדש - אנו
+ צריכים לבחור את השורש הקטן ביותר, כדי לקיים את השמורה של הערימה.
+\end_layout
+
+\begin_layout Standard
+לאחר שבחרנו איזה שורש הכי קטן, כל שנותר לעשות הוא לשרשר את העץ בעל השורש
+ הגדול, לרשימת הבנים של העץ בעל השורש הקטן.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+mergeTrees(tree(ORD,R1,C1),tree(ORD,R2,C2),X) :- 
+\end_layout
+
+\begin_layout Plain Layout
+
+		R1>R2,
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeTrees(tree(ORD,R2,C2), tree(ORD,R1,C1),X).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+היחס הנוסף נועד כדי לוודא שאנחנו מטפלים גם במקרה שבו העצים לא הגיעו כאשר
+ הראשון הוא בעל השורש הקטן יותר, ובמקרה כזה פשוט נחליף בין הסדר של העצים.
+\end_layout
+
+\begin_layout Standard
+כעת, לאחר שסיימנו את מיזוג העצים, נוכל לעבור למיזוג הערימות.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+mergeBH([],X,X) :- !.
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(X,[],X) :- !.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זהו המקרה הטריויאלי, בו אחת מהערימות ריקות.
+ נסתכל מה קורה במקרים המורכבים יותר:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+mergeBH(A,B,RES) :- 
+\end_layout
+
+\begin_layout Plain Layout
+
+		A=[tree(O1,R1,C1)|AS],
+\end_layout
+
+\begin_layout Plain Layout
+
+		B=[tree(O2,_,_)|_],
+\end_layout
+
+\begin_layout Plain Layout
+
+		O1<O2,!,
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeBH(AS,B,D),
+\end_layout
+
+\begin_layout Plain Layout
+
+		RES=[tree(O1,R1,C1)|D].
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(A,B,RES) :- 
+\end_layout
+
+\begin_layout Plain Layout
+
+		B=[tree(O1,R1,C1)|BS],
+\end_layout
+
+\begin_layout Plain Layout
+
+		A=[tree(O2,_,_)|_],
+\end_layout
+
+\begin_layout Plain Layout
+
+		O1<O2,!,
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeBH(BS,A,D),
+\end_layout
+
+\begin_layout Plain Layout
+
+		RES=[tree(O1,R1,C1)|D].
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר בשני הערימות העצים הכי קטנים אינם באותה דרגה, עלינו פשוט לשרשר את העצים
+ לרשימה הממוזגת.
+ כאשר נגיע לעצים בעלי אותו גודל בשתי הרשימות, נשתמש ביחס הבא:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+mergeBH(A,B,RES) :- 
+\end_layout
+
+\begin_layout Plain Layout
+
+		A=[At|AS],
+\end_layout
+
+\begin_layout Plain Layout
+
+		B=[Bt|BS],
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeTrees(At,Bt,RESt),!,
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeBH(RESt,AS,BS,RES).
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+במקרה שבו יש שני עצים באותה דרגה, אנו נמזג אותם ע"פ האלגוריתם שראינו למיזוג
+ עצים, וכעת נישאר עם שתי רשימות ועץ נוסף.
+ יש לשים לב שכל העצים שנותרו בערימות, הם 
+\series bold
+לפחות
+\series default
+ בדרגה של העץ החדש הממוזג )שכן בשתי הערימות היו עצים בדרגה 
+\begin_inset Formula $\text{ORD}$
+\end_inset
+
+, ולכן העצים שנשאר בהם הם לפחות בדרגה 
+\begin_inset Formula $\text{ORD + 1}$
+\end_inset
+
+, כמו העץ שקיבלנו ממזיוג העצים בדרגה 
+\begin_inset Formula $\text{ORD}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+% when merging with carry, the order of the carry tree must not exceed the
+ order of any tree in A and B.
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(tree(ORD,R,C),A,B,RES) :-
+\end_layout
+
+\begin_layout Plain Layout
+
+		A=[tree(ORD,_,_)|_],
+\end_layout
+
+\begin_layout Plain Layout
+
+		B=[tree(ORD,_,_)|_],!,
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeBH(A,B,RESS),
+\end_layout
+
+\begin_layout Plain Layout
+
+		RES=[tree(ORD,R,C)|RESS].
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(tree(ORD,R,C),A,B,RES) :- 
+\end_layout
+
+\begin_layout Plain Layout
+
+		A=[tree(ORD,_,_)|_],!,
+\end_layout
+
+\begin_layout Plain Layout
+
+		mergeBH(A,[tree(ORD,R,C)|B],RES).
+\end_layout
+
+\begin_layout Plain Layout
+
+mergeBH(T,A,B,RES) :- mergeBH([T|A],B,RES).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם הגענו לאחד מהיחסים האלו, אזי יש בידינו שתי ערימות, עץ בודד, ומשתנה שאותו
+ נרצה להתאים לערימה הממוזגת.
+ ההבדל בין היחסים נובע מהדרגה של העץ הכי קטן בערימות הנתונות לנו.
+ נתאר מה קורה בכל אחד מן המקרים:
+\end_layout
+
+\begin_layout Enumerate
+במקרה הראשון )העצים הקטנים בשתי הערימות הם מאותה דרגה של העץ הבודד - כולם
+ בדרגה 
+\begin_inset Formula $\text{ORD}$
+\end_inset
+
+( - נאחד את שתי הערימות.
+ אנו יודעים כעת שהעץ הכי קטן בהם הוא בדרגה 
+\begin_inset Formula $\text{ORD + 1}$
+\end_inset
+
+, ולכן אין בעיה פשוט להוסיף את העץ הבודד לערימה שקיבלנו מהמיזוג.
+\end_layout
+
+\begin_layout Enumerate
+במקרה השני )דרגת העץ ברשימה השניה גדולה יותר מדרגת העץ הבודד, ואילו דרגת
+ העץ ברשימה הראשונה שווה לו( - ניתן להוסיף את העץ לערימה השניה, שכן אין
+ בה עץ באותו גודל )ולכן זהו שרשור פשוט ללא 
+\begin_inset Formula $\text{carry}$
+\end_inset
+
+(, ואז כל שנותר הוא למזג את הערימות שקיבלנו.
+\end_layout
+
+\begin_layout Enumerate
+במקרה השלישי )דרגת שני העצים הראשונים בערימות שקיבלנו גדולה מדרגת העץ הבודד(
+ - נוסיף את העץ לערימה הראשונה )בה"כ(, ונמשיך כרגיל עם המיזוג.
+\end_layout
+
+\begin_layout Standard
+זהו! סיימנו לממש את מיזוג הערימות.
+\end_layout
+
+\begin_layout Subsubsection
+מיון באמצעות ערימה בינומית
+\end_layout
+
+\begin_layout Standard
+כעת נסתכל על הקוד )הדי פשוט, בינינו( של מיון רשימה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+% transfer list to BH 
+\end_layout
+
+\begin_layout Plain Layout
+
+listToBH([],BH) :- !,emptyBH(BH).
+\end_layout
+
+\begin_layout Plain Layout
+
+listToBH([X|XS],BH) :- listToBH(XS,BHS),
+\end_layout
+
+\begin_layout Plain Layout
+
+		add(X,BHS,BH).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% transfer BH to list, inserting the minimum at the beggining
+\end_layout
+
+\begin_layout Plain Layout
+
+bHToList(BH,L) :- emptyBH(BH),!,L=[].
+\end_layout
+
+\begin_layout Plain Layout
+
+bHToList(BH,L) :- fetchMin(X,BH,BHS),
+\end_layout
+
+\begin_layout Plain Layout
+
+		bHToList(BHS,LS),
+\end_layout
+
+\begin_layout Plain Layout
+
+		L=[X|LS].
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% transfers list to BH and then back to list
+\end_layout
+
+\begin_layout Plain Layout
+
+sortList(In,Out) :- listToBH(In,BH),
+\end_layout
+
+\begin_layout Plain Layout
+
+		bHToList(BH,Out).
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כעת, לאחר שמימשנו את מיזוג הערימות, שבאמצעותו מימשנו את שימושיות הערימה
+ הבינומית, כל שנותר לעשות כדי למיין רשימה הוא להעביר אותה לתוך ערימה, ולהוציא
+ את הערימה חזרה לרשימה, כאשר מוציאים כל פעם את האיבר המינימלי.
+\end_layout
+
+\begin_layout Section
+אפילוג
+\end_layout
+
+\begin_layout Standard
+במסמך זה עברנו על היסודות של שפת התכנות פרולוג.
+ ראינו את אופן התכנות בה, את הפעולות הבסיסיות בשפה וכיצד משתמשים ברשימות.
+ המשכנו למנגנון הגישוש הנסוג של השפה, וקינחנו במספר דוגמאות, חלקן פשוטות
+ וחלקן מורכבות.
+\end_layout
+
+\begin_layout Standard
+אך כמובן שפתחנו כאן פתח כחודו של מחט, והדרך לשליטה בשפה עוד ארוכה.
+ שפת פרולוג משמשת כיום בעיקר לשימושים של בינה מלאכותית ועיבוד שפה טבעית
+ )ומשמשת אף את החוקרים בפרוייקט ווטסון של 
+\begin_inset Formula $\text{IBM}$
+\end_inset
+
+(, תחומים בהם לא התמקדנו במסמך זה.
+ 
+\end_layout
+
+\begin_layout Standard
+אנו מקווים שכעת הקורא המיומן מצוייד בכלים המתאימים להמשיך בלמידה והעמקה
+ בשפת פרולוג.
+ אע"פ שלא ניתן לקרוא מסמך זה על רגל אחת, נוכל להגיד בביטחון - "ואידך פירושא
+ הוא - זיל גמור!".
+\end_layout
+
+\end_body
+\end_document

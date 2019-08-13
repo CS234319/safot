@@ -1,0 +1,55 @@
+\def\cf #1 {%
+	\def\kind@cf{#1}%
+	\beginIteration@cf
+}
+
+\def\beginIteration@cf{%
+  \begingroup
+  \catcode`:=11%
+  \def\idAccumulator@cf{}%
+  \iterateOnNextToken@cf
+}
+
+\def\iterateOnNextToken@cf{%
+  \futurelet\nextToken@cf
+	\examineNextToken@cf
+}
+
+\def\examineNextToken@cf{%
+  \ifcase 0% Trick: will expand the next tokens to see if more digits follow. 
+    \ifx\nextToken@cf\@sptoken 0\else
+    \ifcat a\nextToken@cf 1\else
+    \ifcat 0\nextToken@cf 2\fi% test of token is catcode "other"
+    \fi\fi
+  \relax
+    \expandafter\endIteration@cf
+  \or
+    \expandafter\accumulateCharacter@cf
+  \else
+    \expandafter\cf@checknum
+  \fi
+}
+
+\def\accumulateCharacter@cf#1{%
+  \edef\idAccumulator@cf{\idAccumulator@cf#1}%
+  \iterateOnNextToken@cf
+}
+
+% Checks whether the parameter is a number (ASCII 48-57)
+\def\cf@checknum#1{%
+  \ifcase 0%
+    \ifnum`#1>47
+    \ifnum`#1<58 1\fi\fi
+  \relax
+    \def\next{\endIteration@cf#1}%
+  \else
+    \def\next{\accumulateCharacter@cf{#1}}%
+  \fi
+  \next
+}
+
+\def\endIteration@cf{%
+  \edef\label@cf{\kind@cf:\idAccumulator@cf}%
+  \kind@cf~\expandafter\ref\expandafter{\label@cf}%
+  \endgroup
+}

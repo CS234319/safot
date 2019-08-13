@@ -3,11 +3,12 @@
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage{float}
+\usepackage{graphicx}
 \usepackage[toc,section=section,footnote]{glossaries}
 \usepackage{glossary-long}
 \usepackage{yogi-unicode}
 
-\usepackage{graphicx}
+
 \usepackage{latexsym}
 \usepackage{listings}
 \usepackage{multicol}
@@ -26,15 +27,15 @@
   \usepackage{polyglossia}
   \setmainlanguage[calendar=hebrew]{hebrew}
   \setotherlanguage{english}
-  \setmainfont{Comic Sans MS}%Liberation Serif
-  \setromanfont{Comic Sans MS}
+  \setmainfont{Liberation Serif}
+  \setromanfont{Times New Roman}
   \setmonofont{DejaVu Sans Mono}
   \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
- % \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+% \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
 %  \setromanfont{David CLM}
-  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman} 
-  \setromanfont{Times New Roman}
-  \let\hebrewfonttt\ttfamily
+%\setromanfont{Comic Sans MS}
+%\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman} 
+\let\hebrewfonttt\ttfamily
 
 % Fix section numbering
 \renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
