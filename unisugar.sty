@@ -50,12 +50,13 @@ employed in some very common LaTeX commands.
 }{\endgroup#2\space}%
 }
 
-\toEolnCommand\toEolnSectionStar{\section{#1}}
+\toEolnCommand\toEolnChapter{\chapter{#1}}
+\toEolnCommand\toEolnParagraph{\paragraph{#1}}
 \toEolnCommand\toEolnSection{\section{#1}}
+\toEolnCommand\toEolnSectionStar{\section{#1}}
+\toEolnCommand\toEolnSubparagraph{\subparagraph{#1}}
 \toEolnCommand\toEolnSubsection{\subsection{#1}}
 \toEolnCommand\toEolnSubsubsection{\subsubsection{#1}}
-\toEolnCommand\toEolnParagraph{\paragraph{#1}}
-\toEolnCommand\toEolnSubparagraph{\subparagraph{#1}}
 
 \ifxetex
 \relax
@@ -73,6 +74,7 @@ to enjoy this package fully}
 \catcode"2318=11
 \edef\⌘{⌘}
 \catcode"2318=0 
+\def⌘⌘{\item}
 
 % ␣: U+2423 OPEN BOX, a visual space is allowed as a legitimate character in
 % control sequences, whereby eliminating the need for ugly juxtaposing of
@@ -128,6 +130,14 @@ to enjoy this package fully}
 \toEolnParagraph
 }%
 }
+
+⌘catcode"2102=11
+⌘edef\ℂ{ℂ}
+⌘catcode"2102=⌘active 
+⌘newcommandℂ{⌘chapter␣sugar}
+⌘newcommand⌘chapter␣sugar{\toEolnChapter}
+}
+
 
 % §: U+00A7 SECTION SIGN, will serve as a sugar nickname for ⌘section, using
 % the remainder of the line as the section's title. Further, §§, that is two

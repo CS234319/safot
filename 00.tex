@@ -1,7 +1,7 @@
 \documentclass[a4paper,12pt]{book}
 
 \usepackage{00}
-\def\archaic#1\modern#2\phrase{#2}
+
 
 ⌘dominitoc
 ⌘מאומה 
@@ -9,10 +9,7 @@
 
 ⌘כותרת{
   \fontsize{120}{140}\selectfont
-
-   
      שפות תכנות
-
 }
 
 ⌘מחבר{
@@ -21,14 +18,25 @@
 }
 ⌘תחילת{מסמך}
 ⌘חומר␣מקדים
-
+\bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
+location="Jerusalem , Israel"
+server="http://www.Google.com/ig/api"
+request="$server?weather=$location"
+wget -q -O - $request |\
+tr " < >" "\012\012" |\
+grep " condition data " |\
+head -n 1 |\
+sed -e 's/^.*="//' -e 's/"\/*//' |\
+tr 'A -Z' 'a -z'
+\END
 ⌘פרק{פרולוג}
-⌘כלול{admin}
+%⌘כלול{admin}
 ⌘כלול{front}
 
 
 
 ⌘חומר␣עיקרי
+ℂ צעדים ראשונים
 ⌘כלול{steps}
 ⌘פרק{הביצה והתרנגולת}
 ⌘כלול{chicken-and-egg}

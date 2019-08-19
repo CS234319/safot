@@ -7,7 +7,7 @@
 DUP 					 =  ../Programs/dup
 LANG_TOOL      =  ../Programs/LanguageTool-3.2/languagetool-commandline.jar
 LATEX_COMMAND  =  lualatex
-LATEX_FLAGS    =  -file-line-error- -synctex=1 -halt-on-error
+LATEX_FLAGS    =  -file-line-error- -synctex=1 # -halt-on-error
 LATEX          = $(LATEX_COMMAND) $(LATEX_FLAGS)
 LOCALTEXMF     =  ~/texmf   #  Comment or  change  if necessary.
 MAIN           =  00
@@ -15,6 +15,8 @@ SOURCES        =  $(wildcard *.sty *.tex) $(LISTINGS) Makefile
 TARGETS        =  $(MAIN).pdf 
 TMP 					 := $(shell mktemp -d)
 
+
+latex:
 # This is our first target. It would become your default if you include this
 # file, without defining an targets before it. It is OK to use a target whose
 # main body is defined later. 
@@ -55,7 +57,7 @@ clean: $(call tip,clean,\
 
 .PHONY: latex 
 latex: $(call tip,latex, run latex to make $(MAIN).pdf) $(MAIN).pdf
-	texfot $(LATEX) ./$(MAIN).tex
+	$(LATEX) ./$(MAIN).tex
 
 .PHONY: force 
 force: $(call tip,force, alias of 'latex') 

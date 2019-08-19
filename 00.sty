@@ -1,9 +1,13 @@
 % Global packages:
+\usepackage[]{graphicx}
+\graphicspath{{Images/}}
+%\usepackage{ifpdf}
+
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2.5cm]{geometry}
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage{float}
-\usepackage{graphicx}
+
 \usepackage[toc,section=section,footnote]{glossaries}
 \usepackage{glossary-long}
 \usepackage{yogi-unicode}
@@ -13,7 +17,7 @@
 \usepackage{listings}
 \usepackage{multicol}
 \usepackage{url} \def\UrlFont{\ttfamilylatin}
-\usepackage[table]{xcolor}
+\usepackage[table,dvipsnames]{xcolor}
 \usepackage{pbox}
 \usepackage{tcolorbox}
 \usepackage{booktabs}
@@ -27,15 +31,17 @@
   \usepackage{polyglossia}
   \setmainlanguage[calendar=hebrew]{hebrew}
   \setotherlanguage{english}
-  \setmainfont{Liberation Serif}
+  \setmainfont{Times New Roman}
   \setromanfont{Times New Roman}
   \setmonofont{DejaVu Sans Mono}
-  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+
+  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
+  \let\hebrewfonttt\ttfamily
+% Liberation Serif
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
 % \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
 %  \setromanfont{David CLM}
 %\setromanfont{Comic Sans MS}
-%\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman} 
-\let\hebrewfonttt\ttfamily
 
 % Fix section numbering
 \renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
@@ -59,7 +65,7 @@
 %    BoldFont=*-bold,
 %    ItalicFont=*-italic,
 %    BoldItalicFont=*-bolditalic]{AntykwaTorunska}
-\usepackage[unique,dir=00]{bashful}
+\usepackage[unique,dir=Excerpts]{bashful}
 \usepackage{yogi-code}
 \usepackage{yogi-lang}
 
@@ -202,12 +208,29 @@ language=#2,belowcaptionskip=1\baselineskip,
 ⌘setRTL{}
 }
 
+% Environment for writing syntax rules
+\newenvironment{derivation}{\ignorespaces%
+  \def\<##1>{\,⟨\text{\sffamily \scriptsize \slshape ##1}⟩\,}%
+  \def\|{\meta{\mathbin{|}}}%
+  \def\=##1={\,\text{\kk ##1}\,}%
+  \def\meta##1{{\textcolor{red}{##1}}}%
+  \def\({\meta{\left  (}}
+  \def\){\meta{\right )}}
+  \def\~##1~{\,\text{\inline!##1!}\,}%
+  \def\"##1"{\,\text{\inline!##1!}\,}%
+  \def\*{^{\meta*}}%
+  \def\+{^{\meta+}}%
+  \def\opt{\!_{\meta{opt}}\,}%
+  \scriptsize%
+}{\ignorespacesafterend}
 
 \newtcolorbox{mybox}{colback=red!5!white,
 colframe=red!75!black}
 
 % Musn't have an empty new line before it
 \newcommand{⌘הכרח␣שורה␣חדשה}{\\*\hfill\\}
+
+
 
 
 
