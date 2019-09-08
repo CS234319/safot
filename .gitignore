@@ -1,4 +1,5 @@
 # Weirdos // vim: +,/^\s*$/-1!sort -u
+
 ~$*
 __.*
 
@@ -35,14 +36,15 @@ $.*
 *.csv
 *.eho
 *.heo
+*.mtc[0-9]
 *.mtc
-*.mtc0
 *.db
 *.dvi
 *.eml
 *.exe
 *.fdb_latexmk
 *.fls
+*.ini
 *.glg
 *.glo
 *.gls
