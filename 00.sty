@@ -7,11 +7,15 @@
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
 
 \usepackage[toc,section=section,footnote]{glossaries}
 \usepackage{glossary-long}
 \usepackage{yogi-unicode}
-
+\usepackage[nameinlink]{cleveref}
 
 \usepackage{latexsym}
 \usepackage{listings}
@@ -19,9 +23,15 @@
 \usepackage{url} \def\UrlFont{\ttfamilylatin}
 \usepackage[table,dvipsnames]{xcolor}
 \usepackage{pbox}
+\usepackage{proof}
 \usepackage{tcolorbox}
 \usepackage{booktabs}
 \usepackage{multirow}
+
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 
   \usepackage[tight]{minitoc}
     \renewcommand\stctitle{תֹּכֶן הָעִנְיָנִים}
@@ -30,14 +40,34 @@
 
   \usepackage{polyglossia}
   \setmainlanguage[calendar=hebrew]{hebrew}
+  \setmainfont{Linux Libertine O}
   \setotherlanguage{english}
-  \setmainfont{Times New Roman}
-  \setromanfont{Times New Roman}
-  \setmonofont{DejaVu Sans Mono}
+  \setotherlanguage{arabic}
+  \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
+  \newfontfamily\hewrewfont[Script=Hebrew]{David CLM}
+  \makeatletter
+\def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
+\def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
+\makeatother
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
+%    BoldFont=Hadasim CLM Bold,
+%    ItalicFont=Hadasim CLM RegularOblique,
+%    BoldItalicFont=Hadasim CLM BoldOblique,
+%    SlantedFont=Hadasim CLM RegularOblique,
+%    BoldSlantedFont=Hadasim CLM BoldOblique,
+%  ]
 
-  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
-  \let\hebrewfonttt\ttfamily
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Arial}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
+
 % Liberation Serif
+
+ % \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+ % \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+ % \let\hebrewfonttt\ttfamily
+% Liberation Serif
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
 %  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
 % \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
 %  \setromanfont{David CLM}

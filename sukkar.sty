@@ -1,8 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{sukkar}[2011/02/07 
-Hebrew names for common LaTeX commands.
-]
-%\RequirePackage{polyglossia}
+\ProvidesPackage{sukkar}[2018/02/07 Hebrew names for common LaTeX commands.]
+\RequirePackage{polyglossia}
 \RequirePackage{xspace}
 \RequirePackage{xifthen}
 \RequirePackage{enumitem}
@@ -39,12 +37,21 @@ Hebrew names for common LaTeX commands.
 
 % Re-baptize common environments with a Hebrew name.
 
-\newenvironment{מסמך}{\document}{\enddocument}
+\def\@EnvironmentAlias  #1 | #2 | {%
+  \expandafter\def\csname#2\endcsname{\csname#1\endcsname}\relax
+  \expandafter\def\csname end#2\endcsname{\csname end#1\endcsname}\relax
+}
 
-% List
-\newenvironment{ציינון}{\begingroup\itemize}{\enditemize\endgroup}
-\newenvironment{תיאור}{\begingroup\itemize}{\enditemize\endgroup}
-\newenvironment{ספרור}{\begingroup\enumerate}{\endenumerate\endgroup}
+\@EnvironmentAlias description  |  תיאור   |
+\@EnvironmentAlias document     |  מסמך    |
+\@EnvironmentAlias enumerate    |  ספרור   |
+\@EnvironmentAlias figure       |  איור    |
+\@EnvironmentAlias itemize      |  ציינון  |
+\@EnvironmentAlias quote        |  מובאה   |
+\@EnvironmentAlias table        |  טבלה    |
+\@EnvironmentAlias table        |  טבלא    |
+\@EnvironmentAlias definition   |  הגדרה    |
+
 \newenvironment{אבגוד}{%
 \begingroup
 \setenumerate[1]{label=\texthebrew{\protect\hebrewnumeral{\value{enumi}}}.}%
@@ -53,240 +60,115 @@ Hebrew names for common LaTeX commands.
 \setenumerate[4]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumiv}}}.}%
 \enumerate}{\endenumerate\endgroup}
 
+\def\@CommandAlias #1#2 |{\expandafter\let\csname#2\endcsname=#1}
 
-
-\newenvironment{מובאה}{\begingroup\quote}{\endquote\endgroup}
-
-% Floats.
-\newenvironment{טבלה}{\begingroup\table}{\endtable\endgroup}
-\newenvironment{טבלא}{\begingroup\table}{\endtable\endgroup}
-\newenvironment{איור}{\begingroup\figure}{\endfigure\endgroup}
-
-\newcommand\@translate[2]{\expandafter\let\csname#2\endcsname=#1}
-
-%\@translate\a{}
-\@translate\addcontentsline{הוסף␣שורה␣לתוכן␣העניינים}
-\@translate\address{כתובת}
-\@translate\addtocontents{הוסף␣לתוכן␣העניינים}
-%\@translate\addtocounter{}
-%\@translate\addtolength{}
-%\@translate\addvspace{}
-%\@translate\Alph{}
-%\@translate\alph{}
-\@translate\appendix{נספחים}
-%\@translate\arabic{}
-\@translate\author{מחבר}
-%\@translate\backslash{}
-\@translate\begin{תחילת}
-%\@translate\bfseries{}
-\@translate\bibitem{פריט␣ביבליוגרפי}
-\@translate\bibliography{ביבליוגרפיה}
-\@translate\bibliographystyle{סגנון␣ביבליוגרפיה}
-\@translate\bigskip{דילוג␣גדול}
-\@translate\caption{כיתוב}
-\@translate\relax{מאומה}
-\@translate\cc{העתק}
-%\@translate\cdots{}
-\@translate\centering{}
-\@translate\chapter{פרק}
-%\@translate\circle{}
-\@translate\cite{ציטוט}
-\@translate\cleardoublepage{נקה␣עמוד␣כפול}
-\@translate\clearpage{נקה␣עמוד}
-\@translate\cline{עמודה␣מרובה}
-\@translate\closing{סגירה}
-\@translate\protect{שמור}
-\@translate\let{הצב}
-\@translate\let{הגדר}
-%\@translate\COLON{}
-%\@translate\dashbox{}
-\@translate\date{תאריך}
-%\@translate\ddots{}
-%\@translate\depth{}
-%\@translate\documentclass{}
-%\@translate\dotfill{}
-\@translate\emph{הדגש}
-\@translate\encl{לוט}
-\@translate\end{סוף}
-\@translate\enlargethispage{הגדל␣עמוד␣זה}
-\@translate\fbox{}
-\@translate\flushbottom{נקה␣עמוד}
-%\@translate\fnsymbol{}
-%\@translate\fontencoding{}
-%\@translate\fontfamily{}
-%\@translate\fontseries{}
-%\@translate\fontshape{}
-%\@translate\fontsize{}
-\@translate\RTLfootnote{הערת␣שוליים}
-%\@translate\footnotemark{}
-\@translate\footnotesize{גודל␣הערת␣שוליים}
-%\@translate\footnotetext{}
-%\@translate\frac{}
-\@translate\frame{מסגרת}
-\@translate\framebox{}
-\@translate\frontmatter{חומר␣מקדים}
-\@translate\mainmatter{חומר␣עיקרי}
-\@translate\backmatter{חומר␣אחורי}
-\@translate\fussy{טרחני}
-%\@translate\height{}
-\@translate\hebrewtoday{תאריך␣עברי␣של␣היום}
-\@translate\hfill{}
-\@translate\hline{}
-\@translate\hrulefill{}
-%\@translate\hspace{}
-\@translate\Huge{ענקמוני}
-\@translate\huge{ענק}
-\@translate\hyphenation{מיקוף}
-\@translate\include{טול}
-\@translate\includeonly{טול␣כעת}
-\@translate\indent{הזחה}
-\@translate\input{כלול}
-\@translate\item{פריט}
-%\@translate\itshape{}
-\@translate\kill{בטל}
-\@translate\label{תגית}
-\@translate\LARGE{גדול␣מאוד␣מאוד}
-\@translate\Large{גדול␣מאוד}
-\@translate\large{גדול}
-%\@translate\ldots{}
-\@translate\lefteqn{}
-\@translate\line{}
-\@translate\linebreak{}
-\@translate\linethickness{}
-\@translate\listoffigures{רשימת␣איורים}
-\@translate\listoftables{רשימת␣טבלאות}
-\@translate\location{מיקום}
-\@translate\makebox{}
-%\@translate\makebox{}
-%\@translate\makelabels{}
-\@translate\maketitle{עשה␣כותרת}
-\@translate\markboth{}
-\@translate\markright{}
-%\@translate\mathbf{}
-%\@translate\mathcal{}
-%\@translate\mathit{}
-%\@translate\mathnormal{}
-%\@translate\mathrm{}
-%\@translate\mathsf{}
-%\@translate\mathtt{}
-%\@translate\mathversion{}
-\@translate\mbox{תיבה}
-%\@translate\mdseries{}
-\@translate\medskip{דילוג␣בינוני}
-\@translate\multicolumn{}
-%\@translate\multiput{}
-\@translate\name{שם}
-\@translate\newcommand{פקודה␣חדשה}
-%\@translate\newcounter{}
-\@translate\newenvironment{סביבה␣חדשה}
-%\@translate\newfont{}
-%\@translate\newlength{}
-\@translate\newline{שורה␣חדשה}
-\@translate\newpage{עמוד␣חדש}
-%\@translate\newsavebox{}
-%\@translate\newtheorem{}
-\@translate\nocite{ללא␣ציטוט}
-%\@translate\nofiles{}
-\@translate\noindent{ללא␣הזחה}
-\@translate\nolinebreak{אין␣לשבור␣שורה}
-\@translate\nopagebreak{אין␣לשבור␣עמוד}
-%\@translate\normalfont{}
-\@translate\normalsize{גודל␣רגיל}
-\@translate\onecolumn{עמודה␣אחת}
-\@translate\opening{פתיחה}
-%\@translate\oval{}
-%\@translate\overbrace{}
-%\@translate\overline{}
-\@translate\pagebreak{שבירת␣עמוד}
-\@translate\pagenumbering{מספור␣עמודים}
-\@translate\pageref{פנה␣לעמוד}
-%\@translate\pagestyle{}
-\@translate\par{פיסקה␣חדשה}
-\@translate\paragraph{פיסקה}
-\@translate\parbox{}
-%\@translate\ps{}
-%\@translate\pushtabs{}
-%\@translate\put{}
-\@translate\raggedbottom{}
-\@translate\raggedleft{}
-\@translate\raggedright{}
-\@translate\raisebox{}
-\@translate\ref{פנה}
-%\@translate\refstepcounter{}
-\@translate\renewcommand{חדש␣פקודה}
-\@translate\renewenvironment{חדש␣סביבה}
-%\@translate\rmfamily{}
-%\@translate\Roman{}
-%\@translate\roman{}
-\@translate\rule{}
-\@translate\savebox{}
-\@translate\sbox{}
-\@translate\scriptsize{}
-%\@translate\scshape{}
-%\@translate\selectfont{}
-%\@translate\setcounter{}
-%\@translate\setlength{}
-\@translate\setRTL{ימין␣שמאל}
-\@translate\setLTR{שמאל␣ימין}
-\@translate\textenglish{אנגלית}
-%\@translate\settodepth{}
-%\@translate\settoheight{}
-%\@translate\settowidth{}
-%\@translate\sffamily{}
-%\@translate\shortstack{}
-\@translate\signature{חתימה}
-\@translate\sloppy{רשלני}
-%\@translate\slshape{}
-\@translate\small{קטן}
-\@translate\smallskip{דילוג␣קטן}
-%\@translate\sqrt{}
-\@translate\startbreaks{איסור␣שבירת␣עמוד}
-%\@translate\stepcounter{}
-\@translate\stopbreaks{סוף␣איסור␣שבירת␣עמוד}
-\@translate\section{סעיף}
-\@translate\subparagraph{תת␣פסקה}
-\@translate\subsection{תת␣סעיף}
-\@translate\subsubsection{תת␣תת␣סעיף}
-%\@translate\symbol{}
-\@translate\tableofcontents{תוכן␣העניינים}
-\@translate\telephone{טלפון}
-\@translate\textbf{כתב␣עבה}
-\@translate\textit{טקסט␣מסולסל}
-\@translate\textmd{טקסט␣בינוני}
-\@translate\textnormal{כתב␣רגיל}
-%\@translate\textrm{}
-%\@translate\textsc{}
-\@translate\textsf{כתב␣נטול␣תגיות}
-\@translate\textsl{כתב␣נטוי}
-\@translate\texttt{כתב␣מכונה}
-\@translate\textup{כתב␣ישר}
-\@translate\thanks{תודות}
-\@translate\thispagestyle{סגנון␣עמוד␣זה}
-\@translate\tiny{זעיר}
-\@translate\title{כותרת}
-\@translate\today{היום}
-%\@translate\totalheight{}
-%\@translate\ttfamily{}
-\@translate\twocolumn{שתי␣עמודות}
-%\@translate\typein{}
-%\@translate\typeout{}
-%\@translate\underbrace{}
-\@translate\underline{קו␣תחתון}
-%\@translate\upshape{}
-\@translate\usebox{}
-%\@translate\usecounter{}
-%\@translate\usefont{}
-\@translate\usepackage{כלול␣חבילה}
-\@translate\usepackage{השתמש␣בחבילה}
-%\@translate\value{}
-\@translate\vdots{}
-%\@translate\vector{}
-\@translate\verb{כפשוטו}
-\@translate\vfill{}
-%\@translate\vline{}
-%\@translate\vspace{}
-%\@translate\width{}
-\@translate\xspace{שמר␣רווחים}
-
-
-
+\@CommandAlias  \addcontentsline    הוסף␣שורה␣לתוכן␣העניינים  |
+\@CommandAlias  \address            כתובת                     |
+\@CommandAlias  \addtocontents      הוסף␣לתוכן␣העניינים       |
+\@CommandAlias  \appendix           נספחים                    |
+\@CommandAlias  \author             מחבר                      |
+\@CommandAlias  \begin              תחילת                     |
+\@CommandAlias  \begin              החל                       |
+\@CommandAlias  \bibitem            פריט␣ביבליוגרפי           |
+\@CommandAlias  \bibliography       ביבליוגרפיה               |
+\@CommandAlias  \bibliographystyle  סגנון␣ביבליוגרפיה         |
+\@CommandAlias  \bigskip            דילוג␣גדול                |
+\@CommandAlias  \caption            כיתוב                     |
+\@CommandAlias  \relax              מאומה                     |
+\@CommandAlias  \cc                 העתק                      |
+\@CommandAlias  \centering          מירכוז                    |
+\@CommandAlias  \centering          מרכוז                     |
+\@CommandAlias  \chapter            פרק                       |
+\@CommandAlias  \cite               ציטוט                     |
+\@CommandAlias  \cleardoublepage    נקה␣עמוד␣כפול             |
+\@CommandAlias  \clearpage          נקה␣עמוד                  |
+\@CommandAlias  \cline              עמודה␣מרובה               |
+\@CommandAlias  \closing            סגירה                     |
+\@CommandAlias  \protect            שמור                      |
+\@CommandAlias  \let                הצב                       |
+\@CommandAlias  \let                הגדר                      |
+\@CommandAlias  \date               תאריך                     |
+\@CommandAlias  \emph               הדגש                      |
+\@CommandAlias  \encl               לוט                       |
+\@CommandAlias  \end                סוף                       |
+\@CommandAlias  \end                גמר                       |
+\@CommandAlias  \enlargethispage    הגדל␣עמוד␣זה              |
+\@CommandAlias  \flushbottom        נקה␣עמוד                  |
+\@CommandAlias  \RTLfootnote        הערת␣שוליים               |
+\@CommandAlias  \footnotesize       גודל␣הערת␣שוליים          |
+\@CommandAlias  \frame              מסגרת                     |
+\@CommandAlias  \frontmatter        חומר␣מקדים                |
+\@CommandAlias  \mainmatter         חומר␣עיקרי                |
+\@CommandAlias  \backmatter         חומר␣אחורי                |
+\@CommandAlias  \fussy              טרחני                     |
+\@CommandAlias  \hebrewtoday        תאריך␣עברי␣של␣היום        |
+\@CommandAlias  \Huge               ענקמוני                   |
+\@CommandAlias  \huge               ענק                       |
+\@CommandAlias  \hyphenation        מיקוף                     |
+\@CommandAlias  \include            טול                       |
+\@CommandAlias  \includeonly        טול␣כעת                   |
+\@CommandAlias  \indent             הזחה                      |
+\@CommandAlias  \input              כלול                      |
+\@CommandAlias  \item               פריט                      |
+\@CommandAlias  \kill               בטל                       |
+\@CommandAlias  \label              תגית                      |
+\@CommandAlias  \LARGE              גדול␣מאוד␣מאוד            |
+\@CommandAlias  \Large              גדול␣מאוד                 |
+\@CommandAlias  \large              גדול                      |
+\@CommandAlias  \listoffigures      רשימת␣איורים              |
+\@CommandAlias  \listoftables       רשימת␣טבלאות              |
+\@CommandAlias  \location           מיקום                     |
+\@CommandAlias  \maketitle          עשה␣כותרת                 |
+\@CommandAlias  \mbox               תיבה                      |
+\@CommandAlias  \medskip            דילוג␣בינוני              |
+\@CommandAlias  \name               שם                        |
+\@CommandAlias  \newcommand         פקודה␣חדשה                |
+\@CommandAlias  \newenvironment     סביבה␣חדשה                |
+\@CommandAlias  \newline            שורה␣חדשה                 |
+\@CommandAlias  \newpage            עמוד␣חדש                  |
+\@CommandAlias  \nocite             ללא␣ציטוט                 |
+\@CommandAlias  \noindent           ללא␣הזחה                  |
+\@CommandAlias  \nolinebreak        אין␣לשבור␣שורה            |
+\@CommandAlias  \nopagebreak        אין␣לשבור␣עמוד            |
+\@CommandAlias  \normalsize         גודל␣רגיל                 |
+\@CommandAlias  \onecolumn          עמודה␣אחת                 |
+\@CommandAlias  \opening            פתיחה                     |
+\@CommandAlias  \pagebreak          שבירת␣עמוד                |
+\@CommandAlias  \pagenumbering      מספור␣עמודים              |
+\@CommandAlias  \pageref            פנה␣לעמוד                 |
+\@CommandAlias  \paragraph          פיסקה                     |
+\@CommandAlias  \renewcommand       חדש␣פקודה                 |
+\@CommandAlias  \renewenvironment   חדש␣סביבה                 |
+\@CommandAlias  \setRTL             ימין␣שמאל                 |
+\@CommandAlias  \setLTR             שמאל␣ימין                 |
+\@CommandAlias  \textenglish        אנגלית                    |
+\@CommandAlias  \signature          חתימה                     |
+\@CommandAlias  \sloppy             רשלני                     |
+\@CommandAlias  \small              קטן                       |
+\@CommandAlias  \smallskip          דילוג␣קטן                 |
+\@CommandAlias  \startbreaks        איסור␣שבירת␣עמוד          |
+\@CommandAlias  \stopbreaks         סוף␣איסור␣שבירת␣עמוד      |
+\@CommandAlias  \section            סעיף                      |
+\@CommandAlias  \subparagraph       תת␣פסקה                   |
+\@CommandAlias  \subsection         תת␣סעיף                   |
+\@CommandAlias  \subsubsection      תת␣תת␣סעיף                |
+\@CommandAlias  \tableofcontents    תוכן␣העניינים             |
+\@CommandAlias  \telephone          טלפון                     |
+\@CommandAlias  \textbf             כתב␣עבה                   |
+\@CommandAlias  \textit             טקסט␣מסולסל               |
+\@CommandAlias  \textmd             טקסט␣בינוני               |
+\@CommandAlias  \textnormal         כתב␣רגיל                  |
+\@CommandAlias  \textsf             כתב␣נטול␣תגיות            |
+\@CommandAlias  \textsl             כתב␣נטוי                  |
+\@CommandAlias  \texttt             כתב␣מכונה                 |
+\@CommandAlias  \textup             כתב␣ישר                   |
+\@CommandAlias  \thanks             תודות                     |
+\@CommandAlias  \thispagestyle      סגנון␣עמוד␣זה             |
+\@CommandAlias  \tiny               זעיר                      |
+\@CommandAlias  \title              כותרת                     |
+\@CommandAlias  \today              היום                      |
+\@CommandAlias  \twocolumn          שתי␣עמודות                |
+\@CommandAlias  \underline          קו␣תחתון                  |
+\@CommandAlias  \usepackage         כלול␣חבילה                |
+\@CommandAlias  \usepackage         השתמש␣בחבילה              |
+\@CommandAlias  \xspace             שמר␣רווחים                |
