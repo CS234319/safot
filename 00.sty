@@ -1,50 +1,82 @@
-% Global packages:
-\usepackage[]{graphicx}
-\graphicspath{{Images/}}
-%\usepackage{ifpdf}
+\def\options#1[#2]{\PassOptionsToPackage{#2}{#1}}
 
-\usepackage[left=2cm,right=2cm,top=2cm,bottom=2.5cm]{geometry}
+\newcommand{\jf}[1]{\ifcsname#1\endcsname\expandafter\show\csname#1\endcsname\fi}
+
+\options{bashful}[unique,dir=Excerpts]
+\options{cleveref}[nameinlink]
+\options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
+\options{glossaries}[toc,section=section,footnote]
+\options{xcolor}[table,dvipsnames]
+\options{minitoc}[tight]
+
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bashful}
+\usepackage{booktabs}
+\usepackage{cf}
+\usepackage{cleveref}
+\usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{float}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{amssymb}
-
-
-\usepackage[toc,section=section,footnote]{glossaries}
+\usepackage{geometry}
+\usepackage{glossaries}
+\usepackage{minitoc}
 \usepackage{glossary-long}
-\usepackage{yogi-unicode}
-\usepackage[nameinlink]{cleveref}
-
-\usepackage{latexsym}
+\usepackage{graphicx}
 \usepackage{listings}
 \usepackage{multicol}
-\usepackage{url} \def\UrlFont{\ttfamilylatin}
-\usepackage[table,dvipsnames]{xcolor}
+\usepackage{multirow}
+\usepackage{tcolorbox}
+\usepackage{url} 
+\usepackage{xcolor}
+\usepackage{yogi-code}
+\usepackage{yogi-lang}
+\usepackage{yogi-unicode}
+
+\usepackage{polyglossia}
+
+\newtheorem{Theorem}{משפט}
+\newtheorem{Definition}{הגדרה}  
+\graphicspath{{Images/}}
+
+\setmainlanguage[calendar=hebrew]{hebrew}
+\setmainfont{Linux Libertine O}
+\setotherlanguage{english}
+\setotherlanguage{arabic}
+
+\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+\newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
+\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+\setmonofont{UMTypewriter-Regular.otf}
+  
+
+
+
+
+
+
+
+
+
+\crefname{equation}{}{}
+\crefname{definition}{הגדרה}{הגדרות}
+
+\def\UrlFont{\ttfamilylatin}
+
 \usepackage{pbox}
 \usepackage{proof}
-\usepackage{tcolorbox}
-\usepackage{booktabs}
-\usepackage{multirow}
 
 
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
 
-  \usepackage[tight]{minitoc}
     \renewcommand\stctitle{תֹּכֶן הָעִנְיָנִים}
     \renewcommand\ptctitle{\stctitle}
     \renewcommand\mtctitle{\stctitle}
 
-  \usepackage{polyglossia}
-  \setmainlanguage[calendar=hebrew]{hebrew}
-  \setmainfont{Linux Libertine O}
-  \setotherlanguage{english}
-  \setotherlanguage{arabic}
-  \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
-  \newfontfamily\hewrewfont[Script=Hebrew]{David CLM}
+ 
   \makeatletter
 \def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
 \def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
@@ -76,28 +108,15 @@
 % Fix section numbering
 \renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
 
-\newfontfamily\listingsfont[
+
+\newfontfamily \listingsfont[
             Extension=.otf,
 						UprightFont=*-Regular,
 						BoldFont=*-Bold,
 						ItalicFont=*-Italic,
 						BoldItalicFont=*-BoldItalic,
 ]{UMTypewriter}
-\setmonofont{UMTypewriter-Regular.otf}
 
-
-   \newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
-   \usepackage{enumitem}
-% \setmainfont[
-%    Ligatures=TeX,
-%    Extension=.otf,
-%    UprightFont= *-regular,
-%    BoldFont=*-bold,
-%    ItalicFont=*-italic,
-%    BoldItalicFont=*-bolditalic]{AntykwaTorunska}
-\usepackage[unique,dir=Excerpts]{bashful}
-\usepackage{yogi-code}
-\usepackage{yogi-lang}
 
 \let\ttfamily=\listingsfont
   \lstdefinestyle{bashfulScript}{basicstyle=\listingsfont\small,keywords={}}
@@ -177,7 +196,6 @@
 \input{00terms}
 
 
-\usepackage{cf}
   ⌘הצב⌘עע=⌘cf
 
 
@@ -209,8 +227,8 @@ language=#2,belowcaptionskip=1\baselineskip,
   identifierstyle=\color{blue},
   stringstyle=\color{orange},
   backgroundcolor=\color{gray!10},
-  columns=flexible
-,title={#3},
+  columns=flexible,
+  title={#3},
 ]{#1}
 
 ⌘setRTL{}

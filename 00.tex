@@ -36,6 +36,29 @@ tr 'A -Z' 'a -z'
 
 
  ⌘חומר␣עיקרי
+ \chapter{ניסיונות}
+ \newcommand\textbfit[1]{{\bfseries\itshape\selectfont{#1}}}
+\newcommand\textalt[1]{{\altdavid\selectfont{#1}}}
+\newfontfamily\altdavid{David CLM}
+\begin{hebrew}
+{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
+(גופן רגיל)\\
+\textit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
+(גופן נטוי)\\
+\textbf{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
+(גופן מודגש)\\
+\textbfit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
+(גופן נטוי ומודגש)\\
+\textalt{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
+(דוד קולמוס)\\
+\textalt{\textit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}}
+(דוד נטוי)\\
+\textalt{\textbf{מנעולן הפך כף חצץ שגזר קט איבד סתם.}}
+(דוד מודגש)\\
+\textalt{\textbf{\textit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}}}
+(דוד נטוי ומודגש)
+\end{hebrew}​
+
 ℆ הגדרות רקורסיביות
 ⌘כלול{recursive}
 

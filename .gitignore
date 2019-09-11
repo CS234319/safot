@@ -36,6 +36,7 @@ $.*
 *.csv
 *.eho
 *.heo
+*.maf
 *.mtc[0-9]
 *.mtc
 *.db
