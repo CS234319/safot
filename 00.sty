@@ -19,12 +19,13 @@
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{float}
+\usepackage{fontspec}
 \usepackage{geometry}
 \usepackage{glossaries}
-\usepackage{minitoc}
 \usepackage{glossary-long}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{minitoc}
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{tcolorbox}
@@ -35,9 +36,11 @@
 \usepackage{yogi-unicode}
 
 \usepackage{polyglossia}
-
 \newtheorem{Theorem}{משפט}
-\newtheorem{Definition}{הגדרה}  
+\newtheorem{Definition}{הגדרה} 
+
+
+
 \graphicspath{{Images/}}
 
 \setmainlanguage[calendar=hebrew]{hebrew}
@@ -106,8 +109,9 @@
 %\setromanfont{Comic Sans MS}
 
 % Fix section numbering
+\makeatletter
 \renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
-
+\makeatother
 
 \newfontfamily \listingsfont[
             Extension=.otf,

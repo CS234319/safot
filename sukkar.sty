@@ -6,6 +6,8 @@
 \RequirePackage{enumitem}
 \RequirePackage{unisugar}
 
+\def\Itemize#1\toHere{\begin{itemize}#1\end{itemize}}
+
 % Allow Hebrew alphabetical characters in commands.
 \catcode"05D0=11 % א: U+05D0 HEBREW LETTER ALEF
 \catcode"05D1=11 % ב: U+05D1 HEBREW LETTER BET
@@ -51,6 +53,10 @@
 \@EnvironmentAlias table        |  טבלה    |
 \@EnvironmentAlias table        |  טבלא    |
 \@EnvironmentAlias definition   |  הגדרה    |
+
+\def
+⌘ספרר#1⌘עדכאן
+{\begin{enumerate}#1\end{enumerate}}
 
 \newenvironment{אבגוד}{%
 \begingroup
