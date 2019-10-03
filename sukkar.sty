@@ -6,7 +6,6 @@
 \RequirePackage{enumitem}
 \RequirePackage{unisugar}
 
-\def\Itemize#1\toHere{\begin{itemize}#1\end{itemize}}
 
 % Allow Hebrew alphabetical characters in commands.
 \catcode"05D0=11 % א: U+05D0 HEBREW LETTER ALEF
@@ -54,17 +53,23 @@
 \@EnvironmentAlias table        |  טבלא    |
 \@EnvironmentAlias definition   |  הגדרה    |
 
-\def
-⌘ספרר#1⌘עדכאן
-{\begin{enumerate}#1\end{enumerate}}
+\def⌘ספרר#1==={\begin{enumerate}#1\end{enumerate}}
+\def⌘ציינן#1==={\begin{itemize}#1\end{itemize}}
+\def⌘צטט#1==={{\begin{quote}#1\end{quote}}}
+\def⌘תאר#1==={{\begin{description}#1\end{description}}}
+\def⌘אבגד#1==={{\begin{אבגוד}#1\end{אבגוד}}}
+\def\Itemize#1==={\begin{itemize}#1\end{itemize}}
+\DeclareUnicodeCharacter{2726}{\item} % ✦
 
-\newenvironment{אבגוד}{%
-\begingroup
-\setenumerate[1]{label=\texthebrew{\protect\hebrewnumeral{\value{enumi}}}.}%
+\newenvironment{אבגוד}{ \begingroup
+  \setenumerate[1]{label=\texthebrew{\protect\hebrewnumeral{\value{enumi}}}.}%
 \setenumerate[2]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumii}}}.}%
 \setenumerate[3]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumiii}}}.}%
 \setenumerate[4]{label*=.\texthebrew{\protect\hebrewnumeral{\value{enumiv}}}.}%
 \enumerate}{\endenumerate\endgroup}
+\def\הגדל#1{\large{#1}}
+\def\enlarge#1{\large{#1}}
+
 
 \def\@CommandAlias #1#2 |{\expandafter\let\csname#2\endcsname=#1}
 
@@ -116,7 +121,7 @@
 \@CommandAlias  \indent             הזחה                      |
 \@CommandAlias  \input              כלול                      |
 \@CommandAlias  \item               פריט                      |
-\@CommandAlias  \kill               בטל                       |
+\@CommandAlias  \kill               בטל x                      |
 \@CommandAlias  \label              תגית                      |
 \@CommandAlias  \LARGE              גדול␣מאוד␣מאוד            |
 \@CommandAlias  \Large              גדול␣מאוד                 |
@@ -142,7 +147,7 @@
 \@CommandAlias  \pagebreak          שבירת␣עמוד                |
 \@CommandAlias  \pagenumbering      מספור␣עמודים              |
 \@CommandAlias  \pageref            פנה␣לעמוד                 |
-\@CommandAlias  \paragraph          פיסקה                     |
+\@CommandAlias  \paragraph          פסקה                     |
 \@CommandAlias  \renewcommand       חדש␣פקודה                 |
 \@CommandAlias  \renewenvironment   חדש␣סביבה                 |
 \@CommandAlias  \setRTL             ימין␣שמאל                 |

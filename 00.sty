@@ -9,6 +9,7 @@
 \options{xcolor}[table,dvipsnames]
 \options{minitoc}[tight]
 
+\newtheorem{Theorem}{משפט}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -28,21 +29,19 @@
 \usepackage{minitoc}
 \usepackage{multicol}
 \usepackage{multirow}
+\usepackage{polyglossia}
+\usepackage{stmaryrd}
 \usepackage{tcolorbox}
+\usepackage{tikz}
 \usepackage{url} 
 \usepackage{xcolor}
 \usepackage{yogi-code}
 \usepackage{yogi-lang}
 \usepackage{yogi-unicode}
 
-\usepackage{polyglossia}
-\newtheorem{Theorem}{משפט}
+\usetikzlibrary{trees,chains,shapes}
 \newtheorem{Definition}{הגדרה} 
-
-
-
 \graphicspath{{Images/}}
-
 \setmainlanguage[calendar=hebrew]{hebrew}
 \setmainfont{Linux Libertine O}
 \setotherlanguage{english}
@@ -55,7 +54,8 @@
 \newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
 \setmonofont{UMTypewriter-Regular.otf}
   
-
+\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar$\hfil\cr$\to$\cr}}}
+\DeclareMathOperator\arity{arity}
 
 
 
