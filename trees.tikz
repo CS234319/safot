@@ -1,0 +1,16 @@
+﻿
+\begin{tikzpicture}[every node/.style = {shape=circle,
+    draw, align=center,
+    top color=red!10, bottom color=blue!20}]]
+\usetikzlibrary{trees,chains}
+\begin{scope}[start chain=growing right,minimum size=2em]
+\node[on chain,circle,draw]{$;$} child {node{$*$} child{ node{$|$}  child{ node{$a$} } child{ node{$c$} }}}
+ child{ node{$*$} child{ node{$b$}}};
+\node[on chain,circle,draw,xshift=8ex]{$*$}
+child {node{$|$}
+child {node{$a$}}
+child {node{$|$} child{ node{$b$}}  child{ node{$c$}}}
+}
+;
+\end{scope}
+\end{tikzpicture}
