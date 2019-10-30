@@ -4,13 +4,7 @@
 ]
 
 
-% \@ifundefined{text}{
-%   \PackageError{yogi-code}
-%     {Please load package amsmath prior to loading this package}
-%     {Just add a \noexpand\usepackage[<options>]{amsmath} prior \messagebreak
-%       to using the current package.}
-% }{\relax}
-\usepackage{amstext}
+\RequirePackage{amstext}
 \RequirePackage{times}
 \RequirePackage{listings}
 
@@ -76,7 +70,7 @@
     commentstyle={\commentsfont\slshape\codesize},
     keywordstyle={\listingsfont\bfseries\codesize},
     showstringspaces=false,
-    escapechar=¢,
+    escapechar=⌘,
 }
 \lstdefinestyle{inline}{
     basicstyle={\listingsfont\inlinesize},
@@ -84,7 +78,7 @@
     commentstyle={\commentsfont\slshape\inlinesize},
     keywordstyle={\listingsfont\bfseries\inlinesize},
     showstringspaces=false,
-    escapechar=¢,
+    escapechar=⌘,
 }
 
 % Second general style for displayed code. Same as "code" style, but with
@@ -204,11 +198,7 @@
 \newLanguage{Eiffel}{morekeywords={create,factory,note}}{EIFFEL}{eiffel}{eiff}
 \newLanguage{Go}{}{GO}{go}{gocd}
 \newLanguage{HTML}{alsoletter={-}}{HTML}{html}{htm}
-\newLanguage{Java}{
-   		 morekeywords={enum,strictfp,@interface,inherited},
-    	alsoletter={@},
-   		 literate={->}{$\rightarrow$}1
-		}{JAVA}{java}{ja}
+\newLanguage{Java}{}{JAVA}{java}{ja}
 \newLanguage{}{}{NONE}{none}{non}
 \newLanguage{Oberon-2}{}{OBERON}{oberon}{ob}
 \newLanguage{Pascal}{}{PASCAL}{pascal}{pas}

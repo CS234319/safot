@@ -24,7 +24,7 @@ unisugar \version@unisugar{} by
 }
 
 \ProvidesPackage{unisugar}[\date@unisugar{} \signature@unisugar:
-Selected Unicode characters (e.g., ⌘, ␣, •, ⏎, ¶, and §)
+Selected Unicode characters (e.g., ␣, •, ⏎, ¶, and §)
 employed in some very common LaTeX commands.
 ]
 
@@ -66,15 +66,6 @@ to enjoy this package fully}
 \endinput
 \fi
 
-% ⌘: U+2318 PLACE OF INTEREST SIGN (also command key), is used as a direction
-% neutral escape character. Makes it possible to use the command key character
-% as a command prefix. Useful in particular with right-to-left texts, in which
-% the familiar, yet directionally non-neutral, backslash may be a bit
-% confusing.
-\catcode"2318=11
-\edef\⌘{⌘}
-\catcode"2318=0 
-\def⌘⌘{\item}
 
 % ␣: U+2423 OPEN BOX, a visual space is allowed as a legitimate character in
 % control sequences, whereby eliminating the need for ugly juxtaposing of
@@ -83,71 +74,74 @@ to enjoy this package fully}
 \edef\␣{␣}
 
 
-% …: U+2026 HORIZONTAL ELLIPSIS, will serve as a sugar nickname for \ldots.
-⌘catcode"2026=⌘active
-⌘newcommand…{⌘ldots}
-
-% •: U+2022 BULLET (black small circle), a sugared alias for ⌘item.
-⌘catcode"2022=11
-⌘edef⌘•{•}
-⌘catcode"2022=⌘active 
-⌘newcommand•{⌘item}
+% •: U+2022 BULLET (black small circle), a sugared alias for \item.
+\catcode"2022=11
+\edef\•{•}
+\catcode"2022=\active 
+\newcommand•{\item}
 
 % ⏎: U+23CE RETURN SYMBOL, a sugared nickname for \\ 
-⌘catcode"23CE=11
-⌘edef\⏎{⏎}
-⌘catcode"23CE=⌘active 
-⌘newcommand⏎{\\}
+\catcode"23CE=11
+\edef\⏎{⏎}
+\catcode"23CE=\active 
+\newcommand⏎{\\}
 
 % ⌖: U+2316 POSITION INDICATOR, is an alias for LaTeX's \label command.
-⌘catcode"2316=11
-⌘edef\⌖{⌖}
-⌘catcode"2316=⌘active 
-⌘newcommand⌖[1]{⌘label{#1}} 
+\catcode"2316=11
+\edef\⌖{⌖}
+\catcode"2316=\active 
+\newcommand⌖[1]{\label{#1}} 
 
+⮸
 % ☝: U+261D WHITE UP POINTING INDEX, is an alias LaTeX's \ref command.
-⌘catcode"261D=11
-⌘edef\☝{☝}
-⌘catcode"261D=⌘active 
-⌘newcommand☝[1]{⌘ref{#1}}
+\catcode"261D=11
+\edef\☝{☝}
+\catcode"261D=\active 
+\newcommand☝[1]{\ref{#1}}
 
-% ¶: U+00B6 PILCROW SIGN, will serve as a sugar nickname for  ⌘paragraph, using
+
+% ¶: U+00B6 PILCROW SIGN, will serve as a sugar nickname for  \paragraph, using
 % the remainder of the line as the paragraph's title. Further, ¶¶, that is two
 % successive occurrences of the pilcrow sign, shall serve as a sugared nickname
-% for ⌘subparagraph, employing the remainder of the text on the current line as
+% for \subparagraph, employing the remainder of the text on the current line as
 % the subparagraph's title.
-⌘catcode"B6=11
-⌘edef\¶{¶}
-⌘catcode"B6=⌘active 
-⌘newcommand¶{⌘paragraph␣sugar} 
+\catcode"B6=11
+\edef\¶{¶}
+\catcode"B6=\active 
+\newcommand¶{\paragraph␣sugar} 
 
 \newcommand\paragraph␣sugar{%
 \@ifnextchar¶{%
 \expandafter
 \toEolnSubparagraph
+
 \discardNextChar
 }{%
 \toEolnParagraph
 }%
 }
 
-⌘catcode"2106=⌘active 
-⌘newcommand℆{⌘chapter␣sugar}
-⌘newcommand⌘chapter␣sugar{\toEolnChapter}
 
 
-% §: U+00A7 SECTION SIGN, will serve as a sugar nickname for ⌘section, using
+
+
+\catcode"2106=\active 
+\newcommand℆{\chapter␣sugar}
+\newcommand\chapter␣sugar{\toEolnChapter}
+
+
+% §: U+00A7 SECTION SIGN, will serve as a sugar nickname for \section, using
 % the remainder of the line as the section's title. Further, §§, that is two
 % successive occurrences of this Unicode code point, shall serve as a sugared
-% nickname for ⌘subsection, employing the remainder of the text on the current
+% nickname for \subsection, employing the remainder of the text on the current
 % line as the subsection's title. Even further, §§§, three successive
-% occurrences shall serve as a sugared nickname for ⌘subsubsection, employing
+% occurrences shall serve as a sugared nickname for \subsubsection, employing
 % again, the remainder of text on the line as the subsubsection's title.
-⌘catcode"A7=11
-⌘edef\§{§}
-⌘catcode"A7=⌘active 
-⌘newcommand§{⌘section␣sugar}
-⌘newcommand⌘section␣sugar{%
+\catcode"A7=11
+\edef\§{§}
+\catcode"A7=\active 
+\newcommand§{\section␣sugar}
+\newcommand\section␣sugar{%
 \@ifnextchar§{% Two or more § were found.
 \expandafter
 \sub␣or␣subsub␣section
@@ -166,15 +160,3 @@ to enjoy this package fully}
 \toEolnSubsection
 }%
 }
-
-
-
-
-
-
-
-
-
-
-
-

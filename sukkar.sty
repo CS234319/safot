@@ -53,12 +53,12 @@
 \@EnvironmentAlias table        |  טבלא    |
 \@EnvironmentAlias definition   |  הגדרה    |
 
-\def⌘ספרר#1==={\begin{enumerate}#1\end{enumerate}}
-\def⌘ציינן#1==={\begin{itemize}#1\end{itemize}}
-\def⌘צטט#1==={{\begin{quote}#1\end{quote}}}
-\def⌘תאר#1==={{\begin{description}#1\end{description}}}
-\def⌘אבגד#1==={{\begin{אבגוד}#1\end{אבגוד}}}
-\def\Itemize#1==={\begin{itemize}#1\end{itemize}}
+\long\def\ספרר#1==={\begin{enumerate}#1\end{enumerate}}
+\long\def\ציינן#1==={\begin{itemize}#1\end{itemize}}
+\long\def\צטט#1==={{\begin{quote}#1\end{quote}}}
+\long\def\תאר#1==={{\begin{description}#1\end{description}}}
+\long\def\אבגד#1==={{\begin{אבגוד}#1\end{אבגוד}}}
+\long\def\Itemize#1==={\begin{itemize}#1\end{itemize}}
 \DeclareUnicodeCharacter{2726}{\item} % ✦
 
 \newenvironment{אבגוד}{ \begingroup
@@ -78,7 +78,6 @@
 \@CommandAlias  \addtocontents      הוסף␣לתוכן␣העניינים       |
 \@CommandAlias  \appendix           נספחים                    |
 \@CommandAlias  \author             מחבר                      |
-\@CommandAlias  \begin              תחילת                     |
 \@CommandAlias  \begin              החל                       |
 \@CommandAlias  \bibitem            פריט␣ביבליוגרפי           |
 \@CommandAlias  \bibliography       ביבליוגרפיה               |
@@ -102,7 +101,6 @@
 \@CommandAlias  \emph               הדגש                      |
 \@CommandAlias  \encl               לוט                       |
 \@CommandAlias  \end                סוף                       |
-\@CommandAlias  \end                גמר                       |
 \@CommandAlias  \enlargethispage    הגדל␣עמוד␣זה              |
 \@CommandAlias  \flushbottom        נקה␣עמוד                  |
 \@CommandAlias  \RTLfootnote        הערת␣שוליים               |
@@ -121,7 +119,7 @@
 \@CommandAlias  \indent             הזחה                      |
 \@CommandAlias  \input              כלול                      |
 \@CommandAlias  \item               פריט                      |
-\@CommandAlias  \kill               בטל x                      |
+\@CommandAlias  \kill               בטל                       |
 \@CommandAlias  \label              תגית                      |
 \@CommandAlias  \LARGE              גדול␣מאוד␣מאוד            |
 \@CommandAlias  \Large              גדול␣מאוד                 |
@@ -131,6 +129,7 @@
 \@CommandAlias  \location           מיקום                     |
 \@CommandAlias  \maketitle          עשה␣כותרת                 |
 \@CommandAlias  \mbox               תיבה                      |
+\@CommandAlias  \cref               פנה                       |
 \@CommandAlias  \medskip            דילוג␣בינוני              |
 \@CommandAlias  \name               שם                        |
 \@CommandAlias  \newcommand         פקודה␣חדשה                |
@@ -147,7 +146,7 @@
 \@CommandAlias  \pagebreak          שבירת␣עמוד                |
 \@CommandAlias  \pagenumbering      מספור␣עמודים              |
 \@CommandAlias  \pageref            פנה␣לעמוד                 |
-\@CommandAlias  \paragraph          פסקה                     |
+\@CommandAlias  \paragraph          פסקה                      |
 \@CommandAlias  \renewcommand       חדש␣פקודה                 |
 \@CommandAlias  \renewenvironment   חדש␣סביבה                 |
 \@CommandAlias  \setRTL             ימין␣שמאל                 |
@@ -166,7 +165,7 @@
 \@CommandAlias  \tableofcontents    תוכן␣העניינים             |
 \@CommandAlias  \telephone          טלפון                     |
 \@CommandAlias  \textbf             כתב␣עבה                   |
-\@CommandAlias  \textbf             עבה                   |
+\@CommandAlias  \textbf             עבה                       |
 \@CommandAlias  \textit             טקסט␣מסולסל               |
 \@CommandAlias  \textmd             טקסט␣בינוני               |
 \@CommandAlias  \textnormal         כתב␣רגיל                  |

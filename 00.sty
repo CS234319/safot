@@ -9,7 +9,7 @@
 \options{xcolor}[table,dvipsnames]
 \options{minitoc}[tight]
 
-\newtheorem{Theorem}{משפט}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -29,7 +29,9 @@
 \usepackage{minitoc}
 \usepackage{multicol}
 \usepackage{multirow}
+\usepackage{pbox}
 \usepackage{polyglossia}
+\usepackage{proof}
 \usepackage{stmaryrd}
 \usepackage{tcolorbox}
 \usepackage{tikz}
@@ -39,8 +41,15 @@
 \usepackage{yogi-lang}
 \usepackage{yogi-unicode}
 
+
+
 \usetikzlibrary{trees,chains,shapes}
-\newtheorem{Definition}{הגדרה} 
+
+\newtheorem{Definition}{הגדרה}[chapter]
+\newtheorem{Theorem}{משפט}[chapter]
+\newtheorem{Claim}{טענה}[chapter]
+\newtheorem{Example}{דוגמה}[chapter]
+
 \graphicspath{{Images/}}
 \setmainlanguage[calendar=hebrew]{hebrew}
 \setmainfont{Linux Libertine O}
@@ -56,26 +65,19 @@
   
 \newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar$\hfil\cr$\to$\cr}}}
 \DeclareMathOperator\arity{arity}
+\DeclareMathOperator\RE{Re}
 
-
-
-
-
-
-
+\catcode"2318=13
+\def⌘#1{\textcolor{olive}{\text{{\ttfamily \bfseries #1}}}}
 
 \crefname{equation}{}{}
 \crefname{definition}{הגדרה}{הגדרות}
+\let\ref=\cref
 
 \def\UrlFont{\ttfamilylatin}
 
-\usepackage{pbox}
-\usepackage{proof}
 
-
-
-
-    \renewcommand\stctitle{תֹּכֶן הָעִנְיָנִים}
+\renewcommand\stctitle{תוכן הענינים}
     \renewcommand\ptctitle{\stctitle}
     \renewcommand\mtctitle{\stctitle}
 
@@ -158,8 +160,8 @@
 \fancyfoot[C]{\thepage}
 \headheight26pt
 
-⌘newfloat{תכנית}{!htbp}{lop}[chapter]
-⌘floatname{תכנית}{תכנית}
+\newfloat{תכנית}{!htbp}{lop}[chapter]
+\floatname{תכנית}{תכנית}
 
 %\usepackage{unicode-math}
 
@@ -171,11 +173,11 @@
   deletekeywords={writeln,output,integer},
   morekeywords={[2]WriteLn,output,integer},
   keywordstyle={[2]\color{blue}\listingsfont\bfseries\itshape}}
-⌘let⌘קד=⌘cd
-⌘let⌘מש=⌘kw
-⌘let⌘שי=⌘LR
+\let\קד=\cd
+\let\מש=\kw
+\let\שי=\LR
 \def\predefined#1{{\lstset{language=Pascalx}\lstinline!#1!}}
-\let⌘מוגדרת␣מראש=\predefined
+\let\מוגדרת␣מראש=\predefined
 
 
 \newenvironment{קוד}{%
@@ -200,7 +202,7 @@
 \input{00terms}
 
 
-  ⌘הצב⌘עע=⌘cf
+  \הצב\עע=\cf
 
 
 \parskip 0.75ex plus 0.25ex minus -0.25ex
@@ -208,16 +210,16 @@
 
 
 
-\newcommand{⌘גיבור}[1] {
+\newcommand{\גיבור}[1] {
  \textbf{#1}}
 
-\newcommand{⌘יניב}[1] {
+\newcommand{\יניב}[1] {
  \Large{#1}
 \normalsize{}}
 
 
-\newcommand{⌘הכנס␣קוד}[3]{
-⌘setLTR{}
+\newcommand{\הכנס␣קוד}[3]{
+\setLTR{}
 
 \lstinputlisting[
 language=#2,belowcaptionskip=1\baselineskip,
@@ -235,12 +237,12 @@ language=#2,belowcaptionskip=1\baselineskip,
   title={#3},
 ]{#1}
 
-⌘setRTL{}
+\setRTL{}
 }
 
 
-\newcommand{⌘הכנס␣קוד␣נקי}[2]{
-⌘setLTR{}
+\newcommand{\הכנס␣קוד␣נקי}[2]{
+\setLTR{}
 
 \lstinputlisting[
 language=#2,belowcaptionskip=1\baselineskip,
@@ -257,7 +259,7 @@ language=#2,belowcaptionskip=1\baselineskip,
   columns=flexible,
 ]{#1}
 
-⌘setRTL{}
+\setRTL{}
 }
 
 % Environment for writing syntax rules
@@ -280,7 +282,7 @@ language=#2,belowcaptionskip=1\baselineskip,
 colframe=red!75!black}
 
 % Musn't have an empty new line before it
-\newcommand{⌘הכרח␣שורה␣חדשה}{\\*\hfill\\}
+\newcommand{\הכרח␣שורה␣חדשה}{\\*\hfill\\}
 
 
 
