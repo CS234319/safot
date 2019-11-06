@@ -1,0 +1,79 @@
+§ ביטויים סימבוליים 
+בהינתן אלפאבית~$Σ$, נגדיר גם את~$S(Σ)$, קבוצת ה"ביטויים הסימבוליים",(%
+\RL{Symbolic Expression, או בקיצור S-Exrepssions}%
+)
+מעל Σ. ביטוי סימבולי כזה יכול להיות אטומי, ואז הוא חייב להיות אות מ-Σ. ביטוי
+סימבולי שאינו אטומי הוא בהכרח זוג סדור של שני ביטויים סימבוליים אחרים.
+הזוג הסדור נכתב עטוף בזוג סוגריים זוויתיים~$⟨$ ו~$⟩$, ושני הביטויים הסימבוליים
+שבו המופרדים בסימן הנקודה (".").
+כמה ביטויים סימבוליים מעל~$Σ=❴a,b,c❵$
+הם \[
+  a,b,⟨a.b⟩,⟨c.⟨b.a⟩⟩,⟨⟨a.b⟩.⟨a.c⟩⟩∈S❨❴a,b,c❵❩.
+\] האיור הבא מתאר את המבנה של ביטויים סימבוליים כעצים בינאריים.
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \tikzstyle{data}=[shape=circle,
+    draw, align=center,text centered,
+    top color=blue!50, bottom color=blue!10]
+    \tikzstyle{cons}=[rectangle split,rectangle split parts=2,rectangle split horizontal,draw,text centered,top color=gray!50,bottom color=gray!10,minimum width=3em,minimum height=2em]
+    \usetikzlibrary{trees,chains}
+    \begin{scope}[start chain=growing right,minimum size=2em]
+      \node [data,on chain]{$a$};
+      \node [data,on chain]{$b$};
+      \node [cons,on chain]{$∙$\nodepart{two}$∙$}
+      child {node[data]{$a$}}
+      child {node[data]{$b$}};
+      \node [cons,on chain,xshift=4ex]{$∙$\nodepart{two}~$∙$}
+      child {node[data]{$c$}}
+      child {node[cons]{$∙$\nodepart{two}~$∙$}
+          child {node[data]{$b$}}
+          child {node[data]{$a$}}
+        }
+      ;
+      \node [cons,on chain,xshift=14ex]
+      {$∙$\nodepart{two}~$∙$}
+      child {node [cons]
+            {$∙$\nodepart{two}~$∙$}
+          child {node[data]{a}}
+          child {node[data]{b}}}
+      child {node [cons]
+            {$∙$\nodepart{two}~$∙$}
+          child {node[data]{a}}
+          child {node[data]{c}}}
+      ;
+    \end{scope}
+  \end{tikzpicture}
+\end{figure}
+
+לעומת זאת,~$⟨a.b.c⟩$ אינו שייך ל~$S(Σ)$ משום שהוא שלשה סדורה ולא זוג סדור,
+ואילו~$⟨a⟨b⟨c⟩⟩⟩$ אינו שייך לקבוצה, משום שהוא אינו עונה על הדרישה שבין פריטים
+ימצא סימן הנקודה.
+
+ביטויים סימבוליים הם למעשה עצים בינאריים כאשר צומת פנימית של עץ כזה אינו נושא
+מידע, ואילו עלה מכיל מילה מתוך~$Σ$.
+
+לשם ההגדרה הפורמלית נוסיף לאלפאבית~$Σ$ עוד שלושה סימנים שאינם נמצאים בתוכו:
+"$.$" (סימן הנקודה), ו "$⟨$" ו "$⟩$".
+
+\begin{Definition}[ביטויים סימבוליים מעל אלפאבית]
+  בהנתן אלפאבית~$Σ$ אזי,~$S(Σ)$, קבוצת הביטויים הסימבוליים מעל~$Σ$
+  מוגדרת באמצעות הבנאי הנולארי (כלומר איברים אטומיים)
+  \begin{equation*}
+    \infer{σ∈S(Σ)}{σ∈Σ^*}
+  \end{equation*}
+  והבנאי הבינארי:
+  \begin{equation*}
+    \infer{⟨τ₁.τ₂⟩∈S(Σ)}{τ₁∈S(Σ) &τ₂∈S(Σ)}
+  \end{equation*}
+\end{Definition}
+
+הביטויים הסימבוליים מעל~Σ הם למעשה שפה פורמלית מעל האלפאבית
+המורחב:~$Σ∪❴.,⟨,⟩❵$, כלומר~$S(Σ)⊆❨Σ∪❴.,⟨,⟩❵❩^*.$ גם קבוצת הביטויים הסימבוליים
+מעל~$Σ^*$ היא שפה פורמלית מעל אלפאבית זה~$S(Σ^*)⊆❨Σ∪❴.,⟨,⟩❵❩^*$ אבל
+כמובן~$S(Σ)⊊ S(Σ^*)$.
+
+לביטויים סימבוליים יש חשיבות רבה בשפת התכנות ליספ. כל תכנית בשפה זו היא ביטוי
+סימבולי, המקבלת כקלט ביטוי סימבולי אחד, ומחשבת ממנו ביטוי סימבולי אחר.
+
+
