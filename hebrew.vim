@@ -4,6 +4,12 @@
 %s/\\end{enumerate}/\\גמר{ספרור}/ge
 %s/\\begin{description}/\\החל{תיאור}/ge
 %s/\\end{description}/\\גמר{תיאור}/ge
+
+%s/\\begin{definition}/\\החל{הגדרה}/ge
+%s/\\end{definition}/\\גמר{הגדרה}/ge
+%s/\\begin{example}/\\החל{דוגמה}/ge
+%s/\\end{example}/\\גמר{דוגמה}/ge
+
 %s/\\item/✦ /ge
 
 %s/$⟨$/⟨/ge
@@ -26,3 +32,6 @@
 %s/\<כ\~/כ-/ge
 %s/\<ל\~/ל-/ge
 %s/\<ב\~/ב-/ge
+
+source ~/bin/+short
+

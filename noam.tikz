@@ -1,0 +1,19 @@
+﻿\begin{tikzpicture}
+\node[above,ellipse,minimum height=12em,minimum width=24em,draw,fill=yellow,opacity=1] (f) {};
+\node[above,ellipse,minimum height=10em,minimum width=20em,draw,fill=magenta,opacity=1] (e) {};
+\node[above,ellipse,minimum height=8em,minimum width=16em,draw,fill=orange,opacity=1] (d) {};
+\node[above,ellipse,minimum height=6em,minimum width=12em,draw,fill=olive,opacity=1] (c) {};
+\node[above,ellipse,minimum height=4em,minimum width=9em,draw,fill=green,opacity=1] (b) {};
+\node[above,ellipse,minimum height=2em,minimum width=6em,draw,fill=red,opacity=1] (a) {Finite};
+
+
+\path (a.north) node[above] {Regular}
+    (b.north) node[above] {Context Free}
+    (c.north) node[above] {Context Sensitive}
+    (d.north) node[above] {Recursively Enumerable}
+    (e.north) node[above] {$\wp \Sigma^*$};
+
+\draw[label distance=-4pt] (c.north) ++ (4em,-2em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_2$]{};
+\draw[label distance=-4pt] (a.north) ++ (1.5em,-1.4em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_6$]{};
+\draw[label distance=-4pt] (b.north) ++ (1.5em,-1.4em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_4$]{};
+\end{tikzpicture}
