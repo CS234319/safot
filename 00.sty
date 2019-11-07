@@ -33,6 +33,7 @@
 \usepackage{polyglossia}
 \usepackage{proof}
 \usepackage{stmaryrd}
+\usepackage{tabularx}
 \usepackage{tcolorbox}
 \usepackage{tikz}
 \usepackage{url} 
@@ -41,14 +42,13 @@
 \usepackage{yogi-lang}
 \usepackage{yogi-unicode}
 
-
-
 \usetikzlibrary{trees,chains,shapes}
 
-\newtheorem{Definition}{הגדרה}[chapter]
-\newtheorem{Theorem}{משפט}[chapter]
-\newtheorem{Claim}{טענה}[chapter]
-\newtheorem{Example}{דוגמה}[chapter]
+\newtheorem{הגדרה}{הגדרה}[chapter]
+\newtheorem{definition}{הגדרה}[chapter]
+\newtheorem{משפט}{משפט}[chapter]
+\newtheorem{טענה}{טענה}[chapter]
+\newtheorem{דוגמה}{דוגמה}[chapter]
 
 \graphicspath{{Images/}}
 \setmainlanguage[calendar=hebrew]{hebrew}
@@ -63,15 +63,16 @@
 \newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
 \setmonofont{UMTypewriter-Regular.otf}
   
-\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar$\hfil\cr$\to$\cr}}}
+\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
 \DeclareMathOperator\arity{arity}
 \DeclareMathOperator\RE{Re}
 
 \catcode"2318=13
-\def⌘#1{\textcolor{olive}{\text{{\ttfamily \bfseries #1}}}}
+\def⌘#1{{\textcolor{olive}{\text{\LR{\ttfamily \bfseries #1}}}}}
 
 \crefname{equation}{}{}
 \crefname{definition}{הגדרה}{הגדרות}
+\crefname{figure}{איור}{איורים}
 \let\ref=\cref
 
 \def\UrlFont{\ttfamilylatin}

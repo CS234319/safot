@@ -1,14 +1,14 @@
 %s/\\begin{itemize}/\\החל{ציינון}/ge
-%s/\\end{itemize}/\\גמר{ציינון}/ge
+%s/\\end{itemize}/\\סוף{ציינון}/ge
 %s/\\begin{enumerate}/\\החל{ספרור}/ge
-%s/\\end{enumerate}/\\גמר{ספרור}/ge
+%s/\\end{enumerate}/\\סוף{ספרור}/ge
 %s/\\begin{description}/\\החל{תיאור}/ge
-%s/\\end{description}/\\גמר{תיאור}/ge
+%s/\\end{description}/\\סוף{תיאור}/ge
 
 %s/\\begin{definition}/\\החל{הגדרה}/ge
-%s/\\end{definition}/\\גמר{הגדרה}/ge
+%s/\\end{definition}/\\סוף{הגדרה}/ge
 %s/\\begin{example}/\\החל{דוגמה}/ge
-%s/\\end{example}/\\גמר{דוגמה}/ge
+%s/\\end{example}/\\סוף{דוגמה}/ge
 
 %s/\\item/✦ /ge
 
