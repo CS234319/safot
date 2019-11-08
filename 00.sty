@@ -44,11 +44,15 @@
 
 \usetikzlibrary{trees,chains,shapes}
 
-\newtheorem{הגדרה}{הגדרה}[chapter]
+\floatstyle{ruled}
+\restylefloat{figure}
+\restylefloat{table}
+
 \newtheorem{definition}{הגדרה}[chapter]
-\newtheorem{משפט}{משפט}[chapter]
-\newtheorem{טענה}{טענה}[chapter]
-\newtheorem{דוגמה}{דוגמה}[chapter]
+\newtheorem{theorem}{משפט}[chapter]
+\newtheorem{claim}{טענה}[chapter]
+\newtheorem{example}{דוגמה}[chapter]
+\def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
 
 \graphicspath{{Images/}}
 \setmainlanguage[calendar=hebrew]{hebrew}
