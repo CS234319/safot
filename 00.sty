@@ -48,10 +48,10 @@
 \restylefloat{figure}
 \restylefloat{table}
 
-\newtheorem{definition}{הגדרה}[chapter]
-\newtheorem{theorem}{משפט}[chapter]
-\newtheorem{claim}{טענה}[chapter]
-\newtheorem{example}{דוגמה}[chapter]
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{claim}{טענה}[section]
+\newtheorem{example}{דוגמה}[section]
 \def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
 
 \graphicspath{{Images/}}
@@ -72,7 +72,7 @@
 \DeclareMathOperator\RE{Re}
 
 \catcode"2318=13
-\def⌘#1{{\textcolor{olive}{\text{\LR{\ttfamily \bfseries #1}}}}}
+\def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 
 \crefname{equation}{}{}
 \crefname{definition}{הגדרה}{הגדרות}
@@ -165,7 +165,7 @@
 \fancyfoot[C]{\thepage}
 \headheight26pt
 
-\newfloat{תכנית}{!htbp}{lop}[chapter]
+\newfloat{תכנית}{!htbp}{lop}[section]
 \floatname{תכנית}{תכנית}
 
 %\usepackage{unicode-math}
