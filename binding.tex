@@ -1,17 +1,16 @@
-"אין זה איבר, גלגל, אף לא כפתור! וכי מה יש בו בשם?", את עשויה לתמוה. 
-"וזה אשר נקרא בשם זנב, האם לרגל יחשב, אם כך נקרא לו סתם פתאום?"
-
+"אין זה איבר, גלגל, אף לא כפתור! וכי מה יש בו בשם?", את עשויה לתמוה. "וזה אשר
+נקרא בשם זנב, האם לרגל יחשב, אם כך נקרא לו סתם פתאום?"
 
 § ישויות לעומת שמות
 לכולנו ברור כי יש להבחין בין ישות ובין שמה.
-יש דבר מה חמקמק בהבחנה שאני רוצה 
+יש דבר מה חמקמק בהבחנה שאני רוצה
 ⌘תחילת{ספרור}
 • יש ישויות ללא שם - ישויות אנונימיות.
 • יש שמות ללא ישויות - שמות שלא נקשרו לישויות.
 • יתכן שלישות אחת יהיו מספר שמות.
 • יתכן ששם אחד יתייחס למספר ישויות (למשל שם פונקציה ושם משתנה בשפת java, למשל overloading
-• יש שמות שאינם חשובים:  נקודות בתכנית שבהם יש חובה לתת שם, אבל השם עצמו חסר חשיבות. למשל 
-_ בפרולוג או whatever ב METAPOST.
+• יש שמות שאינם חשובים: נקודות בתכנית שבהם יש חובה לתת שם, אבל השם עצמו חסר
+חשיבות. למשל _ בפרולוג או whatever ב-METAPOST.
 ⌘סוף{ספרור}
 
 ⌘תחילת{תכנית}
@@ -19,37 +18,34 @@ _ בפרולוג או whatever ב METAPOST.
 cat << EOF > echo.c
 #include <stdio.h>
 
-typedef char *strings_t[];
+typedef char *stringsₜ[];
 
-void print_strings(strings_t ss) {
+void printₛtrings(stringsₜ ss) {
   for (; *ss; ss++)
     printf("%s ", *ss);
   printf("\n");
 }
 
 int main(int argc, char *argv[], char **envp) {
-  print_strings(argv);
-  print_strings(envp);
+  printₛtrings(argv);
+  printₛtrings(envp);
   return 0;
 }
 EOF
 \END
 ⌘setLTR
-⌘lstinputlisting[language=C++,style=Numbered]{_00/echo.c}
+⌘lstinputlisting[language=C++,style=Numbered]{₀0/echo.c}
 
 ⌘כיתוב{מתן שם לטיפוס בשפת ⌘סי}
 ⌘תגית{תכנית:טיפוס:עם:שם:סי}
 ⌘סוף{תכנית}
-
-
-
 
 ⌘תחילת{תכנית}
 \begin{CPPn}
 struct {
   const char *name;
   const char *action;
-} commands[] = {
+} commands[]={
 };
 \end{CPPn}
 ⌘כיתוב{הגדרת טיפוס אנונימי בשפת ⌘סי}
@@ -63,17 +59,3 @@ struct {
 § יצירת ישויות אנונימיות
 
 § מרחבי שמות
-
-
-
-
-
-
-
-
-
-
-
-
-
-

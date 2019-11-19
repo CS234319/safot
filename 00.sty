@@ -20,6 +20,7 @@
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{float}
+\usepackage{forest}
 \usepackage{fontspec}
 \usepackage{geometry}
 \usepackage{glossaries}
@@ -73,6 +74,10 @@
 
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
+\def\E|#1|{\LR{{#1}}}
+\def\A|#1|{\E|\ttfamily#1|}
+\def\T|#1|{|\ttfamily#1|}
+\def\ע|#1|{{\bfseries#1}}
 
 \crefname{equation}{}{}
 \crefname{definition}{הגדרה}{הגדרות}
@@ -291,5 +296,35 @@ colframe=red!75!black}
 
 
 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\forestset{%
+  s tree/.style={
+    for tree={
+      circle,
+      s sep'+=-3pt,
+      fit=band,
+    },
+  },
+  cons/.style={draw,edge},
+  atom/.style={},
+  nil/.style={circle,inner sep=-6pt,fill=white,nice empty nodes,tikz={\draw  [rotate=-160,scale=0.44] 
+  \pgfsetlinewidth{6\pgflinewidth} % thickness
+  ($(.center)!0.2!(!parent)$)
+  coordinate (o)
+  (o)++(-0.520,0) --++(1.04,0)
+ % (o)++(-4,1) -- ++(8,0)
+  (o)++(-0.380,.180) -- ++(.760,0)
+ % (o)++(-2,3) --++(4,0)
+  (o)++(-0.180,0.360) --++(0.360,0)
+;}},
+}  
 
+
+\forestset{
+nice empty nodes/.style={
+    for tree={calign=fixed edge angles},
+    delay={where content={}{shape=coordinate,for siblings={anchor=north}}{}}
+}
+}
 
