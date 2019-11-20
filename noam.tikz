@@ -14,6 +14,7 @@
     (e.north) node[above] {$\wp \Sigma^*$};
 
 \draw[label distance=-4pt] (c.north) ++ (4em,-2em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_2$]{};
+\draw[label distance=-4pt] (c.east) ++ (4em,-2em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_1$]{};
 \draw[label distance=-4pt] (a.north) ++ (1.5em,-1.4em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_6$]{};
 \draw[label distance=-4pt] (b.north) ++ (1.5em,-1.4em) node[minimum size=3pt,shape=circle,inner sep=0pt,fill=blue,draw=black,label=60:\scriptsize$L_4$]{};
 \end{tikzpicture}

@@ -98,7 +98,7 @@
 
 \דוגמה|שפת התכנות~\CPL כשפה פורמלית|
 שפת התכנות~\CPL מגדירה שפה פורמלית~$L₀$ מעל האלפאבית
-$Σ_C$ \פנה{eq:alphabet:C}:
+$Σ_C$ \פנה|eq:alphabet:C|:
 נאמר על מילה~$w$
 (כאשר~$w∈Σ_C^*$),
 כי היא שייכת לשפה~$L₀$
@@ -132,28 +132,22 @@ $Σ_C$ \פנה{eq:alphabet:C}:
 \end{equation}
 המוגדרת על ידי שני איברים אטומיים
 \begin{align}
-   & \infer{⌘U∈ℚ₁}{} ⏎
-   & \infer{⌘I∈ℚ₁}{}
+   & \infer{⌘U∈L₁}{} ⏎
+   & \infer{⌘I∈L₁}{}
 \end{align}
 ועל ידי ארבעה בנאים:
 \begin{align}
   & \infer{⌘)⌘-w⌘(∈L₁}{w∈L} \label{eq:Q:minus}⏎
-   & \infer{⌘)w₁⌘+w₂⌘(∈L₁}{w₁∈ℚ₁ & w₂∈L₁}\label{eq:Q:plus}⏎
+   & \infer{⌘)w₁⌘+w₂⌘(∈L₁}{w₁∈L₁ & w₂∈L₁}\label{eq:Q:plus}⏎
    & \infer{⌘)w₁⌘*w₂⌘(∈L₁}{w₁∈L₁ & w₂∈L₁}\label{eq:Q:times}⏎
    & \infer{⌘)w₁⌘/w₂⌘(∈L₁}{w₁∈L₁ & w₂∈L₁}\label{eq:Q:div}
 \end{align}
 \סוף{definition}
-כדאי לשים לב להבדלים בין הגדרה זו ובין ההגדרה הקודמת של הקבוצה~$ℚ₁$
-(\פנה{definition:rational}). הגדרה הנוכחית אינה מניחה ידע במתימטיקה או בפעולות
+כדאי לשים לב להבדלים בין הגדרה זו ובין ההגדרה הקודמת של הקבוצה~$L₁$
+(\פנה|definition:rational|). הגדרה הנוכחית אינה מניחה ידע במתימטיקה או בפעולות
 החשבון. איבר של הקבוצה היא סדרה ללא משמעות אותיות הלקוחה מהאלפאבית
-\פנה{eq:Q:alphabet}.
+\פנה|eq:Q:alphabet|.
 
-
-\begin{figure}
-  \centering
-\input{noam.tikz}
-  \caption{ההיררכיה של חומסקי}
-\end{figure}
 
   הנה עוד כמה שפות פורמליות מעל האלפאבית~$❴⌘a,⌘b,⌘c❵$:
 שלא תשתננה גם אם תיקראנה מסופן.
@@ -171,7 +165,7 @@ $Σ_C$ \פנה{eq:alphabet:C}:
 \begin{equation}\label{eq:L6}
   L₆=❴ε,⌘a,⌘b,⌘c,⌘{ab},⌘{ac},⌘{ba},⌘{bc},⌘{ca},⌘{cb},⌘{abc},⌘{acb},⌘{bac},⌘{bca},⌘{cab},⌘{cba}❵.
 \end{equation}
-את השפה האינסופית~$L₅$ ניתן להגדיר תוך שימוש ב\פנה{definition:length}
+את השפה האינסופית~$L₅$ ניתן להגדיר תוך שימוש ב\פנה|definition:length|
 \begin{equation}\label{eq:L5}
   L₅=❴w \,|\, w∈Σ^*, |w|≥5❵.
 \end{equation}
@@ -232,4 +226,10 @@ $L₅$ \cref{eq:L5},
 שימוש במנגנון אחר, ביטויים רגולריים
 מרבית השימושים בפועל מוסיפים תַּחְבִּירִי סֻכָּר כגון:
 
+
+\begin{figure}[H]
+  \centering
+\input{noam.tikz}
+  \caption{ההיררכיה של חומסקי}
+\end{figure}
 

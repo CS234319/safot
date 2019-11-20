@@ -54,6 +54,7 @@
 \newtheorem{claim}{טענה}[section]
 \newtheorem{example}{דוגמה}[section]
 \def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
+\numberwithin{equation}{section}
 
 \graphicspath{{Images/}}
 \setmainlanguage[calendar=hebrew]{hebrew}
@@ -75,9 +76,9 @@
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{\LR{{#1}}}
-\def\A|#1|{\E|\ttfamily#1|}
-\def\T|#1|{|\ttfamily#1|}
+\def\T|#1|{\E|\ttfamily#1|}
 \def\ע|#1|{{\bfseries#1}}
+\def\פנה|#1|{\cref{#1}}
 
 \crefname{equation}{}{}
 \crefname{definition}{הגדרה}{הגדרות}
