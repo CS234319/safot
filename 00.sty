@@ -47,7 +47,6 @@
 
 \floatstyle{ruled}
 \restylefloat{figure}
-\restylefloat{table}
 
 \newtheorem{definition}{הגדרה}[section]
 \newtheorem{theorem}{משפט}[section]
@@ -76,13 +75,15 @@
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{\LR{{#1}}}
-\def\T|#1|{\E|\ttfamily#1|}
+\def\T|#1|{\lisp{#1}}
 \def\ע|#1|{{\bfseries#1}}
 \def\פנה|#1|{\cref{#1}}
+\def\כיתוב|#1|{\caption{#1}}
+\def\תגית|#1|{\label{#1}}
 
-\crefname{equation}{}{}
 \crefname{definition}{הגדרה}{הגדרות}
 \crefname{figure}{איור}{איורים}
+\crefname{table}{טבלה}{טבלאות}
 \let\ref=\cref
 
 \def\UrlFont{\ttfamilylatin}
@@ -328,4 +329,6 @@ nice empty nodes/.style={
     delay={where content={}{shape=coordinate,for siblings={anchor=north}}{}}
 }
 }
-
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%

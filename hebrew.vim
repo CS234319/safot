@@ -18,7 +18,6 @@
 %s/\\סוף{ספרור}/\\end{enumerate}/ge
 %s/\\החל{תיאור}/\\begin{description}/ge
 %s/\\סוף{תיאור}/\\end{description}/ge
-%s/\\כיתוב/\\caption/ge
 
 %s/אלפאבית\>/אלפבית/ge
 %s/\\כיתוב{\(.*\)}/\\כיתוב|\1|/ge 

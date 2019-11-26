@@ -17,7 +17,7 @@
 
 \DeclareOption{terse}{}
 \DeclareOption{verbose}{}
-\newcommand\codesize\normalsize
+\newcommand\codesize\scriptsize
 \DeclareOption{normalsize}{\renewcommand\codesize\normalsize}
 \DeclareOption{small}{\renewcommand\codesize\small}
 \DeclareOption{large}{\renewcommand\codesize\large}
@@ -29,7 +29,7 @@
 \DeclareOption{footnotesize}{\renewcommand\codesize\footnotesize}
 \DeclareOption{tiny}{\renewcommand\codesize\tiny}
 \DeclareOption{dense}{\renewcommand\@codedisplayspace{0pt}}
-\newcommand\inlinesize\normalsize
+\newcommand\inlinesize{}
 \ProcessOptions
 
 \providecommand\ensureLR[1]{\ifdefined\LR\LR{#1}\else{#1}\fi}
@@ -40,7 +40,6 @@
 % These two macros are defined for quick and trouble free placement of short
 % code and keywords of any programming language within the document.
 
-\providecommand\ensureLR[1]{\ifdefined\LR\LR{#1}\else{#1}\fi}
 
 \ifdefined\LR
   \def\@LR#1{\LR{#1}}%
