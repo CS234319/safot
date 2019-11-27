@@ -1008,8 +1008,8 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 הביטוי הזה בתנאים שבהם הפרמטר x משתערך לאטום
 \lisp{a} והפרמטר xs משתערך לרשימה \lisp{(b c)}.  
 
-לשם ביצוע הקריאה ל-apptend פרודצורת השיערוך קושרת בין שמות הפרמטרים הפורמליים
-והאקטואליים, על ידי הוספת  שני \E|dotted-pairs| 
+לשם ביצוע הקריאה ל-append פרודצורת השיערוך קושרת בין שמות הפרמטרים הפורמליים
+והאקטואליים, וזאת על ידי הוספת  שני \E|dotted-pairs| 
 \begin{LISP}
 (x.a)
 \end{LISP}
@@ -1269,57 +1269,11 @@ apply-decompsed-lambda,
 חלקים: שם הפונקציה הפרימיטיבית, והפרמטרים לפונקציה זו.  
 \begin{LISP}
 (defun (evaluate-primitive S-expression a-list)
-  (evaluate-primitive-function (car S-expression) (cdr S-expression) a-list)
+  (apply-primitive-function (car S-expression) (cdr S-expression) a-list))
 \end{LISP}
-
-\פנה|טבלה:גלעין| מסכמת את הפונקציות הפרימיטיביות שבגלעין אשר evaluate-primitive צריכה לטפל בהן. 
-אנו רואים ש-cond היא הפונקציה היחידה מבין כל אלו שהסמנטיקה שלה היא \E|normal|.
-במימוש של evaluate-primitive-function נבדיל בין פונקציה זו וכל השאר.  
-\begin{LISP}
-(defun (evaluate-primitive-function function actuals a-list)
-  (cond
-    ((eq 'cond function)  
-      (evaluate-cond actuals a-list))
-    (t 
-      (apply-eager-primitive-function 
-        function 
-        (evaluate-list actuals a-list) 
-        a-list))))
-\end{LISP}
-המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
-\begin{LISP}
-(defun evaluate-cond(test-forms a-list);
-  (cond
-    ((null test-forms) nil) ; if no more test-forms, return nil
-    ((evaluate (car (car test-forms)) a-list) ; evaluate condition of first test-form 
-      (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate value of test-form
-    (t (evaluate-cond (cdr test-forms) a-list))) ; otherwise, recurse on remaining test-forms
-)
-\end{LISP}
-
-
-
-\begin{LISP}
-(defun (evaluate-primitive-function function actuals a-list)
-  (cond
-        ((eq 'car function)  
-      (evaluate-car actuals a-list))
-\   ((eq 'car function)  
-      (evaluate-car actuals a-list))
-\   ((eq 'car function)  
-      (evaluate-car actuals a-list))
-\   ((eq 'car function)  
-      (evaluate-car actuals a-list))
-\   ((eq 'car function)  
-      (evaluate-car actuals a-list))
-\end{LISP}
-
-
-\newcounter{primitive}
-\setcounter{primitive}{-1}
 
 \begin{table}[h]
-  \begin{tabularx}\textwidth{>{\refstepcounter{primitive}\setLR\scriptsize\setLR}c>{\scriptsize}c
+  \begin{tabularx}\textwidth{>{\setLR\scriptsize\setLR}c>{\scriptsize}c
     >{\setRL\scriptsize\raggedleft\arraybackslash}X
     >{\scriptsize\setLR\raggedright\arraybackslash}X
     >{\scriptsize\setLR\raggedright\arraybackslash}X
@@ -1411,19 +1365,58 @@ apply-decompsed-lambda,
 \end{table}
 
 
-
-
+\פנה|טבלה:גלעין| מסכמת את הפונקציות הפרימיטיביות שבגלעין אשר evaluate-primitive צריכה לטפל בהן. 
+אנו רואים ש-cond היא הפונקציה היחידה מבין כל אלו שהסמנטיקה שלה היא \E|normal|.
+במימוש של apply-primitive-function נבדיל בין פונקציה זו וכל השאר.  
 \begin{LISP}
-    ((eq 'atom function)  (apply-atom actuals a-list))
-    ((eq 'car function)   (apply-car actuals a-list))
-    ((eq 'cdr function)   (apply-cdr actuals a-list))
-    ((eq 'cons function)  (apply-cons actuals a-list))
-    ((eq 'eq function)    (apply-eq actuals a-list))
-    ((eq 'error function) (apply-error actuals a-list))
-    ((eq 'eval function)  (apply-eval actuals a-list))
-    ((eq 'set function)   (apply-set actuals a-list))
-    (t (error 'something-went-wrong function)))
+(defun apply-primitive-function (function actuals a-list)
+  (cond
+    ((eq 'cond function)  
+      (evaluate-cond actuals a-list))
+    (t 
+      (apply-primitive-eager-function 
+        function 
+        (evaluate-list actuals a-list) 
+        a-list))))
 \end{LISP}
+המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
+\begin{LISP}
+(defun evaluate-cond(test-forms a-list);
+  (cond
+    ((null test-forms) nil) ; if no more test-forms, return nil
+    ((evaluate (car (car test-forms)) a-list) ; evaluate test-condition of first test-form 
+      (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate test-value of first test-form
+    (t (evaluate-cond (cdr test-forms) a-list))) ; otherwise, recurse on remaining test-forms
+)
+\end{LISP}
+כדי לטפל בשאר הפונקציות שב\פנה|טבלה:גלעין| נשים לב לכך שכל אלו לבד מ-eval אינן נדרשות יותר ל-a-list, וכולן, לבד מ-error
+מצפות לפרמטר אחד או שני פרמטרים. הפונקציה 
+apply-primitive-eager-function מטפלת בשני מקרים מיוחדים אלו, ומעבירה את המשך הטיפול ל-apply-primitive-eager-function-aux
+\begin{LISP}
+(defun (apply-primitive-eager-function function actuals a-list)
+  (cond
+    ((eq 'error function) (error actuals))
+    ((eq 'eval function) (evaluate (car actuals) a-list))
+    (t (apply-primitive-eager-function-aux 
+      function
+      (car actuals)     ; first actual parameter
+      (car cdr actuals) ; second actual parameter, could be nil
+))))
+\end{LISP}
+כעת הפונקציה apply-primitive-eager-function-aux משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימטיביות שנותרו: 
+\begin{LISP}
+(defun (apply-primitive-eager-function function first second)
+  (cond
+    ((eq 'atom function) (atom first))
+    ((eq 'car function)  (car first))
+    ((eq 'cdr function)  (cdr first))
+    ((eq 'cons function) (cons first second))
+    ((eq 'eq function)   (eq first second))
+    ((eq 'set function)  (set first second))
+    (t (error 'something-went-wrong function))))
+\end{LISP}
+
+
 \begin{table}[H]
   \begin{tabularx}\textwidth{>{\setLR\scriptsize}c>{\scriptsize}c
     >{\scriptsize\raggedleft\arraybackslash}X
