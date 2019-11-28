@@ -42,8 +42,8 @@
 להגדיר באמצעות הפונקציות הפריטיביות.
 
 \ציינן
-✦ \ע|קבועים| (פונקציות ללא פרמטרים): \E|t|)המציין את ערך האמת(ו-\E|nil|
-)המציין את ערך השקר(.
+✦ \ע|קבועים| (פונקציות ללא פרמטרים): \E|t|)המציין את ערך האמת(ו-\E|nil|)המציין
+את ערך השקר(.
 ✦ \ע|פונקציה לוגית|: \E|null| (פונקציה חד-מקומיות הבודקת אם אטום הוא \E|nil|).
 ✦ \ע| פונקציות המסייעות בהגדרת פונקציות|:
 \E|quote|, \E|defun|, \E|ndefun|, \E|lambda| ו-\E|nlambda|.
@@ -55,7 +55,7 @@
 אריתמטיות. רוב הדיאלקטים של ליספ, יודעים להדר, באופן חלקי או מלא, תכניות ליספ
 לשפת מכונה. גם הידור כזה אינו נחוץ בגלעין של השפה. על אף המינימליות של הגלעין,
 הוא טיורינג שלם: כל תכנית שאפשר לכתוב בכל שפת תכנות, אפשר לכתוב גם בגלעין של
-ליספ. בפרט, כפי שנדגים כאן, ניתן לממש את הפונקציה \E|eval| עצמה בגלעין. 
+ליספ. בפרט, כפי שנדגים כאן, ניתן לממש את הפונקציה \E|eval| עצמה בגלעין.
 
 אוסף הפונקציות שבגלעין שנתאר כאן, נמנע מלתמוך בשום תכונה של ליספ שאינן נחוצה
 כדי לממש את הפונקציה \E|eval|.
@@ -149,22 +149,22 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 מתוך~$Σ^*$. הנה כמה ביטויי S והתיאור שלהם כעץ בינארי מלא.
 
 \begin{LTR}
-  \begin{tabular}{cccccc}~$(ab.cd)$                                                                  &
-    $(abcd.ε)$                                                                          &
-    $(ab.(c.d))$                                                                        &
-    $((a.b).(c.d))$                                                                     &
-    $(a.(b.(c.d)))$                                                                     &
+  \begin{tabular}{cccccc}~$(ab.cd)$ &
+    $(abcd.ε)$ &
+    $(ab.(c.d))$ &
+    $((a.b).(c.d))$ &
+    $(a.(b.(c.d)))$ &
     $(((a.b).c).d)$ ⏎
     \scriptsize
-    \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]}                                     &
+    \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]} &
     \scriptsize
-    \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]}                                    &
+    \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]} &
     \scriptsize
-    \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]}                   &
+    \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]} &
     \scriptsize
     \Forest{s tree [{},cons[{},cons[$a$,atom][$b$,atom]][{},cons[$c$,atom][$d$,atom]]]} &
     \scriptsize
-    \Forest{s tree [{},cons [{},cons [{},cons[a,atom][b,atom]] [c,atom]] [d,atom] ] }   &
+    \Forest{s tree [{},cons [{},cons [{},cons[a,atom][b,atom]] [c,atom]] [d,atom] ] } &
     \scriptsize
     \Forest{s tree [{},cons [{}, cons [{}, cons
           [a,atom][b,atom]] [c,atom] ] [d,atom]] }
@@ -228,17 +228,17 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
   \label{איור:רשימות}
   \begin{LTR}
     \begin{tabular}{cccc}
-      \lisp{()}                  &
-      \T|(A)|                    &
-      \T|(A B C D)|              &
+      \lisp{()} &
+      \T|(A)| &
+      \T|(A B C D)| &
       \T|((A B) C)|
-      ⏎
+ ⏎
       \begin{forest}
         s tree [NIL,atom]
-      \end{forest}  &
+      \end{forest} &
       \begin{forest}
         s tree [{},cons [A,atom]]
-      \end{forest}  &
+      \end{forest} &
       \begin{forest}
         s tree [{},cons [A,atom]
         [{},cons [B,atom]
@@ -351,8 +351,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 כמה איברים פשוטים של קבוצת העצים מעל האלפבית בן שלוש האותיות~$Σ=❴a,b,c❵$ הם \[
   a,b,c,a(b,c), a(b(a)), a(a,b,c)∈T(❴a,b,c❵)
 \] \cref{figure:tree} מדגים את הטופולגיה של העץ המורכב יותר
-$a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵)
-  )$
+$a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵))$
 \begin{figure}[H]
   \centering
   \forestset{%
@@ -510,7 +509,7 @@ $a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵)
 לפיכך, כאשר האינטרפטר של ליספ יקרא את האטום \T|t| הוא ידפיס בתגובה \T|T|, וכאשר
 הוא יקרא את האטום \T|nil| הוא ידפיס בתגובה \T|NIL|.
 
-הפונקציה \T|set| זה בגלעין היא פונקציה המקבלת שני פרמטרים, שהראשון בהם הוא
+הפונקציה \T|set| שבגלעין היא פונקציה המקבלת שני פרמטרים, שהראשון בהם הוא
 אטום, והשני הוא ביטוי S כלשהו. הפונקציה מוסיפה ל-\E|a-list| פריט שהוא
 dotted-pair המבטא קישור בין האטום לביטוי.
 
@@ -521,8 +520,8 @@ dotted-pair המבטא קישור בין האטום לביטוי.
 כבקשה לקשור את האטום \T|foo| לרשימה
 \T|(bar baz)|
 נתקל בשגיאות, שכן האינטרפטר ינסה לשערך את שני הארגומנטים של הפונקציה \E|set|
-טרם שהוא יפעיל פונקציה זו. אלא ששיערוך זה יכשל, שכן לאף אחד מהאטומים המופיעים
-בביטוי אין משמעות מלכתחילה.
+טרם שהוא יפעיל פונקציה זו. אלא ששיערוך זה יכשל, שכן לאף אחד משלושת האטומים המופיעים
+בקריאה ל-set אין משמעות מלכתחילה.
 
 בכדי להתגבר על מכשלה זו יש להשתמש בפונקציה \T|quote|, פונקציה של
 ארגומנט אחד אשר \ע|אינה| משערכת את הארגומנט שלה, אלא מחזירה אותו כמות שהוא.
@@ -565,7 +564,7 @@ NIL
 נשים לב לכך שהשערוך של הביטוי \T|(set (quote t) (quote t))| אינו מביא רק לחישוב
 של ערך, אלא לקשירה של שם לערך. באופן כללי פעולת השיערוך בליספ כוללת שלושה סוגים
 של פעולות: מציאת משמעות של שם, הגדרת משמעות של שם, וחישוב שהוא הפעלת פונקציה על
-ביטוי S או ביטויי S.
+ביטוי S או ביטויי \E|S|.
 
 לא ניתן להסיר פריטים מתוך ה-\E|a-list|. אבל, ניתן להסתיר קישור באמצעות הוספת
 פריט לרשימה, אשר יסתיר את הקישור הקודם. אם נכתוב כעת
@@ -797,7 +796,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 הפונקציה cond עוברת על ה-test-forms שקיבלה כפרמטרים לפי סדרם, ובכל אחד כזה היא
 משערכת את ה-\E|test-condition|. אם תוצאת השיערוך היא \E|nil|, כלומר
 ה-test-condition אינו מתקיים, אזי cond \ע|אינה| משערכת את ה-\E|test-value|, וממשיכה
-לפריט הבא. אם לעומת זאת תוצאת השיערוך אינה \E|nil|, כלומר ה-test-condition
+ל-test-form הבא. אם לעומת זאת תוצאת השיערוך אינה \E|nil|, כלומר ה-test-condition
 מתקיים, אזי cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השיערוך הזו, \ע|מבלי|
 להמשיך לשאר ה-\E|test-forms|. אם cond ממצה את רשימת ה-\E|test-forms| מבלי
 להיתקל באף \E|test-condition| שמתקיים, הרי cond מחזירה את הערך \E|nil|.
@@ -811,7 +810,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 
 מקובל להשתמש תמיד באטום \E|t| דווקא כדי לציין את התנאי שמתקיים תמיד, כלומר חלק
 ה-else של פקודת ה-\E|if|, אבל טכנית ניתן היה להגדיר את zcar תוך שימוש בביטוי
-אחר שערכו אינו nil
+אחר שערכו אינו \E|nil|, למשל
 \begin{LISP}
 (defun zcar(x)
   (cond ((atom x) x) ('(DUMMY) (car x)))
@@ -922,6 +921,8 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 אשר מקבלת שתי רשימות באורך שווה: רשימת שמות (\E|names|) ורשימת ערכים
 (\E|values|), וכן רשימה שהיא במבנה של \E|a-list|. \E|bind| ומחזירה את ה-a-list
 שקיבלה בתוספת קישורים בין השמות לערכים.
+
+\begin{minipage}\linewidth
 \begin{LISP}
 ; bind names to values, and append to a-list
 (defun bind (names values a-list)
@@ -938,6 +939,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
         (bind (cdr names) (cdr values) a-list))))
 )
 \end{LISP}
+\end{minipage}
 
 § שיערוך ביטוי מורכב וקריאה לפונקציה
 
@@ -1179,97 +1181,103 @@ normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambd
 
 § הגדרת פונקצית השיערוך בליספ
 
-מתברר שאפשר לממש את פרוצדורת השיערוך גם בליספ. 
-לשם כך נגדיר פונקציה evaluate
-המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|, ומשערכת
-את הביטוי בהתאם לקישורים שבסביבה הנתונה.
-פונקציה זו תקרא לעצמה ברקורסיה כדי לשערך את מרכיבי הביטוי. 
-כאשר evaluate תזהה
-ביטוי $λ$
-היא תקרא לפונקצית עזר
-apply אשר תבצע הפעלה של ביטוי $λ$ על הפרמטרים המועברים לו. 
-אם ביטוי ה-$λ$ הוא \E|eager|, אז apply תקרא ל-evaluate 
-כדי לשערך את הפרמטרים. בנוסף, בנוסף apply תקרא לפונקציה
-bind שאותה כבר הגדרנו כדי לקשור בין הפרמטרים הפורמליים והאקטואליים.
+מתברר שאפשר לממש את פרוצדורת השיערוך גם בליספ. לשם כך נגדיר פונקציה evaluate
+המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|, ומשערכת את הביטוי בהתאם
+לקישורים שבסביבה הנתונה.  הפונקציה evaluate קוראת לעצמה ברקורסיה כדי לשערך את
+מרכיבי הביטוי. כאשר evaluate תזהה ביטוי~$λ$ היא תקרא לפונקצית עזר apply אשר גם
+אותה נגדיר בהמשך, ואשר אחראית להפעיל ביטוי~$λ$ על הפרמטרים המועברים לו. אם
+ביטוי ה-$λ$ הוא \E|eager|, אז apply תקרא ל-evaluate כדי לשערך את הפרמטרים.
+
+מבנה הקריאות והרקורסיות ההדדיות שבמימוש של evaluate ופונקציות העזר שלה מתואר
+ב\פנה|איור:שיערוך|.
+
 
 \begin{figure}[!htb]
-  \caption{
-הפונקציה evaluate ופונקציות העזר שלה.
+  \כיתוב|רקורסיות הדדיות בין הפונקציה evaluate ופונקציות העזר שלה|
+  \תגית|איור:שיערוך|
+  \forestset{%
+    call tree/.style={
+        for tree={
+            font=\scriptsize,
+            % draw,
+            s sep'+=-4pt,
+            fit=tight,
+          },
+      },
   }
-  \label{איור:שיערוך}
-  \begin{quote}
-    \forestset{%
-      call tree/.style={
-          for tree={
-              font=\scriptsize,
-              %      draw,
-              s sep'+=-4pt,
-              fit=tight,
-            },
-        },
+  \centering
+  \begin{forest}
+    call tree [evaluate,name=evaluate
+    [lookup,name=lookup] {
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
     }
-    \begin{forest}
-      call tree [evaluate,name=evaluate
-      [lookup,name=lookup] {
-      \draw[->] () [out=south west,in=north east] .. controls +(south west:1) and +(north west:1) ..  ();
-      }
-      [is-primitive]
-      [evaluate-primitive
-      [apply-primitive
-      [evaluate-cond,name=evaluate-cond] {
-      \draw[->] (.-20) .. controls +(-50:1) and +(60:1) ..  (.15);
-      \draw[->] (.200) .. controls +(210:2) and +(120:3) .. (evaluate.120);
-      }
-      [apply-eager-primitive
-      [apply-trivial-primitive]
-      ]
-      ]
-      ]
-      [apply, name=apply
-      [apply-decomposed-lambda
-      [bind] {
-      \draw[->] () [out=south west,in=north] .. controls +(250:2) and +(120:1) ..  ();
-      }
-      [evaluate-list] {
-      \draw[->] (.200)  .. controls +(220:1) and +(120:1) ..  (.140);
-      \draw[->] (.-20) .. controls +(-10:6) and +(60:3) .. (evaluate.60);
-      }
-      ]
-      ] {
-      \draw[->] (.15) .. controls +(30:1) and +(60:1) .. (evaluate.north east);
-      }
-      ]
-      \draw[->] () [out=south west,in=north west] .. controls +(south west:2) and +(north west:2) ..  ();
-    \end{forest}
-  \end{quote}
+    [is-primitive [exists]
+    {
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+    }
+    ]
+    [evaluate-primitive
+    [apply-primitive
+    [evaluate-cond] {
+    \draw[->] (.-20) .. controls+(-60:0.9) and+(60:0.9) .. (.20);
+    \draw[->] (.200) .. controls+(210:9) and+(120:6) .. (evaluate.120);
+    }
+    [apply-eager-primitive
+    [apply-trivial-primitive]
+    ]
+    ]
+    ]
+    [apply, name=apply
+    [apply-decomposed-lambda
+    [bind] {
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:1) .. ();
+    }
+    [evaluate-list] {
+    \draw[->] (.210) .. controls+(250:2) and+(120:1) .. (.150);
+    \draw[->] (.-20) .. controls+(-10:6) and+(60:3) .. (evaluate.60);
+    }
+    ]
+    ] {
+    \draw[->] (.15) .. controls+(30:1) and+(60:1) .. (evaluate.north east);
+    }
+    ]
+    \draw[->] (.180) [out=south west,in=north west] .. controls+(south west:1) and+(north west:2) .. ();
+    \path (current bounding box.south west)++(-13ex,0) coordinate (A);
+    \path (current bounding box.north east)++(11ex,1ex) coordinate (B);
+    \clip (A) rectangle (B);
+  \end{forest}
 \end{figure}
 
-המימוש של evaluate משתמש בכמה פונקציות עזר נוספות. בין אלו נמצאת הפונקציה 
-lookup אשר תיארנו למעלה כדי לשערך את ערכו של אטום. 
-מבנה הקריאות והרקורסיות של
-evaluate ופונקציות העזר שלה מתואר ב\פנה|איור:שיערוך|.
+אנו רואים באיור גם ש-apply קוראת לפונקציה הרקורסיבית bind (שאותה כבר הגדרנו),
+וזאת כדי לקשור בין הפרמטרים הפורמליים והאקטואליים. האיור מראה גם ש-evaluate
+משתמשת בכמה פונקציות נוספות שהוצגו כבר: הפונקציה הרקורסיבית lookup כדי לשערך את
+ערכו של אטום, ו-is-primitive הקוראת ל-exists הרקורסיבית כדי לזהות אטומים המזהים
+פונקצית פרימיטיביות.  בנוסף לאלו, נעזרת evaluate בפונקציה
+\E|evaluate-primitive|, אשר תתואר בהמשך, כדי לטפל בפונקציות הפרימיטיביות
+שבגלעין.
 
-
-
+הגוף של evalaute הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס לביטוי
+אותו היא נדרש לשערך.
+\begin{minipage}\linewidth
 \begin{LISP}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
   (cond
-    ((atom S-expression)
+    ((atom S-expression) ; recursion base: lookup of atom in a-list
       (lookup S-expression a-list))
-    ((is-primitive (car S-expression))
+    ((is-primitive (car S-expression)) ; special case handling of primitive functions
       (evaluate-primitive S-expression a-list))
-    (t
+    (t ; recursion---lambda applied to parameters
       (apply
-        (evaluate (car S-expression) a-list)
-        (cdr S-expression
+        (evaluate (car S-expression) a-list) ; find lambda expression
+        (cdr S-expression) ; find actual parameters
         a-list))))
 \end{LISP}
-הפונקציה evaluate בודקת אם הביטוי הוא אטום, ואם כן, היא מחשבת את ערכו על ידי
-חיפוש ב-a-list תוך שימוש ב-\E|lookup|. אם הביטוי הוא ביטוי מורכב, אזי
+\end{minipage}
+אם הביטוי ש-evaluate מקבלת הוא אטום, evaluate מפעילה את \E|lookup| כדי למצוא את
+הערך הקשור אליו ברשימת ה-\E|a-list|.  אם לעומת הביטוי הוא ביטוי מורכב, אזי
 dotted-pair אשר ה-car שלו הוא פונקציה, וה-cdr שלו הוא רשימה של
 ארגומנטים שיש להעביר לפונקציה. אם ה-car הוא שם של פונקציה אטומית, נדרש טיפול
 מיוחד, ואז evaluate קוראת לפונקציה evaluate-primitive אשר מבצעת זאת.
-
 בכל מקרה אחר, evaluate מוצאת את הפונקציה אותה יש להפעיל על ידי השיערוך
 \begin{LISP}
 (evaluate (car S-expression) a-list)
@@ -1277,10 +1285,9 @@ dotted-pair אשר ה-car שלו הוא פונקציה, וה-cdr שלו הוא �
 קריאה רקורסיבית זו תחזיר את ביטוי ה-$λ$ אותו יש להפעיל על הפרמטרים. evaluate
 גם מחשבת את הפרמטרים באמצעות הקריאה-\T|(cdr S-expression)|, וקוראת לפונקציה
 apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
-((eq 'cond (car S-expression)))
 
-הפונקציה apply מצידה מפרקת את ביטוי ה-$λ$ למרכיביו, וקוראת לפונקצית העזר
-apply-decompsed-lambda,
+הפונקציה apply מצידה מפרקת את ביטוי ה-$λ$ לשלושת מרכיביו (תגית, רשימת פרמטרים
+וביטוי לחישוב), ומעבירה מרכיבים אלו לפונקצית העזר apply-decompsed-lambda
 \begin{LISP}
 (defun apply(lambda-expression actuals a-list)
   (apply-decomposed-lambda
@@ -1288,8 +1295,7 @@ apply-decompsed-lambda,
     (car (cdr lambda-expression)); list of formal parameters
     (car (cdr (cdr lambda-expression))); body
     actuals
-    a-list)
-)
+    a-list))
 \end{LISP}
 הפונקציה apply-decompsed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
 הפרמטרים הפורמלים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
@@ -1305,12 +1311,10 @@ apply-decompsed-lambda,
     (cond
       (eq tag 'nlambda) (bind formals actuals a-list)
       (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
-      (t (error 'unkown-lambda tag))))
-)
+      (t (error 'unkown-lambda tag)))))
 \end{LISP}
 ההגדרה של הפונקציה evaluate-list המיועדת לשיערוך רשימת הפרמטרים האקטואליים היא
 באמצעות הפעלה רקורסיבית של evaluate על כל אחד מאיברי הרשימה, ושרשור התוצאות
-((eq 'cond (car S-expression)))
 לכדי רשימה אחת.
 \begin{LISP}
 (defun
@@ -1320,8 +1324,7 @@ apply-decompsed-lambda,
       (t
         (cons
           (evaluate (car S-expressions)) ; evaluate first S-Expression
-          (evaluate-list (cdr S-expressions)) ; recursive call on remainder
-))))
+          (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
 \end{LISP}
 
 § מימוש הפונקציות הפרימטיביות שבגלעין
@@ -1348,31 +1351,31 @@ apply-decompsed-lambda,
     }
     \toprule
 
-    \normalsize \bfseries {\text{/arity}}שם           &
-    \normalsize \bfseries סמנטיקה                     &
-    \normalsize \bfseries תמצית                       &
+    \normalsize \bfseries {\text{/arity}}שם &
+    \normalsize \bfseries סמנטיקה &
+    \normalsize \bfseries תמצית &
     \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
     \midrule
 
-    atom/1                                            &
-    eager                                             &
-    בדיקה אם הארגומנט הוא אטום                        &
+    atom/1 &
+    eager &
+    בדיקה אם הארגומנט הוא אטום &
     \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
     \lisp{(atom t)}~$⇒$ \lisp{T} \newline
     \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
     \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
 
-    car/1                                             &
-    eager                                             &
-    חילוץ האיבר הראשון ברשימה                         &
+    car/1 &
+    eager &
+    חילוץ האיבר הראשון ברשימה &
     \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
     \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
     \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
     \lisp{(car 'a)}~$⇒$ \text{✗} \newline
     \lisp{(car ())}~$⇒$ \text{✗} ⏎
 
-    cdr/1                                             &
-    eager                                             &
+    cdr/1 &
+    eager &
     חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
     \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
     \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
@@ -1381,57 +1384,56 @@ apply-decompsed-lambda,
     \lisp{(cdr ())}~$⇒$ ✗ \newline
     \lisp{(cdr nil)}~$⇒$ ✗ ⏎
 
-    ($n≥0$) cond/n                                    &
-    normal                                            &
-    הכללה של פקודת \E|if|.                            &
+    ($n≥0$) cond/n &
+    normal &
+    הכללה של פקודת \E|if|. &
     \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
     \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
     \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
 
-    cons/2                                            &
-    eager                                             &
-    הוספת איבר בתחילת רשימה                           &
+    cons/2 &
+    eager &
+    הוספת איבר בתחילת רשימה &
     \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
     \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
     \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
 
-    eq/2                                              &
-    eager                                             &
-    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
+    eq/2 &
+    eager &
+    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה &
     \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
     \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
     \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
     \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
     \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
 
-    ($n≥0$) error/n                                   &
-    eager                                             &
-    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
+    ($n≥0$) error/n &
+    eager &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית &
     \lisp{(error)}~$⇒$ ✗ \newline
     \lisp{(error A)}~$⇒$ ✗ \newline
     \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
 
-    eval/1                                            &
-    eager                                             &
-    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
+    eval/1 &
+    eager &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית &
     \lisp{(eval 'a)}~$⇒$ \lisp{A} \newline
     \lisp{(eval '(car (x.y))}~$⇒$ \lisp{Y} ⏎
 
-    set/2                                             &
-    eager                                             &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|.            &
+    set/2 &
+    eager &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
     \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
     \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
     \label{primitive:count}
-    ⏎
+ ⏎
     \bottomrule
   \end{tabularx}
   \כיתוב|הפונקציות הפרימטיביות בגלעין של ליספ|
   \תגית|טבלה:גלעין|
 \end{table}
-
 
 אנו רואים ש-cond היא הפונקציה היחידה מבין כל אלו שהסמנטיקה שלה היא \E|normal|.
 במימוש של apply-primitive נבדיל בין פונקציה זו וכל השאר.
@@ -1453,8 +1455,7 @@ apply-decompsed-lambda,
     ((null test-forms) nil) ; if no more test-forms, return nil
     ((evaluate (car (car test-forms)) a-list) ; evaluate test-condition of first test-form
       (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate test-value of first test-form
-    (t (evaluate-cond (cdr test-forms) a-list))) ; otherwise, recurse on remaining test-forms
-)
+      (t (evaluate-cond (cdr test-forms) a-list))))   ; otherwise, recurse on remainder list of test-forms
 \end{LISP}
 כדי לטפל בשאר הפונקציות שב\פנה|טבלה:גלעין| נשים לב לכך שכל אלו לבד מ-eval אינן נדרשות יותר ל-a-list, וכולן, לבד מ-error
 מצפות לפרמטר אחד או שני פרמטרים. הפונקציה
@@ -1467,8 +1468,7 @@ apply-eager-primitive מטפלת בשני מקרים מיוחדים אלו, ומ
     (t (apply-trivial-primitive
       function
       (car actuals) ; first actual parameter
-      (car cdr actuals) ; second actual parameter, could be nil
-))))
+      (car cdr actuals))))) ; second actual parameter, could be nil
 \end{LISP}
 כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימטיביות שנותרו:
 \begin{LISP}
@@ -1493,79 +1493,79 @@ apply-eager-primitive מטפלת בשני מקרים מיוחדים אלו, ומ
     >{\setLR\scriptsize\raggedright\arraybackslash}X
     }
     \toprule
-    \normalsize \bfseries {\text{/arity}}שם                             &
-    \normalsize \bfseries סמנטיקה                                       &
-    \normalsize \bfseries תמצית                                         &
-    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}}                    &
+    \normalsize \bfseries {\text{/arity}}שם &
+    \normalsize \bfseries סמנטיקה &
+    \normalsize \bfseries תמצית &
+    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}} &
     \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
     \midrule
 
-    \E|defun/3|                                                         &
-    normal                                                              &
-    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|.  &
+    \E|defun/3| &
+    normal &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
     \lisp{(set 'defun }\newline
     \mbox\quad\lisp{(nlambda (n p b)} \newline
-    \mbox\qquad \lisp{(set n (lambda p b))))}                           &
+    \mbox\qquad \lisp{(set n (lambda p b))))} &
     \T|(defun f (x y) (y x))|\newline\quad⏎
 
-    lambda/2                                                            &
-    normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|.                 &
+    lambda/2 &
+    normal &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
     \lisp{(ndefun lambda(p b)}\newline
-    \mbox\quad\lisp{('lambda p b))}                                     &
+    \mbox\quad\lisp{('lambda p b))} &
     \lisp{((lambda (x) (car (cdr x)))}\newline
     \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
-    ⏎
+ ⏎
 
-    nil/0                                                               &
-    n/a                                                                 &
+    nil/0 &
+    n/a &
     האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
-    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|.         &
-    \lisp{(set 'nil 'nil)}                                              &
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
+    \lisp{(set 'nil 'nil)} &
     \lisp{nil}~$⇒$ \lisp{NIL} \newline
     \lisp{()}~$⇒$ \lisp{NIL} \newline
     \lisp{(eq nil t)}~$⇒$ \lisp{NIL} ⏎
 
-    null/1                                                              &
-    eager                                                               &
-    בדיקה אם הארגומנט הוא האטום \lisp{nil}                              &
+    null/1 &
+    eager &
+    בדיקה אם הארגומנט הוא האטום \lisp{nil} &
     \lisp{(defun null (x)}\newline
-    \mbox\quad\lisp{(eq x nil))}                                        &
+    \mbox\quad\lisp{(eq x nil))} &
     \lisp{(null t)}~$⇒$ \lisp{NIL} \newline
     \lisp{(null nil)}~$⇒$ \lisp{T}\newline
     \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
     \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
 
-    ndefun/3                                                            &
-    normal                                                              &
+    ndefun/3 &
+    normal &
     יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|normal|. &
     \lisp{(set 'ndefun }\newline
     \mbox\quad\lisp{(nlambda (n p b)} \newline
-    \mbox\qquad\lisp{(set n (nlambda p b))))}                           &
+    \mbox\qquad\lisp{(set n (nlambda p b))))} &
     \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
 
-    nlambda/2                                                           &
-    normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|.                &
+    nlambda/2 &
+    normal &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
     \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))} &
     \T|(nlambda f (x y) (y x))|~$⇒$
     \newline\mbox\quad\T|(nlambda f (x y) (y x)|
-    ⏎
+ ⏎
 
-    quote/1                                                             &
-    normal                                                              &
-    החזרת הארגומנט מבלי לשערך אותו.                                     &
-    \lisp{(ndefun quoate (x) x)}                                        &
+    quote/1 &
+    normal &
+    החזרת הארגומנט מבלי לשערך אותו. &
+    \lisp{(ndefun quoate (x) x)} &
     \lisp{(quote a)}~$⇒$ \lisp{A} \newline
     \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
     \lisp{'a}~$⇒$ \lisp{A} \newline
     \lisp{'(b c)}~$⇒$ \lisp{(B C)} \newline ⏎
 
-    t/0                                                                 &
-    n/a                                                                 &
+    t/0 &
+    n/a &
     האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
-    \E|(true)|.                                                         &
-    \lisp{(set 't 't)}                                                  &
+    \E|(true)|. &
+    \lisp{(set 't 't)} &
     \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
 
     \bottomrule
