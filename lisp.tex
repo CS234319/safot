@@ -923,7 +923,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 (\E|values|), וכן רשימה שהיא במבנה של \E|a-list|. \E|bind| ומחזירה את ה-a-list
 שקיבלה בתוספת קישורים בין השמות לערכים.
 
-\begin{minipage}\linewidth
+\begin{minipage}{0.95\linewidth}
 \begin{LISP}
 ; bind names to values, and append to a-list
 (defun bind (names values a-list)
@@ -1257,7 +1257,7 @@ normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambd
 הגוף של evalaute הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
 לביטוי אותו היא נדרש לשערך.
 
-\begin{minipage}\linewidth
+\begin{minipage}{0.95\linewidth}
 \begin{LISP}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
   (cond
