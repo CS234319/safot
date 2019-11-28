@@ -349,7 +349,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 \end{definition}
 
 כמה איברים פשוטים של קבוצת העצים מעל האלפבית בן שלוש האותיות~$Σ=❴a,b,c❵$ הם \[
-  a,b,c,a(b,c), a(b(a)), a(a,b,c)∈T(❴a,b,c❵)
+  a,b(c),a(b,c), a(b(a)), a(a,b,c)∈T(❴a,b,c❵)
 \] \cref{figure:tree} מדגים את הטופולגיה של העץ המורכב יותר
 $a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵))$
 \begin{figure}[H]
@@ -847,8 +847,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 שלה מצוי ברשימה המכילה את שמות כל הפונקציות הפרימטיביות
 \begin{LISP}
 (defun is-primitive(function)
-  (exists function '(atom car cdr cond cons eq error eval set))
-)
+  (exists function '(atom car cdr cond cons eq error eval set)))
 \end{LISP}
 במימוש זה, אטום הוא שמה של פונקציה פרימיטיבית אם הוא מצוי בתוך רשימה של האטומים
 המציינות פונקציה פרימיטיבית. הפונקציה exists אינה מצוייה בגלעין, אבל קל לממש
@@ -856,16 +855,15 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 \begin{LISP}
 (defun exists (x xs) ; determine if atom x is in list xs
   (cond
-    ((eq xs nil) t) ; list is exhausted
-    ((eq x (car xs)) t) ; item is first in list
-    (t (exists x (cdr xs)))
-)
+    ((eq xs nil) t)          ; list of xs is exhausted
+    ((eq x (car xs)) t)      ; item x is first in xs
+    (t (exists x (cdr xs)))) ; otherwise, recurse on rest of xs
 \end{LISP}
 הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת
 ב-\T|xs|, ומחזירה t אם x מצוי בין ה-\T|xs| ו-\T|nil| אחרת. רקורסיה דורשת תמיד
 בדיקת תנאי, כדי להבחין בין בסיס הרקורסיה שבו אין צורך לבצע קריאות רקורסיביות
 נוספות, ובין המקרה שבו יש צורך בהפעלה רקורסיבית. במקרה של הפונקציה \T|exists|
-יש ל-\T|cond| שלושה test-forms:
+יש ל-\T|cond| שלושה \E|test-forms|:
 \ספרר
 ✦ \T|((eq xs nil) t)| כלומר, אם רשימת ה-\T|xs| ריקה, ברור ש-\T|s| אינו מצוי
 בתוכה ואז \T|exists| מחזירה \T|nil|. לעומת זאת, אם תנאי זה אינו מתקדם,
@@ -893,27 +891,25 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 \begin{LISP}
 (defun exists (x xs) ; determine if atom x is in list xs
   (cond
-    ((null xs) t) ; list is exhausted
-    ((eq x (car xs)) t) ; item is first in list
-    (t (exists x (car xs))))
-)
+    ((null xs) t)            ; list of xs is exhausted
+    ((eq x (car xs)) t)      ; item x is first in xs
+    (t (exists x (cdr xs)))) ; otherwise, recurse on rest of xs
 \end{LISP}
 
 כזכור, ה-a-list היא רשימה של dotted-pairs שכל אחד מהם הוא קישור בין שם לערך.
-נגדיר פונקציה רקורסיבית המחפשת שם ברשימה שהיא במבנה של a-list:
+נגדיר פונקציה רקורסיבית המחפשת שם ברשימה שהיא במבנה של \E|a-list|:
 \begin{LISP}
 (defun lookup (id a-list) ; lookup id in an a-list
   (cond
-    ((null a-list) ; list was exhausted.
+    ((null a-list)                ; a-list was exhausted.
       (error 'unbound-variable id))
-    ((eq id (car (car a-list))) ; found
-      (car (cdr (car a-list))))
-    (t (lookup id (cdr a-list))))
-)
+    ((eq id (car (car a-list)))    ; found in first dotted-pair
+      (car (cdr (car a-list))))    ; return value part of dotted pair
+    (t (lookup id (cdr a-list))))) ; 
 \end{LISP}
 גם בפונקציה lookup אנו רואים קריאה רקורסיבית עם cond המתפצל לשלושה מקרים: במקרה
-של רשימה ריקה הפונקציה נכשלת, במקרה שראש הרשימה מתאים לתנאי, הפונקציה מצליחה,
-וקריאה רקורסיבית בכל מקרה אחר.
+של רשימה ריקה הפונקציה נכשלת, במקרה שראש הרשימה מתאים לתנאי, הפונקציה מצליחה.
+הפונקציה קוראת לעצמה רקורסיבית בכל מקרה אחר.
 
 בהגדרת lookup נעשה שימוש בפונקציה פרימטיבית נוספת, \E|error|. פונקציה זו מדפיסה את
 כל הפרמטרים שלה וגורמת לאינטרפרטר לעבור לסבב הבא של לולאת ה-\E|REPL|.
@@ -925,8 +921,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 
 \begin{minipage}{0.95\linewidth}
 \begin{LISP}
-; bind names to values, and append to a-list
-(defun bind (names values a-list)
+(defun bind (names values a-list) ; bind names to values, and append to a-list
   (cond
     ((null names) ; no more names
       (cond
@@ -1257,7 +1252,7 @@ normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambd
 הגוף של evalaute הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
 לביטוי אותו היא נדרש לשערך.
 
-\begin{minipage}{0.97\linewidth}
+\begin{minipage}{0.92\linewidth}
 \begin{LISP}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
   (cond
