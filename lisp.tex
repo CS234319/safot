@@ -917,6 +917,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
 
 בהגדרת lookup נעשה שימוש בפונקציה פרימטיבית נוספת, \E|error|. פונקציה זו מדפיסה את
 כל הפרמטרים שלה וגורמת לאינטרפרטר לעבור לסבב הבא של לולאת ה-\E|REPL|.
+
 נשתמש ב-error כדי להגדיר את הפונקציה bind שהיא פונקציה רקורסיבית נוספת,
 אשר מקבלת שתי רשימות באורך שווה: רשימת שמות (\E|names|) ורשימת ערכים
 (\E|values|), וכן רשימה שהיא במבנה של \E|a-list|. \E|bind| ומחזירה את ה-a-list
@@ -935,9 +936,8 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
       (error 'missing-values))
     (t
       (cons
-        (cons (car names) (car values)) ; new dotter-pair
-        (bind (cdr names) (cdr values) a-list))))
-)
+        (cons (car names) (car values)) ; new dotted-pair
+        (bind (cdr names) (cdr values) a-list)))))
 \end{LISP}
 \end{minipage}
 
@@ -976,9 +976,7 @@ cond היא פונקציה רב מקומית המקבלת מספר כלשהו ש
     (t
       (cons
         (car x)
-        (append x (cdr xs))
-))))
-)
+        (append x (cdr xs))))))
 \end{LISP}
 לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
 ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
@@ -1256,8 +1254,9 @@ normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambd
 \E|evaluate-primitive|, אשר תתואר בהמשך, כדי לטפל בפונקציות הפרימיטיביות
 שבגלעין.
 
-הגוף של evalaute הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס לביטוי
-אותו היא נדרש לשערך.
+הגוף של evalaute הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
+לביטוי אותו היא נדרש לשערך.
+
 \begin{minipage}\linewidth
 \begin{LISP}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
