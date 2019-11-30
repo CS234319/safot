@@ -85,7 +85,7 @@
 
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
-\def\E|#1|{\LR{{#1}}}
+\def\E|#1|{\LR{\mbox{#1}}}
 \def\T|#1|{\lisp{#1}}
 \def\ע|#1|{{\bfseries#1}}
 \def\פנה|#1|{\cref{#1}}
@@ -311,6 +311,7 @@ colframe=red!75!black}
 
 \usepackage{tikz}
 \usetikzlibrary{calc}
+\usetikzlibrary{chains,arrows}
 \forestset{%
   s tree/.style={
     for tree={
