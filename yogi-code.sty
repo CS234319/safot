@@ -63,11 +63,22 @@
 % for everything but comments.  Keywords are bold face, strings are in italics,
 % while comments are in italics roman font. The escape character is back-quote.
 
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{annotationColor}{rgb}{0.39,0.39,0.39}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{commentColor}{rgb}{0.25,0.50,0.37}
+\definecolor{javadocColor}{rgb}{0.25,0.37,0.75}
+\definecolor{jTagColor}{rgb}{0.50,0.62,0.75}
+\definecolor{eTagColor}{rgb}{0.50,0.62,0.75}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47} 
+\definecolor{darkblue}{rgb}{0.1,0.1,0.9}
+
 \lstdefinestyle{code}{
     basicstyle={\listingsfont\codesize},
-    stringstyle={\listingsfont\itshape\codesize},
-    commentstyle={\commentsfont\slshape\codesize},
-    keywordstyle={\listingsfont\bfseries\codesize},
+    stringstyle={\listingsfont\itshape\color{stringColor}\codesize},
+    commentstyle={\commentsfont\slshape\color{commentColor}\codesize},
+    keywordstyle={\listingsfont\bfseries\color{keywordColor}\codesize},
+    keywordstyle={[2]\listingsfont\bfseries\color{darkblue}\codesize},
     showstringspaces=false,
     escapechar=⌘,
 }
@@ -154,8 +165,11 @@
     stringstyle={\codesize\sf},
 }
 
-
-
+\lstdefinelanguage{kernel}{
+    language=Lisp,
+    keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
+    keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
+}
 
 
 %	#1 Language name, as it is known to the listing package.
@@ -164,19 +178,18 @@
 %	#4 Name of the command for inlining language code.
 %	#5 Name of the short version of the command for inlining language code.
 \def\newLanguage#1#2#3#4#5{%
-	\lstdefinestyle{#3}{language={#1},style=display,#2}%
-  \lstnewenvironment{#3}[1][]{\ensureLTR\lstset{style=#3,##1}}{}%
-  \lstnewenvironment{#3n}[1][]{\ensureLTR\lstset{style=#3,style=numbered,##1}}{}%
-  \lstnewenvironment{#3e}[1][]{\ensureLTRlstset{style=#3,numbers=none,##1}}{}%
+  \lstnewenvironment{#3}[1][]{\ensureLTR\lstset{language=#1,style=display,##1}}{}%
+  \lstnewenvironment{#3n}[1][]{\ensureLTR\lstset{language=#1,style=display,style=numbered,##1}}{}%
+  \lstnewenvironment{#3e}[1][]{\ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{}%
 	\expandafter\newcommand\csname#4\endcsname[1]{%
 	  \begingroup
-	  \lstset{style=#3,style=inline}%
+	  \lstset{language=#1,style=inline}%
 	  \ensureLR{\lstinline!##1!}%
 	  \endgroup
 	  }
 	\expandafter\newcommand\csname#5\endcsname[1]{%
 	  \begingroup
-	  \lstset{style=#3,style=inline}%
+	  \lstset{language=#1,style=inline}%
 	  \ensureLR{\lstinline!##1!}%
 	  \endgroup
 	  }%
@@ -195,7 +208,7 @@
 \newLanguage{Python}{}{PYTHON}{python}{py}
 \newLanguage{}{}{DATALOG}{datalog}{dlog}
 \newLanguage{Eiffel}{morekeywords={create,factory,note}}{EIFFEL}{eiffel}{eiff}
-\newLanguage{Lisp}{}{LISP}{lisp}{lsp}
+\newLanguage{kernel}{}{LISP}{lisp}{lsp}
 \newLanguage{Go}{}{GO}{go}{gocd}
 \newLanguage{HTML}{alsoletter={-}}{HTML}{html}{htm}
 \newLanguage{Java}{}{JAVA}{java}{ja}

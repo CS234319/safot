@@ -43,6 +43,17 @@
 \usepackage{yogi-lang}
 \usepackage{yogi-unicode}
 
+\usepackage{adjustbox,collcell}
+\makeatletter
+% remove the stray space https://tex.stackexchange.com/a/513549
+\patchcmd{\pgfutilsolvetwotwoleqfloat}
+  { \noexpand\pgfmathfloatdivide@}
+  {\noexpand\pgfmathfloatdivide@}
+  {}{}
+
+\makeatother
+
+
 \usetikzlibrary{trees,chains,shapes}
 
 \floatstyle{ruled}
