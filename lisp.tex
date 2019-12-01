@@ -245,7 +245,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 \ע|רשימה| \E|(list)| בליספ היא סדרה של פריטים העטופה בסוגריים. כל פריט ברשימה
 יכול להיות אטום, \E|dotted-pair|, או רשימה בעצמו. ניתן לכתוב רווחים לפני ואחרי
 כל אחד מהפריטים, אולם שני אטומים רצופים ברשימה חייבים להיות מופרדים בסימן רווח
-אחד לפחות. 
+אחד לפחות.
 
 כך, \E|(a b c d)| היא הרשימה המכילה ארבעה פריטים: האטומים \E|a|, \E|b|, \E|c|
 ו-\E|d|. הרשימה הריקה, זו שאינה מכילה אף פריט, נכתבת כ-\E|()|, ואילו
@@ -1044,10 +1044,10 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף \T|(t nil)| אף
 (defun append(x xs) ; append item x to end of list of xs
   (cond
     ((null xs) (x)) ; recursion base: create a list containing x
-    (t              ; recursive call
-      (cons         
-        (car xs)     ; prepend first of xs to...  
-        (append x (cdr xs)))))) ; ... result of recursive call on remaining xs 
+    (t ; recursive call
+      (cons
+        (car xs) ; prepend first of xs to...
+        (append x (cdr xs)))))) ; ... result of recursive call on remaining xs
 \end{LISP}
 לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
 ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
@@ -1071,54 +1071,54 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף \T|(t nil)| אף
      } {
       \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
       \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) ..  (temp.north west);
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
      }
 
-     \node[on chain]  (j) {\huge$\cdots$};
-      \draw[*->] let \p1 = (i.two), \p2 = (j.center) in (\x1,\y2) -- (j);
+     \node[on chain] (j) {\huge$⋯$};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
      \foreach \a/\b in { h/i} {
-      \draw[*->] let \p1 = (\a.two), \p2 = (\b.center) in (\x1,\y2) -- (\b);
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
      }
 
-    \node[above = of h] (A) {a-list};
-    \draw[->] (A.south) -- (h);
+    \node[above=of h] (A) {a-list};
+    \draw[->] (A.south)--(h);
 \end{tikzpicture}
 \end{LTR}
-אזי, אחרי ההגדרה של append ה-a-list תראה כך 
+אזי, אחרי ההגדרה של append ה-a-list תראה כך
 \begin{LTR}
 \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
     draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
       g/append/{
-        (lambda\\
-\quad (x xs)\\
-        \quad (cond\\
-          \quad\quad((null xs)\\
-          \quad\quad\quad(x))\\
-          \quad\quad (t\\ 
-          \quad\quad\quad(cons\\
-          \quad\quad\quad\quad(car x)\\
-        \quad\quad\quad\quad(append\\
-      \quad\quad\quad\quad\quad x \\
+        (lambda⏎
+\quad (x xs)⏎
+        \quad (cond⏎
+          \quad\quad((null xs)⏎
+          \quad\quad\quad(x))⏎
+          \quad\quad (t⏎
+          \quad\quad\quad(cons⏎
+          \quad\quad\quad\quad(car x)⏎
+        \quad\quad\quad\quad(append⏎
+      \quad\quad\quad\quad\quad x ⏎
       \quad\quad\quad\quad\quad (cdr xs))))))},
       h/t/t,
       i/nil/nil
      } {
       \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
       \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) ..  (temp.north west);
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
      }
 
-     \node[on chain]  (j) {\huge$\cdots$};
-      \draw[*->] let \p1 = (i.two), \p2 = (j.center) in (\x1,\y2) -- (j);
+     \node[on chain] (j) {\huge$⋯$};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
      \foreach \a/\b in { g/h, h/i} {
-      \draw[*->] let \p1 = (\a.two), \p2 = (\b.center) in (\x1,\y2) -- (\b);
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
      }
 
-    \node[above = of g] (A) {a-list};
-    \draw[->] (A.south) -- (g);
+    \node[above=of g] (A) {a-list};
+    \draw[->] (A.south)--(g);
 \end{tikzpicture}
 \end{LTR}
 בקריאה ל-append כמו
@@ -1132,7 +1132,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף \T|(t nil)| אף
   (x xs)
   (cond
     ((null xs) (x))
-  (t 
+  (t
       (cons
         (car x)
         (append x (cdr xs))))))
@@ -1165,34 +1165,34 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף \T|(t nil)| אף
       e/x/a,
       f/xs/(b c),
       g/append/{
-        (lambda\\
-\quad (x xs)\\
-        \quad (cond\\
-          \quad\quad((null xs)\\
-          \quad\quad\quad(x))\\
-          \quad\quad (t\\ 
-          \quad\quad\quad(cons\\
-          \quad\quad\quad\quad(car x)\\
-        \quad\quad\quad\quad(append\\
-      \quad\quad\quad\quad\quad x \\
+        (lambda⏎
+\quad (x xs)⏎
+        \quad (cond⏎
+          \quad\quad((null xs)⏎
+          \quad\quad\quad(x))⏎
+          \quad\quad (t⏎
+          \quad\quad\quad(cons⏎
+          \quad\quad\quad\quad(car x)⏎
+        \quad\quad\quad\quad(append⏎
+      \quad\quad\quad\quad\quad x ⏎
       \quad\quad\quad\quad\quad (cdr xs))))))},
       h/t/t,
       i/nil/nil
      } {
       \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
       \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) ..  (temp.north west);
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
      }
 
-     \node[on chain]  (j) {\huge$\cdots$};
-      \draw[*->] let \p1 = (i.two), \p2 = (j.center) in (\x1,\y2) -- (j);
+     \node[on chain] (j) {\huge$⋯$};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
      \foreach \a/\b in { e/f, f/g, g/h, h/i} {
-      \draw[*->] let \p1 = (\a.two), \p2 = (\b.center) in (\x1,\y2) -- (\b);
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
      }
 
-    \node[above = of e] (A) {a-list};
-    \draw[->] (A.south) -- (e);
+    \node[above=of e] (A) {a-list};
+    \draw[->] (A.south)--(e);
 \end{tikzpicture}
 \end{LTR}
 לאחר הקריאה לפונקציה, יש לשחזר את ערכה של ה-a-list לערכה המקורי טרם הקריאה לה.
@@ -1210,39 +1210,39 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף \T|(t nil)| אף
       e/x/a,
       f/xs/(b c),
       g/append/{
-        (lambda\\
-\quad (x xs)\\
-        \quad (cond\\
-          \quad\quad((null xs)\\
-          \quad\quad\quad(x))\\
-          \quad\quad (t\\ 
-          \quad\quad\quad(cons\\
-          \quad\quad\quad\quad(car x)\\
-        \quad\quad\quad\quad(append\\
-      \quad\quad\quad\quad\quad x \\
+        (lambda⏎
+\quad (x xs)⏎
+        \quad (cond⏎
+          \quad\quad((null xs)⏎
+          \quad\quad\quad(x))⏎
+          \quad\quad (t⏎
+          \quad\quad\quad(cons⏎
+          \quad\quad\quad\quad(car x)⏎
+        \quad\quad\quad\quad(append⏎
+      \quad\quad\quad\quad\quad x ⏎
       \quad\quad\quad\quad\quad (cdr xs))))))},
       h/t/t,
       i/nil/nil
      } {
       \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
       \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) ..  (temp.north west);
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
      }
 
-     \node[on chain]  (j) {\huge$\cdots$};
-      \draw[*->] let \p1 = (i.two), \p2 = (j.center) in (\x1,\y2) -- (j);
+     \node[on chain] (j) {\huge$⋯$};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in {  c/d, d/e, e/f, f/g, g/h, h/i} {
-      \draw[*->] let \p1 = (\a.two), \p2 = (\b.center) in (\x1,\y2) -- (\b);
+     \foreach \a/\b in { c/d, d/e, e/f, f/g, g/h, h/i} {
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
      }
 
-    \node[above = of c] (A) {a-list};
-    \draw[->] (A.south) -- (c);
+    \node[above=of c] (A) {a-list};
+    \draw[->] (A.south)--(c);
 \end{tikzpicture}
 \end{LTR}
 כלומר הקישורים חחדשים יסתירו את הקישורים הקודמים.
 
-בקריאה הרקורסיבית השניה של append  לעצמה, יווצרו שני קישורים נוספים,
+בקריאה הרקורסיבית השניה של append לעצמה, יווצרו שני קישורים נוספים,
 \lisp{(x.a)} ו-\lisp{(xs.())}, וה-a-list תראה כך
 \begin{LTR}
 \usetikzlibrary{chains,arrows}
@@ -1257,34 +1257,34 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף \T|(t nil)| אף
       e/x/a,
       f/xs/(b c),
       g/append/{
-        (lambda\\
-\quad (x xs)\\
-        \quad (cond\\
-          \quad\quad((null xs)\\
-          \quad\quad\quad(x))\\
-          \quad\quad (t\\ 
-          \quad\quad\quad(cons\\
-          \quad\quad\quad\quad(car x)\\
-        \quad\quad\quad\quad(append\\
-      \quad\quad\quad\quad\quad x \\
+        (lambda⏎
+\quad (x xs)⏎
+        \quad (cond⏎
+          \quad\quad((null xs)⏎
+          \quad\quad\quad(x))⏎
+          \quad\quad (t⏎
+          \quad\quad\quad(cons⏎
+          \quad\quad\quad\quad(car x)⏎
+        \quad\quad\quad\quad(append⏎
+      \quad\quad\quad\quad\quad x ⏎
       \quad\quad\quad\quad\quad (cdr xs))))))},
       h/t/t,
       i/nil/nil
      } {
       \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
       \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) ..  (temp.north west);
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
      }
 
-     \node[on chain]  (j) {\huge$\cdots$};
-      \draw[*->] let \p1 = (i.two), \p2 = (j.center) in (\x1,\y2) -- (j);
+     \node[on chain] (j) {\huge$⋯$};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
      \foreach \a/\b in { a/b, b/c, c/d, d/e, e/f, f/g, g/h, h/i} {
-      \draw[*->] let \p1 = (\a.two), \p2 = (\b.center) in (\x1,\y2) -- (\b);
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
      }
 
-    \node[above = of a] (A) {a-list};
-    \draw[->] (A.south) -- (a);
+    \node[above=of a] (A) {a-list};
+    \draw[->] (A.south)--(a);
 \end{tikzpicture}
 \end{LTR}
 כאמור, בכל פעם שבה הפונקציה append חוזרת מהפעלה רקורסיבית,
@@ -1843,7 +1843,7 @@ apply-eager-primitive מטפלת בשני מקרים מיוחדים אלו, ומ
 § הקוד המלא של evaluate ופונקציות העזר שלה
 
 \closeout \fullKernelFile
-\LTR
+\begin{LTR}
 \lstinputlisting[language=kernel,style=display,
   numbers=left,
   stepnumber=1,
@@ -1852,15 +1852,18 @@ apply-eager-primitive מטפלת בשני מקרים מיוחדים אלו, ומ
   numberblanklines=false,
   numberstyle=\tiny\bf,
 ]{kernel.lisp}
-\endLTR
+\end{LTR}
 
-§ תרגילים 
-
+§ תרגילים
 \אבגד
-\item הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך
-בפונקציה פרימטיבית \E|progn| אשר מקבלת רשימה של ביטויי \E|S|, ומשערכת אותם
-  לפי סדרם. תוצאת השיערוך היא  היא תוצאת השיערוך של הפריט האחרון ברשימה, או nil
-במקרה שהרשימה ריקה. 
+✦ הפונקציה apply-trivial-primitive אינה בודקת אם מספר הפרמטרים לפונקציות
+הפרימיטיביות הטריביאליות תואם למספר הפרמטרים שהן אמורות לקבל. באילו מקרים העדר
+הבדיקה יביא לכך שלא
+\E|progn| אשר מקבלת רשימה של ביטויי \E|S|, ומשערכת אותם לפי סדרם. תוצאת השיערוך
+היא היא תוצאת השיערוך של הפריט האחרון ברשימה, או nil במקרה שהרשימה ריקה.
+✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימטיבית
+\E|progn| אשר מקבלת רשימה של ביטויי \E|S|, ומשערכת אותם לפי סדרם. תוצאת השיערוך
+היא היא תוצאת השיערוך של הפריט האחרון ברשימה, או nil במקרה שהרשימה ריקה.
 ===
 
 \end{document}]
