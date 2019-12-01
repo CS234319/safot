@@ -180,7 +180,9 @@
 \def\newLanguage#1#2#3#4#5{%
   \lstnewenvironment{#3}[1][]{\ensureLTR\lstset{language=#1,style=display,##1}}{}%
   \lstnewenvironment{#3n}[1][]{\ensureLTR\lstset{language=#1,style=display,style=numbered,##1}}{}%
-  \lstnewenvironment{#3e}[1][]{\ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{}%
+  \lstnewenvironment{#3e}[1][]{%
+  \pagebreak[2]
+\ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{\pagebreak[3]}%
 	\expandafter\newcommand\csname#4\endcsname[1]{%
 	  \begingroup
 	  \lstset{language=#1,style=inline}%
