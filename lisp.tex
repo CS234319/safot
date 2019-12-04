@@ -1158,13 +1158,13 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 במימוש זה, אטום הוא שמה של פונקציה פרימיטיבית אם הוא מצוי בתוך רשימה של האטומים
 המציינות פונקציה פרימיטיבית. הפונקציה exists עצמה אינה מצוייה במיני ליספ, אבל
 קל לממש אותה ברקורסיה.
-\begin{KERNEL}
+\begin{LISP}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; three case to consider
     ((eq xs nil) nil) ; (i) list of xs is exhausted
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
-\end{KERNEL}
+\end{LISP}
 הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת
 ב-\T|xs|, ומחזירה t אם x מצוי בין ה-\T|xs| ו-\T|nil| אחרת. רקורסיה דורשת תמיד
 בדיקת תנאי, כדי להבחין בין בסיס הרקורסיה שבו אין צורך לבצע קריאות רקורסיביות
@@ -1198,7 +1198,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 \begin{KERNEL}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; Three cases to consider:
-    ((null xs) nil) ; (i) list of xs is exhausted
+    ((null xs) xs) ; (i) list of xs is exhausted
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
 \end{KERNEL}
@@ -2079,6 +2079,9 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 
 § תרגילים
 \אבגד
+✦ בדיקה מדוקדקת תגלה הבדל נוסף בין שני המימושים של הפונקציה \E|exists| חוץ מאשר
+עליו מצביע הדיון.  אתר הבדל זה, והסבר מדוע הוא אינו משנה את הסמנטיקה של המימושים.  
+
 ✦ הפונקציה member היא פונקצית ספריה סטנדרטית ברוב המימושים של ליספ. הפונקציה
 מקבלת אטום ורשימה, ומחזירה את זנב הרשימה הארוך ביותר שהאיבר הראשון שבו הוא
 האטום. אם האטום אינו מצוי ברשימה, הפונקציה מחזירה \E|nil|.  ממש פונקציה זו
