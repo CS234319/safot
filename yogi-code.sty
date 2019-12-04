@@ -33,7 +33,7 @@
 \ProcessOptions
 
 \providecommand\ensureLR[1]{\ifdefined\LR\LR{#1}\else{#1}\fi}
-\def\ensureLTR{\ifdefined\setLTR\setLTR\fi}
+\providecommand\ensureLTR{\ifdefined\setLTR\setLTR\fi}
 
 \lstset{defaultdialect=[GNU]C++}
 
@@ -206,17 +206,21 @@
 %	#4 Name of the command for inlining language code.
 %	#5 Name of the short version of the command for inlining language code.
 \def\newLanguage#1#2#3#4#5{%
-  \lstnewenvironment{#3}[1][]{\lstset{language=#1,style=display,##1}}{}%
-  \lstnewenvironment{#3n}[1][]{
-  \ensureLTR\lstset{language=#1,style=display,style=numbered,##1}}{}%
+  \lstnewenvironment{#3}[1][]{%
+    \lstset{language=#1,style=display,##1}
+    \pagebreak[2]%
+    \ensureLTR
+  }{\pagebreak[3]}%
+  \lstnewenvironment{#3n}[1][]{%
+  \ensureLTR\lstset{language=#1,style=display,style=numbered,##1}
+}{}%
   \lstnewenvironment{#3e}[1][]{%
-  \pagebreak[2]
+ \pagebreak[2]
 \ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{\pagebreak[3]}%
 	\expandafter\newcommand\csname#4\endcsname[1]{%
 	  \begingroup
-    \ensureLTR
 	  \lstset{language=#1,style=inline}%
-	  \lstinline/##1/%
+    \LR{\lstinline/##1/}%
 	  \endgroup
 	  }
 	\expandafter\newcommand\csname#5\endcsname[1]{%

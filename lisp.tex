@@ -161,7 +161,7 @@ editor|) \E|Emacs|), AutoLisp (המשמשת כשפת סקריפטים בתכנת
 ✦ \ע|פונקציות נוספות|: \E|set| המאפשרת לתת שמות לביטויי \E|S|, ו-\E|error| המסייעת
 בטיפול במקרים שבהם החישוב נתקל בשגיאה.
 ===
-\פנה|טבלה:מיני| שבהמשך מסכמת את רשימת הפונקציות הפרימטיביות שבמיני ליספ. כל
+\פנה|טבלה:מיני| שבהמשך מסכמת את רשימת הפונקציות הפרימיטיביות שבמיני ליספ. כל
 הפונקציות הפרימיטיות של מיני ליספ הן גם פונקציות פרימיטיביות של מרבית הניבים החשובים
 של ליספ, ובפרט של \E|Common Lisp|.
 
@@ -193,8 +193,8 @@ eval אינה פונקציה פרימיטיבית, אלא היא ממומשת כ
 במיני ליספ.
 
 בפרט, כפי שנדגים כאן, ניתן לממש את האלגוריתם \E|eval| עצמו במיני ליספ, תוך
-שימוש בפונקציות פרימטיביות או בפונקציות הסיפריה, אשר כאמור מוגדרות באמצעות
-הפונקציות הפרימטיביות. מימוש זה הוא פשוט וקצר יחסית ועולה לכדי כמאה שורות
+שימוש בפונקציות פרימיטיביות או בפונקציות הסיפריה, אשר כאמור מוגדרות באמצעות
+הפונקציות הפרימיטיביות. מימוש זה הוא פשוט וקצר יחסית ועולה לכדי כמאה שורות
 בלבד. 
 לבד מהמימוש של eval שפת מיני ליספ מעניינת שכן היא מציגה בתמציתיות את מרבית
 הרעיונות החשובים של ליספ, כגון עיבוד רקורסיבי של רשימות, קישור של שמות לערכים,
@@ -756,6 +756,56 @@ FOO
   (nil.nil)
 )
 \end{LISP}
+ויזואלית, נצייר רשימת ה-\E|a-list| לפני הקריאה כך,
+\begin{LTR}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {
+       h/t/t,
+      i/nil/nil
+     } {
+      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+     }
+
+     \node[on chain,font=\tt\scriptsize] (j) {nil};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+     \foreach \a/\b in { h/i} {
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+     }
+    \node[above=of h] (A) {a-list};
+    \draw[->] (A.south)--(h);
+\end{tikzpicture}
+\end{LTR}
+ואחרי השיערוך של \T|(set (quote foo) (quote (bar baz)))|
+תראה ה-\E|a-list| כך,
+\begin{LTR}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {
+       g/foo/(bar baz),
+       h/t/t,
+      i/nil/nil
+     } {
+      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+     }
+
+     \node[on chain,font=\tt\scriptsize] (j) {nil};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+     \foreach \a/\b in { g/h,h/i} {
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+     }
+    \node[above=of g] (A) {a-list};
+    \draw[->] (A.south)--(g);
+\end{tikzpicture}
+\end{LTR}
+
+
 שפת מיני ליספ יכולה לאתחל את ה-a-list באמצעות
 \begin{LIBRARY}
 (set (quote t) (quote t))
@@ -766,23 +816,52 @@ FOO
 
 אם נכתוב כעת
 \begin{LISP}
-> (set (quote foo) (quote (baz bar)))
+> (set (quote foo) (quote ((baz))))
 (BAR BAZ)
 \end{LISP}
 הרי התוכן של ה-a-list יהיה
 \begin{LISP}
 (
-  (foo.(baz bar))
+  (foo.((baz)))
   (foo.(bar baz))
   (t.t)
   (nil.nil)
 )
 \end{LISP}
+וויזואלית כך,
+\begin{LTR}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {
+      f/foo/((baz))),
+       g/foo/(bar baz),
+       h/t/t,
+      i/nil/nil
+     } {
+      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+     }
+
+     \node[on chain,font=\tt\scriptsize] (j) {nil};
+      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+     \foreach \a/\b in { f/g, g/h,h/i} {
+      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+     }
+    \node[above=of f] (A) {a-list};
+    \draw[->] (A.south)--(f);
+\end{tikzpicture}
+\end{LTR}
+
+
 ואם ננסה לשערך כעת את \T|foo|, נקבל את הערך הנוצר מהקישור החדש
 \begin{LISP}
 > foo
-(BAZ BAR)
+((BAZ) BAR)
 \end{LISP}
+וזאת משום שהחיפוש ב-a-list מתחיל מתחילתה, ועוצר במקום הראשון שבו הוא מצליח.
+
 כתיב מקוצר לביטוי \E|(quote~$X$(| המפעיל את הפונקציה quote על הביטויי~$X$,
 הוא~\E|$'X$|, כלומר סימן מרכאה בודד לפני~$X$. הטיפול בכתיב זה נעשה על ידי
 ה-Reader וה-Printer של ליספ, והם אינם חלק מהמשערך של השפה.
@@ -821,7 +900,7 @@ FOO
 ✦ מספרים שלמים, כגון \T|-12|.
 ✦ מספרטים רציונליים, כגון \T|3/7|.
 ✦ מספרים ממשיים כגון \T|3.1415926535897932384d0| ו-\T|6.02E+23|.
-✦ מספרים מרוכבים כגון \T|#C(5 -3)| אשר ערכו הוא~$5+3i$.
+✦ מספרים מרוכבים כגון \T|#C(5 -3)| אשר ערכו הוא~$5-3i$.
 ✦ מחרוזות כגון \T|"Hello, World"|
 ===
 
@@ -1061,10 +1140,10 @@ cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השי�
 )
 \end{LISP}
 הפונקציה is-primitive משתמשת בסידרה של test-forms כדי לבדוק אם הפרמטר שלה הוא
-אטום המציין פונקציה פרימטיבית ואם כן מחזירה את האטום \E|t|. (מסיבות טכניות אנו
+אטום המציין פונקציה פרימיטיבית ואם כן מחזירה את האטום \E|t|. (מסיבות טכניות אנו
 מניחים כאן שגם \T|eval| היא פונקציה פרימיטיבית.) האטום \E|nil| יוחזר בכל מקרה
 שהפרמטר אינו אטום, או שהוא אטום שאינו מציין פונקציה פרימיטיבית. לשם כך, משתמשת
-is-primitive בפונקציה \T|eq|, שהיא פונקציה פרימטיבית, המשמשת לבדיקה אם הפרמטרים
+is-primitive בפונקציה \T|eq|, שהיא פונקציה פרימיטיבית, המשמשת לבדיקה אם הפרמטרים
 שלה הם שני אטומים השווים זה לזה.
 
 כדאי לשים לכך שה-test-form האחרון שברשימה (כלומר הרשימה \T|(t nil)|) מיותר,
@@ -1073,7 +1152,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 נחוץ, כדי להדגיש שערך ברירת המחדל הוא \E|nil|.
 
 דרך קצרה יותר להגדיר את הפונקציה is-primitive היא באמצעות בדיקה אם הפרמטר
-שלה מצוי ברשימה המכילה את שמות כל הפונקציות הפרימטיביות
+שלה מצוי ברשימה המכילה את שמות כל הפונקציות הפרימיטיביות
 \begin{KERNEL}
 (defun is-primitive(name); determine whether name denotes a primitive function
   (exists name '(atom car cdr cond cons eq error eval set)))
@@ -1113,7 +1192,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 \begin{LIBRARY}
 (defun null(x) (eq x nil))
 \end{LIBRARY}
-ניזכר שהפונקציה eq היא פונקציה פרימטיבית, במובן זה שלא ניתן לממש אותה באמצעות
+ניזכר שהפונקציה eq היא פונקציה פרימיטיבית, במובן זה שלא ניתן לממש אותה באמצעות
 פונקציות אחרות. לעומת זאת, כיוון שהפונקציה null שבמיני ליספ ניתנת להגדרה
 באמצעות פונקציות אחרות היא נחשבת לפונקצית סיפריה.
 
@@ -1127,7 +1206,9 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 \end{KERNEL}
 
 כזכור, ה-a-list היא רשימה של dotted-pairs שכל אחד מהם הוא קישור בין שם לערך.
-נגדיר פונקציה רקורסיבית, \E|lookup|, המחפשת שם ברשימה שהיא במבנה של \E|a-list|:
+נגדיר פונקציה רקורסיבית, \E|lookup| אשר מקבלת שני פרמטרים: id שהוא אטום,
+ו-a-list, שהיא רשימה  במבנה של \E|a-list| כפי שהצגנו אותו, כלומר סדרה של 
+dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr שלו הוא משמעותו של האטום: 
 \begin{KERNEL}
 (defun lookup (id a-list) ; lookup id in an a-list
   (cond ; Three cases to consider:
@@ -1141,7 +1222,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 של רשימה ריקה הפונקציה נכשלת, במקרה שראש הרשימה מתאים לתנאי, הפונקציה מצליחה.
 הפונקציה קוראת לעצמה רקורסיבית בכל מקרה אחר.
 
-בהגדרת lookup נעשה שימוש בפונקציה פרימטיבית נוספת, \E|error|. פונקציה זו מדפיסה את
+בהגדרת lookup נעשה שימוש בפונקציה פרימיטיבית נוספת, \E|error|. פונקציה זו מדפיסה את
 כל הפרמטרים שלה וגורמת לאינטרפרטר לעבור לסבב הבא של לולאת ה-\E|REPL|.
 
 נשתמש ב-error כדי להגדיר את הפונקציה bind שהיא פונקציה רקורסיבית נוספת,
@@ -1740,11 +1821,11 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
         (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
 \end{KERNEL}
 
-§§ מימוש הפונקציות הפרימטיביות
+§§ מימוש הפונקציות הפרימיטיביות
 
 תיארנו את הפונקציה evaluate הממשת את מרבית הפעולות שבפרוצדורת השיערוך של ליספ.
 נותר עוד לתאר את המימוש של הפונקציה evaluate-primitive אשר נועדה לטיפול בפונקציות
-פרימטיביות, כלומר כאלו שלא הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך
+פרימיטיביות, כלומר כאלו שלא הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך
 ה-\E|a-list|.
 
 הצעד הראשון במימוש של evaluate-primitive הוא פירוק הביטוי אותו יש לשערך לשני
@@ -1757,7 +1838,9 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 \פנה|טבלה:מיני| מסכמת את הפונקציות הפרימיטיביות של מיני ליספ. הפונקציה
 evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה eval אשר אינה פרימיטיבית, 
 אבל עדיין לא טופלה.  אנו רואים ש-cond היא הפונקציה היחידה מבין כל אלו שהסמנטיקה
-שלה היא \E|normal|.  במימוש של apply-primitive נבדיל בין פונקציה זו וכל השאר.
+שלה היא \E|normal|.  
+
+במימוש של apply-primitive נבדיל לכן בין cond וכל שאר הפונקציות הפרימיטיביות.
 \begin{KERNEL}
 (defun apply-primitive (primitive actuals a-list)
   (cond
@@ -1851,7 +1934,7 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
  ⏎
     \bottomrule
   \end{tabularx}
-  \כיתוב|הפונקציות הפרימטיביות של מיני ליספ|
+  \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
   \תגית|טבלה:מיני|
 \end{table}
 
@@ -1882,7 +1965,7 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
         (car cdr actuals))))) ; second actual parameter, could be nil
 \end{KERNEL}
 
-כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימטיביות שנותרו:
+כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימיטיביות שנותרו:
 \begin{KERNEL}
 (defun apply-trivial-primitive (primitive first second)
   (cond
@@ -1911,7 +1994,7 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 
 §§ פונקציות הסיפריה של מיני ליספ
 
-\פנה|טבלה:סיפריה| מרכזת את הפונקציות במיני ליספ שאינן פרימטיביות, כלומר אלו
+\פנה|טבלה:סיפריה| מרכזת את הפונקציות במיני ליספ שאינן פרימיטיביות, כלומר אלו
 שהגדרתן יכולה להעשות עלי ידי קשירה של שמן לביטוי lambda או ביטוי nlambda,
 ישירות באמצעות הפונקציה \E|set| או באמצעות הפונקציות \E|defun|, \E|lambda|,
 \E|ndefun| ו-\E|nlambda|, שגם הן משתמשות ב-\E|set|.
@@ -2031,9 +2114,9 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 הפרימיטיביות הטריביאליות תואם למספר הפרמטרים שהן אמורות לקבל. באילו מקרים העדר
 הבדיקה יביא לכך שמספר פרמטרים לא נכון לפונקציה טריביאלית לא ידווח כשגיאה? תקן
 את המימוש כך ששגיאה כזו תדווח.
-✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימטיבית
+✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימיטיבית
 \E|lisp| אשר מקבלת רשימה של ביטויי \E|S|, ומחזירה את הרשימה של הביטויים לאחר שיערוכם. 
-✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימטיבית
+✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימיטיבית
 \E|progn| אשר מקבלת רשימה של ביטויי \E|S|, ומשערכת אותם לפי סדרם. תוצאת השיערוך
 היא תוצאת השיערוך של הפריט האחרון ברשימה, או nil במקרה שהרשימה ריקה.
 ✦ אילו שינויים יש לערוך במימוש של evaluate אם נשנה את מיני ליספ כך שהפונקציות
