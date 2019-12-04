@@ -1126,18 +1126,16 @@ cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השי�
 הנה דוגמה נוספת בה cond מופעלת עם מספר רב יותר של test-forms
 \begin{LISP}
 (defun is-primitive(name) ; determine whether name denotes a primitive function
-  (cond
-    ((eq name 'atom) t)
-    ((eq name 'car) t)
-    ((eq name 'cdr) t)
-    ((eq name 'cond) t)
-    ((eq name 'cons) t)
-    ((eq name 'eq) t)
-    ((eq name 'error) t)
-    ((eq name 'eval) t)
-    ((eq name 'set) t)
-    (t nil))
-)
+  (cond ((eq name 'atom) t)
+        ((eq name 'car) t)
+        ((eq name 'cdr) t)
+        ((eq name 'cond) t)
+        ((eq name 'cons) t)
+        ((eq name 'eq) t)
+        ((eq name 'error) t)
+        ((eq name 'eval) t)
+        ((eq name 'set) t)
+        (t nil)))
 \end{LISP}
 הפונקציה is-primitive משתמשת בסידרה של test-forms כדי לבדוק אם הפרמטר שלה הוא
 אטום המציין פונקציה פרימיטיבית ואם כן מחזירה את האטום \E|t|. (מסיבות טכניות אנו
@@ -1163,7 +1161,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 \begin{KERNEL}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; three case to consider
-    ((eq xs nil) t) ; (i) list of xs is exhausted
+    ((eq xs nil) nil) ; (i) list of xs is exhausted
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
 \end{KERNEL}
@@ -1200,7 +1198,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 \begin{KERNEL}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; Three cases to consider:
-    ((null xs) t) ; (i) list of xs is exhausted
+    ((null xs) nil) ; (i) list of xs is exhausted
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
 \end{KERNEL}
@@ -1232,17 +1230,15 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 
 \begin{KERNEL}
 (defun bind (names values a-list) ; bind names to values, and append to a-list
-  (cond
-    ((null names) ; no more names left
-      (cond
-        ((null values) a-list) ; no more values left, binding done -> return a-list
-        (t (error 'missing-names)))) ; more values than names
-    ((null values) ; names is not nil but values is, i.e., more names than values
-      (error 'missing-values))
-    (t ; both names and values are not empty
-      (cons ; create new binding and prepend it to result of recursive call
-        (cons (car names) (car values)) ; new dotted-pair defines single binding
-        (bind (cdr names) (cdr values) a-list))))) ; recursive vall
+  (cond ((null names) ; no more names left
+        (cond ((null values) a-list) ; no more values left, binding done -> return a-list
+              (t (error 'missing-names)))) ; more values than names
+        ((null values) ; names is not nil but values is, i.e., more names than values
+          (error 'missing-values))
+        (t ; both names and values are not empty
+          (cons ; create new binding and prepend it to result of recursive call
+            (cons (car names) (car values)) ; new dotted-pair defines single binding
+            (bind (cdr names) (cdr values) a-list))))) ; recursive vall
 \end{KERNEL}
 
 §§ שיערוך ביטוי מורכב וקריאה לפונקציה
@@ -1280,24 +1276,21 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 המוסיפה פריט בסופה של רשימה
 \begin{LISP}
 (defun append(x xs) ; append item x to end of list of xs
-  (cond
-    ((null xs) ; no more xs, recursion base¢…¢
+  (cond ((null xs) ; no more xs, recursion base¢…¢
           (x)) ; ¢…¢ return a list containing x
-    (t ; recursive call
-      (cons
-        (car xs) ; prepend first of xs to¢…¢
-        (append x (cdr xs)))))) ; ¢…¢ result of recursive call on remaining xs
+        (t ; recursive call
+          (cons
+            (car xs) ; prepend first of xs to¢…¢
+            (append x (cdr xs)))))) ; ¢…¢ result of recursive call on remaining xs
 \end{LISP}
 לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
 ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
 \begin{LISP}
 (lambda (x xs)
-  (cond
-    ((null xs) (x))
-    (t
-      (cons
-        (car x)
-        (append x (cdr xs))))))
+  (cond ((null xs) (x))
+        (t (cons
+              (car x)
+              (append x (cdr xs))))))
 \end{LISP}
 וקישור זה יתווסף לתחילת ה-\E|a-list|. ויזואלית,
 אם ה-a-list נראתה טרם ההגדרה כך,
@@ -1364,23 +1357,19 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 \begin{LISP}
 (lambda
   (x xs)
-  (cond
-    ((null xs) (x))
-    (t
-      (cons
-        (car x)
-        (append x (cdr xs))))))
+  (cond ((null xs) (x))
+        (t (cons
+              (car x)
+              (append x (cdr xs))))))
 \end{LISP}
 ותפרק אותו לשלושת
 מרכיביו: האטום lambda המזהה את הביטוי, רשימת הפרמטרים הפורמליים \lisp{(x xs)}
 והביטוי לחישוב,
 \begin{LISP}
-(cond
-  ((null xs) (x))
-  (t
-    (cons
-      (car x)
-      (append x (cdr xs)))))
+(cond ((null xs) (x))
+      (t (cons
+            (car x)
+            (append x (cdr xs)))))
 \end{LISP}
 הקריאה לפונקציה append מתבצעת על ידי שיערוך הפרמטרים האקטואליים, כלומר שיערוך
 של הפרמטר \lisp{'a} לכדי הערך \lisp{A} ושיערוך של הפרמטר \lisp{'(b c)}
@@ -1633,9 +1622,8 @@ quote לרשימת ה-a-list באמצעות set
 לאופרטור בשם זה בשפת~\CPL
 \begin{LISP}
 (ndefun ?: (condition true-value false-value)
-  (cond
-    ((eval condition) (eval true-value))
-    (t (eval false-value))))
+  (cond ((eval condition) (eval true-value))
+        (t (eval false-value))))
 \end{LISP}
 כדוגמה נוספת, נגדיר פונקציות \lisp{||} ו-\lisp{&&} הדומות לאופרטורים בשמות אלו
 בשפת~\CPL, כלומר חישוב של הפונקציות הבוליאניות של and ו-or בשיטה הידועה בשם
@@ -1644,13 +1632,11 @@ quote לרשימת ה-a-list באמצעות set
 שיערוך הפרמטר השני
 \begin{LISP}
 (ndefun &&(x y)
-  (cond
-    ((eval x) (eval y))
-    (t nil)))
+  (cond ((eval x) (eval y))
+        (t nil)))
 (ndefun ||(x y)
-  (cond
-    ((eval x) t)
-    (t (eval y))))
+  (cond ((eval x) t)
+        (t (eval y))))
 \end{LISP}
 
 נתקן את פרוצדורת השיערוך כך שתתמוך בפונקציות שהן \E|normal|, על ידי הוספת התנאי
@@ -1755,16 +1741,14 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
 
 \begin{KERNEL}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
-  (cond
-    ((atom S-expression) ; recursion base: lookup of atom in a-list
-      (lookup S-expression a-list))
-    ((is-primitive (car S-expression)) ; special case handling of primitive functions
-      (evaluate-primitive S-expression a-list))
-    (t ; recursive step---lambda applied to parameters
-      (apply
-        (evaluate (car S-expression) a-list) ; find lambda expression
-        (cdr S-expression) ; find actual parameters
-        a-list))))
+  (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
+          (lookup S-expression a-list))
+        ((is-primitive (car S-expression)) ; special case handling of primitive functions
+          (evaluate-primitive S-expression a-list))
+        (t ; recursive step---lambda applied to parameters
+          (apply  (evaluate (car S-expression) a-list) ; find lambda expression
+                  (cdr S-expression) ; find actual parameters
+                  a-list))))
 \end{KERNEL}
 
 אם הביטוי ש-evaluate מקבלת הוא אטום, evaluate מפעילה את \E|lookup| כדי למצוא את
@@ -1802,10 +1786,9 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 \begin{KERNEL}
 (defun apply-decompsed-lambda(tag formals body actuals a-list)
   (evaluate body
-    (cond
-      (eq tag 'nlambda) (bind formals actuals a-list)
-      (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
-      (t (error 'unkown-lambda tag)))))
+    (cond (eq tag 'nlambda) (bind formals actuals a-list)
+          (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
+          (t (error 'unkown-lambda tag)))))
 \end{KERNEL}
 
 ההגדרה של הפונקציה evaluate-list המיועדת לשיערוך רשימת הפרמטרים האקטואליים היא
@@ -1813,12 +1796,10 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 לכדי רשימה אחת.
 \begin{KERNEL}
 (defun evaluate-list(S-expressions a-list)
-  (cond
-    ((null S-expressions) nil) ; no more S-expressions to evaluate
-    (t
-      (cons
-        (evaluate (car S-expressions)) ; evaluate first S-Expression
-        (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
+  (cond ((null S-expressions) nil) ; no more S-expressions to evaluate
+    (t (cons
+          (evaluate (car S-expressions)) ; evaluate first S-Expression
+          (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
 \end{KERNEL}
 
 §§ מימוש הפונקציות הפרימיטיביות
@@ -1843,13 +1824,12 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 במימוש של apply-primitive נבדיל לכן בין cond וכל שאר הפונקציות הפרימיטיביות.
 \begin{KERNEL}
 (defun apply-primitive (primitive actuals a-list)
-  (cond
-    ((eq 'cond primitive) ; special case for cond that has normal semantics
-      (evaluate-cond actuals a-list)) ; don't evaluate actuals
-    (t (apply-eager-primitive ; all other primitives have eager semantics
-          primitive
-          (evaluate-list actuals a-list)
-          a-list))))
+  (cond ((eq 'cond primitive) ; special case for cond that has normal semantics
+            (evaluate-cond actuals a-list)) ; don't evaluate actuals
+        (t (apply-eager-primitive ; all other primitives have eager semantics
+              primitive
+              (evaluate-list actuals a-list)
+              a-list))))
 \end{KERNEL}
 
 \begin{table}[!hbt]
@@ -1941,11 +1921,10 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
 \begin{KERNEL}
 (defun evaluate-cond(test-forms a-list)
-  (cond
-    ((null test-forms) nil) ; if no more test-forms, return nil
-    ((evaluate (car (car test-forms)) a-list) ; evaluate test-condition of first test-form
-      (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate test-value of first test-form
-    (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on remainder list of test-forms
+  (cond ((null test-forms) nil) ; if no more test-forms, return nil
+        ((evaluate (car (car test-forms)) a-list) ; evaluate test-condition of first test-form
+        (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate test-value of first test-form
+        (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on remainder list of test-forms
 \end{KERNEL}
 
 כדי לטפל בשאר הפונקציות שב\פנה|טבלה:מיני| ובפונקציה eval נשים לב לכך שכל אלו
@@ -1955,27 +1934,24 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 ומעבירה את המשך הטיפול ל-apply-trivial-primitive
 \begin{KERNEL}
 (defun apply-eager-primitive (primitive actuals a-list)
-  (cond
-    ((eq primitive 'error) (error actuals))
-    ((eq primitive 'eval) (evaluate (car actuals) a-list))
-    (t
-      (apply-trivial-primitive
-        primitive ; one of atom, car, cdr, cons, eq, or set
-        (car actuals) ; first actual parameter
-        (car cdr actuals))))) ; second actual parameter, could be nil
+  (cond ((eq primitive 'error) (error actuals))
+        ((eq primitive 'eval) (evaluate (car actuals) a-list))
+        (t (apply-trivial-primitive
+              primitive ; one of atom, car, cdr, cons, eq, or set
+              (car actuals) ; first actual parameter
+              (car cdr actuals))))) ; second actual parameter, could be nil
 \end{KERNEL}
 
 כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימיטיביות שנותרו:
 \begin{KERNEL}
 (defun apply-trivial-primitive (primitive first second)
-  (cond
-    ((eq primitive 'atom) (atom first))
-    ((eq primitive 'car) (car first))
-    ((eq primitive 'cdr) (cdr first))
-    ((eq primitive 'cons) (cons first second))
-    ((eq primitive 'eq) (eq first second))
-    ((eq primitive 'set) (set first second))
-    (t (error 'something-went-wrong primitive))))
+  (cond ((eq primitive 'atom) (atom first))
+        ((eq primitive 'car) (car first))
+        ((eq primitive 'cdr) (cdr first))
+        ((eq primitive 'cons) (cons first second))
+        ((eq primitive 'eq) (eq first second))
+        ((eq primitive 'set) (set first second))
+        (t (error 'something-went-wrong primitive))))
 \end{KERNEL}
 
 §§ הקוד המלא של evaluate ופונקציות העזר שלה
@@ -2103,6 +2079,12 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 
 § תרגילים
 \אבגד
+✦ הפונקציה member היא פונקצית ספריה סטנדרטית ברוב המימושים של ליספ. הפונקציה
+מקבלת אטום ורשימה, ומחזירה את זנב הרשימה הארוך ביותר שהאיבר הראשון שבו הוא
+האטום. אם האטום אינו מצוי ברשימה, הפונקציה מחזירה \E|nil|.  ממש פונקציה זו
+במיני ליספ, והסבר מדוע ניתן להשתמש להחליף כל קריאה ל-exists בקריאה דומה
+ל-member עם אותם פרמטרים בדיוק. 
+
 ✦ ממש במיני ליספ את הפונקציה הרקורסיבית equal אשר משווה שני ביטויי S אם הם
 זהים, כלומר אם הטופולוגיה שלהם כעצים בינאריים מלאים זהה, והאטומים המצויים בעלים
 זהים גם כן. הפונקציה מחזירה t במקרה של זהות, ו-nil אחרת.  
