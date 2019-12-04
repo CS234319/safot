@@ -1,4 +1,4 @@
-% location="Jerusalem , Israel"
+% location="Jerusalem, Israel"
 server="http://www.Google.com/ig/api"
 request="$server?weather=$location"
 wget -q -O - $request |\

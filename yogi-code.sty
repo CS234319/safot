@@ -80,7 +80,7 @@
     keywordstyle={\listingsfont\bfseries\color{keywordColor}\codesize},
     keywordstyle={[2]\listingsfont\bfseries\color{darkblue}\codesize},
     showstringspaces=false,
-    escapechar=⌘,
+    escapechar=¢,
 }
 \lstdefinestyle{inline}{
     basicstyle={\listingsfont\inlinesize},
@@ -172,30 +172,135 @@
 }
 
 
+\lstdefinelanguage{Go}{
+  % Keywords as defined in the BNF
+  morekeywords=[1]{break,default,func,interface,%
+    case,defer,go,map,struct,chan,else,goto,package,%
+    switch,const,fallthrough,if,range,type,continue,%
+    for,import,return,var,select},
+  % Special identifiers, builtin functions
+  morekeywords=[2]{make,new,nil,len,cap,copy,cmplx,%
+    real,imag,panic,recover,print,println,iota,close,%
+    closed,_},
+  % Basic types
+  morekeywords=[3]{%
+    string,int,uint,uintptr,double,float,complex,byte,%
+    int8,int16,int32,int64,int128,%
+    uint8,uint16,uint32,uint64,uint128,%
+    float32,float64,complex64,complex128},
+  % Strings : "toto", 'toto', `toto`
+  morestring=[b]{"},
+  morestring=[b]{'},
+  morestring=[b]{`},
+  % Comments : /* comment */ and // comment
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  % Options
+  sensitive=true
+}
+
+
 %	#1 Language name, as it is known to the listing package.
 %	#2 Changes to the language definition, as in the listing package 
 % #3 Name of the environment of the newly defined language.
 %	#4 Name of the command for inlining language code.
 %	#5 Name of the short version of the command for inlining language code.
 \def\newLanguage#1#2#3#4#5{%
-  \lstnewenvironment{#3}[1][]{\ensureLTR\lstset{language=#1,style=display,##1}}{}%
-  \lstnewenvironment{#3n}[1][]{\ensureLTR\lstset{language=#1,style=display,style=numbered,##1}}{}%
+  \lstnewenvironment{#3}[1][]{\lstset{language=#1,style=display,##1}}{}%
+  \lstnewenvironment{#3n}[1][]{
+  \ensureLTR\lstset{language=#1,style=display,style=numbered,##1}}{}%
   \lstnewenvironment{#3e}[1][]{%
   \pagebreak[2]
 \ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{\pagebreak[3]}%
 	\expandafter\newcommand\csname#4\endcsname[1]{%
 	  \begingroup
+    \ensureLTR
 	  \lstset{language=#1,style=inline}%
-	  \ensureLR{\lstinline!##1!}%
+	  \lstinline/##1/%
 	  \endgroup
 	  }
 	\expandafter\newcommand\csname#5\endcsname[1]{%
 	  \begingroup
 	  \lstset{language=#1,style=inline}%
-	  \ensureLR{\lstinline!##1!}%
+	  \ensureLTR\lstinline!##1!%
 	  \endgroup
 	  }%
 }
+\lstdefinelanguage{Golang}{
+   % Keywords as defined in the BNF
+  morekeywords=[1]{break,default,func,interface,%
+    case,defer,go,map,struct,chan,else,goto,package,%
+    switch,const,fallthrough,if,range,type,continue,%
+    for,import,return,var,select},
+   sensitive=true,%
+   morecomment=[l]{//},%
+   morecomment=[s]{/*}{*/},%
+   morestring=[b]',%
+   morestring=[b]",%
+   morestring=[s]{`}{`},%
+  % Predefined constants 
+  morekeywords=[2]{
+    true,
+    false,
+    nil,
+    _
+  },
+  % Predefined types
+  morekeywords=[3]{%
+ComplexType,
+FloatType,
+IntegerType,
+Type,
+bool,
+byte,
+complex128,
+complex64,
+error,
+float32,
+float64,
+int,
+int16,
+int32,
+int64,
+int8,
+rune,
+string,
+uint,
+uint16,
+uint32,
+uint64,
+uint8,
+uintptr,
+},
+ % Predefined functions
+ morekeywords=[4]{%
+append,
+cap,
+close,
+complex,
+copy,
+delete,
+imag,
+len,
+make,
+new,
+panic,
+print,
+println,
+real,
+recover,
+},
+  % Strings : "toto", 'toto', `toto`
+  morestring=[b]{"},
+  morestring=[b]{'},
+  morestring=[b]{`},
+  % Comments : /* comment */ and // comment
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  % Options
+  sensitive=true
+}
+
 
 %---- Concrete Common Languages (Sorted Alphabetically --------------
 
@@ -208,10 +313,10 @@
 \newLanguage{[Sharp]C}{morekeywords={select,in,from,where,var}}{CSHARP}{csharp}{csharpShort}
 \newLanguage{Cobol}{}{COBOL}{cobol}{cobolShort}
 \newLanguage{Python}{}{PYTHON}{python}{py}
+\newLanguage{Go}{}{GO}{go}{gocd}
 \newLanguage{}{}{DATALOG}{datalog}{dlog}
 \newLanguage{Eiffel}{morekeywords={create,factory,note}}{EIFFEL}{eiffel}{eiff}
 \newLanguage{kernel}{}{LISP}{lisp}{lsp}
-\newLanguage{Go}{}{GO}{go}{gocd}
 \newLanguage{HTML}{alsoletter={-}}{HTML}{html}{htm}
 \newLanguage{Java}{}{JAVA}{java}{ja}
 \newLanguage{}{}{NONE}{none}{non}

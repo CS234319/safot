@@ -1,11 +1,9 @@
 \documentclass[a4paper,12pt,reqno]{book}
-
 \usepackage{00}
 
-
-\dominitoc
-\מאומה 
-\faketableofcontents
+%\dominitoc
+%\מאומה
+%\faketableofcontents
 
 \כותרת{
   \fontsize{120}{140}\selectfont
@@ -13,13 +11,16 @@
 }
 
 \מחבר{
+יוסי גיל ⏎
 הפקולטה למדעי המחשב⏎
 הטכניון - מכון טכנולוגי לישראל⏎
 }
-\החל{מסמך}
-\חומר␣מקדים
+
+\begin{document}
+\frontmatter
+
 \bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
-location="Jerusalem , Israel"
+location="Jerusalem, Israel"
 server="http://www.Google.com/ig/api"
 request="$server?weather=$location"
 wget -q -O - $request |\
@@ -33,43 +34,17 @@ tr 'A -Z' 'a -z'
 %\כלול{admin}
 \כלול{front}
 
- \חומר␣עיקרי
- \chapter{ניסיונות}
- \newcommand\textbfit[1]{{\bfseries\itshape\selectfont{#1}}}
-\newcommand\textalt[1]{{\altdavid\selectfont{#1}}}
-\newfontfamily\altdavid{David CLM}
-\begin{hebrew}
-{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
-(גופן רגיל)\\
-\textit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
-(גופן נטוי)\\
-\textbf{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
-(גופן מודגש)\\
-\textbfit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
-(גופן נטוי ומודגש)\\
-\textalt{מנעולן הפך כף חצץ שגזר קט איבד סתם.}
-(דוד קולמוס)\\
-\textalt{\textit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}}
-(דוד נטוי)\\
-\textalt{\textbf{מנעולן הפך כף חצץ שגזר קט איבד סתם.}}
-(דוד מודגש)\\
-\textalt{\textbf{\textit{מנעולן הפך כף חצץ שגזר קט איבד סתם.}}}
-(דוד נטוי ומודגש)
-\end{hebrew}​
-
-℆ רקע מתימטי
-\כלול{recursive}
-
- 
+\mainmatter
+%℆ רקע מתימטי
+%\כלול{recursive}
 
 ℆צעדים ראשונים
-% \כלול{steps}
-\פרק{הביצה והתרנגולת}
-\כלול{chicken-and-egg}
+ \כלול{steps}
+%\פרק{הביצה והתרנגולת}
+%\כלול{chicken-and-egg}
 
-
-\פרק{קידוד תווים}
-\כלול{character-encoding}
+%\פרק{קידוד תווים}
+%\כלול{character-encoding}
 \סוף{מסמך}
 
 \פרק{אבני הבנין של שפות תכנות}
@@ -85,20 +60,19 @@ tr 'A -Z' 'a -z'
 %\flushbottom
 %\clearpage
 
-\החל{multicols}{2} 
-\מאומה \גודל␣הערת␣שוליים 
+\החל{multicols}{2}
+\מאומה \גודל␣הערת␣שוליים
 \printglossary[type=hebeng]
 \סוף{multicols}
 \clearpage
-\החל{multicols}{2} 
+\החל{multicols}{2}
 \setLTR
-\מאומה \גודל␣הערת␣שוליים 
+\מאומה \גודל␣הערת␣שוליים
 \printglossary[type=engheb]
 \סוף{multicols}
 \פרק{הִדּוּר וַהֲרָצָה שֶׁל תָּכְנִיּוֹת Java}
 \כלול{JVM}
 \סוף{מסמך}
-
 
 \פרק{השם ופשרו}
 \כלול{binding}
@@ -115,11 +89,9 @@ tr 'A -Z' 'a -z'
 
 \סוף{מסמך}
 
-
 \החל{מובאה}
 \setLTR\cpp{cat << EOF}
 \סוף{מובאה}
-
 
 איך ללמוד שפה מהר?
 קודם כל להתגבר על בעיות הדקדוק. מסתבר שהדקדוק של שפות שונות עשוי להיות שונה
@@ -127,15 +99,9 @@ tr 'A -Z' 'a -z'
 
 § מאפיינים דקדוקיים ויזואליים
 
-
-
-
-
-
 §§אבחנה בין תיבה עליונה ותחתונה
 למה קוראים להם תיבות עליונות ותחתונות? בעבר, בדפוס היתה תיבה גבוהה עם האותיות
 הגדולות ותיבה נמוכה, תחתונה שבה האותיות הקטנות.
-
 
 איך לומדים מהר שפה?
 §§אוסף מילות מפתח
@@ -150,11 +116,11 @@ tr 'A -Z' 'a -z'
 
 תופעות יחודיות
 
-\החל{ציינון}
-• סימן מיוחד למינוס אונרי …
+\begin{itemize}
+• סימן מיוחד למינוס אונרי…
 • מגוון סימונים לאופרטור השונה מ
 • הצבה? לא תמיד אופרטור.
-\סוף{ציינון}
+\end{itemize}
 
 §§אוסף המילולונים
 בדרך כלל קל הרבה יותר. המילולונים הם די סטנדרטיים.
@@ -181,11 +147,9 @@ tr 'A -Z' 'a -z'
 
 §§שיטת הביצוע
 שפה ביצועית, לעומת שפה הצהרתית, שבה יש מנוע הקובע את שיטת החישוב.
-\החל{ציינון}
+\begin{itemize}
 • הדור לשפת מכונה
 • הדור לשפה אחרת.
 • פרשנות
 • תרגום למכונה אבסטרקטית.
 יש גם מכונה אבסטרקטית הצהרתית לשפת \פרולוג.
-
-
