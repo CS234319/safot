@@ -157,6 +157,7 @@ garbage := $(sort $(wildcard \
 	*.toc                    \
 	hello.c                  \
 	*.vtc                    \
+	temp*.* 							   \
 ))
 G0 := $(words $(garbage)) # 0th moment, i.e., garbage count
 G1 := $(shell ls -ls $(garbage)| tee  $(TMP)/files.lst | awk "{t+=$$$$6}END{print t}")
