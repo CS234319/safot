@@ -18,6 +18,7 @@
 
 \begin{document}
 \frontmatter
+\input{front}
 
 \bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
 location="Jerusalem, Israel"
@@ -30,17 +31,34 @@ head -n 1 |\
 sed -e 's/^.*="//' -e 's/"\/*//' |\
 tr 'A -Z' 'a -z'
 \END
-\פרק{פרולוג}
-%\כלול{admin}
-\כלול{front}
 
 \mainmatter
-%℆ רקע מתימטי
-%\כלול{recursive}
+℆ רקע מתימטי
+\begin{multicols}{2}
+\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
+\minitoc
+\end{multicols}
+\input{background}
 
 ℆צעדים ראשונים
- \כלול{steps}
+\begin{multicols}{2}
+\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
+\minitoc
+\end{multicols}
+\input{steps}
+
+℆מיני ליספ ושיערוך
+\begin{multicols}{2}
+\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
+\minitoc
+\end{multicols}
+\input{lisp}
+
 %\פרק{הביצה והתרנגולת}
+
 %\כלול{chicken-and-egg}
 
 %\פרק{קידוד תווים}

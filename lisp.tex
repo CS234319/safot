@@ -1,10 +1,9 @@
-\documentclass[a4paper,12pt,reqno]{article}
-\usepackage{00}
-\raggedbottom
+%\documentclass[a4paper,12pt,reqno]{article}
+%\usepackage{00}
+%\raggedbottom
 
 \def\CPL{\E|C|\xspace}
 
-\usepackage{filecontents}
 \newcounter{kernel}
 \setcounter{kernel}0
 \newcounter{library}
@@ -63,10 +62,7 @@
 }
 
 %
-\title{מיני-ליספ}
-\author{יוסי גיל ⏎ הפקולטה למדעי המחשב⏎ הטכניון - מכון טכנולוגי לישראל}
-\begin{document}
-\maketitle
+
 § מבוא
 
 שפת LISP (ראשי תיבות של \E|LIst PRocessing|), היתה, יחד עם שפת Fortran (ראשי
@@ -93,11 +89,11 @@
 שפת ליספ שימשה בין השאר לפיתוח \E|Macsyma|, התכנית הראשונה לחישוב מתימטי
 סימבולי, כולל נגזרות, אינטגרלים, ופתרון סימבולי של משוואות.
 דוגמה לחישוב סימבולי ב-\E|Macsyma| היא חישוב האינטגרל המסויים \[
-∫₀⁴ e^{√{ay}}dy
+  ∫₀⁴ e^{√{ay}}dy
 \] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$.
 \begin{LTR}
   \scriptsize
-\begin{LISP}
+  \begin{LISP}
 (%i1) assume(a > 0)$
 (%i2) 'integrate (%e**sqrt(a*y), y, 0, 4);
                       4
@@ -123,8 +119,8 @@
 שיח עם משתמש בדומה לבוט. ELIZA ניסתה לדמות בשיחה את תפקיד הפסיכיאטר או
 הפסיכותראפיסט ודו שימ עמה נראה כך
 \begin{LTR}
-\scriptsize
-\begin{verbatim}
+  \scriptsize
+  \begin{verbatim}
 ELIZA: Please tell me what’s been bothering you.
 ME: Oh, hello, ELIZA. It’s been a long time.
 ELIZA: Hi. What seems to be your problem?
@@ -135,7 +131,7 @@ ELIZA: Of what does feeling sad remind you?
 \end{verbatim}
 \end{LTR}
 שפת ליספ שימשה גם לפיתוח
-\E|Grammarly|, התכנה המפורסמת לתיקוני שגיאות כתיב ודקדוק. 
+\E|Grammarly|, התכנה המפורסמת לתיקוני שגיאות כתיב ודקדוק.
 
 במהלך השנים, נולדו ניבים רבים לליספ שהרחיבו בהרבה את ההגדרה המקורית. בשנת 1984
 אוחדו רבים מהניבים
@@ -181,8 +177,8 @@ editor|) \E|Emacs|), AutoLisp (המשמשת כשפת סקריפטים בתכנת
 של מיני ליספ בכל הניבים האחרים של השפה, אם כי לעיתים הפונקציה defun נקראת בשם
 אחר.
 
-בנוסף לפונקציות הפרימיטיביות ולפונקציות הסיפריה מיני-ליספ תומכת )כמו מרבית
-הניבים של ליספ( בפונקציה \E|eval| אשר מקבלת ביטוי S ומשערכת אותו.  הפונקציה
+בנוסף לפונקציות הפרימיטיביות ולפונקציות הסיפריה מיני-ליספ תומכת)כמו מרבית
+הניבים של ליספ(בפונקציה \E|eval| אשר מקבלת ביטוי S ומשערכת אותו. הפונקציה
 eval אינה פונקציה פרימיטיבית, אלא היא ממומשת כחלק מ-\E|evaluate|, אלגוריתם
 השיערוך של מיני ליספ, אשר גם הוא ממומש כפונקציה במיני ליספ.
 
@@ -195,7 +191,7 @@ eval אינה פונקציה פרימיטיבית, אלא היא ממומשת כ
 בפרט, כפי שנדגים כאן, ניתן לממש את האלגוריתם \E|eval| עצמו במיני ליספ, תוך
 שימוש בפונקציות פרימיטיביות או בפונקציות הסיפריה, אשר כאמור מוגדרות באמצעות
 הפונקציות הפרימיטיביות. מימוש זה הוא פשוט וקצר יחסית ועולה לכדי כמאה שורות
-בלבד. 
+בלבד.
 לבד מהמימוש של eval שפת מיני ליספ מעניינת שכן היא מציגה בתמציתיות את מרבית
 הרעיונות החשובים של ליספ, כגון עיבוד רקורסיבי של רשימות, קישור של שמות לערכים,
 העברת פרמטרים, הסתכלות על תכנית כמבנה נתונים, ועוד.
@@ -234,11 +230,11 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 \LR{\textbf Read \textbf Evaluate \textbf Print \textbf Loop}
 או בראשי תיבות \E|REPL|:
 \ספרר
-  ✦ \E|READ|: האינטרפטר קורא את הקלט, אשר חייב להיות ביטוי~\E|S| במקרה של ליספ.
-  ✦ \E|EVALUATE|: האינטרפטר משערך את ערכו של הביטוי שקרא.
-  ✦ \E|PRINT|: אם השיערוך של הקלט מצליח, אז האינטרפטר מדפיס את תוצאת השיערוך.
-  אחרת, האינטרפטר ידפיס הודעת שגיאה מתאימה.
-  ✦\E|LOOP|: האינטרפטר חוזר לצעד הראשון, לקריאת הקלט הבא.
+✦ \E|READ|: האינטרפטר קורא את הקלט, אשר חייב להיות ביטוי~\E|S| במקרה של ליספ.
+✦ \E|EVALUATE|: האינטרפטר משערך את ערכו של הביטוי שקרא.
+✦ \E|PRINT|: אם השיערוך של הקלט מצליח, אז האינטרפטר מדפיס את תוצאת השיערוך.
+אחרת, האינטרפטר ידפיס הודעת שגיאה מתאימה.
+✦\E|LOOP|: האינטרפטר חוזר לצעד הראשון, לקריאת הקלט הבא.
 ===
 
 \normalsize
@@ -246,10 +242,10 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 האינטרפטר של ליספ מכיל לכן שלושה מרכיבים עיקריים:
 \אבגד
 ✦ ה-Reader אשר קורא קלט שהוא סדרה של תווים, ובונה את מבנה הנתונים המתאים
-  לביטוי ה-S המתאים לתווים אלו.
+לביטוי ה-S המתאים לתווים אלו.
 ✦ המשערך (\E|Evaluator|) אשר משערך ביטויי S אלו.
 ✦ ה-Printer אשר מקבל ביטוי S כמבנה נתונים ומתרגם אותו לסדרת תווים אשר
- מייצגת מבנה נתונים זה.
+מייצגת מבנה נתונים זה.
 ===
 כאן נניח שה-Reader וה-Printer נתונים והם דומים לאלו שבכל ניב של ליספ, ונתאר את
 המימוש של המשערך של מיני ליספ.
@@ -299,7 +295,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 
 נוח לחשוב על ביטויי~S כעצים בינאריים מלאים (כלומר, שלכל צומת שאינה עלה יש בדיוק
 שני בנים) כאשר צומת פנימית של עץ כזה אינו נושא מידע, ואילו עלה מכיל מילה
-מתוך~$Σ^*$.  \פנה|איור:בינארי| מציג כמה ביטויי S יחד עם התיאור שלהם
+מתוך~$Σ^*$. \פנה|איור:בינארי| מציג כמה ביטויי S יחד עם התיאור שלהם
 כעץ בינארי מלא.
 
 \newcommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
@@ -311,25 +307,25 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
   \centering
   \begin{LTR}
     \begin{tabular}{*7T}%
-      $(ab.cd)$ &
-      $(abcd.ε)$ &
-      $((ab.cd).ε)$ &
-      $(ab.(c.d))$ &
-      $((a.b).(c.d))$ &
-      $(a.(b.(c.d)))$ &
+      $(ab.cd)$                                                                           &
+      $(abcd.ε)$                                                                          &
+      $((ab.cd).ε)$                                                                       &
+      $(ab.(c.d))$                                                                        &
+      $((a.b).(c.d))$                                                                     &
+      $(a.(b.(c.d)))$                                                                     &
       \multicolumn1c{$(((a.b).c).d)$} ⏎
       \scriptsize
-      \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]} &
+      \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]}                                     &
       \scriptsize
-      \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]} &
+      \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]}                                    &
       \scriptsize
-      \Forest{s tree [{},cons[cons[$ab$,atom][$cd$,atom]][$ε$,atom]]} &
+      \Forest{s tree [{},cons[cons[$ab$,atom][$cd$,atom]][$ε$,atom]]}                     &
       \scriptsize
-      \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]} &
+      \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]}                   &
       \scriptsize
       \Forest{s tree [{},cons[{},cons[$a$,atom][$b$,atom]][{},cons[$c$,atom][$d$,atom]]]} &
       \scriptsize
-      \Forest{s tree [{},cons [{},cons [{},cons[a,atom][b,atom]] [c,atom]] [d,atom] ] } &
+      \Forest{s tree [{},cons [{},cons [{},cons[a,atom][b,atom]] [c,atom]] [d,atom] ] }   &
       \scriptsize
       \Forest{s tree [{},cons [{}, cons [{}, cons
             [a,atom][b,atom]] [c,atom] ] [d,atom]] }
@@ -401,19 +397,19 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
   \label{איור:רשימות}
   \begin{LTR}
     \begin{tabular}{*5T}
-      \lisp{()} &
-      \T|(A)| &
-      \T|(A B)| &
+      \lisp{()}     &
+      \T|(A)|       &
+      \T|(A B)|     &
       \T|(A B C D)| &
       \multicolumn1c{\T|((A B) C)|}
- ⏎
+      ⏎
       \Forest{
         s tree [NIL,atom]
-      } &
+      }             &
       \Forest{ s tree [{},cons [A,atom] [NIL,atom]]
-      } &
+      }             &
       \Forest{ s tree [{},cons [A,atom] [cons[B,atom][NIL,atom]]]
-      } &
+      }             &
       \Forest{
       s tree [{},cons [A,atom]
       [{},cons [B,atom]
@@ -424,7 +420,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
       ]
       ]
       ]
-      } &
+      }             &
       \Forest{
       s tree [{},cons
       [{},cons
@@ -534,7 +530,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 כמה איברים פשוטים של קבוצת העצים מעל האלפבית בן שלוש האותיות~$Σ=❴a,b,c❵$ הם \[
   a,b(c),a(b,c), a(b(a)), a(a,b,c)∈T(❴a,b,c❵)
 \] \cref{figure:tree} מדגים את הטופולגיה של העץ המורכב יותר \[
-a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵)).
+  a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵)).
 \] \begin{figure}[!htbp]
   \centering
   \forestset{%
@@ -758,53 +754,52 @@ FOO
 \end{LISP}
 ויזואלית, נצייר רשימת ה-\E|a-list| לפני הקריאה כך,
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
-       h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+        h/t/t,
+        i/nil/nil
+      } {
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
 
-     \node[on chain,font=\tt\scriptsize] (j) {nil};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
     \node[above=of h] (A) {a-list};
     \draw[->] (A.south)--(h);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
 ואחרי השיערוך של \T|(set (quote foo) (quote (bar baz)))|
 תראה ה-\E|a-list| כך,
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
-       g/foo/(bar baz),
-       h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+        g/foo/(bar baz),
+        h/t/t,
+        i/nil/nil
+      } {
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
 
-     \node[on chain,font=\tt\scriptsize] (j) {nil};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { g/h,h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { g/h,h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
     \node[above=of g] (A) {a-list};
     \draw[->] (A.south)--(g);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
-
 
 שפת מיני ליספ יכולה לאתחל את ה-a-list באמצעות
 \begin{LIBRARY}
@@ -830,30 +825,29 @@ FOO
 \end{LISP}
 וויזואלית כך,
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
-      f/foo/((baz))),
-       g/foo/(bar baz),
-       h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+        f/foo/((baz))),
+        g/foo/(bar baz),
+        h/t/t,
+        i/nil/nil
+      } {
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
 
-     \node[on chain,font=\tt\scriptsize] (j) {nil};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { f/g, g/h,h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { f/g, g/h,h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
     \node[above=of f] (A) {a-list};
     \draw[->] (A.south)--(f);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
-
 
 ואם ננסה לשערך כעת את \T|foo|, נקבל את הערך הנוצר מהקישור החדש
 \begin{LISP}
@@ -1205,8 +1199,8 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 
 כזכור, ה-a-list היא רשימה של dotted-pairs שכל אחד מהם הוא קישור בין שם לערך.
 נגדיר פונקציה רקורסיבית, \E|lookup| אשר מקבלת שני פרמטרים: id שהוא אטום,
-ו-a-list, שהיא רשימה  במבנה של \E|a-list| כפי שהצגנו אותו, כלומר סדרה של 
-dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr שלו הוא משמעותו של האטום: 
+ו-a-list, שהיא רשימה במבנה של \E|a-list| כפי שהצגנו אותו, כלומר סדרה של
+dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr שלו הוא משמעותו של האטום:
 \begin{KERNEL}
 (defun lookup (id a-list) ; lookup id in an a-list
   (cond ; Three cases to consider:
@@ -1244,32 +1238,32 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 §§ שיערוך ביטוי מורכב וקריאה לפונקציה
 
 תיארנו למעלה כיצד נעשה שיערוך של אטום. נותר לתאר כיצד מתבצע השיערוך של ביטוי
-מורכב. 
+מורכב.
 
 \begin{framed}
-בהינתן ביטוי מורכב \E|$s$|, פרוצדורת השיערוך של ליספ מנסה
-להציג אותו כרשימה בת~$n+1$ איברים \[
-  s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
-\] אם הביטוי אינו רשימה, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
-\T|nil|. אחרת, האינטרפטר מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
-לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך
-של~$s$ מתבצע על פי הסתכלות זו:
-\begin{enumerate}
-  ✦ שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל. אם השיערוך של~$s₀$ נכשל,
-  אזי גם השיערוך של~$s$ נכשל. אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
+  בהינתן ביטוי מורכב \E|$s$|, פרוצדורת השיערוך של ליספ מנסה
+  להציג אותו כרשימה בת~$n+1$ איברים \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+  \] אם הביטוי אינו רשימה, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
+  \T|nil|. אחרת, האינטרפטר מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
+  לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך
+  של~$s$ מתבצע על פי הסתכלות זו:
+  \begin{enumerate}
+    ✦ שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל. אם השיערוך של~$s₀$ נכשל,
+    אזי גם השיערוך של~$s$ נכשל. אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
 
-  השיערוך של~$s$ נכשל גם אם~$s₀'$ אינו פונקציה, או שהוא פונקציה, אך כזו שאינה
-  מצפה ל-$n-1$ ארגומנטים בדיוק.
+    השיערוך של~$s$ נכשל גם אם~$s₀'$ אינו פונקציה, או שהוא פונקציה, אך כזו שאינה
+    מצפה ל-$n-1$ ארגומנטים בדיוק.
 
-  ✦ האינטרפטר ממשיך כעת לשערך רקורסיבית את הפרמטרים האקטואליים לפונקציה~$s₀'$,
-  הלא הם הביטויים~\E|$s₁$~,…,~$sₙ$|. נסמן את תוצאות השיערוך הללו
-  ב-\E|$s₁'$,…,$sₙ'$|. אם השיערוך הרקורסיבי של אחד מבין
-  הביטויים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$
-  כולו נכשל.
+    ✦ האינטרפטר ממשיך כעת לשערך רקורסיבית את הפרמטרים האקטואליים לפונקציה~$s₀'$,
+    הלא הם הביטויים~\E|$s₁$~,…,~$sₙ$|. נסמן את תוצאות השיערוך הללו
+    ב-\E|$s₁'$,…,$sₙ'$|. אם השיערוך הרקורסיבי של אחד מבין
+    הביטויים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$
+    כולו נכשל.
 
-  ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$ על~$n$ הביטויים
-  \E|$s₁'$,…,~$sₙ'$|. אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.
-\end{enumerate}
+    ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$ על~$n$ הביטויים
+    \E|$s₁'$,…,~$sₙ'$|. אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.
+  \end{enumerate}
 \end{framed}
 
 עלינו עוד לתאר כיצד נעשית קריאה לפונקציה. נסתכל לדוגמה על הפונקציה הרקורסיבית
@@ -1295,58 +1289,58 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 וקישור זה יתווסף לתחילת ה-\E|a-list|. ויזואלית,
 אם ה-a-list נראתה טרם ההגדרה כך,
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
-     h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+        h/t/t,
+        i/nil/nil
+      } {
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
 
-     \node[on chain] (j) {\huge$⋯$};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
 
     \node[above=of h] (A) {a-list};
     \draw[->] (A.south)--(h);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
 אזי, אחרי ההגדרה של append ה-a-list תראה כך
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
-      g/append/{
-        (lambda⏎
-\quad (x xs)⏎
-        \quad (cond ⏎
-        \quad\quad((null xs) (x))⏎
-          \quad\quad (t (cons (car x) ⏎
-        \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
-      h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+    g/append/{
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond ⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
 
-     \node[on chain] (j) {\huge$⋯$};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { g/h, h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { g/h, h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
 
     \node[above=of g] (A) {a-list};
     \draw[->] (A.south)--(g);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
 בקריאה ל-append כמו
 \begin{LISP}
@@ -1382,36 +1376,36 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 \lisp{(x.a)} ו-\lisp{(xs.(b c))} ל-\E|a-list|.
 ויזואלית, ה-a-list תראה כך
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=2.5ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=2.5ex]
     \foreach \x/\y/\z in {
-      e/x/a,
-      f/xs/(b c),
-      g/append/{
-        (lambda⏎
-\quad (x xs)⏎
-        \quad (cond⏎
-          \quad\quad((null xs) (x))⏎
-          \quad\quad (t (cons (car x) ⏎
-        \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
-      h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+    e/x/a,
+    f/xs/(b c),
+    g/append/{
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
 
-     \node[on chain] (j) {\huge$⋯$};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { e/f, f/g, g/h, h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { e/f, f/g, g/h, h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
 
     \node[above=of e] (A) {a-list};
     \draw[->] (A.south)--(e);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
 לאחר הקריאה לפונקציה, יש לשחזר את ערכה של ה-a-list לערכה המקורי טרם הקריאה לה.
 
@@ -1420,80 +1414,80 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 \lisp{(x.a)} ו-\lisp{(xs.(c))}.
 לאחר ביצוע קישורים אלו, ה-a-list תראה כך
 \begin{LTR}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
     \foreach \x/\y/\z in {
-      c/x/a,
-      d/xs/(c),
-      e/x/a,
-      f/xs/(b c),
-      g/append/{
-        (lambda⏎
-\quad (x xs)⏎
-        \quad (cond⏎
-          \quad\quad((null xs) (x))⏎
-          \quad\quad (t (cons (car x) ⏎
-        \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
-      h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+    c/x/a,
+    d/xs/(c),
+    e/x/a,
+    f/xs/(b c),
+    g/append/{
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
 
-     \node[on chain] (j) {\huge$⋯$};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { c/d, d/e, e/f, f/g, g/h, h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { c/d, d/e, e/f, f/g, g/h, h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
 
     \node[above=of c] (A) {a-list};
     \draw[->] (A.south)--(c);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
 כלומר הקישורים חחדשים יסתירו את הקישורים הקודמים.
 
 בקריאה הרקורסיבית השניה של append לעצמה, יווצרו שני קישורים נוספים,
 \lisp{(x.a)} ו-\lisp{(xs.())}, וה-a-list תראה כך
 \begin{LTR}
-\usetikzlibrary{chains,arrows}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+  \usetikzlibrary{chains,arrows}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
 
     \foreach \x/\y/\z in {
-      a/x/a,
-      b/xs/(),
-      c/x/a,
-      d/xs/(c),
-      e/x/a,
-      f/xs/(b c),
-      g/append/{
-        (lambda⏎
-\quad (x xs)⏎
-        \quad (cond⏎
-          \quad\quad((null xs) (x))⏎
-          \quad\quad (t (cons (car x) ⏎
-        \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
-      h/t/t,
-      i/nil/nil
-     } {
-      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
-      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
-      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
-     }
+    a/x/a,
+    b/xs/(),
+    c/x/a,
+    d/xs/(c),
+    e/x/a,
+    f/xs/(b c),
+    g/append/{
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
 
-     \node[on chain] (j) {\huge$⋯$};
-      \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
 
-     \foreach \a/\b in { a/b, b/c, c/d, d/e, e/f, f/g, g/h, h/i} {
-      \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
-     }
+    \foreach \a/\b in { a/b, b/c, c/d, d/e, e/f, f/g, g/h, h/i} {
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
 
     \node[above=of a] (A) {a-list};
     \draw[->] (A.south)--(a);
-\end{tikzpicture}
+  \end{tikzpicture}
 \end{LTR}
 כאמור, בכל פעם שבה הפונקציה append חוזרת מהפעלה רקורסיבית,
 ה-a-list ישוחזר, ושני קישורים בין פרמטרים פורמליים לאקטואליים יוסרו ממנו.
@@ -1640,15 +1634,15 @@ quote לרשימת ה-a-list באמצעות set
 \end{LISP}
 
 נתקן את פרוצדורת השיערוך כך שתתמוך בפונקציות שהן \E|normal|, על ידי הוספת התנאי
-הבא: 
+הבא:
 
 \begin{framed}
-בשיערוך הביטוי \[
-  s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
-\] אם שיערוך הביטוי~$s₀$ מחזיר פונקציה שהיא
-normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambda (ולא \E|lambda|) אזי יש
-להעביר לפונקציה זו כארגומנטים את הביטויים~\E|$s₁$,…,$sₙ$| ולא את הערכים
-המשוערכים שלהם~\E|$s₁'$,…,$sₙ'$|.
+  בשיערוך הביטוי \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+  \] אם שיערוך הביטוי~$s₀$ מחזיר פונקציה שהיא
+  normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambda (ולא \E|lambda|) אזי יש
+  להעביר לפונקציה זו כארגומנטים את הביטויים~\E|$s₁$,…,$sₙ$| ולא את הערכים
+  המשוערכים שלהם~\E|$s₁'$,…,$sₙ'$|.
 \end{framed}
 
 § מימוש אלגוריתם השיעורך במיני ליספ
@@ -1658,7 +1652,7 @@ normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambd
 מתברר שאפשר לממש את פרוצדורת השיערוך גם בליספ עצמה. לשם כך נגדיר פונקציה
 evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|, ואשר משערכת את הביטוי
 בהתאם לקישורים שבסביבה הנתונה. הפונקציה evaluate קוראת לעצמה ברקורסיה כדי לשערך
-את מרכיבי הביטוי. 
+את מרכיבי הביטוי.
 
 כאשר evaluate תזהה ביטוי~$λ$ היא תקרא לפונקצית עזר apply אשר גם אותה נגדיר
 בהמשך, ואשר אחראית להפעיל ביטוי~$λ$ על הפרמטרים המועברים לו. אם ביטוי ה-$λ$ הוא
@@ -1746,7 +1740,7 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
         ((is-primitive (car S-expression)) ; special case handling of primitive functions
           (evaluate-primitive S-expression a-list))
         (t ; recursive step---lambda applied to parameters
-          (apply  (evaluate (car S-expression) a-list) ; find lambda expression
+          (apply (evaluate (car S-expression) a-list) ; find lambda expression
                   (cdr S-expression) ; find actual parameters
                   a-list))))
 \end{KERNEL}
@@ -1817,9 +1811,9 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 \end{KERNEL}
 
 \פנה|טבלה:מיני| מסכמת את הפונקציות הפרימיטיביות של מיני ליספ. הפונקציה
-evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה eval אשר אינה פרימיטיבית, 
-אבל עדיין לא טופלה.  אנו רואים ש-cond היא הפונקציה היחידה מבין כל אלו שהסמנטיקה
-שלה היא \E|normal|.  
+evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה eval אשר אינה פרימיטיבית,
+אבל עדיין לא טופלה. אנו רואים ש-cond היא הפונקציה היחידה מבין כל אלו שהסמנטיקה
+שלה היא \E|normal|.
 
 במימוש של apply-primitive נבדיל לכן בין cond וכל שאר הפונקציות הפרימיטיביות.
 \begin{KERNEL}
@@ -1840,31 +1834,31 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
     }
     \toprule
 
-    \normalsize \bfseries {\text{/arity}}שם &
-    \normalsize \bfseries סמנטיקה &
-    \normalsize \bfseries תמצית &
+    \normalsize \bfseries {\text{/arity}}שם           &
+    \normalsize \bfseries סמנטיקה                     &
+    \normalsize \bfseries תמצית                       &
     \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
     \midrule
 
-    atom/1 &
-    eager &
-    בדיקה אם הארגומנט הוא אטום &
+    atom/1                                            &
+    eager                                             &
+    בדיקה אם הארגומנט הוא אטום                        &
     \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
     \lisp{(atom t)}~$⇒$ \lisp{T} \newline
     \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
     \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
 
-    car/1 &
-    eager &
-    חילוץ האיבר הראשון ברשימה &
+    car/1                                             &
+    eager                                             &
+    חילוץ האיבר הראשון ברשימה                         &
     \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
     \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
     \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
     \lisp{(car 'a)}~$⇒$ \text{✗} \newline
     \lisp{(car ())}~$⇒$ \text{✗} ⏎
 
-    cdr/1 &
-    eager &
+    cdr/1                                             &
+    eager                                             &
     חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
     \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
     \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
@@ -1873,45 +1867,45 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
     \lisp{(cdr ())}~$⇒$ ✗ \newline
     \lisp{(cdr nil)}~$⇒$ ✗ ⏎
 
-    ($n≥0$) cond/n &
-    normal &
-    הכללה של פקודת \E|if|. &
+    ($n≥0$) cond/n                                    &
+    normal                                            &
+    הכללה של פקודת \E|if|.                            &
     \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
     \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
     \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
 
-    cons/2 &
-    eager &
-    הוספת איבר בתחילת רשימה &
+    cons/2                                            &
+    eager                                             &
+    הוספת איבר בתחילת רשימה                           &
     \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
     \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
     \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
 
-    eq/2 &
-    eager &
-    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה &
+    eq/2                                              &
+    eager                                             &
+    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
     \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
     \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
     \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
     \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
     \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
 
-    ($n≥0$) error/n &
-    eager &
-    הדפסת כל הפרמטרים ועצירת ביצוע התכנית &
+    ($n≥0$) error/n                                   &
+    eager                                             &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
     \lisp{(error)}~$⇒$ ✗ \newline
     \lisp{(error A)}~$⇒$ ✗ \newline
     \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
 
-    set/2 &
-    eager &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
+    set/2                                             &
+    eager                                             &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|.            &
     \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
     \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
     \label{primitive:count}
- ⏎
+    ⏎
     \bottomrule
   \end{tabularx}
   \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
@@ -1958,14 +1952,14 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 
 \closeout \kernelFile
 \begin{LTR}
-\lstinputlisting[language=kernel,style=display,
-  numbers=left,
-  stepnumber=1,
-  numbersep=2pt,
-  xleftmargin=3ex,
-  numberblanklines=false,
-  numberstyle=\tiny\bf,
-]{temp-kernel.lisp}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+  ]{temp-kernel.lisp}
 \end{LTR}
 
 §§ פונקציות הסיפריה של מיני ליספ
@@ -1982,79 +1976,79 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
     >{\setLR\scriptsize\raggedright\arraybackslash}X
     }
     \toprule
-    \normalsize \bfseries {\text{/arity}}שם &
-    \normalsize \bfseries סמנטיקה &
-    \normalsize \bfseries תמצית &
-    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}} &
+    \normalsize \bfseries {\text{/arity}}שם                             &
+    \normalsize \bfseries סמנטיקה                                       &
+    \normalsize \bfseries תמצית                                         &
+    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}}                    &
     \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
     \midrule
 
-    \E|defun/3| &
-    normal &
-    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
+    \E|defun/3|                                                         &
+    normal                                                              &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|.  &
     \lisp{(set 'defun }\newline
     \mbox\quad\lisp{(nlambda (n p b)} \newline
-    \mbox\qquad \lisp{(set n (lambda p b))))} &
+    \mbox\qquad \lisp{(set n (lambda p b))))}                           &
     \T|(defun f (x y) (y x))|\newline\quad⏎
 
-    lambda/2 &
-    normal &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
+    lambda/2                                                            &
+    normal                                                              &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|.                 &
     \lisp{(ndefun lambda(p b)}\newline
-    \mbox\quad\lisp{('lambda p b))} &
+    \mbox\quad\lisp{('lambda p b))}                                     &
     \lisp{((lambda (x) (car (cdr x)))}\newline
     \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
- ⏎
+    ⏎
 
-    nil/0 &
-    n/a &
+    nil/0                                                               &
+    n/a                                                                 &
     האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
-    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
-    \lisp{(set 'nil 'nil)} &
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|.         &
+    \lisp{(set 'nil 'nil)}                                              &
     \lisp{nil}~$⇒$ \lisp{NIL} \newline
     \lisp{()}~$⇒$ \lisp{NIL} \newline
     \lisp{(eq nil t)}~$⇒$ \lisp{NIL} ⏎
 
-    null/1 &
-    eager &
-    בדיקה אם הארגומנט הוא האטום \lisp{nil} &
+    null/1                                                              &
+    eager                                                               &
+    בדיקה אם הארגומנט הוא האטום \lisp{nil}                              &
     \lisp{(defun null (x)}\newline
-    \mbox\quad\lisp{(eq x nil))} &
+    \mbox\quad\lisp{(eq x nil))}                                        &
     \lisp{(null t)}~$⇒$ \lisp{NIL} \newline
     \lisp{(null nil)}~$⇒$ \lisp{T}\newline
     \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
     \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
 
-    ndefun/3 &
-    normal &
+    ndefun/3                                                            &
+    normal                                                              &
     יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|normal|. &
     \lisp{(set 'ndefun }\newline
     \mbox\quad\lisp{(nlambda (n p b)} \newline
-    \mbox\qquad\lisp{(set n (nlambda p b))))} &
+    \mbox\qquad\lisp{(set n (nlambda p b))))}                           &
     \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
 
-    nlambda/2 &
-    normal &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
+    nlambda/2                                                           &
+    normal                                                              &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|.                &
     \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))} &
     \T|(nlambda f (x y) (y x))|~$⇒$
     \newline\mbox\quad\T|(nlambda f (x y) (y x)|
- ⏎
+    ⏎
 
-    quote/1 &
-    normal &
-    החזרת הארגומנט מבלי לשערך אותו. &
-    \lisp{(ndefun quote (x) x)} &
+    quote/1                                                             &
+    normal                                                              &
+    החזרת הארגומנט מבלי לשערך אותו.                                     &
+    \lisp{(ndefun quote (x) x)}                                         &
     \lisp{(quote a)}~$⇒$ \lisp{A} \newline
     \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
     \lisp{'a}~$⇒$ \lisp{A} \newline
     \lisp{'(b c)}~$⇒$ \lisp{(B C)} \newline ⏎
 
-    t/0 &
-    n/a &
+    t/0                                                                 &
+    n/a                                                                 &
     האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
-    \E|(true)|. &
-    \lisp{(set 't 't)} &
+    \E|(true)|.                                                         &
+    \lisp{(set 't 't)}                                                  &
     \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
 
     \bottomrule
@@ -2067,30 +2061,30 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 \immediate\closeout \libraryFile
 
 \begin{LTR}
-\lstinputlisting[language=kernel,style=display,
-  numbers=left,
-  stepnumber=1,
-  numbersep=2pt,
-  xleftmargin=3ex,
-  numberblanklines=false,
-  numberstyle=\tiny\bf,
-]{temp-library.lisp}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+  ]{temp-library.lisp}
 \end{LTR}
 
 § תרגילים
 \אבגד
 ✦ בדיקה מדוקדקת תגלה הבדל נוסף בין שני המימושים של הפונקציה \E|exists| חוץ מאשר
-עליו מצביע הדיון.  אתר הבדל זה, והסבר מדוע הוא אינו משנה את הסמנטיקה של המימושים.  
+עליו מצביע הדיון. אתר הבדל זה, והסבר מדוע הוא אינו משנה את הסמנטיקה של המימוש.
 
 ✦ הפונקציה member היא פונקצית ספריה סטנדרטית ברוב המימושים של ליספ. הפונקציה
 מקבלת אטום ורשימה, ומחזירה את זנב הרשימה הארוך ביותר שהאיבר הראשון שבו הוא
-האטום. אם האטום אינו מצוי ברשימה, הפונקציה מחזירה \E|nil|.  ממש פונקציה זו
+האטום. אם האטום אינו מצוי ברשימה, הפונקציה מחזירה \E|nil|. ממש פונקציה זו
 במיני ליספ, והסבר מדוע ניתן להשתמש להחליף כל קריאה ל-exists בקריאה דומה
-ל-member עם אותם פרמטרים בדיוק. 
+ל-member עם אותם פרמטרים בדיוק.
 
 ✦ ממש במיני ליספ את הפונקציה הרקורסיבית equal אשר משווה שני ביטויי S אם הם
 זהים, כלומר אם הטופולוגיה שלהם כעצים בינאריים מלאים זהה, והאטומים המצויים בעלים
-זהים גם כן. הפונקציה מחזירה t במקרה של זהות, ו-nil אחרת.  
+זהים גם כן. הפונקציה מחזירה t במקרה של זהות, ו-nil אחרת.
 
 ✦ היכן בודק המימוש של evaluate אם מספר הפרמטרים האקטואליים בהפעלה
 של ביטוי~$λ$
@@ -2100,7 +2094,7 @@ evaluate-primitive צריכה לטפל בכולן, כמו גם בפונקציה 
 הבדיקה יביא לכך שמספר פרמטרים לא נכון לפונקציה טריביאלית לא ידווח כשגיאה? תקן
 את המימוש כך ששגיאה כזו תדווח.
 ✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימיטיבית
-\E|lisp| אשר מקבלת רשימה של ביטויי \E|S|, ומחזירה את הרשימה של הביטויים לאחר שיערוכם. 
+\E|lisp| אשר מקבלת רשימה של ביטויי \E|S|, ומחזירה את הרשימה של הביטויים לאחר שיערוכם.
 ✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימיטיבית
 \E|progn| אשר מקבלת רשימה של ביטויי \E|S|, ומשערכת אותם לפי סדרם. תוצאת השיערוך
 היא תוצאת השיערוך של הפריט האחרון ברשימה, או nil במקרה שהרשימה ריקה.
@@ -2110,4 +2104,3 @@ defun ו-quote תהיינה פרימיטיביות, ונסיר את התמיכה
 
 ===
 
-\end{document}
