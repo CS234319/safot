@@ -120,6 +120,7 @@ anew: $(call tip,anew,same as 'make clean'; try writing 'make anew $(firstword $
 garbage := $(sort $(wildcard \
 	*~                       \
 	*.aux                    \
+	temp*                    \
 	*.backup                 \
 	*.bak                    \
 	*.bbl                    \
