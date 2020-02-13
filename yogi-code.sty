@@ -210,14 +210,14 @@
 \def\newLanguage#1#2#3#4#5{%
   \lstnewenvironment{#3}[1][]{%
     \lstset{language=#1,style=display,##1}
-    \pagebreak[2]%
+    \pagebreak[3]%
     \ensureLTR
   }{\pagebreak[3]}%
   \lstnewenvironment{#3n}[1][]{%
   \ensureLTR\lstset{language=#1,style=display,style=numbered,##1}
 }{}%
   \lstnewenvironment{#3e}[1][]{%
- \pagebreak[2]
+ \pagebreak[3]
 \ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{\pagebreak[3]}%
 	\expandafter\newcommand\csname#4\endcsname[1]{%
 	  \begingroup
