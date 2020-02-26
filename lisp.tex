@@ -11,9 +11,9 @@
 \newcounter{library}
 \setcounter{library}0
 
-\newread   \tempFile     % A temporary reading stream 
-\newwrite  \kernelFile   % A stream to save kernel functions 
-\newwrite  \libraryFile  % A stream to save library functions 
+\newread \tempFile % A temporary reading stream
+\newwrite \kernelFile % A stream to save kernel functions
+\newwrite \libraryFile % A stream to save library functions
 \immediate \openout \kernelFile=temp-kernel.lisp
 \immediate \openout \libraryFile=temp-library.lisp
 
@@ -32,7 +32,7 @@
   \loop\unless\ifeof \tempFile
     \read\tempFile to\fileline % Read one line and store it into \fileline
     \immediate\write \kernelFile
-      {\unexpanded\expandafter{\fileline}} 
+    {\unexpanded\expandafter{\fileline}}
   \repeat
   \endgroup
   \closein \tempFile
@@ -53,8 +53,9 @@
   \begingroup\endlinechar=-1
   \loop\unless\ifeof \tempFile
     \read\tempFile to\fileline % Read one line and store it into \fileline
-    \immediate\write \libraryFile {\unexpanded\expandafter{\fileline}} % print the content to copy.txt
-  \repeat
+    \immediate\write \libraryFile 
+    {\unexpanded\expandafter{\fileline}} % print the content to copy.txt 
+  \repeat 
   \endgroup
   \closein \tempFile
 }
@@ -80,15 +81,16 @@
 
 בנוסף לתחשיב McCarthy הציג גם אלגוריתם אוניברסלי, \E|eval|, המסוגל להריץ תכניות
 בליספ. ליספ הפכה מתחשיב מתימטי לשפת תכנות כאשר האלגוריתם הזה מומש בשפת מכונה.
-מאוחר יותר, נמצא מי שכתב מימוש של \E|eval| בשפת ליספ עצמה. אחת המטרות החשובות
-של סיכום זה היא הדגמה כיצד ניתן לממש את אלגוריתם השיערוך של שפת ליספ באמצעות
-שפת ליספ עצמה. המימוש המלא של האלגוריתם ה
+מאוחר יותר, נמצא מי שכתב מימוש של \E|eval| בשפת ליספ עצמה. 
+
+אחת המטרות החשובות של סיכום זה היא הדגמה כיצד ניתן לממש את אלגוריתם השיערוך של
+שפת ליספ באמצעות שפת ליספ עצמה )עיין בהמשך, \פנה|סעיף:מימוש|.(.
 
 שפת ליספ שימשה בין השאר לפיתוח \E|Macsyma|, התכנית הראשונה לחישוב מתימטי
 סימבולי, כולל נגזרות, אינטגרלים, ופתרון סימבולי של משוואות.
 דוגמה לחישוב סימבולי ב-\E|Macsyma| היא חישוב האינטגרל המסויים \[
   ∫₀⁴ e^{√{ay}}dy
-\] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$.
+\] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$:
 
 \begin{minipage}\linewidth
 \begin{LTR}
@@ -226,6 +228,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 יש פירוש \E|(interpretation)| של תכניות, שני השלבים של השיערוך נעשים על ידי
 האינטרפטר \E|(interpreter)| אשר קורא תכניות ומשערך אותן.
 
+\begin{minipage}\linewidth
 \begin{mdframed}[backgroundcolor=Lavender!20]
 האינטרפטר של ליספ, כמו האינטרפטר של פרולוג, \E|bash| ושפות תכנות אחרות העוברות
 אינטרפטציה, עובד במחזורים, בשיטה הידועה בשם
@@ -239,6 +242,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 ✦\E|LOOP|: האינטרפטר חוזר לצעד הראשון, לקריאת הקלט הבא.
 ===
 \end{mdframed}
+\end{minipage}
 
 \normalsize
 
@@ -1926,7 +1930,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 
 \begin{minipage}\linewidth
 במימוש של הפונקציה \E|apply-primitive| נבדיל לכן בין cond ובין כל שאר הפונקציות
-הפרימיטיביות. 
+הפרימיטיביות.
 \begin{KERNEL}
 (defun apply-primitive (primitive actuals a-list)
   (cond ((eq 'cond primitive) ; special case for cond that has normal semantics
@@ -1975,6 +1979,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 \end{KERNEL}
 
 §§ הקוד המלא של evaluate ופונקציות העזר שלה
+\תגית|סעיף:מימוש|
 
 \immediate\closeout \kernelFile
 
