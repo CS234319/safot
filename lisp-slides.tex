@@ -1,0 +1,53 @@
+%\documentclass[a4paper,12pt,reqno]{book}
+%\usepackage[notheorems,ignorenonframetext]{beamerarticle}
+\documentclass[a4paper]{article}
+\usepackage{beamerarticle}
+%\documentclass[ignorenonframetext,red]{beamer}
+\mode<article>{\usepackage{fullpage}}
+\mode<presentation>{\usetheme{Berlin}}
+% everyone:
+\usepackage[english]{babel}
+\usepackage{pgf}
+\pgfdeclareimage[height=1cm]{myimage}{filename}
+\begin{document}
+\section{Introduction}
+This is the introduction text. This text is not shown in the
+presentation, but will be part of the article.
+\begin{frame}
+\begin{figure}
+% In the article, this is a floating figure,
+% In the presentation, this figure is shown in the first frame
+\pgfuseimage{myimage}
+\end{figure}
+\end{frame}
+This text is once more not shown in the presentation.
+\section{Main Part}
+While this text is not shown in the presentation, the section command
+also applies to the presentation.
+We can add a subsection that is only part of the article like this:
+\subsection<article>{Article-Only Section}
+With some more text.
+\begin{frame}
+This text is part both of the article and of the presentation.
+\begin{itemize}
+\item This stuff is also shown in both version.
+\item This too.
+\only<article>{\item This particular item is only part
+of the article version.}
+\item<presentation:only@0> This text is also only part of the article.
+\end{itemize}
+\end{frame}
+\end{document}
+\documentclass[ignorenonframetext,notheorems]{beamer}
+\usepackage{00}
+\begin{document}
+\begin{frame}
+\frametitle{A frame title}
+\begin{itemize}
+\item<1-> You can use overlay specifications.
+\item<2-> This is useful.
+\end{itemize}
+\end{frame}
+
+\input lisp.tex
+\end{document}

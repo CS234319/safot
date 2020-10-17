@@ -1,0 +1,2 @@
+162:extern int printf (const char *__restrict __format, ...);
+267:  printf("Hello, World!\n");

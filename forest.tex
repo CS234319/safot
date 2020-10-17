@@ -1,0 +1,42 @@
+    \documentclass{standalone}
+    \usepackage{forest}
+    \begin{document}
+    \forestset{c/.style={circle,draw},t/.style={},}
+    \def\bb{ \draw[fill=blue,opacity=0.2] (current bounding box.south west) rectangle (current bounding box.north east);}
+    \def\xx#1#2{
+      #1
+      \begin{tikzpicture}
+        \node [fill=green,opacity=0.2,draw,minimum width=#1cm, minimum height=#2cm] {#1#2};
+      \end{tikzpicture}
+      #2
+    }
+    \begin{tabular}[t]{|c|c|c|c|c|c|}
+      $(ab.cd)$                                                           &
+      $(abcd.\bot)$                                                       &
+      $(ab.(c.d))$                                                        &
+      $((a.b).(c.d))$                                                     &
+      $(a.(b.(c.d)))$                                                     &
+      $(((a.b).c).d)$                                                       \\
+      \hline
+      \xx23                                                               &
+      \xx34                                                               &
+      \xx24                                                               &
+      \xx14                                                               &
+      \xx41                                                               &
+      \xx43                                                                 \\
+      \hline
+      \scriptsize
+      \Forest{for tree [{},c[$ab$,t][$cd$,t]]\bb}                         &
+      \scriptsize
+      \Forest{for tree [{},c[$abcd$,t][$\bot$,t]]\bb}                     &
+      \scriptsize
+      \Forest{for tree [{},c[$ab$,t][{},c[$c$,t][$d$,t]]]\bb}             &
+      \scriptsize
+      \Forest{for tree [{},c[{},c[$a$,t][$b$,t]][{},c[$c$,t][$d$,t]]]\bb} &
+      \scriptsize
+      \Forest{for tree [{},c [{},c [{},c[a,t][b,t]] [c,t]] [d,t] ] \bb}   &
+      \scriptsize
+      \Forest{for tree [{},c [{}, c [{}, c
+            [a,t][b,t]] [c,t] ] [d,t]] \bb}
+    \end{tabular}
+    \end{document}

@@ -1,0 +1,41 @@
+﻿\usetikzlibrary{chains,arrows}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+    draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+
+    \foreach \x/\y/\z in {
+      a/x/a,
+      b/xs/(),
+      c/x/a,
+      d/xs/(c),
+      e/x/a,
+      f/xs/(b c),
+      g/append/{
+        (lambda\\
+\quad (x xs)\\
+        \quad (cond\\
+          \quad\quad((null xs)\\
+          \quad\quad\quad(x))\\
+          \quad\quad (t\\ 
+          \quad\quad\quad(cons\\
+          \quad\quad\quad\quad(car x)\\
+        \quad\quad\quad\quad(append\\
+      \quad\quad\quad\quad\quad x \\
+      \quad\quad\quad\quad\quad (cdr xs))))))},
+      h/t/t,
+      i/nil/nil
+     } {
+      \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+      \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+      \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) ..  (temp.north west);
+     }
+
+     \node[on chain]  (j) {\huge$\cdots$};
+      \draw[*->] let \p1 = (i.two), \p2 = (j.center) in (\x1,\y2) -- (j);
+
+     \foreach \a/\b in { a/b, b/c, c/d, d/e, e/f, f/g, g/h, h/i} {
+      \draw[*->] let \p1 = (\a.two), \p2 = (\b.center) in (\x1,\y2) -- (\b);
+     }
+
+    \node[above = of a] (A) {a-list};
+    \draw[->] (A.south) -- (a);
+\end{tikzpicture}
