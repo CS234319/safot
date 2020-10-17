@@ -1,0 +1,325 @@
+\RequirePackage{ifxetex,ifluatex}
+\RequirePackage{newunicodechar}
+\RequirePackage[utf8]{inputenc}
+
+\newif\ifunicode
+
+\ifxetex\unicodetrue\fi
+\ifluatex\unicodetrue\fi
+
+\ifunicode
+  \newcommand \DeclareUnicodeCharacter [2] {%
+    \begingroup\lccode`|=\string"#1\relax
+    \lowercase{\endgroup\newunicodechar{|}}{#2} %
+}
+\else 
+\fi
+
+\def \uni + 0x#1 | #2 | #3 +{\relax
+  \def\myhex{#1}\relax
+  \def\mymacro{#2}\relax
+  \def\myuni{#3}\relax
+  \@ifnextchar*
+  {\DeclareUnicodeCharacter{\myhex}{\ensuremath{\mymacro}}}\relax
+  {\DeclareUnicodeCharacter{\myhex}{\mymacro}}\relax
+}
+
+% Vim: +,/^\s*$/-!column  -t  |  sort  -n  |  uniq
+\DeclareUnicodeCharacter{00A2}{\textcent}                %  ¢
+\DeclareUnicodeCharacter{00A4}{\textcurrency}            %  ¤
+\DeclareUnicodeCharacter{00A9}{\copyright}               %  ©
+\DeclareUnicodeCharacter{00AC}{\neg}                     %  ¬
+\DeclareUnicodeCharacter{00B1}{\pm}                      %  ±
+\DeclareUnicodeCharacter{00B2}{\ensuremath{^2}}          %  ²
+\DeclareUnicodeCharacter{00B3}{\ensuremath{^3}}          %  ³
+\DeclareUnicodeCharacter{00B6}{\mypar}                   %  ¶
+\DeclareUnicodeCharacter{00B7}{\cdot}                    %  ·
+\DeclareUnicodeCharacter{00B9}{\ensuremath{^1}}          %  ¹
+\DeclareUnicodeCharacter{00D7}{\times}                   %  ×
+\DeclareUnicodeCharacter{00E1}{\'a}                      %  á
+\DeclareUnicodeCharacter{00E9}{\'e}                      %  é
+\DeclareUnicodeCharacter{00F6}{\"o}                      %  ö
+\DeclareUnicodeCharacter{00F8}{\o}                       %  ø
+\DeclareUnicodeCharacter{0107}{\'c}                      %  ć
+\DeclareUnicodeCharacter{02B3}{\ensuremath{^r}}          %  ʳ
+\DeclareUnicodeCharacter{02B9}{'}                        %  ʹ
+\DeclareUnicodeCharacter{0393}{\ensuremath\Gamma}        %  Γ
+\DeclareUnicodeCharacter{0394}{\ensuremath\Delta}        %  Δ
+\DeclareUnicodeCharacter{0398}{\ensuremath\Theta}        %  Θ
+\DeclareUnicodeCharacter{039E}{\ensuremath\Xi}           %  Ξ
+\DeclareUnicodeCharacter{03A3}{\ensuremath\Sigma}        %  Σ
+\DeclareUnicodeCharacter{03A5}{\ensuremath\Upsilon}      %  Υ
+\DeclareUnicodeCharacter{03A6}{\ensuremath\Phi}          %  Φ
+\DeclareUnicodeCharacter{03A7}{\ensuremath\Xi}           %  Χ
+\DeclareUnicodeCharacter{03A8}{\ensuremath\Psi}          %  Ψ
+\DeclareUnicodeCharacter{03A9}{\ensuremath\Omega}        %  Ω
+\DeclareUnicodeCharacter{03B1}{\ensuremath\alpha}        %  α
+\DeclareUnicodeCharacter{03B2}{\ensuremath\beta}         %  β
+\DeclareUnicodeCharacter{03B3}{\ensuremath\gamma}        %  γ
+\DeclareUnicodeCharacter{03B4}{\ensuremath\delta}        %  δ
+\DeclareUnicodeCharacter{03B5}{\ensuremath\epsilon}      %  ε
+\DeclareUnicodeCharacter{03B6}{\ensuremath\zeta}         %  ζ
+\DeclareUnicodeCharacter{03B7}{\ensuremath\eta}          %  η
+\DeclareUnicodeCharacter{03B8}{\ensuremath\theta}        %  θ
+\DeclareUnicodeCharacter{03B9}{\ensuremath\iota}         %  ι
+\DeclareUnicodeCharacter{03BA}{\ensuremath\kappa}        %  κ
+\DeclareUnicodeCharacter{03BB}{\ensuremath\lambda}       %  λ
+\DeclareUnicodeCharacter{03BC}{\ensuremath\mu}           %  μ
+\DeclareUnicodeCharacter{03BD}{\ensuremath\nu}           %  ν
+\DeclareUnicodeCharacter{03BE}{\ensuremath\xi}           %  ξ
+\DeclareUnicodeCharacter{03C0}{\ensuremath\pi}           %  π
+\DeclareUnicodeCharacter{03C1}{\ensuremath\rho}          %  ρ
+\DeclareUnicodeCharacter{03C2}{\ensuremath\varsigma}     %  ς 
+\DeclareUnicodeCharacter{03C3}{\ensuremath\sigma}        %  σ
+\DeclareUnicodeCharacter{03C4}{\ensuremath\tau}          %  τ
+\DeclareUnicodeCharacter{03C5}{\ensuremath\upsilon}      %  υ
+\DeclareUnicodeCharacter{03C6}{\ensuremath\varphi}       %  φ
+\DeclareUnicodeCharacter{03C7}{\ensuremath\chi}          %  χ
+\DeclareUnicodeCharacter{03C8}{\ensuremath\psi}          %  ψ 
+\DeclareUnicodeCharacter{03C9}{\ensuremath\omega}        %  ω
+\DeclareUnicodeCharacter{03D1}{\ensuremath\vartheta}     %  ϑ 
+\DeclareUnicodeCharacter{03D5}{\ensuremath\phi}          %  ϕ
+\DeclareUnicodeCharacter{1D35}{\ensuremath{^I}}          %  Xᴵ
+\DeclareUnicodeCharacter{1D3C}{\ensuremath{^O}}          %  Xᴼ
+\DeclareUnicodeCharacter{1D3F}{\ensuremath{^R}}          %  Xᴿ
+\DeclareUnicodeCharacter{1D4B}{\ensuremath{^\varepsilon}}%  ᵋ
+\DeclareUnicodeCharacter{1D4F}{\ensuremath{^k}}          %  ᵏ
+\DeclareUnicodeCharacter{1D50}{\ensuremath{^m}}          %  ᵐ 
+\DeclareUnicodeCharacter{1D62}{\ensuremath{_i}}          %  ᵢ
+\DeclareUnicodeCharacter{1D63}{\ensuremath{_r}}          %  ᵣ
+\DeclareUnicodeCharacter{1D64}{\ensuremath{_u}}          %  ᵤ
+\DeclareUnicodeCharacter{1D65}{\ensuremath{_v}}          %  ᵥ
+\DeclareUnicodeCharacter{1D66}{\ensuremath{_\beta}}      %  ᵦ
+\DeclareUnicodeCharacter{1D67}{\ensuremath{_\gamma}}     %  ᵧ
+\DeclareUnicodeCharacter{1D68}{\ensuremath{_\rho}}       %  ᵨ
+\DeclareUnicodeCharacter{1D69}{\ensuremath{_\varphi}}    %  ᵩ
+\DeclareUnicodeCharacter{1D6A}{\ensuremath{_\chi}}       %  ᵪ
+\DeclareUnicodeCharacter{1D9C}{\ensuremath{^c}}          %  ∣
+\DeclareUnicodeCharacter{201D}{''}                       %  ”
+\DeclareUnicodeCharacter{201F}{``}                       %  ‟
+\DeclareUnicodeCharacter{2020}{\footnote}                %  †
+\DeclareUnicodeCharacter{2021}{\ddag}                    %  ‡
+\DeclareUnicodeCharacter{2022}{\item\mbox{}}             %  •
+\DeclareUnicodeCharacter{2026}{\ldots}                   %  …
+\DeclareUnicodeCharacter{2063}{\relax}                   %  Unicode  invisible  character
+\DeclareUnicodeCharacter{2070}{\ensuremath{^0}}          %  ⁰
+\DeclareUnicodeCharacter{2071}{\ensuremath{^i}}          %  ⁱ
+\DeclareUnicodeCharacter{2074}{\ensuremath{^4}}          %  ⁴
+\DeclareUnicodeCharacter{2075}{\ensuremath{^5}}          %  ⁵
+\DeclareUnicodeCharacter{2076}{\ensuremath{^6}}          %  ⁶
+\DeclareUnicodeCharacter{2077}{\ensuremath{^7}}          %  ⁷
+\DeclareUnicodeCharacter{2078}{\ensuremath{^8}}          %  ⁸
+\DeclareUnicodeCharacter{2079}{\ensuremath{^9}}          %  ⁹
+\DeclareUnicodeCharacter{207A}{\ensuremath{^+}}          %  ⁺
+\DeclareUnicodeCharacter{207B}{\ensuremath{^-}}          %  ⁻ 
+\DeclareUnicodeCharacter{207C}{\ensuremath{^=}}          %  ⁼
+\DeclareUnicodeCharacter{207F}{\ensuremath{^n}}          %  ⁿ
+\DeclareUnicodeCharacter{2080}{\ensuremath{_0}}          %  ₀
+\DeclareUnicodeCharacter{2080}{\ensuremath{_0}}          %  ₁
+\DeclareUnicodeCharacter{2081}{\ensuremath{_1}}          %  ₁
+\DeclareUnicodeCharacter{2082}{\ensuremath{_2}}          %  ₂
+\DeclareUnicodeCharacter{2083}{\ensuremath{_3}}          %  ₃
+\DeclareUnicodeCharacter{2084}{\ensuremath{_4}}          %  ₄
+\DeclareUnicodeCharacter{2085}{\ensuremath{_5}}          %  ₅
+\DeclareUnicodeCharacter{2086}{\ensuremath{_6}}          %  ₆
+\DeclareUnicodeCharacter{2087}{\ensuremath{_7}}          %  ₇
+\DeclareUnicodeCharacter{2088}{\ensuremath{_8}}          %  ₈
+\DeclareUnicodeCharacter{2089}{\ensuremath{_9}}          %  ₉
+\DeclareUnicodeCharacter{208A}{\ensuremath{_+}}          %  ₊ 
+\DeclareUnicodeCharacter{208B}{\ensuremath{_-}}          %  ₋ 
+\DeclareUnicodeCharacter{2090}{\ensuremath{_a}}          %  ₐ
+\DeclareUnicodeCharacter{2091}{\ensuremath{_e}}          %  ₑ
+\DeclareUnicodeCharacter{2092}{\ensuremath{_o}}          %  ₒ
+\DeclareUnicodeCharacter{2093}{\ensuremath{_x}}          %  ₓ
+\DeclareUnicodeCharacter{2095}{\ensuremath{_h}}          %  ₕ
+\DeclareUnicodeCharacter{2096}{\ensuremath{_k}}          %  ₖ
+\DeclareUnicodeCharacter{2097}{\ensuremath{_l}}          %  ₗ
+\DeclareUnicodeCharacter{2098}{\ensuremath{_m}}          %  ₘ
+\DeclareUnicodeCharacter{2099}{\ensuremath{_n}}          %  ₙ
+\DeclareUnicodeCharacter{209A}{\ensuremath{_p}}          %  ₚ
+\DeclareUnicodeCharacter{209B}{\ensuremath{_s}}          %  ₛ
+\DeclareUnicodeCharacter{209C}{\ensuremath{_t}}          %  ₜ
+\DeclareUnicodeCharacter{20BA}{\ensuremath{_+}}          %  ₊
+\DeclareUnicodeCharacter{20BB}{\ensuremath{_-}}          %  ₊
+\DeclareUnicodeCharacter{2102}{\ensuremath{\mathbb{C}}}  %  ℂ
+\DeclareUnicodeCharacter{210C}{\mathfrak{H}}             %  ℌ
+\DeclareUnicodeCharacter{210D}{\ensuremath{\mathbb{H}}}  %  ℍ
+\DeclareUnicodeCharacter{2111}{\Im}                      %  ℑ
+\DeclareUnicodeCharacter{2113}{\ell}                     %  ℓ
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}  %  ℕ
+\DeclareUnicodeCharacter{2118}{\ensuremath\wp}           %  ℘
+\DeclareUnicodeCharacter{2119}{\ensuremath{\mathbb{P}}}  %  ℙ
+\DeclareUnicodeCharacter{211A}{\ensuremath{\mathbb{Q}}}  %  ℚ
+\DeclareUnicodeCharacter{211C}{\Re}                      %  ℜ
+\DeclareUnicodeCharacter{211D}{\ensuremath{\mathbb{R}}}  %  ℝ
+\DeclareUnicodeCharacter{2124}{\ensuremath{\mathbb{Z}}}  %  ℤ
+\DeclareUnicodeCharacter{2128}{\mathfrak{Z}}             %  ℨ
+\DeclareUnicodeCharacter{2135}{\aleph}                   %  ℵ
+\DeclareUnicodeCharacter{2183}{\reflectbox{C}}           %  Ↄ
+\DeclareUnicodeCharacter{2184}{\reflectbox{c}}           %  ↄ
+\DeclareUnicodeCharacter{2190}{\leftarrow}               %  ←
+\DeclareUnicodeCharacter{2191}{\uparrow}                 %  ↑
+\DeclareUnicodeCharacter{2192}{\rightarrow}              %  →
+\DeclareUnicodeCharacter{2193}{\downarrow}               %  ↓
+\DeclareUnicodeCharacter{219A}{\nleftarrow}              %  ↚
+\DeclareUnicodeCharacter{219B}{\nrightarrow}             %  ↛
+\DeclareUnicodeCharacter{21A6}{\mapsto}                  %  ↦
+\DeclareUnicodeCharacter{21D0}{\Leftarrow}               %  ⇐
+\DeclareUnicodeCharacter{21D2}{\Rightarrow}              %  ⇒
+\DeclareUnicodeCharacter{21D4}{\Leftrightarrow}          %  ⇔
+\DeclareUnicodeCharacter{21F8}{\pfun}                    %  ⇸
+\DeclareUnicodeCharacter{2200}{\forall}                  %  ∀
+\DeclareUnicodeCharacter{2202}{\partial}                 %  ∂
+\DeclareUnicodeCharacter{2203}{\exists}                  %  ∃
+\DeclareUnicodeCharacter{2204}{\not\exists}              %  ∄
+\DeclareUnicodeCharacter{2205}{\emptyset}                %  ∅
+\DeclareUnicodeCharacter{2207}{\nabla}                   %  ∇
+\DeclareUnicodeCharacter{2208}{\in}                      %  ∈
+\DeclareUnicodeCharacter{2209}{\not\in}                  %  ∉
+\DeclareUnicodeCharacter{220B}{\ni}                      %  ∋ 
+\DeclareUnicodeCharacter{220C}{\not\ni}                  %  ∌ 
+\DeclareUnicodeCharacter{220F}{\prod}                    %  ∏ 
+\DeclareUnicodeCharacter{2211}{\sum}                     %  ∑
+\DeclareUnicodeCharacter{2216}{\setminus}                %  ∖
+\DeclareUnicodeCharacter{2218}{\circ}                    %  ∘ 
+\DeclareUnicodeCharacter{2219}{\bullet}                  %  ∙
+\DeclareUnicodeCharacter{221A}{\sqrt}                    %  √
+\DeclareUnicodeCharacter{221D}{\propto}                  %  ∝
+\DeclareUnicodeCharacter{221E}{\infty}                   %  ∞
+\DeclareUnicodeCharacter{2223}{\mid}                     %  ∣
+\DeclareUnicodeCharacter{2227}{\wedge}                   %  ∧
+\DeclareUnicodeCharacter{2228}{\vee}                     %  ∨
+\DeclareUnicodeCharacter{2229}{\cap}                     %  ∩
+\DeclareUnicodeCharacter{222A}{\cup}                     %  ∪
+\DeclareUnicodeCharacter{223F}{\text{\textasciitilde}}   %  ∼
+\DeclareUnicodeCharacter{2245}{\cong}                    %  ≅
+\DeclareUnicodeCharacter{2248}{\approx}                  %  ≈
+\DeclareUnicodeCharacter{2260}{\ne}                      %  ≠
+\DeclareUnicodeCharacter{2261}{\equiv}                   %  ≡
+\DeclareUnicodeCharacter{2264}{\le}                      %  ≤
+\DeclareUnicodeCharacter{2265}{\ge}                      %  ≥
+\DeclareUnicodeCharacter{226A}{\ll}                      %  ≪
+\DeclareUnicodeCharacter{226B}{\gg}                      %  ≫
+\DeclareUnicodeCharacter{226D}{\not\equiv}               %  ≉
+\DeclareUnicodeCharacter{2270}{\not\le}                  %  ≱
+\DeclareUnicodeCharacter{2271}{\not\ge}                  %  ≱
+\DeclareUnicodeCharacter{2272}{\lesssim}                 %  ≲
+\DeclareUnicodeCharacter{2273}{\gtrsim}                  %  ≳
+\DeclareUnicodeCharacter{227A}{\prec}                    %  ≺
+\DeclareUnicodeCharacter{2282}{\subset}                  %  ⊂
+\DeclareUnicodeCharacter{2283}{\supset}                  %  ⊃
+\DeclareUnicodeCharacter{2286}{\subseteq}                %  ⊆
+\DeclareUnicodeCharacter{228A}{\subsetneq}               %  ⊊
+\DeclareUnicodeCharacter{228B}{\supsetneq}               %  ⊋ 
+\DeclareUnicodeCharacter{2291}{\sqsubseteq}              %  ⊑
+\DeclareUnicodeCharacter{22A2}{\vdash}                   %  ⊢
+\DeclareUnicodeCharacter{22A4}{\top}                     %  ⊤
+\DeclareUnicodeCharacter{22A5}{\bot}                     %  ⊥
+\DeclareUnicodeCharacter{22C3}{\bigcup}                  %  ⋃
+\DeclareUnicodeCharacter{22EE}{\vdots}                   %  ⋮
+\DeclareUnicodeCharacter{22EF}{\cdots}                   %  ⋯
+\DeclareUnicodeCharacter{237B}{\not\cmark}               %  ⍻
+\DeclareUnicodeCharacter{23CE}{\\}                       %  ⏎
+\DeclareUnicodeCharacter{25B5}{\triangle}                %  ▵
+\DeclareUnicodeCharacter{2621}{\dbend}                   %  ☡
+\DeclareUnicodeCharacter{2640}{\venus}                   %  ·
+\DeclareUnicodeCharacter{266D}{\flat}                    %  ♭ 
+\DeclareUnicodeCharacter{266F}{\sharp}                   %  ♯
+\DeclareUnicodeCharacter{2693}{\pause}                   %  ⚓
+\DeclareUnicodeCharacter{2713}{\cmark}                   %  ✓
+\DeclareUnicodeCharacter{2717}{\xmark}                   %  ✗
+\DeclareUnicodeCharacter{2768}{\left(}                   %  ❨
+\DeclareUnicodeCharacter{2769}{\right)}                  %  ❩
+\DeclareUnicodeCharacter{2770}{\left\{}                  %  ❰
+\DeclareUnicodeCharacter{2771}{\right\}}                 %  ❱
+\DeclareUnicodeCharacter{2774}{\{}                       %  ❴
+\DeclareUnicodeCharacter{2775}{\}}                       %  ❵
+\DeclareUnicodeCharacter{27E6}{\llbracket}               %  ⟦
+\DeclareUnicodeCharacter{27E7}{\rrbracket}               %  ⟧
+\DeclareUnicodeCharacter{27E8}{\langle}                  %  ⟨
+\DeclareUnicodeCharacter{27E9}{\rangle}                  %  ⟩
+\DeclareUnicodeCharacter{2933}{\leadsto}                 %  ⤳
+\DeclareUnicodeCharacter{2A09}{\times}                   %  ⨉
+\DeclareUnicodeCharacter{2C7C}{\ensuremath{_j}}          %  ⱼ
+\DeclareUnicodeCharacter{FE69}{{\ensuremath\$}}          %  ﹩
+\DeclareUnicodeCharacter{FF03}{\#}                       %  ＃
+\DeclareUnicodeCharacter{FF04}{\$}                       %  $
+\DeclareUnicodeCharacter{FF05}{\%}                       %  ％
+\DeclareUnicodeCharacter{FF06}{\&}                       %  ＆
+
+% Vim: +,/^\s*$/-!column  -t|  sort  -n  |  uniq 
+\DeclareUnicodeCharacter{1D415}{\boldsymbol{V}}           %  𝐕
+\DeclareUnicodeCharacter{1D41E}{\boldsymbol{e}}           %  𝐞
+\DeclareUnicodeCharacter{1D42A}{\boldsymbol{q}}           %  𝐪
+\DeclareUnicodeCharacter{1D42D}{\boldsymbol{t}}           %  𝐭
+\DeclareUnicodeCharacter{1D431}{\boldsymbol{x}}           %  𝐱
+\DeclareUnicodeCharacter{1D49C}{\mathcal{A}}              %  𝒜
+\DeclareUnicodeCharacter{1D49D}{\mathcal{B}}              %  𝒜
+\DeclareUnicodeCharacter{1D49E}{\mathcal{C}}              %  𝒞
+\DeclareUnicodeCharacter{1D49F}{\mathcal{D}}              %  𝒟
+\DeclareUnicodeCharacter{1D4AB}{\mathcal{P}}              %  𝒫
+\DeclareUnicodeCharacter{1D4BB}{\mathcal{f}}              %  𝒻
+\DeclareUnicodeCharacter{1D4D0}{\mathcal{A}}              %  𝓐
+\DeclareUnicodeCharacter{1D4D1}{\mathcal{B}}              %  𝓑
+\DeclareUnicodeCharacter{1D4D2}{\mathcal{C}}              %  𝓒
+\DeclareUnicodeCharacter{1D4D3}{\mathcal{D}}              %  𝓓
+\DeclareUnicodeCharacter{1D4D4}{\mathcal{E}}              %  𝓔
+\DeclareUnicodeCharacter{1D4D5}{\mathcal{F}}              %  𝓕
+\DeclareUnicodeCharacter{1D4D6}{\mathcal{G}}              %  𝓖
+\DeclareUnicodeCharacter{1D4D8}{\mathcal{I}}              %  𝓘
+\DeclareUnicodeCharacter{1D4D9}{\mathcal{J}}              %  𝓙
+\DeclareUnicodeCharacter{1D4DB}{\mathcal{L}}              %  𝓛
+\DeclareUnicodeCharacter{1D4DF}{\mathcal{P}}              %  𝓟
+\DeclareUnicodeCharacter{1D4E0}{\mathcal{Q}}              %  𝓠
+\DeclareUnicodeCharacter{1D4E2}{\mathcal{S}}              %  𝓢
+\DeclareUnicodeCharacter{1D4E3}{\mathcal{T}}              %  𝓣
+\DeclareUnicodeCharacter{1D4E4}{\mathcal{U}}              %  𝓤
+\DeclareUnicodeCharacter{1D4E5}{\mathcal{V}}              %  𝓥
+\DeclareUnicodeCharacter{1D4E6}{\mathcal{W}}              %  𝓦
+\DeclareUnicodeCharacter{1D4E7}{\mathcal{X}}              %  𝓧
+\DeclareUnicodeCharacter{1D4E8}{\mathcal{Y}}              %  𝓨
+\DeclareUnicodeCharacter{1D4E9}{\mathcal{Z}}              %  𝓩
+\DeclareUnicodeCharacter{1D504}{\mathfrak{A}}             %  𝔄
+\DeclareUnicodeCharacter{1D505}{\mathfrak{B}}             %  𝔅
+\DeclareUnicodeCharacter{1D507}{\mathfrak{D}}             %  𝔇
+\DeclareUnicodeCharacter{1D508}{\mathfrak{E}}             %  𝔈
+\DeclareUnicodeCharacter{1D509}{\mathfrak{F}}             %  𝔉
+\DeclareUnicodeCharacter{1D50A}{\mathfrak{G}}             %  𝔊
+\DeclareUnicodeCharacter{1D50D}{\mathfrak{J}}             %  𝔍
+\DeclareUnicodeCharacter{1D50E}{\mathfrak{K}}             %  𝔎
+\DeclareUnicodeCharacter{1D50F}{\mathfrak{L}}             %  𝔏
+\DeclareUnicodeCharacter{1D510}{\mathfrak{M}}             %  𝔐
+\DeclareUnicodeCharacter{1D511}{\mathfrak{N}}             %  𝔑
+\DeclareUnicodeCharacter{1D512}{\mathfrak{O}}             %  𝔒
+\DeclareUnicodeCharacter{1D513}{\mathfrak{P}}             %  𝔓
+\DeclareUnicodeCharacter{1D514}{\mathfrak{Q}}             %  𝔔
+\DeclareUnicodeCharacter{1D516}{\mathfrak{S}}             %  𝔖
+\DeclareUnicodeCharacter{1D517}{\mathfrak{T}}             %  𝔗
+\DeclareUnicodeCharacter{1D518}{\mathfrak{U}}             %  𝔘
+\DeclareUnicodeCharacter{1D519}{\mathfrak{V}}             %  𝔙
+\DeclareUnicodeCharacter{1D51A}{\mathfrak{W}}             %  𝔚
+\DeclareUnicodeCharacter{1D51B}{\mathfrak{X}}             %  𝔛
+\DeclareUnicodeCharacter{1D51C}{\mathfrak{Y}}             %  𝔜
+\DeclareUnicodeCharacter{1D538}{\ensuremath{\mathbb{A}}}  %  𝔸
+\DeclareUnicodeCharacter{1D539}{\ensuremath{\mathbb{B}}}  %  𝔹
+\DeclareUnicodeCharacter{1D540}{\ensuremath{\mathbb{I}}}  %  𝕀
+\DeclareUnicodeCharacter{1D543}{\ensuremath{\mathbb{L}}}  %  𝕃
+\DeclareUnicodeCharacter{1D544}{\ensuremath{\mathbb{M}}}  %  𝕄
+\DeclareUnicodeCharacter{1D54A}{\ensuremath{\mathbb{S}}}  %  𝕊
+\DeclareUnicodeCharacter{1D54B}{\ensuremath{\mathbb{T}}}  %  𝕋
+\DeclareUnicodeCharacter{1D54D}{\ensuremath{\mathbb{V}}}  %  𝕍
+\DeclareUnicodeCharacter{1D5FB}{\boldsymbol{{{n}}}}       %  𝗻
+\DeclareUnicodeCharacter{1D64D}{\boldsymbol\sigma}        %  𝛔
+\DeclareUnicodeCharacter{1D6AA}{\boldsymbol\Gamma}        %  𝚪
+\DeclareUnicodeCharacter{1D6C4}{\boldsymbol\gamma}        %  𝛄
+\DeclareUnicodeCharacter{1D6D4}{\boldsymbol\tau}          %  𝛔
+\DeclareUnicodeCharacter{1D6D5}{\boldsymbol\tau}          %  𝛕
+\DeclareUnicodeCharacter{1D6DD}{\boldsymbol\vartheta}     %  𝛝
+\DeclareUnicodeCharacter{1D6E0}{\boldsymbol\rho}          %  𝛠
+\DeclareUnicodeCharacter{1D6DC}{\boldsymbol\varepsilon}   %  𝛜 
+\DeclareUnicodeCharacter{1D700}{\varepsilon}              %  𝜀
+\DeclareUnicodeCharacter{1D7EC}{\boldsymbol0}             %  𝟬
+\DeclareUnicodeCharacter{1D7ED}{\boldsymbol1}             %  𝟭
+\DeclareUnicodeCharacter{1F340}{\FourClowerOpen}          %  🍀
+
+%%% Above line must be blank
