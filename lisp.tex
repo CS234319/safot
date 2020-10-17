@@ -2,14 +2,6 @@
 %\usepackage{00}
 %\raggedbottom
 
-\begin{frame}
-  \frametitle{שלוםכיתה א}
-\begin{itemize}
-\item<1> You can use overlay specifications.
-\item<2> This is useful.
-\end{itemize}
-\end{frame}
-
 \def\CPL{\E|C|\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,6 +17,32 @@
 \immediate \openout \kernelFile=temp-kernel.lisp
 \immediate \openout \libraryFile=temp-library.lisp
 
+\newcounter{beamer}
+\setcounter{beamer}0
+\newwrite\beamerfile % storing beamer files.  
+\immediate \openout \libraryFile=\jobname.beamer.tex
+
+% An environment for writing kernel functions
+\newenvironment{BOTH}{%
+  \stepcounter{beamer}
+  \def\fileName{temp-beamer-\arabic{beamer}.tex}%
+  \csname filecontents*\endcsname[overwrite]{\fileName}%
+}{%
+  \csname endfilecontents*\endcsname%
+  \input  \def\fileName{temp-beamer-\arabic{beamer}.tex}%
+  \LTR
+    \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{green!20}]{\fileName}%
+  \endLTR
+  \openin \tempFile=\fileName
+  \begingroup\endlinechar=-1
+  \loop\unless\ifeof \tempFile
+    \read\tempFile to\fileline % Read one line and store it into \fileline
+    \immediate\write \kernelFile
+    {\unexpanded\expandafter{\fileline}}
+  \repeat
+  \endgroup
+  \closein \tempFile
+}
 % An environment for writing kernel functions
 \newenvironment{KERNEL}{%
   \stepcounter{kernel}
@@ -71,17 +89,10 @@
 %
 § מבוא
 
-\begin{frame}
-\frametitle{A frame title}
 שפת LISP (ראשי תיבות של \E|LIst PRocessing|), היתה, יחד עם שפת Fortran (ראשי
 תיבות של \LR{FORmula TRANslation}, אחת משתי שפות התכנות הראשונות. ליספ פותחה
 ב-MIT על ידי \E|John McCarthy| עוד בשנת 1,956. אולם מלכתחילה, ליספ לא נתפסה על
 ידי ממציאה כשפת תכנות, אלא כתחשיב מתימטי המיועד לכתיבת אלגוריתמים, הדומה לתחשיב
-\begin{itemize}
-\item<1> You can use overlay specifications.
-\item<2> This is useful.
-\end{itemize}
-\end{frame}
 
 
 שפת LISP (ראשי תיבות של \E|LIst PRocessing|), היתה, יחד עם שפת Fortran (ראשי
@@ -99,14 +110,6 @@
 הומואייקוניות כוללות את פרולוג, \LR{Wolfram Mathematica}, \E|Snobol|
 ו-\E|Julia|. שפות כמו~\CPL, פסקל, ו-\E|Java|, כמו מרבית שפות התכנות אינן
 הומואייקוניות.
-
-\begin{frame}{LISP}
-  \begin{itemize}
-  \item  asdf
-        \item ONe
-    \item ONe
-\end{itemize}
-\end{frame}
 
 בנוסף לתחשיב McCarthy הציג גם אלגוריתם אוניברסלי, \E|eval|, המסוגל להריץ תכניות
 בליספ. ליספ הפכה מתחשיב מתימטי לשפת תכנות כאשר האלגוריתם הזה מומש בשפת מכונה.
