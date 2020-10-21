@@ -14,8 +14,8 @@
 \newread \tempFile % A temporary reading stream
 \newwrite \kernelFile % A stream to save kernel functions
 \newwrite \libraryFile % A stream to save library functions
-\immediate \openout \kernelFile=temp-kernel.lisp
-\immediate \openout \libraryFile=temp-library.lisp
+\immediate \openout \kernelFile=\jobname-kernel.lisp
+\immediate \openout \libraryFile=\jobname-library.lisp
 
 \newcounter{beamer}
 \setcounter{beamer}0
