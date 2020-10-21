@@ -1,7 +1,354 @@
 \documentclass[fleqn]{beamer}
 \usepackage[english]{babel}
-\usepackage{00}
 
+\def\options#1[#2]{\PassOptionsToPackage{#2}{#1}}
+
+\newcommand{\jf}[1]{\ifcsname#1\endcsname\expandafter\show\csname#1\endcsname\fi}
+
+\options{bashful}[unique,dir=Excerpts]
+\options{cleveref}[nameinlink]
+\options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
+\options{glossaries}[toc,section=section,footnote]
+\options{xcolor}[table,dvipsnames]
+\options{minitoc}[tight]
+
+
+\usepackage{mdframed}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bashful}
+\usepackage{booktabs}
+\usepackage{cf}
+\usepackage{cleveref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{forest}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{morewrites}
+\usepackage{glossaries}
+\usepackage{glossary-long}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{minitoc}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{pbox}
+\usepackage{polyglossia}
+\usepackage{proof}
+\usepackage{stmaryrd}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{url} 
+\usepackage{xcolor}
+\usepackage{filecontents}
+\usepackage{yogi-code}
+\usepackage{yogi-lang}
+\usepackage{yogi-unicode}
+\usepackage{adjustbox,collcell}
+
+
+
+\makeatletter
+% remove the stray space https://tex.stackexchange.com/a/513549
+\patchcmd{\pgfutilsolvetwotwoleqfloat}
+  { \noexpand\pgfmathfloatdivide@}
+  {\noexpand\pgfmathfloatdivide@}
+  {}{}
+
+\makeatother
+
+
+\usetikzlibrary{trees,chains,shapes}
+
+\floatstyle{ruled}
+\restylefloat{figure}
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{claim}{טענה}[section]
+\newtheorem{example}{דוגמה}[section]
+\numberwithin{equation}{section}
+
+\def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
+\graphicspath{{Images/}}
+\setmainlanguage{hebrew}
+\setmainfont{Linux Libertine O}
+\setotherlanguage{english}
+\setotherlanguage{arabic}
+
+\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+\newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
+\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+\setmonofont{UMTypewriter-Regular.otf}
+  
+\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
+\DeclareMathOperator\arity{arity}
+\DeclareMathOperator\RE{Re}
+
+\catcode"2318=13
+\def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
+\def\E|#1|{\LR{\mbox{#1}}}
+\def\T|#1|{\lisp{#1}}
+\def\ע|#1|{{\bfseries#1}}
+\def\פנה|#1|{\cref{#1}}
+\def\כיתוב|#1|{\caption{#1}}
+\def\תגית|#1|{\label{#1}}
+
+\crefname{definition}{הגדרה}{הגדרות}
+\crefname{figure}{איור}{איורים}
+\crefname{table}{טבלה}{טבלאות}
+\let\ref=\cref
+
+\def\UrlFont{\ttfamilylatin}
+
+
+\renewcommand\stctitle{תוכן הענינים}
+    \renewcommand\ptctitle{\stctitle}
+    \renewcommand\mtctitle{\stctitle}
+
+ 
+  \makeatletter
+\def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
+\def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
+\makeatother
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
+%    BoldFont=Hadasim CLM Bold,
+%    ItalicFont=Hadasim CLM RegularOblique,
+%    BoldItalicFont=Hadasim CLM BoldOblique,
+%    SlantedFont=Hadasim CLM RegularOblique,
+%    BoldSlantedFont=Hadasim CLM BoldOblique,
+%  ]
+
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Arial}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
+
+% Liberation Serif
+
+ % \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+ % \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+ % \let\hebrewfonttt\ttfamily
+% Liberation Serif
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+% \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%  \setromanfont{David CLM}
+%\setromanfont{Comic Sans MS}
+
+% Fix section numbering
+\makeatletter
+\renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
+\makeatother
+
+\newfontfamily \listingsfont[
+            Extension=.otf,
+						UprightFont=*-Regular,
+						BoldFont=*-Bold,
+						ItalicFont=*-Italic,
+						BoldItalicFont=*-BoldItalic,
+]{UMTypewriter}
+
+
+\let\ttfamily=\listingsfont
+  \lstdefinestyle{bashfulScript}{basicstyle=\listingsfont\small,keywords={}}
+  \lstdefinestyle{bashfulStdout}{basicstyle=\sl\listingsfont\small,keywords={}}
+  \newenvironment{interaction}%
+    {\parskip0pt\par\hrulefill\par}{\parskip0pt\par\hrulefill\par}
+\lstdefinestyle{numbered}{
+    backgroundcolor=\color{blue!20},
+    style=display,
+    numbers=right,
+    stepnumber=1,
+    numbersep=-6pt,
+    xleftmargin=3ex,
+    xrightmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    frame=trBL,
+}
+
+\newenvironment{Output}{%
+\setLTR
+\quote
+\vskip 1ex%
+\qquad\qquad
+\large\bfseries\itshape\underline{Output}%
+}{\endquote\setRTL}
+
+\usepackage{sukkar}
+
+% Tune header
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[RO]{\slshape \rightmark}
+\fancyhead[LE]{\slshape \leftmark}
+\fancyfoot[C]{\thepage}
+\headheight26pt
+
+\newfloat{תכנית}{!htbp}{lop}[section]
+\floatname{תכנית}{תכנית}
+
+%\usepackage{unicode-math}
+
+\catcode"2026=\active % …: U+2026 HORIZONTAL ELLIPSIS
+\let…=\ldots
+\lstdefinelanguage{Pascalx}{
+  language=Pascal,
+  morestring=[b]",
+  deletekeywords={writeln,output,integer},
+  morekeywords={[2]WriteLn,output,integer},
+  keywordstyle={[2]\color{blue}\listingsfont\bfseries\itshape}}
+\let\קד=\cd
+\let\מש=\kw
+\let\שי=\LR
+\def\predefined#1{{\lstset{language=Pascalx}\lstinline!#1!}}
+\let\מוגדרת␣מראש=\predefined
+
+
+\newenvironment{קוד}{%
+  \quote
+  \minipage{\linewidth}%
+  \setLTR
+  }{%
+  \endminipage
+  \endquote
+}
+
+\renewcommand\floatpagefraction{.9}
+\renewcommand\topfraction{.9}
+\renewcommand\bottomfraction{.9}
+\renewcommand\textfraction{.1}   
+\setcounter{totalnumber}{50}
+\setcounter{topnumber}{50}
+\setcounter{bottomnumber}{50}
+
+\input{00terms}
+
+
+  \הצב\עע=\cf
+
+
+\parskip 0.75ex plus 0.25ex minus -0.25ex
+
+
+
+
+\newcommand{\גיבור}[1] {
+ \textbf{#1}}
+
+\newcommand{\יניב}[1] {
+ \Large{#1}
+\normalsize{}}
+
+
+\newcommand{\הכנס␣קוד}[3]{
+\setLTR{}
+
+\lstinputlisting[
+language=#2,belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=single,frameround=tttt,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  backgroundcolor=\color{gray!10},
+  columns=flexible,
+  title={#3},
+]{#1}
+
+\setRTL{}
+}
+
+
+\newcommand{\הכנס␣קוד␣נקי}[2]{
+\setLTR{}
+
+\lstinputlisting[
+language=#2,belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=single,frameround=tttt,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  backgroundcolor=\color{gray!10},
+  columns=flexible,
+]{#1}
+
+\setRTL{}
+}
+
+% Environment for writing syntax rules
+\newenvironment{derivation}{\ignorespaces%
+  \def\<##1>{\,⟨\text{\sffamily \scriptsize \slshape ##1}⟩\,}%
+  \def\|{\meta{\mathbin{|}}}%
+  \def\=##1={\,\text{\kk ##1}\,}%
+  \def\meta##1{{\textcolor{red}{##1}}}%
+  \def\({\meta{\left  (}}
+  \def\){\meta{\right )}}
+  \def\~##1~{\,\text{\inline!##1!}\,}%
+  \def\"##1"{\,\text{\inline!##1!}\,}%
+  \def\*{^{\meta*}}%
+  \def\+{^{\meta+}}%
+  \def\opt{\!_{\meta{opt}}\,}%
+  \scriptsize%
+}{\ignorespacesafterend}
+
+\newtcolorbox{mybox}{colback=red!5!white,
+colframe=red!75!black}
+
+% Musn't have an empty new line before it
+\newcommand{\הכרח␣שורה␣חדשה}{\\*\hfill\\}
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{chains,arrows}
+\forestset{%
+  s tree/.style={
+    for tree={
+      circle,
+      s sep'+=-3pt,
+      fit=band,
+    },
+  },
+  cons/.style={draw,edge,fill=teal},
+  atom/.style={},
+  nil/.style={circle,inner sep=-6pt,fill=white,nice empty nodes,tikz={\draw  [rotate=-160,scale=0.44] 
+  \pgfsetlinewidth{6\pgflinewidth} % thickness
+  ($(.center)!0.2!(!parent)$)
+  coordinate (o)
+  (o)++(-0.520,0) --++(1.04,0)
+ % (o)++(-4,1) -- ++(8,0)
+  (o)++(-0.380,.180) -- ++(.760,0)
+ % (o)++(-2,3) --++(4,0)
+  (o)++(-0.180,0.360) --++(0.360,0)
+;}},
+}  
+
+
+\forestset{
+nice empty nodes/.style={
+    for tree={calign=fixed edge angles},
+    delay={where content={}{shape=coordinate,for siblings={anchor=north}}{}}
+}
+}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
 % vertical separator macro
 \newcommand{\vsep}{
   \column{0.0\textwidth}

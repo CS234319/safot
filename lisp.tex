@@ -14,8 +14,8 @@
 \newread \tempFile % A temporary reading stream
 \newwrite \kernelFile % A stream to save kernel functions
 \newwrite \libraryFile % A stream to save library functions
-\immediate \openout \kernelFile=\jobname-kernel.lisp
-\immediate \openout \libraryFile=\jobname-library.lisp
+\immediate \openout \kernelFile=\jobname.kernel.lisp
+\immediate \openout \libraryFile=\jobname.library.lisp
 
 \newcounter{beamer}
 \setcounter{beamer}0
@@ -25,7 +25,7 @@
 % An environment for writing kernel functions
 \newenvironment{KERNEL}{%
   \stepcounter{kernel}
-  \def\fileName{temp-kernel-\arabic{kernel}.lisp}%
+  \def\fileName{\jobname.kernel.\arabic{kernel}.lisp}%
   \csname filecontents*\endcsname[overwrite]{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
@@ -46,7 +46,7 @@
 % An environment for writing library functions
 \newenvironment{LIBRARY}{%
   \stepcounter{library}
-  \def\fileName{temp-library-\arabic{library}.lisp}%
+  \def\fileName{\jobname.library-\arabic{library}.lisp}%
   \csname filecontents*\endcsname[overwrite]{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
@@ -225,18 +225,18 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
     s tree [$⊘$,[$\circledcirc$ [$\amalg$] [$\maltese$]] [$\wr$[$\Re$][$\Game$]]]
   \end{forest}
 \end{LTR}
-אולם, ייתכן גם כי האופרנדים הם 
-הסימנים $\Game$ ו-$\maltese$
-ואילו $\amalg$, $\circledcirc$, $\maltese$ ו-$\Re$ 
+אולם, ייתכן גם כי האופרנדים הם
+הסימנים~$\Game$ ו-$\maltese$
+ואילו~$\amalg$,~$\circledcirc$,~$\maltese$ ו-$\Re$
   הם אופרטורים אונאריים.
 
 \begin{LTR}
   \begin{forest}
-    s tree [$⊘$,[$\amalg$ [$\circledcirc$ [$\amalg$]]] 
-      [$\Re$ [$\wr$ [$\Game$\end{forest]]]]
+    s tree [$⊘$,[$\amalg$ [$\circledcirc$ [$\amalg$]]]
+      [$\Re$ [$\wr$ [$\Game$]]]]
   \end{forest}
 \end{LTR}
-אולם, ייתכן גם כי האופרנדים הם 
+אולם, ייתכן גם כי האופרנדים הם
 אולם כיוון שמשמעות האופרנדים והאופרטורים אינה ידועה, לא נוכל לחשב את הביטוי.
 המונח שיערוך כולל בתוכו שני מרכיבים עיקריים: ראשית, איתור המשמעות של הסימבולים
 המופיעים בביטוי, ושנית, חישוב הביטוי בהתאם למשמעות זו. בדרך כלל מרכיב החישוב של
@@ -2014,7 +2014,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     numberblanklines=false,
     numberstyle=\tiny\bf,
     backgroundcolor=\color{green!20}
-  ]{temp-kernel.lisp}
+  ]{\jobname.kernel.lisp}
 \end{LTR}
 
 §§ פונקציות הסיפריה של מיני ליספ
@@ -2124,7 +2124,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     numberblanklines=false,
     numberstyle=\tiny\bf,
     backgroundcolor=\color{orange!20}
-  ]{temp-library.lisp}
+  ]{\jobname.library.lisp}
 \end{LTR}
 
 § תרגילים

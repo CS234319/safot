@@ -63,14 +63,13 @@
 
 \floatstyle{ruled}
 \restylefloat{figure}
-
-%\newtheorem{definition}{הגדרה}[section]
-%\newtheorem{theorem}{משפט}[section]
-%\newtheorem{claim}{טענה}[section]
-%\newtheorem{example}{דוגמה}[section]
-\def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{claim}{טענה}[section]
+\newtheorem{example}{דוגמה}[section]
 \numberwithin{equation}{section}
 
+\def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
 \graphicspath{{Images/}}
 \setmainlanguage{hebrew}
 \setmainfont{Linux Libertine O}
