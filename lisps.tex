@@ -1,0 +1,77 @@
+\documentclass[fleqn]{beamer}
+\usepackage[english]{babel}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+
+% vertical separator macro
+\newcommand{\vsep}{
+  \column{0.0\textwidth}
+    \begin{tikzpicture}
+      \draw[very thick,black!10] (0,0) -- (0,7.3);
+    \end{tikzpicture}
+}
+
+% More space between lines in align
+\setlength{\mathindent}{0pt}
+
+% Beamer theme
+\usetheme{AnnArbor}
+\usefonttheme[onlysmall]{structurebold}
+\mode<presentation>
+\setbeamercovered{transparent=10}
+
+% align spacing
+\setlength{\jot}{0pt}
+
+%\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+
+\title{Mini-Lisp}
+\author{Yossi Gil}
+\institute[Department of Computer Science, The Technion]{CS236703--Programming Languages}
+\date{\today}
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}{Lisp?}
+\begin{block}{
+Philip Greenspun's Tenth\footnote{there are  no other rules, just the tenth one} Rule of Programming
+}
+"Any sufficiently complicated C or Fortran program contains an ad-hoc, informally-specified bug-ridden slow implementation of half of Common Lisp.“
+\end{block}
+* Note:  
+
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+    Left column
+    \begin{itemize}
+      \item Item 1
+      \item Item 2
+      \item Item 3
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{block}{Right Column}
+      this is a block
+    \end{block}
+  \end{columns}
+\end{frame}
+\begin{frame}
+  \frametitle{Slide 2}
+  erster Satz\\
+  zweiter Satz
+
+  \pause
+
+  dritter Satz
+\end{frame}
+\begin{frame}
+  \frametitle{Slide 3}
+  \uncover<1>{erster Satz}\\
+  \uncover<3>{zweiter Satz}\\
+  \uncover<2>{dritter Satz}
+\end{frame}
+\end{document}
