@@ -1,14 +1,2644 @@
-\documentclass[ignorenonframetext,notheorems]{beamer}
-\usepackage{00}
+\documentclass[fleqn]{beamer}
+\usepackage[english]{babel}
+
+\def\options#1[#2]{\PassOptionsToPackage{#2}{#1}}
+
+\newcommand{\jf}[1]{\ifcsname#1\endcsname\expandafter\show\csname#1\endcsname\fi}
+
+\options{bashful}[unique,dir=Excerpts]
+\options{cleveref}[nameinlink]
+\options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
+\options{glossaries}[toc,section=section,footnote]
+\options{xcolor}[table,dvipsnames]
+\options{minitoc}[tight]
+
+
+\usepackage{mdframed}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bashful}
+\usepackage{booktabs}
+\usepackage{cf}
+\usepackage{cleveref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{forest}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{morewrites}
+\usepackage{glossaries}
+\usepackage{glossary-long}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{minitoc}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{pbox}
+\usepackage{polyglossia}
+\usepackage{proof}
+\usepackage{stmaryrd}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{url} 
+\usepackage{xcolor}
+\usepackage{filecontents}
+\usepackage{yogi-code}
+\usepackage{yogi-lang}
+\usepackage{yogi-unicode}
+\usepackage{adjustbox,collcell}
+
+
+
+\makeatletter
+% remove the stray space https://tex.stackexchange.com/a/513549
+\patchcmd{\pgfutilsolvetwotwoleqfloat}
+  { \noexpand\pgfmathfloatdivide@}
+  {\noexpand\pgfmathfloatdivide@}
+  {}{}
+
+\makeatother
+
+
+\usetikzlibrary{trees,chains,shapes}
+
+\floatstyle{ruled}
+\restylefloat{figure}
+\numberwithin{equation}{section}
+
+\def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
+\graphicspath{{Images/}}
+\setmainlanguage{hebrew}
+\setmainfont{Linux Libertine O}
+\setotherlanguage{english}
+\setotherlanguage{arabic}
+
+\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+\newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
+\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+\setmonofont{UMTypewriter-Regular.otf}
+  
+\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
+\DeclareMathOperator\arity{arity}
+\DeclareMathOperator\RE{Re}
+
+\catcode"2318=13
+\def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
+\def\E|#1|{\LR{\mbox{#1}}}
+\def\T|#1|{\lisp{#1}}
+\def\ע|#1|{{\bfseries#1}}
+\def\פנה|#1|{\cref{#1}}
+\def\כיתוב|#1|{\caption{#1}}
+\def\תגית|#1|{\label{#1}}
+
+\crefname{definition}{הגדרה}{הגדרות}
+\crefname{figure}{איור}{איורים}
+\crefname{table}{טבלה}{טבלאות}
+\let\ref=\cref
+
+\def\UrlFont{\ttfamilylatin}
+
+
+\renewcommand\stctitle{תוכן הענינים}
+    \renewcommand\ptctitle{\stctitle}
+    \renewcommand\mtctitle{\stctitle}
+
+ 
+  \makeatletter
+\def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
+\def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
+\makeatother
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
+%    BoldFont=Hadasim CLM Bold,
+%    ItalicFont=Hadasim CLM RegularOblique,
+%    BoldItalicFont=Hadasim CLM BoldOblique,
+%    SlantedFont=Hadasim CLM RegularOblique,
+%    BoldSlantedFont=Hadasim CLM BoldOblique,
+%  ]
+
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Arial}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
+
+% Liberation Serif
+
+ % \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+ % \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+ % \let\hebrewfonttt\ttfamily
+% Liberation Serif
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
+%  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+% \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%  \setromanfont{David CLM}
+%\setromanfont{Comic Sans MS}
+
+% Fix section numbering
+\makeatletter
+\renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
+\makeatother
+
+\newfontfamily \listingsfont[
+            Extension=.otf,
+						UprightFont=*-Regular,
+						BoldFont=*-Bold,
+						ItalicFont=*-Italic,
+						BoldItalicFont=*-BoldItalic,
+]{UMTypewriter}
+
+
+\let\ttfamily=\listingsfont
+  \lstdefinestyle{bashfulScript}{basicstyle=\listingsfont\small,keywords={}}
+  \lstdefinestyle{bashfulStdout}{basicstyle=\sl\listingsfont\small,keywords={}}
+  \newenvironment{interaction}%
+    {\parskip0pt\par\hrulefill\par}{\parskip0pt\par\hrulefill\par}
+\lstdefinestyle{numbered}{
+    backgroundcolor=\color{blue!20},
+    style=display,
+    numbers=right,
+    stepnumber=1,
+    numbersep=-6pt,
+    xleftmargin=3ex,
+    xrightmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    frame=trBL,
+}
+
+\newenvironment{Output}{%
+\setLTR
+\quote
+\vskip 1ex%
+\qquad\qquad
+\large\bfseries\itshape\underline{Output}%
+}{\endquote\setRTL}
+
+\usepackage{sukkar}
+
+% Tune header
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[RO]{\slshape \rightmark}
+\fancyhead[LE]{\slshape \leftmark}
+\fancyfoot[C]{\thepage}
+\headheight26pt
+
+\newfloat{תכנית}{!htbp}{lop}[section]
+\floatname{תכנית}{תכנית}
+
+%\usepackage{unicode-math}
+
+\catcode"2026=\active % …: U+2026 HORIZONTAL ELLIPSIS
+\let…=\ldots
+\lstdefinelanguage{Pascalx}{
+  language=Pascal,
+  morestring=[b]",
+  deletekeywords={writeln,output,integer},
+  morekeywords={[2]WriteLn,output,integer},
+  keywordstyle={[2]\color{blue}\listingsfont\bfseries\itshape}}
+\let\קד=\cd
+\let\מש=\kw
+\let\שי=\LR
+\def\predefined#1{{\lstset{language=Pascalx}\lstinline!#1!}}
+\let\מוגדרת␣מראש=\predefined
+
+
+\newenvironment{קוד}{%
+  \quote
+  \minipage{\linewidth}%
+  \setLTR
+  }{%
+  \endminipage
+  \endquote
+}
+
+\renewcommand\floatpagefraction{.9}
+\renewcommand\topfraction{.9}
+\renewcommand\bottomfraction{.9}
+\renewcommand\textfraction{.1}   
+\setcounter{totalnumber}{50}
+\setcounter{topnumber}{50}
+\setcounter{bottomnumber}{50}
+
+\input{00terms}
+
+
+  \הצב\עע=\cf
+
+
+\parskip 0.75ex plus 0.25ex minus -0.25ex
+
+
+
+
+\newcommand{\גיבור}[1] {
+ \textbf{#1}}
+
+\newcommand{\יניב}[1] {
+ \Large{#1}
+\normalsize{}}
+
+
+\newcommand{\הכנס␣קוד}[3]{
+\setLTR{}
+
+\lstinputlisting[
+language=#2,belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=single,frameround=tttt,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  backgroundcolor=\color{gray!10},
+  columns=flexible,
+  title={#3},
+]{#1}
+
+\setRTL{}
+}
+
+
+\newcommand{\הכנס␣קוד␣נקי}[2]{
+\setLTR{}
+
+\lstinputlisting[
+language=#2,belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=single,frameround=tttt,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  backgroundcolor=\color{gray!10},
+  columns=flexible,
+]{#1}
+
+\setRTL{}
+}
+
+% Environment for writing syntax rules
+\newenvironment{derivation}{\ignorespaces%
+  \def\<##1>{\,⟨\text{\sffamily \scriptsize \slshape ##1}⟩\,}%
+  \def\|{\meta{\mathbin{|}}}%
+  \def\=##1={\,\text{\kk ##1}\,}%
+  \def\meta##1{{\textcolor{red}{##1}}}%
+  \def\({\meta{\left  (}}
+  \def\){\meta{\right )}}
+  \def\~##1~{\,\text{\inline!##1!}\,}%
+  \def\"##1"{\,\text{\inline!##1!}\,}%
+  \def\*{^{\meta*}}%
+  \def\+{^{\meta+}}%
+  \def\opt{\!_{\meta{opt}}\,}%
+  \scriptsize%
+}{\ignorespacesafterend}
+
+\newtcolorbox{mybox}{colback=red!5!white,
+colframe=red!75!black}
+
+% Musn't have an empty new line before it
+\newcommand{\הכרח␣שורה␣חדשה}{\\*\hfill\\}
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{chains,arrows}
+\forestset{%
+  s tree/.style={
+    for tree={
+      circle,
+      s sep'+=-3pt,
+      fit=band,
+    },
+  },
+  cons/.style={draw,edge,fill=teal},
+  atom/.style={},
+  nil/.style={circle,inner sep=-6pt,fill=white,nice empty nodes,tikz={\draw  [rotate=-160,scale=0.44] 
+  \pgfsetlinewidth{6\pgflinewidth} % thickness
+  ($(.center)!0.2!(!parent)$)
+  coordinate (o)
+  (o)++(-0.520,0) --++(1.04,0)
+ % (o)++(-4,1) -- ++(8,0)
+  (o)++(-0.380,.180) -- ++(.760,0)
+ % (o)++(-2,3) --++(4,0)
+  (o)++(-0.180,0.360) --++(0.360,0)
+;}},
+}  
+
+
+\forestset{
+nice empty nodes/.style={
+    for tree={calign=fixed edge angles},
+    delay={where content={}{shape=coordinate,for siblings={anchor=north}}{}}
+}
+}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+% vertical separator macro
+\newcommand{\vsep}{
+  \column{0.0\textwidth}
+    \begin{tikzpicture}
+      \draw[very thick,black!10] (0,0) -- (0,7.3);
+    \end{tikzpicture}
+}
+
+% More space between lines in align
+\setlength{\mathindent}{0pt}
+
+% Beamer theme
+\usetheme{AnnArbor}
+\usefonttheme[onlysmall]{structurebold}
+\mode<presentation>
+\setbeamercovered{transparent=10}
+
+% align spacing
+\setlength{\jot}{0pt}
+
+%\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+
+\title{Mini-Lisp}
+\author{Yossi Gil}
+\institute[Department of Computer Science, The Technion]{CS236703--Programming Languages}
+\date{\today}
+
 \begin{document}
+\long\def\OFF#1\ON{}
 \begin{frame}
-  \frametitle{שלום רב}
-\begin{itemize}
-\item אחת 
-\item שתיים 
-\end{itemize}
+  \titlepage
 \end{frame}
 
 
-\input{lisp.tex}
+\begin{frame}{Lisp?}
+\begin{block}{
+Philip Greenspun's Tenth\footnote{there are  no other rules, just the tenth one} Rule of Programming
+}
+"Any sufficiently complicated C or Fortran program contains an ad-hoc, informally-specified bug-ridden slow implementation of half of Common Lisp.“
+\end{block}
+* Note:  
+
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+    Left column
+    \begin{itemize}
+      \item Item 1
+      \item Item 2
+      \item Item 3
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{block}{Right Column}
+      this is a block
+    \end{block}
+  \end{columns}
+\end{frame}
+\begin{frame}
+  \frametitle{Slide 2}
+  erster Satz\\
+  zweiter Satz
+
+  \pause
+
+  dritter Satz
+\end{frame}
+\begin{frame}
+  \frametitle{Slide 3}
+  \uncover<1>{erster Satz}\\
+  \uncover<3>{zweiter Satz}\\
+  \uncover<2>{dritter Satz}
+\end{frame}
+
+\def\CPL{\E|C|\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code for collecting code exerpts into a separate library and kernel files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{kernel}
+\newcounter{library}
+\setcounter{library}0
+
+\newread \tempFile % A temporary reading stream
+\newwrite \kernelFile % A stream to save kernel functions
+\newwrite \libraryFile % A stream to save library functions
+\immediate \openout \kernelFile=\jobname.kernel.lisp
+\immediate \openout \libraryFile=\jobname.library.lisp
+
+% An environment for writing kernel functions
+\newenvironment{KERNEL}{%
+  \stepcounter{kernel}
+  \def\fileName{\jobname.kernel.\arabic{kernel}.lisp}%
+  \csname filecontents*\endcsname[overwrite]{\fileName}%
+}{%
+  \csname endfilecontents*\endcsname%
+  \LTR
+    \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{green!20}]{\fileName}%
+  \endLTR
+  \openin \tempFile=\fileName
+  \begingroup\endlinechar=-1
+  \loop\unless\ifeof \tempFile
+    \read\tempFile to\fileline % Read one line and store it into \fileline
+    \immediate\write \kernelFile
+    {\unexpanded\expandafter{\fileline}}
+  \repeat
+  \endgroup
+  \closein \tempFile
+}
+
+% An environment for writing library functions
+\newenvironment{LIBRARY}{%
+  \stepcounter{library}
+  \def\fileName{\jobname.library.\arabic{library}.lisp}%
+  \csname filecontents*\endcsname[overwrite]{\fileName}%
+}{%
+  \csname endfilecontents*\endcsname%
+  \LTR
+    \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{orange!20}]{\fileName}%
+  \endLTR
+  \newread \tempFile % open the file to read from
+  \openin \tempFile=\fileName
+  \begingroup\endlinechar=-1
+  \loop\unless\ifeof \tempFile
+    \read\tempFile to\fileline % Read one line and store it into \fileline
+    \immediate\write \libraryFile
+    {\unexpanded\expandafter{\fileline}} % print the content to copy.txt
+  \repeat
+  \endgroup
+  \closein \tempFile
+}
+\setLTR
+\OFF
+%
+§ מבוא
+
+שפת LISP (ראשי תיבות של \E|LIst PRocessing|), היתה, יחד עם שפת Fortran (ראשי
+תיבות של \LR{FORmula TRANslation}, אחת משתי שפות התכנות הראשונות. ליספ פותחה
+ב-MIT על ידי \E|John McCarthy| עוד בשנת 1,956. אולם מלכתחילה, ליספ לא נתפסה על
+ידי ממציאה כשפת תכנות, אלא כתחשיב מתימטי המיועד לכתיבת אלגוריתמים, הדומה לתחשיב
+
+שפת LISP (ראשי תיבות של \E|LIst PRocessing|), היתה, יחד עם שפת Fortran (ראשי
+תיבות של \LR{FORmula TRANslation}, אחת משתי שפות התכנות הראשונות. ליספ פותחה
+ב-MIT על ידי \E|John McCarthy| עוד בשנת 1,956. אולם מלכתחילה, ליספ לא נתפסה על
+ידי ממציאה כשפת תכנות, אלא כתחשיב מתימטי המיועד לכתיבת אלגוריתמים, הדומה לתחשיב
+ה-$λ$ \E|(lambda calculus)|. רק לאחר מכן, מומש התחשיב כשפת תכנות.
+
+בתחשיב של \E|McCarthy|, כל תכנית היא מה שנקרא "\ע|ביטוי~S|", והרצת התכנית קרויה
+"שיערוך" (\E|evaluation|) של הביטוי. יתירה מכך, כל הנתונים בשפת ליספ גם הם
+ביטויי~\E|S|. תכנית בשפת ליספ היא פונקציה שיכולה לקבל כארגומנטים ביטויי~S והיא
+מחזירה ביטוי~\E|S|, וכאמור, כל פונקציה כזו, היא בעצמה ביטוי~\E|S|. שפת ליספ
+נחנה לכן בתכונה הידועה בשם \ע|הומואייקוניות| (\E|homoiconicity|) לפיה ניתן מתוך
+השפה לבצע מניפולציה על תכניות הכתובות בשפה כאילו היו הן נתונים. שפות אחרות שהן
+הומואייקוניות כוללות את פרולוג, \LR{Wolfram Mathematica}, \E|Snobol|
+ו-\E|Julia|. שפות כמו~\CPL, פסקל, ו-\E|Java|, כמו מרבית שפות התכנות אינן
+הומואייקוניות.
+
+בנוסף לתחשיב McCarthy הציג גם אלגוריתם אוניברסלי, \E|eval|, המסוגל להריץ תכניות
+בליספ. ליספ הפכה מתחשיב מתימטי לשפת תכנות כאשר האלגוריתם הזה מומש בשפת מכונה.
+מאוחר יותר, נמצא מי שכתב מימוש של \E|eval| בשפת ליספ עצמה.
+
+אחת המטרות החשובות של סיכום זה היא הדגמה כיצד ניתן לממש את אלגוריתם השיערוך של
+שפת ליספ באמצעות שפת ליספ עצמה)עיין בהמשך, \פנה|סעיף:מימוש|.(.
+
+שפת ליספ שימשה בין השאר לפיתוח \E|Macsyma|, התכנית הראשונה לחישוב מתימטי
+סימבולי, כולל נגזרות, אינטגרלים, ופתרון סימבולי של משוואות.
+דוגמה לחישוב סימבולי ב-\E|Macsyma| היא חישוב האינטגרל המסויים \[
+  ∫₀⁴ e^{√{ay}}dy
+\] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$:
+
+\begin{minipage}\linewidth
+\begin{LTR}
+  \scriptsize
+  \begin{LISP}
+(%i1) assume(a > 0)$
+(%i2) 'integrate (%e**sqrt(a*y), y, 0, 4);
+                      4
+                     /
+                     [ sqrt(a) sqrt(y) (%o2) I %e dy
+                     ]
+                     /
+                      0
+(%i3) changevar (%, y-z²/a, z, y);
+                      0
+                     /
+                     [ abs(z)
+                   2 I z %e dz
+                     ]
+                     /
+- 2 sqrt(a)
+(%o3)-----------------------------
+                                a
+\end{LISP}
+\end{LTR}
+\end{minipage}
+
+שפת ליספ שימשה גם לפיתוחה של \E|ELIZA| תכנית המחשב הראשונה שהייתה מסוגלת לנהל
+שיח עם משתמש בדומה לבוט. ELIZA ניסתה לדמות בשיחה את תפקיד הפסיכיאטר או
+הפסיכותראפיסט ודו שימ עמה נראה כך
+\begin{LTR}
+  \scriptsize
+  \begin{verbatim}
+ELIZA: Please tell me what’s been bothering you.
+ME: Oh, hello, ELIZA. It’s been a long time.
+ELIZA: Hi. What seems to be your problem?
+ME: Lately, I’ve been feeling a little depressed.
+ELIZA: And how do you feel right now?
+ME: I feel sad, but relieved to be writing.
+ELIZA: Of what does feeling sad remind you?
+\end{verbatim}
+\end{LTR}
+שפת ליספ שימשה גם לפיתוח
+\E|Grammarly|, התכנה המפורסמת לתיקוני שגיאות כתיב ודקדוק.
+
+במהלך השנים, נולדו ניבים רבים לליספ שהרחיבו בהרבה את ההגדרה המקורית. בשנת 1,984
+אוחדו רבים מהניבים
+הללו לכדי הגדרה של שפה אחת הידועה בשם \E|Common Lisp| (\E|CL|). ניבים נפוצים
+אחרים כוללים את Emacs Lisp (המשמשת כשפת סקריפטים בעבור עורך הקבצים (\E|text
+editor|) \E|Emacs|), AutoLisp (המשמשת כשפת סקריפטים בתכנת \E|AutoCad|),
+\E|Scheme|, \E|Clojure|, ואפילו שפת התכנות \E|Dylan|, אשר למרות הדקדוק השונה
+בתכלית שלה, היא מבוססת על ליספ.
+
+הדיון כאן איננו עוסק בליספ כשפת תכנות, וגם לא באף אחד מהניבים הנפוצים או הפחות
+נפוצים שלה, אלא מתרכז אך ורק בהצגת גלעין (\E|core|) מינימלי של השפה, שהוא בעצמו
+ניב של ליספ. אנו נכנה גלעין זה בשם \ע|מיני ליספ|. שפת מיני ליספ היא מינימלית
+ביותר, והיא כוללת שמונה פונקציות פרימיטיביות בלבד, כלומר פונקציות שלא ניתן
+להגדירן באמצעות פונקציות אחרות:
+
+\ציינן
+✦ \ע|פונקציות מבניות|: \E|car|, \E|cdr| ו-\E|cons|, אשר מאפשרות ליצור ביטוי
+\E|S|, ולפרק אותו לחלקיו.
+
+✦ \ע|פונקציות לוגיות|: \E|atom|, \E|eq| ו-\E|cond|, המאפשרות לבדוק את תכנו של
+ביטוי~\E|S|.
+
+✦ \ע|פונקציות נוספות|: \E|set| המאפשרת לתת שמות לביטויי \E|S|, ו-\E|error| המסייעת
+בטיפול במקרים שבהם החישוב נתקל בשגיאה.
+===
+\פנה|טבלה:מיני| שבהמשך מסכמת את רשימת הפונקציות הפרימיטיביות שבמיני ליספ. כל
+הפונקציות הפרימיטיות של מיני ליספ הן גם פונקציות פרימיטיביות של מרבית הניבים החשובים
+של ליספ, ובפרט של \E|Common Lisp|.
+
+\normalsize
+בנוסף, מכילה מיני ליספ מספר קטן של פונקציות "סיפריה", כלומר פונקציות הכתובות
+בשפת מיני ליספ תוך שימוש בפונקציות הפריטיביות.
+
+\ציינן
+✦ \ע|קבועים| (פונקציות ללא פרמטרים): \E|t| (המציין את הערך הבוליאני של אמת) ו-\E|nil|
+(המציין את הערך הבוליאני של שקר).
+✦ \ע|פונקציה לוגית|: \E|null| (פונקציה חד-מקומיות הבודקת אם ביטוי הוא \E|nil|).
+✦ \ע| פונקציות המסייעות בהגדרת פונקציות|:
+\E|quote|, \E|defun|, \E|ndefun|, \E|lambda| ו-\E|nlambda|.
+===
+\פנה|טבלה:סיפריה| שבהמשך מסכמת את רשימת פונקציות הסיפריה של מיני ליספ, ומביאה
+גם את מימושן במיני ליספ. מלבד ndefun ו-nlambda ניתן למצוא את פונקציות הסיפריה
+של מיני ליספ בכל הניבים האחרים של השפה, אם כי לעיתים הפונקציה defun נקראת בשם
+אחר.
+
+בנוסף לפונקציות הפרימיטיביות ולפונקציות הסיפריה, שפת מיני-ליספ תומכת, כמו מרבית
+הניבים של ליספ, בפונקציה \E|eval| אשר מקבלת ביטוי S ומשערכת אותו. הפונקציה
+eval אינה פונקציה פרימיטיבית, אלא היא ממומשת כחלק מ-\E|evaluate|, אלגוריתם
+השיערוך של מיני ליספ, אשר גם הוא ממומש כפונקציה במיני ליספ.
+
+בניגוד לניבים האחרים של ליספ, שפת מיני ליספ אינה תומכת במספרים ובפעולות
+אריתמטיות. רוב הניבים של ליספ, יודעים להדר, באופן חלקי או מלא, תכניות ליספ לשפת
+מכונה. גם הידור כזה אינו נחוץ במיני ליספ. על אף המינימליות של שפת מיני ליספ,
+שפה זו היא טיורינג שלמה: כל תכנית שאפשר לכתוב בכל שפת תכנות, אפשר לכתוב גם
+במיני ליספ.
+
+בפרט, כפי שנדגים כאן, ניתן לממש את האלגוריתם \E|eval| עצמו במיני ליספ, תוך
+שימוש בפונקציות פרימיטיביות או בפונקציות הסיפריה, אשר כאמור מוגדרות באמצעות
+הפונקציות הפרימיטיביות. מימוש זה הוא פשוט וקצר יחסית ועולה לכדי כמאה שורות
+בלבד.
+
+לבד מהמימוש של eval שפת מיני ליספ מעניינת שכן היא מציגה בתמציתיות את מרבית
+הרעיונות החשובים של ליספ, כגון עיבוד רקורסיבי של רשימות, קישור של שמות לערכים,
+העברת פרמטרים, הסתכלות על תכנית כמבנה נתונים, ועוד.
+
+לא רק תכניות הם ביטויי~\E|S|. כל הערכים בשפת ליספ הם ביטויי~S
+\E|(S-Expressions)|. המונח~S-Expression בא לעולם כקיצור למונח \E|symbolic
+expression| (ביטוי סימבולי). המילה "סימבולי" מטעימה שמדובר שאין מדובר בהכרח
+בביטוי מתימטי כגון~$13+41/2$, שבו המשמעות של כל הסימנים ידועה בדרך כלל, אלא
+בביטוי כללי שיכול להכיל סימבולים שמשמעותם דורשת הגדרה מפורשת, כגון
+\begin{equation*}
+  (\amalg \circledcirc \maltese) ⊘ (\Re \wr \Game)
+\end{equation*}
+בביטוי זה, ניתן לנחש כי מופיעים בו האופרנדים ($\amalg$,~$\maltese$,~$\Re$ ו-$\Game$) ואת
+האופרטורים ($\circledcirc$,~$⊘$ ו-$\wr$). ניתן גם לשרטט עץ המתאר את מבנה הביטוי
+\begin{LTR}
+  \begin{forest}
+    s tree [$⊘$,[$\circledcirc$ [$\amalg$] [$\maltese$]] [$\wr$[$\Re$][$\Game$]]]
+  \end{forest}
+\end{LTR}
+אולם, ייתכן גם כי האופרנדים הם 
+הסימנים $\Game$ ו-$\maltese$
+ואילו $\amalg$, $\circledcirc$, $\maltese$ ו-$\Re$ 
+  הם אופרטורים אונאריים.
+
+\begin{LTR}
+  \begin{forest}
+    s tree [$⊘$,[$\amalg$ [$\circledcirc$ [$\amalg$]]] 
+      [$\Re$ [$\wr$ [$\Game$]]]]
+  \end{forest}
+\end{LTR}
+אולם, ייתכן גם כי האופרנדים הם 
+אולם כיוון שמשמעות האופרנדים והאופרטורים אינה ידועה, לא נוכל לחשב את הביטוי.
+המונח שיערוך כולל בתוכו שני מרכיבים עיקריים: ראשית, איתור המשמעות של הסימבולים
+המופיעים בביטוי, ושנית, חישוב הביטוי בהתאם למשמעות זו. בדרך כלל מרכיב החישוב של
+השיערוך מחשב ביטוי חדש, אך לעיתים השיערוך מייצר משמעות בעבור סימבולים שלא הייתה
+להם משמעות טרם השיערוך. במילים אחרות, השיערוך משתמש בהגדרות של סימבולים, ויכול
+גם לייצר הגדרות כאלו.
+
+בשפת תכנות כדוגמת~\CPL העוברות הידור \E|(compilation)| שני מרכיבי השיערוך
+נפרדים. מתן המשמעות לסימבולים ואיתור המשמעות של סימבולים נעשה על ידי המהדר
+\E|(compiler)|. החישוב עצמו נעשה בזמן ריצת התכנית. בליספ, כמו בשפות אחרות שבהן
+יש פירוש \E|(interpretation)| של תכניות, שני השלבים של השיערוך נעשים על ידי
+האינטרפטר \E|(interpreter)| אשר קורא תכניות ומשערך אותן.
+
+\begin{minipage}\linewidth
+\begin{mdframed}[backgroundcolor=Lavender!20]
+האינטרפטר של ליספ, כמו האינטרפטר של פרולוג, \E|bash| ושפות תכנות אחרות העוברות
+אינטרפטציה, עובד במחזורים, בשיטה הידועה בשם
+\LR{\textbf Read \textbf Evaluate \textbf Print \textbf Loop}
+או בראשי תיבות \E|REPL|:
+\ספרר
+✦ \E|READ|: האינטרפטר קורא את הקלט, אשר חייב להיות ביטוי~\E|S| במקרה של ליספ.
+✦ \E|EVALUATE|: האינטרפטר משערך את ערכו של הביטוי שקרא.
+✦ \E|PRINT|: אם השיערוך של הקלט מצליח, אז האינטרפטר מדפיס את תוצאת השיערוך.
+אחרת, האינטרפטר ידפיס הודעת שגיאה מתאימה.
+✦\E|LOOP|: האינטרפטר חוזר לצעד הראשון, לקריאת הקלט הבא.
+===
+\end{mdframed}
+\end{minipage}
+
+\normalsize
+
+האינטרפטר של ליספ מכיל לכן שלושה מרכיבים עיקריים:
+\אבגד
+✦ ה-Reader אשר קורא קלט שהוא סדרה של תווים, ובונה את מבנה הנתונים המתאים
+לביטוי ה-S המתאים לתווים אלו.
+✦ המשערך (\E|Evaluator|) אשר משערך ביטויי S אלו.
+✦ ה-Printer אשר מקבל ביטוי S כמבנה נתונים ומתרגם אותו לסדרת תווים אשר
+מייצגת מבנה נתונים זה.
+===
+כאן נניח שה-Reader וה-Printer נתונים והם דומים לאלו שבכל ניב של ליספ, ונתאר את
+המימוש של המשערך של מיני ליספ.
+
+§ ביטויי~S
+§§ ביטויי~S כשפה פורמלית
+
+\newcommand\SX{\ensuremath{S_{\text{exp}}}}
+
+בהינתן אלפבית~$Σ$, נגדיר את~$\SX(Σ)$, קבוצת "ביטויי ה-S", מעל~$Σ$.
+אינטואיטיבית, ביטוי~S יכול להיות אטומי, ואז הוא חייב להיות מילה מתוך~$Σ^*$.
+ביטוי~S שאינו אטומי הוא בהכרח זוג סדור של שני ביטויי~S אחרים. הזוג הסדור נכתב
+עטוף בזוג סוגריים ושני הביטויים הסימבוליים שבו מופרדים בסימן הנקודה.
+
+כמה ביטויי~S מעל האלפבית~$Σ=❴a,b,c❵$ הם \[
+  a,b,(a.b),(c.(b.a)),((a.b).(a.c))∈\SX❨❴a,b,c❵❩.
+\] לעומת זאת,~$(a.b.c)$ אינו שייך ל~$\SX(Σ)$ משום שהוא שלשה סדורה ולא זוג סדור,
+ואילו~$(a(b(c)))$ אינו שייך לקבוצה, משום שהוא אינו עונה על הדרישה שבין פריטים
+ימצא סימן הנקודה.
+
+הקבוצה~$\SX(Σ)$ היא שפה פורמלית מעל אלפבית מורחב, המתקבל מהוספת סימן הנקודה
+ושני סימני הסוגריים לאלפבית~$Σ$ (אנו מניחים, בלי הגבלת הכלליות, ששלושת הסימנים
+הללו אינם מצוים ב-$Σ$).
+
+ניתן לאפיין את השפה~$\SX(Σ)$ באמצעות כללי היסק:
+\begin{definition}[ביטויי~S מעל
+    אלפבית] בהנתן אלפבית~$Σ$ אזי,~$\SX(Σ)$, קבוצת ביטויי ה-S מעל~$Σ$ מוגדרת
+  באמצעות הבנאי הנולארי (כלומר איברים אטומיים):
+  \begin{equation*}
+    \infer{w∈\SX(Σ)}{w∈Σ^*}
+  \end{equation*} והבנאי הבינארי:
+  \begin{equation*}
+    \infer{(τ₁.τ₂⟩∈\SX(Σ)}{τ₁∈\SX(Σ) &τ₂∈\SX(Σ)}
+  \end{equation*}
+\end{definition}
+
+ניתן להגדיר את~$\SX(Σ)$ גם באמצעות דקדוק חסר הקשר
+\begin{equation}
+  \begin{split}
+    S &→(S.S)⏎ S &→A ⏎
+    A &→ε⏎ A &→Aσ₁ ⏎
+    A &→Aσ₂ ⏎
+    ⋮ ⏎
+    A &→Aσₙ ⏎
+  \end{split}
+\end{equation} כאשר~$Σ=❴σ₁,σ₂,…,σₙ❵$.
+
+נוח לחשוב על ביטויי~S כעצים בינאריים מלאים (כלומר, שלכל צומת שאינה עלה יש בדיוק
+שני בנים) כאשר צומת פנימית של עץ כזה אינו נושא מידע, ואילו עלה מכיל מילה
+מתוך~$Σ^*$. \פנה|איור:בינארי| מציג כמה ביטויי S יחד עם התיאור שלהם
+כעץ בינארי מלא.
+
+\newcommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
+\newcolumntype{T}{>{\collectcell{\TopAlign}}c<{\endcollectcell}}
+
+\begin{figure}[htbp]
+  \כיתוב|ביטויי S והייצוג שלהם כעץ בינארי מלא|
+  \תגית|איור:בינארי|
+  \centering
+  \begin{LTR}
+    \rowcolors{2}{green!20}{white}
+    \begin{tabular}{*7T}%
+      $(ab.cd)$ &
+      $(abcd.ε)$ &
+      $((ab.cd).ε)$ &
+      $(ab.(c.d))$ &
+      $((a.b).(c.d))$ &
+      $(a.(b.(c.d)))$ &
+      \multicolumn1c{$(((a.b).c).d)$} ⏎
+      \scriptsize
+      \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]} &
+      \scriptsize
+      \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]} &
+      \scriptsize
+      \Forest{s tree [{},cons[\relax,cons[$ab$,atom][$cd$,atom]][$ε$,atom]]} &
+      \scriptsize
+      \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]} &
+      \scriptsize
+      \Forest{s tree [{},cons[{},cons[$a$,atom][$b$,atom]][{},cons[$c$,atom][$d$,atom]]]} &
+      \scriptsize
+      \Forest{s tree [{},cons [{},cons [{},cons[a,atom][b,atom]] [c,atom]] [d,atom] ] } &
+      \scriptsize
+      \Forest{s tree [{},cons [{}, cons [{}, cons
+            [a,atom][b,atom]] [c,atom] ] [d,atom]] }
+    \end{tabular}
+  \end{LTR}
+\end{figure}
+
+הייצוג הרגיל של ביטוי S במחשב הוא באמצעות עצים בינאריים. בייצוג זה, כל צומת
+פנימי של העץ הוא רשומה המכילה שני מצביעים, שכל אחד מהם יכול להצביע לרשומה אחרת,
+או למילה.
+
+§§ ביטויי S בשפת ליספ וכתיב הרשימות
+
+שפת ליספ מרחיבה מעט את ההגדרה של ביטויי-S כפי שהצגנו אותה למעלה, אבל, בסופו של
+דבר, ביטויי S בליספ היא הקבוצה~$\SX$ מעל אלפבית הכולל בתוכו את האותיות
+\texttt{A} עד \texttt{Z}, ספרות, וגם מרבית הסימנים המיוחדים, כולל \texttt{-},
+\texttt{+} ועוד.
+
+לביטוי S מורכב קוראים בשפת ליספ \E|dotted-pair|. לאיבר הראשון ב-dotted-pair
+קוראים \E|car|, ולאיבר השני ב-dotted-pair קוראים \E|cdr|. לזוג כולו קוראים
+.
+לעיתים גם "רשומת \E|cons|".
+
+לביטוי S אטומי בשפת ליספ קוראים אטום \E|(atom)|. דוגמאות לאטומים הן \E|A|,
+\E|12B|, \E|ZZZ| ו-\E|+|. מסיבות היסטוריות, האלפבית של אטומים בליספ אינו מכיל
+אותיות קטנות. מערכות ליספ מתרגמת את האותיות הקטנות לאותיות גדולות כשהן מופיעות
+בתוך אטומים.
+
+סדרת התווים המגדירה אטום יכולה להיות גם~$ε$, הסידרה הריקה. השם \E|nil| מציין את
+האטום שסדרת התווים שלו היא~$ε$. כפי שנראה בהמשך, גם הכתיב \E|()| מציין את האטום
+הזה. סדרת התווים המגדירה אטום היא חסרת משמעות בדרך כלל, אולם המתכנת בליספ יכול
+להעניק לאטומים נבחרים משמעות. בנוסף, יש מספר אטומים שהמשמעות שלהם מוגדרת מראש
+בשפה.
+
+\ע|רשימה| \E|(list)| בליספ היא סדרה של פריטים העטופה בסוגריים. כל פריט ברשימה
+יכול להיות אטום, \E|dotted-pair|, או רשימה בעצמו. ניתן לכתוב רווחים לפני ואחרי
+כל אחד מהפריטים, אולם שני אטומים רצופים ברשימה חייבים להיות מופרדים בסימן רווח
+אחד לפחות.
+
+כך, \E|(a b c d)| היא הרשימה המכילה ארבעה פריטים: האטומים \E|a|, \E|b|, \E|c|
+ו-\E|d|. הרשימה הריקה, זו שאינה מכילה אף פריט, נכתבת כ-\E|()|, ואילו
+\E|((a.c)c)| היא רשימה המכילה שני פריטים, שהראשון בהם הוא ביטויי~S מורכב,
+\E|(a.c)|, והשני הוא האטום \E|c|.
+
+כל רשימה היא כתיב מקוצר לביטוי~\E|S|. הכתיב מוגדר באינדוקציה על אורך הרשימה:
+הרשימה הריקה \E|()| היא כתיב אחר לאטום \E|nil|. רשימה שאינה ריקה, היא כתיב
+מקוצר לביטוי~S מורכב, כלומר זוג של ביטויי~\E|S|. האיבר הראשון בזוג הוא האיבר
+הראשון ברשימה. האיבר השני בזוג, הוא הייצוג של שארית הרשימה.
+
+לפיכך, הרשימה \E|(a b c d)| היא כתיב אחר לביטוי~S
+\begin{LISP}
+(a.(b.(c.(d.nil))))
+\end{LISP}
+
+הפריטים ברשימה הם ביטויי~\E|S|, אבל כיוון שרשימה גם היא ביטוי~\E|S|, רשימה
+יכולה להכיל בתוכה רשימות. למשל,
+\begin{LISP}
+  ((a b) c)
+\end{LISP}
+היא רשימה המכילה בתוכה שני פריטים, הראשון שבהם הוא רשימה בת שני אטומים, והשני
+שבהם הוא אטום. רשימה זו ניתנת לתיאור באמצעות ביטוי~\E|S|,
+\begin{LISP}
+  ((a.(b.nil)).(c.nil))
+\end{LISP}
+\פנה|איור:רשימות| מציג רשימות אלו כעצים בינאריים מלאים.
+
+\begin{figure}[!htbp]
+  \caption{יצוג רשימות כעצים בינאריים}
+  \label{איור:רשימות}
+  \begin{LTR}
+    \rowcolors{2}{orange!20}{white}
+    \begin{tabular}{*5T}
+      \lisp{()} &
+      \T|(A)| &
+      \T|(A B)| &
+      \T|(A B C D)| &
+      \multicolumn1c{\T|((A B) C)|}
+ ⏎
+      \Forest{%
+        s tree [$ε$,atom]
+      } &
+      \Forest{s tree [{},cons [A,atom] [$ε$,atom]]
+      } &
+      \Forest{s tree [{},cons [A,atom] [\relax,cons[B,atom][$ε$,atom]]]
+      } &
+      \Forest{%
+      s tree [{},cons [A,atom]
+      [{},cons [B,atom]
+      [{},cons [C,atom]
+      [{},cons [D,atom]
+      [$ε$,atom]
+      ]
+      ]
+      ]
+      ]
+      } &
+      \Forest{%
+      s tree [{},cons
+      [{},cons
+      [B,atom]
+      [{},cons[C,atom] [$ε$,atom] ]
+      ]
+      [{},cons
+      [C,atom]
+      [$ε$,atom]
+      ]
+      ]
+      }
+    \end{tabular}
+  \end{LTR}
+\end{figure}
+
+המשמעות של המונח \ע|כתיב| היא שמרכיב ה-Reader של האינטרפטר של ליספ יכול לקרוא
+ביטויי S הנתונים בכתיב הרשימות ושמרכיב ה-Printer של האינטרפטר יתרגם ביטוי S
+לכתיב הרשימות כשהדבר אפשרי. (לא כל ביטוי~S ניתן להיכתב בכתיב
+הרשימות. למשל הביטוי \E|(a.b)| אינו ניתן להכתב כרשימה. אבל כל רשימה ניתנת
+להיכתב כביטוי~\E|S|.) בהעדר סיבה מיוחדת, מתכנתי ליספ נוהגים לכתוב ביטויי~S
+בכתיב הרשימות בכל אימת שניתן לעשות זאת.
+
+§§ פעולות על ביטויי~S
+
+שפת ליספ תומכת בפעולות מבניות אלמנטריות על ביטויי~\E|S|. המשמעות של שלושת
+האטומים \T|cons|, \T|car|, ו-\T|cdr| מוגדרת מראש במיני ליספ לציין פעולות
+מבניות אלו:
+
+\begin{enumerate}
+  ✦ האטום \T|cons| מציין פונקציה המקבלת שני ביטויי~\E|S|, ומחזירה ביטוי~S
+  שהוא זוג בו האיבר הראשון הוא הארגומנט הראשון לפונקציה, ואילו האיבר השני של
+  הזוג הוא הארגומנט השני לפונקציה.
+
+  נשים לב לכך שאם הארגומנט השני לפונקציה זו הוא רשימה, אז הפונקציה מחזירה רשימה
+  חדשה שבה הפריט הראשון הוא הארגומנט הראשון לפונקציה ושאר הפריטים הם כמו אלו
+  שהיו ברשימה שהיא הארגומנט הראשון: הפעלת car על האטום a ועל הרשימה
+  \E|((b~c)~d)| תחזיר את הרשימה \E|(a~(b~c)~d)|.
+
+  ✦ האטום \T|car| מציין פונקציה המקבלת כארגומנט ביטוי~S אחד. אם ביטוי זה הוא
+  ביטוי מורכב, הפונקציה מחזירה ביטוי~S שהוא האיבר הראשון בזוג ממנו הארגומנט
+  בנוי.
+
+  לעומת זאת, אם הארגומנט לפונקציה הוא אטום, הפונקציה נכשלת. כשלון זה דומה
+  לכשלון של ניסיון לחלוקה באפס. ממש כשם שלא כל הפעולות האריתמטיות מוגדרות על כל
+  המספרים, לא כל הפונקציות המבניות מוגדרות על כל ביטויי~ה-\E|S|.
+
+  אם הארגומנט לפונקציה הוא רשימה שאיננה ריקה, אז הפונקציה מחזירה את הפריט
+  הראשון ברשימה: הפעלת cdr על הרשימה \E|((b c) d)| תחזיר \E|(b c)|. כאמור, אם
+  הארגומנט ל-\E|car| הוא אטום, ואפילו יהא זה האטום \lisp{nil}, כלומר הרשימה
+  הריקה, הפונקציה נכשלת.
+
+  ✦ האטום \T|cdr| מציין פונקציה המקבלת כארגומנט ביטוי~S אחד. אם ביטוי זה הוא
+  ביטוי מורכב, הפונקציה מחזירה ביטוי~S שהוא האיבר השני בזוג ממנו הארגומנט בנוי.
+
+  אם הארגומנט לפונקציה הוא רשימה שאינה ריקה, אז הפונקציה מחזירה את שארית
+  הרשימה, כלומר, הרשימה בלעדי האיבר הראשון שבה: הפעלת cdr על הרשימה \E|((b c)
+  d)| תחזיר \E|(d)|. ממש כמו car הפונקציה cdr נכשלת אם היא מופעלת על אטום בודד
+  או על הרשימה הריקה.
+
+\end{enumerate}
+
+שפת ליספ תומכת גם בפונקציות לוגיות המאפשרות לבדוק את תוכנו של ביטויי~\E|S|.
+שפת מיני ליספ מסתפקת בשלוש כאלו: המשמעות של שלושת האטומים \T|atom|, \T|null|,
+ו-\T|eq| מוגדרת מראש במיני ליספ לציין פונקציות המאפשרות בדיקות כאלו:
+
+\begin{enumerate}
+  ✦ האטום \T|atom| מציין פונקציה המקבלת ביטוי~S אחד ומחזירה את האטום \T|t| אם
+  ארגומנט זה הוא אטום, ואחרת את האטום \T|nil|.
+
+  ✦ האטום \T|null| מציין את הפונקציה המקבלת ביטויי~S אחד ומחזירה את האטום
+  \T|t|. אם ארגומנט זה הוא האטום \T|nil| ואחרת את האטום \T|t| אם הארגומנט
+  לפונקציה הוא רשימה, אז הפונקציה מחזירה \T|t| אם ורק אם הרשימה ריקה, ו-\T|nil|
+  בכל מקרה אחר.
+
+  ✦ האטום \T|eq| מציין את הפונקציה המקבלת שני ביטויי~S ומחזירה את האטום \T|t|
+  אם שני הארגומנטים לפונקציה הם אטומים, ושני האטומים הללו שווים. בכל מקרה אחר,
+  הפונקציה מחזירה את האטום \T|nil|.
+\end{enumerate}
+
+ניתן לחשוב על האטום \T|nil| כמסמן את הערך של שלילה לוגית, כלומר \E|false|, ועל
+האטום \T|t| כמסמן את ערך האמת, \E|true|.
+
+§§ ביטויי S כעצים מעל אלפאבית
+
+ראינו שביטויי S ניתנים להצגה כעץ בינארי שבו העלים, והעלים בלבד, מכילים
+סימבולים. אם ביטוי S ניתן להכתב כרשימה של רשימות, אז ניתן להציג את הביטוי הזה
+כ\ע|עץ|, שבו קיים סימבול בכל צומת פנימית ובכל עלה. ומספר הבנים של כל צומת
+פנימית יכול להיות כלשהו.
+
+בהנתן אלפבית~$Σ$, נגדיר את~$T(Σ)$, קבוצת העצים שבכל צומת שלהם ישנו איבר של~$Σ$.
+עץ כזה יכול להיות עץ אטומי, ואז העץ מצטמצם לכדי עלה בודד, שחייב להכיל איבר
+של~$Σ^*$. עץ ב-$T(Σ)$ יכול להיות גם עץ מורכב, ובמקרה זה הוא מורכב מצומת פנימי
+שבו יש אות של~$Σ$ ומספר כלשהו של בנים שכולם עצים ב-\E|$T(S)$|. בניסוח זה, אנו
+רואים שעץ אטומי הוא עץ מורכב שיש לו אפס בנים.
+
+נוכל להגדיר את הקבוצה~$T(Σ)$ כשפה פורמלית מעל אלפבית מורחב, הכולל גם את זוג
+סימני הסוגריים ואת סימן הפסיק בא בהנתן אלפבית~$Σ$ אזי,~$T(Σ)$,
+\begin{definition}[עצים מעל אלפבית]
+  בהנתן אלפבית~$Σ$ אזי,~\E|$T(Σ)$|, קבוצת העצים מעל~$Σ$ מוגדרת באמצעות הבנאי
+  ה-$n$ מקומי
+  \begin{equation*}
+    \infer{w(t₁,…,tₙ)∈\SX(Σ)}{w∈Σ^* & n≥0 & t₁∈T(Σ) & t₂∈T(Σ)&⋯& tₙ∈T(Σ)}
+  \end{equation*}
+\end{definition}
+
+כמה איברים פשוטים של קבוצת העצים מעל האלפבית בן שלוש האותיות~$Σ=❴a,b,c❵$ הם \[
+  a,b(c),a(b,c), a(b(a)), a(a,b,c)∈T(❴a,b,c❵)
+\] \cref{figure:tree} מדגים את הטופולגיה של העץ המורכב יותר \[
+  a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab)))∈T(❴a,b,c❵)).
+\] \begin{figure}[!htbp]
+  \centering
+  \forestset{%
+    x tree/.style={%
+        for tree={%
+            math content,
+            s sep'+=-3pt,
+            fit=band,
+          },
+      },
+  }
+  \begin{forest}
+    s tree [a
+          [a,[a][ab][abc]]
+          [b,[b][ab[c]]]
+          [c,[c[a[ab]]]]
+      ]
+  \end{forest}
+  \כיתוב|העץ~$a(a(a,ab,abc),b(b,ab(c)),c(c(a(ab))))$.|
+  \label{figure:tree}
+\end{figure}
+
+אם ביטוי S הוא רשימה של רשימות, אזי ניתן להציגו כעץ. התרגום מתבצע על ידי הפיכת
+כל רשימה בביטוי לתת-עץ: האיבר הראשון ברשימה הוא שורש תת-העץ. שאר האיברים
+ברשימה, הם הבנים של תת העץ. לדוגמה, בעבור הרשימה
+\begin{LISP}
+  (a b (car x) (+b x))
+\end{LISP}
+יבנה כך העץ
+\begin{LTR}
+  \scriptsize
+  \forestset{%
+    x tree/.style={%
+        font=\ttfamily,
+        for tree={%
+            s sep'+=-3pt,
+            circle,
+            fit=band,
+          },
+      },
+  }
+  \begin{forest}
+    x tree [a,
+        [a,[car,[x]]]
+          [+, [b] [x]]
+      ]
+  \end{forest}
+\end{LTR}
+
+נשים לב לכך שהפונקציה \E|car|, כשהיא מופעלת על עץ מעל אלפאבית מחזירה את תוכנו
+של הצומת שבשורש העץ, ואילו הפונקציה \E|cdr| מחזירה את רשימת הבנים של הצומת, שכל
+אחד מהם הוא עץ כזה בעצמו.
+
+§§ עצי שיערוך
+
+ניתן להסתכל על עץ מעל אלפאבית, שבו יש סימבול בכל צומת, ושבו הדרגה אינה מוגבלת,
+כעץ "שיערוך". נסתכל למשל על הביטוי הבא בשפת~\CPL
+\begin{CPP}
+  f(2) ? g(++a,--b,-sin(c)) : 10+h()
+\end{CPP}
+חישוב ביטוי כגון זה, דורש ראשית הבנה של המונחים שבו. חישוב הכולל הבנת מונחים
+פיענוח משמעות הסימבולים אנו קוראים שיערוך \E|(evaluation)|.
+נתאר את השיערוך של הביטוי הזה על ידי הצגתו כעץ השיערוך המתואר ב\פנה|איור:עץ|.
+
+\begin{figure}[!htbp]
+  \caption{%
+    עץ החישוב של הביטוי \protect\T|f(2) ? g(++a,--b,-sin(c)) : 10+h()|.
+  }
+  \תגית|איור:עץ|
+  \centering
+  \begin{LTR}
+    \scriptsize
+    \forestset{%
+      x tree/.style={%
+          for tree={%
+              font=\ttfamily\scriptsize,
+              s sep'+=3pt,
+              l sep'+=3pt,
+              fit=band,
+            },
+        },
+    }
+    \begin{forest}
+      x tree [\E|:?|,
+      [$f()$ [$2$]]
+      [$g()$
+      [\T|++|[$a$]]
+      [\T|--|[$b$]]
+      [$-$ [$\sin()$ [$c$]]]
+      ]
+      [$+$[$10$][$h()$]]
+      ]
+    \end{forest}
+  \end{LTR}
+\end{figure}
+
+שיערוך ביטוי ניתן לתיאור רקורסיבי באמצעות העץ שמתאר אותו.
+בסיס הרקורסיה הוא שיערוך של עלה, הנעשה באמצעות פיענוח משמעותו.
+בעץ שבאיור יש שישה עלים:
+\begin{itemize}
+  ✦ משמעות העלים המסומנים ב-$2$ וב-$10$ היא המספרים~$2$ ו-$10$, שכן בשפת~\CPL
+  סדרות התווים \T|2| ו-\T|10| הן מילולונים, כלומר סדרות אלו מציינות ערך הנקבע
+  באופן יחיד על ידי תוכן הסדרה, ללא תלות בטבלת סימבולים כלשהי.
+  ✦ משמעות העלים המסומנים ב-$a$, \E|$b$| וב-$c$ נעשית על ידי חיפוש השמות הללו
+  בטבלת הסימבולים, שכן בשפת~\CPL סדרות התווים \T|a|, \T|b| ו-\T|c| הם מזהים. מזהים
+  אלו מתייחסים, ככל הנראה, למשתנים אשר הוגדרו קודם.
+  ✦ משמעות העלה המסומן ב-$h()$ גם היא נעשית באמצעות חיפוש השם~$h$
+  בטבלת הסימבולים, אלא שנדרש שהחיפוש בטבלה יקשור את השם לפונקציה.
+  אם על פי החיפוש, משמעות השם~$h$ היא משתנה, אזי השיערוך של הביטוי יכשל.
+\end{itemize}
+
+שיערוך של צומת פנימית, מתחיל באופן דומה. ראשית יש לברר את משמעות הסימבול אשר
+נמצא בתוך הצומת. בדוגמה שלנו, הסימבולים \T|+|, \T|-|, \T|++|, \T|--| ו-\T|?:|
+הם אופרטורים של שפת~\E|\CPL|. כלומר, המשמעות שלהם קבועה מראש בשפה, ולכן אין לחפש את
+משמעותם בטבלת שמות. לעומת זאת, \T|f|, \T|g| ו-\T|sin| הם שמות שהוגדרו על ידי
+מתכנת†{נזכר שהפונקציה~$\sin$ אינה בנויה בשפת~\E|\CPL|, אלא היא מוגדרת באחת
+מהסיפריות.} לאחר פענוח משמעותה של צומת פנימית, יש לחשב את ערכי תתי העצים של
+הצומת, ולהעביר את תוצאות החישוב של תתי העצים כארגומנטים לפונקציה.
+
+ניתן להבין באופן מדוייק יותר את תהליך השיערוך באמצעות בדיקה של האופן שבו הוא
+מתבצע בשפת ליספ.
+
+§ שיערוך של ביטויי S
+
+§§ שיערוך של אטומים
+
+השיערוך של ביטויי-S מוגדר רקורסיבית. בסיס הרקורסיה הוא בשיערוך של אטומים.
+שיערוך של אטום אינו נדרש לבצע חישוב, אלא רק למצוא את משמעותו של האטום הנתון.
+אטום בליספ הוא מזהה \E|(identifiier)|, וכמו בשפות תכנות אחרות, משמעותו של המזהה
+נמצאת בטבלת סימבולים \E|(symbol table)|. טבלת הסימבולים היא מבנה נתונים הקושר בין
+שמות ובין משמעותם, ומציאת המשמעות נעשית על ידי חיפוש בטבלה זו.
+
+טבלת הסימבולים בליספ מאורגנת במבנה נתונים הידוע בליספ בשם \E|association list| או
+בקיצור \E|a-list|. ה-\E|a-list| היא רשימה של פריטים אשר כל אחד מהם מבטא קישור
+של שם לערך. כל פריט הוא dotted-pair אשר ה-car שלו הוא שם
+(המיוצג כאטום) ואילו ה-cdr של הפריט הוא משמעותו של השם (שהיא~\E|S-Expression|,
+אטומי או מורכב. אם משמעותו של האטום foo היא העץ~$ϕ$ אז הפריט הנשמר ב-\E|a-list|
+הוא~\E|$(\text{foo}.ϕ)$|. הקישור בין השם והביטוי הוא בדיוק בעובדה ששני אלו מחוברים
+ברשומת \E|cons|.
+
+רשימה ה-\E|a-list| מנוהלת כמחסנית, כלומר פריטים מתווספים ומוסרים ממנה רק
+בתחילתה. החיפוש אחר משמעות ברשימה נעשה סדרתית, בסריקה המתחילה בתחילת הרשימה.
+חיפוש המשמעות של האטום foo נעצר בזוג הראשון שבו מרכיב השם הוא \E|foo|. החיפוש
+נכשל אם לא נמצא זוג כזה.
+
+כאשר האינטרפטר של ליספ מתחיל את פעולתו, ה-\E|a-list| מכילה קישורים בעבור כמה
+אטומים המוגדרים מראש בשפה. לשם פשטות נניח בשלב זה כי הרשימה מכילה קישורים בעבור
+שני אטומים בלבד: \E|t| ו-\E|nil|.
+התוכן המינימלי של ה-\E|a-list| הוא על כן
+\begin{LISP}
+(
+  (t.t)
+  (nil.nil)
+)
+\end{LISP}
+
+הפריט הראשון ברשימה הוא dotted-pair הקובע שמשמעות של האטום \T|t| היא אטום זה
+עצמו. הפריט השני ברשימה קובע שמשמעותו של האטום \T|nil| היא אטום זה עצמו גם כן.
+לפיכך, כאשר האינטרפטר של ליספ יקרא את האטום \T|t| הוא ידפיס בתגובה \T|T|, וכאשר
+הוא יקרא את האטום \T|nil| הוא ידפיס בתגובה \T|NIL|.
+\begin{LISP}
+> t
+T
+> nil
+NIL
+\end{LISP}
+
+§§ הפונקציה set
+הפונקציה \T|set| שבליספ היא פונקציה פרימטיבית המקבלת שני פרמטרים, שהראשון בהם
+הוא אטום, והשני הוא ביטוי S כלשהו. הפונקציה מוסיפה ל-\E|a-list| פריט שהוא
+dotted-pair
+המבטא קישור בין האטום לביטוי. במרבית הניבים של ליספ יש ואריאנטים רבים של
+\T|set| אולם במיני ליספ נסתפק ב-\T|set| בלבד.
+
+אם נזין לאינטרפטר של ליספ את הביטוי
+\begin{LISP}
+> (set foo (bar baz))
+\end{LISP}
+כבקשה לקשור את האטום \T|foo| לרשימה \T|(bar baz)|
+נתקל בשגיאות, שכן האינטרפטר ינסה לשערך את שני הארגומנטים של הפונקציה \E|set|
+טרם שהוא יפעיל פונקציה זו. אלא ששיערוך זה יכשל, שכן לאף אחד משלושת האטומים
+המופיעים בקריאה ל-set אין משמעות מלכתחילה.
+
+בכדי להתגבר על מכשלה זו יש להשתמש בפונקציה \T|quote|, פונקציה של ארגומנט אחד
+אשר \ע|אינה| משערכת את הארגומנט שלה, אלא מחזירה אותו כמות שהוא.
+כך למשל
+\begin{LISP}
+> (quote foo)
+FOO
+> (quote (bar baz))
+(BAR BAZ)
+\end{LISP}
+קשירת האטום \T|foo| לרשימה \T|(bar baz)| יכול להעשות באמצעות
+\begin{LISP}
+> (set (quote foo) (quote (bar baz)))
+(BAR BAZ)
+> foo
+(BAR BAZ)
+\end{LISP}
+נשים לב לכך שהשערוך של הביטוי
+\begin{LISP}
+(set (quote foo) (quote (bar baz)))
+\end{LISP}
+אינו במטרה לחשב ערך כלשהו, אלא במטרה לקשור שם לערך. נזכר שבאופן
+כללי פעולת השיערוך בליספ כוללת שלושה סוגים של פעולות: מציאת משמעות של שם, הגדרת
+משמעות של שם, וחישוב שהוא הפעלת פונקציה על ביטוי S או ביטויי \E|S|.
+בכל זאת, כל פונקציה בליספ חייבת להחזיר ערך.
+
+במקרה של הפונקציה set הערך המוחזר הוא ערכו של הפרמטר השני שלה, ואכן האינטרפטר
+מדפיס את הערך \T|(BAR BAZ)| בתגובה לקלט \T|(set (quote foo) (quote (bar
+baz)))|.
+
+\begin{LISP}
+> (set (quote foo) (quote (bar baz)))
+(BAR BAZ)
+\end{LISP}
+
+\begin{minipage}\linewidth
+הפונקציה set מוסיפה זוג לתחילת ה-\E|a-list|: אם התוכן של רשימת ה-\E|a-list|
+לפני הקריאה ל-set היה \begin{LISP}
+(
+  (t.t)
+  (nil.nil)
+)
+\end{LISP}
+\end{minipage}
+אזי אחרי הקריאה תוכן רשימה זו יהיה
+\begin{LISP}
+(
+  (foo.(bar baz))
+  (t.t)
+  (nil.nil)
+)
+\end{LISP}
+ויזואלית, נצייר רשימת ה-\E|a-list| לפני הקריאה כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+    \node[above=of h] (A) {a-list};
+    \draw[->] (A.south)--(h);
+  \end{tikzpicture}
+\end{LTR}
+ואחרי השיערוך של \T|(set (quote foo) (quote (bar baz)))|
+תראה ה-\E|a-list| כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        g/foo/(bar baz),
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {g/h,h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+    \node[above=of g] (A) {a-list};
+    \draw[->] (A.south)--(g);
+  \end{tikzpicture}
+\end{LTR}
+
+שפת מיני ליספ יכולה לאתחל את ה-a-list באמצעות
+\begin{LIBRARY}
+(set (quote t) (quote t))
+(set (quote nil) (quote nil))
+\end{LIBRARY}
+לא ניתן \ע|להסיר| פריטים מתוך ה-\E|a-list|. אבל, ניתן \ע|להסתיר| קישור באמצעות
+הוספת פריט לרשימה, אשר יסתיר את הקישור הקודם.
+
+אם נכתוב כעת
+\begin{LISP}
+> (set (quote foo) (quote ((baz))))
+(BAR BAZ)
+\end{LISP}
+הרי התוכן של ה-a-list יהיה
+\begin{LISP}
+(
+  (foo.((baz)))
+  (foo.(bar baz))
+  (t.t)
+  (nil.nil)
+)
+\end{LISP}
+וויזואלית כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        f/foo/((baz)),
+        g/foo/(bar baz),
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {f/g, g/h,h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+    \node[above=of f] (A) {a-list};
+    \draw[->] (A.south)--(f);
+  \end{tikzpicture}
+\end{LTR}
+
+ואם ננסה לשערך כעת את \T|foo|, נקבל את הערך הנוצר מהקישור החדש
+\begin{LISP}
+> foo
+((BAZ) BAR)
+\end{LISP}
+וזאת משום שהחיפוש ב-a-list מתחיל מתחילתה, ועוצר במקום הראשון שבו הוא מצליח.
+
+כתיב מקוצר לביטוי \E|(quote~$X$(| המפעיל את הפונקציה quote על הביטויי~$X$,
+הוא~\E|$'X$|, כלומר סימן מרכאה בודד לפני~$X$. הטיפול בכתיב זה נעשה על ידי
+ה-Reader וה-Printer של ליספ, והם אינם חלק מהמשערך של השפה.
+
+הקריאה ל-\E|set| בשימוש בכתיב המקוצר היא אכן קצרה יותר,
+\begin{LISP}
+> 'foo
+FOO
+> (quote 'foo)
+'FOO
+> '(quote foo)
+'FOO
+> '(bar baz)
+(BAR BAZ)
+> (set 'foo '(bar baz))
+(BAR BAZ)
+> foo
+(BAR BAZ)
+\end{LISP}
+
+§§ מילולונים
+ניזכר שבביטויי~S כל אטום הוא סדרת סימנים נטולת משמעות. בעבור מיני ליספ,
+מספיק להניח כי גם האטום 42 הוא סדרה (בת שתי אותיות) שאין לה משמעות משלה.
+במיני ליספ נוכל לתת לאטום זה משמעות, למשל על ידי
+\begin{LISP}
+(set '42 'answer)
+\end{LISP}
+במרבית המימושים של ליספ האטום 42 מייצג ערך שהוא מספר
+שלם. אנו אומרים שהאטום 42 הוא \ע|מילולון| (\E|literal|). מילולון הוא
+אטום שמשמעותו קבועה והוא אינו מציין ביטוי \E|S| אחר. משמעותו של מילולון
+נקבעת על ידי פירוש "מילולי" של סדרת התווים שבו, בניגוד למשמעותו של סימבול
+הנקבעת באמצעות טבלת סימבולים.
+
+כאמור, אין מילולונים במיני ליספ. ב-\E|Common Lisp| יש כמה סוגים של מילולונים,
+הכוללים
+\אבגד
+✦ מספרים שלמים, כגון \T|-12|.
+✦ מספרטים רציונליים, כגון \T|3/7|.
+✦ מספרים ממשיים כגון \T|3.1415926535897932384d0| ו-\T|6.02E+23|.
+✦ מספרים מרוכבים כגון \T|#C(5-3)| אשר ערכו הוא~$5-3i$.
+✦ מחרוזות כגון \T|"Hello, World"|
+===
+
+התמיכה במילולונים נעשית על ידי הרחבת שיטת השיערוך של אטומים: אם האטום אותו יש
+לשערך הוא סדרת תווים הנחזית להיות מספר או מילולון אחר, אז השיערוך של האטום נעשה
+ללא היוועצות בטבלת הסימבולים. תמיכה בפעולות אריתמטיות נעשית באמצעות הגדרה מראש
+של קישור בין האטום \T|+| לפעולת החיבור של מספרים, בין \T|*| ובין פעולת הכפל,
+וכו'.
+
+בכמעט כל הניבים של ליספ, ניתן לכתוב ביטויים אריתמטיים בכתיב הרשימות, והשיערוך
+שלהם יביא לתוצאה הצפוייה,
+
+\begin{LISP}
+> (+¢ ¢2 (* 3 5))
+17
+\end{LISP}
+
+הרחבות אלו אינן נחוצות לשם הבנה של ליספ, שכן ניתן לקודד בתוך ביטויי~S את
+המספרים הטבעיים, את המספרים הממשיים והמרוכבים, מחרוזות ולמעשה כל מבנה נתונים
+שניתן להעלות על הדעת, וניתן באמצעות מיני ליספ לממש את כל הפונקציות האריתמטיות.
+אבל, כיוון שמיני ליספ אינו מסוגל לבדוק את תוכנה של סדרת הסימנים היוצרת אטום
+הפעולה היחידה המותרת על אטום במיני ליספ היא השוואתו לאטום אחר: שפת מיני ליספ
+אינה יכולה להפוך אטום כמו \T|43217| למילולון אשר משמעותו היא המספר הטבעי
+\E|$43,217$|, דהיינו, ארבעים ושלושה אלפים ומאתיים ושבע עשרה.
+
+§§ ביטויי~$λ$
+מתכנת בליספ יכול להוסיף פריטים לטבלת הסימבולים באמצעות הפונקציות \E|set|
+ו-\E|defun|.
+
+הפונקציה defun מאפשרת להגדיר פונקציות חדשות. נגדיר לדוגמה פונקציה בשם mirror
+המקבלת פרמטר x שהוא ביטוי~\E|S| מורכב, ומחזירה ביטוי מורכב אחר שבו ה-car וה-cdr
+שב-x הוחלפו.
+\begin{LISP}
+(defun ; define a new function
+  mirror; named mirror
+  (x) ; which expects a single parameter, named x
+  (cons (cdr x) (car x)); and whose body is this S-expression
+)
+\end{LISP}
+אנו רואים שהפונקציה defun מקבלת שלושה פרמטרים: שם הפונקציה אותה יש להגדיר,
+רשימת הפרמטרים הפורמליים לפונקציה, וגוף הפונקציה. הקריאה גם מדגימה שהערות בליספ
+מתחילות בסימן ";" (נקודה ופסיק) ונמשכות על סוף השורה.
+
+אחרי הגדרה זו של \E|mirror| באמצעות \E|defun|, נוכל להשתמש בפונקציה החדשה
+שהגדרנו כך:
+\begin{LISP}
+> (mirror '(a.b))
+(B.A)
+\end{LISP}
+
+מקובל לקרוא ל-\E|a-list| גם סביבה \E|(environment)|. הסביבה היא אוסף של קישורים
+בין שמות למשמעותם, והיא זו שנותנת משמעות לשמות. ראינו כבר שהפונקציה \E|set|
+מוסיפה קישור לסביבה. גם הפונקציה \E|defun| מוסיפה קישור לסביבה: שיערוך הביטוי
+\begin{LISP}
+(defun mirror (x) (cons (cdr x) (car x)))
+\end{LISP}
+מביא לקשירה בין השם mirror ובין מימוש הפונקציה. שיערוך הביטוי \T|(mirror
+'(a.b))| משתמש בשם זה, למציאת מימוש הפונקציה.
+
+המימוש של פונקציה כולל את ביטוי ה-S המהווה את גוף הפונקציה. בדוגמה שלנו ביטוי
+זה הוא
+\begin{LISP}
+(cons (cdr x) (car x))
+\end{LISP}
+אבל, מלבד גוף הפונקציה כולל המימוש גם את רשימת השמות הפרמטרים הפורמליים אליה.
+בפונקציה mirror יש פרמטר אחד אשר מיוצג ברשימה \T|(x)|. שמות הפרמטרים הפורמליים
+קובעים כיצד יש לחשב את גוף הפונקציה: בכל מקום שבגוף הפונקציה מופיע שם של פרמטר
+פורמלי, יש בזמן הקריאה לפונקציה וחישוב הגוף, להחליף שם זה בערכו של הפרמטר
+האקטואלי.
+
+הצירוף של גוף הפונקציה ושמות הפרמטרים אליה נקרא ביטוי-$λ$. ביטוי כזה
+מייצג פונקציה אנונימית. ביטוי ה-$λ$ בעבור mirror הוא
+\begin{LISP}
+  (lambda (x) (cons (cdr x) (car x)))
+\end{LISP}
+באופן כללי ביטוי~$λ$ הוא רשימה בת שלושה פריטים בדיוק:
+\ספרר
+✦ האטום \T|lambda| המזהה את הרשימה כביטוי~$λ$.
+✦ רשימה של אטומים, המייצגת את שמות הפרמטרים הפורמליים לפונקציה.
+✦ גוף הפונקציה, כלומר הביטוי שהשיערוך שלו אחרי הקשירה בין הפרמטרים
+הפורמליים לאקטואליים, יתן את ערכה של הפונקציה.
+===
+
+הפונקציה defun יוצרת ביטוי-$λ$ וקושרת אותו לשם הפונקציה המוגדרת. מסיבות של
+יעילות, מרבית המימושים של ליספ מנהלים את הקישורים בין שמות הפונקציות ובין הגוף
+שלהן באמצעות מנגנונים יעודיים. במיני ליספ הקישורים הללו מנוהלים באמצעות
+ה-\E|a-list|, כלומר אם תוכן ה-\E|a-list| הוא
+\begin{LISP}
+(
+  (foo.(bar baz))
+  (t.t)
+  (nil.nil)
+)
+\end{LISP}
+\begin{minipage}\linewidth
+אז לאחר שיערוך הביטוי
+\begin{LISP}
+(defun
+  mirror (x)
+  (cons (cdr x) (car x))
+)
+\end{LISP}
+תוכן ה-\E|a-list| יהיה
+\begin{LISP}
+(
+  (mirror.
+     (lambda (x)
+        (cons (cdr x) (car x))))
+  (foo.(bar baz))
+  (t.t)
+  (nil.nil)
+)
+\end{LISP}
+\end{minipage}
+
+ניתן במיני ליספ לייצר ביטוי-$λ$ מבלי להשתמש ב-\E|defun|, בשימוש בפונקציה
+\E|quote|,
+\begin{LISP}
+  '(lambda (x) (cons (cdr x) (car x)))
+\end{LISP}
+ולכן ניתן להגדיר את הפונקציה mirror תוך שימוש ב-set במקום ב-\E|defun|,
+\begin{LISP}
+(set mirror
+  '(lambda (x)
+      (cons (cdr x) (car x)))
+)
+\end{LISP}
+לחילופין, ניתן להשתמש בפונקציה lambda המקבלת שני פרמטרים: הראשון שבהם הוא רשימה
+של אטומים, המייצגים את שמות הפרמטרים הפורמליים לפונקציה, והשני הוא גוף הפונקציה
+אשר אותו יש לשערך בקריאה לפונקציה, בסביבה הכוללת קישורים בין הפרמטרים הפורמליים
+ובין האקטואליים. תוצאת השיערוך של קריאה לפונקציה lambda היא ביטוי S שנראה
+בדיוק כמו הקריאה לפונקציה.
+\begin{LISP}
+> (lambda (x) (cons (cdr x) (car x)))
+(LAMBDA (X) (CONS (CDR X) (CAR X)))
+\end{LISP}
+ניתן לחקות את ה-הפעולה של defun באמצעות set ושימוש בביטויי~$λ$.
+\begin{LISP}
+(set
+  mirror
+  (lambda (x) (cons (cdr x) (car x)))
+)
+\end{LISP}
+לאחר הקישור בין השם mirror ובין ביטוי ה-$λ$ המתאר את מימוש הפונקציה \E|mirror|,
+האטום mirror ישוערך לביטוי~$λ$ זה. בקריאה \T|(mirror '(a.b))| תוחלף המילה
+mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור בין הפרמטרים האקטואליים
+והפורמליים.
+
+ניתן גם לקרוא לפונקציה מבלי לנקוב בשמה, אלא תוך שימוש בביטוי המתאר את המימוש
+שלה:
+\pagebreak[3]
+\begin{LISP}
+> (
+    '(lambda (x)
+      (cons (cdr x) (car x))
+    '(a.b)
+)
+(B.A)
+\end{LISP}
+ניתן להשמיט את סימן ה-\E|quote|, ולנצל את העובדה שהאטום \T|lambda| אינו רק
+הפתיח של ביטוי~$λ$ אלא גם פונקציה המחזירה ביטוי כזה,
+\begin{LISP}
+> (
+    (lambda (x) (cons (cdr x) (car x)
+    '(a.b)
+)
+(B.A)
+\end{LISP}
+
+§§ שיערוך מותנה ורקורסיה
+
+שיערוך מותנה פירושו שהשיערוך מתבצע כאשר תנאי מסויים מתקיים, והוא אינו מתבצע
+כאשר התנאי אינו מתקיים. בליספ שיערוך מותנה מתבצע באמצעות הפונקציה \E|cond|
+אשר מכלילה את פקודות ה-if וה-switch שיש בשפת-\E|\CPL|.
+
+נשתמש ב-cond כדי להגדיר פונקציה zcar המחזירה את ה-car של הפרמטר אם
+הוא ביטוי מורכב, ואת הפרמטר עצמו אם הוא אטום
+\begin{LISP}
+(defun zcar(x)
+  (cond ((atom x) x) (t (car x)))
+)
+\end{LISP}
+גוף הפונקציה zcar הוא הביטוי
+\begin{LISP}
+  (cond ((atom x) x) (t (car x)))
+\end{LISP}
+שהוא קריאה לפונקציה cond עם שני פרמטרים שכל אחד מהם הוא רשימה בת שני איברים:
+\begin{LTR}
+  \begin{itemize}
+    ✦ \lisp{((atom x) x)}
+    ✦ \lisp{(t x)}
+  \end{itemize}
+\end{LTR}
+cond היא פונקציה רב מקומית המקבלת מספר כלשהו של פרמטרים שכל אחד מהם נקרא
+\E|test-form|. כל \E|test-form| הוא רשימה בת שני פריטים שכל אחד מהם הוא ביטוי~S
+אשר עשוי להיות משוערך במהלך פעולתה של \E|cond|. הפריט הראשון ב-\E|test-form|
+נקרא test-condition והפריט השני נקראה \E|test-value|.
+
+הפונקציה cond עוברת על ה-test-forms שקיבלה כפרמטרים לפי סדרם, ובכל אחד כזה היא
+משערכת את ה-\E|test-condition|.
+\אבגד
+✦ אם תוצאת השיערוך היא \E|nil|, כלומר ה-test-condition אינו מתקיים, אזי cond
+\ע|אינה| משערכת את ה-\E|test-value|, וממשיכה ל-test-form הבא.
+✦ אם לעומת זאת תוצאת השיערוך אינה \E|nil|, כלומר ה-test-condition מתקיים, אזי
+cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השיערוך הזו, \ע|מבלי|
+להמשיך לשאר ה-\E|test-forms|.
+✦ אם cond ממצה את רשימת ה-\E|test-forms| מבלי להיתקל באף \E|test-condition|
+שמתקיים, הרי cond מחזירה את הערך \E|nil|.
+===
+הביטוי
+\begin{LISP}
+  (cond ((atom x) x) (t (car x)))
+\end{LISP}
+שבגוף הפונקציה zcar ישוערך לכן ל-x אם x הוא אטום, ול-\E|car| של \E|x|, אם x
+איננו אטום.
+
+מקובל להשתמש תמיד באטום \E|t| דווקא כדי לציין את התנאי שמתקיים תמיד, כלומר חלק
+ה-else של פקודת ה-\E|if|, אבל טכנית ניתן היה להגדיר את zcar תוך שימוש בביטוי
+אחר שערכו אינו \E|nil|, למשל
+\begin{LISP}
+(defun zcar(x)
+  (cond ((atom x) x) ('(any S expression) (car x)))
+)
+\end{LISP}
+הנה דוגמה נוספת בה cond מופעלת עם מספר רב יותר של test-forms
+\begin{LISP}
+(defun is-primitive(name) ; determine whether name denotes a primitive function
+  (cond ((eq name 'atom) t)
+        ((eq name 'car) t)
+        ((eq name 'cdr) t)
+        ((eq name 'cond) t)
+        ((eq name 'cons) t)
+        ((eq name 'eq) t)
+        ((eq name 'error) t)
+        ((eq name 'eval) t)
+        ((eq name 'set) t)
+        (t nil)))
+\end{LISP}
+הפונקציה is-primitive משתמשת בסידרה של test-forms כדי לבדוק אם הפרמטר שלה הוא
+אטום המציין פונקציה פרימיטיבית ואם כן מחזירה את האטום \E|t|. (מסיבות טכניות אנו
+מניחים כאן שגם \T|eval| היא פונקציה פרימיטיבית.) האטום \E|nil| יוחזר בכל מקרה
+שהפרמטר אינו אטום, או שהוא אטום שאינו מציין פונקציה פרימיטיבית. לשם כך, משתמשת
+is-primitive בפונקציה \T|eq|, שהיא פונקציה פרימיטיבית, המשמשת לבדיקה אם הפרמטרים
+שלה הם שני אטומים השווים זה לזה.
+
+כדאי לשים לכך שה-test-form האחרון שברשימה (כלומר הרשימה \T|(t nil)|) מיותר,
+שהרי אם אף אחד מה-test-conditions שב-test-forms שקדמו לו אינו מתקיים, ממילא
+cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-form \T|(t nil)| אף אם אינו
+נחוץ, כדי להדגיש שערך ברירת המחדל הוא \E|nil|.
+
+דרך קצרה יותר להגדיר את הפונקציה is-primitive היא באמצעות בדיקה אם הפרמטר
+שלה מצוי ברשימה המכילה את שמות כל הפונקציות הפרימיטיביות
+\begin{KERNEL}
+(defun is-primitive(name); determine whether name denotes a primitive function
+  (exists name '(atom car cdr cond cons eq error eval set)))
+\end{KERNEL}
+במימוש זה, אטום הוא שמה של פונקציה פרימיטיבית אם הוא מצוי בתוך רשימה של האטומים
+המציינות פונקציה פרימיטיבית. הפונקציה exists עצמה אינה מצוייה במיני ליספ, אבל
+קל לממש אותה ברקורסיה.
+\begin{LISP}
+(defun exists (x xs) ; determine whether atom x is in list xs
+  (cond ; three case to consider
+    ((eq xs nil) nil) ; (i) list of xs is exhausted
+    ((eq x (car xs)) t) ; (ii) item x is first in xs
+    (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
+\end{LISP}
+הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת
+ב-\T|xs|, ומחזירה t אם x מצוי בין ה-\T|xs| ו-\T|nil| אחרת. רקורסיה דורשת תמיד
+בדיקת תנאי, כדי להבחין בין בסיס הרקורסיה שבו אין צורך לבצע קריאות רקורסיביות
+נוספות, ובין המקרה שבו יש צורך בהפעלה רקורסיבית. במקרה של הפונקציה \T|exists|
+יש ל-\T|cond| שלושה \E|test-forms|:
+\ספרר
+✦ \T|((eq xs nil) t)| כלומר, אם רשימת ה-\T|xs| ריקה, ברור ש-\T|s| אינו מצוי
+בתוכה ואז \T|exists| מחזירה \T|nil|. לעומת זאת, אם תנאי זה אינו מתקדם,
+\T|exists| עוברת לבדוק את התנאי הבא:
+
+✦ \T|((eq x (car xs)) t)| כלומר, הרקורסיה בוחנת את הפריט הראשון ברשימה \T|xs|,
+על ידי חישוב הביטוי \T|(car xs)| (מובטח שחישוב \T|(car xs)| יצליח שכן
+ה-test-form הקודם שבו נבדק אם הרשימה ריקה נכשל) ומשווה אותו ל-\T|x|. אם מתקיים
+שיוויון, אזי החיפוש הצליח, ו-\T|exists| מחזירה \T|t| מבלי להידרש ל-test-form
+הבא. אחרת, יש בדיקה של ה-test-form הבא:
+✦ \T|(t (exists x (car xs)))|, כלומר, במקרה שהרשימה \T|xs| אינה ריקה, ו-\T|x|
+אינו שווה לפריט הראשון שב-\T|xs|, הפונקציה \T|exists| קוראת לעצמה רקורסיבית לחיפוש של
+\T|x| בשארית הרשימה אשר מתקבלת מחישוב \T|(cdr xs)|.
+===
+הבדיקה אם הרשימה ריקה נעשית באמצעות חישוב התנאי \T|(eq xs nil)|. השוואה של
+אטום ל-nil היא נפוצה בחישובים רקורסיביים. מיני ליספ מגדירה פונקציה הנקראת null
+המיועדת לשם ביצוע השוואה זו:
+\begin{LIBRARY}
+(defun null(x) (eq x nil))
+\end{LIBRARY}
+ניזכר שהפונקציה eq היא פונקציה פרימיטיבית, במובן זה שלא ניתן לממש אותה באמצעות
+פונקציות אחרות. לעומת זאת, כיוון שהפונקציה null שבמיני ליספ ניתנת להגדרה
+באמצעות פונקציות אחרות היא נחשבת לפונקצית סיפריה.
+
+מימוש exists באמצעות null יראה אם כן כך
+\begin{KERNEL}
+(defun exists (x xs) ; determine whether atom x is in list xs
+  (cond ; Three cases to consider:
+    ((null xs) xs) ; (i) list of xs is exhausted
+    ((eq x (car xs)) t) ; (ii) item x is first in xs
+    (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
+\end{KERNEL}
+
+כזכור, ה-a-list היא רשימה של dotted-pairs שכל אחד מהם הוא קישור בין שם לערך.
+נגדיר פונקציה רקורסיבית, \E|lookup| אשר מקבלת שני פרמטרים: id שהוא אטום,
+ו-a-list, שהיא רשימה במבנה של \E|a-list| כפי שהצגנו אותו, כלומר סדרה של
+dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr שלו הוא משמעותו של האטום:
+\begin{KERNEL}
+(defun lookup (id a-list) ; lookup id in an a-list
+  (cond ; Three cases to consider:
+    ((null a-list) ; (i) a-list was exhausted.
+      (error 'unbound-variable id))
+    ((eq id (car (car a-list))) ; (ii) found in first dotted-pair
+      (car (cdr (car a-list)))) ; return value part of dotted pair
+    (t (lookup id (cdr a-list))))) ; (iii) otherwise, recursive call on remainder of a-list
+\end{KERNEL}
+גם בפונקציה lookup אנו רואים קריאה רקורסיבית עם cond המתפצל לשלושה מקרים: במקרה
+של רשימה ריקה הפונקציה נכשלת, במקרה שראש הרשימה מתאים לתנאי, הפונקציה מצליחה.
+הפונקציה קוראת לעצמה רקורסיבית בכל מקרה אחר.
+
+בהגדרת lookup נעשה שימוש בפונקציה פרימיטיבית נוספת, \E|error|. פונקציה זו
+מדפיסה את כל הפרמטרים שלה וגורמת לאינטרפרטר לעבור לסבב הבא של לולאת ה-\E|REPL|.
+
+נשתמש ב-error כדי להגדיר את הפונקציה bind שהיא פונקציה רקורסיבית נוספת, אשר
+מקבלת שתי רשימות באורך שווה: רשימת שמות (\E|names|) ורשימת ערכים (\E|values|),
+וכן רשימה שהיא במבנה של \E|a-list|. \E|bind| ומחזירה את ה-a-list
+שקיבלה בתוספת קישורים בין השמות לערכים.
+
+\begin{KERNEL}
+(defun bind (names values a-list) ; bind names to values, and append to a-list
+  (cond ((null names) ; no more names left
+        (cond ((null values) a-list) ; no more values left, binding done-> return a-list
+              (t (error 'missing-names)))) ; more values than names
+        ((null values) ; names is not nil but values is, i.e., more names than values
+          (error 'missing-values))
+        (t ; both names and values are not empty
+          (cons ; create new binding and prepend it to result of recursive call
+            (cons (car names) (car values)) ; new dotted-pair defines single binding
+            (bind (cdr names) (cdr values) a-list))))) ; recursive vall
+\end{KERNEL}
+
+§§ שיערוך ביטוי מורכב וקריאה לפונקציה
+
+תיארנו למעלה כיצד נעשה שיערוך של אטום. נותר לתאר כיצד מתבצע השיערוך של ביטוי
+מורכב.
+
+\begin{mdframed}[backgroundcolor=Lavender!20]
+  בהינתן ביטוי מורכב \E|$s$|, אלגוריתם השיערוך של ליספ מנסה
+  להציג אותו כרשימה בת~$n+1$ איברים \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+\] אם הביטוי אינו רשימה, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
+  \T|nil|. אחרת, האינטרפטר מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
+  לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך
+  של~$s$ מתבצע על פי הסתכלות זו:
+  \begin{enumerate}
+    ✦ שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל. אם השיערוך של~$s₀$ נכשל,
+    אזי גם השיערוך של~$s$ נכשל. אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
+
+    השיערוך של~$s$ נכשל גם אם~$s₀'$ אינו פונקציה, או שהוא פונקציה, אך כזו שאינה
+    מצפה ל-$n-1$ ארגומנטים בדיוק.
+
+    ✦ האינטרפטר ממשיך כעת לשערך רקורסיבית את הפרמטרים האקטואליים לפונקציה~$s₀'$,
+    הלא הם הביטויים~\E|$s₁$~,…,~$sₙ$|. נסמן את תוצאות השיערוך הללו
+    ב-\E|$s₁'$,…,$sₙ'$|. אם השיערוך הרקורסיבי של אחד מבין
+    הביטויים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$
+    כולו נכשל.
+
+    ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$ על~$n$ הביטויים
+    \E|$s₁'$,…,~$sₙ'$|. אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.
+  \end{enumerate}
+\end{mdframed}
+
+עלינו עוד לתאר כיצד נעשית קריאה לפונקציה. נסתכל לדוגמה על הפונקציה הרקורסיבית
+המוסיפה פריט בסופה של רשימה
+\begin{LISP}
+(defun append(x xs) ; append item x to end of list of xs
+  (cond ((null xs) ; no more xs, recursion base¢…¢
+          (x)) ; ¢…¢ return a list containing x
+        (t ; recursive call
+          (cons
+            (car xs) ; prepend first of xs to¢…¢
+            (append x (cdr xs)))))) ; ¢…¢ result of recursive call on remaining xs
+\end{LISP}
+לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
+ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
+\begin{LISP}
+(lambda (x xs)
+  (cond ((null xs) (x))
+        (t (cons
+              (car x)
+              (append x (cdr xs))))))
+\end{LISP}
+וקישור זה יתווסף לתחילת ה-\E|a-list|. ויזואלית,
+אם ה-a-list נראתה טרם ההגדרה כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of h] (A) {a-list};
+    \draw[->] (A.south)--(h);
+  \end{tikzpicture}
+\end{LTR}
+אזי, אחרי ההגדרה של append ה-a-list תראה כך
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond ⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of g] (A) {a-list};
+    \draw[->] (A.south)--(g);
+  \end{tikzpicture}
+\end{LTR}
+בקריאה ל-append כמו
+\begin{LISP}
+(append 'a '(b c))
+\end{LISP}
+פרודצורת השיערוך תאתר בתוך ה-a-list את ביטוי ה-$λ$ הקשור לפונקציה, כלומר
+את הביטוי
+\begin{LISP}
+(lambda
+  (x xs)
+  (cond ((null xs) (x))
+        (t (cons
+              (car x)
+              (append x (cdr xs))))))
+\end{LISP}
+ותפרק אותו לשלושת
+מרכיביו: האטום lambda המזהה את הביטוי, רשימת הפרמטרים הפורמליים \lisp{(x xs)}
+והביטוי לחישוב,
+\begin{LISP}
+(cond ((null xs) (x))
+      (t (cons
+            (car x)
+            (append x (cdr xs)))))
+\end{LISP}
+הקריאה לפונקציה append מתבצעת על ידי שיערוך הפרמטרים האקטואליים, כלומר שיערוך
+של הפרמטר \lisp{'a} לכדי הערך \lisp{A} ושיערוך של הפרמטר \lisp{'(b c)}
+לכדי הערך \lisp{(B C)}, ולאחר מכן חישוב
+הביטוי הזה בתנאים שבהם הפרמטר x משתערך לאטום
+\lisp{a} והפרמטר xs משתערך לרשימה \lisp{(b c)}.
+
+קריאה לפונקציה בפרודצורת השיערוך בליספ נעשית באמצעות יצירת קישורים בין שמות הפרמטרים הפורמליים
+וערכי הפרמטרים האקטואליים. במקרה של append מתווספים שני \E|dotted-pairs|
+\lisp{(x.a)} ו-\lisp{(xs.(b c))} ל-\E|a-list|.
+ויזואלית, ה-a-list תראה כך
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=2.5ex]
+    \foreach \x/\y/\z in {%
+    e/x/a,
+    f/xs/(b c),
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {e/f, f/g, g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of e] (A) {a-list};
+    \draw[->] (A.south)--(e);
+  \end{tikzpicture}
+\end{LTR}
+לאחר הקריאה לפונקציה, יש לשחזר את ערכה של ה-a-list לערכה המקורי טרם הקריאה לה.
+
+כאשר הפונקציה append קוראת לעצמה רקורסיבית בפעם הראשונה, יתבצע קישור נוסף בין
+הפרמטרים האקטואליים והפורמליים, וגם זאת על ידי תוספת של שני \E|dotted-pairs| נוספים:
+\lisp{(x.a)} ו-\lisp{(xs.(c))}.
+לאחר ביצוע קישורים אלו, ה-a-list תראה כך
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+    c/x/a,
+    d/xs/(c),
+    e/x/a,
+    f/xs/(b c),
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {c/d, d/e, e/f, f/g, g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of c] (A) {a-list};
+    \draw[->] (A.south)--(c);
+  \end{tikzpicture}
+\end{LTR}
+כלומר הקישורים חחדשים יסתירו את הקישורים הקודמים.
+
+בקריאה הרקורסיבית השניה של append לעצמה, יווצרו שני קישורים נוספים,
+\lisp{(x.a)} ו-\lisp{(xs.())}, וה-a-list תראה כך
+\begin{LTR}
+  \usetikzlibrary{chains,arrows}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+
+    \foreach \x/\y/\z in {%
+    a/x/a,
+    b/xs/(),
+    c/x/a,
+    d/xs/(c),
+    e/x/a,
+    f/xs/(b c),
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {a/b, b/c, c/d, d/e, e/f, f/g, g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of a] (A) {a-list};
+    \draw[->] (A.south)--(a);
+  \end{tikzpicture}
+\end{LTR}
+כאמור, בכל פעם שבה הפונקציה append חוזרת מהפעלה רקורסיבית, ה-a-list ישוחזר,
+ושני קישורים בין פרמטרים פורמליים לאקטואליים יוסרו ממנו.
+
+§§ שיערוך דחוי
+אלגוריתם השיערוך כפי שתואר עד כה אינו מספיק כדי לשערך את העץ ב\פנה|איור:עץ|
+כהלכה. הסיבה היא שהאופרטור הטרנארי \T|?:| אשר מצוי בשורש העץ, מחשב את הארגומנט
+הראשון שלו, ובהתאם לתוצאת החישוב, מחשב את הארגומנט השני או השלישי, אבל לא את
+שניהם גם יחד. בפרודצורת השיערוך שתוארה למעלה, יש לחשב את כל הארגומנטים לפונקציה
+(או אופרטור), טרם שמפעילים את הפונקציה עצמה.
+
+אלגוריתם השיערוך גם אינו מתאים לפונקציות כגון quote ו-lambda אשר אינן משערכות
+את הפרמטרים שלהן כלל. הפרודצורה גם אינה מתאימה לפונקציות כגון cond בהן השיערוך
+של חלקים מגוף הפונקציה תלוי בערכים המחושבים בחלקים אחרים של הגוף.
+
+אנו מבדילים בין שני סוגים של סמנטיקות של שיערוך של פונקציה:
+\begin{description}
+  ✦ [eager] בקריאה לפונקציה כגון set שהסמנטיקה שלה היא \E|eager|, הארגומנטים
+  לפונקציה משוערכים \ע|טרם| הקריאה לפונקציה, ורק ערכי השיערוך מועברים לפונקציה.
+  הפונקציה אינה יכולה לדעת מה היו ערכי הארגומנטים לפני ששוערכו.
+
+  פונקציות בעלות סמנטיקה שהיא eager מיוצגות על ידי ביטוי~$λ$ שהאטום הראשון שבו
+  הוא \T|lambda|.
+
+  ✦ [normal] לעומת זאת, בקריאה לפונקציה כגון quote שהסמנטיקה שלה היא
+  \E|normal|, הארגומנטים לפונקציה \ע|אינם| משוערכים טרם הקריאה לפונקציה,
+  והפונקציה יכולה לבחור אם לשערך את הארגומנטים.
+
+  פונקציות בעלות סמנטיקה שהיא normal מיוצגות על ידי ביטוי~$λ$ שהאטום הראשון שבו
+  הוא האטום \T|nlambda|.†{%
+  שימוש זה ב-nlambda היה קיים במימושים הראשונים של ליספ, אולם ברוב המימושים המודרניים
+  הוא בוטל מסיבות של יעילות. במקומו, נוסף מה שקוראים מקרו \E|(macro)|
+  שהוא דומה אך לא זהה ל-\E|nlambda|.}
+
+  כלומר, אנו מבחינים בין שני סוגים של ביטויי~\E|$λ$| בליספ: כאלו שמשערכים את
+  הפרמטרים שלהם לפני הפעלתם והמסומנים על ידי האטום \T|lambda| וכאלו שאינו עושים
+  זאת, והמסומנים על ידי האטום \T|nlambda|.
+\end{description}
+
+הסמנטיקה של כל הפונקציות וכמעט כל האופרטורים בשפות כמו \E|\CPL|, היא \E|eager|.
+ב\פנה|טבלה:מיני| אנחנו רואים גם שמרבית הפונקציות הפרימיטיביות שבמיני ליספ הן
+\E|eager|.
+
+הפונקציה quote שבמיני ליספ אינה פרימיטיבית שכן ניתן להגדיר אותה באמצעות ביטוי
+ה-nlambda הפשוט הבא
+\begin{LISP}
+(nlambda (x) x)
+\end{LISP}
+לא ניתן להגדיר פונקציות שהן normal באמצעות \E|defun|, אך ניתן להוסיף את הפונקציה
+quote לרשימת ה-a-list באמצעות set
+\begin{LIBRARY}
+(set 'quote
+  '(nlambda (x) x))
+\end{LIBRARY}
+כפי שראינו מיני ליספ מגדירה גם פונקציה lambda שהסמנטיקה שלה היא normal המאפשרת
+ליצור ביטוי~$λ$ מבלי להשתמש ב-quote
+\begin{LISP}
+> (lambda (x) (cons (cdr x) (car x)))
+(LAMBDA (X) (CONS (CDR X) (CAR X)))
+\end{LISP}
+נוכל לכן להגדיר את הפונקציה lambda באמצעות
+\begin{LIBRARY}
+(set 'lambda
+  '(nlambda (parameters-list body) ('lambda parameters body)))
+\end{LIBRARY}
+כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters-list
+ו-\E|body|. הפונקציה אינה משערכת פרמטרים אלו ומחזירה ביטוי lambda המוגדר על ידיהם
+\begin{LISP}
+  ('lambda parameters body)
+\end{LISP}
+גם הפונקציה nlambda מסייעת להגדרת ביטויי nlambda באופן דומה, וניתן להגדירה
+באמצעות
+\begin{LIBRARY}
+(set 'nlambda
+  '(nlambda (parameters-list body) ('nlambda parameters body)))
+\end{LIBRARY}
+כלומר, גם הפונקציה nlambda היא פונקציה שמקבלת שני פרמטרים שאינם משוערכים
+(\E|parameters-list| ו-\E|body|) ומחזירה ביטוי nlambda המוגדר על ידי
+שני הפרמטרים הללו
+\begin{LISP}
+  ('nlambda parameters body)
+\end{LISP}
+לאחר הגדרה זו של הפונקציה nlambda הכתיב
+\begin{LISP}
+  (nlambda x y)
+\end{LISP}
+זהה לכתיב
+\begin{LISP}
+  ('nlambda x y)
+\end{LISP}
+ללא תלות בערכיהם של x ו-\E|y|.
+
+ניתן גם להגדיר את הפונקציה defun באמצעות ביטוי nlambda
+\begin{LIBRARY}
+(set 'defun
+  '(nlambda (name parameter-list body)
+    (set name (lambda parameter-list body))))
+\end{LIBRARY}
+כלומר, הפונקציה defun היא ביטוי nlambda אשר מקבל שלושה פרמטרים: \E|name|,
+\E|parameter-list| ו-\E|body|, ואשר קושר (באמצעות \E|set|) את הפרמטר אל ביטוי
+ה-lambda המוגדר על ידי שני הפרמטרים האחרים, והכל מבלי לשערך את הפרמטרים שלו.
+
+ניתן גם להגדיר את הפונקציה ndefun המגדירה פונקציה שהסמנטיקה שלה היא normal
+\begin{LIBRARY}
+(set 'ndefun
+  '(nlambda (name parameter-list body)
+    (set name (nlambda parameter-list body))))
+\end{LIBRARY}
+גוף ההגדרה זהה לזה defun אלא ש-ndefun יוצרת ביטוי nlambda במקום ביטוי
+\E|lambda|.
+
+לאחר שהגדרנו את הפונקציה ndefun נוכל להגדיר את quote באמצעותה
+\begin{LISP}
+(ndefun quote(x) x)
+\end{LISP}
+הפונקציות \E|quote|, \E|defun|, \E|ndefun|, \E|lambda| ו-\E|nlambda| אינן
+משערכות את הפרמטרים שלהן אף פעם. כאשר יש צורך בשיערוך הפרמטרים ניתן לקרוא
+לפונקציה \E|eval|. נגדיר לדוגמה את הפונקציה setq אשר מאפשרת לקשור ערך לאטום ללא
+צורך לבצע quoting על שם האטום
+\begin{LISP}
+(ndefun setq(atom value)
+  (set atom (eval value)))
+\end{LISP}
+השימוש בסמנטיקה שהיא normal אינו מתעורר רק בהגדרת פונקציות כמו quote ו-defun
+המשמשות לביצוע הגדרות. נגדיר למשל את הפונקציה \T|?:| אשר מתנהגת באופן דומה
+לאופרטור בשם זה בשפת~\CPL
+\begin{LISP}
+(ndefun ?: (condition true-value false-value)
+  (cond ((eval condition) (eval true-value))
+        (t (eval false-value))))
+\end{LISP}
+כדוגמה נוספת, נגדיר פונקציות \lisp{||} ו-\lisp{&&} הדומות לאופרטורים בשמות אלו
+בשפת~\CPL, כלומר חישוב של הפונקציות הבוליאניות של and ו-or בשיטה הידועה בשם
+\E|short-circuit|: ראשית שיערוך של הפרמטר הראשון, ואם זה קובע את תוצאת הפונקציה
+הבוליאנית, הימנעות משיערוך הפרמטר השני. אחרת, ערכה של הפונקציה הבוליאנית הוא תוצאת
+שיערוך הפרמטר השני
+\begin{LISP}
+(ndefun &&(x y)
+  (cond ((eval x) (eval y))
+        (t nil)))
+(ndefun ||(x y)
+  (cond ((eval x) t)
+        (t (eval y))))
+\end{LISP}
+
+נתקן את אלגוריתם השיערוך כך שיתמוך בפונקציות שהן \E|normal|, על ידי הוספת התנאי
+הבא:
+\begin{mdframed}[backgroundcolor=Lavender!20]
+  בשיערוך הביטוי \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+\] אם שיערוך הביטוי~$s₀$ מחזיר פונקציה שהיא
+  normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambda (ולא \E|lambda|) אזי יש
+  להעביר לפונקציה זו כארגומנטים את הביטויים~\E|$s₁$,…,$sₙ$| ולא את הערכים
+  המשוערכים שלהם~\E|$s₁'$,…,$sₙ'$|.
+\end{mdframed}
+
+§ מימוש אלגוריתם השיערוך במיני ליספ
+§§ הפונקציות evaluate ו-apply
+
+מתברר שאפשר לממש את אלגוריתם השיערוך גם בליספ עצמה. לשם כך נגדיר פונקציה
+evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|, ואשר משערכת את הביטוי
+בהתאם לקישורים שבסביבה הנתונה. הפונקציה evaluate קוראת לעצמה ברקורסיה כדי לשערך
+את מרכיבי הביטוי.
+
+כאשר evaluate תזהה ביטוי~$λ$ היא תקרא לפונקצית עזר apply אשר גם אותה נגדיר
+בהמשך, ואשר אחראית להפעיל ביטוי~$λ$ על הפרמטרים המועברים לו. אם ביטוי ה-$λ$ הוא
+\E|eager|, אז apply תקרא ל-evaluate כדי לשערך את הפרמטרים.
+
+מבנה הקריאות והרקורסיות ההדדיות שבמימוש של evaluate ופונקציות העזר שלה מתואר
+ב\פנה|איור:שיערוך|.
+
+\begin{figure}[!htb]
+  \כיתוב|רקורסיות הדדיות בין הפונקציה evaluate ופונקציות העזר שלה|
+  \תגית|איור:שיערוך|
+  \forestset{%
+    call tree/.style={%
+        for tree={%
+            font=\scriptsize,
+            rounded rectangle,
+            fill=green!20,
+            % draw,
+            s sep'+=-4pt,
+            fit=tight,
+          },
+      },
+  }
+  \centering
+  \begin{forest}
+    call tree [evaluate,name=evaluate
+    [lookup,name=lookup] {%
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+    }
+    [is-primitive [exists]
+    {%
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+    }
+    ]
+    [evaluate-primitive
+    [apply-primitive
+    [evaluate-cond] {%
+    \draw[->] (.-20) .. controls+(-60:0.9) and+(60:0.9) .. (.20);
+    \draw[->] (.200) .. controls+(210:9) and+(120:6) .. (evaluate.120);
+    }
+    [apply-eager-primitive
+    [apply-trivial-primitive]
+    ]
+    ]
+    ]
+    [apply, name=apply
+    [apply-decomposed-lambda
+    [bind] {%
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:1) .. ();
+    }
+    [evaluate-list] {%
+    \draw[->] (.210) .. controls+(250:2) and+(120:1) .. (.150);
+    \draw[->] (.-20) .. controls+(-10:6) and+(60:3) .. (evaluate.60);
+    }
+    ]
+    ] {\draw[->] (.15) .. controls+(30:1) and+(60:1) .. (evaluate.north east);}
+    ]
+    \draw[->] (.180) [out=south west,in=north west] .. controls+(south west:1) and+(north west:2) .. ();
+    \path (current bounding box.south west)++(-13ex,0) coordinate (A);
+    \path (current bounding box.north east)++(11ex,1ex) coordinate (B);
+    \clip (A) rectangle (B);
+  \end{forest}
+\end{figure}
+
+אנו רואים באיור גם ש-apply קוראת לפונקציה הרקורסיבית bind (שאותה כבר הגדרנו),
+וזאת כדי לקשור בין הפרמטרים הפורמליים והאקטואליים. האיור מראה גם ש-evaluate
+משתמשת בכמה פונקציות נוספות שהוצגו כבר: הפונקציה הרקורסיבית lookup כדי לשערך את
+ערכו של אטום, ו-is-primitive הקוראת ל-exists הרקורסיבית כדי לזהות אטומים המזהים
+פונקצית פרימיטיביות.
+
+בנוסף לאלו, נעזרת evaluate בפונקציה \E|evaluate-primitive|, אשר מצידה משתמשת
+בכמה פונקציות עזר משלה, בהמשך כדי לממש את הפונקציות הפרימיטיביות שבהם משתמשת
+מיני ליספ. שיערוך של אטומים, יחד עם מימוש הפונקציות הפרימיטיביות, מהווה את
+בסיס הרקורסיה של \E|evaluate|. השיערוך של כל ביטוי \E|S|, מורכב ככל שיהיה
+מתורגם על ידי evaluate לסדרה מתאימה של שיערוך של אטומים והפעלות של פונקציות
+פרימיטיביות.
+
+הגוף של evalaute עצמה הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
+לביטוי אותו היא נדרש לשערך.
+
+\begin{KERNEL}
+(defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
+  (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
+          (lookup S-expression a-list))
+        ((is-primitive (car S-expression)) ; special case handling of primitive functions
+          (evaluate-primitive S-expression a-list))
+        (t ; recursive step---lambda applied to parameters
+          (apply (evaluate (car S-expression) a-list) ; find lambda expression
+                  (cdr S-expression) ; find actual parameters
+                  a-list))))
+\end{KERNEL}
+
+אם הביטוי ש-evaluate מקבלת הוא אטום, evaluate מפעילה את \E|lookup| כדי למצוא את
+הערך הקשור אליו ברשימת ה-\E|a-list|. אם לעומת הביטוי הוא ביטוי מורכב, אזי
+dotted-pair אשר ה-car שלו הוא פונקציה, וה-cdr שלו הוא רשימה של
+ארגומנטים שיש להעביר לפונקציה. אם ה-car הוא שם של פונקציה אטומית, נדרש טיפול
+מיוחד, ואז evaluate קוראת לפונקציה evaluate-primitive אשר מבצעת זאת.
+בכל מקרה אחר, evaluate מוצאת את הפונקציה אותה יש להפעיל על ידי השיערוך
+\begin{LISP}
+(evaluate (car S-expression) a-list)
+\end{LISP}
+קריאה רקורסיבית זו תחזיר את ביטוי ה-$λ$ אותו יש להפעיל על הפרמטרים. evaluate
+גם מחשבת את הפרמטרים באמצעות הקריאה-\T|(cdr S-expression)|, וקוראת לפונקציה
+apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
+
+הפונקציה apply מצידה מפרקת את ביטוי ה-$λ$ לשלושת מרכיביו (תגית, רשימת פרמטרים
+וביטוי לחישוב), ומעבירה מרכיבים אלו לפונקצית העזר apply-decompsed-lambda
+\begin{KERNEL}
+(defun apply(lambda-expression actuals a-list)
+  (apply-decomposed-lambda
+    (car lambda-expression) ; tag=lambda or nlambda
+    (car (cdr lambda-expression)); list of formal parameters
+    (car (cdr (cdr lambda-expression))); body
+    actuals
+    a-list))
+\end{KERNEL}
+הפונקציה apply-decompsed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
+הפרמטרים הפורמלים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
+הגדרנו.
+
+אם התגית של ביטוי ה-$λ$ היא האטום nlambda הקישור נעשה ללא שיערוך הפרמטרים
+האקטואליים. אם לעומת זאת התגית היא האטום lambda הקישור בין הפרמטרים הפורמליים
+לאקטואליים נעשה לאחר שיערוך של הפרמטרים האקטואליים באמצעות הפונקציה
+\E|evalauate-list|. אם התגית אינה אף אחד משני האטומים הללו השיערוך נכשל.
+\begin{KERNEL}
+(defun apply-decompsed-lambda(tag formals body actuals a-list)
+  (evaluate body
+    (cond (eq tag 'nlambda) (bind formals actuals a-list)
+          (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
+          (t (error 'unkown-lambda tag)))))
+\end{KERNEL}
+
+ההגדרה של הפונקציה evaluate-list המיועדת לשיערוך רשימת הפרמטרים האקטואליים היא
+באמצעות הפעלה רקורסיבית של evaluate על כל אחד מאיברי הרשימה, ושרשור התוצאות
+לכדי רשימה אחת.
+\begin{KERNEL}
+(defun evaluate-list(S-expressions a-list)
+  (cond ((null S-expressions) nil) ; no more S-expressions to evaluate
+    (t (cons
+          (evaluate (car S-expressions)) ; evaluate first S-Expression
+          (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
+\end{KERNEL}
+
+§§ מימוש הפונקציות הפרימיטיביות
+
+\פנה|טבלה:מיני| מסכמת את הפונקציות הפרימיטיביות של מיני ליספ. כלומר כאלו שלא
+הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך ה-\E|a-list|.
+
+\begin{table}[!hbt]
+  \rowcolors{2}{green!20}{white}
+  \begin{tabularx}\textwidth{>{\setLR\scriptsize\setLR}c>{\scriptsize}c
+    >{\setRL\scriptsize\raggedleft\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    }
+
+    \toprule
+    \normalsize \bfseries {\text{/arity}}שם &
+    \normalsize \bfseries סמנטיקה &
+    \normalsize \bfseries תמצית &
+    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+    \midrule
+
+    atom/1 &
+    eager &
+    בדיקה אם הארגומנט הוא אטום &
+    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
+
+    car/1 &
+    eager &
+    חילוץ האיבר הראשון ברשימה &
+    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
+    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
+    \lisp{(car ())}~$⇒$ \text{✗} ⏎
+
+    cdr/1 &
+    eager &
+    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
+    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
+    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
+    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cdr t)}~$⇒$ ✗ \newline
+    \lisp{(cdr ())}~$⇒$ ✗ \newline
+    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
+
+    ($n≥0$) cond/n &
+    normal &
+    הכללה של פקודת \E|if|. &
+    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
+    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
+    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
+
+    cons/2 &
+    eager &
+    הוספת איבר בתחילת רשימה &
+    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
+    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
+
+    eq/2 &
+    eager &
+    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה &
+    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
+
+    ($n≥0$) error/n &
+    eager &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית &
+    \lisp{(error)}~$⇒$ ✗ \newline
+    \lisp{(error A)}~$⇒$ ✗ \newline
+    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
+
+    set/2 &
+    eager &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
+    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
+    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
+    \label{primitive:count}
+ ⏎
+    \bottomrule
+  \end{tabularx}
+  \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
+  \תגית|טבלה:מיני|
+\end{table}
+
+תיארנו את הפונקציה evaluate הממשת את מרבית הפעולות שבאלגוריתם השיערוך של ליספ.
+נותר עוד לתאר את המימוש של הפונקציה evaluate-primitive אשר נועדה לטיפול
+בפונקציות הפרימיטיביות.
+
+הצעד הראשון במימוש של evaluate-primitive הוא פירוק הביטוי אותו יש לשערך לשני
+חלקים: שם הפונקציה הפרימיטיבית, והפרמטרים לפונקציה זו.
+\begin{KERNEL}
+(defun evaluate-primitive (S-expression a-list)
+  (apply-primitive (car S-expression) (cdr S-expression) a-list))
+\end{KERNEL}
+
+ הפונקציה
+evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטיביות, כמו גם בפונקציה eval
+אשר אינה פרימיטיבית, אבל עדיין לא טופלה. אנו רואים ש-cond היא הפונקציה היחידה
+מבין כל אלו שהסמנטיקה
+שלה היא \E|normal|.
+
+\begin{minipage}\linewidth
+במימוש של הפונקציה \E|apply-primitive| נבדיל לכן בין cond ובין כל שאר הפונקציות
+הפרימיטיביות.
+\begin{KERNEL}
+(defun apply-primitive (primitive actuals a-list)
+  (cond ((eq 'cond primitive) ; special case for cond that has normal semantics
+            (evaluate-cond actuals a-list)) ; don't evaluate actuals
+        (t (apply-eager-primitive ; all other primitives have eager semantics
+              primitive
+              (evaluate-list actuals a-list)
+              a-list))))
+\end{KERNEL}
+\end{minipage}
+
+המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
+\begin{KERNEL}
+(defun evaluate-cond(test-forms a-list)
+  (cond ((null test-forms) nil) ; if no more test-forms, return nil
+        ((evaluate (car (car test-forms)) a-list) ; evaluate test-condition of first test-form
+        (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate test-value of first test-form
+        (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on remainder list of test-forms
+\end{KERNEL}
+
+כדי לטפל בשאר הפונקציות שב\פנה|טבלה:מיני| ובפונקציה eval נשים לב לכך שכל אלו
+מלבד eval אינן נדרשות יותר ל-a-list וכולן, לבד מ-error מצפות לפרמטר אחד או שני פרמטרים.
+
+הפונקציה apply-eager-primitive מטפלת במקרים המיוחדים של eval ושל \E|error|
+ומעבירה את המשך הטיפול ל-apply-trivial-primitive
+\begin{KERNEL}
+(defun apply-eager-primitive (primitive actuals a-list)
+  (cond ((eq primitive 'error) (error actuals))
+        ((eq primitive 'eval) (evaluate (car actuals) a-list))
+        (t (apply-trivial-primitive
+              primitive ; one of atom, car, cdr, cons, eq, or set
+              (car actuals) ; first actual parameter
+              (car cdr actuals))))) ; second actual parameter, could be nil
+\end{KERNEL}
+
+כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימיטיביות שנותרו:
+\begin{KERNEL}
+(defun apply-trivial-primitive (primitive first second)
+  (cond ((eq primitive 'atom) (atom first))
+        ((eq primitive 'car) (car first))
+        ((eq primitive 'cdr) (cdr first))
+        ((eq primitive 'cons) (cons first second))
+        ((eq primitive 'eq) (eq first second))
+        ((eq primitive 'set) (set first second))
+        (t (error 'something-went-wrong primitive))))
+\end{KERNEL}
+
+§§ הקוד המלא של evaluate ופונקציות העזר שלה
+\תגית|סעיף:מימוש|
+
+\immediate\closeout \kernelFile
+
+\begin{LTR}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{green!20}
+  ]{\jobname.kernel.lisp}
+\end{LTR}
+
+§§ פונקציות הסיפריה של מיני ליספ
+
+\פנה|טבלה:סיפריה| מרכזת את הפונקציות במיני ליספ שאינן פרימיטיביות, כלומר אלו
+שהגדרתן יכולה להעשות עלי ידי קשירה של שמן לביטוי lambda או ביטוי nlambda,
+ישירות באמצעות הפונקציה \E|set| או באמצעות הפונקציות \E|defun|, \E|lambda|,
+\E|ndefun| ו-\E|nlambda|, שגם הן משתמשות ב-\E|set|.
+
+\begin{table}[!htbp]
+  \begin{tabularx}\textwidth{>{\setLR\scriptsize}c>{\scriptsize}c
+    >{\scriptsize\raggedleft\arraybackslash}X
+    >{\setLR\scriptsize\raggedright\arraybackslash}X
+    >{\setLR\scriptsize\raggedright\arraybackslash}X
+    }
+    \toprule
+    \normalsize \bfseries {\text{/arity}}שם &
+    \normalsize \bfseries סמנטיקה &
+    \normalsize \bfseries תמצית &
+    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}} &
+    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+    \midrule
+
+    \E|defun/3| &
+    normal &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
+    \lisp{(set 'defun }\newline
+    \mbox\quad\lisp{(nlambda (n p b)} \newline
+    \mbox\qquad \lisp{(set n (lambda p b))))} &
+    \T|(defun f (x y) (y x))|\newline\quad⏎
+
+    lambda/2 &
+    normal &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
+    \lisp{(ndefun lambda(p b)}\newline
+    \mbox\quad\lisp{('lambda p b))} &
+    \lisp{((lambda (x) (car (cdr x)))}\newline
+    \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
+ ⏎
+
+    nil/0 &
+    n/a &
+    האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
+    \lisp{(set 'nil 'nil)} &
+    \lisp{nil}~$⇒$ \lisp{NIL} \newline
+    \lisp{()}~$⇒$ \lisp{NIL} \newline
+    \lisp{(eq nil t)}~$⇒$ \lisp{NIL} ⏎
+
+    null/1 &
+    eager &
+    בדיקה אם הארגומנט הוא האטום \lisp{nil} &
+    \lisp{(defun null (x)}\newline
+    \mbox\quad\lisp{(eq x nil))} &
+    \lisp{(null t)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(null nil)}~$⇒$ \lisp{T}\newline
+    \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
+
+    ndefun/3 &
+    normal &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|normal|. &
+    \lisp{(set 'ndefun }\newline
+    \mbox\quad\lisp{(nlambda (n p b)} \newline
+    \mbox\qquad\lisp{(set n (nlambda p b))))} &
+    \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
+
+    nlambda/2 &
+    normal &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
+    \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))} &
+    \T|(nlambda f (x y) (y x))|~$⇒$
+    \newline\mbox\quad\T|(nlambda f (x y) (y x)|
+ ⏎
+
+    quote/1 &
+    normal &
+    החזרת הארגומנט מבלי לשערך אותו. &
+    \lisp{(ndefun quote (x) x)} &
+    \lisp{(quote a)}~$⇒$ \lisp{A} \newline
+    \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
+    \lisp{'a}~$⇒$ \lisp{A} \newline
+    \lisp{'(b c)}~$⇒$ \lisp{(B C)} \newline ⏎
+
+    t/0 &
+    n/a &
+    האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
+    \E|(true)|. &
+    \lisp{(set 't 't)} &
+    \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
+
+    \bottomrule
+  \end{tabularx}
+  \כיתוב|פונקציות הסיפריה של מיני ליספ|
+  \תגית|טבלה:סיפריה|
+\end{table}
+
+והנה הקוד המלא של המימוש של פונקציות אלו
+\immediate\closeout \libraryFile
+
+\begin{LTR}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{orange!20}
+  ]{temp-library.lisp}
+\end{LTR}
+
+§ תרגילים
+\begin{enumerate}
+✦ בדיקה מדוקדקת תגלה הבדל נוסף בין שני המימושים של הפונקציה \E|exists| חוץ מאשר
+עליו מצביע הדיון. אתר הבדל זה, והסבר מדוע הוא אינו משנה את הסמנטיקה של המימוש.
+
+✦ הפונקציה member היא פונקצית ספריה סטנדרטית ברוב המימושים של ליספ. הפונקציה
+מקבלת אטום ורשימה, ומחזירה את זנב הרשימה הארוך ביותר שהאיבר הראשון שבו הוא
+האטום. אם האטום אינו מצוי ברשימה, הפונקציה מחזירה \E|nil|. ממש פונקציה זו
+במיני ליספ, והסבר מדוע ניתן להשתמש להחליף כל קריאה ל-exists בקריאה דומה
+ל-member עם אותם פרמטרים בדיוק.
+
+✦ ממש במיני ליספ את הפונקציה הרקורסיבית equal אשר משווה שני ביטויי S אם הם
+זהים, כלומר אם הטופולוגיה שלהם כעצים בינאריים מלאים זהה, והאטומים המצויים בעלים
+זהים גם כן. הפונקציה מחזירה t במקרה של זהות, ו-nil אחרת.
+
+✦ היכן בודק המימוש של evaluate אם מספר הפרמטרים האקטואליים בהפעלה של ביטוי~$λ$
+זהה למספר הפרמטרים הפורמליים שמוגדר בביטוי?
+
+✦ המימוש של evaluate אינו בודק אם מספר הפרמטרים בפועל לפונקציות הפרימיטיביות
+הפרימיטיביות הטריביאליות תואם למספר הפרמטרים שהן אמורות לקבל. באילו מקרים העדר
+הבדיקה יביא לכך שמספר פרמטרים לא נכון לפונקציה טריביאלית לא ידווח כשגיאה? תקן
+את המימוש כך ששגיאה כזו תדווח.
+
+✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימיטיבית
+\E|list| אשר מקבלת רשימה של ביטויי \E|S|, ומחזירה את הרשימה של הביטויים לאחר
+שיערוכם.
+
+✦ הסבר כיצד ניתן לתקן את evaluate כפי שתוארה כאן בכדי לתמוך בפונקציה פרימיטיבית
+\E|progn| אשר מקבלת רשימה של ביטויי \E|S|, ומשערכת אותם לפי סדרם. תוצאת השיערוך
+היא תוצאת השיערוך של הפריט האחרון ברשימה, או nil במקרה שהרשימה ריקה.
+
+✦ אילו שינויים יש לערוך במימוש של evaluate אם נשנה את מיני ליספ כך שהפונקציות
+defun ו-quote תהיינה פרימיטיביות, ונסיר את התמיכה בפונקציות הסיפריה \E|lambda|,
+\E|nlambda| ו-\E|ndefun|.
+
+✦ ב\פנה|איור:שיערוך| ישנה פונקציות אשר אינן יכולות לקרוא לעצמה
+רקורסיבית~)אם ישירות ואם בעקיפין(. מיהן פונקציות אלו? מיהן
+הפונקקציות שיכולות לקרוא לעצמן רקורסיבית בעקיפין, אך לא ישירות.
+✦ נגדיר
+\ע|יצוג אונארי| של המספרים הטבעיים באמצעות ביטוי-S באופן הבא: המספר
+0,
+מיוצג על ידי \E|nil|, המספר 1 על ידי הרשימה המכילה את \E|nil|, כלומר הרשימה
+\E|(nil)|, המספר 2 מיוצג על ידי הרשימה המכילה את המספר 1, כלומר \E|((nil))|,
+המספר 3, על ידי הרשימה המכילה את המספר 2, כלומר, \E|(((nil)))| וכן הלאה.
+הגדר פונקציה uadd המקבלת שתי רשימות המהוות יצוג אונארי של מספרים, ומחזירה
+רשימה שהיא ייצוג אונארי של סכום המספרים. החיבור 1+2 יוצג על ידי הקריאה
+\begin{LISP}
+> (uadd (nil) ((nil)))
+(((NIL)))
+\end{LISP}
+אשר, כפי שאנו רואים, מחזירה את הייצוג של המספר 3.
+כדאי להשתמש בהגדרות העזר הבאות:
+\begin{LISP}
+(defun s(x) (cons x ())) ; the successor function
+(defun p(x) (car x)) ; the predecessor function
+; symbolic names for the first few numbers
+(setq zero nil)
+(setq one (s zero))
+(setq two (s one))
+(setq three (s two))
+(setq four (s three))
+(setq five ‘((((())))))
+\end{LISP}
+בהגדרות אלו נקבל שהקריאה
+\lisp{(uadd three two)}
+תחזיר \lisp{((((()))))}.
+✦ \ע|בייצוג בינארי| על ידי רשימות, כל מספר מייוצג על ידי רשימת אטומים, כאשר כל
+אטום מייצג ספרה בינארית: את הספרה~$0$ מייצג האטום Z, ואת הספרה~$1$ מייצג את
+האטום O. המספר~$5$ מיוצג על ידי הרשימה \begin{LISP}
+(O Z O)
+\end{LISP} שכן הייצוג הבינארי של~$5$ הוא~$101$. הרשימות נכתבות ב-little-endian,
+כלומר, הביט המשמעותי פחות, מופיע ראשון. לדוגמה, המספר~$6$ מיוצג על ידי הרשימה
+\begin{LISP}
+ (Z O O)
+ \end{LISP} שכן הייצוג הבינארי של~$6$ הוא~$110$. אורך הרשימה תלוי בגודל המספר.
+ לדוגמה, המספר~$3$ בכתיב בינארי מיוצג על ידי הרשימה \begin{LISP}
+ (O O)
+ \end{LISP} הייצוג הבינארי של~$3$ הוא~$11$. ניתן להוסיף אטומים של Z בסוף
+ הרשימה. כל הרשימות הבאות הן ייצוג של המספר~$3$. \begin{LISP}
+(O O)
+(O O Z)
+(O O Z Z)
+(O O Z Z Z)
+\end{LISP}
+ ובאופן דומה, כל הרשימות הבאות הן ייצוג של המספר~$0$,
+\begin{LISP}
+()
+(Z)
+(Z Z)
+(Z Z Z)
+\end{LISP}
+בתרגיל זה הנך נדרש לכתוב שתי פונקציות:
+\begin{itemize}
+    ✦ כתוב פונקציה במיני-ליספ בשם bnormalize המקבלת מספר בייצוג בינארי כרשימה,
+    ומחזירה את הייצוג הקצר ביותר שלו באותה דרך.
+     ✦ כתוב פונקציה במיני-ליספ בשם badd המקבלת שתי רשימות המהוות ייצוג בינארי
+     של מספר טבעי לא שלילי, ומחזירות רשימה שהיא היצוג הבינארי של סכומם.
+     הפונקציה צריכה להחזיר הרשימה הקצרה ביותר מבין הרשימות שמייצגות את הסכום,
+     אבל היא אינה יכולה להניח שהמספרים אותם עליה לחבר מיוצגים כרשימה קצרה
+     ביותר.
+\end{itemize}
+\end{enumerate}
+\ON
 \end{document}
