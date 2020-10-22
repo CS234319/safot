@@ -896,12 +896,14 @@ baz)))|.
   \end{tikzpicture}
 \end{LTR}
 
+\begin{minipage}\textwidth
 ואם ננסה לשערך כעת את \T|foo|, נקבל את הערך הנוצר מהקישור החדש
 \begin{LISP}
 > foo
 ((BAZ) BAR)
 \end{LISP}
 וזאת משום שהחיפוש ב-a-list מתחיל מתחילתה, ועוצר במקום הראשון שבו הוא מצליח.
+\end{minipage}
 
 כתיב מקוצר לביטוי \E|(quote~$X$(| המפעיל את הפונקציה quote על הביטויי~$X$,
 הוא~\E|$'X$|, כלומר סימן מרכאה בודד לפני~$X$. הטיפול בכתיב זה נעשה על ידי
@@ -1327,6 +1329,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
             (car xs) ; prepend first of xs to¢…¢
             (append x (cdr xs)))))) ; ¢…¢ result of recursive call on remaining xs
 \end{LISP}
+\begin{minipage}\textwidth
 לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
 ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
 \begin{LISP}
@@ -1336,6 +1339,8 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
               (car x)
               (append x (cdr xs))))))
 \end{LISP}
+\end{minipage}
+
 וקישור זה יתווסף לתחילת ה-\E|a-list|. ויזואלית,
 אם ה-a-list נראתה טרם ההגדרה כך,
 \begin{LTR}
@@ -1396,6 +1401,8 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 \begin{LISP}
 (append 'a '(b c))
 \end{LISP}
+
+\begin{minipage}\textwidth
 פרודצורת השיערוך תאתר בתוך ה-a-list את ביטוי ה-$λ$ הקשור לפונקציה, כלומר
 את הביטוי
 \begin{LISP}
@@ -1406,6 +1413,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
               (car x)
               (append x (cdr xs))))))
 \end{LISP}
+\end{minipage}
 ותפרק אותו לשלושת
 מרכיביו: האטום lambda המזהה את הביטוי, רשימת הפרמטרים הפורמליים \lisp{(x xs)}
 והביטוי לחישוב,
