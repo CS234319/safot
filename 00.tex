@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt,reqno]{book}
+\documentclass[12pt,reqno]{book}
 \usepackage{00}
 
 %\dominitoc
@@ -17,8 +17,8 @@
 }
 
 \begin{document}
-%\frontmatter
-%\input{front}
+\frontmatter
+\input{front}
 
 \bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
 location="Jerusalem, Israel"
@@ -33,6 +33,14 @@ tr 'A -Z' 'a -z'
 \END
 
 \mainmatter
+℆ רקע מתימטי
+\begin{multicols}{2}
+\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
+\minitoc
+\end{multicols}
+\input{background}
+
 ℆מיני ליספ ושיערוך
 \begin{multicols}{2}
 \mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
@@ -40,14 +48,6 @@ tr 'A -Z' 'a -z'
 \minitoc
 \end{multicols}
 \input{lisp}
-
-%℆ רקע מתימטי
-%\begin{multicols}{2}
-%\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
-%\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
-%\minitoc
-%\end{multicols}
-%\input{background}
 
 %℆צעדים ראשונים
 %\begin{multicols}{2}
