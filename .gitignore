@@ -24,6 +24,7 @@ $.*
 *.a
 *.aux
 *.apk
+*.lop
 *.kernel.lisp 
 *.library.lisp 
 *.kernel.[0-9]*.lisp 
