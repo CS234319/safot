@@ -503,7 +503,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
   המספרים, לא כל הפונקציות המבניות מוגדרות על כל ביטויי~ה-\E|S|.
 
   אם הארגומנט לפונקציה הוא רשימה שאיננה ריקה, אז הפונקציה מחזירה את הפריט
-  הראשון ברשימה: הפעלת cdr על הרשימה \E|((b c) d)| תחזיר \E|(b c)|. כאמור, אם
+  הראשון ברשימה: הפעלת car על הרשימה \E|((b c) d)| תחזיר \E|(b c)|. כאמור, אם
   הארגומנט ל-\E|car| הוא אטום, ואפילו יהא זה האטום \lisp{nil}, כלומר הרשימה
   הריקה, הפונקציה נכשלת.
 
@@ -526,7 +526,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
   ארגומנט זה הוא אטום, ואחרת את האטום \T|nil|.
 
   ✦ האטום \T|null| מציין את הפונקציה המקבלת ביטויי~S אחד ומחזירה את האטום
-  \T|t|. אם ארגומנט זה הוא האטום \T|nil| ואחרת את האטום \T|t| אם הארגומנט
+  \T|t| אם ארגומנט זה הוא האטום \T|nil| ואחרת את האטום \T|t|. אם הארגומנט
   לפונקציה הוא רשימה, אז הפונקציה מחזירה \T|t| אם ורק אם הרשימה ריקה, ו-\T|nil|
   בכל מקרה אחר.
 
@@ -1788,7 +1788,7 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
 
 הגוף של evalaute עצמה הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
 לביטוי אותו היא נדרש לשערך.
-\begin{minipage}\textwidth
+
 \begin{KERNEL}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
   (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
@@ -1800,7 +1800,6 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
                   (cdr S-expression) ; find actual parameters
                   a-list))))
 \end{KERNEL}
-\end{minipage}
 
 אם הביטוי ש-evaluate מקבלת הוא אטום, evaluate מפעילה את \E|lookup| כדי למצוא את
 הערך הקשור אליו ברשימת ה-\E|a-list|. אם לעומת הביטוי הוא ביטוי מורכב, אזי
@@ -1853,14 +1852,12 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
           (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
 \end{KERNEL}
 
-\pagebreak[4]
 §§ מימוש הפונקציות הפרימיטיביות
 
 \פנה|טבלה:מיני| מסכמת את הפונקציות הפרימיטיביות של מיני ליספ. כלומר כאלו שלא
 הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך ה-\E|a-list|.
 
 \begin{table}[!hbt]
-%  \begin{adjustbox}{max height=0.9\textheight}
   \rowcolors{2}{green!20}{white}
   \begin{tabularx}\textwidth{>{\setLR\scriptsize\setLR}c>{\scriptsize}c
     >{\setRL\scriptsize\raggedleft\arraybackslash}X
@@ -1945,7 +1942,6 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
   \end{tabularx}
   \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
   \תגית|טבלה:מיני|
-%\end{adjustbox}
 \end{table}
 
 תיארנו את הפונקציה evaluate הממשת את מרבית הפעולות שבאלגוריתם השיערוך של ליספ.
