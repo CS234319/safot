@@ -66,10 +66,6 @@
 
 \floatstyle{ruled}
 \restylefloat{figure}
-\newtheorem{definition}{הגדרה}[section]
-\newtheorem{theorem}{משפט}[section]
-\newtheorem{claim}{טענה}[section]
-\newtheorem{example}{דוגמה}[section]
 \numberwithin{equation}{section}
 
 \def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
@@ -377,6 +373,7 @@ nice empty nodes/.style={
 \date{\today}
 
 \begin{document}
+\long\def\OFF#1\ON{}
 \begin{frame}
   \titlepage
 \end{frame}
@@ -482,7 +479,8 @@ Philip Greenspun's Tenth\footnote{there are  no other rules, just the tenth one}
   \endgroup
   \closein \tempFile
 }
-
+\setLTR
+\OFF
 %
 § מבוא
 
@@ -651,7 +649,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 \begin{LTR}
   \begin{forest}
     s tree [$⊘$,[$\amalg$ [$\circledcirc$ [$\amalg$]]] 
-      [$\Re$ [$\wr$ [$\Game$\end{forest]]]]
+      [$\Re$ [$\wr$ [$\Game$]]]]
   \end{forest}
 \end{LTR}
 אולם, ייתכן גם כי האופרנדים הם 
@@ -2647,4 +2645,5 @@ defun ו-quote תהיינה פרימיטיביות, ונסיר את התמיכה
      ביותר.
 \end{itemize}
 \end{enumerate}
+\ON
 \end{document}

@@ -46,7 +46,7 @@
 % An environment for writing library functions
 \newenvironment{LIBRARY}{%
   \stepcounter{library}
-  \def\fileName{\jobname.library-\arabic{library}.lisp}%
+  \def\fileName{\jobname.library.\arabic{library}.lisp}%
   \csname filecontents*\endcsname[overwrite]{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
