@@ -1,7 +1,7 @@
 .PHONY: default
 # Normally, this file should not be modified. But you are encouraged to read it
 # and learn how to modify its behavior by adding to the variables defined here,
-# or overriding theme altogether.
+# or overriding them altogether.
 #
 # Settings //vim: /=/,/^\s*$/-! sort -u
 DUP 					 =  ../Programs/dup
