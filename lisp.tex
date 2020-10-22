@@ -851,6 +851,7 @@ baz)))|.
   (nil.nil)
 )
 \end{LISP}
+
 \minipage\textwidth
 אזי אחרי הקריאה תוכן רשימה זו יהיה
 \begin{LISP}
@@ -1859,6 +1860,8 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
 
 הגוף של evalaute עצמה הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
 לביטוי אותו היא נדרש לשערך.
+
+\minipage\textwidth
 \begin{KERNEL}
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
   (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
@@ -1870,6 +1873,7 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
                   (cdr S-expression) ; find actual parameters
                   a-list))))
 \end{KERNEL}
+\endminipage
 
 אם הביטוי ש-evaluate מקבלת הוא אטום, evaluate מפעילה את \E|lookup| כדי למצוא את
 הערך הקשור אליו ברשימת ה-\E|a-list|. אם לעומת הביטוי הוא ביטוי מורכב, אזי
@@ -1898,11 +1902,6 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 הפונקציה apply-decompsed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
 הפרמטרים הפורמלים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
 הגדרנו.
-
-אם התגית של ביטוי ה-$λ$ היא האטום nlambda הקישור נעשה ללא שיערוך הפרמטרים
-האקטואליים. אם לעומת זאת התגית היא האטום lambda הקישור בין הפרמטרים הפורמליים
-לאקטואליים נעשה לאחר שיערוך של הפרמטרים האקטואליים באמצעות הפונקציה
-\E|evalauate-list|. אם התגית אינה אף אחד משני האטומים הללו השיערוך נכשל.
 \begin{KERNEL}
 (defun apply-decompsed-lambda(tag formals body actuals a-list)
   (evaluate body
@@ -1910,6 +1909,19 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
           (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
           (t (error 'unkown-lambda tag)))))
 \end{KERNEL}
+
+האבחנה בין הסוגים השונים של ביטוי ה-$λ$, נעשית באופן הבא בפונקציה
+apply-decompsed-lambda
+\begin{itemize}
+    \item
+אם התגית של ביטוי ה-$λ$ היא האטום nlambda הקישור נעשה
+ללא שיערוך הפרמטרים
+האקטואליים. 
+\item אם לעומת זאת התגית היא האטום lambda הקישור בין הפרמטרים הפורמליים
+לאקטואליים נעשה לאחר שיערוך של הפרמטרים האקטואליים באמצעות הפונקציה
+\E|evalauate-list|. \item 
+אם התגית אינה אף אחד משני האטומים הללו השיערוך נכשל.
+\end{itemize}
 
 ההגדרה של הפונקציה evaluate-list המיועדת לשיערוך רשימת הפרמטרים האקטואליים היא
 באמצעות הפעלה רקורסיבית של evaluate על כל אחד מאיברי הרשימה, ושרשור התוצאות
@@ -1922,6 +1934,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
           (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
 \end{KERNEL}
 
+\vfill
 \pagebreak[4]
 §§ מימוש הפונקציות הפרימיטיביות
 
@@ -2034,6 +2047,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 מבין כל אלו שהסמנטיקה
 שלה היא \E|normal|.
 
+\minipage\textwidth
 במימוש של הפונקציה \E|apply-primitive| נבדיל לכן בין cond ובין כל שאר הפונקציות
 הפרימיטיביות.
 \begin{KERNEL}
@@ -2045,6 +2059,10 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
               (evaluate-list actuals a-list)
               a-list))))
 \end{KERNEL}
+\endminipage
+
+במקרה ששם הפונקציה הפרימיטיבית cond נשתמש בפונקצית עזר, evaluate-cond. במקרה
+שהשם הוא אחר, נמשיך עם הפונקציה \E|apply-eager-primitive|.
 
 המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
 \begin{KERNEL}
@@ -2082,6 +2100,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
         (t (error 'something-went-wrong primitive))))
 \end{KERNEL}
 
+\eject
 §§ הקוד המלא של evaluate ופונקציות העזר שלה
 \תגית|סעיף:מימוש|
 
@@ -2099,6 +2118,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
   ]{\jobname.kernel.lisp}
 \end{LTR}
 
+\eject
 §§ פונקציות הסיפריה של מיני ליספ
 
 \פנה|טבלה:סיפריה| מרכזת את הפונקציות במיני ליספ שאינן פרימיטיביות, כלומר אלו
