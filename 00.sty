@@ -12,7 +12,7 @@
 \options{minitoc}[tight]
 
 
-\usepackage{mdframed}
+\usepackage{adjustbox,collcell}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -22,18 +22,21 @@
 \usepackage{cleveref}
 \usepackage{enumitem}
 \usepackage{fancyhdr}
+\usepackage{filecontents}
 \usepackage{float}
-\usepackage{forest}
 \usepackage{fontspec}
+\usepackage{forest}
 \usepackage{geometry}
-\usepackage{morewrites}
 \usepackage{glossaries}
 \usepackage{glossary-long}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{mdframed}
 \usepackage{minitoc}
+\usepackage{morewrites}
 \usepackage{multicol}
 \usepackage{multirow}
+\usepackage{pagecolor}
 \usepackage{pbox}
 \usepackage{polyglossia}
 \usepackage{proof}
@@ -43,11 +46,9 @@
 \usepackage{tikz}
 \usepackage{url} 
 \usepackage{xcolor}
-\usepackage{filecontents}
 \usepackage{yogi-code}
 \usepackage{yogi-lang}
 \usepackage{yogi-unicode}
-\usepackage{adjustbox,collcell}
 
 
 
@@ -291,6 +292,17 @@ language=#2,belowcaptionskip=1\baselineskip,
 
 \setRTL{}
 }
+\newenvironment{editing}[1]{%
+  \eject
+  \pagecolor{yellow!50}
+  \large
+  שימו לב, פרק זה בתהליכי שכתוב, אין לשלוח הערות בשלב זה
+  \normalsize
+}{
+  \eject
+  \pagecolor{white}
+}
+
 
 % Environment for writing syntax rules
 \newenvironment{derivation}{\ignorespaces%
