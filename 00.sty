@@ -4,8 +4,8 @@
 
 \options{bashful}[unique,dir=Excerpts]
 \options{cleveref}[nameinlink]
-%\options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
-\options{geometry}[a4paper,landscape]
+\options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
+%\options{geometry}[a4paper,landscape]
 
 \options{glossaries}[toc,section=section,footnote]
 \options{xcolor}[table,dvipsnames]
@@ -101,7 +101,9 @@
 \crefname{definition}{הגדרה}{הגדרות}
 \crefname{figure}{איור}{איורים}
 \crefname{table}{טבלה}{טבלאות}
-\crefname{eq}{}{}
+\crefname{section}{פרק}{פרקים}
+\crefname{equation}{}{}
+\crefformat{equation}{(#2#1#3)}
 \let\ref=\cref
 
 \def\UrlFont{\ttfamilylatin}
