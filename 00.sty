@@ -71,20 +71,29 @@
 \newtheorem{claim}{טענה}[section]
 \newtheorem{example}{דוגמה}[section]
 \numberwithin{equation}{section}
-
+\defaultfontfeatures{Mapping=tex-text, Scale=MatchLowercase}
+\setdefaultlanguage{english}
+\setotherlanguage{hebrew}
 \def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
 \graphicspath{{Images/}}
+
+
 \setmainlanguage{hebrew}
-\setmainfont{Linux Libertine O}
+\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
+%%\setmainfont{Linux Libertine O}
 \setotherlanguage{english}
 \setotherlanguage{arabic}
-
-\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
 \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
-\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
-\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+
+\usepackage{polyglossia}
+\setmainfont[Script=Hebrew]{Ezra SIL}% 
+%\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+\setmonofont[Script=Hebrew]{DejaVu Sans}% 
+
 \newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
-\setmonofont{UMTypewriter-Regular.otf}
+%\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+%\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+%\setmonofont{UMTypewriter-Regular.otf}
   
 \newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
 \DeclareMathOperator\arity{arity}
