@@ -2090,7 +2090,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימיט�
               (car cdr actuals))))) ; second actual parameter, could be nil
 \end{KERNEL}
 
-כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימיטיביות שנותרו:
+כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בשש הפונקציות הפרימיטיביות שנותרו:
 \begin{KERNEL}
 (defun apply-trivial-primitive (primitive first second)
   (cond ((eq primitive 'atom) (atom first))
