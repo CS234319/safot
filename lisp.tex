@@ -1911,7 +1911,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
   (evaluate body
     (cond (eq tag 'nlambda) (bind formals actuals a-list)
           (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
-          (t (error 'unkown-lambda tag)))))
+          (t (error 'unknown-lambda tag)))))
 \end{KERNEL}
 
 האבחנה בין הסוגים השונים של ביטוי ה-$λ$, נעשית באופן הבא בפונקציה
