@@ -37,4 +37,5 @@
 %s/\<ב \+/ב-/ge
 
 source ~/bin/+short
+set nospell
 
