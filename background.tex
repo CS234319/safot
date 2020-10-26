@@ -226,9 +226,7 @@
     \פנה|eq:plus|, \פנה|eq:times|, או \פנה|eq:div|.
     מכאן, \[
       f(q)∈❴-q₁,q₁+q₂,q₁·q₂,q₁/q₂❵.
-\] 
-
-כיוון שמספר הפעולות הבנאים לשם יצירת הפונקציות~$f₁$ ו-$f₂$ קטן ממש מ-$n$
+\] כיוון שמספר הפעולות הבנאים לשם יצירת הפונקציות~$f₁$ ו-$f₂$ קטן ממש מ-$n$
     הנחת האינדוקציה מתקיימת לגביהן, ולכן, גם~$q₁$ וגם~$q₂$ חייבים להיות רציונליים
 
     אם הם מוגדרים, ולכן גם~$f(q)$,
@@ -319,7 +317,6 @@ $E₁⌘?E₂⌘:E₃$ הוא ביטוי.
 לבד מביטויים, תכניות גם מכילות פקודות אשר ביצוען מביא לשינוי של מצב התכנית. גם
 גם קבוצת הפקודות מוגדרת בדרך כלל רקורסיבית, והגדרה זו כוללת בתוכה
 הגדרה של בנאי פקודות ופקודות אטומיות.
-
 
 פקודה אטומית יכולה להכיל בתוכו ביטוי, והביטוי יכול שיהיה ביטוי מורכב, גם אם
 הפקודה עצמה היא אטומית.
@@ -416,7 +413,6 @@ b :=c;
 end
 \end{PASCAL}
 אינה פקודה אטומית, שכן ניתן לאתר בה מרכיב שהוא \פקודה בעצמו.
-
 
 \begin{editing}
 §§ הגדרה רקורסיבית של טיפוסים בשפת תכנות
@@ -1253,11 +1249,11 @@ $⌘)Q⌘*⌘U⌘(→Q$ המכיל את הסמל~$Q$ בתוך צורת המשפ�
     block4→block5 ⏎
     block4→proc-and-func-declaration ; block5 ⏎
     block5→begin statement-list end ⏎
-  …⏎
+ …⏎
     type-declaration→type type-declarator ⏎
     type-declaration→type-declaration ; type-declarator ⏎
     type-declarator→identifier=type ⏎
-  …⏎
+ …⏎
     type→identifier ⏎
     type→record field-list \=end=⏎
     field-list→𝜺 ⏎
@@ -1300,22 +1296,22 @@ end.
 הסימן הלא סופי statement ולהיפך:
 
 \begin{align}
-  statement-list→statement
-  statement-list→statement-list ; statement
-  statement→𝜺
-  statement→variable :=expression
-  statement→begin statement-list end
-  statement→if expression then statement
-  statement→if expression then statement else statement
-  statement→case expression of case-list end
-  statement→while expression do statement
-  statement→repeat statement-list until expression
-  statement→for varid :=for-list do statement
-  statement→procid
-  statement→procid(expression-list)
-  statement→goto label
-  statement→with record-variable-list do statement
-  statement→label : statement
+  statement-list→statement ⏎
+  statement-list→statement-list ; statement⏎
+  statement→𝜺⏎
+  statement→variable :=expression⏎
+  statement→begin statement-list end⏎
+  statement→if expression then statement⏎
+  statement→if expression then statement else statement⏎
+  statement→case expression of case-list end⏎
+  statement→while expression do statement⏎
+  statement→repeat statement-list until expression⏎
+  statement→for varid :=for-list do statement⏎
+  statement→procid⏎
+  statement→procid(expression-list)⏎
+  statement→goto label⏎
+  statement→with record-variable-list do statement⏎
+  statement→label : statement⏎
 \end{align}
 
 הגדרות רקורסיביות מעין אלו הינן חיוניות בהגדרת שפות תכנות מודרניות, אך הן אינן
