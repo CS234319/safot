@@ -225,9 +225,132 @@ editor|) הידוע בשם \E|Emacs|), AutoLisp (המשמשת כשפת סקרי�
 
 שני מרכיבים בגלעין זה: 
 \begin{description}
-  \item[פונקציות פרימיטיביות] אילו הן פונקציות פשוטות אשר הן "אקסיומטיות", כלומר, הגלעין מניח שהן קיימות, ואנו נגדיר, אך לא נממש אותן כאן.
-  \item[פונקציות סיפרייה] אילו הן פונקציות אשר אותן מגדיר הגלעין, באמצעות פונקציות הפרימיטיביות. 
+  \item[פונקציות פרימיטיביות] אילו הן פונקציות פשוטות אשר הן "אקסיומטיות",
+    כלומר, הגלעין מניח שהן קיימות וכי הן מצייתות למפרט מוגדר היטב. אולם, האופן 
+    שבו ממומשות הפונקציות הפרימיטיביות אינו חלק מהגלעין.  
+  \item[פונקציות סיפרייה] אילו הן פונקציות אשר אותן
+    הגלעין מממש באמצעות קריאה לאחת או יותר מהפונקציות הפרימיטיביות.  
 \end{description}
+
+לפיכך, התיאור המלא של שפת מיני-ליספ, כולל שני מרכיבים בלבד: המפרט של הפונקציות
+הפרימיטיביות  והמימוש של פונקציות הסיפריה.
+המפרט מופיע ב\פנה|טבלה:מיני|.
+
+
+\begin{table}[!hbt]
+\newcounter{magicrownumbers}
+\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
+  % \begin{adjustbox}{max height=0.9\textheight}
+  \rowcolors{2}{olive!10}{white}
+  \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize\setLR}c>{\scriptsize}c
+    >{\setRL\scriptsize\raggedleft\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    }
+
+    \toprule
+    \# &
+    \normalsize \bfseries {\text{/arity}}שם           &
+    \normalsize \bfseries סמנטיקה                     &
+    \normalsize \bfseries תמצית                       &
+    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+    \midrule
+
+    \rownumber &
+    atom/1                                            &
+    eager                                             &
+    בדיקה אם הארגומנט הוא אטום                        &
+    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
+
+    \rownumber &
+    car/1                                             &
+    eager                                             &
+    חילוץ האיבר הראשון ברשימה                         &
+    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
+    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
+    \lisp{(car ())}~$⇒$ \text{✗} ⏎
+
+    \rownumber &
+    cdr/1                                             &
+    eager                                             &
+    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
+    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
+    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
+    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cdr t)}~$⇒$ ✗ \newline
+    \lisp{(cdr ())}~$⇒$ ✗ \newline
+    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
+
+    \rownumber &
+    ($n≥0$) cond/n                                    &
+    normal                                            &
+    הכללה של פקודת \E|if|.                            &
+    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
+    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
+    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
+
+    \rownumber &
+    cons/2                                            &
+    eager                                             &
+    הוספת איבר בתחילת רשימה                           &
+    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
+    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
+
+    \rownumber &
+    eq/2                                              &
+    eager                                             &
+    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
+    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
+
+    \rownumber &
+    ($n≥0$) error/n                                   &
+    eager                                             &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
+    \lisp{(error)}~$⇒$ ✗ \newline
+    \lisp{(error A)}~$⇒$ ✗ \newline
+    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
+
+    \rownumber &
+    set/2                                             &
+    eager                                             &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|.            &
+    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
+    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
+    \label{primitive:count}
+    ⏎
+    \bottomrule
+  \end{tabularx}
+  \כיתוב|הפונקציות הפרימיטיביות של מיני-ליספ|
+  \תגית|טבלה:מיני|
+  %\end{adjustbox}
+\end{table}
+
+
+המימוש של פונקציות הסיפרייה אף הוא אינו ארוך ביותר:
+\begin{LTR}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{orange!20}
+  ]{\jobname.library.lisp}
+\end{LTR}
+
 
 על אף המינימליות של שפת מיני-ליספ, שפה זו היא "טיורינג שלמה". רוצה לומר: ניתן
 לכתוב במיני-ליספ כל תכנית שאפשר לכתוב בשפות תכנות פחות סגפניות ממנה, כמו פסקל
@@ -1317,7 +1440,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 (defun null(x) (eq x nil))
 \end{LIBRARY}
 
-§§ פונקציות פרימטיביות לעומת פונקציות סיפריה
+§§ פונקציות פרימיטיביות לעומת פונקציות סיפריה
 ניזכר שהפונקציה eq היא פונקציה פרימיטיבית, במובן זה שלא ניתן לממש אותה באמצעות
 פונקציות אחרות. לעומת זאת, כיוון שהפונקציה null שבמיני-ליספ ניתנת להגדרה
 באמצעות פונקציות אחרות היא נחשבת לפונקצית סיפריה.
@@ -1954,106 +2077,6 @@ apply-decompsed-lambda
 הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך ה-\E|a-list|.
 
 
-\begin{table}[!hbt]
-\newcounter{magicrownumbers}
-\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
-  % \begin{adjustbox}{max height=0.9\textheight}
-  \rowcolors{2}{olive!10}{white}
-  \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize\setLR}c>{\scriptsize}c
-    >{\setRL\scriptsize\raggedleft\arraybackslash}X
-    >{\scriptsize\setLR\raggedright\arraybackslash}X
-    >{\scriptsize\setLR\raggedright\arraybackslash}X
-    }
-
-    \toprule
-    \# &
-    \normalsize \bfseries {\text{/arity}}שם           &
-    \normalsize \bfseries סמנטיקה                     &
-    \normalsize \bfseries תמצית                       &
-    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
-    \midrule
-
-    \rownumber &
-    atom/1                                            &
-    eager                                             &
-    בדיקה אם הארגומנט הוא אטום                        &
-    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
-
-    \rownumber &
-    car/1                                             &
-    eager                                             &
-    חילוץ האיבר הראשון ברשימה                         &
-    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
-    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
-    \lisp{(car ())}~$⇒$ \text{✗} ⏎
-
-    \rownumber &
-    cdr/1                                             &
-    eager                                             &
-    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
-    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
-    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
-    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cdr t)}~$⇒$ ✗ \newline
-    \lisp{(cdr ())}~$⇒$ ✗ \newline
-    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
-
-    \rownumber &
-    ($n≥0$) cond/n                                    &
-    normal                                            &
-    הכללה של פקודת \E|if|.                            &
-    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
-    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
-    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
-
-    \rownumber &
-    cons/2                                            &
-    eager                                             &
-    הוספת איבר בתחילת רשימה                           &
-    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
-    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
-
-    \rownumber &
-    eq/2                                              &
-    eager                                             &
-    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
-    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
-
-    \rownumber &
-    ($n≥0$) error/n                                   &
-    eager                                             &
-    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
-    \lisp{(error)}~$⇒$ ✗ \newline
-    \lisp{(error A)}~$⇒$ ✗ \newline
-    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
-
-    \rownumber &
-    set/2                                             &
-    eager                                             &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|.            &
-    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
-    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
-    \label{primitive:count}
-    ⏎
-    \bottomrule
-  \end{tabularx}
-  \כיתוב|הפונקציות הפרימיטיביות של מיני-ליספ|
-  \תגית|טבלה:מיני|
-  %\end{adjustbox}
-\end{table}
-
 תיארנו את הפונקציה evaluate הממשת את מרבית הפעולות שבאלגוריתם השיערוך של ליספ.
 נותר עוד לתאר את המימוש של הפונקציה evaluate-primitive אשר נועדה לטיפול
 בפונקציות הפרימיטיביות.
@@ -2128,6 +2151,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 §§ הקוד המלא של evaluate ופונקציות העזר שלה
 \תגית|סעיף:מימוש|
 
+\immediate\closeout \libraryFile
 \immediate\closeout \kernelFile
 
 \begin{LTR}
