@@ -38,200 +38,130 @@
 \begin{document}
 \setLTR
 \begin{frame}
-  \titlepage
+\titlepage
 \end{frame}
 
 \begin{frame}
-  \frametitle{Preliminaries}
-  \begin{block}{Running Mini Lisp code}
+\frametitle{Preliminaries}
+\begin{block}{Running Mini Lisp code}
   Use the following link to test your Mini Lisp code: ⏎
   \url{https://rextester.com/l/commonₗispₒnline_compiler} ⏎
   Note that this uses the Common Lisp language which is a superset of Mini Lisp. ⏎
-  You are only allowed to use functions and features that exist in Mini Lisp, as shown in the lectures and tutorials.
-  \end{block}
+  You are only allowed to use functions of Mini Lisp, as shown in the lectures and tutorials.
+\end{block}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Atomic Functions in Mini Lisp}{atomic functions are builtin}
-  \begin{block}{Structural}
+\begin{frame}%{8 Atomic Functions of Mini Lisp}{atomic functions are builtin}
+\begin{block}{Structural}
   \begin{description}
-      \item[car/1] Quiz: 
-      \item[cdr/1] Quiz: 
-      \item[cons/2] Quiz: 
-      \end{description}
-  \end{block}
-  \begin{block}{Logical}
-  \begin{description}
-      \item[atom/1] Quiz: \lisp{(atom nil)}?  \lisp{(atom t)}?
-          \lisp{(atom '(a a))}?  \lisp{(atom 'a)}?
-      \item[eq/1] Quiz:  \lisp{(eq t t)}? \lisp{(eq t nil)}? \lisp{(eq nil nil)}? \lisp{(eq 'a 'a)}? 
-      \lisp{(eq '(a a) '(a a))}?
-      \item[cond/n] Quiz: 
+    \item[car/1] Quiz:
+      \lisp{(car '(b.a))}?
+      \lisp{(car '(b a))}?
+      \lisp{(car '(a))}?
+      \lisp{(car 'a)}?
+      \lisp{(car ())}?
+    \item[cdr/1] Quiz:
+      \lisp{(cdr '(a.b))}?
+      \lisp{(cdr '(a b))}?
+      \lisp{(cdr '(b))}?
+      \lisp{(cdr t)}?
+      \lisp{(cdr ())}?
+      \lisp{(cdr nil)}?
+    \item[cons/2] Quiz:
+      \lisp{(cons 'a '(b c))}?
+      \lisp{(cons 'b nil)}?
+      \lisp{(cons 'a 'b)}?
   \end{description}
-  \begin{description}
-      \item[set/2] Quiz: 
-      \item[cond/n] Quiz: 
-  \end{description}
-   \end{block}
-  TTwo concepts:
-  \begin{itemize}
-   \item Function name: strings \texttt{defun}, \texttt{nlamda},…
-   \item Function body: defined in library
-  \end{itemize}
-  \pause
-  \begin{block}{Predefined Names of Atoms}
-    t ⏎
-    nil
-  \end{block}
-  Predefined atoms, are just like functions that take no argument,
-  \begin{itemize}
-   \item Function name: strings \texttt{t} and \texttt{nil}
-   \item Function body: defined in library to the string \texttt{t} and \texttt{nil}
-  \end{itemize}
+\end{block}
+%\begin{block}{Logical}
+%  \begin{description}
+%    \item[atom/1] Quiz:
+%      \lisp{(atom nil)}?
+%      \lisp{(atom t)}?
+%      \lisp{(atom '(a a))}?
+%      \lisp{(atom 'a)}?
+%    \item[eq/1] Quiz:
+%      \lisp{(eq t t)}?
+%      \lisp{(eq t nil)}?
+%      \lisp{(eq nil nil)}?
+%      \lisp{(eq 'a 'a)}?
+%      \lisp{(eq '(a a) '(a a))}?
+%    \item[cond/n] Quiz:
+%      \lisp{(cond (t 'A))}?
+%      \lisp{(cond (nil 'A) (t 'B))}?
+%      \lisp{(cond (nil 'A) (t 'B) (t 'C))}?
+%      \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
+%      \lisp{(cond)}?
+%  \end{description}
+%\end{block}
+%\begin{block}
+%  \begin{description}
+%    \item[set/2] Quiz:
+%      \lisp{(set 'a '(b c))}?
+%      \lisp{(set 'b nil)}?
+%    \item[error/2] Quiz:
+%      \lisp{(error)}?
+%      \lisp{(error A)}?
+%      \lisp{(error 'my-error 'message)}?
+%  \end{description}
+%\end{block}
 \end{frame}
+\end{document}
 
-\begin{table}[!hbt]
-   \begin{adjustbox}{max height=0.9\textheight}
-  \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize\setLR}c>{\scriptsize}c
-    >{\setRL\scriptsize\raggedleft\arraybackslash}X
-    >{\scriptsize\setLR\raggedright\arraybackslash}X
-    >{\scriptsize\setLR\raggedright\arraybackslash}X
-    }
-
-    \toprule
-    ＃ &
-    \normalsize \bfseries {\text{name/arity}}           &
-    \normalsize \bfseries Semantics                     &
-    \normalsize \bfseries Summary                       &
-    \multicolumn1c{\normalsize \bfseries \LR{Examples}} ⏎
-    \midrule
-
-    atom/1                                            &
-    eager                                             &
-    בדיקה אם הארגומנט הוא אטום                        &
-    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
-
-    car/1                                             &
-    eager                                             &
-    חילוץ האיבר הראשון ברשימה                         &
-    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
-    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
-    \lisp{(car ())}~$⇒$ \text{✗} ⏎
-
-    cdr/1                                             &
-    eager                                             &
-    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
-    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
-    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
-    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cdr t)}~$⇒$ ✗ \newline
-    \lisp{(cdr ())}~$⇒$ ✗ \newline
-    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
-
-    ($n≥0$) cond/n                                    &
-    normal                                            &
-    הכללה של פקודת \E|if|. &
-    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
-    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
-    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
-
-    cons/2                                            &
-    eager                                             &
-    הוספת איבר בתחילת רשימה                           &
-    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
-    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
-
-    eq/2                                              &
-    eager                                             &
-    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
-    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
-
-    ($n≥0$) error/n                                   &
-    eager                                             &
-    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
-    \lisp{(error)}~$⇒$ ✗ \newline
-    \lisp{(error A)}~$⇒$ ✗ \newline
-    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
-
-    set/2                                             &
-    eager                                             &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
-    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
-    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
-    \label{primitive:count}
- ⏎
-    \bottomrule
-  \end{tabularx}
-  \end{adjustbox}
-\end{table}
-
-\begin{frame}
-  \frametitle{Predefined Functions in Mini Lisp}
-  \begin{block}{Predefined Functions}
-      defun ⏎
-      lambda ⏎
-      null ⏎
-      ndefun ⏎
-      nlambda ⏎
-      quote
-  \end{block}
-  Two concepts:
-  \begin{itemize}
-   \item Function name: strings \texttt{defun}, \texttt{nlamda},…
-   \item Function body: defined in library
-  \end{itemize}
-  \pause
-  \begin{block}{Predefined Names of Atoms}
-    t ⏎
-    nil
-  \end{block}
-  Predefined atoms, are just like functions that take no argument,
-  \begin{itemize}
-   \item Function name: strings \texttt{t} and \texttt{nil}
-   \item Function body: defined in library to the string \texttt{t} and \texttt{nil}
-  \end{itemize}
+\begin{frame}{Predefined Functions in Mini Lisp}{defined using atomic functions only}
+%\begin{block}{Predefined Functions}
+%  defun ⏎
+%  lambda ⏎
+%  null ⏎
+%  ndefun ⏎
+%  nlambda ⏎
+%  quote
+%\end{block}
+%Two concepts:
+%\begin{itemize}
+%  \item Function name: strings \texttt{defun}, \texttt{nlamda},…
+%  \item Function body: defined in library
+%\end{itemize}
+%\pause
+%\begin{block}{Predefined Names of Atoms}
+%  t ⏎
+%  nil
+%\end{block}
+%Predefined atoms, are just like functions that take no argument,
+%\begin{itemize}
+%  \item Function name: strings \texttt{t} and \texttt{nil}
+%  \item Function body: defined in library to the string \texttt{t} and \texttt{nil}
+%\end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Exercise}
-  \begin{block}{Binary representation of numbers}
-    First let us define how we represent an unsigned integer in binary, ⏎
-    A number will be represented in its' binary form as a List consisting of the atom O and Z with the LSB (Least Significant Bit) first. ie. the leftmost bit the the LSB. ⏎
-    The atom Z will represent zero and the atom O will represent one.
-  \end{block}
+\frametitle{Exercise}
+\begin{block}{Binary representation of numbers}
+  First let us define how we represent an unsigned integer in binary, ⏎
+  A number will be represented in its' binary form as a List consisting of the atom O and Z with the LSB (Least Significant Bit) first. ie. the leftmost bit the the LSB. ⏎
+  The atom Z will represent zero and the atom O will represent one.
+\end{block}
 
-  \begin{block}{Example}
+\begin{block}{Example}
   The number~$6={110}_b$ will be represented as (Z O O) ⏎
   The number~$9={1001}_b$ will be represented as (O Z Z O)
-  \end{block}
+\end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Exercise}
-  \begin{block}{Implement the following functions}
-    \begin{enumerate}
-        \item bnormalize--receives a number represented as a list and returns its' shortest representation, without trailling zeros.
-        \item badd--receives two numbers represented as lists (not necessarily the shortest- normalized representation) and returns the shortest list representing the sum of the two numbers.
-    \end{enumerate}
-  \end{block}
+\frametitle{Exercise}
+\begin{block}{Implement the following functions}
+  \begin{enumerate}
+    \item bnormalize--receives a number represented as a list and returns its' shortest representation, without trailing zeros.
+    \item badd--receives two numbers represented as lists (not necessarily the shortest- normalized representation) and returns the shortest list representing the sum of the two numbers.
+  \end{enumerate}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Solution- bnormalize}
-  \begin{block}{Auxiliary functions}
-    \begin{lstlisting}[language=Lisp]
+\frametitle{Solution- bnormalize}
+\begin{block}{Auxiliary functions}
+  \begin{lstlisting}[language=Lisp]
 (defun list-contains-only-zeros (l) (
   cond
     ((null l) t)
@@ -240,26 +170,26 @@
     ((eq (car l) (quote O)) (nil))
 ))
     \end{lstlisting}
-  \end{block}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Solution- bnormalize}
-  \begin{block}{bnormalize}
-    \begin{lstlisting}[language=Lisp]
+\frametitle{Solution- bnormalize}
+\begin{block}{bnormalize}
+  \begin{lstlisting}[language=Lisp]
 (defun bnormalize (l) (
   cond
     ((list-contains-only-zeros l) nil)
     (t (cons (car l) (bnormalize (cdr l))))
 ))
     \end{lstlisting}
-  \end{block}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Solution- badd}
-  \begin{block}{Auxiliary functions}
-    \begin{lstlisting}[language=Lisp]
+\frametitle{Solution- badd}
+\begin{block}{Auxiliary functions}
+  \begin{lstlisting}[language=Lisp]
 (defun andalso (l) (
   cond
     ((null b1) nil)
@@ -267,13 +197,13 @@
     (t t)
 ))
     \end{lstlisting}
-  \end{block}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Solution- badd}
-  \begin{block}{badd}
-    \begin{lstlisting}[language=Lisp]
+\frametitle{Solution- badd}
+\begin{block}{badd}
+  \begin{lstlisting}[language=Lisp]
 (defun badd (l1 l2) (
   cond
     ((null (bnormalize l1)) (bnormalize l2))
@@ -284,18 +214,18 @@
     (t (cons 'O (badd (cdr l1) (cdr l2))))
 ))
     \end{lstlisting}
-  \end{block}
+\end{block}
 
-  \begin{block}{Note}
-    \Verb |(quote X)| is equivalent to \Verb |'X|.
-  \end{block}
+\begin{block}{Note}
+  \Verb |(quote X)| is equivalent to \Verb |'X|.
+\end{block}
 \end{frame}
 
 % should this be in the slides? or maybe use this or bsub as homework
 \begin{frame}[fragile]
-  \frametitle{Solution- bmul}
-  \begin{block}{bmul}
-    \begin{lstlisting}[language=Lisp]
+\frametitle{Solution- bmul}
+\begin{block}{bmul}
+  \begin{lstlisting}[language=Lisp]
 (defun bmul (l1 l2) (
   cond
     ((null (bnormalize l1)) nil)
@@ -305,13 +235,13 @@
     ((eq (car l1) 'Z) (cons 'Z (bmul l1 (cdr l2))))
 ))
     \end{lstlisting}
-  \end{block}
+\end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Exercise}
-  \uncover<1>{erster Satz}⏎
-  \uncover<3>{zweiter Satz}⏎
-  \uncover<2>{dritter Satz}
+\frametitle{Exercise}
+\uncover<1>{erster Satz}⏎
+\uncover<3>{zweiter Satz}⏎
+\uncover<2>{dritter Satz}
 \end{frame}
 \end{document}
