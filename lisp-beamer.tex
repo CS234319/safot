@@ -29,7 +29,12 @@
 
 \title{Mini Lisp}
 \author{Maxim Barsky}
-\institute[Programming Languages- 236319]{Programming Languages⏎ 236319}
+\institute[236319/2020/2021]{%
+Programming Languages 236319⏎
+Autumn 2020/Winter 2021 ⏎
+Department of Computer Science ⏎
+The Technion
+}
 \date{\today}
 
 \begin{document}
@@ -42,7 +47,7 @@
 \begin{block}{Common lisp online IDE}
   \url{https://rextester.com/l/commonₗispₒnline_compiler}
 \end{block}
-Note: Common Lisp language is (mostly)  a superset of Mini Lisp.
+Note: Common Lisp language is (mostly) a superset of Mini Lisp.
 \begin{block}{Allowed functions in this course}
   \begin{itemize}
     \item 8 atomic (primitive) functions of mini-lisp
@@ -78,38 +83,104 @@ Add solutions in transparent
       \lisp{(cons 'a 'b)}?
   \end{description}
 \end{block}
-\begin{block}{3 Logical}
-  \begin{description}
-    \item[atom/1] Quiz:
-      \lisp{(atom nil)}?
-      \lisp{(atom t)}?
-      \lisp{(atom '(a a))}?
-      \lisp{(atom 'a)}?
-    \item[eq/1] Quiz:
-      \lisp{(eq t t)}?
-      \lisp{(eq t nil)}?
-      \lisp{(eq nil nil)}?
-      \lisp{(eq 'a 'a)}?
-      \lisp{(eq '(a a) '(a a))}?
-    \item[cond/n] Quiz:
-      \lisp{(cond (t 'A))}?
-      \lisp{(cond (nil 'A) (t 'B))}?
-      \lisp{(cond (nil 'A) (t 'B) (t 'C))}?
-      \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
-      \lisp{(cond)}?
-  \end{description}
+\end{frame}
+
+\begin{frame}{8 Atomic Functions of Mini Lisp}{atomic functions are builtin}
+Add solutions in transparent
+\begin{block}{3 Structural Functions:}
+  car, cdr, cons
 \end{block}
-\begin{block}{2 Other Functions}
-  \begin{description}
-    \item[set/2] Quiz:
-      \lisp{(set 'a '(b c))}?
-      \lisp{(set 'b nil)}?
-    \item[error/2] Quiz:
-      \lisp{(error)}?
-      \lisp{(error A)}?
-      \lisp{(error 'my-error 'message)}?
-  \end{description}
+\begin{block}{2 Logical Functions: }
+  atom, eq, cond
 \end{block}
+\begin{block}{2 Other Functions: }
+  atom, eq, cond
+\end{block}
+\end{frame}
+
+\begin{frame}{The Structural Functions}
+\begin{description}
+  \item[3 Structural Functions] car, cdr, cons
+    \begin{description}
+      \item[car/1] Quiz:
+        \begin{itemize}
+          \item \lisp{(car '(b.a))}?
+          \item \lisp{(car '(b a))}?
+          \item \lisp{(car '(a))}?
+          \item \lisp{(car 'a)}?
+          \item \lisp{(car ())}?
+        \end{itemize}
+      \item[cdr/1] Quiz:
+        \begin{itemize}
+          \item \lisp{(cdr '(a.b))}?
+          \item \lisp{(cdr '(a b))}?
+          \item \lisp{(cdr '(b))}?
+          \item \lisp{(cdr t)}?
+          \item \lisp{(cdr ())}?
+          \item \lisp{(cdr nil)}?
+        \end{itemize}
+      \item[cons/2] Quiz:
+        \begin{itemize}
+          \item \lisp{(cons 'a '(b c))}?
+          \item \lisp{(cons 'b nil)}?
+          \item \lisp{(cons 'a 'b)}?
+        \end{itemize}
+      \item[3 Logical Functions]: atom, eq, cond
+      \item[2 Other Functions:] set, error
+    \end{description}
+\end{description}
+
+\begin{frame}{The Logical Functions}
+\begin{description}
+  \item[3 Structural Functions] car, cdr, cons
+  \item[3 Logical Functions]: atom, eq, cond
+    \begin{description}
+      \item[atom/1] Quiz:
+        \begin{itemize}
+          \item \lisp{(atom nil)}?
+          \item \lisp{(atom t)}?
+          \item \lisp{(atom '(a a))}?
+          \item \lisp{(atom 'a)}?
+        \end{itemize}
+      \item[eq/1] Quiz:
+        \begin{itemize}
+          \item \lisp{(eq t t)}?
+          \item \lisp{(eq t nil)}?
+          \item \lisp{(eq nil nil)}?
+          \item \lisp{(eq 'a 'a)}?
+          \item \lisp{(eq '(a a) '(a a))}?
+        \end{itemize}
+      \item[cond/n] Quiz:
+        \begin{enumerate}
+          \item \lisp{(cond (t 'A))}?
+          \item \lisp{(cond (nil 'A) (t 'B))}?
+          \item \lisp{(cond (nil 'A) (t 'B) (t 'C))}?
+          \item \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
+          \item \lisp{(cond)}?
+        \end{enumerate}
+      \item[2 Other Functions:] set, error
+    \end{description}
+\end{description}
+\end{frame}
+
+\begin{frame}{The Remaining ``Other'' Functions}
+\begin{description}
+  \item[3 Structural Functions] car, cdr, cons
+  \item[3 Logical Functions]: atom, eq, cond
+    \begin{description}
+      \item[set/2] Quiz:
+        \begin{itemize}
+          \lisp{(set 'a '(b c))}?
+          \lisp{(set 'b nil)}?
+        \end{itemize}
+      \item[error/2] Quiz:
+        \begin{itemize}
+          \lisp{(error)}?
+          \lisp{(error A)}?
+          \lisp{(error 'my-error 'message)}?
+        \end{itemize}
+    \end{description}
+\end{description}
 \end{frame}
 
 \begin{frame}{Predefined Functions in Mini Lisp}{defined using atomic functions only}
@@ -148,7 +219,7 @@ Predefined atoms, are just like functions that take no argument,
     numberblanklines=false,
     numberstyle=\tiny\bf,
     backgroundcolor=\color{orange!20}
-  ]{\jobname.library.lisp}
+  ]{00.library.lisp}
 \end{LTR}
 \end{frame}
 
