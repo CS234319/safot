@@ -8,20 +8,12 @@
     urlcolor=blue,
 }
 
-% vertical separator macro
-\newcommand{\vsep}{
-  \column{0.0\textwidth}
-    \begin{tikzpicture}
-      \draw[very thick,black!10] (0,0)--(0,7.3);
-    \end{tikzpicture}
-}
-
 % More space between lines in align
 \setlength{\mathindent}{0pt}
 
 % Beamer theme
-\usetheme{ZMBZFMK}
-\usefonttheme[onlysmall]{structurebold}
+%\usetheme{ZMBZFMK}
+%\usefonttheme[onlysmall]{structurebold}
 \mode<presentation>
 \setbeamercovered{transparent=10}
 
@@ -41,18 +33,26 @@
 \titlepage
 \end{frame}
 
-\begin{frame}
-\frametitle{Preliminaries}
-\begin{block}{Running Mini Lisp code}
-  Use the following link to test your Mini Lisp code: ⏎
-  \url{https://rextester.com/l/commonₗispₒnline_compiler} ⏎
-  Note that this uses the Common Lisp language which is a superset of Mini Lisp. ⏎
-  You are only allowed to use functions of Mini Lisp, as shown in the lectures and tutorials.
+\begin{frame}{Preliminaries}
+\begin{block}{Common lisp online IDE}
+  \url{https://rextester.com/l/commonₗispₒnline_compiler}
+\end{block}
+Note: Common Lisp language is (mostly)  a superset of Mini Lisp.
+\begin{block}{Allowed functions in this course}
+  \begin{itemize}
+    \item 8 atomic (primitive) functions of mini-lisp
+    \item 8 library functions of mini-lisp
+    \item any functions you define with these
+  \end{itemize}
+\end{block}
+\begin{block}{In this course…}
+  We implement function \lisp{eval} using atomic and library functions only.
 \end{block}
 \end{frame}
 
-\begin{frame}%{8 Atomic Functions of Mini Lisp}{atomic functions are builtin}
-\begin{block}{Structural}
+\begin{frame}{8 Atomic Functions of Mini Lisp}{atomic functions are builtin}
+Add solutions in transparent
+\begin{block}{3 Structural}
   \begin{description}
     \item[car/1] Quiz:
       \lisp{(car '(b.a))}?
@@ -73,65 +73,78 @@
       \lisp{(cons 'a 'b)}?
   \end{description}
 \end{block}
-%\begin{block}{Logical}
-%  \begin{description}
-%    \item[atom/1] Quiz:
-%      \lisp{(atom nil)}?
-%      \lisp{(atom t)}?
-%      \lisp{(atom '(a a))}?
-%      \lisp{(atom 'a)}?
-%    \item[eq/1] Quiz:
-%      \lisp{(eq t t)}?
-%      \lisp{(eq t nil)}?
-%      \lisp{(eq nil nil)}?
-%      \lisp{(eq 'a 'a)}?
-%      \lisp{(eq '(a a) '(a a))}?
-%    \item[cond/n] Quiz:
-%      \lisp{(cond (t 'A))}?
-%      \lisp{(cond (nil 'A) (t 'B))}?
-%      \lisp{(cond (nil 'A) (t 'B) (t 'C))}?
-%      \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
-%      \lisp{(cond)}?
-%  \end{description}
-%\end{block}
-%\begin{block}
-%  \begin{description}
-%    \item[set/2] Quiz:
-%      \lisp{(set 'a '(b c))}?
-%      \lisp{(set 'b nil)}?
-%    \item[error/2] Quiz:
-%      \lisp{(error)}?
-%      \lisp{(error A)}?
-%      \lisp{(error 'my-error 'message)}?
-%  \end{description}
-%\end{block}
+\begin{block}{3 Logical}
+  \begin{description}
+    \item[atom/1] Quiz:
+      \lisp{(atom nil)}?
+      \lisp{(atom t)}?
+      \lisp{(atom '(a a))}?
+      \lisp{(atom 'a)}?
+    \item[eq/1] Quiz:
+      \lisp{(eq t t)}?
+      \lisp{(eq t nil)}?
+      \lisp{(eq nil nil)}?
+      \lisp{(eq 'a 'a)}?
+      \lisp{(eq '(a a) '(a a))}?
+    \item[cond/n] Quiz:
+      \lisp{(cond (t 'A))}?
+      \lisp{(cond (nil 'A) (t 'B))}?
+      \lisp{(cond (nil 'A) (t 'B) (t 'C))}?
+      \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
+      \lisp{(cond)}?
+  \end{description}
+\end{block}
+\begin{block}{2 Other Functions}
+  \begin{description}
+    \item[set/2] Quiz:
+      \lisp{(set 'a '(b c))}?
+      \lisp{(set 'b nil)}?
+    \item[error/2] Quiz:
+      \lisp{(error)}?
+      \lisp{(error A)}?
+      \lisp{(error 'my-error 'message)}?
+  \end{description}
+\end{block}
 \end{frame}
-\end{document}
 
 \begin{frame}{Predefined Functions in Mini Lisp}{defined using atomic functions only}
-%\begin{block}{Predefined Functions}
-%  defun ⏎
-%  lambda ⏎
-%  null ⏎
-%  ndefun ⏎
-%  nlambda ⏎
-%  quote
-%\end{block}
-%Two concepts:
-%\begin{itemize}
-%  \item Function name: strings \texttt{defun}, \texttt{nlamda},…
-%  \item Function body: defined in library
-%\end{itemize}
-%\pause
-%\begin{block}{Predefined Names of Atoms}
-%  t ⏎
-%  nil
-%\end{block}
-%Predefined atoms, are just like functions that take no argument,
-%\begin{itemize}
-%  \item Function name: strings \texttt{t} and \texttt{nil}
-%  \item Function body: defined in library to the string \texttt{t} and \texttt{nil}
-%\end{itemize}
+\begin{block}{Predefined Functions}
+  defun ⏎
+  lambda ⏎
+  null ⏎
+  ndefun ⏎
+  nlambda ⏎
+  quote
+\end{block}
+Two concepts:
+\begin{itemize}
+  \item Function name: strings \texttt{defun}, \texttt{nlamda},…
+  \item Function body: defined in library
+\end{itemize}
+\pause
+\begin{block}{Predefined Names of Atoms}
+  t ⏎
+  nil
+\end{block}
+Predefined atoms, are just like functions that take no argument,
+\begin{itemize}
+  \item Function name: strings \texttt{t} and \texttt{nil}
+  \item Function body: defined in library to the string \texttt{t} and \texttt{nil}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Definition of predefined functions}
+\begin{LTR}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{orange!20}
+  ]{\jobname.library.lisp}
+\end{LTR}
 \end{frame}
 
 \begin{frame}
@@ -148,20 +161,23 @@
 \end{block}
 \end{frame}
 
-\begin{frame}
-\frametitle{Exercise}
+\begin{frame}{Exercise}
 \begin{block}{Implement the following functions}
-  \begin{enumerate}
-    \item bnormalize--receives a number represented as a list and returns its' shortest representation, without trailing zeros.
-    \item badd--receives two numbers represented as lists (not necessarily the shortest- normalized representation) and returns the shortest list representing the sum of the two numbers.
-  \end{enumerate}
+  \begin{description}
+    \item [bnormalize] receives a number represented as a list and returns its'
+      shortest representation, without trailing zeros.
+    \item [badd] receives two numbers represented as lists (not necessarily the
+      shortest-
+      normalized representation) and returns the shortest list representing the
+      sum of the two numbers.
+  \end{description}
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Solution- bnormalize}
 \begin{block}{Auxiliary functions}
-  \begin{lstlisting}[language=Lisp]
+  \begin{LISP}
 (defun list-contains-only-zeros (l) (
   cond
     ((null l) t)
@@ -169,41 +185,42 @@
       (list-contains-only-zeros (cdr l)))
     ((eq (car l) (quote O)) (nil))
 ))
-    \end{lstlisting}
+    \end{LISP}
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Solution- bnormalize}
 \begin{block}{bnormalize}
-  \begin{lstlisting}[language=Lisp]
+  \begin{LISP}
 (defun bnormalize (l) (
   cond
     ((list-contains-only-zeros l) nil)
     (t (cons (car l) (bnormalize (cdr l))))
 ))
-    \end{lstlisting}
+    \end{LISP}
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Solution- badd}
+I think this is buggy, b1 and b2 are not arguments
 \begin{block}{Auxiliary functions}
-  \begin{lstlisting}[language=Lisp]
+  \begin{LISP}
 (defun andalso (l) (
   cond
     ((null b1) nil)
     ((null b2) nil)
     (t t)
 ))
-    \end{lstlisting}
+    \end{LISP}
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Solution- badd}
 \begin{block}{badd}
-  \begin{lstlisting}[language=Lisp]
+  \begin{LISP}
 (defun badd (l1 l2) (
   cond
     ((null (bnormalize l1)) (bnormalize l2))
@@ -213,19 +230,20 @@
       (cons 'Z (badd (cdr l1) (cdr l2))))
     (t (cons 'O (badd (cdr l1) (cdr l2))))
 ))
-    \end{lstlisting}
+    \end{LISP}
 \end{block}
 
 \begin{block}{Note}
-  \Verb |(quote X)| is equivalent to \Verb |'X|.
+  \lisp{quote X)} is equivalent to \lisp{'X}.
 \end{block}
 \end{frame}
 
 % should this be in the slides? or maybe use this or bsub as homework
-\begin{frame}[fragile]
-\frametitle{Solution- bmul}
+% this is homework.
+
+\begin{frame}[fragile]{Solution- bmul}
 \begin{block}{bmul}
-  \begin{lstlisting}[language=Lisp]
+  \begin{LISP}
 (defun bmul (l1 l2) (
   cond
     ((null (bnormalize l1)) nil)
@@ -234,7 +252,7 @@
         (badd l1 (cons 'Z (bmul l1 (cdr l2))))))
     ((eq (car l1) 'Z) (cons 'Z (bmul l1 (cdr l2))))
 ))
-    \end{lstlisting}
+    \end{LISP}
 \end{block}
 \end{frame}
 
