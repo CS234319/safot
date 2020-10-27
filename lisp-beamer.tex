@@ -45,7 +45,7 @@ The Technion
 
 \begin{frame}{Preliminaries}
 \begin{block}{Common lisp online IDE}
-  \url{https://rextester.com/l/commonₗispₒnline_compiler}
+  \url{https://rextester.com/l/common_lisp_online_compiler}
 \end{block}
 Note: Common Lisp language is (mostly) a superset of Mini Lisp.
 \begin{block}{Allowed functions in this course}
@@ -203,6 +203,8 @@ Two concepts:
   t ⏎
   nil
 \end{block}
+
+% FIXME: the following part is not visible in the slide, it overflows the page
 Predefined atoms, are just like functions that take no argument,
 \begin{itemize}
   \item Function name: strings \texttt{t} and \texttt{nil}
@@ -281,10 +283,9 @@ Predefined atoms, are just like functions that take no argument,
 
 \begin{frame}[fragile]
 \frametitle{Solution- badd}
-I think this is buggy, b1 and b2 are not arguments
 \begin{block}{Auxiliary functions}
   \begin{LISP}
-(defun andalso (l) (
+(defun andalso (b1 b2) (
   cond
     ((null b1) nil)
     ((null b2) nil)
@@ -301,6 +302,7 @@ I think this is buggy, b1 and b2 are not arguments
 (defun badd (l1 l2) (
   cond
     ((null (bnormalize l1)) (bnormalize l2))
+    ((null (bnormalize l2)) (bnormalize l1))
     ((andalso (eq (car l1) 'O) (eq (car l2) 'O))
       (cons 'Z (badd (badd 'O (cdr l1)) (cdr l2))))
     ((andalso (eq (car l1) 'Z) (eq (car l2) 'Z))
@@ -311,7 +313,7 @@ I think this is buggy, b1 and b2 are not arguments
 \end{block}
 
 \begin{block}{Note}
-  \lisp{quote X)} is equivalent to \lisp{'X}.
+  \lisp{(quote X)} is equivalent to \lisp{'X}.
 \end{block}
 \end{frame}
 
