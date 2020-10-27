@@ -1449,7 +1449,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 \begin{KERNEL}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; Three cases to consider:
-    ((null xs) xs) ; (i) list of xs is exhausted
+    ((null xs) nil) ; (i) list of xs is exhausted
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
 \end{KERNEL}
