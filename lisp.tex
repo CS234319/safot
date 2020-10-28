@@ -1816,24 +1816,24 @@ quote לרשימת ה-a-list באמצעות set
 נוכל לכן להגדיר את הפונקציה lambda באמצעות
 \begin{LIBRARY}
 (set 'lambda
-  '(nlambda (parameters-list body) ('lambda parameters body)))
+  '(nlambda (parameters-list body) ('lambda parameters-list body)))
 \end{LIBRARY}
 כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters-list
 ו-\E|body|. הפונקציה אינה משערכת פרמטרים אלו ומחזירה ביטוי lambda המוגדר על ידיהם
 \begin{LISP}
-  ('lambda parameters body)
+  ('lambda parameters-list body)
 \end{LISP}
 גם הפונקציה nlambda מסייעת להגדרת ביטויי nlambda באופן דומה, וניתן להגדירה
 באמצעות
 \begin{LIBRARY}
 (set 'nlambda
-  '(nlambda (parameters-list body) ('nlambda parameters body)))
+  '(nlambda (parameters-list body) ('nlambda parameters-list body)))
 \end{LIBRARY}
 כלומר, גם הפונקציה nlambda היא פונקציה שמקבלת שני פרמטרים שאינם משוערכים
 (\E|parameters-list| ו-\E|body|) ומחזירה ביטוי nlambda המוגדר על ידי
 שני הפרמטרים הללו
 \begin{LISP}
-  ('nlambda parameters body)
+  ('nlambda parameters-list body)
 \end{LISP}
 לאחר הגדרה זו של הפונקציה nlambda הכתיב
 \begin{LISP}
