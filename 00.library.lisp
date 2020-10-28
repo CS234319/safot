@@ -7,10 +7,10 @@
   '(nlambda (x) x))
 
 (set 'lambda
-  '(nlambda (parameters-list body) ('lambda parameters body)))
+  '(nlambda (parameters-list body) ('lambda parameters-list body)))
 
 (set 'nlambda
-  '(nlambda (parameters-list body) ('nlambda parameters body)))
+  '(nlambda (parameters-list body) ('nlambda parameters-list body)))
 
 (set 'defun
   '(nlambda (name parameter-list body)
