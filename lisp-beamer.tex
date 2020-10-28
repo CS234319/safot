@@ -60,47 +60,19 @@ Note: Common Lisp language is (mostly) a superset of Mini Lisp.
 \end{block}
 \end{frame}
 
-\begin{frame}{8 Atomic Functions of Mini Lisp}{atomic functions are builtin}
-Add solutions in transparent
-\begin{block}{3 Structural}
-  \begin{description}
-    \item[car/1] Quiz:
-      \lisp{(car '(b.a))}?
-      \lisp{(car '(b a))}?
-      \lisp{(car '(a))}?
-      \lisp{(car 'a)}?
-      \lisp{(car ())}?
-    \item[cdr/1] Quiz:
-      \lisp{(cdr '(a.b))}?
-      \lisp{(cdr '(a b))}?
-      \lisp{(cdr '(b))}?
-      \lisp{(cdr t)}?
-      \lisp{(cdr ())}?
-      \lisp{(cdr nil)}?
-    \item[cons/2] Quiz:
-      \lisp{(cons 'a '(b c))}?
-      \lisp{(cons 'b nil)}?
-      \lisp{(cons 'a 'b)}?
-  \end{description}
-\end{block}
-\end{frame}
-
-\begin{frame}{8 Atomic Functions of Mini Lisp}{atomic functions are builtin}
-Add solutions in transparent
+\begin{frame}{Eight Atomic Functions of Mini Lisp}{atomic functions are builtin}
 \begin{block}{3 Structural Functions:}
-  car, cdr, cons
+  car/1, cdr/1, cons/2
 \end{block}
-\begin{block}{2 Logical Functions: }
-  atom, eq, cond
+\begin{block}{3 Logical Functions: }
+  atom/1, eq/2, cond/2
 \end{block}
 \begin{block}{2 Other Functions: }
-  atom, eq, cond
+  set/2, error/n 
 \end{block}
 \end{frame}
 
-\begin{frame}{The Structural Functions}
-\begin{description}
-  \item[3 Structural Functions] car, cdr, cons
+\begin{frame}{The Three Structural Functions}
     \begin{description}
       \item[car/1] Quiz:
         \begin{itemize}
@@ -125,16 +97,10 @@ Add solutions in transparent
           \item \lisp{(cons 'b nil)}?
           \item \lisp{(cons 'a 'b)}?
         \end{itemize}
-      \item[3 Logical Functions]: atom, eq, cond
-      \item[2 Other Functions:] set, error
-    \end{description}
 \end{description}
 \end{frame}
 
-\begin{frame}{The Logical Functions}
-\begin{description}
-  \item[3 Structural Functions] car, cdr, cons
-  \item[3 Logical Functions]: atom, eq, cond
+\begin{frame}{The Three Logical Functions}
     \begin{description}
       \item[atom/1] Quiz:
         \begin{itemize}
@@ -159,28 +125,22 @@ Add solutions in transparent
           \item \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
           \item \lisp{(cond)}?
         \end{itemize}
-      \item[2 Other Functions:] set, error
-    \end{description}
 \end{description}
 \end{frame}
 
 \begin{frame}{The Remaining ``Other'' Functions}
 \begin{description}
-  \item[3 Structural Functions] car, cdr, cons
-  \item[3 Logical Functions]: atom, eq, cond
-    \begin{description}
       \item[set/2] Quiz:
         \begin{itemize}
-          \lisp{(set 'a '(b c))}?
-          \lisp{(set 'b nil)}?
+          \item \lisp{(set 'a '(b c))}?
+          \item \lisp{(set 'b nil)}?
         \end{itemize}
       \item[error/2] Quiz:
         \begin{itemize}
-          \lisp{(error)}?
-          \lisp{(error A)}?
-          \lisp{(error 'my-error 'message)}?
+          \item \lisp{(error)}?
+          \item \lisp{(error A)}?
+          \item \lisp{(error 'my-error 'message)}?
         \end{itemize}
-    \end{description}
 \end{description}
 \end{frame}
 
