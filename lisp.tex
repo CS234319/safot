@@ -1464,7 +1464,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
     ((null a-list) ; (i) a-list was exhausted.
       (error 'unbound-variable id))
     ((eq id (car (car a-list))) ; (ii) found in first dotted-pair
-      (car (cdr (car a-list)))) ; return value part of dotted pair
+      ((cdr (car a-list)))) ; return value part of dotted pair
     (t (lookup id (cdr a-list))))) ; (iii) otherwise, recursive call on remainder of a-list
 \end{KERNEL}
 גם בפונקציה lookup אנו רואים קריאה רקורסיבית עם cond המתפצל לשלושה מקרים: במקרה
