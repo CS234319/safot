@@ -1,6 +1,13 @@
 \documentclass[12pt,reqno]{book}
 \usepackage{00}
 
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{claim}{טענה}[section]
+\newtheorem{example}{דוגמה}[section]
+\numberwithin{equation}{section}
+
+
 %\dominitoc
 %\מאומה
 %\faketableofcontents
@@ -17,8 +24,8 @@
 }
 
 \begin{document}
-\frontmatter
-\input{front}
+%\frontmatter
+%\input{front}
 
 \bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
 location="Jerusalem, Israel"

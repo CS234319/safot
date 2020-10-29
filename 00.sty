@@ -51,24 +51,15 @@
 \usepackage{yogi-unicode}
 
 
-
-\makeatletter
 % remove the stray space https://tex.stackexchange.com/a/513549
 \patchcmd{\pgfutilsolvetwotwoleqfloat}
   { \noexpand\pgfmathfloatdivide@}
   {\noexpand\pgfmathfloatdivide@}
   {}{}
 
-\makeatother
-
 
 \usetikzlibrary{trees,chains,shapes}
 
-\newtheorem{definition}{הגדרה}[section]
-\newtheorem{theorem}{משפט}[section]
-\newtheorem{claim}{טענה}[section]
-\newtheorem{example}{דוגמה}[section]
-\numberwithin{equation}{section}
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{{\LR{\mbox{#1}}}}
@@ -89,16 +80,12 @@
 \floatstyle{ruled}
 \restylefloat{figure}
 
-
-
 \graphicspath{{Images/}}
-
 
 \renewcommand\stctitle{תוכן הענינים}
     \renewcommand\ptctitle{\stctitle}
     \renewcommand\mtctitle{\stctitle}
 
- 
 \def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
 \def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
 
@@ -109,7 +96,6 @@
 \setotherlanguage{arabic}
 
 \defaultfontfeatures{Mapping=tex-text, Scale=MatchLowercase}
-%\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
 \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
 
 %\setmainfont[Script=Hebrew]{Ezra SIL}% 
@@ -118,28 +104,30 @@
 %\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
 %\let\hebrewfonttt\ttfamily
 
-\setmainfont{Linux Libertine O}
-\setmonofont{UMTypewriter-Regular.otf}
-\setromanfont{Comic Sans MS}
-\setromanfont{David CLM}
+% Uncomment for 00.tex
+%\setmainfont{Linux Libertine O}
+%\setmonofont{UMTypewriter-Regular.otf}
+%\setromanfont{Comic Sans MS}
+%\setromanfont{David CLM}
 
-\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+% Uncomment for 00.tex
+%\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+\newfontfamily\commentsfont[Mapping=tex-text]{Times New Roman}
 
-%
 % Hebrew Font: Uncomment precisely one option
 %======================================================
 %\newfontfamily\hebrewfont[Script=Hebrew]{Arial}
-\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
 %\newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
 %\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
 %\newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
-%\newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
-%    BoldFont=Hadasim CLM Bold,
-%    ItalicFont=Hadasim CLM RegularOblique,
-%    BoldItalicFont=Hadasim CLM BoldOblique,
-%    SlantedFont=Hadasim CLM RegularOblique,
-%    BoldSlantedFont=Hadasim CLM BoldOblique,
-%]
+\newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
+    BoldFont=Hadasim CLM Bold,
+    ItalicFont=Hadasim CLM RegularOblique,
+    BoldItalicFont=Hadasim CLM BoldOblique,
+    SlantedFont=Hadasim CLM RegularOblique,
+    BoldSlantedFont=Hadasim CLM BoldOblique,
+]
 
 \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
 \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
