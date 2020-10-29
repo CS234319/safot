@@ -2029,8 +2029,8 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 (defun apply(lambda-expression actuals a-list)
   (apply-decomposed-lambda
     (car lambda-expression) ; tag=lambda or nlambda
-    (car (cdr lambda-expression)); list of formal parameters
-    (car (cdr (cdr lambda-expression))); body
+    (car (actuals)); list of formal parameters
+    (car (cdr actuals)); body
     actuals
     a-list))
 \end{KERNEL}
