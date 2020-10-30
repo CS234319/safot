@@ -1062,7 +1062,7 @@ FOO
 \end{LISP}
 ולכן ניתן להגדיר את הפונקציה mirror תוך שימוש ב-set במקום ב-\E|defun|,
 \begin{LISP}
-(set mirror
+(set 'mirror
   '(lambda (x)
       (cons (cdr x) (car x)))
 )
@@ -1079,7 +1079,7 @@ FOO
 ניתן לחקות את ה-הפעולה של defun באמצעות set ושימוש בביטויי~$λ$.
 \begin{LISP}
 (set
-  mirror
+  'mirror
   (lambda (x) (cons (cdr x) (car x)))
 )
 \end{LISP}
