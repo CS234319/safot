@@ -1,6 +1,3 @@
-(set (quote t) (quote t))
-(set (quote nil) (quote nil))
-
 (defun null(x) (eq x nil))
 
 (set 'quote
@@ -8,9 +5,6 @@
 
 (set 'lambda
   '(nlambda (parameters-list body) ('lambda parameters-list body)))
-
-(set 'nlambda
-  '(nlambda (parameters-list body) ('nlambda parameters-list body)))
 
 (set 'defun
   '(nlambda (name parameter-list body)

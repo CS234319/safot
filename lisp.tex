@@ -3,6 +3,7 @@
 %\raggedbottom
 
 \def\CPL{\E|C|\xspace}
+\long\def\OFF#1\ON{\pagebreak}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Code for collecting code exerpts into a separate library and kernel files
@@ -12,10 +13,21 @@
 \setcounter{library}0
 
 \newread \tempFile % A temporary reading stream
+\newwrite \slidesFile % A stream to save kernel functions
 \newwrite \kernelFile % A stream to save kernel functions
 \newwrite \libraryFile % A stream to save library functions
 \immediate \openout \kernelFile=\jobname.kernel.lisp
 \immediate \openout \libraryFile=\jobname.library.lisp
+\immediate \openout  \slidesFile=\jobname.slides.tex
+
+\newenvironment{XLISP}{%
+  \def\fileName{\jobname.slides.\arabic{kernel}.lisp}%
+  \csname filecontents*\endcsname[overwrite]{\fileName}%
+}{%
+  \csname endfilecontents*\endcsname%
+  \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
+}
+
 
 % An environment for writing kernel functions
 \newenvironment{KERNEL}{%
@@ -28,13 +40,18 @@
   \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
   \endLTR
   \openin \tempFile=\fileName
+  \immediate\write\slidesFile {\unexpanded{\begin{frame}[fragile]}}
+  \immediate\write\slidesFile {\noexpand\begin{LISP}}
   \begingroup\endlinechar=-1
   \loop\unless\ifeof \tempFile
-  \read\tempFile to\fileline % Read one line and store it into \fileline
-  \immediate\write \kernelFile
-  {\unexpanded\expandafter{\fileline}}
+    \read\tempFile to\fileline % Read one line and store it into \fileline
+    \immediate\write \kernelFile {\unexpanded\expandafter{\fileline}}
+    \immediate\write \slidesFile {\unexpanded\expandafter{\fileline}}
   \repeat
   \endgroup
+  \immediate\write\slidesFile {\noexpand\end{LISP}}
+%  \immediate\write\slidesFile {\unexpanded{\end{frame}}
+  \immediate\write\slidesFile {}
   \closein \tempFile
 }
 
@@ -60,6 +77,7 @@
   \closein \tempFile
 }
 
+\OFF
 %
 § מבוא
 
@@ -789,7 +807,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 כל רשימה בביטוי לתת-עץ: האיבר הראשון ברשימה הוא שורש תת-העץ. שאר האיברים
 ברשימה, הם הבנים של תת העץ. לדוגמה, בעבור הרשימה
 \begin{LISP}
-  (a b (car x) (+b x))
+  (a b (car x) (+¢¢ b x))
 \end{LISP}
 יבנה כך העץ
 \begin{LTR}
@@ -1180,6 +1198,7 @@ FOO
 הפונקציה defun מאפשרת להגדיר פונקציות חדשות. נגדיר לדוגמה פונקציה בשם mirror
 המקבלת פרמטר x שהוא ביטוי~\E|S| מורכב, ומחזירה ביטוי מורכב אחר שבו ה-car וה-cdr
 שב-x הוחלפו.
+\ON
 \begin{LISP}
 (defun ; define a new function
   mirror; named mirror
@@ -1187,6 +1206,7 @@ FOO
   (cons (cdr x) (car x)); and whose body is this S-expression
 )
 \end{LISP}
+\OFF
 אנו רואים שהפונקציה defun מקבלת שלושה פרמטרים: שם הפונקציה אותה יש להגדיר,
 רשימת הפרמטרים הפורמליים לפונקציה, וגוף הפונקציה. הקריאה גם מדגימה שהערות בליספ
 מתחילות בסימן ";" (נקודה ופסיק) ונמשכות על סוף השורה.
@@ -1252,6 +1272,7 @@ FOO
 )
 \end{LISP}
 תוכן ה-\E|a-list| יהיה
+\ON
 \begin{LISP}
 (
   (mirror.
@@ -1262,24 +1283,30 @@ FOO
   (nil.nil)
 )
 \end{LISP}
+\OFF
 
 ניתן במיני-ליספ לייצר ביטוי-$λ$ מבלי להשתמש ב-\E|defun|, בשימוש בפונקציה
 \E|quote|,
+\ON
 \begin{LISP}
   '(lambda (x) (cons (cdr x) (car x)))
 \end{LISP}
+\OFF
 ולכן ניתן להגדיר את הפונקציה mirror תוך שימוש ב-set במקום ב-\E|defun|,
+\ON
 \begin{LISP}
 (set mirror
   '(lambda (x)
       (cons (cdr x) (car x)))
 )
 \end{LISP}
+\OFF
 לחילופין, ניתן להשתמש בפונקציה lambda המקבלת שני פרמטרים: הראשון שבהם הוא רשימה
 של אטומים, המייצגים את שמות הפרמטרים הפורמליים לפונקציה, והשני הוא גוף הפונקציה
 אשר אותו יש לשערך בקריאה לפונקציה, בסביבה הכוללת קישורים בין הפרמטרים הפורמליים
 ובין האקטואליים. תוצאת השיערוך של קריאה לפונקציה lambda היא ביטוי S שנראה
 בדיוק כמו הקריאה לפונקציה.
+\ON
 \begin{LISP}
 > (lambda (x) (cons (cdr x) (car x)))
 (LAMBDA (X) (CONS (CDR X) (CAR X)))
@@ -1291,6 +1318,7 @@ FOO
   (lambda (x) (cons (cdr x) (car x)))
 )
 \end{LISP}
+\OFF
 לאחר הקישור בין השם mirror ובין ביטוי ה-$λ$ המתאר את מימוש הפונקציה \E|mirror|,
 האטום mirror ישוערך לביטוי~$λ$ זה. בקריאה \T|(mirror '(a.b))| תוחלף המילה
 mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור בין הפרמטרים האקטואליים
@@ -1299,6 +1327,7 @@ mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור 
 ניתן גם לקרוא לפונקציה מבלי לנקוב בשמה, אלא תוך שימוש בביטוי המתאר את המימוש
 שלה:
 \pagebreak[3]
+\ON
 \begin{LISP}
 > (
     '(lambda (x)
@@ -1307,8 +1336,10 @@ mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור 
 )
 (B.A)
 \end{LISP}
+\OFF
 ניתן להשמיט את סימן ה-\E|quote|, ולנצל את העובדה שהאטום \T|lambda| אינו רק
 הפתיח של ביטוי~$λ$ אלא גם פונקציה המחזירה ביטוי כזה,
+\ON
 \begin{LISP}
 > (
     (lambda (x) (cons (cdr x) (car x)
@@ -1316,6 +1347,7 @@ mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור 
 )
 (B.A)
 \end{LISP}
+\OFF
 
 §§ שיערוך מותנה ורקורסיה
 
@@ -1373,6 +1405,7 @@ cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השי�
 )
 \end{LISP}
 הנה דוגמה נוספת בה cond מופעלת עם מספר רב יותר של test-forms
+  \ON
 \begin{LISP}
 (defun is-primitive(name) ; determine whether name denotes a primitive function
   (cond ((eq name 'atom) t)
@@ -1386,6 +1419,7 @@ cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השי�
         ((eq name 'set) t)
         (t nil)))
 \end{LISP}
+\OFF
 הפונקציה is-primitive משתמשת בסידרה של test-forms כדי לבדוק אם הפרמטר שלה הוא
 אטום המציין פונקציה פרימיטיבית ואם כן מחזירה את האטום \E|t|. (מסיבות טכניות אנו
 מניחים כאן שגם \T|eval| היא פונקציה פרימיטיבית.) האטום \E|nil| יוחזר בכל מקרה
@@ -1400,13 +1434,16 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 
 דרך קצרה יותר להגדיר את הפונקציה is-primitive היא באמצעות בדיקה אם הפרמטר
 שלה מצוי ברשימה המכילה את שמות כל הפונקציות הפרימיטיביות
+\ON
 \begin{KERNEL}
 (defun is-primitive(name); determine whether name denotes a primitive function
   (exists name '(atom car cdr cond cons eq error eval set)))
 \end{KERNEL}
+\OFF
 במימוש זה, אטום הוא שמה של פונקציה פרימיטיבית אם הוא מצוי בתוך רשימה של האטומים
 המציינות פונקציה פרימיטיבית. הפונקציה exists עצמה אינה מצוייה במיני-ליספ, אבל
 קל לממש אותה ברקורסיה.
+\ON
 \begin{LISP}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; three case to consider
@@ -1414,6 +1451,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
 \end{LISP}
+\OFF
 הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת
 ב-\T|xs|, ומחזירה t אם x מצוי בין ה-\T|xs| ו-\T|nil| אחרת. רקורסיה דורשת תמיד
 בדיקת תנאי, כדי להבחין בין בסיס הרקורסיה שבו אין צורך לבצע קריאות רקורסיביות
@@ -1436,9 +1474,11 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 הבדיקה אם הרשימה ריקה נעשית באמצעות חישוב התנאי \T|(eq xs nil)|. השוואה של
 אטום ל-nil היא נפוצה בחישובים רקורסיביים. מיני-ליספ מגדירה פונקציה הנקראת null
 המיועדת לשם ביצוע השוואה זו:
+\ON
 \begin{LIBRARY}
 (defun null(x) (eq x nil))
 \end{LIBRARY}
+\OFF
 
 §§ פונקציות פרימיטיביות לעומת פונקציות סיפריה
 ניזכר שהפונקציה eq היא פונקציה פרימיטיבית, במובן זה שלא ניתן לממש אותה באמצעות
@@ -1446,6 +1486,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 באמצעות פונקציות אחרות היא נחשבת לפונקצית סיפריה.
 
 מימוש exists באמצעות null יראה כך
+\ON
 \begin{KERNEL}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; Three cases to consider:
@@ -1453,11 +1494,13 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
 \end{KERNEL}
+\OFF
 
 כזכור, ה-a-list היא רשימה של dotted-pairs שכל אחד מהם הוא קישור בין שם לערך.
 נגדיר פונקציה רקורסיבית, \E|lookup| אשר מקבלת שני פרמטרים: id שהוא אטום,
 ו-a-list, שהיא רשימה במבנה של \E|a-list| כפי שהצגנו אותו, כלומר סדרה של
 dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr שלו הוא משמעותו של האטום:
+\ON
 \begin{KERNEL}
 (defun lookup (id a-list) ; lookup id in an a-list
   (cond ; Three cases to consider:
@@ -1467,6 +1510,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
       (car (cdr (car a-list)))) ; return value part of dotted pair
     (t (lookup id (cdr a-list))))) ; (iii) otherwise, recursive call on remainder of a-list
 \end{KERNEL}
+\OFF
 גם בפונקציה lookup אנו רואים קריאה רקורסיבית עם cond המתפצל לשלושה מקרים: במקרה
 של רשימה ריקה הפונקציה נכשלת, במקרה שראש הרשימה מתאים לתנאי, הפונקציה מצליחה.
 הפונקציה קוראת לעצמה רקורסיבית בכל מקרה אחר.
@@ -1479,6 +1523,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 וכן רשימה שהיא במבנה של \E|a-list|. \E|bind| ומחזירה את ה-a-list
 שקיבלה בתוספת קישורים בין השמות לערכים.
 
+\ON
 \begin{KERNEL}
 (defun bind (names values a-list) ; bind names to values, and append to a-list
   (cond ((null names) ; no more names left
@@ -1491,6 +1536,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
             (cons (car names) (car values)) ; new dotted-pair defines single binding
             (bind (cdr names) (cdr values) a-list))))) ; recursive vall
 \end{KERNEL}
+\OFF
 
 \eject
 §§ שיערוך ביטוי מורכב וקריאה לפונקציה
@@ -1798,31 +1844,41 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 
 הפונקציה quote שבמיני-ליספ אינה פרימיטיבית שכן ניתן להגדיר אותה באמצעות ביטוי
 ה-nlambda הפשוט הבא
+\ON
 \begin{LISP}
 (nlambda (x) x)
 \end{LISP}
+\OFF
 לא ניתן להגדיר פונקציות שהן normal באמצעות \E|defun|, אך ניתן להוסיף את הפונקציה
 quote לרשימת ה-a-list באמצעות set
+\ON
 \begin{LIBRARY}
 (set 'quote
   '(nlambda (x) x))
 \end{LIBRARY}
+\OFF
 כפי שראינו מיני-ליספ מגדירה גם פונקציה lambda שהסמנטיקה שלה היא normal המאפשרת
 ליצור ביטוי~$λ$ מבלי להשתמש ב-quote
+\ON
 \begin{LISP}
 > (lambda (x) (cons (cdr x) (car x)))
 (LAMBDA (X) (CONS (CDR X) (CAR X)))
 \end{LISP}
+\OFF
 נוכל לכן להגדיר את הפונקציה lambda באמצעות
+\ON
 \begin{LIBRARY}
 (set 'lambda
   '(nlambda (parameters-list body) ('lambda parameters-list body)))
 \end{LIBRARY}
+\OFF
 כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters-list
 ו-\E|body|. הפונקציה אינה משערכת פרמטרים אלו ומחזירה ביטוי lambda המוגדר על ידיהם
+\ON
 \begin{LISP}
   ('lambda parameters-list body)
 \end{LISP}
+\OFF
 גם הפונקציה nlambda מסייעת להגדרת ביטויי nlambda באופן דומה, וניתן להגדירה
 באמצעות
 \begin{LIBRARY}
@@ -1846,21 +1902,25 @@ quote לרשימת ה-a-list באמצעות set
 ללא תלות בערכיהם של x ו-\E|y|.
 
 ניתן גם להגדיר את הפונקציה defun באמצעות ביטוי nlambda
+\ON
 \begin{LIBRARY}
 (set 'defun
   '(nlambda (name parameter-list body)
     (set name (lambda parameter-list body))))
 \end{LIBRARY}
+\OFF
 כלומר, הפונקציה defun היא ביטוי nlambda אשר מקבל שלושה פרמטרים: \E|name|,
 \E|parameter-list| ו-\E|body|, ואשר קושר (באמצעות \E|set|) את הפרמטר אל ביטוי
 ה-lambda המוגדר על ידי שני הפרמטרים האחרים, והכל מבלי לשערך את הפרמטרים שלו.
 
 ניתן גם להגדיר את הפונקציה ndefun המגדירה פונקציה שהסמנטיקה שלה היא normal
+\ON
 \begin{LIBRARY}
 (set 'ndefun
   '(nlambda (name parameter-list body)
     (set name (nlambda parameter-list body))))
 \end{LIBRARY}
+\OFF
 גוף ההגדרה זהה לזה defun אלא ש-ndefun יוצרת ביטוי nlambda במקום ביטוי
 \E|lambda|.
 
@@ -1879,24 +1939,28 @@ quote לרשימת ה-a-list באמצעות set
 השימוש בסמנטיקה שהיא normal אינו מתעורר רק בהגדרת פונקציות כמו quote ו-defun
 המשמשות לביצוע הגדרות. נגדיר למשל את הפונקציה \T|?:| אשר מתנהגת באופן דומה
 לאופרטור בשם זה בשפת~\CPL
+\ON
 \begin{LISP}
-(ndefun ?: (condition true-value false-value)
+(ndefun ?:¢¢ (condition true-value false-value)
   (cond ((eval condition) (eval true-value))
         (t (eval false-value))))
 \end{LISP}
+\OFF
 כדוגמה נוספת, נגדיר פונקציות \lisp{||} ו-\lisp{&&} הדומות לאופרטורים בשמות אלו
 בשפת~\CPL, כלומר חישוב של הפונקציות הבוליאניות של and ו-or בשיטה הידועה בשם
 \E|short-circuit|: ראשית שיערוך של הפרמטר הראשון, ואם זה קובע את תוצאת הפונקציה
 הבוליאנית, הימנעות משיערוך הפרמטר השני. אחרת, ערכה של הפונקציה הבוליאנית הוא תוצאת
 שיערוך הפרמטר השני
+\ON
 \begin{LISP}
-(ndefun &&(x y)
+(ndefun &&¢¢ (x y)
   (cond ((eval x) (eval y))
         (t nil)))
-(ndefun ||(x y)
+(ndefun ||¢¢ (x y)
   (cond ((eval x) t)
         (t (eval y))))
 \end{LISP}
+\OFF
 
 נתקן את אלגוריתם השיערוך כך שיתמוך בפונקציות שהן \E|normal|, על ידי הוספת התנאי
 הבא:
@@ -1924,6 +1988,7 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
 מבנה הקריאות והרקורסיות ההדדיות שבמימוש של evaluate ופונקציות העזר שלה מתואר
 ב\פנה|איור:שיערוך|.
 
+\ON
 \begin{figure}[!htb]
   \כיתוב|רקורסיות הדדיות בין הפונקציה evaluate ופונקציות העזר שלה|
   \תגית|איור:שיערוך|
@@ -1979,6 +2044,7 @@ evaluate המקבלת ביטוי \E|S|, וסביבה במבנה של \E|a-list|,
     \clip (A) rectangle (B);
   \end{forest}
 \end{figure}
+\OFF
 
 אנו רואים באיור גם ש-apply קוראת לפונקציה הרקורסיבית bind (שאותה כבר הגדרנו),
 וזאת כדי לקשור בין הפרמטרים הפורמליים והאקטואליים. האיור מראה גם ש-evaluate
@@ -2025,6 +2091,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 
 הפונקציה apply מצידה מפרקת את ביטוי ה-$λ$ לשלושת מרכיביו (תגית, רשימת פרמטרים
 וביטוי לחישוב), ומעבירה מרכיבים אלו לפונקצית העזר apply-decompsed-lambda
+\ON
 \begin{KERNEL}
 (defun apply(lambda-expression actuals a-list)
   (apply-decomposed-lambda
@@ -2034,9 +2101,11 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
     actuals
     a-list))
 \end{KERNEL}
+\OFF
 הפונקציה apply-decompsed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
 הפרמטרים הפורמלים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
 הגדרנו.
+\ON
 \begin{KERNEL}
 (defun apply-decompsed-lambda(tag formals body actuals a-list)
   (evaluate body
@@ -2044,6 +2113,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
           (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
           (t (error 'unkown-lambda tag)))))
 \end{KERNEL}
+\OFF
 
 האבחנה בין הסוגים השונים של ביטוי ה-$λ$, נעשית באופן הבא בפונקציה
 apply-decompsed-lambda
@@ -2061,13 +2131,15 @@ apply-decompsed-lambda
 ההגדרה של הפונקציה evaluate-list המיועדת לשיערוך רשימת הפרמטרים האקטואליים היא
 באמצעות הפעלה רקורסיבית של evaluate על כל אחד מאיברי הרשימה, ושרשור התוצאות
 לכדי רשימה אחת.
+\ON
 \begin{KERNEL}
 (defun evaluate-list(S-expressions a-list)
   (cond ((null S-expressions) nil) ; no more S-expressions to evaluate
     (t (cons
-          (evaluate (car S-expressions)) ; evaluate first S-Expression
-          (evaluate-list (cdr S-expressions)))))) ; recursive call on remainder
+          (evaluate (car S-expressions) a-list) ; evaluate first S-Expression
+          (evaluate-list (cdr S-expressions) a-list))))) ; recursive call on remainder
 \end{KERNEL}
+\OFF
 
 \vfill
 \pagebreak[4]
@@ -2083,10 +2155,12 @@ apply-decompsed-lambda
 
 הצעד הראשון במימוש של evaluate-primitive הוא פירוק הביטוי אותו יש לשערך לשני
 חלקים: שם הפונקציה הפרימיטיבית, והפרמטרים לפונקציה זו.
+\ON
 \begin{KERNEL}
 (defun evaluate-primitive (S-expression a-list)
   (apply-primitive (car S-expression) (cdr S-expression) a-list))
 \end{KERNEL}
+\OFF
 
 הפונקציה
 evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטיביות, כמו גם בפונקציה eval
@@ -2097,6 +2171,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 \minipage\textwidth
 במימוש של הפונקציה \E|apply-primitive| נבדיל לכן בין cond ובין כל שאר הפונקציות
 הפרימיטיביות.
+\ON
 \begin{KERNEL}
 (defun apply-primitive (primitive actuals a-list)
   (cond ((eq 'cond primitive) ; special case for cond that has normal semantics
@@ -2104,38 +2179,44 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
         (t (apply-eager-primitive ; all other primitives have eager semantics
               primitive
               (evaluate-list actuals a-list)
-              a-list)))|)
+              a-list))))
 \end{KERNEL}
+\OFF
 \endminipage
 
 במקרה ששם הפונקציה הפרימיטיבית cond נשתמש בפונקצית עזר, \E|evaluate-cond|. במקרה
 שהשם הוא אחר, נמשיך עם הפונקציה \E|apply-eager-primitive|.
 
 המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
+\ON
 \begin{KERNEL}
 (defun evaluate-cond(test-forms a-list)
   (cond ((null test-forms) nil) ; if no more test-forms, return nil
-        ((evaluate (car (car test-forms)) a-list) ; evaluate test-condition of first test-form
-        (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate test-value of first test-form
-        (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on remainder list of test-forms
+        ((evaluate (car (car test-forms)) a-list) ; evaluate condition part of the first test-form
+        (evaluate (car (cdr (car test-forms)) a-list))) ; if true, evaluate value part (second part) of the first test-form
+        (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on rest of test-forms
 \end{KERNEL}
+\OFF
 
 כדי לטפל בשאר הפונקציות שב\פנה|טבלה:מיני| ובפונקציה eval נשים לב לכך שכל אלו
 מלבד eval אינן נדרשות יותר ל-a-list וכולן, לבד מ-error מצפות לפרמטר אחד או שני פרמטרים.
 
 הפונקציה apply-eager-primitive מטפלת במקרים המיוחדים של eval ושל \E|error|
 ומעבירה את המשך הטיפול ל-apply-trivial-primitive
+\ON
 \begin{KERNEL}
 (defun apply-eager-primitive (primitive actuals a-list)
   (cond ((eq primitive 'error) (error actuals))
         ((eq primitive 'eval) (evaluate (car actuals) a-list))
         (t (apply-trivial-primitive
               primitive ; one of atom, car, cdr, cons, eq, or set
-              (car actuals) ; first actual parameter
-              (car cdr actuals))))) ; second actual parameter, could be nil
+              (car actuals); first actual parameter
+              (car (cdr actuals)))))) ; second actual parameter, could be nil
 \end{KERNEL}
+\OFF
 
 כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימיטיביות שנותרו:
+\ON
 \begin{KERNEL}
 (defun apply-trivial-primitive (primitive first second)
   (cond ((eq primitive 'atom) (atom first))
@@ -2146,12 +2227,14 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
         ((eq primitive 'set) (set first second))
         (t (error 'something-went-wrong primitive))))
 \end{KERNEL}
+\OFF
 
 \eject
 §§ הקוד המלא של evaluate ופונקציות העזר שלה
 \תגית|סעיף:מימוש|
 
 \immediate\closeout \libraryFile
+\immediate\closeout \slidesFile
 \immediate\closeout \kernelFile
 
 \begin{LTR}
@@ -2389,3 +2472,4 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     ביותר.
   \end{itemize}
 \end{enumerate}
+\ON
