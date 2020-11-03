@@ -110,8 +110,8 @@
         ((eq primitive 'eval) (evaluate (car actuals) a-list))
         (t (apply-trivial-primitive
               primitive ; one of atom, car, cdr, cons, eq, or set
-              (car actuals) ; first actual parameter
-              (car cdr actuals))))) ; second actual parameter, could be nil
+              (car actuals); first actual parameter
+              (car (cdr actuals)))))) ; second actual parameter, could be nil
 
 \end {LISP}
 
