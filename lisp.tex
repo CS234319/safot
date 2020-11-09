@@ -1548,7 +1548,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 \begin{LISP}
 (defun append(x xs) ; append item x to end of list of xs
   (cond ((null xs) ; no more xs, recursion base¢…¢
-          (x)) ; ¢…¢ return a list containing x
+          x) ; ¢…¢ return a list containing x
         (t ; recursive call
           (cons
             (car xs) ; prepend first of xs to¢…¢
