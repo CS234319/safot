@@ -12,15 +12,12 @@
 \setcounter{library}0
 
 \newread \tempFile % A temporary reading stream
-\newwrite \slidesFile % A stream to save kernel functions
 \newwrite \kernelFile % A stream to save kernel functions
 \newwrite \libraryFile % A stream to save library functions
 \immediate \openout \kernelFile=\jobname.kernel.lisp
 \immediate \openout \libraryFile=\jobname.library.lisp
-\immediate \openout \slidesFile=\jobname.slides.tex
 
 \newenvironment{XLISP}{%
-  \def\fileName{\jobname.slides.\arabic{kernel}.lisp}%
   \csname filecontents*\endcsname[overwrite]{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
@@ -38,18 +35,12 @@
   \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
   \endLTR
   \openin \tempFile=\fileName
-  \immediate\write\slidesFile {\unexpanded{\begin{frame}[fragile]}}
-  \immediate\write\slidesFile {\noexpand\begin{LISP}}
   \begingroup\endlinechar=-1
   \loop\unless\ifeof \tempFile
-    \read\tempFile to\fileline % Read one line and store it into \fileline
-    \immediate\write \kernelFile {\unexpanded\expandafter{\fileline}}
-    \immediate\write \slidesFile {\unexpanded\expandafter{\fileline}}
+  \read\tempFile to\fileline % Read one line and store it into \fileline
+  \immediate\write \kernelFile {\unexpanded\expandafter{\fileline}}
   \repeat
   \endgroup
-  \immediate\write\slidesFile {\noexpand\end{LISP}}
-% \immediate\write\slidesFile {\unexpanded{\end{frame}}
-  \immediate\write\slidesFile {}
   \closein \tempFile
 }
 
@@ -106,7 +97,7 @@
 סימבולי, כולל נגזרות, אינטגרלים, ופתרון סימבולי של משוואות.
 דוגמה לחישוב סימבולי ב-\E|Macsyma| היא חישוב האינטגרל המסויים \[
   ∫₀⁴ e^{√{ay}}dy=-2
-\] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$: 
+\] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$:
 ראשית נודיע-\E|Macsyma| שהערך של a חיובי,
 
 \minipage\textwidth
@@ -148,7 +139,7 @@
 \begin{minipage}\textwidth
   \begin{LTR}
     \scriptsize
-\begin{verbatim}
+    \begin{verbatim}
 =======
     \begin{verbatim}
 >>>>>>> Update lisp.tex
@@ -225,29 +216,30 @@ ELIZA: Of what does feeling sad remind you?
   • לעומת זאת, מפרש בסיסי לשפת פרולוג הכתוב בפרולוג יכול להכתב בשורה אחת בלבד,
   ומפרש מתוחכם, המאפשר למשל מעקב אחרי החישוב, לא יארך בדרך כלל יותר מעשר שורות.
   ומפרש מתוחכם, המאפשר למשל מעקב אחרי החישוב, לא ידרוש בדרך כלל יותר מעשר שורות.
->>>>>>> Update lisp.tex
 \end{enumerate}
 
-§§ הגדרת שפות להגדרת שפה פורמלית, באמצעות עצמן
-מהי שפה פורמלית, כל שְׂפַת תכנות היא שפה פורמלית. ישנן שפות פורמליות שאינן שפות
-תכנות. שפות תכנות אינן מכניזם נוח להגדרת שפה פורמלית. מכניזמים להגדרת שפות
-פורמליות. מתברר שגם מכניזמים אלו הם שפה פורמלית.
+\begin{editing}
+  §§ הגדרת שפות להגדרת שפה פורמלית, באמצעות עצמן
+  מהי שפה פורמלית, כל שְׂפַת תכנות היא שפה פורמלית. ישנן שפות פורמליות שאינן שפות
+  תכנות. שפות תכנות אינן מכניזם נוח להגדרת שפה פורמלית. מכניזמים להגדרת שפות
+  פורמליות. מתברר שגם מכניזמים אלו הם שפה פורמלית.
 
-בדרך כלל, קל הרבה יותר להגדיר שפה פורמלית, מאשר לכתוב מהדר של השפה בעזרת עצמה.
-הנה דוגמאות.
-\begin{itemize}
-  ✦ הגדרת BNF בעזרת עצמו
-  ✦ הגדרת EBNF בעזרת עצמו
-  ✦ ביטוי רגולרי המגדיר מהו ביטוי רגולרי חוקי
-\end{itemize}
-קל להגדיר את משפחת ה-BNF באצעות ביטוי רגולרי.
-קל להשתמש ב-BNF כדי להגדיר מהו ביטוי רגוליר.
-אבל, ניתן להגדיר ביטוי רגולרי באמצעות ביטוי רגולרי? לא! רקורסיה.
-טבלת סיכום, הגדרה הדדית.
+  בדרך כלל, קל הרבה יותר להגדיר שפה פורמלית, מאשר לכתוב מהדר של השפה בעזרת עצמה.
+  הנה דוגמאות.
+  \begin{itemize}
+    ✦ הגדרת BNF בעזרת עצמו
+    ✦ הגדרת EBNF בעזרת עצמו
+    ✦ ביטוי רגולרי המגדיר מהו ביטוי רגולרי חוקי
+  \end{itemize}
+  קל להגדיר את משפחת ה-BNF באצעות ביטוי רגולרי.
+  קל להשתמש ב-BNF כדי להגדיר מהו ביטוי רגוליר.
+  אבל, ניתן להגדיר ביטוי רגולרי באמצעות ביטוי רגולרי? לא! רקורסיה.
+  טבלת סיכום, הגדרה הדדית.
 
-מסיבה זו, השפות BNF וְ-EBNF הן אלגנטיות יותר מביטויים רגולריים.
+  מסיבה זו, השפות BNF וְ-EBNF הן אלגנטיות יותר מביטויים רגולריים.
 
 \end{editing}
+
 § מיני-ליספ
 הדיון כאן איננו עוסק בליספ כשפת תכנות, וגם לא באף אחד מהניבים הנפוצים או הפחות
 נפוצים שלה, אלא מתרכז אך ורק בהצגת גלעין \E|(core)| מינימלי של השפה, שהוא בעצמו
@@ -258,10 +250,10 @@ ELIZA: Of what does feeling sad remind you?
 שני מרכיבים בגלעין זה:
 \begin{description}
   ✦ [פונקציות פרימיטיביות] אילו הן פונקציות פשוטות אשר הן "אקסיומטיות",
-    כלומר, הגלעין מניח שהן קיימות וכי הן מצייתות למפרט מוגדר היטב. אולם, האופן
-    שבו ממומשות הפונקציות הפרימיטיביות אינו חלק מהגלעין.
+  כלומר, הגלעין מניח שהן קיימות וכי הן מצייתות למפרט מוגדר היטב. אולם, האופן
+  שבו ממומשות הפונקציות הפרימיטיביות אינו חלק מהגלעין.
   ✦ [פונקציות סיפרייה] אילו הן פונקציות אשר אותן
-    הגלעין מממש באמצעות קריאה לאחת או יותר מהפונקציות הפרימיטיביות.
+  הגלעין מממש באמצעות קריאה לאחת או יותר מהפונקציות הפרימיטיביות.
 \end{description}
 
 לפיכך, התיאור המלא של שפת מיני-ליספ, כולל שני מרכיבים בלבד: המפרט של הפונקציות
@@ -269,8 +261,8 @@ ELIZA: Of what does feeling sad remind you?
 המפרט מופיע ב\פנה|טבלה:מיני|.
 
 \begin{table}[!hbt]
-\newcounter{magicrownumbers}
-\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
+  \newcounter{magicrownumbers}
+  \newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
   % \begin{adjustbox}{max height=0.9\textheight}
   \rowcolors{2}{olive!10}{white}
   \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize\setLR}c>{\scriptsize}c
@@ -280,14 +272,14 @@ ELIZA: Of what does feeling sad remind you?
     }
 
     \toprule
-    ＃ &
+    ＃                                                &
     \normalsize \bfseries {\text{/arity}}שם           &
     \normalsize \bfseries סמנטיקה                     &
     \normalsize \bfseries תמצית                       &
     \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
     \midrule
 
-    \rownumber &
+    \rownumber                                        &
     atom/1                                            &
     eager                                             &
     בדיקה אם הארגומנט הוא אטום                        &
@@ -296,7 +288,7 @@ ELIZA: Of what does feeling sad remind you?
     \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
     \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
 
-    \rownumber &
+    \rownumber                                        &
     car/1                                             &
     eager                                             &
     חילוץ האיבר הראשון ברשימה                         &
@@ -306,7 +298,7 @@ ELIZA: Of what does feeling sad remind you?
     \lisp{(car 'a)}~$⇒$ \text{✗} \newline
     \lisp{(car ())}~$⇒$ \text{✗} ⏎
 
-    \rownumber &
+    \rownumber                                        &
     cdr/1                                             &
     eager                                             &
     חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
@@ -317,17 +309,17 @@ ELIZA: Of what does feeling sad remind you?
     \lisp{(cdr ())}~$⇒$ ✗ \newline
     \lisp{(cdr nil)}~$⇒$ ✗ ⏎
 
-    \rownumber &
+    \rownumber                                        &
     ($n≥0$) cond/n                                    &
     normal                                            &
-    הכללה של פקודת \E|if|. &
+    הכללה של פקודת \E|if|.                            &
     \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
     \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
     \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
 
-    \rownumber &
+    \rownumber                                        &
     cons/2                                            &
     eager                                             &
     הוספת איבר בתחילת רשימה                           &
@@ -335,7 +327,7 @@ ELIZA: Of what does feeling sad remind you?
     \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
     \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
 
-    \rownumber &
+    \rownumber                                        &
     eq/2                                              &
     eager                                             &
     בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
@@ -345,7 +337,7 @@ ELIZA: Of what does feeling sad remind you?
     \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
     \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
 
-    \rownumber &
+    \rownumber                                        &
     ($n≥0$) error/n                                   &
     eager                                             &
     הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
@@ -353,14 +345,14 @@ ELIZA: Of what does feeling sad remind you?
     \lisp{(error A)}~$⇒$ ✗ \newline
     \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
 
-    \rownumber &
+    \rownumber                                        &
     set/2                                             &
     eager                                             &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|.            &
     \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
     \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
     \label{primitive:count}
- ⏎
+    ⏎
     \bottomrule
   \end{tabularx}
   \כיתוב|הפונקציות הפרימיטיביות של מיני-ליספ|
@@ -442,7 +434,7 @@ ELIZA: Of what does feeling sad remind you?
 
 בניגוד לניבים האחרים של ליספ, שפת מיני-ליספ אינה תומכת במספרים ובפעולות
 אריתמטיות. רוב הניבים של ליספ, יודעים להדר, באופן חלקי או מלא, תכניות ליספ לשפת
-מכונה. גם הידור כזה אינו נחוץ במיני-ליספ. 
+מכונה. גם הידור כזה אינו נחוץ במיני-ליספ.
 
 על אף המינימליות של שפת מיני-ליספ, השפה היא  היא מה שקרוי \E|Turing complete|.
 לא נסביר בדיוק מונח זה כאן, אבל נציין באופן לא מדוייק לחלוטין שמשמעות המונח היא
@@ -454,7 +446,7 @@ ELIZA: Of what does feeling sad remind you?
 גם היא בעצם פונקציה פרימיטיבית. אנחנו לא נתאר אותה כן, אך נדגים כיצד ניתן לממש
 אותה באמצעות מימוש פונקציה דומה \E|evaluate| כפונקצית ספריה. ההבדל בין שתי
 הפונקציות מזערי.  שתי הפונקציות מקבלות ביטוי-S ןמשערכות אותו, אלא שהפונקציה
-\E|evaluate| מקבלת פרמטר נוסף, המתאר את ההגדרות שנעשו בתכנית עד כה. 
+\E|evaluate| מקבלת פרמטר נוסף, המתאר את ההגדרות שנעשו בתכנית עד כה.
 eval משתמשת בהגדרות אלו, אלא שבתוך המימוש של מיני-ליספ, אין צורך להעביר הגדרות
 אלו כפרמטר. העדר הצורך להעביר את רשימת ההגדרות כפרמטר ל-eval הוא ההבדל היחידי
 בין שתי הפונקציות.
@@ -595,25 +587,25 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
   \begin{LTR}
     \rowcolors{2}{olive!10}{white}
     \begin{tabular}{*7T}%
-      $(ab.cd)$                                                                           &
-      $(abcd.ε)$                                                                          &
-      $((ab.cd).ε)$                                                                       &
-      $(ab.(c.d))$                                                                        &
-      $((a.b).(c.d))$                                                                     &
-      $(a.(b.(c.d)))$                                                                     &
+      $(ab.cd)$                                                                             &
+      $(abcd.ε)$                                                                            &
+      $((ab.cd).ε)$                                                                         &
+      $(ab.(c.d))$                                                                          &
+      $((a.b).(c.d))$                                                                       &
+      $(a.(b.(c.d)))$                                                                       &
       \multicolumn1c{$(((a.b).c).d)$} ⏎
       \scriptsize
-      \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]}                                     &
+      \Forest{s tree [{},cons[$ab$,atom][$cd$,atom]]}                                       &
       \scriptsize
-      \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]}                                    &
+      \Forest{s tree [{},cons[$abcd$,atom][$ε$,atom]]}                                      &
       \scriptsize
-      \Forest{s tree [{},cons[\relax,cons[$ab$,atom][$cd$,atom]][$ε$,atom]]}              &
+      \Forest{s tree [{},cons[\relax,cons[$ab$,atom][$cd$,atom]][$ε$,atom]]}                &
       \scriptsize
-      \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]}                   &
+      \Forest{s tree [{},cons[$ab$,atom][{},cons[$c$,atom][$d$,atom]]]}                     &
       \scriptsize
-      \Forest{s tree [{},cons[{},cons[$a$,atom][$b$,atom]][{},cons[$c$,atom][$d$,atom]]]} &
+      \Forest{s tree [{},cons[{},cons[$a$,atom][$b$,atom]][{},cons[$c$,atom][$d$,atom]]]}   &
       \scriptsize
-      \Forest{s tree [{},cons [$b$,atom],[{},cons [$b$,atom] [{},cons[c,atom] [d,atom]]]] }   &
+      \Forest{s tree [{},cons [$b$,atom],[{},cons [$b$,atom] [{},cons[c,atom] [d,atom]]]] } &
       \scriptsize
       \Forest{s tree [{},cons [{}, cons [{}, cons
             [a,atom][b,atom]] [c,atom] ] [d,atom]] }
@@ -1561,29 +1553,29 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
   בהינתן ביטוי מורכב \E|$s$|, אלגוריתם השיערוך של ליספ מנסה
   להציג אותו כרשימה בת~$n+1$ איברים \[
     s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
-\] אם הביטוי אינו רשימה, כלומר, הם הביטוי הנתון הוא \E|dotted pair| כמו
-\E|(a.b)| למשל, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
+  \] אם הביטוי אינו רשימה, כלומר, הם הביטוי הנתון הוא \E|dotted pair| כמו
+  \E|(a.b)| למשל, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
   \T|nil|. אחרת, המשערך מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
   לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך
   של~$s$ מתבצע על פי הסתכלות זו:
   \begin{quote}
-  \begin{enumerate}
-    ✦ שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל. אם השיערוך של~$s₀$ נכשל,
-    אזי גם השיערוך של~$s$ נכשל. אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
+    \begin{enumerate}
+      ✦ שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל. אם השיערוך של~$s₀$ נכשל,
+      אזי גם השיערוך של~$s$ נכשל. אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
 
-    השיערוך של~$s$ נכשל גם אם~$s₀'$ אינו פונקציה, או שהוא פונקציה, אך כזו שאינה
-    מצפה ל-$n$ ארגומנטים בדיוק.
+      השיערוך של~$s$ נכשל גם אם~$s₀'$ אינו פונקציה, או שהוא פונקציה, אך כזו שאינה
+      מצפה ל-$n$ ארגומנטים בדיוק.
 
-    ✦ המשערך ממשיך כעת לשערך רקורסיבית את הפרמטרים האקטואליים לפונקציה~$s₀'$,
-    הלא הם הביטויים~\E|$s₁$~,…,~$sₙ$|. נסמן את תוצאות השיערוך הללו
-    ב-\E|$s₁'$,…,$sₙ'$|. אם השיערוך הרקורסיבי של אחד מבין
-    הביטויים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$
-    כולו נכשל.
+      ✦ המשערך ממשיך כעת לשערך רקורסיבית את הפרמטרים האקטואליים לפונקציה~$s₀'$,
+      הלא הם הביטויים~\E|$s₁$~,…,~$sₙ$|. נסמן את תוצאות השיערוך הללו
+      ב-\E|$s₁'$,…,$sₙ'$|. אם השיערוך הרקורסיבי של אחד מבין
+      הביטויים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$
+      כולו נכשל.
 
-    ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$ על~$n$ הביטויים
-    \E|$s₁'$,…,~$sₙ'$|. אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.
-  \end{enumerate}
-\end{quote}
+      ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$ על~$n$ הביטויים
+      \E|$s₁'$,…,~$sₙ'$|. אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.
+    \end{enumerate}
+  \end{quote}
 \end{mdframed}
 \endminipage
 
@@ -2301,7 +2293,6 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 \תגית|סעיף:מימוש|
 
 \immediate\closeout \libraryFile
-\immediate\closeout \slidesFile
 \immediate\closeout \kernelFile
 
 \begin{LTR}
@@ -2332,7 +2323,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     >{\setLR\scriptsize\raggedright\arraybackslash}X
     }
     \toprule
-    \normalsize \bfseries ＃                             &
+    \normalsize \bfseries ＃                                            &
     \normalsize \bfseries {\text{/arity}}שם                             &
     \normalsize \bfseries סמנטיקה                                       &
     \normalsize \bfseries תמצית                                         &
@@ -2340,10 +2331,10 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
     \midrule
 
-    \rownumber &
+    \rownumber                                                          &
     \E|defun/3|                                                         &
     normal                                                              &
-    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|.  &
     \E|defun/3|                                                         &
     normal                                                              &
     יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|.  &
@@ -2352,27 +2343,27 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \mbox\qquad \lisp{(set n (lambda p b))))}                           &
     \T|(defun f (x y) (y x))|\newline\quad⏎
 
-    \rownumber &
+    \rownumber                                                          &
     lambda/2                                                            &
     normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|.                 &
     \lisp{(ndefun lambda(p b)}\newline
     \mbox\quad\lisp{('lambda p b))}                                     &
     \lisp{((lambda (x) (car (cdr x)))}\newline
     \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
     ⏎
 
-    \rownumber &
+    \rownumber                                                          &
     nil/0                                                               &
     n/a                                                                 &
     האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
-    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|.         &
     \lisp{(set 'nil 'nil)}                                              &
     \lisp{nil}~$⇒$ \lisp{NIL} \newline
     \lisp{()}~$⇒$ \lisp{NIL} \newline
     \lisp{(eq nil t)}~$⇒$ \lisp{NIL} ⏎
 
-    \rownumber &
+    \rownumber                                                          &
     null/1                                                              &
     eager                                                               &
     בדיקה אם הארגומנט הוא האטום \lisp{nil}                              &
@@ -2383,7 +2374,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
     \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
 
-    \rownumber &
+    \rownumber                                                          &
     ndefun/3                                                            &
     normal                                                              &
     יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|normal|. &
@@ -2392,7 +2383,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \mbox\qquad\lisp{(set n (nlambda p b))))}                           &
     \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
 
-    \rownumber &
+    \rownumber                                                          &
     nlambda/2                                                           &
     normal                                                              &
     יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|.                &
@@ -2400,21 +2391,21 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \T|(nlambda f (x y) (y x))|~$⇒$
     \newline\mbox\quad\T|(nlambda f (x y) (y x)|
     ⏎
-    \rownumber &
+    \rownumber                                                          &
     quote/1                                                             &
     normal                                                              &
-    החזרת הארגומנט מבלי לשערך אותו. &
+    החזרת הארגומנט מבלי לשערך אותו.                                     &
     \lisp{(ndefun quote (x) x)}                                         &
     \lisp{(quote a)}~$⇒$ \lisp{A} \newline
     \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
     \lisp{'a}~$⇒$ \lisp{A} \newline
     \lisp{'(b c)}~$⇒$ \lisp{(B C)} \newline ⏎
 
-    \rownumber &
+    \rownumber                                                          &
     t/0                                                                 &
     n/a                                                                 &
     האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
-    \E|(true)|. &
+    \E|(true)|.                                                         &
     \lisp{(set 't 't)}                                                  &
     \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
 
@@ -2492,8 +2483,8 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 > (uadd (nil) ((nil)))
 (((NIL)))
 \end{LISP}
-    אשר, כפי שאנו רואים, מחזירה את הייצוג של המספר 3.
-    כדאי להשתמש בהגדרות העזר הבאות:
+  אשר, כפי שאנו רואים, מחזירה את הייצוג של המספר 3.
+  כדאי להשתמש בהגדרות העזר הבאות:
   \begin{LISP}
 (defun s(x) (cons x ())) ; the successor function
 (defun p(x) (car x)) ; the predecessor function
