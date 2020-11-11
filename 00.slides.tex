@@ -70,7 +70,7 @@
 
 \begin {frame}[fragile]
 \begin {LISP}
-(defun apply-decompsed-lambda(tag formals body actuals a-list)
+(defun apply-decomposed-lambda(tag formals body actuals a-list)
   (evaluate body
     (cond (eq tag 'nlambda) (bind formals actuals a-list)
           (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
