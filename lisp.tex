@@ -1562,7 +1562,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 (lambda (x xs)
   (cond ((null xs) (x))
         (t (cons
-              (car x)
+              (car xs)
               (append x (cdr xs))))))
 \end{LISP}
 \endminipage
@@ -2041,7 +2041,7 @@ dotted-pair אשר ה-car שלו הוא פונקציה, וה-cdr שלו הוא �
 apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 
 הפונקציה apply מצידה מפרקת את ביטוי ה-$λ$ לשלושת מרכיביו (תגית, רשימת פרמטרים
-וביטוי לחישוב), ומעבירה מרכיבים אלו לפונקצית העזר apply-decompsed-lambda
+וביטוי לחישוב), ומעבירה מרכיבים אלו לפונקצית העזר apply-decomposed-lambda
 \begin{KERNEL}
 (defun apply(lambda-expression actuals a-list)
   (apply-decomposed-lambda
@@ -2051,11 +2051,11 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
     actuals
     a-list))
 \end{KERNEL}
-הפונקציה apply-decompsed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
+הפונקציה apply-decomposed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
 הפרמטרים הפורמלים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
 הגדרנו.
 \begin{KERNEL}
-(defun apply-decompsed-lambda(tag formals body actuals a-list)
+(defun apply-decomposed-lambda(tag formals body actuals a-list)
   (evaluate body
     (cond (eq tag 'nlambda) (bind formals actuals a-list)
           (eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list)
@@ -2063,7 +2063,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 \end{KERNEL}
 
 האבחנה בין הסוגים השונים של ביטוי ה-$λ$, נעשית באופן הבא בפונקציה
-apply-decompsed-lambda
+apply-decomposed-lambda
 \begin{itemize}
   ✦
   אם התגית של ביטוי ה-$λ$ היא האטום nlambda הקישור נעשה
