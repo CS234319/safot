@@ -20,6 +20,10 @@ On OSX, it was tested that `MacPorts` works well for installing `tex` related pa
 6. `texlive-xetex`
 7. `texlive-science`
 
+```bash
+sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern
+```
+
 #### Fonts 
 
 1. `ttf-mscorefonts-installer` (available with `apt`. Solves the `font "Times New Roman" cannot be found` issue, don't think it's needed on Mac)
