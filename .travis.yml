@@ -3,4 +3,8 @@ language: generic
 dist: bionic
 
 script:
-    - echo yo
+    - sudo apt update -y
+    - sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern
+    - echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer
+    - mkdir ~/.fonts ; cp ./fonts/* ~/.fonts/ ; fc-cache -f
+    - make
