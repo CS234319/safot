@@ -5,7 +5,6 @@
 \options{bashful}[unique,dir=Excerpts]
 \options{cleveref}[nameinlink]
 \options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
-%\options{geometry}[a4paper,landscape]
 
 \options{glossaries}[toc,section=section,footnote]
 \options{xcolor}[table,dvipsnames]
@@ -51,24 +50,15 @@
 \usepackage{yogi-unicode}
 
 
-
-\makeatletter
 % remove the stray space https://tex.stackexchange.com/a/513549
 \patchcmd{\pgfutilsolvetwotwoleqfloat}
   { \noexpand\pgfmathfloatdivide@}
   {\noexpand\pgfmathfloatdivide@}
   {}{}
 
-\makeatother
-
 
 \usetikzlibrary{trees,chains,shapes}
 
-\newtheorem{definition}{הגדרה}[section]
-\newtheorem{theorem}{משפט}[section]
-\newtheorem{claim}{טענה}[section]
-\newtheorem{example}{דוגמה}[section]
-\numberwithin{equation}{section}
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{{\LR{\mbox{#1}}}}
@@ -89,76 +79,60 @@
 \floatstyle{ruled}
 \restylefloat{figure}
 
-
-
 \graphicspath{{Images/}}
-
 
 \renewcommand\stctitle{תוכן הענינים}
     \renewcommand\ptctitle{\stctitle}
     \renewcommand\mtctitle{\stctitle}
 
- 
 \def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
 \def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
 
 
-\defaultfontfeatures{Mapping=tex-text, Scale=MatchLowercase}
 \setdefaultlanguage{english}
-\setotherlanguage{hebrew}
 \setmainlanguage{hebrew}
-\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
-%%\setmainfont{Linux Libertine O}
 \setotherlanguage{english}
 \setotherlanguage{arabic}
+
+\defaultfontfeatures{Mapping=tex-text, Scale=MatchLowercase}
 \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
 
-\usepackage{polyglossia}
-\setmainfont[Script=Hebrew]{Ezra SIL}% 
-%\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
-\setmonofont[Script=Hebrew]{DejaVu Sans}% 
-
-\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+%\setmainfont[Script=Hebrew]{Ezra SIL}% 
+%\setmonofont[Script=Hebrew]{DejaVu Sans}% 
 %\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
 %\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+%\let\hebrewfonttt\ttfamily
+
+% Uncomment for 00.tex
+%\setmainfont{Linux Libertine O}
 %\setmonofont{UMTypewriter-Regular.otf}
-  
-\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
-\DeclareMathOperator\arity{arity}
-\DeclareMathOperator\RE{Re}
-\def\UrlFont{\ttfamilylatin}
-
-
-%  \newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
-%    BoldFont=Hadasim CLM Bold,
-%    ItalicFont=Hadasim CLM RegularOblique,
-%    BoldItalicFont=Hadasim CLM BoldOblique,
-%    SlantedFont=Hadasim CLM RegularOblique,
-%    BoldSlantedFont=Hadasim CLM BoldOblique,
-%  ]
-
-%  \newfontfamily\hebrewfont[Script=Hebrew]{Arial}
-%  \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
-%  \newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
-
-% Liberation Serif
-
- % \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
- % \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
- % \let\hebrewfonttt\ttfamily
-% Liberation Serif
-%  \newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
-%  \newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
-% \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
-%  \setromanfont{David CLM}
 %\setromanfont{Comic Sans MS}
+%\setromanfont{David CLM}
 
-% Fix section numbering
-\makeatletter
-\renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
-\makeatother
+% Uncomment for 00.tex
+%\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+\newfontfamily\commentsfont[Mapping=tex-text]{Times New Roman}
 
-\newfontfamily \listingsfont[
+% Hebrew Font: Uncomment precisely one option
+%======================================================
+%\newfontfamily\hebrewfont[Script=Hebrew]{Arial}
+%\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+%\newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
+%\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
+%\newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
+\newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
+    BoldFont=Hadasim CLM Bold,
+    ItalicFont=Hadasim CLM RegularOblique,
+    BoldItalicFont=Hadasim CLM BoldOblique,
+    SlantedFont=Hadasim CLM RegularOblique,
+    BoldSlantedFont=Hadasim CLM BoldOblique,
+]
+
+\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
+\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
+
+
+ \newfontfamily \listingsfont[
             Extension=.otf,
 						UprightFont=*-Regular,
 						BoldFont=*-Bold,
@@ -170,7 +144,8 @@
 \let\ttfamily=\listingsfont
   \lstdefinestyle{bashfulScript}{basicstyle=\listingsfont\small,keywords={}}
   \lstdefinestyle{bashfulStdout}{basicstyle=\sl\listingsfont\small,keywords={}}
-  \newenvironment{interaction}%
+
+\newenvironment{interaction}%
     {\parskip0pt\par\hrulefill\par}{\parskip0pt\par\hrulefill\par}
 \lstdefinestyle{numbered}{
     backgroundcolor=\color{blue!20},
@@ -184,6 +159,21 @@
     numberstyle=\tiny\bf,
     frame=trBL,
 }
+
+
+
+\def\UrlFont{\ttfamilylatin}
+
+ 
+\newcommand\pfun{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
+\DeclareMathOperator\arity{arity}
+\DeclareMathOperator\RE{Re}
+
+
+% Fix section numbering
+\makeatletter
+\renewcommand\SepMark[1]{\def\@SepMark{#1}}\SepMark{.}
+\makeatother
 
 \newenvironment{Output}{%
 \setLTR
