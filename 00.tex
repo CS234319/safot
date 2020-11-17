@@ -1,6 +1,13 @@
 \documentclass[12pt,reqno]{book}
 \usepackage{00}
 
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{claim}{טענה}[section]
+\newtheorem{example}{דוגמה}[section]
+\numberwithin{equation}{section}
+
+
 %\dominitoc
 %\מאומה
 %\faketableofcontents
@@ -17,29 +24,32 @@
 }
 
 \begin{document}
-\frontmatter
-\input{front}
+%\frontmatter
+%\input{front}
 
-\bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
-location="Jerusalem, Israel"
-server="http://www.Google.com/ig/api"
-request="$server?weather=$location"
-wget -q -O - $request |\
-tr " < >" "\012\012" |\
-grep " condition data " |\
-head -n 1 |\
-sed -e 's/^.*="//' -e 's/"\/*//' |\
-tr 'A -Z' 'a -z'
-\END
+<<<<<<< HEAD
+%\bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
+%location="Jerusalem, Israel"
+%server="http://www.Google.com/ig/api"
+%request="$server?weather=$location"
+%wget -q -O - $request |\
+%tr " < >" "\012\012" |\
+%grep " condition data " |\
+%head -n 1 |\
+%sed -e 's/^.*="//' -e 's/"\/*//' |\
+%%tr 'A -Z' 'a -z'
+%\END
 
-\mainmatter
-℆ רקע מתימטי
-\begin{multicols}{2}
-\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
-\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
-\minitoc
-\end{multicols}
-\input{background}
+=======
+>>>>>>> ef024670e28c13d8007e518bd1a50bddea8b9215
+%\mainmatter
+%℆ רקע מתימטי
+%%\begin{multicols}{2}
+%\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
+%\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
+%\minitoc
+%\end{multicols}
+%\input{background}
 
 ℆מיני ליספ ושיערוך
 \begin{multicols}{2}
@@ -48,7 +58,6 @@ tr 'A -Z' 'a -z'
 \minitoc
 \end{multicols}
 \input{lisp}
-
 \end{document}
 %℆צעדים ראשונים
 %\begin{multicols}{2}
