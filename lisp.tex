@@ -4,6 +4,11 @@
 
 \def\CPL{\E|C|\xspace}
 
+\begin{LISP}
+  asfasd 
+\end{LISP}
+\lstinputlisting[language=Lisp]{00.kernel.1.lisp}
+\end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Code for collecting code exerpts into a separate library and kernel files
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,22 +26,23 @@
 \newenvironment{KERNEL}{%
   \stepcounter{kernel}
   \def\fileName{\jobname.kernel.\arabic{kernel}.lisp}%
-  \csname filecontents*\endcsname[overwrite]{\fileName}%
+  \csname filecontents*\endcsname{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
   \LTR
-  \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
+  \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
   \endLTR
-  \openin \tempFile=\fileName
+  \openin\tempFile=\fileName
   \begingroup\endlinechar=-1
   \loop\unless\ifeof \tempFile
-  \read\tempFile to\fileline % Read one line and store it into \fileline
-  \immediate\write \kernelFile
-  {\unexpanded\expandafter{\fileline}}
+    \read\tempFile to\fileline % Read one line and store it into \fileline
+    \message{\fileline}
+    \immediate\write \kernelFile{\unexpanded\expandafter{\fileline}}
   \repeat
   \endgroup
   \closein \tempFile
 }
+
 \begin{KERNEL}
   asdf
 \end{KERNEL}
@@ -45,11 +51,11 @@
 \newenvironment{LIBRARY}{%
   \stepcounter{library}
   \def\fileName{\jobname.library.\arabic{library}.lisp}%
-  \csname filecontents*\endcsname[overwrite]{\fileName}%
+  \csname filecontents*\endcsname{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
   \LTR
-  \lstinputlisting[language=kernel,style=display,backgroundcolor=\color{orange!20}]{\fileName}%
+  \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{orange!20}]{\fileName}%
   \endLTR
   \newread \tempFile % open the file to read from
   \openin \tempFile=\fileName
@@ -66,6 +72,7 @@
 \begin{LIBRARY}
   asdf
 \end{LIBRARY}
+
 § מבוא
 
 שפת LISP (כקיצור של \E|LIst ProceSsing|), היתה, יחד עם שפת Fortran (ראשי
@@ -163,7 +170,7 @@ editor|) \E|Emacs|), AutoLisp (המשמשת כשפת סקריפטים בתכנת
 בהינתן שפת תכנות אוניברסלית~$𝓛$ יש טעם לשאול באיזו שפה כתוב המהדר או המפרש
 של~$𝓛$. אך, כיוון ש-$𝓛$ היא אוניברסלית, הרי אם אפשר לכתוב את המהדר (לחילופין,
 המפרש) של~$𝓛$ בשפה '~$𝓛$ הרי גם ניתן לכתוב את המהדר (לחילופין, המשערך) בשפה~$𝓛$
-עצמה. 
+עצמה.
 
 מתברר שמקובל מאוד לכתוב את המהדר של השפה בשפה עצמה. כך למשל, המהדר של
 שְׂפַת \סי כתוב בִּשְׂפַת \סי. המהדר של שְׂפַת \גאוה כתוב בִּשְׂפַת \גאוה, וכו'. כמובן שהדבר
@@ -193,11 +200,10 @@ editor|) \E|Emacs|), AutoLisp (המשמשת כשפת סקריפטים בתכנת
 §§ מדד לאלגנטיות של שפה
 אבן בוחן מרתקת לאלגנטיות של שְׂפַת תכנות היא אורך המהדר (או המפרש) של השפה, כאשר
 הוא כתוב בשפה עצמה. שהרי ככל שהשפה מורכבת ומתוחכמת יותר, מחד קל יותר לכתוב את
-המהדר ולכן הוא יהיה קצר יותר, אך מאידך על המהדר לתמוך בכל המורכבות והעושר הזה. 
+המהדר ולכן הוא יהיה קצר יותר, אך מאידך על המהדר לתמוך בכל המורכבות והעושר הזה.
 לחילופין, שפה שהיא פשוטה
 ביחס (כמו שְׂפַת ה-\שי{batch} של \קד{DOS}) שהוזכרה מעלה, היא קלה אולי להידור, אבל
 הפשטות של השפה מהווה אבן נגף בבואנו להשתמש בה כדי לכתוב מהדר.
-
 
 הנה מספר אורכים אופייני של מהדר לשפה הכתוב בשפה עצמה:
 
@@ -214,18 +220,18 @@ editor|) \E|Emacs|), AutoLisp (המשמשת כשפת סקריפטים בתכנת
 \begin{editing}
 §§ הגדרת שפות להגדרת שפה פורמלית, באמצעות עצמן
 מהי שפה פורמלית, כל שְׂפַת תכנות היא שפה פורמלית. ישנן שפות פורמליות שאינן שפות
-תכנות.  שפות תכנות אינן מכניזים נוח להגדרת שפה פורמלית.  מכניזמים להגדרת שפות
+תכנות. שפות תכנות אינן מכניזים נוח להגדרת שפה פורמלית. מכניזמים להגדרת שפות
 פורמליות. מתברר שגם מכניזמים אלו הם שפה פורמלית.
 
 בדרך כלל, קל הרבה יותר להגדיר שפה פורמלית, מאשר לכתוב מהדר של השפה בעזרת עצמה.
 הנה דוגמאות.
 \begin{itemize}
 
-  \item הגדרת BNF בעזרת עצמו
+  ✦ הגדרת BNF בעזרת עצמו
 
-  \item הגדרת EBNF בעזרת עצמו
+  ✦ הגדרת EBNF בעזרת עצמו
 
-  \item ביטוי רגולרי המגדיר מהו ביטוי רגולרי חוקי
+  ✦ ביטוי רגולרי המגדיר מהו ביטוי רגולרי חוקי
 \end{itemize}
 קל להגדיר את משפחת ה-BNF באצעות ביטוי רגולרי.
 קל להשתמש ב-BNF כדי להגדיר מהו ביטוי רגוליר.
@@ -342,7 +348,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
     ✦ \E|PRINT|: אם השיערוך של הקלט מצליח, אז האינטרפטר מדפיס את תוצאת השיערוך.
     אחרת, האינטרפטר ידפיס הודעת שגיאה מתאימה.
     ✦\E|LOOP|: האינטרפטר חוזר לצעד הראשון, לקריאת הקלט הבא.
-    ===
+   ===
   \end{mdframed}
 \end{minipage}
 
@@ -384,18 +390,18 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
     אלפבית] בהנתן אלפבית~$Σ$ אזי,~$\SX(Σ)$, קבוצת ביטויי ה-S מעל~$Σ$ מוגדרת
   באמצעות שני בנאים:
   \begin{description}
-    \item[בנאי נולארי]  בנאי זה מייצר את האיברים האטומיים בקבוצה $\SX(Σ$
+    ✦ [בנאי נולארי] בנאי זה מייצר את האיברים האטומיים בקבוצה~$\SX(Σ$
   \begin{equation*}
     \infer{w∈\SX(Σ)}{w∈Σ^*}
-  \end{equation*} 
-  )בנאי זה הוא נולארי, כי הוא מייצר איברים של הקבוצה המוגדרת ברקורסיה ללא שימוש
+  \end{equation*}
+)בנאי זה הוא נולארי, כי הוא מייצר איברים של הקבוצה המוגדרת ברקורסיה ללא שימוש
   באיברים אחרים של הקבוצה.(
 
-\item[ והבנאי הבינארי:]
+✦ [ והבנאי הבינארי:]
   \begin{equation*}
     \infer{(τ₁.τ₂)∈\SX(Σ)}{τ₁∈\SX(Σ) &τ₂∈\SX(Σ)}
   \end{equation*}
-  )בנאי זה הוא בינארי, כי הוא מייצר איבר של  הקבוצה מתוך שני איברים אחרים של הקבוצה.( 
+)בנאי זה הוא בינארי, כי הוא מייצר איבר של הקבוצה מתוך שני איברים אחרים של הקבוצה.(
   \end{description}
 \end{definition}
 
@@ -463,11 +469,11 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
 \texttt{+} ועוד.
 
 \begin{itemize}
-\item לביטוי-S מורכב קוראים בשפת ליספ \E|dotted-pair|. לאיבר הראשון
+✦ לביטוי-S מורכב קוראים בשפת ליספ \E|dotted-pair|. לאיבר הראשון
   ב-dotted-pair קוראים \E|car|, ולאיבר השני ב-dotted-pair קוראים \E|cdr|. לזוג
   כולו קוראים לעיתים גם "רשומת \E|cons|".
 
-\item 
+✦
 לביטוי-S אטומי בשפת ליספ קוראים אטום \E|(atom)|. דוגמאות לאטומים הן \E|A|,
 \E|12B|, \E|ZZZ| ו-\E|+|. מסיבות היסטוריות, האלפבית של אטומים בליספ אינו מכיל
 אותיות קטנות. מערכות ליספ מתרגמת את האותיות הקטנות לאותיות גדולות כשהן מופיעות
@@ -523,7 +529,7 @@ expression| (ביטוי סימבולי). המילה "סימבולי" מטעימ�
       \T|(A B)|                     &
       \T|(A B C D)|                 &
       \multicolumn1c{\T|((A B) C)|}
-      ⏎
+ ⏎
       \Forest{%
         s tree [$ε$,atom]
       }                             &
@@ -1391,7 +1397,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
   בהינתן ביטוי מורכב \E|$s$|, אלגוריתם השיערוך של ליספ מנסה
   להציג אותו כרשימה בת~$n+1$ איברים \[
     s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
-  \] אם הביטוי אינו רשימה, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
+\] אם הביטוי אינו רשימה, השיערוך נכשל. אם הרשימה ריקה, תוצאת השיערוך היא האטום
   \T|nil|. אחרת, האינטרפטר מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
   לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך
   של~$s$ מתבצע על פי הסתכלות זו:
@@ -1791,7 +1797,8 @@ quote לרשימת ה-a-list באמצעות set
 \begin{mdframed}[backgroundcolor=Lavender!20]
   בשיערוך הביטוי \[
     s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
-  \] אם שיערוך הביטוי~$s₀$ מחזיר פונקציה שהיא
+  
+\] אם שיערוך הביטוי~$s₀$ מחזיר פונקציה שהיא
   normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambda (ולא \E|lambda|) אזי יש
   להעביר לפונקציה זו כארגומנטים את הביטויים~\E|$s₁$,…,$sₙ$| ולא את הערכים
   המשוערכים שלהם~\E|$s₁'$,…,$sₙ'$|.
@@ -2009,7 +2016,7 @@ apply-decompsed-lambda
 
     ($n≥0$) cond/n                                    &
     normal                                            &
-    הכללה של פקודת \E|if|.                            &
+    הכללה של פקודת \E|if|. &
     \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
     \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
     \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
@@ -2041,11 +2048,11 @@ apply-decompsed-lambda
 
     set/2                                             &
     eager                                             &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|.            &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
     \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
     \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
     \label{primitive:count}
-    ⏎
+ ⏎
     \bottomrule
   \end{tabularx}
   \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
@@ -2130,7 +2137,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 \immediate\closeout \kernelFile
 
 \begin{LTR}
-  \lstinputlisting[language=kernel,style=display,
+  \lstinputlisting[language=Mini,style=display,
     numbers=left,
     stepnumber=1,
     numbersep=2pt,
@@ -2165,7 +2172,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 
     \E|defun/3|                                                         &
     normal                                                              &
-    יצירת קישור בין אטום ובין ביטוי~S שהוא פונקציה בסמנטיקה \E|eager|.  &
+    יצירת קישור בין אטום ובין ביטוי~S שהוא פונקציה בסמנטיקה \E|eager|. &
     \lisp{(set 'defun }\newline
     \mbox\quad\lisp{(nlambda (n p b)} \newline
     \mbox\qquad \lisp{(set n (lambda p b))))}                           &
@@ -2173,17 +2180,17 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 
     lambda/2                                                            &
     normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|.                 &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
     \lisp{(ndefun lambda(p b)}\newline
     \mbox\quad\lisp{('lambda p b))}                                     &
     \lisp{((lambda (x) (car (cdr x)))}\newline
     \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
-    ⏎
+ ⏎
 
     nil/0                                                               &
     n/a                                                                 &
     האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
-    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|.         &
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
     \lisp{(set 'nil 'nil)}                                              &
     \lisp{nil}~$⇒$ \lisp{NIL} \newline
     \lisp{()}~$⇒$ \lisp{NIL} \newline
@@ -2209,15 +2216,15 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 
     nlambda/2                                                           &
     normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|.                &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
     \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))} &
     \T|(nlambda f (x y) (y x))|~$⇒$
     \newline\mbox\quad\T|(nlambda f (x y) (y x)|
-    ⏎
+ ⏎
 
     quote/1                                                             &
     normal                                                              &
-    החזרת הארגומנט מבלי לשערך אותו.                                     &
+    החזרת הארגומנט מבלי לשערך אותו. &
     \lisp{(ndefun quote (x) x)}                                         &
     \lisp{(quote a)}~$⇒$ \lisp{A} \newline
     \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
@@ -2227,7 +2234,7 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     t/0                                                                 &
     n/a                                                                 &
     האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
-    \E|(true)|.                                                         &
+    \E|(true)|. &
     \lisp{(set 't 't)}                                                  &
     \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
 
@@ -2238,10 +2245,10 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
 \end{table}
 
 והנה הקוד המלא של המימוש של פונקציות אלו
-\immediate\closeout \libraryFile
+\immediate\closeout\libraryFile
 
 \begin{LTR}
-  \lstinputlisting[language=kernel,style=display,
+  \lstinputlisting[language=Mini,style=display,
     numbers=left,
     stepnumber=1,
     numbersep=2pt,

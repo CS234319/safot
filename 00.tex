@@ -5,18 +5,31 @@
 %\מאומה
 %\faketableofcontents
 
-\כותרת{
-  \fontsize{120}{140}\selectfont
-     שפות תכנות
-}
+%\כותרת{
+%  \fontsize{120}{140}\selectfont
+%     שפות תכנות
+%}
 
-\מחבר{
-יוסי גיל ⏎
-הפקולטה למדעי המחשב⏎
-הטכניון - מכון טכנולוגי לישראל⏎
-}
+%\מחבר{
+%יוסי גיל ⏎
+%הפקולטה למדעי המחשב⏎
+%הטכניון - מכון טכנולוגי לישראל⏎
+%}
 
+\usepackage{filecontents}
 \begin{document}
+\begin{filecontents*}{x.lisp}
+  int
+\end{filecontents*}
+
+\begin{filecontents*}{e.lisp}
+  int
+\end{filecontents*}
+
+
+\input{lisp}
+\end{document}
+
 \frontmatter
 \input{front}
 
