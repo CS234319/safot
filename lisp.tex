@@ -2202,13 +2202,15 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \E|defun/3|                                                         &
     normal                                                              &
     יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
-    \E|defun/3|                                                         &
-    normal                                                              &
-    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
     \lisp{(set 'defun }\newline
     \mbox\quad\lisp{(nlambda (n p b)} \newline
     \mbox\qquad \lisp{(set n (lambda p b))))}                           &
-    \T|(defun f (x y) (y x))|\newline\quad⏎
+    \T|(defun f (x y) (y x))|\newline\quad 
+    ⏎
+  \end{tabularx}
+\end{table}
+  \end{document}
+  \endinput
 
     \rownumber                                                          &
     lambda/2                                                            &
@@ -2240,7 +2242,6 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
     \lisp{(null nil)}~$⇒$ \lisp{T}\newline
     \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
     \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
-
     \rownumber                                                          &
     ndefun/3                                                            &
     normal                                                              &
