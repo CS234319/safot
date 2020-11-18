@@ -62,7 +62,7 @@
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{{\LR{\mbox{#1}}}}
-\def\T|#1|{\lisp{#1}}
+\def\T|#1|{{\lisp{#1}}}
 \def\ע|#1|{{\bfseries#1}}
 \def\פנה|#1|{\cref{#1}}
 \def\כיתוב|#1|{\caption{#1}}
@@ -99,8 +99,6 @@
 
 %\setmainfont[Script=Hebrew]{Ezra SIL}% 
 %\setmonofont[Script=Hebrew]{DejaVu Sans}% 
-%\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
-%\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
 %\let\hebrewfonttt\ttfamily
 
 % Uncomment for 00.tex
@@ -116,23 +114,23 @@
 % Hebrew Font: Uncomment precisely one option
 %======================================================
 %\newfontfamily\hebrewfont[Script=Hebrew]{Arial}
-%\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+\newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
 %\newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL}
 %\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
 %\newfontfamily\hebrewfont[Script=Hebrew]{Linux Libertine O}
-\newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
-    BoldFont=Hadasim CLM Bold,
-    ItalicFont=Hadasim CLM RegularOblique,
-    BoldItalicFont=Hadasim CLM BoldOblique,
-    SlantedFont=Hadasim CLM RegularOblique,
-    BoldSlantedFont=Hadasim CLM BoldOblique,
-]
+%\newfontfamily\hebrewfont[Script=Hebrew]{Hadasim CLM}[
+%    BoldFont=Hadasim CLM Bold,
+%    ItalicFont=Hadasim CLM RegularOblique,
+%%    BoldItalicFont=Hadasim CLM BoldOblique,
+%%    SlantedFont=Hadasim CLM RegularOblique,
+%    BoldSlantedFont=Hadasim CLM BoldOblique,
+%]
 
 \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
 \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
 
 
- \newfontfamily \listingsfont[
+\newfontfamily \listingsfont[
             Extension=.otf,
 						UprightFont=*-Regular,
 						BoldFont=*-Bold,
