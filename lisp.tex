@@ -2185,18 +2185,19 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימטי�
         (t (apply-trivial-primitive
               primitive ; one of atom, car, cdr, cons, eq, or set
               (car actuals); first actual parameter
-              (car (cdr actuals)))))) ; second actual parameter, could be nil
+              (car (cdr actuals)); second actual parameter, could be nil
+              a-list)))); pass the a-list for set
 \end{KERNEL}
 
 כעת הפונקציה apply-trivial-primitive משתמשת ב-cond כדי לטפל בששת הפונקציות הפרימיטיביות שנותרו:
 \begin{KERNEL}
-(defun apply-trivial-primitive (primitive first second)
+(defun apply-trivial-primitive (primitive first second a-list)
   (cond ((eq primitive 'atom) (atom first))
         ((eq primitive 'car) (car first))
         ((eq primitive 'cdr) (cdr first))
         ((eq primitive 'cons) (cons first second))
         ((eq primitive 'eq) (eq first second))
-        ((eq primitive 'set) (set first second))
+        ((eq primitive 'set) (bind (cons first nil) (cons second nil))) ;we cannot use the primitive set since it appends to the global a-list
         (t (error 'something-went-wrong primitive))))
 \end{KERNEL}
 
