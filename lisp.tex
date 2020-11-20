@@ -273,10 +273,6 @@ ELIZA: Of what does feeling sad remind you?
   ✦ [פונקציות סיפרייה] אילו הן פונקציות אשר אותן הגלעין מממש באמצעות קריאה לאחת
   או יותר מהפונקציות הפרימיטיביות.
 
-  המפרט המלא של פונקציות הסיפריה אשר מופיע ב\פנה|טבלה:סיפריה|. אנו נביא גם מימוש
-  של כל פונקציות הספריה באמצעות הפונקציות הפרימיטיביות. גם מימוש זה אינו ארוך,
-  והוא מגיע לכעשרים שורות בלבד.
-
   ✦[אלגוריתם השיערוך] שפת מיני-ליספ, כמו בניבים אחרים של ליספ, מכילה פונקציה
   מיוחדת, \E|eval| שמה, אשר מקבלת ביטוי S ומשערכת אותו. מסיבות טכניות, הפונקציה
   eval נחשבת פונקציה פרימיטיבית, אולם, את רובה ניתן לממש כפונקצית סיפריה.
@@ -297,9 +293,110 @@ ELIZA: Of what does feeling sad remind you?
 המסייעת בטיפול במקרים שבהם החישוב נתקל בשגיאה.
 ===
 
-\פנה|טבלה:מיני| שבהמשך מסכמת את רשימת הפונקציות הפרימיטיביות שבמיני-ליספ. כל
-הפונקציות הפרימיטיות של מיני-ליספ הן גם פונקציות פרימיטיביות של מרבית הניבים
-החשובים של ליספ, ובפרט של \E|Common Lisp|.
+\פנה|טבלה:מיני| מגדירה את שמונה הפונקציות הללו. אנו נתאר את הפונקציות הפרימיטיביות השונות כשניתקל בהן. 
+
+\newcounter{magicrownumbers}
+\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
+\begin{table}[!hbt]
+  \footnotesize
+  \rowcolors{2}{olive!10}{white}
+  \begin{tabularx}\textwidth{r>{\scriptsize\setLR}c>{\scriptsize}c
+    >{\setRL\scriptsize\raggedleft\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    }
+
+    \toprule
+    \normalsize \bfseries \#                          & 
+    \normalsize \bfseries {\text{/arity}}שם           &
+    \normalsize \bfseries סמנטיקה                     &
+    \normalsize \bfseries תמצית                       &
+    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+    \midrule
+
+    \rownumber                                        &
+    atom/1                                            &
+    eager                                             &
+    בדיקה אם הארגומנט הוא אטום                        &
+    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
+
+    \rownumber                                        &
+    car/1                                             &
+    eager                                             &
+    חילוץ האיבר הראשון ברשימה                         &
+    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
+    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
+    \lisp{(car ())}~$⇒$ \text{✗} ⏎
+
+    \rownumber                                        &
+    cdr/1                                             &
+    eager                                             &
+    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
+    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
+    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
+    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cdr t)}~$⇒$ ✗ \newline
+    \lisp{(cdr ())}~$⇒$ ✗ \newline
+    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
+
+    \rownumber                                        &
+    ($n≥0$) cond/n                                    &
+    normal                                            &
+    הכללה של פקודת \E|if|. &
+    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
+    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
+    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
+
+    \rownumber                                        &
+    cons/2                                            &
+    eager                                             &
+    הוספת איבר בתחילת רשימה                           &
+    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
+    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
+
+    \rownumber                                        &
+    eq/2                                              &
+    eager                                             &
+    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
+    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
+
+    \rownumber                                        &
+    ($n≥0$) error/n                                   &
+    eager                                             &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
+    \lisp{(error)}~$⇒$ ✗ \newline
+    \lisp{(error A)}~$⇒$ ✗ \newline
+    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
+
+    \rownumber                                        &
+    set/2                                             &
+    eager                                             &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
+    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
+    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
+    \label{primitive:count}
+ ⏎
+    \bottomrule
+  \end{tabularx}
+  \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
+  \תגית|טבלה:מיני|
+\end{table}
+
+כל הפונקציות הפרימיטיביות של מיני-ליספ הן גם פונקציות פרימיטיביות של מרבית
+הניבים החשובים של ליספ, ובפרט של \E|Common Lisp|.
+
 
 §§ פונקציות הספריה
 מיני-ליספ מכיל שמונה פונקציות "סיפריה", כלומר פונקציות הכתובות בשפת
@@ -320,10 +417,115 @@ ELIZA: Of what does feeling sad remind you?
 \item בפונקציות  \E|ndefun|, \E|lambda| ו-\E|nlambda|, נדון בהמשך.
 \end{itemize}
 ===
-
-\פנה|טבלה:סיפריה| שבהמשך מסכמת את רשימת פונקציות הסיפריה של מיני-ליספ, ומביאה
-גם את מימושן במיני ליספ. מלבד ndefun ו-nlambda ניתן למצוא את פונקציות הספרייה
+מלבד ndefun ו-nlambda ניתן למצוא את פונקציות הספרייה
 של ליספ גם ב-\E|Common lisp|.
+
+לנוחות הקורא, \פנה|טבלה:סיפריה| מסכמת את רשימת פונקציות הסיפריה של מיני-ליספ,
+ומביאה גם את מימושן במיני ליספ. 
+
+\פנה|טבלה:סיפריה| מרכזת את הפונקציות במיני-ליספ שאינן פרימיטיביות, כלומר אלו
+שהגדרתן יכולה להעשות עלי ידי קשירה של שמן לביטוי lambda או ביטוי nlambda,
+ישירות באמצעות הפונקציה \E|set| או באמצעות הפונקציות \E|defun|, \E|lambda|,
+\E|ndefun| ו-\E|nlambda|, שגם הן משתמשות ב-\E|set|.
+\begin{table}[!htbp]
+  \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize}c>{\scriptsize}c
+    >{\scriptsize\raggedleft\arraybackslash}X
+    >{\setLR\scriptsize\raggedright\arraybackslash}X
+    >{\setLR\scriptsize\raggedright\arraybackslash}X
+    }
+    \toprule
+    \normalsize \bfseries ＃                                            &
+    \normalsize \bfseries {\text{/arity}}שם                             &
+    \normalsize \bfseries סמנטיקה                                       &
+    \normalsize \bfseries תמצית                                         &
+    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}}                    &
+    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+    \midrule
+
+    \rownumber                                                          &
+    \E|defun/3|                                                         &
+    normal                                                              &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
+    \lisp{(set 'defun }\newline
+    \mbox\quad\lisp{(nlambda (n p b)} \newline
+    \mbox\qquad \lisp{(set n (lambda p b))))}                           &
+    \T|(defun f (x y) (y x))|\newline\quad
+ ⏎
+
+    \rownumber                                                          &
+    lambda/2                                                            &
+    normal                                                              &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
+    \lisp{(ndefun lambda(p b)}\newline
+    \mbox\quad\lisp{('lambda p b))}                                     &
+    \lisp{((lambda (x) (car (cdr x)))}\newline
+    \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
+ ⏎
+
+    \rownumber                                                          &
+    nil/0                                                               &
+    n/a                                                                 &
+    האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
+    \lisp{(set 'nil 'nil)}                                              &
+    \lisp{nil}~$⇒$ \lisp{NIL} \newline
+    \lisp{()}~$⇒$ \lisp{NIL} \newline
+    \lisp{(eq nil t)}~$⇒$ \lisp{NIL} ⏎
+
+    \rownumber                                                          &
+    null/1                                                              &
+    eager                                                               &
+    בדיקה אם הארגומנט הוא האטום \lisp{nil}                              &
+    \lisp{(defun null (x)}\newline
+    \mbox\quad\lisp{(eq x nil))}                                        &
+    \lisp{(null t)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(null nil)}~$⇒$ \lisp{T}\newline
+    \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
+    \rownumber                                                          &
+    ndefun/3                                                            &
+    normal                                                              &
+    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|normal|. &
+    \lisp{(set 'ndefun }\newline
+    \mbox\quad\lisp{(nlambda (n p b)} \newline
+    \mbox\qquad\lisp{(set n (nlambda p b))))}                           &
+    \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
+
+    \rownumber                                                          &
+    nlambda/2                                                           &
+    normal                                                              &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
+    \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))} &
+    \T|(nlambda f (x y) (y x))|~$⇒$
+    \newline\mbox\quad\T|(nlambda f (x y) (y x)|
+ ⏎
+    \rownumber                                                          &
+    quote/1                                                             &
+    normal                                                              &
+    החזרת הארגומנט מבלי לשערך אותו. &
+    \lisp{(ndefun quote (x) x)}                                         &
+    \lisp{(quote a)}~$⇒$ \lisp{A} \newline
+    \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
+    \lisp{'a}~$⇒$ \lisp{A} \newline
+    \lisp{'(b c)}~$⇒$ \lisp{(B C)} \newline ⏎
+
+    \rownumber                                                          &
+    t/0                                                                 &
+    n/a                                                                 &
+    האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
+    \E|(true)|. &
+    \lisp{(set 't 't)}                                                  &
+    \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
+
+    \bottomrule
+  \end{tabularx}
+  \כיתוב|פונקציות הספרייה של מיני ליספ|
+  \תגית|טבלה:סיפריה|
+\end{table}
+
+
+
+הדיון כאן יתאר את פונקציות הסיפריה 
 
 §§ הפונקציה eval
 
@@ -1230,14 +1432,17 @@ FOO
 באופן כללי ביטוי~$λ$ הוא רשימה בת שלושה פריטים בדיוק:
 \ספרר
 ✦ האטום \T|lambda| המזהה את הרשימה כביטוי~$λ$.
-הפורמליים לאקטואליים, יתן את ערכה של הפונקציה.
-===
-\ספרר
-✦ האטום \T|lambda| המזהה את הרשימה כביטוי~$λ$.
 ✦ רשימה של אטומים, המייצגת את שמות הפרמטרים הפורמליים לפונקציה.
+בביטוי שלמעלה, זו רשימה המכילה איבר אחד בלבד, האטום \E|x|, שהוא שמו של הפרמטר הפורמלי לפונקציה. 
 ✦ גוף הפונקציה, כלומר הביטוי שהשיערוך שלו אחרי הקשירה בין הפרמטרים
-הפורמליים לאקטואליים, יתן את ערכה של הפונקציה.
+הפורמליים לאקטואליים, יתן את ערכה של הפונקציה. בביטוי שלמעלה גוף הפונקציה הוא
+\lisp{(cons (cdr x) (car x))}.
 ===
+בביטוי ה-λ   
+\begin{LISP}
+  (lambda (x) (cons (cdr x) (car x)))
+\end{LISP}
+
 
 הפונקציה defun יוצרת ביטוי-$λ$ וקושרת אותו לשם הפונקציה המוגדרת. מסיבות של
 יעילות, מרבית המימושים של ליספ מנהלים את הקישורים בין שמות הפונקציות ובין הגוף
@@ -2098,99 +2303,10 @@ apply-decompsed-lambda
           (evaluate-list (cdr S-expressions) a-list))))) ; recursive call on remainder
 \end{KERNEL}
 
-\vfill
-\pagebreak[4]
 §§ מימוש הפונקציות הפרימיטיביות של מיני-ליספ בתוך הפונקציה evaluate
 
-\פנה|טבלה:מיני| מסכמת את הפונקציות הפרימיטיביות של מיני-ליספ. כלומר כאלו שלא
-הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך ה-\E|a-list|.
-
-\begin{table}[!hbt]
-  \rowcolors{2}{olive!10}{white}
-  \begin{tabularx}\textwidth{>{\setLR\scriptsize\setLR}c>{\scriptsize}c
-    >{\setRL\scriptsize\raggedleft\arraybackslash}X
-    >{\scriptsize\setLR\raggedright\arraybackslash}X
-    >{\scriptsize\setLR\raggedright\arraybackslash}X
-    }
-
-    \toprule
-    \normalsize \bfseries {\text{/arity}}שם           &
-    \normalsize \bfseries סמנטיקה                     &
-    \normalsize \bfseries תמצית                       &
-    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
-    \midrule
-
-    atom/1                                            &
-    eager                                             &
-    בדיקה אם הארגומנט הוא אטום                        &
-    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
-
-    car/1                                             &
-    eager                                             &
-    חילוץ האיבר הראשון ברשימה                         &
-    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
-    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
-    \lisp{(car ())}~$⇒$ \text{✗} ⏎
-
-    cdr/1                                             &
-    eager                                             &
-    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
-    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
-    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
-    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cdr t)}~$⇒$ ✗ \newline
-    \lisp{(cdr ())}~$⇒$ ✗ \newline
-    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
-
-    ($n≥0$) cond/n                                    &
-    normal                                            &
-    הכללה של פקודת \E|if|. &
-    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
-    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
-    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
-
-    cons/2                                            &
-    eager                                             &
-    הוספת איבר בתחילת רשימה                           &
-    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
-    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
-
-    eq/2                                              &
-    eager                                             &
-    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
-    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
-
-    ($n≥0$) error/n                                   &
-    eager                                             &
-    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
-    \lisp{(error)}~$⇒$ ✗ \newline
-    \lisp{(error A)}~$⇒$ ✗ \newline
-    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
-
-    set/2                                             &
-    eager                                             &
-    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
-    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
-    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
-    \label{primitive:count}
- ⏎
-    \bottomrule
-  \end{tabularx}
-  \כיתוב|הפונקציות הפרימיטיביות של מיני ליספ|
-  \תגית|טבלה:מיני|
-\end{table}
+נזכר ב\פנה|טבלה:מיני| המסכמת את הפונקציות הפרימיטיביות של מיני-ליספ. כלומר כאלו
+שלא הוגדרו על ידי המתכנת והמימוש שלהן לא נמצא בתוך ה-\E|a-list|.
 
 תיארנו את הפונקציה evaluate הממשת את מרבית הפעולות שבאלגוריתם השיערוך של ליספ.
 נותר עוד לתאר את המימוש של הפונקציה evaluate-primitive אשר נועדה לטיפול
@@ -2282,108 +2398,6 @@ evaluate-primitive צריכה לטפל בכל הפונקציות הפרימיט�
 
 \eject
 §§ פונקציות הסיפריה של מיני ליספ
-
-\פנה|טבלה:סיפריה| מרכזת את הפונקציות במיני-ליספ שאינן פרימיטיביות, כלומר אלו
-שהגדרתן יכולה להעשות עלי ידי קשירה של שמן לביטוי lambda או ביטוי nlambda,
-ישירות באמצעות הפונקציה \E|set| או באמצעות הפונקציות \E|defun|, \E|lambda|,
-\E|ndefun| ו-\E|nlambda|, שגם הן משתמשות ב-\E|set|.
-\newcounter{magicrownumbers}
-\begin{table}[!htbp]
-  \newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
-  \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize}c>{\scriptsize}c
-    >{\scriptsize\raggedleft\arraybackslash}X
-    >{\setLR\scriptsize\raggedright\arraybackslash}X
-    >{\setLR\scriptsize\raggedright\arraybackslash}X
-    }
-    \toprule
-    \normalsize \bfseries ＃                                            &
-    \normalsize \bfseries {\text{/arity}}שם                             &
-    \normalsize \bfseries סמנטיקה                                       &
-    \normalsize \bfseries תמצית                                         &
-    \multicolumn1c{\normalsize \bfseries \RL{הגדרה}}                    &
-    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
-    \midrule
-
-    \rownumber                                                          &
-    \E|defun/3|                                                         &
-    normal                                                              &
-    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|eager|. &
-    \lisp{(set 'defun }\newline
-    \mbox\quad\lisp{(nlambda (n p b)} \newline
-    \mbox\qquad \lisp{(set n (lambda p b))))}                           &
-    \T|(defun f (x y) (y x))|\newline\quad
- ⏎
-
-    \rownumber                                                          &
-    lambda/2                                                            &
-    normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
-    \lisp{(ndefun lambda(p b)}\newline
-    \mbox\quad\lisp{('lambda p b))}                                     &
-    \lisp{((lambda (x) (car (cdr x)))}\newline
-    \mbox\quad\lisp{'(a b)}~$⇒$ \lisp{B}
- ⏎
-
-    \rownumber                                                          &
-    nil/0                                                               &
-    n/a                                                                 &
-    האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
-    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
-    \lisp{(set 'nil 'nil)}                                              &
-    \lisp{nil}~$⇒$ \lisp{NIL} \newline
-    \lisp{()}~$⇒$ \lisp{NIL} \newline
-    \lisp{(eq nil t)}~$⇒$ \lisp{NIL} ⏎
-
-    \rownumber                                                          &
-    null/1                                                              &
-    eager                                                               &
-    בדיקה אם הארגומנט הוא האטום \lisp{nil}                              &
-    \lisp{(defun null (x)}\newline
-    \mbox\quad\lisp{(eq x nil))}                                        &
-    \lisp{(null t)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(null nil)}~$⇒$ \lisp{T}\newline
-    \lisp{(null 'a)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(null '(a a))}~$⇒$ \lisp{NIL} ⏎
-    \rownumber                                                          &
-    ndefun/3                                                            &
-    normal                                                              &
-    יצירת קישור בין אטום ובין ביטוי S שהוא פונקציה בסמנטיקה \E|normal|. &
-    \lisp{(set 'ndefun }\newline
-    \mbox\quad\lisp{(nlambda (n p b)} \newline
-    \mbox\qquad\lisp{(set n (nlambda p b))))}                           &
-    \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
-
-    \rownumber                                                          &
-    nlambda/2                                                           &
-    normal                                                              &
-    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
-    \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))} &
-    \T|(nlambda f (x y) (y x))|~$⇒$
-    \newline\mbox\quad\T|(nlambda f (x y) (y x)|
- ⏎
-    \rownumber                                                          &
-    quote/1                                                             &
-    normal                                                              &
-    החזרת הארגומנט מבלי לשערך אותו. &
-    \lisp{(ndefun quote (x) x)}                                         &
-    \lisp{(quote a)}~$⇒$ \lisp{A} \newline
-    \lisp{(quote (b c))}~$⇒$ \lisp{(B C)} \newline
-    \lisp{'a}~$⇒$ \lisp{A} \newline
-    \lisp{'(b c)}~$⇒$ \lisp{(B C)} \newline ⏎
-
-    \rownumber                                                          &
-    t/0                                                                 &
-    n/a                                                                 &
-    האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
-    \E|(true)|. &
-    \lisp{(set 't 't)}                                                  &
-    \lisp{t}~$⇒$ \lisp{T} \newline \lisp{(eq nil nil)}~$⇒$ \lisp{T} ⏎
-
-    \bottomrule
-  \end{tabularx}
-  \כיתוב|פונקציות הספרייה של מיני ליספ|
-  \תגית|טבלה:סיפריה|
-\end{table}
 
 והנה הקוד המלא של המימוש של פונקציות אלו
 \immediate\closeout \libraryFile
