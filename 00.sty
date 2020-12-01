@@ -5,12 +5,11 @@
 \options{bashful}[unique,dir=Excerpts]
 \options{cleveref}[nameinlink]
 \options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
-%\options{geometry}[a4paper,landscape]
-
 \options{glossaries}[toc,section=section,footnote]
 \options{xcolor}[table,dvipsnames]
 \options{minitoc}[tight]
 
+\raggedbottom
 
 \usepackage{adjustbox,collcell}
 \usepackage{amsmath}
@@ -51,28 +50,19 @@
 \usepackage{yogi-unicode}
 
 
-
-\makeatletter
 % remove the stray space https://tex.stackexchange.com/a/513549
 \patchcmd{\pgfutilsolvetwotwoleqfloat}
   { \noexpand\pgfmathfloatdivide@}
   {\noexpand\pgfmathfloatdivide@}
   {}{}
 
-\makeatother
-
 
 \usetikzlibrary{trees,chains,shapes}
 
-\newtheorem{definition}{הגדרה}[section]
-\newtheorem{theorem}{משפט}[section]
-\newtheorem{claim}{טענה}[section]
-\newtheorem{example}{דוגמה}[section]
-\numberwithin{equation}{section}
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{{\LR{\mbox{#1}}}}
-\def\T|#1|{\lisp{#1}}
+\def\T|#1|{{\lisp{#1}}}
 \def\ע|#1|{{\bfseries#1}}
 \def\פנה|#1|{\cref{#1}}
 \def\כיתוב|#1|{\caption{#1}}
@@ -89,16 +79,12 @@
 \floatstyle{ruled}
 \restylefloat{figure}
 
-
-
 \graphicspath{{Images/}}
 
-
 \renewcommand\stctitle{תוכן הענינים}
-    \renewcommand\ptctitle{\stctitle}
-    \renewcommand\mtctitle{\stctitle}
+\renewcommand\ptctitle{\stctitle}
+\renewcommand\mtctitle{\stctitle}
 
- 
 \def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
 \def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
 
@@ -109,23 +95,24 @@
 \setotherlanguage{arabic}
 
 \defaultfontfeatures{Mapping=tex-text, Scale=MatchLowercase}
-%\newfontfamily\hebrewfont[Script=Hebrew]{Times New Roman}
 \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
 
 %\setmainfont[Script=Hebrew]{Ezra SIL}% 
 %\setmonofont[Script=Hebrew]{DejaVu Sans}% 
-%\newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
-%\newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
 %\let\hebrewfonttt\ttfamily
 
-\setmainfont{Linux Libertine O}
-\setmonofont{UMTypewriter-Regular.otf}
-\setromanfont{Comic Sans MS}
-\setromanfont{David CLM}
+%\setmainfont{Linux Libertine O}
+%\setmonofont{UMTypewriter-Regular.otf}
 
-\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+% Roman Font: Uncomment precisely one option
+%======================================================
+%\setromanfont{Comic Sans MS}
+%\setromanfont{David CLM}
+\setromanfont{Linux Libertine O}
 
-%
+%\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+\newfontfamily\commentsfont[Mapping=tex-text]{Times New Roman}
+
 % Hebrew Font: Uncomment precisely one option
 %======================================================
 %\newfontfamily\hebrewfont[Script=Hebrew]{Arial}
@@ -145,7 +132,7 @@
 \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
 
 
- \newfontfamily \listingsfont[
+\newfontfamily \listingsfont[
             Extension=.otf,
 						UprightFont=*-Regular,
 						BoldFont=*-Bold,
@@ -172,9 +159,6 @@
     numberstyle=\tiny\bf,
     frame=trBL,
 }
-
-
-
 \def\UrlFont{\ttfamilylatin}
 
  
@@ -224,7 +208,6 @@
 \let\שי=\LR
 \def\predefined#1{{\lstset{language=Pascalx}\lstinline!#1!}}
 \let\מוגדרת␣מראש=\predefined
-
 
 \newenvironment{קוד}{%
   \quote
