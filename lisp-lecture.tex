@@ -1,0 +1,113 @@
+\PassOptionsToPackage{table,dvipsnames}{xcolor}
+\documentclass[fleqn]{beamer}
+\usepackage{00}
+\setdefaultlanguage{english}
+\setmainlanguage{english}
+\setotherlanguage{arabic}
+\setotherlanguage{hebrew}
+
+\mode<presentation>
+\setbeamercovered{transparent=10}
+
+% align spacing
+\setlength{\jot}{0pt}
+
+%\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+
+\title{Mini Lisp}
+\author{Yossi Gil}
+\institute[236319/2020/2021]{%
+Programming Languages 236319⏎
+Autumn 2020/Winter 2021 ⏎
+Department of Computer Science ⏎
+The Technion
+}
+\date{\today}
+
+\begin{document}
+\setLTR
+\begin{frame}
+\titlepage
+\end{frame}
+
+\input 00.slides.tex
+
+\begin{frame}{Definition of predefined functions}
+\begin{LTR}
+  \lstinputlisting[language=kernel,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{orange!20}
+  ]{00.library.lisp}
+\end{LTR}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Solution- bnormalize}
+\begin{block}{Auxiliary functions}
+  \begin{LISP}
+(defun list-contains-only-zeros (l) (
+  cond
+    ((null l) t)
+    ((eq (car l) (quote Z))
+      (list-contains-only-zeros (cdr l)))
+    ((eq (car l) (quote O)) (nil))
+))
+    \end{LISP}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Solution- bnormalize}
+\begin{block}{bnormalize}
+  \begin{LISP}
+(defun bnormalize (l) (
+  cond
+    ((list-contains-only-zeros l) nil)
+    (t (cons (car l) (bnormalize (cdr l))))
+))
+    \end{LISP}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Solution- badd}
+\begin{block}{Auxiliary functions}
+  \begin{LISP}
+(defun andalso (b1 b2) (
+  cond
+    ((null b1) nil)
+    ((null b2) nil)
+    (t t)
+))
+    \end{LISP}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Solution- badd}
+\begin{block}{badd}
+  \begin{LISP}
+(defun badd (l1 l2) (
+  cond
+    ((null (bnormalize l1)) (bnormalize l2))
+    ((null (bnormalize l2)) (bnormalize l1))
+    ((andalso (eq (car l1) 'O) (eq (car l2) 'O))
+      (cons 'Z (badd (badd 'O (cdr l1)) (cdr l2))))
+    ((andalso (eq (car l1) 'Z) (eq (car l2) 'Z))
+      (cons 'Z (badd (cdr l1) (cdr l2))))
+    (t (cons 'O (badd (cdr l1) (cdr l2))))
+))
+    \end{LISP}
+\end{block}
+
+\begin{block}{Note}
+  \lisp{(quote X)} is equivalent to \lisp{'X}.
+\end{block}
+\end{frame}
+
+\end{document}

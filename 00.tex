@@ -1,9 +1,18 @@
 \documentclass[12pt,reqno]{book}
 \usepackage{00}
 
-%\dominitoc
-%\מאומה
-%\faketableofcontents
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{claim}{טענה}[section]
+\newtheorem{example}{דוגמה}[section]
+\numberwithin{equation}{section}
+
+\long\def\OUT#1\IN{}
+\long\def\IN#1\OUT{#1}
+
+\dominitoc
+\מאומה
+\faketableofcontents
 
 \כותרת{
   \fontsize{120}{140}\selectfont
@@ -19,18 +28,7 @@
 \begin{document}
 \frontmatter
 \input{front}
-
-\bash[verbose,scriptFile=condition.sh,stdoutFile=condition.tex]
-location="Jerusalem, Israel"
-server="http://www.Google.com/ig/api"
-request="$server?weather=$location"
-wget -q -O - $request |\
-tr " < >" "\012\012" |\
-grep " condition data " |\
-head -n 1 |\
-sed -e 's/^.*="//' -e 's/"\/*//' |\
-tr 'A -Z' 'a -z'
-\END
+\tableofcontents
 
 \mainmatter
 ℆ רקע מתימטי
@@ -41,6 +39,7 @@ tr 'A -Z' 'a -z'
 \end{multicols}
 \input{background}
 
+
 ℆מיני ליספ ושיערוך
 \begin{multicols}{2}
 \mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
@@ -48,8 +47,8 @@ tr 'A -Z' 'a -z'
 \minitoc
 \end{multicols}
 \input{lisp}
-
 \end{document}
+
 %℆צעדים ראשונים
 %\begin{multicols}{2}
 %\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
@@ -174,4 +173,5 @@ tr 'A -Z' 'a -z'
 • הדור לשפה אחרת.
 • פרשנות
 • תרגום למכונה אבסטרקטית.
+\end{itemize}
 יש גם מכונה אבסטרקטית הצהרתית לשפת \פרולוג.
