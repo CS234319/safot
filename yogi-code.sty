@@ -123,6 +123,11 @@
 %    \ensureLTR
 %  }{\pagebreak[3]}
 
+\lstdefinelanguage{Mini}{
+  language=Lisp,
+  keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
+  keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
+}
 
 \lstdefinelanguage{Go}{
   % Keywords as defined in the BNF
@@ -288,11 +293,7 @@ recover,
 
 %---- Concrete Common Languages (Sorted Alphabetically --------------
 
-\lstdefinelanguage{MINILISP}{
-  language=Lisp,
-  keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
-  keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
-}
+
 
 
 %	#1 Language name, as it is known to the listing package.
@@ -300,7 +301,8 @@ recover,
 % #3 Name of the environment of the newly defined language.
 %	#4 Name of the command for inlining language code.
 %	#5 Name of the short version of the command for inlining language code.
-\newLanguage{MINPLISP}{}{LISP}{lisp}{lsp}
+
+\newLanguage{Mini}{}{LISP}{lisp}{ls}
 
 \newLanguage{Ada}{}{ADA}{ada}{adaShort}
 \newLanguage{[AspectJ]Java}{morekeywords={remotecall,shakein,declare,precedence,parents}}{AJ}{aj}{ajx}

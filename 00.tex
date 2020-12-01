@@ -10,38 +10,25 @@
 \long\def\OUT#1\IN{}
 \long\def\IN#1\OUT{#1}
 
-%\dominitoc
-%\מאומה
-%\faketableofcontents
+\dominitoc
+\מאומה
+\faketableofcontents
 
-%\כותרת{
-%  \fontsize{120}{140}\selectfont
-%     שפות תכנות
-%}
+\כותרת{
+  \fontsize{120}{140}\selectfont
+     שפות תכנות
+}
 
-%\מחבר{
-%יוסי גיל ⏎
-%הפקולטה למדעי המחשב⏎
-%הטכניון - מכון טכנולוגי לישראל⏎
-%}
-
-\usepackage{filecontents}
-\begin{document}
-\begin{filecontents*}{x.lisp}
-  int
-\end{filecontents*}
-
-\begin{filecontents*}{e.lisp}
-  int
-\end{filecontents*}
-
-
-\input{lisp}
-\end{document}
+\מחבר{
+יוסי גיל ⏎
+הפקולטה למדעי המחשב⏎
+הטכניון - מכון טכנולוגי לישראל⏎
+}
 
 \begin{document}
 \frontmatter
 \input{front}
+\tableofcontents
 
 \mainmatter
 ℆ רקע מתימטי
@@ -61,6 +48,7 @@
 \end{multicols}
 \input{lisp}
 \end{document}
+
 %℆צעדים ראשונים
 %\begin{multicols}{2}
 %\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
