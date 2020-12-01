@@ -7,6 +7,8 @@
 \newtheorem{example}{דוגמה}[section]
 \numberwithin{equation}{section}
 
+\long\def\OUT#1\IN{}
+\long\def\IN#1\OUT{#1}
 
 %\dominitoc
 %\מאומה
@@ -38,17 +40,17 @@
 \end{document}
 
 \begin{document}
-%\frontmatter
-%\input{front}
+\frontmatter
+\input{front}
 
-%\mainmatter
-%℆ רקע מתימטי
-%%\begin{multicols}{2}
-%\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
-%\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
-%\minitoc
-%\end{multicols}
-%\input{background}
+\mainmatter
+℆ רקע מתימטי
+\begin{multicols}{2}
+\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
+\minitoc
+\end{multicols}
+\input{background}
 
 
 ℆מיני ליספ ושיערוך
