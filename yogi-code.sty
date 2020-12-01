@@ -116,6 +116,14 @@
     numberstyle=\tiny\bf,
 }
 
+
+%\lstnewenvironment{LISP}[1][]{%
+%    \pagebreak[3]%
+%    \lstset{language=mini,style=display,##1}
+%    \ensureLTR
+%  }{\pagebreak[3]}
+
+
 \lstdefinelanguage{Go}{
   % Keywords as defined in the BNF
   morekeywords=[1]{break,default,func,interface,%
@@ -141,36 +149,6 @@
   morecomment=[s]{/*}{*/},
   % Options
   sensitive=true
-}
-
-\lstdefinelanguage[JTL]{Java}[]{Java}%
-    {morekeywords={
-        name,Alias,
-        enum,strictfp,@interface,                        %%%% --- missing Java keywords
-        NULL,TYPE,MEMBER,STRING,PACKAGE,SCRATCH,         %%%% --- kinds
-        TYPES,STRINGS,MEMBERS,                           %%%% --- lists
-        typename,membername,                             %%%% --- entry definitions
-        This,Result,                                     %%%% --- variables
-        and,or,not,                                      %%%% --- operators
-        is,equal,equals,                                 %%%% --- builtin predicates
-        all,exist,exists,has,many,multiple,no,one,empty, %%%% --- quantifiers
-        optional,
-        partition,imply,implies,disjoint,supersetof,     %%%% --- set operators
-        extends+,implements+,extends*,implements*,       %%%% --- closure of \Java operators
-%       nothing,otherwise,                               %%%% --- Y.G., crazy
-        first,last,between,                              %%%% --- Iterators
-    },%
-    deletestring=[b]{'},
-    comment=[l]{--},
-    alsoletter={+*},
-    morecomment=[s][\codesize\sf]{\\[}{\\]},
-    stringstyle={\codesize\sf},
-}
-
-\lstdefinelanguage{kernel}{
-    language=Lisp,
-    keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
-    keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
 }
 
 
@@ -310,6 +288,19 @@ recover,
 
 %---- Concrete Common Languages (Sorted Alphabetically --------------
 
+\lstdefinelanguage{MINILISP}{
+  language=Lisp,
+  keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
+  keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
+}
+
+
+%	#1 Language name, as it is known to the listing package.
+%	#2 Changes to the language definition, as in the listing package 
+% #3 Name of the environment of the newly defined language.
+%	#4 Name of the command for inlining language code.
+%	#5 Name of the short version of the command for inlining language code.
+\newLanguage{MINPLISP}{}{LISP}{lisp}{lsp}
 
 \newLanguage{Ada}{}{ADA}{ada}{adaShort}
 \newLanguage{[AspectJ]Java}{morekeywords={remotecall,shakein,declare,precedence,parents}}{AJ}{aj}{ajx}
@@ -322,7 +313,6 @@ recover,
 \newLanguage{Go}{}{GO}{go}{gocd}
 \newLanguage{}{}{DATALOG}{datalog}{dlog}
 \newLanguage{Eiffel}{morekeywords={create,factory,note}}{EIFFEL}{eiffel}{eiff}
-\newLanguage{kernel}{}{LISP}{lisp}{lsp}
 \newLanguage{HTML}{alsoletter={-}}{HTML}{html}{htm}
 \newLanguage{Java}{}{JAVA}{java}{ja}
 \newLanguage{}{}{NONE}{none}{non}

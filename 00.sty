@@ -5,11 +5,11 @@
 \options{bashful}[unique,dir=Excerpts]
 \options{cleveref}[nameinlink]
 \options{geometry}[left=2cm,right=2cm,top=2cm,bottom=2.5cm]
-
 \options{glossaries}[toc,section=section,footnote]
 \options{xcolor}[table,dvipsnames]
 \options{minitoc}[tight]
 
+\raggedbottom
 
 \usepackage{adjustbox,collcell}
 \usepackage{amsmath}
@@ -82,8 +82,8 @@
 \graphicspath{{Images/}}
 
 \renewcommand\stctitle{תוכן הענינים}
-    \renewcommand\ptctitle{\stctitle}
-    \renewcommand\mtctitle{\stctitle}
+\renewcommand\ptctitle{\stctitle}
+\renewcommand\mtctitle{\stctitle}
 
 \def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
 \def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
@@ -131,7 +131,6 @@
 \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
 \newfontfamily\hebrewfontsf[Script=Hebrew]{Simple CLM}
 
-
  \newfontfamily \listingsfont[
             Extension=.otf,
 						UprightFont=*-Regular,
@@ -159,9 +158,6 @@
     numberstyle=\tiny\bf,
     frame=trBL,
 }
-
-
-
 \def\UrlFont{\ttfamilylatin}
 
  
@@ -211,7 +207,6 @@
 \let\שי=\LR
 \def\predefined#1{{\lstset{language=Pascalx}\lstinline!#1!}}
 \let\מוגדרת␣מראש=\predefined
-
 
 \newenvironment{קוד}{%
   \quote
