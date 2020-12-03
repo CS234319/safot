@@ -29,7 +29,7 @@ jobs:
 
       # Install requirements
       - name: Run a one-line script
-        run: sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-math-extra && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir ~/.fonts ; cp ./fonts/* ~/.fonts/ ; fc-cache -f
+        run: sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-math-extra texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir ~/.fonts ; cp ./fonts/* ~/.fonts/ ; fc-cache -f
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
