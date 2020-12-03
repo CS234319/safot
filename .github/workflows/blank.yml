@@ -25,12 +25,12 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Setup tmate session
+      - name: Setup tmate (Debug) session
         uses: mxschmitt/action-tmate@v3
 
       # Install requirements
       - name: Install requirements
-        run: sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir ~/.fonts ; cp ./fonts/* ~/.fonts/ ; fc-cache -f
+        run: sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ ; fc-cache -f
 
       # Runs a set of commands using the runners shell
       - name: Compile LaTeX
