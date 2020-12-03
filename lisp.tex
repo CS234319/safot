@@ -2647,7 +2647,8 @@ evaluate-atomic צריכה לטפל בכל הפונקציות האטומיות, 
     (t (apply-trivial-atomic
         atomic ; one of ¢\tt atom¢, car, cdr, cons, eq, set
         (car actuals); first actual parameter
-        (car (cdr actuals)))))) ; second actual parameter, could be nil
+        (car (cdr actuals)); second actual parameter, could be nil
+        a-list)))); a-list for set special handling 
 \end{KERNEL}
 
 כעת הפונקציה apply-trivial-atomic משתמשת ב-cond כדי לטפל בששת הפונקציות האטומיות שנותרו:
