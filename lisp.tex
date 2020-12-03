@@ -2652,13 +2652,13 @@ evaluate-atomic צריכה לטפל בכל הפונקציות האטומיות, 
 
 כעת הפונקציה apply-trivial-atomic משתמשת ב-cond כדי לטפל בששת הפונקציות האטומיות שנותרו:
 \begin{KERNEL}
-(defun apply-trivial-atomic (atomic first second)
+(defun apply-trivial-atomic (atomic first second a-list)
   (cond ((eq atomic 'atom) (atom first))
         ((eq atomic 'car) (car first))
         ((eq atomic 'cdr) (cdr first))
         ((eq atomic 'cons) (cons first second))
         ((eq atomic 'eq) (eq first second))
-        ((eq atomic 'set) (set first second))
+        ((eq atomic 'set) (bind (cons first nil) (cons second nil))) ;we cannot use the primitive set since it appends to the global a-list
         (t (error 'something-went-wrong atomic))))
 \end{KERNEL}
 
