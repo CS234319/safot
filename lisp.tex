@@ -1884,7 +1884,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
         (t ; both names and values are not empty
           (cons ; create new binding and prepend it to result of recursive call
             (cons (car names) (car values)) ; new dotted-pair defines single binding
-            (bind (cdr names) (cdr values) a-list))))) ; recursive vall
+            (bind (cdr names) (cdr values) a-list))))) ; recursive val
 \end{KERNEL}
 
 §§ שיערוך ביטוי מורכב וקריאה לפונקציה
