@@ -43,7 +43,8 @@ jobs:
 #        title: Build Artifacts
 #          - files: [ "00.pdf" ]
 #          - files: [ "00.log" ]
-
+	if: ${{ always() }}
         with:
           name: Pdf Book
           path: ./00.pdf
+          if-no-files-found: error
