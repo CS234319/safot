@@ -151,3 +151,4 @@ doc/tags
 out/
 
 # User defined (add below this line) // vim: +,$!sort -u
+.DS_Store
