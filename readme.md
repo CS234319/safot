@@ -1,3 +1,4 @@
+![PDF Build Status](https://github.com/yossigil/safot/workflows/PDF/badge.svg)
 # Programming Language Course Text Book Tex Sources
 
 ## Clone and Compile
