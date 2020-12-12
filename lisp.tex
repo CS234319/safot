@@ -17,6 +17,8 @@
 \newenvironment{KERNEL}{%
   \stepcounter{kernel}
   \def\fileName{\jobname.kernel.\arabic{kernel}.lisp}%
+  \global\let\savedifeof=\ifeof
+  \def\ifeof##1{\global\let\ifeof=\savedifeof\iftrue}%
   \csname filecontents*\endcsname{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
@@ -37,6 +39,8 @@
 \newenvironment{LIBRARY}{%
   \stepcounter{library}
   \def\fileName{\jobname.library.\arabic{library}.lisp}%
+  \global\let\savedifeof=\ifeof
+  \def\ifeof##1{\global\let\ifeof=\savedifeof\iftrue}%
   \csname filecontents*\endcsname{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
@@ -851,11 +855,11 @@ of integers)| מוגדרות שלוש פעולות: שתי הפעולות הבי
 
 \begin{table}[!htbp]
   \rowcolors{2}{olive!10}{white}
-  \begin{tabularx}\textwidth{c>{\scriptsize}X>{\scriptsize}X}
+  \begin{tabularx}\textwidth{r>{\small}X>{\small}X}
     \toprule
     \bf                                      &
-    \bf חוג המספרים הטבעיים~$ℤ$              &
-    \bf~$𝓢$, קבוצת ביטויי~\E|S|⏎
+    \bf \normalsize חוג המספרים השלמים~$ℤ$              &
+    \bf \normalsize~$𝓢$, קבוצת ביטויי~\E|S|⏎
     \midrule
     פעולות יסודיות                           &
     כפל, חיבור, ומציאת ההופכי החיבורי        &
@@ -891,8 +895,8 @@ of integers)| מוגדרות שלוש פעולות: שתי הפעולות הבי
     בדיקה אם שני אטומים הם זהים ⏎
     \bottomrule
   \end{tabularx}
-  \כיתוב|קבוצת ביטויי ה-S לעומת קבוצת המספרים הטבעיים, והתמיכה במבנים
-  מתימטים בשפות תכנות|
+  \כיתוב|קבוצת ביטויי ה-S לעומת קבוצת המספרים השלמים, והתמיכה במבנים מתימטים
+  בשפות תכנות|
   \תגית|טבלה:השוואה|
 \end{table}
 
@@ -966,7 +970,7 @@ of integers)| מוגדרות שלוש פעולות: שתי הפעולות הבי
 
 §§ בדיקת התוכן של ביטויי~\E|S|
 
-הקבוצה~$ℤ$ היא קבוצה סדורה היטב. ניתן לבדוק לגבי כל שני מספרים טבעיים~$n₁,n₂∈ℤ$
+הקבוצה~$ℤ$ היא קבוצה סדורה היטב. ניתן לבדוק לגבי כל שני מספרים שלמים~$n₁,n₂∈ℤ$
 מתקיים אחד מבין ההיגדים הבאים:~$n₁=n₂$,~$n₁<n₂$ או~$n₁>n₂$. אין יחס סדר דומה
 לקבוצת ביטויי ה-S, אבל ניתן לבדוק את תוכנם באמצעות פונקציות מתאימות בליספ.
 
@@ -1517,8 +1521,9 @@ FOO
 \end{LISP}
 
 הרחבות אלו אינן נחוצות לשם הבנה של ליספ, שכן ניתן לקודד בתוך ביטויי~\E|S| את
-המספרים הטבעיים, את המספרים הממשיים והמרוכבים, מחרוזות ולמעשה כל מבנה נתונים
-שניתן להעלות על הדעת, וניתן באמצעות מיני-ליספ לממש את כל הפונקציות האריתמטיות.
+המספרים הטבעיים, המספרים השלמים, וגם את המספרים הממשיים והמרוכבים, מחרוזות
+ולמעשה כל מבנה נתונים שניתן להעלות על הדעת, וניתן באמצעות מיני-ליספ לממש את כל
+הפונקציות האריתמטיות.
 אבל, כיוון שמיני-ליספ אינו מסוגל לבדוק את תוכנה של סדרת הסימנים היוצרת אטום
 הפעולה היחידה המותרת על אטום במיני-ליספ היא השוואתו לאטום אחר: שפת מיני-ליספ
 אינה יכולה להפוך אטום כמו \T|43217| למילולון אשר משמעותו היא המספר הטבעי
@@ -2637,9 +2642,7 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
 §§ הקוד המלא של evaluate ופונקציות העזר שלה
 \תגית|סעיף:מימוש|
 
-\immediate\closeout \libraryFile
-\immediate\closeout \kernelFile
-
+\immediate \closeout \kernelFile
 \begin{LTR}
   \lstinputlisting[language=Mini,style=display,
     numbers=left,
@@ -2754,7 +2757,6 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
 
 במהלך הדיון, הצגנו את המימוש של הפונקציות המוגדרות מראש באמצעות הפונקציות
 האטומיות. הנה הקוד המלא של המימוש שהצגנו.
-\immediate\closeout \libraryFile
 
 \begin{LTR}
   \lstinputlisting[language=Mini,style=display,
