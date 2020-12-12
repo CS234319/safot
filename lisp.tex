@@ -138,7 +138,8 @@
 שיח עם משתמש בדומה לבוט. ELIZA ניסתה לדמות בשיחה את תפקיד הפסיכיאטר או
 הפסיכותראפיסט ודו-שיח עמה נראה כך
 
-\begin{minipage}\textwidth
+\begin{quote}
+  \begin{minipage}{0.8\textwidth}
   \begin{LTR}
     \scriptsize
     \begin{verbatim}
@@ -152,6 +153,7 @@ ELIZA: Of what does feeling sad remind you?
 \end{verbatim}
   \end{LTR}
 \end{minipage}
+\end{quote}
 שפת ליספ שימשה גם לפיתוח \E|Grammarly|, התכנה המפורסמת לתיקוני שגיאות כתיב
 ודקדוק.
 
@@ -387,7 +389,7 @@ ELIZA: Of what does feeling sad remind you?
 ניתן לממש אותה באמצעות מימוש פונקציה דומה \E|evaluate| כפונקצית ספרייה.
 
 ישנו הבדל קטן בין \E|eval|, הפונקציה הפרימיטיבית, ובין \E|evaluate|, אותה נממש
-כפונקציית ספרייה. שתי הפונקציות מקבלות ביטוי-|S| ומשערכות אותו, אלא שהפונקציה
+כפונקציית ספרייה. שתי הפונקציות מקבלות ביטוי-S ומשערכות אותו, אלא שהפונקציה
 \E|evaluate| מקבלת פרמטר נוסף, המתאר את ההגדרות שנעשו בתכנית עד כה.
 לאוסף זה של ההגדרות, קוראים \ע|סביבה|. הסביבה ממומשת בשפת ליספ באמצעות
 מבנה נתונים הקרוי \E|a-list|. הפונקציה eval משתמשת אף היא בסביבה, אלא שבתוך
@@ -2300,7 +2302,6 @@ evaluate המקבלת ביטוי~\E|S|, וסביבה במבנה של \E|a-list|,
 
 מבנה הקריאות והרקורסיות ההדדיות שבמימוש של evaluate ופונקציות העזר שלה מתואר
 ב\פנה|איור:שיערוך|.
-
 \begin{figure}[!htb]
   \כיתוב|רקורסיות הדדיות בין הפונקציה evaluate ופונקציות העזר שלה|
   \תגית|איור:שיערוך|
@@ -2319,24 +2320,25 @@ evaluate המקבלת ביטוי~\E|S|, וסביבה במבנה של \E|a-list|,
   \centering
   \begin{forest}
     call tree [evaluate,name=evaluate
-     [lookup,name=lookup] {%
-    % \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
-    % }
-    % [is-atomic [exists]
-    % {%
-    % \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
-    % }
-    % ]
-    % [evaluate-atomic
-    % [apply-atomic
-    % [evaluate-cond] {%
-    % \draw[->] (.-20) .. controls+(-60:0.9) and+(60:0.9) .. (.20);
-    % \draw[->] (.200) .. controls+(210:9) and+(120:6) .. (evaluate.120);
-    % }
-    % [apply-eager-atomic
-    [apply-trivial-atomic]
+    [lookup,name=lookup] {%
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+    }
+    [is-primitive [exists]
+    {%
+    \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+    }
     ]
-    % ]
+    [evaluate-primitive
+    [apply-primitive
+    [evaluate-cond] {%
+    \draw[->] (.-20) .. controls+(-60:0.9) and+(60:0.9) .. (.20);
+    \draw[->] (.200) .. controls+(210:9) and+(120:6) .. (evaluate.120);
+    }
+    [apply-eager-primitive
+    [apply-trivial-primitive]
+    ]
+    ]
+    ]
     [apply, name=apply
     [apply-decomposed-lambda
     [bind] {%

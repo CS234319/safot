@@ -1,1 +1,1 @@
-% javac MakePascalHelloWorld.java; java MakePascalHelloWorld
+% javap Hello
