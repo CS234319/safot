@@ -2233,18 +2233,18 @@ quote לרשימת ה-a-list באמצעות set
 ניתן גם להגדיר את הפונקציה defun באמצעות ביטוי nlambda
 \begin{LIBRARY}
 (set 'defun
-  '(nlambda (name parameter-list body)
-    (set name (lambda parameter-list body))))
+  '(nlambda (name parameters body)
+    (set name (lambda parameters body))))
 \end{LIBRARY}
 כלומר, הפונקציה defun היא ביטוי nlambda אשר מקבל שלושה פרמטרים: \E|name|,
-\E|parameter-list| ו-\E|body|, ואשר קושר (באמצעות \E|set|) את הפרמטר אל ביטוי
+\E|parameters| ו-\E|body|, ואשר קושר (באמצעות \E|set|) את הפרמטר אל ביטוי
 ה-lambda המוגדר על ידי שני הפרמטרים האחרים, והכל מבלי לשערך את הפרמטרים שלו.
 
 ניתן גם להגדיר את הפונקציה ndefun המגדירה פונקציה שהסמנטיקה שלה היא normal
 \begin{LIBRARY}
 (set 'ndefun
-  '(nlambda (name parameter-list body)
-    (set name (nlambda parameter-list body))))
+  '(nlambda (name parameters body)
+    (set name (nlambda parameters body))))
 \end{LIBRARY}
 גוף ההגדרה זהה לזה של defun אלא ש-ndefun יוצרת ביטוי nlambda במקום ביטוי
 \E|lambda|.
@@ -2753,7 +2753,7 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
 
 במהלך הדיון, הצגנו את המימוש של הפונקציות המוגדרות מראש באמצעות הפונקציות
 האטומיות. הנה הקוד המלא של המימוש שהצגנו.
-
+\immediate\closeout \libraryFile
 \begin{LTR}
   \lstinputlisting[language=Mini,style=display,
     numbers=left,
