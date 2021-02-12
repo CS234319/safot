@@ -22,15 +22,20 @@
   \csname filecontents*\endcsname{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
+  \pagebreak[3]%
   \LTR
   \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
   \endLTR
+  \pagebreak[3]%
   \openin\tempFile=\fileName
   \begingroup\endlinechar=-1
   \loop\unless\ifeof \tempFile
   \read\tempFile to\fileline % Read one line and store it into \fileline
-  \immediate\write \kernelFile {\unexpanded\expandafter{\fileline}}
+  \immediate\write\kernelFile {\unexpanded\expandafter{\fileline}}
   \repeat
+  \immediate\write \kernelFile {¢}
+  \immediate\write \kernelFile {\unexpanded\expandafter{\pagebreak}[3]}
+  \immediate\write \kernelFile {¢}
   \endgroup
   \closein \tempFile
 }
@@ -44,9 +49,11 @@
   \csname filecontents*\endcsname{\fileName}%
 }{%
   \csname endfilecontents*\endcsname%
+  \pagebreak[3]%
   \LTR
   \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{orange!20}]{\fileName}%
   \endLTR
+  \pagebreak[3]%
   \newread \tempFile % open the file to read from
   \openin \tempFile=\fileName
   \begingroup\endlinechar=-1
@@ -2631,7 +2638,7 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
 מלבד eval אינן נדרשות יותר ל-a-list וכולן, לבד מ-error מצפות לפרמטר אחד או שני
 פרמטרים.
 
-הפונקציה apply-eager-atomic מטפלת במקרים המיוחדים של E|eval| ושל \E|error|
+הפונקציה apply-eager-atomic מטפלת במקרים המיוחדים של \E|eval| ושל \E|error|
 ומעבירה את המשך הטיפול ל-apply-trivial-atomic
 \begin{KERNEL}
 (defun apply-eager-atomic (atomic actuals a-list)
