@@ -20,14 +20,17 @@ CFLAGS += -MD -MP
 
 all: mini-lisp test
 
+%.o: %.cc
+	$(CXX) $(CFLAGS) $(CPPFLAGS) $(OUTPUT_OPTION) $<
+
 mini-lisp:	$(OBJS) 
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: test.o tokenizer-test.o parser-test.o
-	$(LD) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 -include $(SRC:%.c=%.d)
 
 clean:
-		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup *.d
+		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup 
 
