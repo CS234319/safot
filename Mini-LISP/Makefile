@@ -17,21 +17,16 @@ else
 endif
 
 CFLAGS += -MD -MP 
--include $(SRC:%.c=%.d)
 
 all: mini-lisp test
 
 mini-lisp:	$(OBJS) 
-	$(CXX) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -o $@ $^ 
 
 test: test.o tokenizer-test.o parser-test.o
-	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+	$(LD) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
-%.o: %.cc %$(DEPDIR)/%.d | $(DEPDIR)
-	$(CXX) -MD -MP -c $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -o $@ $<
-
-%.o: %.c %$(DEPDIR)/%.d | $(DEPDIR)
-	$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+-include $(SRC:%.c=%.d)
 
 clean:
 		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup

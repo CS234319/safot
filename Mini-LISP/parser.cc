@@ -74,6 +74,9 @@ int go() {
 	while (!Stack::empty()) {
     auto token = Tokenizer::get();
     auto top = Stack::pop(); 
+    if (token <= 0)
+      if (top == 0)
+        continue;
     if (token == top)
       continue; 
     Tokenizer::unget();
@@ -133,7 +136,6 @@ int go() {
         break;
      }
 	}
-  return 1;
 }
 
 }
