@@ -2,7 +2,7 @@ OBJS = mini-lisp.o stack-trace.o main.o tokenizer.o parser.o
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE
-	BUILD_MODE = run
+	BUILD_MODE = debug
 endif
 
 ifeq ($(BUILD_MODE),debug)
@@ -21,7 +21,10 @@ CFLAGS += -MD -MP
 all: mini-lisp test
 
 %.o: %.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $(OUTPUT_OPTION) $<
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c $<
+
+%.o: %.c
+	$(CXX) $(CFLAGS)  -c $<
 
 mini-lisp:	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 

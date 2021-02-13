@@ -7,6 +7,7 @@ extern "C" void stack_trace(void);
 
 #define normally(x) if (x); else  {\
   fprintf(stderr,"\n\n** Aborting at %s/%s (%d): Expression (%s) evaluated to false\n",__FILE__, __FUNCTION__, __LINE__,#x); \
+  stack_trace(); \
   throw (__LINE__); \
 }
 

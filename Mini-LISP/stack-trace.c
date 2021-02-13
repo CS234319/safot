@@ -1,10 +1,13 @@
 #define BT_BUF_SIZE 100
 
+#include "stack-trace.h"
+
 #include <stdio.h>
 #include <execinfo.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+
 void stack_trace(void) {
   int nptrs;
   void *buffer[BT_BUF_SIZE];
