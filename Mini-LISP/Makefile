@@ -29,5 +29,5 @@ test: test.o tokenizer-test.o parser-test.o
 -include $(SRC:%.c=%.d)
 
 clean:
-		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup
+		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup *.d
 
