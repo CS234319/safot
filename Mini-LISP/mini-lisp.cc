@@ -1,8 +1,6 @@
 // An implementation of mini-lisp in mini-C++
-//
 #include "mini-lisp.hh"
 #include "dump.h"
-#include <iostream>
 
 #define SILENT 1 
 #if SILENT
@@ -18,36 +16,37 @@ extern bool islist(S s) {
   return islist(s.cdr());
 }
 
-auto operator , (const S s1, const S s2) { 
-  D(s1,s2);
-  D(s1.islist(),s2.islist());
+auto operator ,(const S s1, const S s2) {
+  D(s1, s2);
+  D(s1.islist(), s2.islist());
   if (s2.islist())
-    return s1.cons(s2); 
-  return list(s1,s2); 
+    return s1.cons(s2);
+  return list(s1, s2);
 }
 
-auto operator , (const S s1, String s2) { 
+auto operator ,(const S s1, String s2) {
   return (s1, S(s2));
 }
 
-auto operator , (String s1, const S s2) { 
+auto operator ,(String s1, const S s2) {
   return (S(s1), s2);
 }
 
-std::ostream& operator<<(std::ostream& os, Pair p) {
-   return os << "[" << p.car << "." << p.cdr << "]";
+#include <iostream>
+std::ostream& operator<<(std::ostream &os, Pair p) {
+  return os << "[" << p.car << "." << p.cdr << "]";
 }
 
-std::ostream& operator<<(std::ostream& os, S s) {
+std::ostream& operator<<(std::ostream &os, S s) {
   if (s.null())
     return os << "nil";
   if (s.atom())
     return os << s.asAtom();
-  if (!islist(s)) 
+  if (!islist(s))
     return os << "(" << car(s) << "." << cdr(s) << ")";
-  os << "(" ;
+  os << "(";
   for (;;) {
-    os << S(s.car()); 
+    os << S(s.car());
     if ((s = s.cdr()).null())
       break;
     os << " ";
@@ -59,6 +58,10 @@ namespace Pairs {
   define(M = (1 << 15) - 1)
   static Pair buffer[M];
   Pair *const pool = buffer - 1;
+  static H remaining = M;
+  extern H to_go() {
+    return remaining;
+  }
 
   static H init() {
     for (H h = 1; h < M; ++h)
@@ -67,28 +70,36 @@ namespace Pairs {
     return 1;
   }
 
-  static H available = init();
+  static H next = init();
 
+  H allocate() {
+    D(next, remaining);
+    normally(next != 0 && remaining > 0);
+    const H $ = next;
+    remaining--, next = pool[next].next;
+    D($, next, remaining);
+    return $;
+  }
   H allocate(H car, H cdr) {
-    D(available, car,cdr);
-    normally(available != 0);
-    const H $ = available;
-    available = pool[available].next;
+    D(next, car, cdr, remaining);
+    H $ = allocate();
+    D(next, car, cdr, remaining);
     pool[$].car = car;
     pool[$].cdr = cdr;
-    D($,pool[$].car,pool[$].cdr, S($), S(pool[$].car), S(pool[$].cdr));
+    //D($,pool[$].car,pool[$].cdr, S($), S(pool[$].car), S(pool[$].cdr));
+    D($);
     return $;
   }
   void free(H h) {
-    pool[h].next = available;
-    available = h;
+    D(h, remaining);
+    pool[h].next = next, remaining++, next = h;
   }
 }
 
 namespace Strings { // Atoms are never freed in mini-lisp
   define(M = 1024);
   char buffer[M] = "BOTTOM";
-  char nil[] = "NIL"; 
+  char nil[] = "NIL";
   const char *const pool = nil;
   static H current = 0;
   static H size(String s) {
@@ -96,7 +107,9 @@ namespace Strings { // Atoms are never freed in mini-lisp
       if (s[$] == '\0')
         return $ + 1;
   }
-  char upper(char c)  { return c < 'a' || c > 'z' ? c : c - 'a' + 'A';}
+  char upper(char c) {
+    return c < 'a' || c > 'z' ? c : c - 'a' + 'A';
+  }
 
   bool eq(const char *s1, const char *s2) {
     for (; upper(*s1) == upper(*s2); ++s1, ++s2)
@@ -108,8 +121,8 @@ namespace Strings { // Atoms are never freed in mini-lisp
   H allocate(String s) {
     D(s, size(s), current, (long) buffer, (long) pool, pool-buffer);
     for (const char *p = pool + current; p <= pool; ++p)
-      if (eq(s,p))  
-        return  (D(s, p - pool)), p - pool;
+      if (eq(s, p))
+        return (D(s, p - pool)), p - pool;
     const H n = size(s);
     D(s, size(s), n);
     current -= n;
@@ -117,14 +130,14 @@ namespace Strings { // Atoms are never freed in mini-lisp
     normally(pool + current >= buffer);
 
     for (H h = 0; h < n; ++h) // Only case in code to change the pool 
-      const_cast<char &>(pool[current + h]) = upper(s[h]);
+      const_cast<char&>(pool[current + h]) = upper(s[h]);
     D(s, pool + current, current);
     return current;
   }
 }
 
 bool eq(S s1, S s2) {
-  D(s1,s2);
+  D(s1, s2);
   if (not (s1.atom()) or not (s2.atom()))
     return false;
   if (s1.index == s2.index)
@@ -153,45 +166,59 @@ S set(S name, S value) {
   return value;
 }
 
-
 static void error(String s);
 static void error(String s, S s1);
 
 static S lookup(S id, S alist) { // lookup id in an a-list
   if (alist.null())
     return NIL;
-  if (eq(id,alist.car().car()))
+  if (eq(id, alist.car().car()))
     return alist.car().cdr();
   return lookup(id, alist.cdr());
 }
 
 S lookup(S s) {
-  return lookup(s,alist);
-} 
-
+  return lookup(s, alist);
+}
 
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
 const S T(set(S("T"), S("T")));  // (set (quote t) (quote t))
 
-S cons(S car, S cdr) { return S(car, cdr); }
-S list() { return NIL; }
-S list(S s) { return cons(s, NIL); } 
-S list(S s1, S s2) { return cons(s1, list(s2)); }
-S list(S s1, S s2, S s3) { return cons(s1, list(s2, s3)); }
-S list(S s1, S s2, S s3, S s4) { return cons(s1, list(s2, s3, s4)); }
-S list(S s1, S s2, S s3, S s4, S s5) { return cons(s1, list(s2, s3, s4, s5)); }
-S list(S s1, S s2, S s3, S s4, S s5, S s6) { return cons(s1, list(s2, s3, s4, s5, s6)); }
-S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7) { 
-    return cons(s1, list(s2, s3, s4, s5, s6, s7)); 
+S cons(S car, S cdr) {
+  return S(car, cdr);
 }
-S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8) { 
-    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8)); 
+S list() {
+  return NIL;
 }
-S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9) { 
-    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9)); 
+S list(S s) {
+  return cons(s, NIL);
 }
-S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9, S s10) { 
-    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9, s10)); 
+S list(S s1, S s2) {
+  return cons(s1, list(s2));
+}
+S list(S s1, S s2, S s3) {
+  return cons(s1, list(s2, s3));
+}
+S list(S s1, S s2, S s3, S s4) {
+  return cons(s1, list(s2, s3, s4));
+}
+S list(S s1, S s2, S s3, S s4, S s5) {
+  return cons(s1, list(s2, s3, s4, s5));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6) {
+  return cons(s1, list(s2, s3, s4, s5, s6));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7) {
+  return cons(s1, list(s2, s3, s4, s5, s6, s7));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8) {
+  return cons(s1, list(s2, s3, s4, s5, s6, s7, s8));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9) {
+  return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9, S s10) {
+  return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9, s10));
 }
 
 const S nlambda("nlambda"), lambda("lambda"), quote("quote");
@@ -205,11 +232,11 @@ bool exists(S x, S xs) { // determine whether atom x is in list xs
   return exists(x, xs.cdr());
 }
 
-static const S atomic_functions = list( "atom", "car", "cdr",
-    "cond","cons","eq", "error","eval", "set");
+static const S atomic_functions = list("atom", "car", "cdr", "cond", "cons",
+    "eq", "error", "eval", "set");
 
 bool atomic(S name) { // determine whether name denotes an atomic function
-  return exists(name,atomic_functions);
+  return exists(name, atomic_functions);
 }
 
 S evaluate_atomic(S atomic, S args) {
@@ -220,12 +247,12 @@ S apply(S s, S args) {
   return NIL;
 }
 
-S eval(S s) { 
+S eval(S s) {
   if (s.atom())
     return lookup(s);
-  if (atomic(s.car())) 
+  if (atomic(s.car()))
     return evaluate_atomic(s.car(), s.cdr());
-  return apply(eval(s.car()), s.cdr()); 
+  return apply(eval(s.car()), s.cdr());
 }
 
 #if 0

@@ -1,5 +1,6 @@
 #include <cstdint>
-
+#ifndef MINI_LISP_H
+#define MINI_LISP_H 
 #define perspective(...) struct{__VA_ARGS__;};
 #define	returns(x) const {return x;}
 #define representation union
@@ -24,14 +25,16 @@ typedef int16_t H; // Half a word including 16 bits.
 representation Pair { // Representation of a dotted pair
   perspective(W cons: 32)
   perspective(H car,cdr :16)
-  perspective(H next :16)
+  perspective(H data, next :16)
 };
 
 namespace Pairs {
    extern Pair *const pool;
    extern H allocate(H car, H cdr);
    extern void free(H index);
+   extern H to_go(); 
 };
+
 namespace Strings { // Atoms are never freed in mini-lisp
   extern const char *const pool;
   extern H allocate(String s);
@@ -85,3 +88,4 @@ extern S eval(S s);
 extern S set(S name, S value);
 
 #undef construct
+#endif // MINI_LISP_H 

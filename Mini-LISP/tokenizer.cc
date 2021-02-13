@@ -1,3 +1,4 @@
+#include "mini-lisp.hh"
 #include "tokenizer.h"
 #include "dump.h"
 
@@ -24,20 +25,31 @@ static bool isAtom();
 static bool isNewLine(); 
 static bool isIgnored();
 
+static H last; 
+static bool pending = false;
+
+extern H get() {
+  if (!pending) 
+    return last = next();
+  pending = false;
+  return pending;
+}
+
+extern H unget() {
+  pending = false;
+  return last;
+}
+
 extern H next() {
-  D(C(), head, isToken(), isIgnored(), isAtom(), isNewLine());
   if (!advance())
     return $;
   if (isToken())
     return *head++;
-  D(C(), head, isToken(), isIgnored(), isAtom(), isNewLine());
   return nextAtom();
 }
 
 static char advance() {
-  D(head,C(), (long)head, (int)C());
   for (; ; ++head) {
-    D(head,C(), (long)head, (int)C());
     if (C() == '\0')
       break;
     if (isIgnored())
@@ -47,23 +59,19 @@ static char advance() {
     for ( ++head; C() != '\0' && !isNewLine(); ++head)
         ;
   }
-  D(head,C(), (long)head, (int)C());
   return C();
 }
 
 
 static H nextAtom() {
-  D(C(), head, isToken(), isIgnored(), isAtom(), isNewLine());
   const char * const begin = head;
   for (;C();++head)   
     if (!isAtom())
       break;
-  D(begin, C(), (int)C(),head);
   char c = C();
   C() = '\0';
   H $ = Strings::allocate(begin);
   C() = c;
-  D($);
   return $;
 }
 

@@ -1,13 +1,10 @@
-PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-
-OBJS = mini-lisp.o stack-trace.o
+OBJS = mini-lisp.o stack-trace.o main.o tokenizer.o parser.o
+SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE
-BUILD_MODE = debug
+	BUILD_MODE = run
 endif
 
-CFLAGS += -Iinclude 
-LDFLAGS += -L. 
 ifeq ($(BUILD_MODE),debug)
 	CFLAGS += -g
 else ifeq ($(BUILD_MODE),run)
@@ -19,20 +16,23 @@ else
     $(error Build mode $(BUILD_MODE) not supported by this Makefile)
 endif
 
-all: mini-lisp
+CFLAGS += -MD -MP 
+-include $(SRC:%.c=%.d)
+
+all: mini-lisp test
 
 mini-lisp:	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
-test: test.o tokenizer-test.o
+test: test.o tokenizer-test.o parser-test.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
+%.o: %.cc %$(DEPDIR)/%.d | $(DEPDIR)
+	$(CXX) -MD -MP -c $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -o $@ $<
 
-%.o:	$(PROJECT_ROOT)%.cpp
-	$(CXX) -c $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -o $@ $<
-
-%.o:	$(PROJECT_ROOT)%.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+%.o: %.c %$(DEPDIR)/%.d | $(DEPDIR)
+	$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 clean:
 		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup
+

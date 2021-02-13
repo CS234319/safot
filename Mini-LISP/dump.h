@@ -21,7 +21,6 @@
 #define SEP   <<"; " 
 #define D(...) LOCATION FOR_EACH(DUMP,SEP,__VA_ARGS__) << std::endl
 
-
 #if 0
 void main() {
   int A, B, C, D, E, F;

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "tokenizer.c"
+#include "tokenizer.cc"
 #include "test.hh"
 
 #include <string.h>
