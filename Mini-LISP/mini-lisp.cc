@@ -1,8 +1,9 @@
 // An implementation of mini-lisp in mini-C++
 #include "mini-lisp.hh"
 #include "dump.h"
+#include "stack-trace.h"
 
-#define SILENT 1 
+#define SILENT 0 
 #if SILENT
 #undef D
 #define D(...) 0
@@ -53,89 +54,6 @@ std::ostream& operator<<(std::ostream &os, S s) {
   }
   return os << ")";
 }
-
-namespace Pairs {
-  define(M = (1 << 15) - 1)
-  static Pair buffer[M];
-  Pair *const pool = buffer - 1;
-  static H remaining = M;
-  extern H to_go() {
-    return remaining;
-  }
-
-  static H init() {
-    for (H h = 1; h < M; ++h)
-      pool[h].next = h + 1;
-    pool[M].next = 0;
-    return 1;
-  }
-
-  static H next = init();
-
-  H allocate() {
-    D(next, remaining);
-    normally(next != 0 && remaining > 0);
-    const H $ = next;
-    remaining--, next = pool[next].next;
-    D($, next, remaining);
-    return $;
-  }
-  H allocate(H car, H cdr) {
-    D(next, car, cdr, remaining);
-    H $ = allocate();
-    D(next, car, cdr, remaining);
-    pool[$].car = car;
-    pool[$].cdr = cdr;
-    //D($,pool[$].car,pool[$].cdr, S($), S(pool[$].car), S(pool[$].cdr));
-    D($);
-    return $;
-  }
-  void free(H h) {
-    D(h, remaining);
-    pool[h].next = next, remaining++, next = h;
-  }
-}
-
-namespace Strings { // Atoms are never freed in mini-lisp
-  define(M = 1024);
-  char buffer[M] = "BOTTOM";
-  char nil[] = "NIL";
-  const char *const pool = nil;
-  static H current = 0;
-  static H size(String s) {
-    for (H $ = 0;; ++$)
-      if (s[$] == '\0')
-        return $ + 1;
-  }
-  char upper(char c) {
-    return c < 'a' || c > 'z' ? c : c - 'a' + 'A';
-  }
-
-  bool eq(const char *s1, const char *s2) {
-    for (; upper(*s1) == upper(*s2); ++s1, ++s2)
-      if (*s1 == '\0')
-        return true;
-    return false;
-  }
-
-  H allocate(String s) {
-    D(s, size(s), current, (long) buffer, (long) pool, pool-buffer);
-    for (const char *p = pool + current; p <= pool; ++p)
-      if (eq(s, p))
-        return (D(s, p - pool)), p - pool;
-    const H n = size(s);
-    D(s, size(s), n);
-    current -= n;
-    normally(current < 0);
-    normally(pool + current >= buffer);
-
-    for (H h = 0; h < n; ++h) // Only case in code to change the pool 
-      const_cast<char&>(pool[current + h]) = upper(s[h]);
-    D(s, pool + current, current);
-    return current;
-  }
-}
-
 bool eq(S s1, S s2) {
   D(s1, s2);
   if (not (s1.atom()) or not (s2.atom()))

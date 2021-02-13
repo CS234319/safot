@@ -77,12 +77,6 @@ TEST(EQ, Basics) {
   EXPECT_TRUE(eq(T,T));
 }
 
-TEST(Strings, Representation) {
-  using namespace Strings;
-  EXPECT_EQ(nil, buffer + sizeof(buffer));
-  EXPECT_EQ(nil, pool);
-}
-
 
 TEST(EQ, Trivial) {
   EXPECT_TRUE(eq(T, S("T")));

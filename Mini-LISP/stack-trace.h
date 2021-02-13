@@ -1,5 +1,6 @@
 #ifndef STACK_TRACE_H_
 #define STACK_TRACE_H_
+#include "dump.h"
 
 #include <iostream>
 

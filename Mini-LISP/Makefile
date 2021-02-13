@@ -1,8 +1,8 @@
-OBJS = mini-lisp.o stack-trace.o main.o tokenizer.o parser.o
+OBJS = mini-lisp.o strings.o pairs.o stack-trace.o main.o tokenizer.o parser.o
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE
-	BUILD_MODE = debug
+	BUILD_MODE = run
 endif
 
 ifeq ($(BUILD_MODE),debug)
@@ -29,7 +29,7 @@ all: mini-lisp test
 mini-lisp:	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
-test: test.o tokenizer-test.o parser-test.o
+test: test.o tokenizer-test.o strings-test.o pairs-test.o parser-test.o stack-trace.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 -include $(SRC:%.c=%.d)
