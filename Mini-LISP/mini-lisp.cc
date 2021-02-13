@@ -5,7 +5,6 @@
 #include <iostream>
 
 #define SILENT 1 
-
 #if SILENT
 #undef D
 #define D(...) 0

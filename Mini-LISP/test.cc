@@ -1,7 +1,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "mini-lisp.cc"
-#include "test.h"
+#include "test.hh"
 
 TEST(Comma, Two) {
   S a = S("A");
@@ -42,10 +42,7 @@ TEST(List, Singleton) {
   const S s = list("A");  
   EXPECT_TRUE(s.islist());
   EXPECT_TRUE(eq(s.car(), S("A")));
-  EXPECT_TRUE(eq(s.car(), "A"));
-  EXPECT_TRUE(eq(s.cdr(), NIL));
-  EXPECT_TRUE(eq(s.cdr(), "NIL"));
-  EXPECT_TRUE(eq(s.cdr(), S("NIL")));
+  EXPECT_TRUE(eq(s.car(), "A")); EXPECT_TRUE(eq(s.cdr(), NIL)); EXPECT_TRUE(eq(s.cdr(), "NIL")); EXPECT_TRUE(eq(s.cdr(), S("NIL")));
   EXPECT_EQ(NIL,s.cdr());
 }
 
@@ -174,6 +171,7 @@ TEST(AtomicFunctionsList, AfterSet) {
 }
 
 int main(int argc, char **argv) {
+  // ::testing::GTEST_FLAG(filter) = "*OneComment*";//":-:*Counter*";
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
