@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mini-lisp.hh"
+#include "mini-lisp.h"
 #include "parser.h"
 
 static inline auto prompt(const char *s) {

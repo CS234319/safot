@@ -36,15 +36,16 @@ namespace Pairs {
 };
 
 namespace Strings { // Atoms are never freed in mini-lisp
-  extern const char *const pool;
-  extern H allocate(String s);
+  extern String pool;
+  extern H allocate(String);
+  extern bool eq(String, String);
 };
 
 
 union S; 
 extern S cons(S car, S cdr);
-extern bool eq(S car, S cdr);
-extern bool islist(S s); 
+extern bool eq(S, S);
+extern bool islist(S); 
 
 representation S { // Representation of an S expression.
   perspective(H index)
@@ -70,22 +71,26 @@ representation S { // Representation of an S expression.
 };
 
 
-extern S alist;
-extern const S NIL,T;
+// Nullary atomic function
+extern const S NIL,T, QUOTE;
 
-extern S list() ;
-extern S list(S s);
-extern S list(S s1, S s2);
-extern S list(S s1, S s2, S s3);
-extern S list(S s1, S s2, S s3, S s4);
+// Unary atomic functions
+extern S car(S);
+extern S cdr(S);
+extern S atom(S);
+extern S eval(S);
 
+// Binary atomic functions
+extern bool eq(S, S);
 extern S cons(S car, S cdr);
-extern S car(S s);
-extern S cdr(S s);
-extern bool eq(S s1, S s2);
-extern S atom(S s);
-extern S eval(S s);
 extern S set(S name, S value);
+
+// Utility functions
+extern S list() ;
+extern S list(S);
+extern S list(S, S);
+extern S list(S, S, S );
+extern S list(S, S, S, S);
 
 #undef construct
 #endif // MINI_LISP_H 

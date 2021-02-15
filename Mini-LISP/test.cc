@@ -1,7 +1,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "mini-lisp.cc"
-#include "test.hh"
+#include "test.h"
 
 TEST(Comma, Two) {
   S a = S("A");
@@ -10,6 +10,7 @@ TEST(Comma, Two) {
   S b = S("B");
   EXPECT_TRUE(b.atom());
   EXPECT_FALSE(b.islist());
+  set("A","B");
   S s = (a,b);
   EXPECT_FALSE(s.atom());
   EXPECT_TRUE(s.islist());
@@ -125,28 +126,22 @@ TEST(Lookup, T) {
 
 TEST(Lookup, NIL1) {
   S n1 = S("NIL");
-  D(n1);
   S n2 = S("nil");
-  D(n1,n2);
   EXPECT_EQ(n1.index,n2.index);
 }
 
 TEST(Lookup, NIL2) {
   S n1 = S("NIL");
-  D(n1);
   S n2 = S("NIL");
-  D(n1,n2);
   EXPECT_TRUE(lookup("NIL").eq("NIL"));
 }
 
 TEST(Lookup, Failure) {
-  D(alist);
   EXPECT_FALSE(lookup("X"));
   EXPECT_FALSE(lookup("Y"));
 }
 
 TEST(Lookup, AfterSet) {
-  D(alist);
   set("X","Y");
   EXPECT_TRUE(lookup("X"));
   EXPECT_FALSE(lookup("Y"));
@@ -154,7 +149,6 @@ TEST(Lookup, AfterSet) {
 }
 
 TEST(AtomicFunctionsList, AfterSet) {
-  D(alist);
   EXPECT_TRUE(exists("car", atomic_functions));
   EXPECT_TRUE(exists("cdr", atomic_functions));
   EXPECT_TRUE(exists("cons", atomic_functions));
@@ -167,8 +161,4 @@ TEST(AtomicFunctionsList, AfterSet) {
   EXPECT_FALSE(atomic(""));
 }
 
-int main(int argc, char **argv) {
-  // ::testing::GTEST_FLAG(filter) = "*Stack*";//":-:*Counter*";
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+

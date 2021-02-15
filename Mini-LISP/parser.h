@@ -1,6 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include "mini-lisp.hh"
+#include "mini-lisp.h"
 
 namespace Parser {
   extern S result();

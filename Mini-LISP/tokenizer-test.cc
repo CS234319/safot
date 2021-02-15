@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "tokenizer.cc"
-#include "test.hh"
+#include "test.h"
 
 #include <string.h>
 
@@ -28,8 +28,16 @@ TEST(Tokenizer, EmptyComment) {
   EXPECT_EQ($,next());
 }
 
+TEST(Tokenizer, Char) {
+  t("A");
+  EXPECT_STREQ("A",nextS());
+}
+
+
 TEST(Tokenizer, Atom) {
+  D("Begin");
   t("atom");
+  D("Set");
   auto s = nextS();
   D(s);
   D("A");

@@ -1,6 +1,6 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
-#include "mini-lisp.hh"
+#include "mini-lisp.h"
 namespace Tokenizer {
 enum { undefined = 128, $};
 const char tokens[] = "()[].\'";
@@ -11,6 +11,7 @@ extern H next(void);
 extern H get(void); 
 extern H unget(void); 
 }
+extern bool exists(const char, String s); 
 
 #endif
 

@@ -1,4 +1,4 @@
-#include "mini-lisp.hh"
+#include "mini-lisp.h"
 #include "tokenizer.h"
 #include "dump.h"
 
@@ -29,45 +29,58 @@ static H last;
 static bool pending = false;
 
 extern H get() {
+  D(pending, last);
   if (!pending) 
     return last = next();
-  pending = false;
-  return pending;
-}
-
-extern H unget() {
   pending = false;
   return last;
 }
 
+extern H unget() {
+  pending = true;
+  return last;
+}
+
 extern H next() {
+  D(head, C());
   if (!advance())
     return $;
+  D(head, C(), isToken());
   if (isToken())
     return *head++;
+  D(head, C());
   return nextAtom();
 }
 
 static char advance() {
+    D(head, *head, C());
   for (; ; ++head) {
+    D(head, *head, C());
     if (C() == '\0')
       break;
+    D(head, *head, C());
     if (isIgnored())
       continue;
+    D(head, *head, C());
     if (C() != ';')
       break;
-    for ( ++head; C() != '\0' && !isNewLine(); ++head)
+    D(head, *head, C());
+    for (++head; C() != '\0' && !isNewLine(); ++head)
         ;
+    D(head, *head, C());
   }
+    D(head, *head, C());
   return C();
 }
 
 
 static H nextAtom() {
+  D(head,isToken());
   const char * const begin = head;
   for (;C();++head)   
     if (!isAtom())
       break;
+  D(begin);
   char c = C();
   C() = '\0';
   H $ = Strings::allocate(begin);
@@ -88,9 +101,15 @@ static bool isIgnored() {
 }
 
 static bool isToken() {
-  for (const char *p = tokens; *p; ++p)
-    if (C() == *p)
+  return exists(C(),tokens);
+}
+}
+extern bool exists(const char c, String s) {
+  D(c, s);
+  for (const char *p = s; *p; ++p)
+    if (c == *p)
       return true;
   return false;
 }
-}
+
+

@@ -1,9 +1,9 @@
 // An implementation of mini-lisp in mini-C++
-#include "mini-lisp.hh"
+#include "mini-lisp.h"
 #include "dump.h"
 #include "stack-trace.h"
 
-#define SILENT 0 
+#define SILENT 1 
 #if SILENT
 #undef D
 #define D(...) 0
@@ -62,7 +62,7 @@ bool eq(S s1, S s2) {
     return true;
   using namespace Strings;
   D(pool + s1.index, pool + s2.index);
-  return eq(pool + s1.index, pool + s2.index);
+  return Strings::eq(pool + s1.index, pool + s2.index);
 }
 
 S car(S s) {
@@ -101,6 +101,7 @@ S lookup(S s) {
 
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
 const S T(set(S("T"), S("T")));  // (set (quote t) (quote t))
+const S QUOTE("quote");
 
 S cons(S car, S cdr) {
   return S(car, cdr);
