@@ -35,9 +35,7 @@ TEST(Tokenizer, Char) {
 
 
 TEST(Tokenizer, Atom) {
-  D("Begin");
   t("atom");
-  D("Set");
   auto s = nextS();
   D(s);
   D("A");

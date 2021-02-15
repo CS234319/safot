@@ -46,7 +46,9 @@ namespace Parser {
   extern void supply(char *buffer) {
     D(buffer);
     Tokenizer::initialize(buffer);
-    D(buffer);
+    H h = Tokenizer::get();
+    D(h, S(h), !S(h));
+    Tokenizer::unget();
     parse();
     D(buffer);
   }
@@ -65,36 +67,22 @@ namespace Parser {
     if (s < 0)
       return S(s).asAtom();
     switch (s) {
-      case Parser::$:
-        return "$";
-      case Parser::_:
-        return "_";
-      case Parser::E:
-        return "E";
-      case Parser::X:
-        return "X";
-      case Parser::T:
-        return "T";
-      case Parser::L:
-        return "L";
-      case Parser::_1:
-        return "_ ::= E $";
-      case Parser::E1:
-        return "' E";
-      case Parser::E2:
-        return "X T";
-      case Parser::X1:
-        return "( L )";
-      case Parser::X2:
-        return "a";
-      case Parser::T1:
-        return "T ::= . X";
-      case Parser::T2:
-        return "T ::= ''";
-      case Parser::L1:
-        return "L ::= E L";
-      case Parser::L2:
-        return "L ::= ''";
+      case Parser::$: return "$";
+      case Parser::_: return "_";
+      case Parser::E: return "E";
+      case Parser::X: return "X";
+      case Parser::T: return "T";
+      case Parser::L: return "L";
+      case Parser::_1: return "_ ::= E $";
+      case Parser::E1: return "' E";
+      case Parser::E2: return "X T";
+      case Parser::X1: return "( L )";
+      case Parser::X2: return "a";
+      case Parser::T1: return "T ::= . X";
+      case Parser::T2: return "T ::= ''";
+      case Parser::L1: return "L ::= E L";
+      case Parser::L2: return "L ::= ''";
+      case 0: return "()";
     }
     std::ostringstream o;
     if (s < 127)
@@ -121,7 +109,8 @@ namespace Parser {
     while (!Stack::empty()) {
       Symbol token = (Symbol) Tokenizer::get();
       Symbol top  = (Symbol) Stack::pop();
-      D("LOOP", current, prev, !token, !top, stack());
+      D("LOOP", current, prev, token, top);
+      D("LOOP", !current, !prev, !token, !top, stack());
       if (token <= 0 && top == 0) {
         D("ATOM", !token, !(top));
         continue;
@@ -240,8 +229,6 @@ const char* stack() {
   o << "->";
   for (H h = Stack::top; h != 0;) {
     Pair p = S(h).asCons();
-//    D(S(h), p.data, p.next);
- //   D(Symbol(p.data));
     o << !Symbol(p.data);
     if ((h = p.next) == 0)
       break;

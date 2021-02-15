@@ -4,8 +4,12 @@
 #include "test.h"
 #include "dump.h"
 
+static auto t(const char *s) {
+  return Tokenizer::initialize(strdup(s));
+}
+
 auto supply(const char *s) {
-  reset();
+  Parser::reset();
   return Parser::supply(strdup(s));
 }
 using namespace Parser;
@@ -22,13 +26,49 @@ TEST(Parser, Empty) {
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, Atom) {
+TEST(Parser, SingleTokenError) {
+  supply("(");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::accept, status());
+  EXPECT_EQ(Status::reject, status());
+  supply(")");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::accept, status());
+  EXPECT_EQ(Status::reject, status());
+  supply("'");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::accept, status());
+  EXPECT_EQ(Status::reject, status());
+  supply(".");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::accept, status());
+  ASSERT_NE(Status::accept, status());
+  EXPECT_EQ(Status::reject, status());
+  supply("[");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::accept, status());
+  EXPECT_EQ(Status::reject, status());
+}
+
+TEST(Parser, AtomCharTokenizer) {
+  t("A");
+  H h =  Tokenizer::next();
+  EXPECT_STREQ("A",S(h).asAtom()); 
+}
+
+TEST(Parser, AtomChar) {
   supply("A");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
+TEST(Parser, AtomLong) {
+  supply("A");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
+  EXPECT_EQ(Status::accept, status());
+}
 TEST(Parser, List0) {
   EXPECT_EQ(Status::ready, status());
   supply("()");
@@ -50,7 +90,6 @@ TEST(Parser, List2) {
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
-
 
 TEST(Parser, List3) {
   supply("(a b c)");
@@ -126,7 +165,6 @@ TEST(Parser, QList2) {
   EXPECT_EQ(Status::accept, status());
 }
 
-
 TEST(Parser, QList3) {
   supply("(a 'b c)");
   ASSERT_NE(Status::ready, status());
@@ -154,7 +192,6 @@ TEST(Parser, QPairBoth) {
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
-
 
 TEST(Parser, qParenPair) {
   supply("'(a.b)");

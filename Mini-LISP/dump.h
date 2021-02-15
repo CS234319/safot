@@ -9,11 +9,12 @@
 #define FE_4(WHAT, BETWEEN, X, ...) WHAT(X) BETWEEN FE_3(WHAT, BETWEEN, __VA_ARGS__)
 #define FE_5(WHAT, BETWEEN, X, ...) WHAT(X) BETWEEN FE_4(WHAT, BETWEEN, __VA_ARGS__)
 #define FE_6(WHAT, BETWEEN, X, ...) WHAT(X) BETWEEN FE_5(WHAT, BETWEEN, __VA_ARGS__)
+#define FE_7(WHAT, BETWEEN, X, ...) WHAT(X) BETWEEN FE_5(WHAT, BETWEEN, __VA_ARGS__)
 //... repeat as needed
 
-#define GET_MACRO(_0,_1,_2,_3,_4,_5,_6,NAME,...) NAME 
+#define GET_MACRO(_0,_1,_2,_3,_4,_5,_6,_7, NAME,...) NAME 
 #define FOR_EACH(action,between, ...) \
-  GET_MACRO(_0,__VA_ARGS__,FE_6,FE_5,FE_4,FE_3,FE_2,FE_1,FE_0)(action, between,__VA_ARGS__)
+  GET_MACRO(_0,__VA_ARGS__,FE_7, FE_6,FE_5,FE_4,FE_3,FE_2,FE_1,FE_0)(action, between,__VA_ARGS__)
 
 #include <iostream>
 #define LOCATION std::cerr << __FILE__  << "(" << __LINE__ << ")/" << __FUNCTION__ << "(): "
