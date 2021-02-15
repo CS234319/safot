@@ -240,8 +240,8 @@ const char* stack() {
   o << "->";
   for (H h = Stack::top; h != 0;) {
     Pair p = S(h).asCons();
-    D(S(h), p.data, p.next);
-    D(Symbol(p.data));
+//    D(S(h), p.data, p.next);
+ //   D(Symbol(p.data));
     o << !Symbol(p.data);
     if ((h = p.next) == 0)
       break;
