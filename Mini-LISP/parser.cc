@@ -43,16 +43,7 @@ namespace Parser {
     return current_status;
   }
   static void parse();
-  extern void supply(char *buffer) {
-    D(buffer);
-    Tokenizer::initialize(buffer);
-    H h = Tokenizer::get();
-    D(h, S(h), !S(h));
-    Tokenizer::unget();
-    parse();
-    D(buffer);
-  }
-  enum Symbol : H {
+ enum Symbol : H {
     $ = Tokenizer::$, _, E, X, T, L, _1, // _ ::= E $
     E1, // E ::= ' E
     E2, // E ::= X T
@@ -94,7 +85,16 @@ namespace Parser {
       o << (int) s;
     return o.str().c_str();
   }
-
+  extern void supply(char *buffer) {
+    D(buffer);
+    Tokenizer::initialize(buffer);
+    H h = Tokenizer::get();
+    D(h, Symbol(h), S(h).asAtom(), !Symbol(h));
+    Tokenizer::unget();
+    parse();
+    D(buffer);
+  }
+ 
   extern void reset() {
     while (!Stack::empty())
       Stack::pop();

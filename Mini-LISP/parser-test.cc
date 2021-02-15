@@ -18,6 +18,19 @@ TEST(Parser, Initially) {
   EXPECT_EQ(Status::ready, status());
 }
 
+TEST(Parser, AtomCharTokenizer) {
+  t("A");
+  H h =  Tokenizer::next();
+  EXPECT_STREQ("A",S(h).asAtom()); 
+}
+
+TEST(Parser, AtomChar) {
+  supply("A");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
+  EXPECT_EQ(Status::accept, status());
+}
+
 TEST(Parser, Empty) {
   EXPECT_EQ(Status::ready, status());
   supply("");
@@ -50,21 +63,8 @@ TEST(Parser, SingleTokenError) {
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, AtomCharTokenizer) {
-  t("A");
-  H h =  Tokenizer::next();
-  EXPECT_STREQ("A",S(h).asAtom()); 
-}
-
-TEST(Parser, AtomChar) {
-  supply("A");
-  ASSERT_NE(Status::ready, status());
-  ASSERT_NE(Status::reject, status());
-  EXPECT_EQ(Status::accept, status());
-}
-
 TEST(Parser, AtomLong) {
-  supply("A");
+  supply("Atom");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
