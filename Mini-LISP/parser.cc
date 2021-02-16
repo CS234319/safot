@@ -2,17 +2,22 @@
 #include "stack.h"
 #include "tokenizer.h"
 
-#include <sstream>
 #include "dump.h"
 #include "stack-trace.h"
 
-#define SILENT 0 
-#if SILENT
+#include <string.h>
+
+
+#define DEBUG 0 
+
+#ifndef DEBUG 
 #undef D
 #define D(...) 0
+#else 
+#include <sstream>
+std::ostream& operator<<(std::ostream &os, std::ostringstream o);
+String stack(); 
 #endif
-
-static const char* stack();
 
 namespace Parser {
   /* Formal grammar of S expression
@@ -43,8 +48,9 @@ namespace Parser {
     return current_status;
   }
   static void parse();
- enum Symbol : H {
-    $ = Tokenizer::$, _, E, X, T, L, _1, // _ ::= E $
+  enum Symbol : H {
+    $ = Tokenizer::$, _, E, X, T, L, //
+    _1, // _ ::= E $
     E1, // E ::= ' E
     E2, // E ::= X T
     X1, // X ::= ( L )
@@ -58,22 +64,22 @@ namespace Parser {
     if (s < 0)
       return S(s).asAtom();
     switch (s) {
+      case 0: return "()";
       case Parser::$: return "$";
       case Parser::_: return "_";
       case Parser::E: return "E";
       case Parser::X: return "X";
       case Parser::T: return "T";
       case Parser::L: return "L";
-      case Parser::_1: return "_ ::= E $";
-      case Parser::E1: return "' E";
-      case Parser::E2: return "X T";
-      case Parser::X1: return "( L )";
-      case Parser::X2: return "a";
-      case Parser::T1: return "T ::= . X";
-      case Parser::T2: return "T ::= ''";
-      case Parser::L1: return "L ::= E L";
-      case Parser::L2: return "L ::= ''";
-      case 0: return "()";
+      case Parser::_1: return "/_ ::= E $/";
+      case Parser::E1: return "/' E/";
+      case Parser::E2: return "/X T/";
+      case Parser::X1: return "/( L )/";
+      case Parser::X2: return "/S::= a/";
+      case Parser::T1: return "/T::= . X/";
+      case Parser::T2: return "/T ::= ''/";
+      case Parser::L1: return "/L ::= E L/";
+      case Parser::L2: return "/L ::= ''/";
     }
     std::ostringstream o;
     if (s < 127)
@@ -83,7 +89,7 @@ namespace Parser {
         o << '/' << (int) s << '/';
     else
       o << (int) s;
-    return o.str().c_str();
+    return strdup(o.str().c_str());
   }
   extern void supply(char *buffer) {
     D(buffer);
@@ -109,8 +115,7 @@ namespace Parser {
     while (!Stack::empty()) {
       Symbol token = (Symbol) Tokenizer::get();
       Symbol top  = (Symbol) Stack::pop();
-      D("LOOP", current, prev, token, top);
-      D("LOOP", !current, !prev, !token, !top, stack());
+      D("LOOP", !token, !top, stack(), !current, !prev,);
       if (token <= 0 && top == 0) {
         D("ATOM", !token, !(top));
         continue;
@@ -120,29 +125,29 @@ namespace Parser {
         continue;
       }
       Tokenizer::unget();
-      D("UNGET", !(Tokenizer::get()));
-      Tokenizer::unget();
-      D("REGET", !token, !top);
       switch (top) {
         case _:
           D(_, stack(), !token, !top);
           if (token == '\'' || token == '(' || token < 0) {
-            Stack::push(_1, E, $);
+            D(_1);
             D(stack());
+            Stack::push(E, $, _1);
+            D(stack(),!_1);
             continue;
           }
           break;
         case _1:
+          D(_, stack(), !token, !top);
           continue;
         case E:
           D(E, !token, !top);
           if (token == '\'') {
-            Stack::push(E1, '\'', E);
+            Stack::push('\'', E, E1);
             D(stack());
             continue;
           }
           if (token == '(' || token <= 0) {
-            Stack::push(E2, X, T);
+            Stack::push(X, T, E2);
             D(stack());
             continue;
           }
@@ -159,14 +164,14 @@ namespace Parser {
           continue;
         case X:
           if (token == '(') {
-            Stack::push(X1, '(', L, ')');
+            Stack::push('(', L, ')', X1);
             D(stack());
             continue;
           }
           if (token <= 0) {
             prev = current;
             current = token;
-            Stack::push(X2, 0);
+            Stack::push(0, X2);
             D(stack());
             continue;
           }
@@ -181,7 +186,7 @@ namespace Parser {
           }
           continue;
           if (token == '.') {
-            Stack::push(T2, '.', X);
+            Stack::push('.', X, T2);
             D(stack());
             continue;
           }
@@ -195,7 +200,7 @@ namespace Parser {
           continue;
         case L:
           if (exists(token,"'(") || token <= 0) {
-            Stack::push(L1, E, L);
+            Stack::push(E, L, L1);
             D(stack());
             continue;
           }
@@ -223,10 +228,20 @@ namespace Parser {
   }
 
 }
-const char* stack() {
-  std::ostringstream o;
-  using namespace Parser;
+
+#ifdef DEBUG
+#include <string.h>
+
+std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
+  return os << o.str();
+}
+
+String stack() {
+  static std::ostringstream o;
+  o.str("");
   o << "->";
+  D(o.str());
+  using namespace Parser;
   for (H h = Stack::top; h != 0;) {
     Pair p = S(h).asCons();
     o << !Symbol(p.data);
@@ -235,7 +250,8 @@ const char* stack() {
     o << " ";
   }
   o << "]]";
-  return o.str().c_str();
+  return strdup(o.str().c_str());
 }
+#endif
 
 

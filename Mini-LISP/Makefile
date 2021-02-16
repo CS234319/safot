@@ -20,6 +20,10 @@ CFLAGS += -MD -MP
 
 all: mini-lisp test
 
+stack-test.cc: stack.cc
+
+parser-test.cc: parser.cc
+
 %.o: %.cc
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c $<
 
@@ -35,5 +39,5 @@ test: test-main.o test.o tokenizer-test.o strings-test.o pairs-test.o parser-tes
 -include $(SRC:%.c=%.d)
 
 clean:
-		rm -fr $(OBJS) mini-lisp test *.o *~ *.backup 
+		rm -fr $(OBJS) mini-lisp test *.o *.d *~ *.backup 
 
