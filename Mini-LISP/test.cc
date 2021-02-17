@@ -3,6 +3,7 @@
 #include "mini-lisp.cc"
 #include "test.h"
 
+
 TEST(Comma, Two) {
   S a = S("A");
   EXPECT_TRUE(a.atom());
@@ -32,12 +33,17 @@ TEST(Comma, TwoStrings) {
   EXPECT_TRUE(exists("B",s));
 }
 
-
 TEST(List, Empty) {
   S s = list();  
   EXPECT_TRUE(s.islist());
   EXPECT_EQ(NIL,s);
 }
+
+TEST(List, Null) {
+  S s = list();  
+  EXPECT_TRUE(s.null());
+}
+
 
 TEST(List, Singleton) {
   const S s = list("A");  

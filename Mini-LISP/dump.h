@@ -1,5 +1,6 @@
 #ifndef DUMP_H_
 #define DUMP_H_
+extern bool dumping;
 
 // Make a FOREACH macro
 #define FE_0(WHAT, BETWEEN, ...)    <<""
@@ -14,13 +15,16 @@
 
 #define GET_MACRO(_0,_1,_2,_3,_4,_5,_6,_7, NAME,...) NAME 
 #define FOR_EACH(action,between, ...) \
-  GET_MACRO(_0,__VA_ARGS__,FE_7, FE_6,FE_5,FE_4,FE_3,FE_2,FE_1,FE_0)(action, between,__VA_ARGS__)
+  GET_MACRO(_0,__VA_ARGS__,FE_7, FE_6,FE_5,FE_4,FE_3,FE_2,FE_1,FE_0)\
+    (action, between,__VA_ARGS__)
 
 #include <iostream>
-#define LOCATION std::cerr << __FILE__  << "(" << __LINE__ << ")/" << __FUNCTION__ << "(): "
+#define LOCATE(X)  std::cerr << __FILE__  << "(" << __LINE__ << ")/" << __FUNCTION__ << "(): " << X
 #define DUMP(X) <<#X<<"="<<X
 #define SEP   <<"; " 
-#define D(...) LOCATION FOR_EACH(DUMP,SEP,__VA_ARGS__) << std::endl
+#define DDD(...) (FOR_EACH(DUMP,SEP,__VA_ARGS__) << std::endl)
+#define M(X,...) (!dumping ? (dumping = true, (LOCATE(X) DDD(__VA_ARGS__)), dumping=false) : 0)
+#define D(...) (M("",__VA_ARGS__))
 
 #if 0
 void main() {

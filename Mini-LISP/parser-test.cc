@@ -20,8 +20,8 @@ TEST(Parser, Initially) {
 
 TEST(Parser, AtomCharTokenizer) {
   t("A");
-  H h =  Tokenizer::next();
-  EXPECT_STREQ("A",S(h).asAtom()); 
+  H h = Tokenizer::next();
+  EXPECT_STREQ("A", S(h).asAtom());
 }
 
 TEST(Parser, AtomChar) {
@@ -31,32 +31,53 @@ TEST(Parser, AtomChar) {
   EXPECT_EQ(Status::accept, status());
 }
 
+extern std::ostream& operator<<(std::ostream &os, S s); 
+
+TEST(AST, AtomChar) {
+  supply("A");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
+  EXPECT_EQ(Status::accept, status());
+  EXPECT_STREQ("A", S(result()).asAtom());   
+}
+
+
 TEST(Parser, Empty) {
-  EXPECT_EQ(Status::ready, status());
   supply("");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, SingleTokenError) {
+TEST(Parser, SingleTokenErrorOpenParen) {
   supply("(");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
+}
+
+TEST(Parser, SingleTokenErrorCloseParen) {
   supply(")");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
+}
+
+TEST(Parser, SingleTokenErrorQuote) {
   supply("'");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
+}
+
+TEST(Parser, SingleTokenErrorPeriod) {
   supply(".");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
-  ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
+}
+
+TEST(Parser, SingleTokenErrorSquare) {
   supply("[");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
@@ -69,15 +90,153 @@ TEST(Parser, AtomLong) {
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
+
+TEST(AST, AtomLong) {
+  supply("Atom");
+  EXPECT_STREQ("ATOM", S(result()).asAtom());   
+}
+
+TEST(AST, List0) {
+  supply("()");
+  EXPECT_EQ(NIL, result());
+}
+
+TEST(AST, List1) {
+  supply("(HELLO)");
+  auto s = Parser::result();
+  D(s);
+  ASSERT_NE(NIL,s);
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_TRUE(islist(s));
+  EXPECT_STREQ("HELLO",car(s).asAtom());
+  EXPECT_EQ(NIL,cdr(s));
+}
+
+TEST(AST, List2) {
+  supply("(1 2)");
+  auto s = Parser::result();
+  D(s);
+  ASSERT_NE(NIL,s);
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_TRUE(islist(s));
+  EXPECT_STREQ("1",car(s).asAtom());
+  s = cdr(s);
+  EXPECT_STREQ("2",car(s).asAtom());
+  EXPECT_EQ(NIL,cdr(s));
+}
+
+TEST(AST, List3) {
+  supply("(X Y Z)");
+  auto s = Parser::result();
+  D(s);
+  ASSERT_NE(NIL,s);
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_TRUE(islist(s));
+  EXPECT_STREQ("X",car(s).asAtom());
+  s = cdr(s);
+  EXPECT_STREQ("Y",car(s).asAtom());
+  s = cdr(s);
+  EXPECT_STREQ("Z",car(s).asAtom());
+  EXPECT_EQ(NIL,cdr(s));
+}
+
+
+
 TEST(Parser, List0) {
-  EXPECT_EQ(Status::ready, status());
   supply("()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
+
+
+TEST(Parser, ListTokenizationGetNextTwice) {
+  Tokenizer::initialize(strdup("(a)"));
+  H token;
+  token = Tokenizer::get();
+  EXPECT_EQ(token, '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::get());
+  EXPECT_EQ($, Tokenizer::get());
+
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::next(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::next());
+  EXPECT_EQ($, Tokenizer::next());
+}
+
+TEST(Parser, ListTokenizationNextGet) {
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::next(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::next());
+  EXPECT_EQ($, Tokenizer::next());
+
+  Tokenizer::initialize(strdup("(a)"));
+  H token;
+  token = Tokenizer::get();
+  EXPECT_EQ(token, '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::get());
+  EXPECT_EQ($, Tokenizer::get());
+}
+
+TEST(Parser, ListTokenization) {
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::next(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::next());
+  EXPECT_EQ($, Tokenizer::next());
+
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::get(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::get());
+  EXPECT_EQ(')', Tokenizer::get());
+  EXPECT_EQ($, Tokenizer::get());
+}
+
 TEST(Parser, List1) {
-  EXPECT_EQ(Status::ready, status());
+  supply("(a)");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
+  EXPECT_EQ(Status::accept, status());
+}
+
+TEST(Parser, List1x) {
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::next(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::next());
+  EXPECT_EQ($, Tokenizer::next());
+
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::get(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::get());
+  EXPECT_EQ(')', Tokenizer::get());
+  EXPECT_EQ($, Tokenizer::get());
+
+  Tokenizer::initialize(strdup("(a)"));
+  H h;
+
+  h = Tokenizer::get();
+  D(h);
+  D(!Symbol(h));
+  EXPECT_EQ(h, '(');
+
+  h = Tokenizer::get();
+  D(h);
+  D(!Symbol(h));
+  EXPECT_STREQ(Strings::pool + h, "A");
+
+  h = Tokenizer::get();
+  D(h);
+  D(!Symbol(h));
+  EXPECT_EQ(h, ')');
+
   supply("(a)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
@@ -112,6 +271,42 @@ TEST(Parser, Pair) {
   EXPECT_EQ(Status::accept, status());
 }
 
+TEST(AST, Pair) {
+  supply("hello.world");
+  S s = Parser::result();
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_FALSE(islist(s));
+  EXPECT_STREQ("HELLO",car(s).asAtom());
+  EXPECT_STREQ("WORLD",cdr(s).asAtom());
+}
+
+TEST(Parser, PairInList) {
+  supply("(a.b)");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
+  EXPECT_EQ(Status::accept, status());
+}
+
+TEST(Parser, ListTokenizationWithGet) {
+  Tokenizer::initialize(strdup("(a)"));
+  H token;
+  token = Tokenizer::get();
+  EXPECT_EQ(token, '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::get());
+  EXPECT_EQ($, Tokenizer::get());
+}
+
+TEST(Parser, ListTokenizationNext) {
+  Tokenizer::initialize(strdup("(a)"));
+  EXPECT_EQ(Tokenizer::next(), '(');
+  EXPECT_STREQ("A", Strings::pool + Tokenizer::next());
+  EXPECT_EQ(')', Tokenizer::next());
+  EXPECT_EQ($, Tokenizer::next());
+}
+
+
 TEST(Parser, ParenPair) {
   supply("(a.b)");
   ASSERT_NE(Status::ready, status());
@@ -145,13 +340,14 @@ TEST(Parser, QuoteAtom) {
   EXPECT_EQ(Status::accept, status());
 }
 
-TEST(Parser, QList0) {
+TEST(Parser, QuotedListEmpty) {
   supply("'()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
-TEST(Parser, QList1) {
+
+TEST(Parser, QuotedListSingleton) {
   supply("'(a)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());

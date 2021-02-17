@@ -77,7 +77,6 @@ extern const S NIL,T, QUOTE;
 // Unary atomic functions
 extern S car(S);
 extern S cdr(S);
-extern S atom(S);
 extern S eval(S);
 
 // Binary atomic functions

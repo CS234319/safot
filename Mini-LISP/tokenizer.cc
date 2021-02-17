@@ -2,7 +2,7 @@
 #include "tokenizer.h"
 #include "dump.h"
 
-#define SILENT 1 
+#define SILENT 1
 #if SILENT
 #undef D
 #define D(...) 0
@@ -14,17 +14,6 @@ static char *head;
 static inline char& C() {
   return *head;
 }
-extern void initialize(char *buffer) {
-  head = buffer;
-}
-
-static char advance();
-static H nextAtom();
-static bool isToken();
-static bool isAtom();
-static bool isNewLine(); 
-static bool isIgnored();
-
 static H last; 
 static bool pending = false;
 
@@ -35,6 +24,18 @@ extern H get() {
   pending = false;
   return last;
 }
+
+extern void initialize(char *buffer) {
+  head = buffer;
+  pending = false;
+}
+
+static char advance();
+static H nextAtom();
+static bool isToken();
+static bool isAtom();
+static bool isNewLine(); 
+static bool isIgnored();
 
 extern H unget() {
   pending = true;
@@ -73,7 +74,6 @@ static char advance() {
   return C();
 }
 
-
 static H nextAtom() {
   D(head,isToken());
   const char * const begin = head;
@@ -85,6 +85,7 @@ static H nextAtom() {
   C() = '\0';
   H $ = Strings::allocate(begin);
   C() = c;
+  D($);
   return $;
 }
 

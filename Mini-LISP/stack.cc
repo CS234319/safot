@@ -4,7 +4,6 @@
 namespace Stack {
   H top = 0;
   void push(H data) {
-    D(data);
     top = Pairs::allocate(data,top);
   }
   void push(H h1,H h2) {

@@ -2,7 +2,7 @@ OBJS = mini-lisp.o strings.o pairs.o stack-trace.o main.o tokenizer.o parser.o s
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE
-	BUILD_MODE = run
+	BUILD_MODE = debug
 endif
 
 ifeq ($(BUILD_MODE),debug)
@@ -24,6 +24,8 @@ stack-test.cc: stack.cc
 
 parser-test.cc: parser.cc
 
+tokenzier-test.cc: tokenizer.cc
+
 %.o: %.cc
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c $<
 
@@ -33,7 +35,7 @@ parser-test.cc: parser.cc
 mini-lisp:	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
-test: test-main.o test.o tokenizer-test.o strings-test.o pairs-test.o parser-test.o stack-test.o stack-trace.o
+test: test-main.o test.o tokenizer-test.o strings-test.o pairs-test.o parser-test.o stack-test.o stack-trace.o dump.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 -include $(SRC:%.c=%.d)
