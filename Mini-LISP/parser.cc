@@ -72,15 +72,15 @@ namespace Parser {
       case Parser::X: return "X";
       case Parser::T: return "T";
       case Parser::L: return "L";
-      case Parser::_1: return "{_ ::= E $}";
-      case Parser::E1: return "{E ::= X T}";
-      case Parser::X1: return "{X ::= ' X}";
-      case Parser::X2: return "{S::= ( L )}";
-      case Parser::X3: return "{S::= a}";
-      case Parser::T1: return "{T::= . X}";
-      case Parser::T2: return "{T ::= ''}";
-      case Parser::L1: return "{L ::= E L}";
-      case Parser::L2: return "{L ::= ''}";
+      case Parser::_1: return "[_->E$]";
+      case Parser::E1: return "[E->XT]";
+      case Parser::X1: return "[X->'X]";
+      case Parser::X2: return "[S->(L)]";
+      case Parser::X3: return "[S->a]";
+      case Parser::T1: return "[T->.X]";
+      case Parser::T2: return "[T->'']";
+      case Parser::L1: return "[L->EL]";
+      case Parser::L2: return "[L->'']";
     }
     std::ostringstream o;
     if (s < 127)
@@ -114,7 +114,7 @@ namespace Parser {
       Symbol top  = (Symbol) Stack::pop();
       M("LOOP", current,~token, ~top, stack(),prev);
       if (atom(token) && top == 0) {
-        M("MATCH", ~token, ~(top));
+        M("MATCH",~token, ~(top));
         continue;
       }
       if (token == top) {
