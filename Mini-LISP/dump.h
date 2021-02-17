@@ -18,13 +18,19 @@ extern bool dumping;
   GET_MACRO(_0,__VA_ARGS__,FE_7, FE_6,FE_5,FE_4,FE_3,FE_2,FE_1,FE_0)\
     (action, between,__VA_ARGS__)
 
-#include <iostream>
-#define LOCATE(X)  std::cerr << __FILE__  << "(" << __LINE__ << ")/" << __FUNCTION__ << "(): " << X
-#define DUMP(X) <<#X<<"="<<X
+#define LOCATE(X)  std::cerr<<__FILE__<<"("<<__LINE__<<")/" <<__FUNCTION__ << "(): " << X
+#define DUMP(X) <<X
+#define DDD(...) FOR_EACH(DUMP,SEP,__VA_ARGS__) << std::endl
+#define xM(X,items...) (!dumping ? (dumping = true, (LOCATE(X) DDD(items)), dumping=false) : 0)
+#define M(X,items...) (!dumping ? (dumping = true, (LOCATE(X) DDD(items)), dumping=false) : 0)
+#define D(items...) M("",items)
 #define SEP   <<"; " 
-#define DDD(...) (FOR_EACH(DUMP,SEP,__VA_ARGS__) << std::endl)
-#define M(X,...) (!dumping ? (dumping = true, (LOCATE(X) DDD(__VA_ARGS__)), dumping=false) : 0)
-#define D(...) (M("",__VA_ARGS__))
+
+#include <iostream>
+
+// #define xDUMP(X) <<#X<<"="<<X
+//
+
 
 #if 0
 void main() {
