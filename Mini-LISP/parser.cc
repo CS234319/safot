@@ -47,8 +47,9 @@ namespace Parser {
   }
   static void parse();
   enum Symbol : H {
-    $ = Tokenizer::$, _, E, X, T, L, //
-    _1, // _ ::= E $
+    $ = Tokenizer::$, Start, Atom, // Special symbols, EOF, Start
+    E, X, T, L, 
+    Start1, // _ ::= E $
     E1, // E ::= X T
     X1, // X ::= ' X 
     X2, // X ::= ( L ) 
@@ -66,20 +67,21 @@ namespace Parser {
       return S(s).asAtom();
     switch (s) {
       case Parser::$: return "$";
-      case Parser::_: return "_";
+      case Parser::Start: return "Start";
+      case Parser::Atom: return "Atom";
       case Parser::E: return "E";
       case Parser::X: return "X";
       case Parser::T: return "T";
       case Parser::L: return "L";
-      case Parser::_1: return "[_->E$]";
-      case Parser::E1: return "[E->XT]";
-      case Parser::X1: return "[X->'X]";
-      case Parser::X2: return "[X->(L)]";
-      case Parser::X3: return "[X->a]";
-      case Parser::T1: return "[T->.X]";
-      case Parser::T2: return "[T->'']";
-      case Parser::L1: return "[L->EL]";
-      case Parser::L2: return "[L->'']";
+      case Parser::Start1: return "Start:_->E$";
+      case Parser::E1: return "E1:E->XT";
+      case Parser::X1: return "X1:X->'X";
+      case Parser::X2: return "X2:X->(L)";
+      case Parser::X3: return "X3:X->Atom";
+      case Parser::T1: return "T1:T->.X";
+      case Parser::T2: return "T2:T->''";
+      case Parser::L1: return "L1:L->EL";
+      case Parser::L2: return "L2:L->''";
     }
     std::ostringstream o;
     if (s < 127)
@@ -100,143 +102,146 @@ namespace Parser {
   extern void reset() {
     while (!Stack::empty())
       Stack::pop();
-    Stack::push(_);
-    D(stack(), _);
+    Stack::push(Start);
     current_status = ready;
   }
 
-  void shift(Symbol head, Symbol rule, H h1, H h2, H h3) {
-    _M("Shift",~head,~rule, h1, h2, h3);
-    Stack::push(h1, h2, h3, rule);
+  Symbol token;
+  Symbol top;
+
+  String h2s(H h) {
+    return ~*reinterpret_cast<Symbol*>(&h);
   }
 
-  void shift(Symbol head, Symbol rule, Symbol s1, Symbol s2) {
-    _M("Shift",~head,~rule, ~s1, ~s2);
-    Stack::push(s1, s2, rule);
+  void reduce() {
+    M4("Reduce",~top,~token,stack());
   }
 
-  void shift(Symbol head, Symbol rule, H h) {
-    _M("Shift",~head,~rule, h);
-    Stack::push(h, rule);
+  void shift(Symbol rule, H h1, H h2, H h3) {
+    M4("Shift",~top,~rule,~token, h2s(h1), h2s(h2), h2s(h3));
+    Stack::push(h1, h2, h3, rule, current);
   }
+
+  void shift(Symbol rule, H h1, H h2) {
+    M4("Shift",~top,~token,~rule, h2s(h1), h2s(h2));
+    Stack::push(h1, h2, rule, current);
+  }
+
+  void shift(Symbol rule, H h) {
+    M4("Shift",~top,~token,~rule, h2s(h), current);
+    Stack::push(h, rule, current);
+  }
+
+  void shift(Symbol rule) {
+    M4("Shift",~top,~token,~rule);
+    Stack::push(rule, current);
+  }
+
 
   static void parse() {
     D(stack());
     while (!Stack::empty()) {
-      M("LOOP", current, prev, stack());
-      Symbol token = (Symbol) Tokenizer::get();
-      Symbol top  = (Symbol) Stack::pop();
-      M("POP", ~token, ~top);
-      if (atom(token) && top == 0) {
-        M("Match",~token, ~top);
+      M1("LOOP", current, prev, stack());
+      token = (Symbol) Tokenizer::get();
+      top  = (Symbol) Stack::pop();
+      M1("POP", ~token, ~top);
+      if (atom(token) && top == Atom) {
+        current = token;
         continue;
       }
       if (token == top) {
-        M("Match", ~token,~top);
+        M1("Match", ~token,~top);
         continue;
       }
       Tokenizer::unget();
       switch (top) {
-        case _:
+        case Start:
           if (token == '\'' || token == '(' || atom(token)) {
-            shift(top, _1, E, $); 
+            shift(Start1, E, $); 
             continue;
           }
           break;
-        case _1:
-          _M("Reduce",~_, stack(), ~token, ~top);
+        case Start1:
+          reduce();
+          Stack::pop();
           continue;
         case E:
           if (token == '\'' || token == '(' || atom(token)) {
-            shift(top, E1, X, T, current.index);
-            Stack::push(X, T, E1, current);
+            shift(E1, X, T);
             continue;
           }
           break;
         case E1:
-          _M("Reduce",~E1);
+          reduce();
           prev=Stack::pop();
           continue;
         case X:
-          _M("Shift",~X);
           if (token == '\'') {
-            Stack::push('\'', X, X1);
-            D(stack());
+            shift(X1,'\'');
             continue;
           }
           if (token == '(') {
-            Stack::push('(', L, ')', X2);
+            shift(X2, '(', L, ')');
             continue;
           }
           if (atom(token)) {
-            prev = current;
-            current = token;
-            M("Set", current, prev);
-            Stack::push(0, X3);
+            shift(X3,Atom);
             continue;
           }
           break;
         case X1:
-          _M("Reduce",~X1);
-          current = list(QUOTE,current);
-          M("Set", current, prev);
+          reduce();
+          current = list(QUOTE,Stack::pop());
           continue;
         case X2:
-          _M("Reduce",~X2);
+          reduce(); 
+          current = Stack::pop();
           continue;
         case X3:
-          _M("Reduce",~X3);
+          reduce(); 
+          current = Stack::pop();
           continue;
         case T:
-          _M("Shift",~T);
           if (exists(token, "()'") || token == $ || atom(token)) {
-            Stack::push(T1);
-            D(stack());
+            shift(T1);
             continue;
           }
           if (token == '.') {
-            Stack::push('.', X, T2);
-            D(stack());
+            shift(T2, '.', X);
             continue;
           }
           break;
         case T1:
-          // This is the case that the T part is empty.
-          // in this case, the top stack element must be X.
-          _M("Reduce",~T1);
-          Stack::pop();
+          reduce(); 
+          current = Stack::pop();
           continue;
         case T2:
-          _M("Reduce",~T2);
-          current = cons(prev, current);
-          M("Set", current);
+          reduce(); 
+          current = cons(Stack::pop(), current);
           continue;
         case L:
-          _M("Shift",~L);
           if (exists(token,"'(") || atom(token)) {
-            Stack::push(E, L, L1);
+            shift(L1, E, L);
             D(stack());
             continue;
           }
           if (token == ')') {
-            Stack::push(L2);
+            shift(L2);
             D(stack());
             continue;
           }
           break;
         case L1:
-          _M("Reduce",~L1);
-          current = cons(prev, current);
-          M("Set", current);
+          reduce(); 
+          current = cons(current, Stack::pop());
+          M1("Set", current);
           continue;
         case L2:
-          _M("Reduce",~L2);
-          prev = current;
-          current = NIL;
-          M("Set", current, prev);
+          reduce(); 
+          current = Stack::pop();
           continue;
       }
-      M("REJECT", ~token, ~top, stack());
+      M1("REJECT", ~token, ~top, stack());
       current_status = reject;
       return;
     }
@@ -254,7 +259,7 @@ std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
 String stack() {
   static std::ostringstream o;
   o.str("");
-  o << "->";
+  o << "";
   using namespace Parser;
   for (H h = Stack::top; h != 0;) {
     Pair p = S(h).asCons();

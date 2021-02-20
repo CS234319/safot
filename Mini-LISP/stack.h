@@ -5,6 +5,7 @@ namespace Stack {
   void push(H,H);
   void push(H,H,H);
   void push(H,H,H,H);
+  void push(H,H,H,H,H);
   extern H top;
   bool empty();
 }

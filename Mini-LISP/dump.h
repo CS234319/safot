@@ -20,9 +20,11 @@ extern bool dumping;
 
 #define dITERATE(...) ITERATE(DUMMY,## __VA_ARGS__) 
 
-#define D(...)      BEFORE                           dITERATE(__VA_ARGS__) AFTER
-#define M(X,...)    BEFORE __VALUE(X)                dITERATE(__VA_ARGS__) AFTER
-#define _M(X,Y,...) BEFORE __VALUE(X) __VALUE(Y)     dITERATE(__VA_ARGS__) AFTER
+#define D(...)        BEFORE                                      dITERATE(__VA_ARGS__) AFTER
+#define M1(X,...)     BEFORE __VALUE(X)                           dITERATE(__VA_ARGS__) AFTER
+#define M2(X,Y,...)   BEFORE __VALUE(X) __VALUE(Y)                dITERATE(__VA_ARGS__) AFTER
+#define M3(X,Y,Z,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z)     dITERATE(__VA_ARGS__) AFTER
+#define M4(X,Y,Z,W,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W)    dITERATE(__VA_ARGS__) AFTER
 
 #define LOCATE  std::cerr\
   <<__FILE__\
@@ -30,7 +32,7 @@ extern bool dumping;
   <<__FUNCTION__ << "(): "
 
 #define __EXPRESSION(X) <<#X<<"="<<X<<"; "
-#define __VALUE(X) <<X<<"/"
+#define __VALUE(X) <<X<<","
 #define __SEP <<"; "
 
 

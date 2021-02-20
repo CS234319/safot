@@ -25,7 +25,7 @@ TEST(Parser, AtomCharTokenizer) {
 }
 
 TEST(Parser, AtomChar) {
-  supply("A");
+  supply("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());

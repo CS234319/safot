@@ -18,6 +18,10 @@ namespace Stack {
     push(h4);
     push(h1, h2, h3);
   }
+  void push(H h1,H h2, H h3, H h4, H h5) {
+    push(h5);
+    push(h1, h2, h3, h4);
+  }
   bool empty() { return top == 0; } 
   H pop() {
     normally(top != 0);
