@@ -62,10 +62,9 @@ namespace Parser {
     return s <= 0;
   }
   String operator ~(Symbol s) {
-    if (s < 0)
+    if (atom(s))
       return S(s).asAtom();
     switch (s) {
-      case 0: return "()";
       case Parser::$: return "$";
       case Parser::_: return "_";
       case Parser::E: return "E";
@@ -83,7 +82,6 @@ namespace Parser {
       case Parser::L2: return "[L->'']";
     }
     std::ostringstream o;
-    o << int(s);
     if (s < 127)
       if (s > ' ')
         o << (char) s;
@@ -107,10 +105,25 @@ namespace Parser {
     current_status = ready;
   }
 
+  void shift(Symbol head, Symbol rule, H h1, H h2, H h3) {
+    _M("Shift",~head,~rule, h1, h2, h3);
+    Stack::push(h1, h2, h3, rule);
+  }
+
+  void shift(Symbol head, Symbol rule, Symbol s1, Symbol s2) {
+    _M("Shift",~head,~rule, ~s1, ~s2);
+    Stack::push(s1, s2, rule);
+  }
+
+  void shift(Symbol head, Symbol rule, H h) {
+    _M("Shift",~head,~rule, h);
+    Stack::push(h, rule);
+  }
+
   static void parse() {
     D(stack());
     while (!Stack::empty()) {
-      M("LOOP", stack());
+      M("LOOP", current, prev, stack());
       Symbol token = (Symbol) Tokenizer::get();
       Symbol top  = (Symbol) Stack::pop();
       M("POP", ~token, ~top);
@@ -125,10 +138,8 @@ namespace Parser {
       Tokenizer::unget();
       switch (top) {
         case _:
-          ~_;
-          _M("Shift",~_);
           if (token == '\'' || token == '(' || atom(token)) {
-            Stack::push(E, $, _1);
+            shift(top, _1, E, $); 
             continue;
           }
           break;
@@ -136,8 +147,8 @@ namespace Parser {
           _M("Reduce",~_, stack(), ~token, ~top);
           continue;
         case E:
-          _M("Shift",~E);
           if (token == '\'' || token == '(' || atom(token)) {
+            shift(top, E1, X, T, current.index);
             Stack::push(X, T, E1, current);
             continue;
           }
