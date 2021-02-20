@@ -1,4 +1,4 @@
-OBJS = mini-lisp.o dump.o strings.o pairs.o stack-trace.o main.o tokenizer.o parser.o stack.o
+OBJS = mini-lisp.o dump.o strings.o pairs.o stack-trace.o main.o tokenizer.o parser.o stack.o io.o
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE

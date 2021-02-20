@@ -62,6 +62,23 @@ namespace Parser {
   static auto atom(Symbol s) {
     return s <= 0;
   }
+
+  bool isRule(Symbol s) {
+    switch (s) {
+      case Parser::Start1: 
+      case Parser::E1: return true;
+      case Parser::X1: return true;
+      case Parser::X2: return true;
+      case Parser::X3: return true;
+      case Parser::T1: return true;
+      case Parser::T2: return true;
+      case Parser::L1: return true;
+      case Parser::L2: return true;
+      return true; 
+    }
+    return false;
+  }
+
   String operator ~(Symbol s) {
     if (atom(s))
       return S(s).asAtom();
@@ -93,6 +110,8 @@ namespace Parser {
       o << (int) s;
     return strdup(o.str().c_str());
   }
+
+
   extern void supply(char *buffer) {
     D(buffer);
     Tokenizer::initialize(buffer);
@@ -146,11 +165,12 @@ namespace Parser {
       top  = (Symbol) Stack::pop();
       M1("POP", ~token, ~top);
       if (atom(token) && top == Atom) {
+        M1("Match Atom", ~token,~top);
         current = token;
         continue;
       }
       if (token == top) {
-        M1("Match", ~token,~top);
+        M1("Match Ignore", ~token,~top);
         continue;
       }
       Tokenizer::unget();
@@ -199,7 +219,7 @@ namespace Parser {
           continue;
         case X3:
           reduce(); 
-          current = Stack::pop();
+          Stack::pop();
           continue;
         case T:
           if (exists(token, "()'") || token == $ || atom(token)) {
@@ -213,11 +233,11 @@ namespace Parser {
           break;
         case T1:
           reduce(); 
-          current = Stack::pop();
+          current = cons(Stack::pop(), current);
           continue;
         case T2:
           reduce(); 
-          current = cons(Stack::pop(), current);
+          Stack::pop();
           continue;
         case L:
           if (exists(token,"'(") || atom(token)) {
@@ -251,6 +271,7 @@ namespace Parser {
 }
 
 #ifdef DEBUG
+#include "io.h"
 #include <string.h>
 std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
   return os << o.str();
@@ -258,17 +279,23 @@ std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
 
 String stack() {
   static std::ostringstream o;
+  bool afterRule = false;
   o.str("");
-  o << "";
+  o << "[";
   using namespace Parser;
   for (H h = Stack::top; h != 0;) {
     Pair p = S(h).asCons();
-    o << ~Symbol(p.data);
+    if (afterRule) 
+      afterRule = false,o << S(h.data);
+    else 
+      o << ~Symbol(p.data);
+    if (isRule(h2s(h))) 
+      afterRule = true;
     if ((h = p.next) == 0)
       break;
     o << " ";
   }
-  o << "]]";
+  o << "]";
   return strdup(o.str().c_str());
 }
 #endif

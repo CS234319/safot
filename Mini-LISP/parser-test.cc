@@ -34,11 +34,11 @@ TEST(Parser, AtomChar) {
 extern std::ostream& operator<<(std::ostream &os, S s); 
 
 TEST(AST, AtomChar) {
-  supply("A");
+  supply("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("A", S(result()).asAtom());   
+  EXPECT_STREQ("Z", S(result()).asAtom());   
 }
 
 

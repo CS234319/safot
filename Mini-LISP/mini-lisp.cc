@@ -33,27 +33,7 @@ auto operator ,(String s1, const S s2) {
   return (S(s1), s2);
 }
 
-#include <iostream>
-std::ostream& operator<<(std::ostream &os, Pair p) {
-  return os << "[" << p.car << "." << p.cdr << "]";
-}
 
-std::ostream& operator<<(std::ostream &os, S s) {
-  if (s.null())
-    return os << "nil";
-  if (s.atom())
-    return os << s.asAtom();
-  if (!islist(s))
-    return os << "(" << car(s) << "." << cdr(s) << ")";
-  os << "(";
-  for (;;) {
-    os << S(s.car());
-    if ((s = s.cdr()).null())
-      break;
-    os << " ";
-  }
-  return os << ")";
-}
 bool eq(S s1, S s2) {
   D(s1, s2);
   if (not (s1.atom()) or not (s2.atom()))
@@ -64,6 +44,7 @@ bool eq(S s1, S s2) {
   D(pool + s1.index, pool + s2.index);
   return Strings::eq(pool + s1.index, pool + s2.index);
 }
+
 
 S car(S s) {
   normally(!s.atom());
