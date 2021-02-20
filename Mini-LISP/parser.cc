@@ -75,14 +75,15 @@ namespace Parser {
       case Parser::_1: return "[_->E$]";
       case Parser::E1: return "[E->XT]";
       case Parser::X1: return "[X->'X]";
-      case Parser::X2: return "[S->(L)]";
-      case Parser::X3: return "[S->a]";
+      case Parser::X2: return "[X->(L)]";
+      case Parser::X3: return "[X->a]";
       case Parser::T1: return "[T->.X]";
       case Parser::T2: return "[T->'']";
       case Parser::L1: return "[L->EL]";
       case Parser::L2: return "[L->'']";
     }
     std::ostringstream o;
+    o << int(s);
     if (s < 127)
       if (s > ' ')
         o << (char) s;
@@ -107,46 +108,46 @@ namespace Parser {
   }
 
   static void parse() {
-    stack();
     D(stack());
     while (!Stack::empty()) {
+      M("LOOP", stack());
       Symbol token = (Symbol) Tokenizer::get();
       Symbol top  = (Symbol) Stack::pop();
-      M("LOOP", current,~token, ~top, stack(),prev);
+      M("POP", ~token, ~top);
       if (atom(token) && top == 0) {
-        M("MATCH",~token, ~(top));
+        M("Match",~token, ~top);
         continue;
       }
       if (token == top) {
-        D("MATCH", ~token, ~(top));
+        M("Match", ~token,~top);
         continue;
       }
       Tokenizer::unget();
       switch (top) {
         case _:
-          M("Shift",~_, stack(), ~token, ~top);
+          ~_;
+          _M("Shift",~_);
           if (token == '\'' || token == '(' || atom(token)) {
-            D(stack());
             Stack::push(E, $, _1);
-            D(stack());
             continue;
           }
           break;
         case _1:
-          M("Reduce",~_, stack(), ~token, ~top);
+          _M("Reduce",~_, stack(), ~token, ~top);
           continue;
         case E:
-          M("Shift",~E, ~token, ~top);
+          _M("Shift",~E);
           if (token == '\'' || token == '(' || atom(token)) {
-            Stack::push(X, T, E1);
+            Stack::push(X, T, E1, current);
             continue;
           }
           break;
         case E1:
-          D("Reduce",~E1, stack(), ~token, ~top);
+          _M("Reduce",~E1);
+          prev=Stack::pop();
           continue;
         case X:
-          D("Shift",~X, stack(), ~token, ~top);
+          _M("Shift",~X);
           if (token == '\'') {
             Stack::push('\'', X, X1);
             D(stack());
@@ -159,23 +160,24 @@ namespace Parser {
           if (atom(token)) {
             prev = current;
             current = token;
+            M("Set", current, prev);
             Stack::push(0, X3);
             continue;
           }
           break;
         case X1:
-          M("Reduce",~X1, stack(), ~token, ~top);
+          _M("Reduce",~X1);
           current = list(QUOTE,current);
-          D(~X1, stack(), current, ~token, ~top);
+          M("Set", current, prev);
           continue;
         case X2:
-          M("Reduce",~X2, stack(), current, ~token, ~top);
+          _M("Reduce",~X2);
           continue;
         case X3:
-          M("Reduce",~X3, stack(), current, ~token, ~top);
+          _M("Reduce",~X3);
           continue;
         case T:
-          M("Shift",~T, stack(), ~token, ~top);
+          _M("Shift",~T);
           if (exists(token, "()'") || token == $ || atom(token)) {
             Stack::push(T1);
             D(stack());
@@ -190,15 +192,16 @@ namespace Parser {
         case T1:
           // This is the case that the T part is empty.
           // in this case, the top stack element must be X.
-          D("Reduce",~T1, stack(), ~token, ~top);
+          _M("Reduce",~T1);
           Stack::pop();
           continue;
         case T2:
-          D("Reduce",~T2, stack(), ~token, ~top);
+          _M("Reduce",~T2);
           current = cons(prev, current);
+          M("Set", current);
           continue;
         case L:
-          D("Shift",~L, stack(), ~token, ~top);
+          _M("Shift",~L);
           if (exists(token,"'(") || atom(token)) {
             Stack::push(E, L, L1);
             D(stack());
@@ -211,16 +214,18 @@ namespace Parser {
           }
           break;
         case L1:
-          D("Reduce",~L1, stack(), ~token, ~top);
+          _M("Reduce",~L1);
           current = cons(prev, current);
+          M("Set", current);
           continue;
         case L2:
-          D("Reduce",~L2, stack(), ~token, ~top);
+          _M("Reduce",~L2);
           prev = current;
           current = NIL;
+          M("Set", current, prev);
           continue;
       }
-      D("REJECT", ~token, ~top, stack());
+      M("REJECT", ~token, ~top, stack());
       current_status = reject;
       return;
     }

@@ -128,18 +128,18 @@ TEST(AST, List2) {
 }
 
 TEST(AST, List3) {
-  supply("(X Y Z)");
+  supply("(A B C)");
   auto s = Parser::result();
   D(s);
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("X",car(s).asAtom());
+  EXPECT_STREQ("A",car(s).asAtom());
   s = cdr(s);
-  EXPECT_STREQ("Y",car(s).asAtom());
+  EXPECT_STREQ("B",car(s).asAtom());
   s = cdr(s);
-  EXPECT_STREQ("Z",car(s).asAtom());
+  EXPECT_STREQ("C",car(s).asAtom());
   EXPECT_EQ(NIL,cdr(s));
 }
 

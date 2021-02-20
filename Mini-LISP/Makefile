@@ -22,6 +22,8 @@ all: mini-lisp test
 
 stack-test.cc: stack.cc
 
+dump.cc: dump.h
+
 parser-test.cc: parser.cc
 
 tokenzier-test.cc: tokenizer.cc
@@ -38,7 +40,8 @@ mini-lisp:	$(OBJS)
 test: test-main.o test.o tokenizer-test.o strings-test.o pairs-test.o parser-test.o stack-test.o stack-trace.o dump.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
--include $(SRC:%.c=%.d)
+# -include $(SRC:%.c=%.d)
+
 
 clean:
 		rm -fr $(OBJS) mini-lisp test *.o *.d *~ *.backup 

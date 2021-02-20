@@ -24,7 +24,7 @@ typedef int16_t H; // Half a word including 16 bits.
 
 representation Pair { // Representation of a dotted pair
   perspective(W cons: 32)
-  perspective(H car,cdr :16)
+  perspective(H car, cdr :16)
   perspective(H data, next :16)
 };
 
