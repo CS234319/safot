@@ -126,24 +126,26 @@ namespace Parser {
     M4("Reduce",~top,~token,stack());
   }
 
+  void shift(Symbol rule) {
+    M4("Shift",~rule,"on", ~token, current);
+    Stack::push(rule, current);
+  }
+
+
   void shift(Symbol rule, H h1, H h2, H h3) {
-    M4("Shift",~top,~rule,~token, current, h2s(h1), h2s(h2), h2s(h3));
-    Stack::push(h1, h2, h3, rule, current);
+    shift(rule);
+    Stack::push(h1, h2, h3);
   }
 
   void shift(Symbol rule, H h1, H h2) {
-    M4("Shift",~top,~token,~rule, current, h2s(h1), h2s(h2));
-    Stack::push(h1, h2, rule, current);
+    shift(rule);
+    Stack::push(h1, h2);
   }
 
   void shift(Symbol rule, H h) {
-    M4("Shift",~top,~token,~rule, current, h2s(h), current);
-    Stack::push(h, rule, current);
-  }
-
-  void shift(Symbol rule) {
-    M4("Shift",~top,~token,~rule, current);
-    Stack::push(rule, current);
+    shift(rule);
+    Stack::push(h);
+    D(stack();
   }
 
 
@@ -156,6 +158,7 @@ namespace Parser {
       M1("POP", ~token, ~top);
       if (atom(token) && top == Atom) {
         M1("Match Atom", ~token,~top);
+        current = token;
         continue;
       }
       if (token == top) {

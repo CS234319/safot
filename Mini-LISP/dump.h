@@ -32,7 +32,7 @@ extern bool dumping;
   <<__FUNCTION__ << "(): "
 
 #define __EXPRESSION(X) <<#X<<"="<<X<<"; "
-#define __VALUE(X) <<X<<","
+#define __VALUE(X) <<X<<" "
 #define __SEP <<"; "
 
 
