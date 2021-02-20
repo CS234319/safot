@@ -14,6 +14,12 @@ auto supply(const char *s) {
 }
 using namespace Parser;
 
+TEST(Symbol, isRule) {
+  EXPECT_TRUE(isRule(Symbol::E1));
+  EXPECT_FALSE(isRule(Symbol::E));
+}
+
+
 TEST(Parser, Initially) {
   EXPECT_EQ(Status::ready, status());
 }

@@ -35,7 +35,7 @@ namespace Parser {
 
    */
 
-  S current, prev;
+  S current = NIL;
   extern S result() {
     return current; 
   }
@@ -49,6 +49,7 @@ namespace Parser {
   enum Symbol : H {
     $ = Tokenizer::$, Start, Atom, // Special symbols, EOF, Start
     E, X, T, L, 
+    MIN_RULE, // DUMMY 
     Start1, // _ ::= E $
     E1, // E ::= X T
     X1, // X ::= ' X 
@@ -58,25 +59,14 @@ namespace Parser {
     T2, // T ::= ''
     L1, // L ::= E L
     L2, // L ::= ''
+    MAX_RULE // DUMMY
   };
   static auto atom(Symbol s) {
     return s <= 0;
   }
 
-  bool isRule(Symbol s) {
-    switch (s) {
-      case Parser::Start1: 
-      case Parser::E1: return true;
-      case Parser::X1: return true;
-      case Parser::X2: return true;
-      case Parser::X3: return true;
-      case Parser::T1: return true;
-      case Parser::T2: return true;
-      case Parser::L1: return true;
-      case Parser::L2: return true;
-      return true; 
-    }
-    return false;
+  bool isRule(int i) {
+    return i> MIN_RULE && i < MAX_RULE;  
   }
 
   String operator ~(Symbol s) {
@@ -137,22 +127,22 @@ namespace Parser {
   }
 
   void shift(Symbol rule, H h1, H h2, H h3) {
-    M4("Shift",~top,~rule,~token, h2s(h1), h2s(h2), h2s(h3));
+    M4("Shift",~top,~rule,~token, current, h2s(h1), h2s(h2), h2s(h3));
     Stack::push(h1, h2, h3, rule, current);
   }
 
   void shift(Symbol rule, H h1, H h2) {
-    M4("Shift",~top,~token,~rule, h2s(h1), h2s(h2));
+    M4("Shift",~top,~token,~rule, current, h2s(h1), h2s(h2));
     Stack::push(h1, h2, rule, current);
   }
 
   void shift(Symbol rule, H h) {
-    M4("Shift",~top,~token,~rule, h2s(h), current);
+    M4("Shift",~top,~token,~rule, current, h2s(h), current);
     Stack::push(h, rule, current);
   }
 
   void shift(Symbol rule) {
-    M4("Shift",~top,~token,~rule);
+    M4("Shift",~top,~token,~rule, current);
     Stack::push(rule, current);
   }
 
@@ -160,13 +150,12 @@ namespace Parser {
   static void parse() {
     D(stack());
     while (!Stack::empty()) {
-      M1("LOOP", current, prev, stack());
+      M1("LOOP", current, stack());
       token = (Symbol) Tokenizer::get();
       top  = (Symbol) Stack::pop();
       M1("POP", ~token, ~top);
       if (atom(token) && top == Atom) {
         M1("Match Atom", ~token,~top);
-        current = token;
         continue;
       }
       if (token == top) {
@@ -193,7 +182,7 @@ namespace Parser {
           break;
         case E1:
           reduce();
-          prev=Stack::pop();
+          Stack::pop();
           continue;
         case X:
           if (token == '\'') {
@@ -205,6 +194,7 @@ namespace Parser {
             continue;
           }
           if (atom(token)) {
+            current = token;
             shift(X3,Atom);
             continue;
           }
@@ -283,15 +273,18 @@ String stack() {
   o.str("");
   o << "[";
   using namespace Parser;
+  Symbol::E1 < Symbol::L2;
   for (H h = Stack::top; h != 0;) {
     Pair p = S(h).asCons();
+    H data = p.data;
+    H next = p.next;
     if (afterRule) 
-      afterRule = false,o << S(h.data);
+      afterRule = false,o << S(data);
     else 
-      o << ~Symbol(p.data);
-    if (isRule(h2s(h))) 
+      o << ~Symbol(data);
+    if (isRule(data)) 
       afterRule = true;
-    if ((h = p.next) == 0)
+    if ((h = next) == 0)
       break;
     o << " ";
   }
