@@ -1796,7 +1796,7 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
 \end{LISP}
-הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת
+הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת ב־\T|xs|. 
 על פי הגדרה זו, הפונקציה \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים
 המסומנת ב-\T|xs|, ומחזירה~t אם האטום x מצוי בין פריטי הרשימה-\T|xs| ו-\T|nil|
 אחרת.
