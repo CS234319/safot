@@ -1936,7 +1936,7 @@ defun, המשמשת להגדרת פונקציות חדשות, כדי להגדי�
 המוסיפה פריט בסופה של רשימה \begin{LISP}
 (defun append(x xs) ; append item x to end of list of xs
   (cond ((null xs) ; no more xs, recursion base¢…¢
-          (x)) ; ¢…¢ return a list containing x
+          (cons x nil)) ; ¢…¢ return a list containing x
         (t ; recursive call
           (cons
             (car xs) ; prepend first of xs to¢…¢
@@ -1947,7 +1947,7 @@ defun, המשמשת להגדרת פונקציות חדשות, כדי להגדי�
 ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
 \begin{LISP}
 (lambda (x xs)
-  (cond ((null xs) (x))
+  (cond ((null xs) (cons x nil))
         (t (cons
               (car xs)
               (append x (cdr xs))))))
