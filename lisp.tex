@@ -2284,8 +2284,8 @@ quote לרשימת ה-a-list באמצעות set
 לפונקציה \E|eval|. נגדיר לדוגמה את הפונקציה setq אשר מאפשרת לקשור ערך לאטום ללא
 צורך לבצע quoting על שם האטום
 \begin{LISP}
-(ndefun setq(atom value)
-  (set atom (eval value)))
+(ndefun setq(a value)
+  (set a (eval value)))
 \end{LISP}
 השימוש בסמנטיקה שהיא normal אינו מתעורר רק בהגדרת פונקציות כמו quote ו-defun
 המשמשות לביצוע הגדרות. נגדיר למשל את הפונקציה \T|?:| אשר מתנהגת באופן דומה
