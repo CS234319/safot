@@ -1,3 +1,4 @@
+
 #include "parser.h"
 #include "stack.h"
 #include "tokenizer.h"
@@ -61,6 +62,11 @@ namespace Parser {
     L2, // L ::= ''
     MAX_RULE // DUMMY
   };
+std::ostream& operator<<(std::ostream &os, Symbol s)  {
+  os << "Symbol";
+  os  << long(s);
+  return os;
+}
   static auto atom(Symbol s) {
     return s <= 0;
   }
@@ -127,8 +133,8 @@ namespace Parser {
   }
 
   void shift(Symbol rule) {
-    M4("Shift",~rule,"on", ~token, current);
-    Stack::push(rule, current);
+    M4("Shift",~rule,"on", ~token, current,stack());
+    Stack::push(rule, current.index);
   }
 
 
@@ -145,7 +151,7 @@ namespace Parser {
   void shift(Symbol rule, H h) {
     shift(rule);
     Stack::push(h);
-    D(stack();
+    D(stack());
   }
 
 
@@ -215,12 +221,12 @@ namespace Parser {
           Stack::pop();
           continue;
         case T:
-          if (exists(token, "()'") || token == $ || atom(token)) {
-            shift(T1);
+          if (token == '.') {
+            shift(T1, '.', X);
             continue;
           }
-          if (token == '.') {
-            shift(T2, '.', X);
+          if (exists(token, "()'") || token == $ || atom(token)) {
+            shift(T2);
             continue;
           }
           break;

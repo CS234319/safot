@@ -61,7 +61,7 @@ representation S { // Representation of an S expression.
   property S cons(const S s) returns (::cons(*this,s));
   property S eq(const S s) returns (::eq(*this, s));
   property bool islist() returns (::islist(*this));
-  operator bool() const { return !null(); }
+  // operator bool() const { return !null(); }
 
   perspective( H bits : 15;  bool sign: 1)
   construct S() by(bits(0), sign(0))
