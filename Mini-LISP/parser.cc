@@ -151,7 +151,6 @@ std::ostream& operator<<(std::ostream &os, Symbol s)  {
   void shift(Symbol rule, H h) {
     shift(rule);
     Stack::push(h);
-    D(stack());
   }
 
 
@@ -241,7 +240,6 @@ std::ostream& operator<<(std::ostream &os, Symbol s)  {
         case L:
           if (exists(token,"'(") || atom(token)) {
             shift(L1, E, L);
-            D(stack());
             continue;
           }
           if (token == ')') {
