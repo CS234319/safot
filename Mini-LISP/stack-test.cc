@@ -31,13 +31,46 @@ TEST(Stack, Push3) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Push4) {
+TEST(Stack, Peep) {
   push(1,2,3);
+  EXPECT_EQ(1,peep());
+  EXPECT_EQ(1,peep(0));
+  EXPECT_EQ(2,peep(1));
+  EXPECT_EQ(3,peep(2));
   EXPECT_EQ(1,pop());
   EXPECT_EQ(2,pop());
   EXPECT_EQ(3,pop());
   EXPECT_TRUE(empty());
 }
+
+
+TEST(Stack, Push4) {
+  push(1,2,3,4);
+  EXPECT_EQ(1,pop());
+  EXPECT_EQ(2,pop());
+  EXPECT_EQ(3,pop());
+  EXPECT_EQ(4,pop());
+  EXPECT_TRUE(empty());
+}
+
+TEST(Stack, Clear) {
+  EXPECT_TRUE(empty());
+  push(1,2,3,4);
+  EXPECT_FALSE(empty());
+  clear(); 
+  EXPECT_TRUE(empty());
+  clear(); 
+  EXPECT_TRUE(empty());
+}
+
+TEST(Stack, TopZero) {
+  EXPECT_TRUE(empty());
+  EXPECT_TRUE(top == 0);
+  push(3);
+  EXPECT_FALSE(top == 0);
+  clear(); 
+  EXPECT_TRUE(top == 0);
+} 
 
 
 

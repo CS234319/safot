@@ -1,13 +1,18 @@
 #ifndef STACK_TRACE_H_
 #define STACK_TRACE_H_
-#include "dump.h"
 
 #include <iostream>
 
-extern "C" void stack_trace(void);
+extern "C" void stack_trace();
 
 #define normally(x) if (x); else  {\
   fprintf(stderr,"\n\n** Aborting at %s/%s (%d): Expression (%s) evaluated to false\n",__FILE__, __FUNCTION__, __LINE__,#x); \
+  stack_trace(); \
+  throw (__LINE__); \
+}
+
+#define never(x) {\
+  fprintf(stderr,"\n\n** Aborting at %s/%s (%d): %s\n",__FILE__, __FUNCTION__, __LINE__,#x); \
   stack_trace(); \
   throw (__LINE__); \
 }

@@ -15,5 +15,3 @@ TEST(Pairs, Representation) {
   Pairs::free(h);
   EXPECT_EQ(Pairs::to_go(), before);
 }
-
-

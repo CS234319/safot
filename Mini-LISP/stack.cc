@@ -26,10 +26,26 @@ namespace Stack {
   H pop() {
     normally(top != 0);
     auto free = top;
-    auto p = S(top).asCons();
+    auto p = S(top).asPair();
     auto $ = p.data;
     top = p.next;
     Pairs::free(free);
     return $;
   }
+  void clear() {
+    while (!Stack::empty())
+      Stack::pop();
+  }
+  H& peep() {
+    normally(top != 0);
+    return Pairs::get(top).data;
+  }
+  H& peep(H offset) {
+    for (H h = Stack::top, i = 0; ; i++) {
+      if (i == offset)
+        return Pairs::get(h).data;
+      if ((h = Pairs::get(h).next) == 0)
+        never("Stack exhausted");
+    }
+ }
 }

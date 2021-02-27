@@ -32,7 +32,8 @@ namespace Pairs {
    extern Pair *const pool;
    extern H allocate(H car, H cdr);
    extern void free(H index);
-   extern H to_go(); 
+   extern H to_go();
+   extern Pair& get(H index);
 };
 
 namespace Strings { // Atoms are never freed in mini-lisp
@@ -53,15 +54,15 @@ representation S { // Representation of an S expression.
   property bool null() returns  (index == 0)
   property bool atom() returns  (index <= 0)
   property String asAtom() returns  (Strings::pool + index)
+  property bool isTrue() returns(!null())
 
-  property Pair asCons() returns  (Pairs::pool[index])
-  property S car() returns (asCons().car)
-  property S cdr() returns (asCons().cdr)
+  property Pair asPair() returns  (Pairs::get(index));
+  property S car() returns (asPair().car)
+  property S cdr() returns (asPair().cdr)
 
   property S cons(const S s) returns (::cons(*this,s));
   property S eq(const S s) returns (::eq(*this, s));
   property bool islist() returns (::islist(*this));
-  // operator bool() const { return !null(); }
 
   perspective( H bits : 15;  bool sign: 1)
   construct S() by(bits(0), sign(0))

@@ -126,8 +126,12 @@ TEST(Exists, Long) {
   EXPECT_FALSE(exists(NIL,list("B")));
 }
 
+
+#define EXPECT_STRUE(e) EXPECT_TRUE(e.isTrue())
+#define EXPECT_SFALSE(e) EXPECT_FALSE(e.isTrue())
+
 TEST(Lookup, T) {
-  EXPECT_TRUE(lookup("T").eq("T"));
+  EXPECT_STRUE(lookup("T").eq("T"));
 }
 
 TEST(Lookup, NIL1) {
@@ -139,7 +143,7 @@ TEST(Lookup, NIL1) {
 TEST(Lookup, NIL2) {
   S n1 = S("NIL");
   S n2 = S("NIL");
-  EXPECT_TRUE(lookup("NIL").eq("NIL"));
+  EXPECT_STRUE(lookup("NIL").eq("NIL"));
 }
 
 TEST(Lookup, Failure) {
@@ -149,8 +153,8 @@ TEST(Lookup, Failure) {
 
 TEST(Lookup, AfterSet) {
   set("X","Y");
-  EXPECT_TRUE(lookup("X"));
-  EXPECT_FALSE(lookup("Y"));
+  EXPECT_STRUE(lookup("X"));
+  EXPECT_SFALSE(lookup("Y"));
   EXPECT_EQ(lookup("X"), S("Y"));
 }
 

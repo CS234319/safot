@@ -8,4 +8,7 @@ namespace Stack {
   void push(H,H,H,H,H);
   extern H top;
   bool empty();
+  void clear();
+  H &peep();
+  H &peep(H h);
 }

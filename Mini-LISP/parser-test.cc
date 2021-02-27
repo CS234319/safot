@@ -2,7 +2,6 @@
 #include <gtest/gtest.h>
 #include "parser.cc"
 #include "test.h"
-#include "dump.h"
 
 static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));
@@ -24,10 +23,11 @@ TEST(Parser, Initially) {
   EXPECT_EQ(Status::ready, status());
 }
 
+typedef ::S SExp;
 TEST(Parser, AtomCharTokenizer) {
   t("A");
   H h = Tokenizer::next();
-  EXPECT_STREQ("A", S(h).asAtom());
+  EXPECT_STREQ("A", SExp(h).asAtom());
 }
 
 TEST(Parser, AtomChar) {
@@ -37,14 +37,14 @@ TEST(Parser, AtomChar) {
   EXPECT_EQ(Status::accept, status());
 }
 
-extern std::ostream& operator<<(std::ostream &os, S s); 
+extern std::ostream& operator<<(std::ostream &os, SExp s); 
 
 TEST(AST, AtomChar) {
   supply("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("Z", S(result()).asAtom());   
+  EXPECT_STREQ("Z", SExp(result()).asAtom());   
 }
 
 
@@ -99,7 +99,7 @@ TEST(Parser, AtomLong) {
 
 TEST(AST, AtomLong) {
   supply("Atom");
-  EXPECT_STREQ("ATOM", S(result()).asAtom());   
+  EXPECT_STREQ("ATOM", SExp(result()).asAtom());   
 }
 
 TEST(AST, List0) {
@@ -149,7 +149,38 @@ TEST(AST, List3) {
   EXPECT_EQ(NIL,cdr(s));
 }
 
+TEST(AST, QuoteA) {
+  supply("'Z");
+  auto s = Parser::result();
+  D(s);
+  ASSERT_NE(NIL,s);
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_TRUE(islist(s));
+  EXPECT_STREQ("QUOTE",car(s).asAtom());
+  s = cdr(s);
+  EXPECT_STREQ("Z",car(s).asAtom());
+  EXPECT_EQ(NIL,cdr(s));
+}
 
+TEST(AST, QuoteAA) {
+  supply("''Z");
+  auto s = Parser::result();
+  ASSERT_NE(NIL,s);
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_TRUE(islist(s));
+  EXPECT_STREQ("QUOTE",car(s).asAtom());
+  s = cdr(s);
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_TRUE(islist(s));
+  s = car(s);
+  EXPECT_STREQ("QUOTE",car(s).asAtom());
+  s = cdr(s);
+  EXPECT_STREQ("Z",car(s).asAtom());
+  EXPECT_EQ(NIL,cdr(s));
+}
 
 TEST(Parser, List0) {
   supply("()");
@@ -287,11 +318,37 @@ TEST(AST, Pair) {
   EXPECT_STREQ("WORLD",cdr(s).asAtom());
 }
 
+TEST(AST, PairYZ) {
+  supply("Y.Z");
+  S s = Parser::result();
+  ASSERT_FALSE(s.null());
+  ASSERT_FALSE(s.atom());
+  ASSERT_FALSE(islist(s));
+  EXPECT_STREQ("Y",car(s).asAtom());
+  EXPECT_STREQ("Z",cdr(s).asAtom());
+}
+
 TEST(Parser, PairInList) {
   supply("(a.b)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
+}
+
+TEST(AST, AtomOutput) {
+  supply("Y");
+  EXPECT_STREQ("Y", ~Parser::result());
+}
+
+TEST(AST, PairInList) {
+  supply("(Y.Z)");
+  EXPECT_STREQ("(Y.Z)", ~Parser::result());
+}
+
+
+TEST(AST, PairX) {
+  supply("Y.Z");
+  EXPECT_STREQ("Y.Z", ~Parser::result());
 }
 
 TEST(Parser, ListTokenizationWithGet) {
@@ -414,10 +471,23 @@ TEST(Parser, EmptyQNilPair) {
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
-TEST(Parser, QNestedList) {
+
+TEST(AST, QNestedList) {
   supply("((a b) '(c (d e)))");
-  ASSERT_NE(Status::ready, status());
-  ASSERT_NE(Status::reject, status());
-  EXPECT_EQ(Status::accept, status());
+  EXPECT_STREQ("((A B) (QUOTE (C (D E))))", ~Parser::result());
 }
 
+TEST(AST, ListQuotePair) {
+  supply("(c d).'(a b)");
+  EXPECT_STREQ("((C D) QUOTE (A B))", ~Parser::result());
+}
+
+TEST(AST, NIL) {
+  supply("NIL");
+  EXPECT_EQ(NIL, Parser::result());
+}
+
+TEST(AST, EmptyListNiL) {
+  supply("()");
+  EXPECT_EQ(NIL, Parser::result());
+}

@@ -16,6 +16,10 @@ namespace Pairs {
     return remaining;
   }
 
+  Pair &get(H h) {
+    return pool[h];
+  }
+
   static H init() {
     for (H h = 1; h < M; ++h)
       pool[h].next = h + 1;
