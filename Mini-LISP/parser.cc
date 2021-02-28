@@ -119,6 +119,7 @@ namespace Parser {
 
   static void parse() {
     D(stack());
+    bool gulp = false;
     while (!Stack::empty()) {
       token = (Symbol) Tokenizer::get();
       top  = (Symbol) Stack::pop();
@@ -130,6 +131,14 @@ namespace Parser {
       }
       if (token == top) {
         M1("Match Ignore", ~token,~top);
+        continue;
+      }
+      if (token == '[') {
+        Stack::push(token);
+        continue;
+      }
+      if (top == '[') {
+        gulp = false;
         continue;
       }
       Tokenizer::unget();
