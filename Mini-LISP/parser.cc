@@ -112,6 +112,7 @@ namespace Parser {
   }
   void reset() {
     Stack::clear();
+    current_status = ready;
     shift(s);
   }
 

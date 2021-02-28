@@ -45,7 +45,6 @@ bool eq(S s1, S s2) {
   return Strings::eq(pool + s1.index, pool + s2.index);
 }
 
-
 S car(S s) {
   normally(!s.atom());
   return s.car();

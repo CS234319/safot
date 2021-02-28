@@ -38,9 +38,6 @@ int print(S s) {
   return print(")");
 }
 
-
-
-
 static S REPL() {
   static size_t n = 0;
   static auto line = (char *) malloc (n + 1);
@@ -66,7 +63,7 @@ static S REPL() {
   Eval:
     S e = eval(s);
   Print:
-    print(s);
+    print(s), print("\n");
   Loop:
     goto Start;
 }

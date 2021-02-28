@@ -37,7 +37,7 @@ tokenzier-test.cc: tokenizer.cc
 mini-lisp:	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
-test: test-main.o test.o tokenizer-test.o strings-test.o pairs-test.o parser-test.o stack-test.o stack-trace.o dump.o io.o
+test: test-main.o test.o tokenizer-test.o ast-test.o strings-test.o pairs-test.o parser-test.o stack-test.o stack-trace.o dump.o io.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 # -include $(SRC:%.c=%.d)
