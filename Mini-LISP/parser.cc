@@ -116,13 +116,11 @@ namespace Parser {
     shift(s);
   }
 
-
   static void parse() {
     D(stack());
-    bool gulp = false;
     while (!Stack::empty()) {
-      token = (Symbol) Tokenizer::get();
       top  = (Symbol) Stack::pop();
+      token = (Symbol) Tokenizer::get();
       __("LOOP", $$, ~token, ~top, stack());
       if (atom(token) && top == Atom) {
         M1("Match Atom", ~token,~top);
@@ -131,14 +129,6 @@ namespace Parser {
       }
       if (token == top) {
         M1("Match Ignore", ~token,~top);
-        continue;
-      }
-      if (token == '[') {
-        Stack::push(token);
-        continue;
-      }
-      if (top == '[') {
-        gulp = false;
         continue;
       }
       Tokenizer::unget();

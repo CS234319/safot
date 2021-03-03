@@ -78,6 +78,19 @@ static S lookup(S id, S alist) { // lookup id in an a-list
 S lookup(S s) {
   return lookup(s, alist);
 }
+S bind(S names, S values, S alist) {
+  if (names.null()) {
+    if (values.null()) 
+      return alist;
+    error("Redundant argument");
+    return NIL;
+  }
+  if (values.null()) {
+    error("Missing argument");
+    return NIL;
+  }
+  return S(S(car(names), car(values),bind(cdr(names), cdr(values), alist));
+}
 
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
 const S T(set(S("T"), S("T")));  // (set (quote t) (quote t))
@@ -154,20 +167,10 @@ S eval(S s) {
   return apply(eval(s.car()), s.cdr());
 }
 
-#if 0
-  (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
-          (lookup S-expression a-list))
-        ((is-atomic (car S-expression)) ; case of handling atomic functions
-          (evaluate-atomic S-expression a-list))
-        (t ; recursive step---lambda applied to parameters
-          (apply (evaluate (car S-expression) a-list) ; find lambda expression
-                  (cdr S-expression) ; find actual parameters
-                  a-list))))
-
-
 S Defun(S name, S parameters, S body) {
   set(name, list(lambda, parameters, body));
 }
+
 S Ndefun(S name, S parameters, S body) {
   set(name, list(nlambda, parameters, body));
 }
@@ -179,44 +182,12 @@ set(defun,
          list(name, parameters, body), 
          list(set, name, list(lambda parameters body))));
 }
-
+#if 0
 (defun is-atomic(name); determine whether name denotes an atomic function
   (exists name '(atom car cdr cond cons eq error eval set)))
 
-¢
 \protect \pagebreak  [3]
 ¢
-(defun exists (x xs) ; determine whether atom x is in list xs
-  (cond ; Three cases to consider:
-    ((null xs) xs) ; (i) list of xs is exhausted
-    ((eq x (car xs)) t) ; (ii) item x is first in xs
-    (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
-
-¢
-\protect \pagebreak  [3]
-¢
-(defun lookup (id a-list) ; lookup id in an a-list
-  (cond ; Three cases to consider:
-    ((null a-list) ; (i) a-list was exhausted.
-      (error 'unbound-variable id))
-    ((eq id (car (car a-list))) ; (ii) found in first dotted-pair
-      (car (cdr (car a-list)))) ; return value part of dotted pair
-    (t (lookup id (cdr a-list))))) ; (iii) otherwise, recursive call on remainder of a-list
-
-¢
-\protect \pagebreak  [3]
-¢
-(defun bind (names values a-list) ; bind names to values, and append to a-list
-  (cond ((null names) ; no more names left
-        (cond ((null values) a-list) ; no more values left, binding done-> return a-list
-              (t (error 'missing-names)))) ; more values than names
-        ((null values) ; names is not nil but values is, i.e., more names than values
-          (error 'missing-values))
-        (t ; both names and values are not empty
-          (cons ; create new binding and prepend it to result of recursive call
-            (cons (car names) (car values)) ; new dotted-pair defines single binding
-            (bind (cdr names) (cdr values) a-list))))) ; recursive call
-
 ¢
 \protect \pagebreak  [3]
 ¢

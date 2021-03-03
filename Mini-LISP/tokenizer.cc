@@ -17,8 +17,13 @@ static inline char& C() {
 static H last; 
 static bool pending = false;
 
-extern H get() {
-  D(pending, last);
+H peep() {
+  H h = get();
+  unget();
+  return h;
+}
+
+H get() {
   if (!pending) 
     return last = next();
   pending = false;

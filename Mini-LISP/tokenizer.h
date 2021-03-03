@@ -10,6 +10,7 @@ namespace Tokenizer {
   extern H next(); 
   extern H get(); 
   extern H unget(); 
+  extern H peep();
 }
   extern bool exists(const char, String s); 
 

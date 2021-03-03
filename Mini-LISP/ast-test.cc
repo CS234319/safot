@@ -258,3 +258,20 @@ TEST(AST, LibNDefun) {
   "",~Parser::result());
   reset();
 }
+
+TEST(AST, OneSquare) {
+  supply(""
+    "(set 'ndefun\n"
+      "'(nlambda (name parameters body)\n"
+    "(set name (nlambda parameters body]\n"
+ "\n"
+ "\n");
+  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
+  EXPECT_EQ(Status::accept, status());
+  EXPECT_STREQ(""
+      "(SET (QUOTE NDEFUN) " "(QUOTE (NLAMBDA (NAME PARAMETERS BODY) " //
+      "(SET NAME (NLAMBDA PARAMETERS BODY)))))"
+  "",~Parser::result());
+  reset();
+}
