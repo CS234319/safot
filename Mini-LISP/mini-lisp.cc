@@ -89,7 +89,7 @@ S bind(S names, S values, S alist) {
     error("Missing argument");
     return NIL;
   }
-  return S(S(car(names), car(values),bind(cdr(names), cdr(values), alist));
+  return cons(cons(car(names), car(values)),bind(cdr(names), cdr(values), alist));
 }
 
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
@@ -168,29 +168,15 @@ S eval(S s) {
 }
 
 S Defun(S name, S parameters, S body) {
-  set(name, list(lambda, parameters, body));
+  return set(name, list(lambda, parameters, body));
 }
 
 S Ndefun(S name, S parameters, S body) {
-  set(name, list(nlambda, parameters, body));
+  return set(name, list(nlambda, parameters, body));
 }
 
 
-int main() {
-set(defun, 
-      list(nlambda, 
-         list(name, parameters, body), 
-         list(set, name, list(lambda parameters body))));
-}
 #if 0
-(defun is-atomic(name); determine whether name denotes an atomic function
-  (exists name '(atom car cdr cond cons eq error eval set)))
-
-\protect \pagebreak  [3]
-¢
-¢
-\protect \pagebreak  [3]
-¢
 (defun evaluate(S-expression a-list) ; evaluate S-expression in the environment defined by a-list
   (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
           (lookup S-expression a-list))
