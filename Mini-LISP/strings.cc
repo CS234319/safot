@@ -6,12 +6,12 @@
 #define D(...) 0
 #endif
 // Planned global data layout.
+static const bool active = false; 
 static struct { // Falls in the data segment; should be just before Pairs::buffer
-   bool active = false; 
    // This is where strings go, negative handles.
-   char pool1[active<<10] = "BOTTOM";
+   static char pool1[active<<10] = "BOTTOM";
    // handle 0 should be exactly here.
-   char nil[sizeof("NIL")] = "NIL";
+   static char nil[sizeof("NIL")] = "NIL";
    // positive (i.e., not - handles point here. be careful 2^15 is not a positive number 
    static Pair pool2[(active << 15)-2]; // not sure about the 2 here; add test
 } data;
