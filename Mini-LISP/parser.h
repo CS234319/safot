@@ -21,9 +21,11 @@ namespace Parser {
   extern enum Status status();
   extern void supply(const char *input); // What to parse, ideally in installments
   extern void reset(); // Must call before the first supply
+
   /* Used in the LL(1) parsing algorithm; integer range tricks
    * are used to represent terminals, non-terminals, and even
-   * names of rules as a single handl;
+   * names of rules as a single handle.
+   */
   enum Symbol : H { 
     $ = Tokenizer::$, s, Atom, // Special symbols, EOF, S
     E, X, T, L, 

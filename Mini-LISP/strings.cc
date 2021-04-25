@@ -6,7 +6,7 @@
 #define D(...) 0
 #endif
 // Planned global data layout.
-static const bool active = false; 
+static const bool active = true; 
 static struct { // Falls in the data segment; should be just before Pairs::buffer
    // This is where strings go, negative handles.
    char pool1[active<<10] = "BOTTOM";
