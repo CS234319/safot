@@ -9,11 +9,11 @@
 static const bool active = false; 
 static struct { // Falls in the data segment; should be just before Pairs::buffer
    // This is where strings go, negative handles.
-   static char pool1[active<<10] = "BOTTOM";
+   char pool1[active<<10] = "BOTTOM";
    // handle 0 should be exactly here.
-   static char nil[sizeof("NIL")] = "NIL";
+   char nil[sizeof("NIL")] = "NIL";
    // positive (i.e., not - handles point here. be careful 2^15 is not a positive number 
-   static Pair pool2[(active << 15)-2]; // not sure about the 2 here; add test
+   Pair pool2[(active << 15)-2]; // not sure about the 2 here; add test
 } data;
   
 namespace Strings { // Atoms are never freed in mini-lisp
