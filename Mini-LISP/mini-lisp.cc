@@ -33,7 +33,6 @@ auto operator ,(String s1, const S s2) {
   return (S(s1), s2);
 }
 
-
 bool eq(S s1, S s2) {
   D(s1, s2);
   if (not (s1.atom()) or not (s2.atom()))
@@ -91,7 +90,6 @@ S bind(S names, S values, S alist) {
   }
   return cons(cons(car(names), car(values)),bind(cdr(names), cdr(values), alist));
 }
-
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
 const S T(set(S("T"), S("T")));  // (set (quote t) (quote t))
 const S QUOTE("quote");

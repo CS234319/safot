@@ -1,8 +1,9 @@
 #ifndef __EXPRESSION_H_
 #define __EXPRESSION_H_
 #include <iostream>
-extern bool dumping;
+/* Quick hacks for dumping; DALUT SOREFET */
 
+extern bool dumping;
 
 #define FE_1(W,_1)                          
 #define FE_2(W,_1,_2)                      W(_2)

@@ -6,9 +6,11 @@
 #define D(...) 0
 #endif
 
+/* Global memory layout; we use no dynamic allocation of the host language */
 
 namespace Pairs {
   define(M = (1 << 15) - 1)
+  // Falls in the data segment;
   static Pair buffer[M];
   Pair *const pool = buffer - 1;
   static H remaining = M;

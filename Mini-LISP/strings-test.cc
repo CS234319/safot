@@ -4,7 +4,7 @@
 #include "test.h"
 
  
-TEST(Strings, Representation) {
+TEST(Strings, Layout) {
   using namespace Strings;
   EXPECT_EQ(nil, buffer + sizeof(data.buffer));
   EXPECT_EQ(nil - buffer, sizeof(data.buffer));

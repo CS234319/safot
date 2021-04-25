@@ -2,8 +2,9 @@
 #include "gtest/gtest.h"
 #include "mini-lisp.cc"
 #include "test.h"
-
-
+/**
+ * Tests of mini-lisp basics; should be renamed one day
+ */
 TEST(Comma, Two) {
   S a = S("A");
   EXPECT_TRUE(a.atom());
@@ -43,7 +44,6 @@ TEST(List, Null) {
   S s = list();  
   EXPECT_TRUE(s.null());
 }
-
 
 TEST(List, Singleton) {
   const S s = list("A");  

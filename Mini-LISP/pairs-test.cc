@@ -3,6 +3,7 @@
 #include "pairs.cc"
 #include "test.h"
 
+/* Sanity of free/allocate; someday: deal with exhausted memory */
 TEST(Pairs, Representation) {
   using namespace Pairs;
   H before = Pairs::to_go();

@@ -1,4 +1,7 @@
 #include "mini-lisp.h"
+/* Manages a singleton stack of handles, used
+ * by the LL parsing algorithm.
+ */
 namespace Stack {
   H pop();
   void push(H);

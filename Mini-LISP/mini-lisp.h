@@ -1,26 +1,8 @@
 #include <cstdint>
 #ifndef MINI_LISP_H
 #define MINI_LISP_H 
-#define perspective(...) struct{__VA_ARGS__;};
-#define	returns(x) const {return x;}
-#define representation union
-#define define(...) enum{__VA_ARGS__};
-#define function
-#define property inline
-#define procedure void
-#define construct
-#define destruct ~
-#define by(...) :__VA_ARGS__{}
 
-#define array(name,type,min,max) \
-    static type buffer##__LINE__[(max)-(min)+1]; \
-    static type *const name = buffer##__LINE__ - min;
-
-#define let static
-typedef const char *const String;
-
-typedef int32_t W; // A full word of  32 bits; two half words
-typedef int16_t H; // Half a word including 16 bits.
+#include "hacks.h"
 
 representation Pair { // Representation of a dotted pair
   perspective(W cons: 32)
@@ -48,7 +30,8 @@ extern S cons(S car, S cdr);
 extern bool eq(S, S);
 extern bool islist(S); 
 
-representation S { // Representation of an S expression.
+representation S { // Representation of an S expression
+ /// Perspective I: a simple handle in an H data type 
   perspective(H index)
   construct S(H h) by (index(h));
   property bool null() returns  (index == 0)
@@ -64,6 +47,8 @@ representation S { // Representation of an S expression.
   property S eq(const S s) returns (::eq(*this, s));
   property bool islist() returns (::islist(*this));
 
+  // Perspective II: a sign bit (pool designator) and an index into 
+  // into that pool. 
   perspective( H bits : 15;  bool sign: 1)
   construct S() by(bits(0), sign(0))
 
