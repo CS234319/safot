@@ -38,10 +38,12 @@ int print(S s) {
   return print(")");
 }
 
+// Realizes the famous "Read, Evaluate, Print, Loop" of interpreters
 static S REPL() {
   static size_t n = 0;
   static auto line = (char *) malloc (n + 1);
   using namespace Parser;
+
   Start:
     reset();
     prompt("> ");

@@ -6,7 +6,8 @@
 #define D(...) 0
 #endif
 
-/* Global memory layout; we use no dynamic allocation of the host language */
+/* Global memory layout; we use no dynamic allocation of the host language.
+ * TODO: deal with memory exhausting */
 
 namespace Pairs {
   define(M = (1 << 15) - 1)
@@ -43,6 +44,7 @@ namespace Pairs {
     D($, next(), remaining);
     return $;
   }
+
   H allocate(H car, H cdr) {
     D(next(), car, cdr, remaining);
     H $ = allocate();
@@ -53,6 +55,7 @@ namespace Pairs {
     D($);
     return $;
   }
+
   void free(H h) {
     D(h, remaining);
     pool[h].next = next(), remaining++, next() = h;

@@ -5,17 +5,7 @@
 #undef D
 #define D(...) 0
 #endif
-// Planned global data layout.
-static const bool active = true; 
-static struct { // Falls in the data segment; should be just before Pairs::buffer
-   // This is where strings go, negative handles.
-   char pool1[active<<10] = "BOTTOM";
-   // handle 0 should be exactly here.
-   char nil[sizeof("NIL")] = "NIL";
-   // positive (i.e., not - handles point here. be careful 2^15 is not a positive number 
-   Pair pool2[(active << 15)-2]; // not sure about the 2 here; add test
-} data;
-  
+ 
 namespace Strings { // Atoms are never freed in mini-lisp
   define(M = 1024); // We use a total of M + sizeof("NIL") (typically 4) bytes
   static struct { // Falls in the data segment; should be just before Pairs::buffer
@@ -42,6 +32,11 @@ namespace Strings { // Atoms are never freed in mini-lisp
     return false;
   }
 
+  /* Allocation of a input string is by moving the pool pointer down and then
+   * copying the input there. A bit of optimization saves some space by refraining
+   * from allocating the same string twice; moreover, there is also a minimal attempt
+   * to allow one string to be realizes the suffix of a previously allocated string  
+   */ 
   H allocate(String s) {
     D((long) pool, (long) nil);
     D(s, size(s), current);
@@ -63,3 +58,16 @@ namespace Strings { // Atoms are never freed in mini-lisp
     return current;
   }
 }
+
+// Planned global data layout.
+static const bool active = true; 
+
+static struct { // Falls in the data segment; should be just before Pairs::buffer
+   // This is where strings go, negative handles.
+   char pool1[active<<10] = "BOTTOM";
+   // handle 0 should be exactly here.
+   char nil[sizeof("NIL")] = "NIL";
+   // positive (i.e., not - handles point here. be careful 2^15 is not a positive number 
+   Pair pool2[(active << 15)-2]; // not sure about the 2 here; add test
+} SometimeYossiGil;
+ 

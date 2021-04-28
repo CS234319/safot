@@ -3,8 +3,8 @@
 #include "mini-lisp.h"
 #include "tokenizer.h"
 
-/**
- * An implementation of a simple, single instance hand tailored LL(1) parser;
+/** An implementation of a simple, single instance hand tailored LL(1) parser.
+ * Here is pseudo code describing its services.
  * <pre>
  * reset();
  * supply(buffer);
@@ -16,15 +16,15 @@
  * </pre>
  */
 namespace Parser {
-  extern S result(); // Result of parrsing action; undefined if status is not accept 
-  enum Status { ready, accept, reject}; // Should still work on resuming after NL 
-  extern enum Status status();
-  extern void supply(const char *input); // What to parse, ideally in installments
   extern void reset(); // Must call before the first supply
+  extern void supply(char *input); // What to parse, ideally in installments
+  enum Status { ready, accept, reject}; // Should still work on resuming after NL 
+  extern enum Status status();     // Returns the result of the most recent supply
+  extern S result(); // Result of parrsing action; undefined if status is not accept 
 
-  /* Used in the LL(1) parsing algorithm; integer range tricks
-   * are used to represent terminals, non-terminals, and even
-   * names of rules as a single handle.
+  /* Used in the LL(1) parsing algorithm; integer range tricks are used to
+   * represent terminals, non-terminals, and even names of rules as a single
+   * handle.  
    */
   enum Symbol : H { 
     $ = Tokenizer::$, s, Atom, // Special symbols, EOF, S

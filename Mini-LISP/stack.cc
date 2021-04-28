@@ -23,6 +23,7 @@ namespace Stack {
     push(h1, h2, h3, h4);
   }
   bool empty() { return top == 0; } 
+
   H pop() {
     normally(top != 0);
     auto free = top;
@@ -32,14 +33,17 @@ namespace Stack {
     Pairs::free(free);
     return $;
   }
+
   void clear() {
     while (!Stack::empty())
       Stack::pop();
   }
+
   H& peep() {
     normally(top != 0);
     return Pairs::get(top).data;
   }
+
   H& peep(H offset) {
     for (H h = Stack::top, i = 0; ; i++) {
       if (i == offset)

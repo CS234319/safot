@@ -42,7 +42,6 @@ test: test-main.o test.o tokenizer-test.o ast-test.o strings-test.o pairs-test.o
 
 # -include $(SRC:%.c=%.d)
 
-
 clean:
 		rm -fr $(OBJS) mini-lisp test *.o *.d *~ *.backup 
 

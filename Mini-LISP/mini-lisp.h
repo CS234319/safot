@@ -4,32 +4,60 @@
 
 #include "hacks.h"
 
-representation Pair { // Representation of a dotted pair
+// Representation of a dotted pair, i.e., an unlabeled internal node in the
+// binary tree behind compound S-expression.
+representation Pair { 
   perspective(W cons: 32)
   perspective(H car, cdr :16)
   perspective(H data, next :16)
 };
 
+/** A pool of all pairs is managed by the pairs module (see pairs.cc). The pool
+ * is an array; an index into this array, also called a handle, is a half word
+ * (type H), and can be thought of as a pointer. All indices are strictly
+ * positive.
+ */
 namespace Pairs {
-   extern Pair *const pool;
-   extern H allocate(H car, H cdr);
-   extern void free(H index);
-   extern H to_go();
-   extern Pair& get(H index);
+   extern Pair *const pool;         /* Array of all pair records, free and allocated */
+   extern H allocate(H car, H cdr); /* Retrieve a free pair, and set it values */
+   extern void free(H index);       /* Return a pair to the pool */
+   extern H to_go();                /* How many pairs are still free */ 
+   extern Pair& get(H index);       /* A convenience method that retrieves a pair by its handle */
 };
 
-namespace Strings { // Atoms are never freed in mini-lisp
-  extern String pool;
-  extern H allocate(String);
-  extern bool eq(String, String);
+/** A pool of all strings used by the program  is managed by the strings module
+ * (see strings.cc).  Note that unlike pairs, there is no dynamic allocation of
+ * strings at run time. All strings are atoms in the input program.  An index
+ * into this array, called a handle, is a half word (type H), and can be
+ * thought of as a pointer. 
+ *
+ * Allocation is done
+ */
+namespace Strings { 
+  extern String pool;              // The array of characters.
+  extern H allocate(String);       // Allocate a sequence of 
+  extern bool eq(String, String);  // Compare two strings equality.
 };
 
+/** Handles are therefore 16 bits integers; a positive integer designates a
+ * pair, i.e., an internal node; a negative pair represents a string. A zero
+ * integer designates the NIL atom.  There is a bit of trickery to make sure
+ * that if the index zero, the string behind it happens to be NIL. In a sense
+ * the zero is also an index into the strings array.
+ *
+ * Both pools are consecutive in memory: There is a large static buffer in which 
+ * both pools reside.
+ */
 
 union S; 
 extern S cons(S car, S cdr);
 extern bool eq(S, S);
 extern bool islist(S); 
 
+/* An S expression is identified by a 16 bits handle (the type H).
+ * It is an atom is the handle is non-positive (the index zero is 
+ * reserved for the special NIL atom). It is an internal node 
+ */
 representation S { // Representation of an S expression
  /// Perspective I: a simple handle in an H data type 
   perspective(H index)
@@ -63,6 +91,7 @@ extern const S NIL,T, QUOTE;
 // Unary atomic functions
 extern S car(S);
 extern S cdr(S);
+// Unary library functions
 extern S eval(S);
 
 // Binary atomic functions
