@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <iostream>
 #ifndef MINI_LISP_H
 #define MINI_LISP_H 
 
@@ -76,6 +77,9 @@ extern S list(S);
 extern S list(S, S);
 extern S list(S, S, S );
 extern S list(S, S, S, S);
+
+static void error(String s) {  std::cerr << s;  throw __LINE__; }
+static void error(String s, S s1) {  std::cerr << s << " " << s1.asAtom();  throw __LINE__; }
 
 #undef construct
 #endif // MINI_LISP_H 
