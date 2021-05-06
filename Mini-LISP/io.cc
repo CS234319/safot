@@ -1,5 +1,8 @@
 #include "io.h"
-
+/** An auxiliary file with lots of heavy weight C++ code and huge overhead.
+ * This should not be in the production version. It is OK for testing and for
+ * debugging.
+ */
 #include <string.h>
 #include "parser.h"
 #include "stack.h"
@@ -96,7 +99,6 @@ String stack() {
   o << "]";
   return strdup(o.str().c_str());
 }
-
 
 
 //  String h2s(H h) { return ~*reinterpret_cast<Symbol*>(&h); }

@@ -1,7 +1,8 @@
 #ifndef __EXPRESSION_H_
 #define __EXPRESSION_H_
 #include <iostream>
-/* Quick hacks for dumping; DALUT SOREFET */
+/* Quick hacks for dumping; DALUT SOREFET; we do a lot of dumps for debugging,
+ * no debugger in this project */
 
 extern bool dumping;
 

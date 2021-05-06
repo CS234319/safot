@@ -43,7 +43,6 @@ test: $(TEST_OBJS)
 
 # -include $(SRC:%.c=%.d)
 
-
 clean:
 		rm -fr $(OBJS) mini-lisp test *.o *.d *~ *.backup 
 

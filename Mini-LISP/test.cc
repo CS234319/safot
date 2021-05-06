@@ -170,5 +170,3 @@ TEST(AtomicFunctionsList, AfterSet) {
   EXPECT_FALSE(atomic("X"));
   EXPECT_FALSE(atomic(""));
 }
-
-
