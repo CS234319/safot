@@ -48,7 +48,7 @@ static S REPL() {
   Read:
     if (getline(&line, &n, stdin) < 0) 
       throw;
-    supply(line);
+    supply((char*)line);
     switch (status()) {
       case ready:
         prompt("- ");
