@@ -16,6 +16,10 @@
  * </pre>
  */
 namespace Parser {
+  extern S result(); // Result of parrsing action; undefined if status is not accept 
+  enum Status { ready, accept, reject}; // Should still work on resuming after NL 
+  extern enum Status status();
+  extern void supply(char *input); // What to parse, ideally in installments
   extern void reset(); // Must call before the first supply
   extern void supply(char *input); // What to parse, ideally in installments
   enum Status { ready, accept, reject}; // Should still work on resuming after NL 
