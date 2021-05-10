@@ -16,15 +16,12 @@
  * </pre>
  */
 namespace Parser {
-  extern S result(); // Result of parrsing action; undefined if status is not accept 
+  extern S result(); // Result of parsing action; undefined if status is not accept 
   enum Status { ready, accept, reject}; // Should still work on resuming after NL 
   extern enum Status status();
   extern void supply(char *input); // What to parse, ideally in installments
-  extern void reset(); // Must call before the first supply
   extern void supply(char *input); // What to parse, ideally in installments
-  enum Status { ready, accept, reject}; // Should still work on resuming after NL 
-  extern enum Status status();     // Returns the result of the most recent supply
-  extern S result(); // Result of parrsing action; undefined if status is not accept 
+  extern void reset(); // Must call before the first supply
 
   /* Used in the LL(1) parsing algorithm; integer range tricks are used to
    * represent terminals, non-terminals, and even names of rules as a single
