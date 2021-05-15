@@ -17,7 +17,7 @@ else
     $(error Build mode $(BUILD_MODE) not supported by this Makefile)
 endif
 
-CFLAGS += -MD -MP -w
+CFLAGS += -std=c++17 -MD -MP -w
 
 all: mini-lisp test
 
