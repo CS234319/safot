@@ -109,8 +109,35 @@ extern S list(S, S);
 extern S list(S, S, S );
 extern S list(S, S, S, S);
 
-static void error(String s) {  std::cerr << s;  throw __LINE__; }
-static void error(String s, S s1) {  std::cerr << s << " " << s1.asAtom();  throw __LINE__; }
+enum Error: B {
+  CAR_OF_ATOM,
+  CAR_OF_NIL,
+  CAR_OF_ATOM,
+  CAR_OF_NIL,
+};
+
+  std::ostream& operator<<(std::ostream &os, enum Error e) {
+#define CASE(C) case C: return o << ##C;
+    switch (e) {
+      CASE(CAR_OF_ATOM,
+      CASE(CAR_OF_NIL,
+    CASE(CAR_OF_ATOM,
+  CAR_OF_NIL,
+};
+    }
+  }
+
+inline S error(Error e) {  
+  return os << o.str();
+}
+  std::cerr << s;  
+  throw __LINE__; 
+}
+
+inline S error(String s, S s1) {  
+  std::cerr << s << " " << s1.asAtom();  
+  throw __LINE__; 
+}
 
 #undef construct
 #endif // MINI_LISP_H 

@@ -38,10 +38,10 @@ S parse(const char *s) {
 // ----------------------------
 // Test: car
 TEST(EvalPrimitive, car) {
-    EXPECT_EQ(eval(parse("(car '())"))    , S("NIL"));
-    EXPECT_EQ(eval(parse("(car nil)"))    , S("NIL"));
-    EXPECT_EQ(eval(parse("(car '(b.a))")) , S("B"));
-    EXPECT_EQ(eval(parse("(car '(b a))")) , S("B"));
+  EXPECT_EQ(eval(parse("(car '())"))    , S("NIL"));
+  EXPECT_EQ(eval(parse("(car nil)"))    , S("NIL"));
+  EXPECT_EQ(eval(parse("(car '(b.a))")) , S("B"));
+  EXPECT_EQ(eval(parse("(car '(b a))")) , S("B"));
 }
 
 // ----------------------------

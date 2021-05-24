@@ -63,11 +63,11 @@ TEST(Strings, Indices) {
   EXPECT_NE(T,NIL);
   EXPECT_EQ(T,T);
   EXPECT_NE(cons(T,T),cons(T,T));
-  EXPECT_EQ(q_lambda, q_lambda);
-  EXPECT_EQ(q_lambda, S("lambda"));
-  EXPECT_NE(q_lambda, q_nlambda);
-  EXPECT_NE(q_nlambda, q_lambda);
-  EXPECT_EQ(q_nlambda, q_nlambda);
+  EXPECT_EQ(Atoms::lambda, Atoms::lambda);
+  EXPECT_EQ(Atoms::lambda, S("lambda"));
+  EXPECT_NE(Atoms::lambda, Atoms::nlambda);
+  EXPECT_NE(Atoms::nlambda, Atoms::lambda);
+  EXPECT_EQ(Atoms::nlambda, Atoms::nlambda);
 }
 
 TEST(Strings, NIL) {

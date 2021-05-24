@@ -73,9 +73,6 @@ S set(S name, S value) {
   return value;
 }
 
-static void error(String s);
-static void error(String s, S s1);
-
 /** Implement library function */
 static S lookup(S id, S alist) { // lookup id in an a-list
   if (alist.null())
@@ -148,13 +145,22 @@ S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9, S s10) {
 }
 
 
-const S q_nlambda("nlambda"), q_lambda("lambda"), q_quote("quote");
-const S q_ndefun("ndefun"), q_defun("defun");
-const S q_atom("atom"), q_car("car"), q_cdr("cdr"), q_cond("cond"),
-  q_cons("cons"), q_eq("eq"), q_error("error"), q_eval("eval"), q_set("set");
-
-const S nlambda("nlambda"), lambda("lambda"), quote("quote");
-const S ndefun("ndefun"), defun("defun");
+namespace Atoms { 
+  const S ndefun("ndefun"); // Always define longer names first 
+  const S defun("defun");
+  const S nlambda("nlambda");
+  const S lambda("lambda");
+  const S quote("quote");
+  const S atom("atom");
+  const S car("car");
+  const S cdr("cdr");
+  const S cond("cond");
+  const S cons("cons");
+  const S error("error");
+  const S eval("eval");
+  const S set("set");
+  const S eq("eq");
+};
 
 
 /** Implement library function */
@@ -191,35 +197,32 @@ S evaluate_cond(S test_forms) {
 }
 
 S apply_trivial_atomic(S atomic_function, S first, S second) {
-  if (eq(atomic_function, q_atom))
+  if (eq(atomic_function, Atoms::atom))
     return first.atom();
-  if (eq(atomic_function, q_car)) {
+  if (eq(atomic_function, Atoms::car)) 
     return first.car();
-  }
-    
-  if (eq(atomic_function, q_cdr))
+  if (eq(atomic_function, Atoms::cdr))
     return first.cdr();
-  if (eq(atomic_function, q_cons))
+  if (eq(atomic_function, Atoms::cons))
     return cons(first, second);
-  if (eq(atomic_function, q_eq))
+  if (eq(atomic_function, Atoms::eq))
     return eq(first, second);
-  if (eq(atomic_function, q_set))
+  if (eq(atomic_function, Atoms::set))
     return set(first, second);
   error("Expected atomic function");
   return NIL;
 }
 
 S apply_eager_atomic(S atomic_function, S actuals) {
-  if (eq(atomic_function, q_error))
-    error("", actuals);
-    return NIL;
-  if (eq(atomic_function, q_eval))
+  if (eq(atomic_function, Atoms::error)) 
+    return error("", actuals);
+  if (eq(atomic_function, Atoms::eval))
     return eval(actuals.car());
   return apply_trivial_atomic(atomic_function, actuals.car(), actuals.cdr().car());
 }
 
 S apply_atomic(S atomic_function, S actuals) {
-  if (eq(atomic_function, q_cond)) 
+  if (eq(atomic_function, Atoms::cond)) 
     return evaluate_cond(actuals);
   return apply_eager_atomic(atomic_function, evaluate_list(actuals));
 }
@@ -243,11 +246,11 @@ S eval(S s) {
 }
 
 S defun(S name, S parameters, S body) {
-  return set(name, list(q_lambda, parameters, body));
+  return set(name, list(Atoms::lambda, parameters, body));
 }
 
 S ndefun(S name, S parameters, S body) {
-  return set(name, list(q_nlambda, parameters, body));
+  return set(name, list(Atoms::nlambda, parameters, body));
 }
 
 
