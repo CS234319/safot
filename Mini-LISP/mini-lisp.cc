@@ -2,6 +2,7 @@
 #include "mini-lisp.h"
 #include "dump.h"
 #include "stack-trace.h"
+
 #include "io.h"
 #include <iostream>
 
@@ -146,10 +147,15 @@ S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9, S s10) {
     return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9, s10));
 }
 
+
 const S q_nlambda("nlambda"), q_lambda("lambda"), q_quote("quote");
 const S q_ndefun("ndefun"), q_defun("defun");
 const S q_atom("atom"), q_car("car"), q_cdr("cdr"), q_cond("cond"),
   q_cons("cons"), q_eq("eq"), q_error("error"), q_eval("eval"), q_set("set");
+
+const S nlambda("nlambda"), lambda("lambda"), quote("quote");
+const S ndefun("ndefun"), defun("defun");
+
 
 /** Implement library function */
 bool exists(S x, S xs) { // determine whether atom x is in list xs

@@ -95,6 +95,8 @@ extern S cdr(S);
 // Unary library functions
 extern S eval(S);
 
+extern S apply(S s, S args);
+
 // Binary atomic functions
 extern bool eq(S, S);
 extern S cons(S car, S cdr);
