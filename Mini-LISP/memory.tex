@@ -103,18 +103,34 @@ characters.  An S-expression is represented by a 16 bits handle (the
 type H) encoding an integer $h$,
 \[2^{15} \le h \le 2^{15}-1\] 
 
-. The handle of a dotted pair is always positive. The handle of the 
+The handle of a dotted pair is always positive. The handle of the 
 special atom  NIL is zero; handles of all other atoms are negative. The sign bit 
 of a handle is therefore 
 a boolean: if it set, then the handle is an atom.
 */
-union S { // handle of S expression
-  H h; // full handle
-  };
+struct S { // handle of S expression
+  H h; // the handle
+};
+/*
+A handle makes it possible access the representation of the actual data: in the case
+of an  expression.
+*/
 \end{code}
 
-Such an expression is represented by a half-word that represents an integer $h$, %
-\[2^{15} \le h \le 2^{15}-1\] 
+\begin{code}
+/* @Represenation of atoms@ Also, for the purpose of our implementation we
+represent ``atoms'' (A) as the address of the first byte in sequence of bytes that
+end in the null byte, i.e., a byte in which all bits are zero, denoted in C by \verb/'\0'/ and mathematically by~$\natural$. 
+\[
+\verb/'\0'/ = \natural= 
+\begin{tikzpicture}[start chain=going right]
+\foreach \i in {1,...,8} \node [draw,on chain] {0};
+\end{tikzpicture}
+\]
+*/
+
+typedef const B *const A; // Underlining representation of strings as pointers to bytes  
+\end{code}
 
 \begin{code}/* @Representation of a dotted pair@ A dotted pair (for short, ``pair'') is 
 an unlabeled internal node in the binary tree representation of an S-expression. 
@@ -130,7 +146,7 @@ union Pair { // The perspectives of a pair.
 \end{code}
 
 \begin{code}
-/* @S-Expressions and their representation@ An S-expresion is either a %
+/* @Handles as indices@ An S-expresion is either a %
 dotted pair (consistuted by two, smaller, S-expressions) or an atom. %
 Such an expression is represented by a half-word that represents an integer $h$, %
 \[2^{15} \le h \le 2^{15}-1\] 
@@ -147,8 +163,8 @@ Such an expression is represented by a half-word that represents an integer $h$,
 \node[p] (p6) [p,pin=above:{$n_p$}] {};
 \node (label) [above=2 of p4]{\bf Pairs' Pool ($1\le h\le p$)};
 \foreach \n/\l/\p in { P0/$P_0=P$/p1.north west,P1/$P_1=P+4p$/p6.north east} 
-    \node(\n) [below=3 of \p] {\l} edge[u] (\p |+ label); 
-%    \node(\n) [below=3 of \p] {\l} edge[u] ($(\p)+(0,3)$); 
+%    \node(\n) [below=3 of \p] {\l} edge[u] (\p |+ label); 
+    \node(\n) [below=3 of \p] {\l} edge[u] ($(\p)+(0,3)$); 
     \path [u] (P0) -- +(0,1) coordinate (B0);
     \path [u] (P1) -- +(0,1) coordinate (B1);
     \draw[m] ($(P0)+(0,1)$)-- node (B) [fill=white,text=black] {$p$ pairs ($4p$ bytes)} ($(P1)+(0,1)$) ;
@@ -207,21 +223,6 @@ pair, i.e., an internal node; a negative pair represents a string. A zero
 
 
 
-\begin{code}
-/* @Represenation of atoms@ Also, for the purpose of our implementation we
-represent ``atoms'' (A) as the address of the first byte in sequence of bytes that
-end in the null byte, i.e., a byte in which all bits are zero, denoted in C by \verb/'\0'/ and mathematically by~$\natural$. 
-\[
-\verb/'\0'/ = \natural= 
-\begin{tikzpicture}[start chain=going right]
-\foreach \i in {1,...,8} \node [draw,on chain] {0};
-\end{tikzpicture}
-\]
-*/
-
-typedef const B *const A; // Underlining representation of strings as pointers to bytes  
-\end{code}
-
 \begin{code}[literate=
     {=}{$\equiv$ }{1}
     {*}{$\times$}{1}
@@ -238,14 +239,14 @@ Constants {
 }
 \end{code}
 
-
 \begin{code}[literate=
     {*}{$\times$}{1}
     {=}{$\equiv$ }{1}{*}{$\times$}{1}
     {1<<13}{$2^{13}$}{3}
     {1<<15}{$2^{15}$}{3}
     {1a<<$H_x$}{$2^{H_x}$}{3}
-]/* @Static memory@ 
+]
+/* @Static memory@ 
 All memory allocations are from a pre-allocated fixed 
 contigious memory block, the \emph{pool} of $n$ bytes comprising:
 \begin{enumerate} 
