@@ -1,6 +1,37 @@
 // An implementation of mini-lisp in mini-C++
 #include "mini-lisp.h"
-#include "delme.h"
+#include "dump.h"
+#include "stack-trace.h"
+
+#define SILENT 1
+#if SILENT
+#undef D
+#define D(...) 0
+#endif
+
+extern bool islist(S s) {
+    if (s.null())
+        return true;
+    if (s.atom())
+        return false;
+    return islist(s.cdr());
+}
+
+auto operator ,(const S s1, const S s2) {
+    D(s1, s2);
+    D(s1.islist(), s2.islist());
+    if (s2.islist())
+        return s1.cons(s2);
+    return list(s1, s2);
+}
+
+auto operator ,(const S s1, String s2) {
+    return (s1, S(s2));
+}
+
+auto operator ,(String s1, const S s2) {
+    return (S(s1), s2);
+}
 
 /** Implement atomic function */
 bool eq(S s1, S s2) {
@@ -68,6 +99,44 @@ S bind(S names, S values, S alist) {
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
 const S T(set(S("T"), S("T")));  // (set (quote t) (quote t))
 const S QUOTE("quote");
+
+S cons(S car, S cdr) {
+    return S(car, cdr);
+}
+S list() {
+    return NIL;
+}
+S list(S s) {
+    return cons(s, NIL);
+}
+S list(S s1, S s2) {
+    return cons(s1, list(s2));
+}
+S list(S s1, S s2, S s3) {
+    return cons(s1, list(s2, s3));
+}
+S list(S s1, S s2, S s3, S s4) {
+    return cons(s1, list(s2, s3, s4));
+}
+S list(S s1, S s2, S s3, S s4, S s5) {
+    return cons(s1, list(s2, s3, s4, s5));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6) {
+    return cons(s1, list(s2, s3, s4, s5, s6));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9, S s10) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9, s10));
+}
+
 const S nlambda("nlambda"), lambda("lambda"), quote("quote");
 const S ndefun("ndefun"), defun("defun");
 
