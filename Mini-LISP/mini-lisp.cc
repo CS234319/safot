@@ -1,14 +1,54 @@
 // An implementation of mini-lisp in mini-C++
 #include "mini-lisp.h"
-#include "delme.h"
+#include "dump.h"
+#include "stack-trace.h"
+#include "io.h"
+#include <iostream>
+
+#define SILENT 1
+#if SILENT
+#undef D
+#define D(...) 0
+#endif
+
+extern bool islist(S s) {
+    if (s.null())
+        return true;
+    if (s.atom())
+        return false;
+    return islist(s.cdr());
+}
+
+auto operator ,(const S s1, const S s2) {
+    D(s1, s2);
+    D(s1.islist(), s2.islist());
+    if (s2.islist())
+        return s1.cons(s2);
+    return list(s1, s2);
+}
+
+auto operator ,(const S s1, String s2) {
+    return (s1, S(s2));
+}
+
+auto operator ,(String s1, const S s2) {
+    return (S(s1), s2);
+}
 
 /** Implement atomic function */
 bool eq(S s1, S s2) {
-  if (not (s1.atom()) or not (s2.atom()))
+  if (not (s1.atom()) or not (s2.atom())) {
+    std::cout << "aaa: false" << std::endl;
     return false;
-  if (s1.index == s2.index)
+  }
+
+    
+  if (s1.index == s2.index) {
+    std::cout << "aaa: true" << std::endl;
     return true;
+  }
   using namespace Strings;
+  std::cout << "aaa: string eq" << std::endl;
   return Strings::eq(pool + s1.index, pool + s2.index);
 }
 
@@ -68,8 +108,48 @@ S bind(S names, S values, S alist) {
 const S NIL(set(S("NIL"), S())); // (set (quote nil) (quote nil))
 const S T(set(S("T"), S("T")));  // (set (quote t) (quote t))
 const S QUOTE("quote");
-const S nlambda("nlambda"), lambda("lambda"), quote("quote");
-const S ndefun("ndefun"), defun("defun");
+
+S cons(S car, S cdr) {
+    return S(car, cdr);
+}
+S list() {
+    return NIL;
+}
+S list(S s) {
+    return cons(s, NIL);
+}
+S list(S s1, S s2) {
+    return cons(s1, list(s2));
+}
+S list(S s1, S s2, S s3) {
+    return cons(s1, list(s2, s3));
+}
+S list(S s1, S s2, S s3, S s4) {
+    return cons(s1, list(s2, s3, s4));
+}
+S list(S s1, S s2, S s3, S s4, S s5) {
+    return cons(s1, list(s2, s3, s4, s5));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6) {
+    return cons(s1, list(s2, s3, s4, s5, s6));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9));
+}
+S list(S s1, S s2, S s3, S s4, S s5, S s6, S s7, S s8, S s9, S s10) {
+    return cons(s1, list(s2, s3, s4, s5, s6, s7, s8, s9, s10));
+}
+
+const S q_nlambda("nlambda"), q_lambda("lambda"), q_quote("quote");
+const S q_ndefun("ndefun"), q_defun("defun");
+const S q_atom("atom"), q_car("car"), q_cdr("cdr"), q_cond("cond"),
+  q_cons("cons"), q_eq("eq"), q_error("error"), q_eval("eval"), q_set("set");
 
 /** Implement library function */
 bool exists(S x, S xs) { // determine whether atom x is in list xs
@@ -87,8 +167,59 @@ bool atomic(S name) { // determine whether name denotes an atomic function
   return exists(name, atomic_functions);
 }
 
-S evaluate_atomic(S atomic, S args) {
+S evaluate_list(S xs) {
+  if (xs.null())
+    return NIL;
+  return cons(eval(xs.car()), evaluate_list(xs.cdr()));
+}
+
+S evaluate_cond(S test_forms) {
+  if (test_forms.null())
+    return NIL;
+  if (test_forms.car().atom())
+    error("Expected pair in cond", test_forms.car());
+    return NIL;
+  if (!eq(eval(test_forms.car().car()), NIL))
+    return eval(test_forms.car().cdr().car());
+  return evaluate_cond(test_forms.cdr());
+}
+
+S apply_trivial_atomic(S atomic_function, S first, S second) {
+  if (eq(atomic_function, q_atom))
+    return first.atom();
+  if (eq(atomic_function, q_car)) {
+    return first.car();
+  }
+    
+  if (eq(atomic_function, q_cdr))
+    return first.cdr();
+  if (eq(atomic_function, q_cons))
+    return cons(first, second);
+  if (eq(atomic_function, q_eq))
+    return eq(first, second);
+  if (eq(atomic_function, q_set))
+    return set(first, second);
+  error("Expected atomic function");
   return NIL;
+}
+
+S apply_eager_atomic(S atomic_function, S actuals) {
+  if (eq(atomic_function, q_error))
+    error("", actuals);
+    return NIL;
+  if (eq(atomic_function, q_eval))
+    return eval(actuals.car());
+  return apply_trivial_atomic(atomic_function, actuals.car(), actuals.cdr().car());
+}
+
+S apply_atomic(S atomic_function, S actuals) {
+  if (eq(atomic_function, q_cond)) 
+    return evaluate_cond(actuals);
+  return apply_eager_atomic(atomic_function, evaluate_list(actuals));
+}
+
+S evaluate_atomic(S s) {
+  return apply_atomic(s.car(), s.cdr());
 }
 
 S apply(S s, S args) {
@@ -96,19 +227,21 @@ S apply(S s, S args) {
 }
 
 S eval(S s) {
-  if (s.atom())
+  if (s.atom()) {
     return lookup(s);
-  if (atomic(s.car()))
-    return evaluate_atomic(s.car(), s.cdr());
+  }
+  if (atomic(s.car())) {
+    return evaluate_atomic(s);
+  }
   return apply(eval(s.car()), s.cdr());
 }
 
-S Defun(S name, S parameters, S body) {
-  return set(name, list(lambda, parameters, body));
+S defun(S name, S parameters, S body) {
+  return set(name, list(q_lambda, parameters, body));
 }
 
-S Ndefun(S name, S parameters, S body) {
-  return set(name, list(nlambda, parameters, body));
+S ndefun(S name, S parameters, S body) {
+  return set(name, list(q_nlambda, parameters, body));
 }
 
 
