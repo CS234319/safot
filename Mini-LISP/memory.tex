@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+
 \usepackage[margin=1.5cm]{geometry}
 \usepackage{newverbs,listings}
 \usepackage[dvipsnames]{xcolor}
@@ -23,7 +24,7 @@
 \newread  \tempFile     % A temporary reading stream
 \newwrite \codeFile     % A stream to save the code fragment 
 
-\immediate \openout \codeFile=\jobname.cc
+%\immediate \openout \codeFile=\jobname.cc
 
 \lstnewenvironment{code}[1][\relax]{\lstset{#1}}{}
 
@@ -74,8 +75,6 @@
     escapebegin={\works},
 }
 
-\begin{document}
-
 \begingroup
 \catcode`@=\active
 \gdef\works{%    note the global \gdef
@@ -85,16 +84,23 @@
   }%
 }%
 \endgroup
-\begin{code}/* @Primitive types characterizing the machine@ We begin with a %
-definition  of the basic types that characterize our presumed JVM like machine 
+
+\begin{document}
+
+
+\begin{code}
+/* @Primitive types characterizing the machine@ 
+We begin with a  definition  of the basic types that characterize our presumed JVM like machine 
 i.e., byte addressable, two-complement and where words (W) are 32 bits wide, 
 half words (H) are 16 bits, and bytes (B) are 8 bits. */
+
 #include <cstdint> // Standard header providing width integer types 
 
 typedef int8_t  B; // A byte, 8 bits 
 typedef int16_t H; // Half a word, 16 bits; two bytes
 typedef int32_t W; // A full word of 32 bits; four bytes, two half words
 \end{code}
+
 
 \begin{code}
 /* @S-Expressions and  handles@ An S-expression is either a  dotted pair 
@@ -156,8 +162,10 @@ Such an expression is represented by a half-word that represents an integer $h$,
     an array $P$ of pairs whose indices are in the range $1,2,\ldots p$, and %
     where $p>0$ is the number of pairs in the the statically allocated %
     memory block used for storing pairs. %
+
 \begin{layout}
-\foreach \i in {1,...,3} \node[p] (p\i) [pin=above:{\i}] {};
+\foreach \i in {1,...,3} 
+    \node[p] (p\i) [pin=above:{\i}] {};
 \node[p] (p4) [minimum width=120pt] {$\cdots$};
 \node[p] (p5) [p,pin=above:{$n_p-1$}] {};
 \node[p] (p6) [p,pin=above:{$n_p$}] {};
@@ -206,6 +214,19 @@ Such an expression is represented by a half-word that represents an integer $h$,
 \end{layout}
 \end{description}
 \end{code}
+
+\begin{code} /*@Ensuring that both pools are contigious$
+We need to make array $P$ follow arrary $A$ in memory to conserve as much memory 
+as possible. To do so, we allocate a memory block of $a + 4*p$ bytes, and use 
+two perspectives to access it.
+*/
+
+Allocate represnetation {
+    perspective(byte [a + 4*p])
+    perspective(char A[a]; pair P[p];) 
+}
+\end{code}
+
 
 \begin{itemize}
     \item  integers 
@@ -261,7 +282,7 @@ from which internal representations of pairs are allocated.
 \node[a] (a2) {};
 %\node[a] (a3) {};
 \node[a] (a4) [minimum width=45pt] {$\cdots$};
-\foreach \i/\l[count=\j from -4] in {5/,6/,7/T,8/$\natural$,9/N,10/I,11/L,12/$\natural$} \node (a\i) [a,pin=below:{\j}] {\tt\l};
+\foreach \i/\l[count=\j from -3] in {5/,6/,7/T,8/$\natural$,9/N,10/I,11/L,12/$\natural$} \node (a\i) [a,pin=below:{\j}] {\tt\l};
 
 \foreach \i in {1,...,3} \node[p] (p\i) [pin=below:{\i}] {};
 \node[p] (p4) [minimum width=160pt] {$\cdots$};

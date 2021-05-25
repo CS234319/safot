@@ -41,6 +41,10 @@ mini-lisp:	$(OBJS)
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
+memory: memory.o
+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+
+
 # -include $(SRC:%.c=%.d)
 
 clean:

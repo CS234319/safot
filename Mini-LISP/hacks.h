@@ -19,8 +19,6 @@
 #define let static
 typedef const char *const String;
 
-
 typedef int32_t W; // A full word of  32 bits; two half words
 typedef int16_t H; // Half a word including 16 bits.
-
-
+typedef int8_t B; // A byte 
