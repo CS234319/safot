@@ -109,23 +109,17 @@ extern S list(S, S);
 extern S list(S, S, S );
 extern S list(S, S, S, S);
 
-enum Error: B {
+enum Error: byte {
   CAR_OF_ATOM,
   CAR_OF_NIL,
-  CAR_OF_ATOM,
-  CAR_OF_NIL,
+  CDR_OF_ATOM,
+  CDR_OF_NIL,
+  UNBOUND_VARIABLE,
+  MISSING_VALUE,
+  OTHER_ERROR,
+  AFTER_ERRORS, // Use this to make sure all exceptions were tested;
 };
 
-  std::ostream& operator<<(std::ostream &os, enum Error e) {
-#define CASE(C) case C: return o << ##C;
-    switch (e) {
-      CASE(CAR_OF_ATOM,
-      CASE(CAR_OF_NIL,
-    CASE(CAR_OF_ATOM,
-  CAR_OF_NIL,
-};
-    }
-  }
 
 inline S error(Error e) {  
   return os << o.str();
@@ -141,3 +135,4 @@ inline S error(String s, S s1) {
 
 #undef construct
 #endif // MINI_LISP_H 
+   

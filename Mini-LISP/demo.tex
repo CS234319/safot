@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{listings,showexpl}
+\begin{document}
+I try to use the listings package to typeset C code, such that C comments 
+are interpreted as input to \LaTeX. 
+\begin{LTXexample}
+\lstset{language=C}
+\end{LTXexample}
+One line comments are easy with \verb/texcl/ 
+option,
+
+\begin{LTXexample}
+\begin{lstlisting}[texcl]
+main(){main();}//\LaTeX
+\end{lstlisting}
+\end{LTXexample}
+But, this option applies only to line comments 
+\begin{LTXexample}
+\begin{lstlisting}[texcl]
+main(){main();}/*\LaTeX*/
+\end{lstlisting}
+\end{LTXexample}
+The \verb/escapeinside/ option can be used instead, 
+\begin{LTXexample}
+ \begin{lstlisting}[escapeinside={/*}{*/}]
+main(){main();}/*\LaTeX*/
+ \end{lstlisting}
+\end{LTXexample}
+ With \verb/escapebegin/ and \verb/escapeend/ we can even make the output look 
+very much like the input, with a bit of polishing 
+\begin{LTXexample}
+\begin{lstlisting}[
+    escapeinside={/*}{*/},
+    escapebegin={\texttt{/*}},
+    escapeend={\texttt{*/}}]
+main(){main();}/*\LaTeX*/
+\end{lstlisting}
+\end{LTXexample}
+\paragraph{Detour} Why would I want to make the output look like the input? I envision a poor man's version of web/tangle/weave in which code written within a version of a listings
+environment is not only presented nicely on the rendered document, it is also saved in a file named \verb/\jobname.c/, which can be compiled by a C compiler.
+This file should also make sense to a person who has very little understanding of \LaTeX. Something like 
+
+\begin{LTXexample}
+ \lstnewenvironment{code}{
+    \lstset{frame=single,
+      escapeinside={/*}{*/},
+      escapebegin={\texttt{/*}\itshape}, 
+      escapeend={\texttt{*/}}}}{\footnote
+        {Should be saved in \jobname.c}}
+\begin{code}
+main(){main();}/*\LaTeX*/
+\end{code}
+\end{LTXexample}
+
+The problem is that escaping to \LaTeX does not work quite right, and new line
+characters in the input disappear
+\begin{code}
+/* The shortest legal (but not warnings free) C 
+program.*/ 
+main(){for(;;);}
+\end{code}
+There is yet another small glitch I think with the escaping mechanism; it seems to 
+be adding a space.
+\begin{LTXexample}
+\begin{lstlisting}[escapeinside={/*}{*/}]
+/* This is the time for all good men to come to the */
+main(){main();}/*\LaTeX*/
+\end{lstlisting}
+\end{LTXexample}
+\end{document}

@@ -2,6 +2,26 @@
 #include "gtest/gtest.h"
 #include "mini-lisp.cc"
 #include "test.h"
+
+// This is how you can covert error codes to strings
+#if 0
+std::ostream& operator<<(std::ostream &os, enum Error e) {
+#define CASE(C) case C: return o << ##C;
+    switch (e) {
+      CASE(CAR_OF_ATOM,
+      CASE(CAR_OF_NIL,
+    CASE(CAR_OF_ATOM,
+  CAR_OF_NIL,
+};
+    }
+  }
+#endif 
+
+
+byte ErrorChecked[AFTER_ERRORS];  // Mark here every exceptions that was tested; 
+// Add test that all exceptions were checked.
+// Add tests that error strings are meaningful; consult with Yossi on how
+
 /**
  * Tests of mini-lisp basics; should be renamed one day
  */

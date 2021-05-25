@@ -1,0 +1,3 @@
+﻿\begin{tikzpicture} 
+\draw (0,0)rectangle +(42, 67);
+\end{tikzpicture}
