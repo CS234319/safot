@@ -68,20 +68,26 @@ as possible. To do so, we allocate a memory block of $a + 4*p$ bytes, and use
 two perspectives to access it.
 */
 
+#define ARRAY(type) type *const
+
 namespace Memory { // Prototype for memory.h
-  extern char *A;
-  extern pair *P;
+  extern ARRAY(char) A ;
+  extern ARRAY(pair) P;
   namespace Atoms { 
-   extern H allocate(String);       // Allocate a sequence of 
-   extern bool eq(String, String);  // Compare two strings equality.
-   // We cannot free atoms.
+   typedef const char* const string;
+   extern string retrieve(H h);   
+   extern H allocate(string);       // Returns an index in A in which a character sequence is identical to the parameter; 
+   extern H available();            // How many characters are still available on A 
+   extern bool eq(string, string);  // Check two strings for equality.
+   extern string (H index);       //  A convenience method that retrieves a pair by its handle
   };
 
   namespace Pairs {
-    extern H allocate(H car, H cdr); /* Retrieve a free pair, and set it values */
-    extern void free(H index);       /* Return a pair to the pool */
-    extern H to_go();                /* How many pairs are still free */ 
-    extern Pair& get(H index);       /* A convenience method that retrieves a pair by its handle */
+    extern H first; 
+    extern H allocate(H, H);         //  Retrieve a free pair, and set it values 
+    extern void free(H index);       //  Return a pair to the pool
+    extern H available();            //  How many pairs are still free 
+    extern pair& get(H index);       //  A convenience method that retrieves a pair by its handle
   }
 };
 
@@ -89,8 +95,8 @@ namespace Memory { // Prototype for memory.h
 namespace Memory { 
   static union  {
     enum: H { a = 1 << 13 }; 
-    enum: H { p = 1 << 15 - 2}; 
-    enum: unsigned H  { n = a + p * sizeof pair};
+    enum: H { p = 1 << 15 - a }; 
+    enum: unsigned H  { n = a + p * sizeof (union pair)};
     enum: H { NIL_SIZE = 4 };
     char block[a + 4 *p];
     struct {
@@ -99,35 +105,62 @@ namespace Memory {
      pair P[p];
     };
   } all; 
-  const char *A  = all.A;
-  const pair *P = all.P - 1;
-  pair *P1 = all.P + all.p;
-  static const char *A0  = all.A0;
-  static const char *A1  = all.A + all.a;
-  static pair *P0 = all.P - 1;
-  static pair *P0 = all.P - 1;
-  static pair *P0 = all.P - 1;
+  ARRAY(pair) P = all.P - 1;
+  ARRAY(pair) P0 = all.P - 1;
+  ARRAY(pair) P1 = all.P + all.p;
+  ARRAY(char) A  = all.A;
+  ARRAY(char) A0  = all.A0;
+  ARRAY(char) A1  = all.A + all.a;
 };
+namespace Memory::Pairs {
+  enum {min = 1; max = p;};
+}
 
 
 #include "gtest/gtest.h"
 
+TEST(Memory, ByteFlipping) { 
+  using namespace Memory;
+  EXPECT_EQ(sizeof(byte), 1);
+  EXPECT_EQ(sizeof(char), 1);
+  EXPECT_EQ(sizeof(H), 2);
+  EXPECT_EQ(sizeof(W), 4);
+  EXPECT_EQ(sizeof(pair), 4);
+};
+
+
 TEST(Memory, PrimitiveSizs) { 
   using namespace Memory;
-  EXPECT_EQ(sizeof byte, 1);
-  EXPECT_EQ(sizeof char, 1);
-  EXPECT_EQ(sizeof H, 2);
-  EXPECT_EQ(sizeof W, 4);
-  EXPECT_EQ(sizeof pair, 4);
+  EXPECT_EQ(sizeof(byte), 1);
+  EXPECT_EQ(sizeof(char), 1);
+  EXPECT_EQ(sizeof(H), 2);
+  EXPECT_EQ(sizeof(W), 4);
+  EXPECT_EQ(sizeof(pair), 4);
+};
+
+TEST(Memory, NIL) {
+  using namespace Memory;
+  EXPECT_STREQ((char *) all.P, A1);
+  EXPECT_STREQ(A, "NIL");
+  EXPECT_STREQ((char *)P, "NIL");
+};
+
+TEST(Memory, innerAndOuterArrays) {
+  using namespace Memory;
+  EXPECT_EQ(A,all.A);
+  EXPECT_GE(P + 1,all.P);
+  EXPECT_LE(P + 1,all.P);
+  EXPECT_EQ(P + 1 - all.P,0);
+  EXPECT_EQ(P + 1,all.P);
 };
 
 TEST(Memory, twoArrayAreConsecutive) {
   using namespace Memory;
-  EXPECT_STREQ((char *P), A1);
-  EXPECT_STREQ(A1, "NIL");
-  EXPECT_STREQ((char *)P, "NIL");
+  EXPECT_GE(all.A + sizeof(all.A), (char *)all.P);
+  EXPECT_LE(all.A + sizeof(all.A), (char *)all.P);
+  EXPECT_EQ(all.A + sizeof(all.A) - (char *)all.P,0);
+  EXPECT_EQ((void *)(all.A + sizeof all.A), (void *)all.P); 
 };
-
 
 TEST(Memory, totalSize) {
   using namespace Memory;

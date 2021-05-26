@@ -41,12 +41,12 @@ mini-lisp:	$(OBJS)
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
-memory: memory.o
+store: store.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 
 # -include $(SRC:%.c=%.d)
 
 clean:
-		rm -fr $(OBJS) mini-lisp test *.o *.d *~ *.backup 
+		rm -fr $(OBJS) mini-lisp test store *.o *.d *~ *.backup 
 
