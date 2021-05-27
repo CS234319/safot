@@ -6,17 +6,20 @@
 \usepackage{tikz}
 
 \usetikzlibrary{arrows,chains,calc,shapes,shapes.multipart,shapes.callouts}
-
-\tikzset{node distance=0,pin distance=9pt}
-\tikzstyle{c}=[draw,on chain, minimum height=13pt,minimum width=13pt]
-\tikzstyle{a}=[c,fill=yellow]
-\tikzstyle{h}=[inner sep=1pt,ellipse,fill=blue!20]
-\tikzstyle{p}=[c,fill=SpringGreen,minimum width=40pt]
-\tikzstyle{m}=[<->,draw,shorten >=3pt,shorten <=3pt,thin,olive!50!black,fill=white,text=black]
-\tikzstyle{u}=[draw,very thick,red,]
+\tikzset{node distance=0}
 \tikzstyle{f}=[draw,blue!50!black,->,shorten <=2pt,shorten >=2pt]
-\newenvironment{layout}{\quote\tikzpicture[start chain=going right,x=13pt,y=13pt]\scriptsize}
-                       {\endtikzpicture\endquote}
+\newenvironment{layout}{\quote
+\tikzpicture[start chain=going right,x=20pt,y=14pt]
+   \tikzset{pin distance=9pt}
+   \tikzstyle{c}=[draw,on chain, minimum height=13pt,minimum width=13pt]
+   \tikzstyle{a}=[c,fill=yellow]
+   \tikzstyle{h}=[inner sep=2pt,rounded corners,fill=blue!20]
+   \tikzstyle{p}=[c,fill=SpringGreen,minimum width=40pt]
+   \tikzstyle{m}=[<->,draw,shorten >=3pt,shorten <=3pt,thin,olive!50!black,fill=white,text=black]
+   \tikzstyle{u}=[draw,very thick,red,]
+   \scriptsize%
+}
+{\endtikzpicture\endquote}
     
 
 \newcounter{segment}
@@ -118,7 +121,7 @@ struct S { // handle of S expression
   H h; // the handle
 };
 /*
-A handle makes it possible access the representation of the actual data: in the case
+A handle makes it possible to access the representation of the actual data: In the case
 of an  expression.
 */
 \end{code}
@@ -188,7 +191,7 @@ Such an expression is represented by a half-word that represents an integer $h$,
 \begin{layout}
 \node[a] (a0) [pin=above:{$-a+4$}] {};
 \node[a] (a1) [minimum width=56ex] {$\cdots$};
-\foreach \i/\l[count=\j from -8] in {ndefun/\tt N,defun/\tt D,/\tt E,/\tt F,/\tt U,/\tt N,/$\natural$,t/\tt T,12/$\natural$,nil/\tt N,10/\tt I,11/\tt L,a$/$\natural$} \node (\i) [a,pin=above:{\tiny \j}] {\l};
+\foreach \i/\l[count=\j from -9] in {ndefun/\tt N,defun/\tt D,/\tt E,/\tt F,/\tt U,/\tt N,/$\natural$,t/\tt T,12/$\natural$,nil/\tt N,10/\tt I,11/\tt L,a$/$\natural$} \node (\i) [a,pin=above:{\tiny \j}] {\l};
 \path ($(a1)!0.5!(a$)$) ++(0,3)  node {\bf Atoms' Pool ($-a+4 \le h\le 0$)};
 
     \node(A0)  [below=4 of a0.south west] {$A_0=A-a+4$}; 
@@ -197,13 +200,13 @@ Such an expression is represented by a half-word that represents an integer $h$,
     \draw[u] (A0) -- +(0,9);
     \draw[u] (A) -- +(0,4);
     \draw[u] (A1) -- +(0,9);
-    \draw[m] ($(A0)+(0,1)$)--node(B)[fill=white,text=black]{$a$ bytes}($(A1)+(0,1)$);
-    \draw[m] ($(A0)+(0,3)$)--node(B)[fill=white,text=black]{$a$ bytes}($(A)+(0,1)$);
-    \draw[m] ($(A)+(0,1)$)--node(B)[fill=white,text=black]{$4$ bytes}($(A1)+(0,3)$);
+    \draw[m] ($(A0)+(0,1)$)--node(B)[fill=white]{$a$ bytes}($(A1)+(0,1)$);
+    \draw[m] ($(A0)+(0,3)$)--node(B)[fill=white]{$a-4$ bytes}($(A)+(0,1)$);
+    \draw[m] ($(A)+(0,1)$)--node(B)[fill=white]{$4$ bytes} ($(A1)+(0,3)$);
     
-    \node[below=8 of nil,h]{\tt nil} edge [f] node[above,rotate=90,very near start] {\tiny $h=0$} (nil);
-    \node[below=7 of t,h] {\tt t} edge[f] node[above,rotate=90,very near start] {\tiny $h=-1$} (t);
-    \node[below=10 of defun,h] {\tt defun} edge [f] node[above,rotate=90,very near start] {\tiny $h=-7$} (defun);
+    \node[below=8 of nil,h]{\tt nil} edge [f] node[above,rotate=90,near start] {\tiny $h=0$} (nil);
+    \node[below=7 of t,h] {\tt t} edge[f] node[above,rotate=90,near start] {\tiny $h=-1$} (t);
+    \node[below=5.5 of defun,h] {\tt defun} edge [f] node[above,rotate=90,near start] {\tiny $h=-7$} (defun);
     \node[below=7 of ndefun,h] {\tt ndefun} edge[f] node[above,rotate=90,near start] {\tiny $h=-8$} (ndefun);
 
 

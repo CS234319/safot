@@ -2,11 +2,9 @@
 // 
 #include <cstdint> // Standard header providing integer types with widths 
 
-#define Constant(type) enum:type 
 #define Context namespace
 #define Provides extern
-#define Define constexpr 
-#define Implements inline
+#define Let constexpr 
 
 #define function   
 #define property inline  
@@ -23,7 +21,6 @@
 
 #define max(x,y) (x > y ? x : y) 
 #define min(x,y) (x < y ? x : y) 
-
 
 typedef int8_t   byte; /// Byte                         | 8 bits signed integer  | (rarely used)
 typedef int16_t  H;    /// Half a word (2 bytes)        | 16 bits signed integer | (used as handle) 
@@ -49,47 +46,52 @@ Context Pairs { Provides property variable(pair) fetch(H index); }  ///  Retriev
 Context Atoms { Provides property constant(text) fetch(H index); }  ///  Retrieves text of a handle (immutable) 
 
 Context Store { 
-  Provides modifier H yield(H, H);    /// Handle create new pair with given contents 
-  Provides function H yield(text);    /// Find or or create new atom with given contents 
   Provides procedure free(H index);   /// Marks a previously yielded handle as no longer in use 
+  Provides modifier H yield(H, H);    /// Returns handle of pair with given values of its two handles 
+  Provides function H yield(text);    /// Returns handle of atom with given text; 
+  extern const H a;
+  //, p, n; 
 }
 
 Context Pairs { Provides function H available(); }  /// How many pairs remain available for allocation 
 Context Atoms { Provides function H available(); }  /// How many chars remain available for allocation 
 
 Context Store { 
-  static union  {
-    Constant(H)  { a = 1 << 12 }; 
-    Constant(H)  { p = (1 << 15) - a + 3}; 
-    Constant(H)  { NIL_SIZE = 4 };
-    Constant(W)  { n = a + p * sizeof (union pair)};
-    char block[a + 4 *p];
-    struct {
-     char A0[a - NIL_SIZE];
-     char A[NIL_SIZE] = { 'N', 'I', 'L', '\0' };
-     pair P[p];
-    };
-  } all; 
-  Define array(pair) P = all.P - 1;
-  Define array(pair) P0 = all.P - 1;
-  Define array(pair) P1 = all.P + all.p;
-  Define array(char) A  = all.A;
-  Define array(char) A0  = all.A0;
-  Define array(char) A1  = all.A + all.a;
+  Let H a = 1 << 12;
+  Let H p = (1 << 15) - a + 3; 
+  Let W n = a + p * sizeof (union pair);
+  Let H NIL_SIZE = sizeof "NIL";
 }
 
-Context Atoms { Constant(H) { $h_0$ = Store::A0 - Store::A,   $h_1$ = Store::A0 - Store::A };  } 
-Context Pairs { Constant(H) { $h_0$ = Store::P0 - Store::P,   $h_1$ = Store::P1 - Store::P };  } 
+static union  {
+  char block[Store::a + 4 * Store::p];
+  struct {
+   char A0[Store::a - Store::NIL_SIZE];
+   char A[Store::NIL_SIZE] = { 'N', 'I', 'L', '\0' };
+   pair P[Store::p];
+  };
+} all; 
+
+
+Context Store { 
+  Let array(pair) P = all.P - 1;
+  Let array(pair) P0 = all.P - 1;
+  Let array(pair) P1 = all.P + p;
+  Let array(char) A  = all.A;
+  Let array(char) A0  = all.A0;
+  Let array(char) A1  = all.A + a;
+}
+
+Context Atoms { Let H $h_0$ = Store::A0 - Store::A, $h_1$ = 0;  } 
+Context Pairs { Let H $h_0$ = all.P - Store::P, $h_1$ = Store::P1 - all.P;  } 
 
 Context Store {   
-  Constant(H) { 
-    $h_0$ = min(Atoms::$h_0$, Pairs::$h_0$),
-    $h_1$ = max(Atoms::$h_1$, Pairs::$h_1$)
-  };     
+  Let H $h_0$ = min(Atoms::$h_0$, Pairs::$h_0$), $h_1$ = max(Atoms::$h_1$, Pairs::$h_1$);
 }
-Context Pairs  { Constant(H) { $n$ = $h_1$ - $h_1$ + 1}; };
-Context Atoms  { Constant(H) { $n$ = $h_1$ - $h_1$ + 1}; }; 
-Context Store { Constant(H)  { $n$ = $h_1$ - $h_1$ + 1}; };
+
+Context Pairs { Let H $n$ = $h_1$ - $h_0$ + 1; };
+Context Atoms { Let H $n$ = $h_1$ - $h_0$ + 1; }; 
+Context Store { Let H $n$ = $h_1$ - $h_0$ + 1; };
 
 Context Store {
   H mark(H h)   { return h + (1 << 15); } 
@@ -107,33 +109,59 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+TEST(Atoms, $h_0$) { 
+  using Context Atoms; 
+  EXPECT_LT($h_0$,0);
+  EXPECT_GE(Store::A - Store::A0,$h_0$);
+}
+
+TEST(Atoms, $h_1$) { 
+  using Context Atoms; 
+  EXPECT_EQ($h_1$, 0);
+  EXPECT_EQ(Store::A + $h_1$, (text) Store::P);
+}
+
+TEST(Atoms, $n$) { 
+  using Context Atoms; 
+  EXPECT_GT($h_1$, $h_0$);
+  EXPECT_GT($n$, 0);
+  EXPECT_EQ($n$, sizeof all.A0 + 1);
+}
+
+TEST(Pairs, $h_0$) { 
+  using Context Pairs; 
+  EXPECT_EQ($h_0$, 1);
+}
+
+TEST(Pairs, $h_1$) { 
+  using Context Pairs; 
+  EXPECT_GT($h_1$, $h_0$);
+  EXPECT_EQ($h_1$, $n$);
+  EXPECT_EQ(Store::P1 - all.P, $h_1$);
+  EXPECT_EQ(Store::p, $h_1$);
+}
+
+TEST(Pairs, $n$) { 
+  using Context Pairs; 
+  EXPECT_GT($n$,0);
+  EXPECT_LT($n$,sizeof all);
+  EXPECT_LT($n$,sizeof all.P);
+  EXPECT_EQ($n$, Store::p);
+  EXPECT_EQ($n$,sizeof all.P / sizeof all.P[0]);
+}
 
 TEST(Store, minimalSize) {
   using Context Store;
-  EXPECT_GT((H) all.a, 100);
-  EXPECT_GT((H) all.p, 100);
-};
+  EXPECT_GT((H) a, 100);
+  EXPECT_GT((H) p, 100);
+}
 
 TEST(Store, overflow) {
   using Context Store;
-  EXPECT_GT((H) all.p + 1, 0);
-  EXPECT_LT((H) - all.a - 1, 0);
-};
-
-TEST(Store, RangesAtoms) { 
-  using Context Atoms; 
-  EXPECT_EQ(Store::A + $h_0$, Store::A0);
-  EXPECT_EQ(Store::A + $h_1$, (text) Store::P);
-  EXPECT_EQ($n$, Store::all.a - 4);
-};
-
-TEST(Store, RangesPairs) { 
-  using Context Pairs; 
-  EXPECT_EQ(Store::A + Store::$h_0$, Store::A0);
-  EXPECT_EQ(Store::A + Store::$h_1$, Store::A);
-};
-
-TEST(Store, MarkingPairs) { 
+  EXPECT_GT((H) p + 1, 0);
+  EXPECT_LT((H) - a - 1, 0);
+}
+TEST(Marking, Pairs) { 
   using Context Pairs;
   EXPECT_LT(Store::mark($h_0$), Atoms::$h_0$);   
   EXPECT_LT(Store::mark($h_1$), Atoms::$h_0$);   
@@ -145,11 +173,11 @@ TEST(Store, MarkingPairs) {
   EXPECT_EQ(Store::mark(Store::mark(($h_0$ + $h_1$)/2)),($h_0$ + $h_1$)/2);
   EXPECT_EQ(Store::mark(Store::mark($h_0$ + 1)),$h_0$ + 1 );
   EXPECT_EQ(Store::mark(Store::mark($h_1$ + 1)), $h_1$ + 1);
-};
+}
 
-TEST(Store, MarkingAtoms) { 
+TEST(Marking, Atoms1) { 
   using Context Atoms;
-  EXPECT_GT(Store::mark($h_0$), Pairs::$h_1$);   
+  EXPECT_GT(Store::mark($h_0$), $h_1$);   
   EXPECT_LT(Store::mark($h_1$),0);
   EXPECT_GT(Store::mark(($h_0$ + $h_1$)/2), Pairs::$h_1$);   
   EXPECT_GT(Store::mark($h_1$-1), Pairs::$h_1$);   
@@ -159,14 +187,27 @@ TEST(Store, MarkingAtoms) {
   EXPECT_EQ(Store::mark(Store::mark(($h_0$ + $h_1$)/2)),($h_0$ + $h_1$)/2);
   EXPECT_EQ(Store::mark(Store::mark($h_0$ + 1)),$h_0$ + 1 );
   EXPECT_EQ(Store::mark(Store::mark($h_1$ + 1)), $h_1$ + 1);
-};
+}
 
-TEST(Store, MarkingIsMarked) { 
+TEST(Marking, Atoms2) { 
+  using Context Atoms;
+  EXPECT_GT(Store::mark($h_0$), $h_1$);   
+  EXPECT_LT(Store::mark($h_1$),0);
+  EXPECT_GT(Store::mark(($h_0$ + $h_1$)/2), Pairs::$h_1$);   
+  EXPECT_GT(Store::mark($h_1$-1), Pairs::$h_1$);   
+  EXPECT_GT(Store::mark($h_0$+1), Pairs::$h_1$);   
+  EXPECT_EQ(Store::mark(Store::mark($h_0$)), $h_0$);
+  EXPECT_EQ(Store::mark(Store::mark($h_1$)), $h_1$);
+  EXPECT_EQ(Store::mark(Store::mark(($h_0$ + $h_1$)/2)),($h_0$ + $h_1$)/2);
+  EXPECT_EQ(Store::mark(Store::mark($h_0$ + 1)),$h_0$ + 1 );
+  EXPECT_EQ(Store::mark(Store::mark($h_1$ + 1)), $h_1$ + 1);
+}
+
+TEST(Marking, MarkingIsMarked) { 
   using Context Store;
   for (H h = $h_0$; h <= $h_1$; ++h)
     EXPECT_TRUE(marked(mark(h)));
-};
-
+}
 
 TEST(Store, PrimitiveSizs) { 
   using Context Store;
@@ -175,14 +216,14 @@ TEST(Store, PrimitiveSizs) {
   EXPECT_EQ(sizeof(H), 2);
   EXPECT_EQ(sizeof(W), 4);
   EXPECT_EQ(sizeof(pair), 4);
-};
+}
 
 TEST(Store, NIL) {
   using Context Store;
   EXPECT_STREQ((char *) all.P, A1);
   EXPECT_STREQ(A, "NIL");
   EXPECT_STREQ((char *)P, "NIL");
-};
+}
 
 TEST(Store, innerAndOuterArrays) {
   using Context Store;
@@ -191,7 +232,7 @@ TEST(Store, innerAndOuterArrays) {
   EXPECT_LE(P + 1,all.P);
   EXPECT_EQ(P + 1 - all.P,0);
   EXPECT_EQ(P + 1,all.P);
-};
+}
 
 TEST(Store, twoArrayAreConsecutive) {
   using Context Store;
@@ -201,15 +242,30 @@ TEST(Store, twoArrayAreConsecutive) {
   EXPECT_EQ((void *)(all.A + sizeof all.A), (void *)all.P); 
 }
 
-TEST(Store, totalSize) {
+TEST(Store, computedSize) {
   using Context Store;
-  EXPECT_EQ(sizeof all.block, all.n);
-  EXPECT_EQ(sizeof all.block - all.n, 0);
-  EXPECT_EQ(all.n - sizeof all.block, 0);
+  EXPECT_EQ(sizeof all.block, n);
+  EXPECT_EQ(sizeof all.block - n, 0);
+  EXPECT_EQ(n - sizeof all.block, 0);
 }
+
+TEST(Store, actualSize) {
+  using Context Store;
+  EXPECT_EQ(sizeof all.block, sizeof all);
+  EXPECT_EQ(sizeof all.block - sizeof all, 0);
+  EXPECT_EQ(sizeof all - sizeof all.block, 0);
+}
+
+TEST(Store, correctCounting) {
+  using Context Store;
+  EXPECT_EQ(sizeof all.block, sizeof all);
+}
+
 TEST(Store, ConversionToIntDoesNotBreakArrayLimits) {
   using Context Store;
-  EXPECT_EQ((H) all.a, all.a); 
-  EXPECT_EQ((H) all.p, all.p); 
+  EXPECT_EQ((H) a, a); 
+  EXPECT_EQ((H) p, p); 
 }
+
+
 
