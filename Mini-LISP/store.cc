@@ -11,10 +11,10 @@
 #define procedure void  
 #define array(type) type *const
 
-#define text const char* const // Underlining representation of atoms as pointers to characters
+#define text const char * // Underlining representation of atoms as pointers to characters
 
-#define constant(type) type & 
-#define variable(type) const type 
+#define variable(type) type & 
+#define constant(type) const type 
 #define action void
 #define modifier 
 #define data 
@@ -43,14 +43,15 @@ Context Store { // Prototype for store.h
 }
 
 Context Pairs { Provides property variable(pair) fetch(H index); }  ///  Retrieves the pair behind a positive handle (mutable)  
-Context Atoms { Provides property constant(text) fetch(H index); }  ///  Retrieves text of a handle (immutable) 
+Context Atoms { Provides property text fetch(H index); }  ///  Retrieves text of a handle (immutable) 
 
 Context Store { 
   Provides procedure free(H index);   /// Marks a previously yielded handle as no longer in use 
   Provides modifier H yield(H, H);    /// Returns handle of pair with given values of its two handles 
   Provides function H yield(text);    /// Returns handle of atom with given text; 
-  extern const H a;
-  //, p, n; 
+  extern const H a; 
+  extern const H p; 
+  extern const W m;
 }
 
 Context Pairs { Provides function H available(); }  /// How many pairs remain available for allocation 
@@ -161,6 +162,7 @@ TEST(Store, overflow) {
   EXPECT_GT((H) p + 1, 0);
   EXPECT_LT((H) - a - 1, 0);
 }
+
 TEST(Marking, Pairs) { 
   using Context Pairs;
   EXPECT_LT(Store::mark($h_0$), Atoms::$h_0$);   
@@ -266,6 +268,3 @@ TEST(Store, ConversionToIntDoesNotBreakArrayLimits) {
   EXPECT_EQ((H) a, a); 
   EXPECT_EQ((H) p, p); 
 }
-
-
-
