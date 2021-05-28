@@ -1,5 +1,5 @@
 OBJS = mini-lisp.o dump.o strings.o pairs.o stack-trace.o main.o tokenizer.o parser.o stack.o io.o
-TEST_OBJS = test-main.o test.o tokenizer-test.o ast-test.o strings-test.o pairs-test.o parser-test.o stack-test.o apply-test.o evaluate-primitive-test.o stack-trace.o dump.o io.o
+TEST_OBJS = test-main.o test.o tokenizer-test.o ast-test.o strings-test.o pairs-test.o parser-test.o stack-test.o apply-test.o evaluate-primitive-test.o cond-evaluation-test.o stack-trace.o dump.o io.o
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE
