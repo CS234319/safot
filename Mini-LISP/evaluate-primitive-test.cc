@@ -25,16 +25,6 @@
 #include <gtest/gtest.h>
 #include "test.h"
 
-// Helper function:
-S parse(const char *s) {
-    Parser::reset();
-    Parser::supply(strdup(s));
-    if (Parser::status() != Parser::Status::accept) {
-        throw std::runtime_error("Unexpected parser error"); // should not be here - we assume all unittest inputs are valid
-    }
-    return Parser::result();
-}
-
 // ----------------------------
 // Test: car
 TEST(EvalPrimitive, car) {
