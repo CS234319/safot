@@ -55,6 +55,7 @@ extern S cons(S car, S cdr);
 extern bool eq(S, S);
 extern bool islist(S); 
 
+
 /* An S expression is identified by a 16 bits handle (the type H).
  * It is an atom is the handle is non-positive (the index zero is 
  * reserved for the special NIL atom). It is an internal node 

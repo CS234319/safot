@@ -9,17 +9,6 @@
 // Planned global data layout.
 static const bool active = true; 
 
-static struct { // Falls in the data segment; should be just before Pairs::buffer
-   // This is where strings go, negative handles.
-   char pool1[active<<10] = "BOTTOM";
-   // handle 0 should be exactly here.; this is OFFSET 0. Handle 0.
-   char nil[sizeof("NIL")] = "NIL";
-   //
-   // positive (i.e., not - handles point here; be careful 2^15 is not a positive number 
-   Pair pool2[(active << 15)-2]; // not sure about the 2 here; add test
-} SometimeYossiGil;
- 
-
 namespace Strings { // Atoms are never freed in mini-lisp
   define(M = 1024); // We use a total of M + sizeof("NIL") (typically 4) bytes
   static struct { // Falls in the data segment; should be just before Pairs::buffer
