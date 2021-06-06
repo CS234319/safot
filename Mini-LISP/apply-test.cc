@@ -9,48 +9,38 @@
 #include <gtest/gtest.h>
 #include "test.h"
 
-// Helper function:
-S parse_s(const char *s) {
-    Parser::reset();
-    Parser::supply(strdup(s));
-    if (Parser::status() != Parser::Status::accept) {
-        throw std::runtime_error("Unexpected parse_sr error"); // should not be here - we assume all unittest inputs are valid
-    }
-    return Parser::result();
-}
-
 // ----------------------------
 // Test: primitives_functions
 TEST(Apply, primitives_functions) {
     EXPECT_EQ(apply(
-            parse_s("'atom"), parse_s("'(a)")
+            parse("'atom"), parse("'(a)")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("'null"), parse_s("'(a)")
+            parse("'null"), parse("'(a)")
             ), S("NIL"));
     EXPECT_EQ(apply(
-            parse_s("'null"), parse_s("'(NIL)")
+            parse("'null"), parse("'(NIL)")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("'cons"), parse_s("'(a b)")
+            parse("'cons"), parse("'(a b)")
             ), S("(A . B)"));
     EXPECT_EQ(apply(
-            parse_s("'eq"), parse_s("'(a a)")
+            parse("'eq"), parse("'(a a)")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("'eq"), parse_s("'(a b)")
+            parse("'eq"), parse("'(a b)")
             ), S("NIL"));
     EXPECT_EQ(apply(
-            parse_s("'set"), parse_s("'(b T)")
+            parse("'set"), parse("'(b T)")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("'set"), parse_s("'(a '(b c))")
+            parse("'set"), parse("'(a '(b c))")
             ), S("'(B C)"));
     EXPECT_EQ(apply(
-            parse_s("'eval"), parse_s("'(t)")
+            parse("'eval"), parse("'(t)")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("'eval"), parse_s("'(nil)")
+            parse("'eval"), parse("'(nil)")
             ), S("NIL"));
 }
 
@@ -58,13 +48,13 @@ TEST(Apply, primitives_functions) {
 // Test: complicated_functions
 TEST(Apply, complicated_functions) {
     EXPECT_EQ(apply(
-            parse_s("(defun ret_nil(x) NIL)"), parse_s("'(a)")
+            parse("(defun ret_nil(x) NIL)"), parse("'(a)")
             ), S("NIL"));
     EXPECT_EQ(apply(
-            parse_s("(defun ret_nil(x y) NIL)"), parse_s("'(a b)")
+            parse("(defun ret_nil(x y) NIL)"), parse("'(a b)")
             ), S("NIL"));
     EXPECT_EQ(apply(
-            parse_s("(defun zcar(x)  (cond ((atom x) x) (t (car x))))"), parse_s("'(a)")
+            parse("(defun zcar(x)  (cond ((atom x) x) (t (car x))))"), parse("'(a)")
             ), S("A"));
 }
 
@@ -80,10 +70,10 @@ TEST(Apply, complicated_functions) {
  */
 TEST(Apply, recursive_functions) {
     EXPECT_EQ(apply(
-            parse_s("(defun is_in_list (val L) (cond (( null L ) NIL ) (( eql val ( car L ) ) T ) ( T ( is_in_list val ( cdr L ) ) ) ))"), parse_s("'(2 (2 3))")
+            parse("(defun is_in_list (val L) (cond (( null L ) NIL ) (( eql val ( car L ) ) T ) ( T ( is_in_list val ( cdr L ) ) ) ))"), parse("'(2 (2 3))")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("(defun is_in_list (val L) (cond (( null L ) NIL ) (( eql val ( car L ) ) T ) ( T ( is_in_list val ( cdr L ) ) ) ))"), parse_s("'(2 (1 3))")
+            parse("(defun is_in_list (val L) (cond (( null L ) NIL ) (( eql val ( car L ) ) T ) ( T ( is_in_list val ( cdr L ) ) ) ))"), parse("'(2 (1 3))")
             ), S("F"));
 }
 
@@ -91,10 +81,10 @@ TEST(Apply, recursive_functions) {
 // Test: self_apply:
 TEST(Apply, self_apply) {
     EXPECT_EQ(apply(
-            parse_s("'apply"), parse_s("'(null NIL NIL))")
+            parse("'apply"), parse("'(null NIL NIL))")
             ), S("T"));
     EXPECT_EQ(apply(
-            parse_s("'apply"), parse_s("'(null T NIL))")
+            parse("'apply"), parse("'(null T NIL))")
             ), S("NIL"));
 }
 
