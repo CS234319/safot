@@ -1,7 +1,6 @@
 #include <string.h>
 #include <gtest/gtest.h>
-#include "stack.cc"
-#include "parser.h"
+#include "stack.h"
 #include "test.h"
 
 using namespace Stack;

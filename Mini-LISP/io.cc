@@ -4,6 +4,7 @@
  * debugging.
  */
 #include <string.h>
+#include "basics.h"
 #include "parser.h"
 #include "stack.h"
 #include "stack-trace.h"
@@ -28,7 +29,7 @@ std::ostream& operator<<(std::ostream &os, S s) {
   if (s.atom())
     return os << s.asAtom();
   if (!islist(s))
-    return os << "" << car(s) << "." << cdr(s) << "";
+    return os << "" << s.car() << "." << s.cdr() << "";
   os << "(";
   for (;;) {
     os << S(s.car());

@@ -1,5 +1,5 @@
-OBJS = mini-lisp.o dump.o strings.o pairs.o stack-trace.o main.o tokenizer.o parser.o stack.o io.o
-TEST_OBJS = test-main.o test.o tokenizer-test.o ast-test.o strings-test.o pairs-test.o parser-test.o stack-test.o apply-test.o evaluate-primitive-test.o cond-evaluation-test.o stack-trace.o dump.o io.o
+OBJS = atomic.o a-list.o eval.o dump.o strings.o pairs.o stack-trace.o tokenizer.o parser.o stack.o io.o 
+TEST_OBJS =test.o  $(OBJS) atomic-test.cc basics-test.o tokenizer-test.o ast-test.o strings-test.o pairs-test.o parser-test.o stack-test.o apply-test.o evaluate-primitive-test.o cond-evaluation-test.o stack-trace.o dump.o io.o
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
 ifndef BUILD_MODE
@@ -35,7 +35,7 @@ tokenizer-test.cc: tokenizer.cc
 %.o: %.c
 	$(CXX) $(CFLAGS)  -c $<
 
-mini-lisp:	$(OBJS) 
+mini-lisp: mini-lisp.o	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: $(TEST_OBJS)
@@ -48,5 +48,5 @@ store: store.o
 # -include $(SRC:%.c=%.d)
 
 clean:
-		rm -fr $(OBJS) mini-lisp test store *.o *.d *~ *.backup 
+		rm -fr $(OBJS) mini-lisp test store *.o *.d *~ *.backup memory *.back *.aux *.log
 

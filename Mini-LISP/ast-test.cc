@@ -1,6 +1,17 @@
 #include <string.h>
 #include <gtest/gtest.h>
 #include "test.h"
+#include "basics.h"
+
+#if !BUGGY
+#undef D
+#undef M
+#define D(...) 0
+#define M(...) 0
+#else 
+#include "dump.h"
+#endif
+
 
 static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));
@@ -32,83 +43,83 @@ TEST(AST, AtomLong) {
 
 TEST(AST, List0) {
   supply("()");
-  EXPECT_EQ(NIL, result());
+  EXPECT_EQ(S::NIL, result());
   reset();
 }
 
 TEST(AST, List1) {
   supply("(HELLO)");
   auto s = Parser::result();
-  ASSERT_NE(NIL,s);
+  ASSERT_NE(S::NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("HELLO",car(s).asAtom());
-  EXPECT_EQ(NIL,cdr(s));
+  EXPECT_STREQ("HELLO",s.car().asAtom());
+  EXPECT_EQ(S::NIL,s.cdr());
   reset();
 }
 
 TEST(AST, List2) {
   supply("(1 2)");
   auto s = Parser::result();
-  ASSERT_NE(NIL,s);
+  ASSERT_NE(S::NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("1",car(s).asAtom());
-  s = cdr(s);
-  EXPECT_STREQ("2",car(s).asAtom());
-  EXPECT_EQ(NIL,cdr(s));
+  EXPECT_STREQ("1",s.car().asAtom());
+  s = s.cdr();
+  EXPECT_STREQ("2",s.car().asAtom());
+  EXPECT_EQ(S::NIL,s.cdr());
   reset();
 }
 
 TEST(AST, List3) {
   supply("(A B C)");
   auto s = Parser::result();
-  ASSERT_NE(NIL,s);
+  ASSERT_NE(S::NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("A",car(s).asAtom());
-  s = cdr(s);
-  EXPECT_STREQ("B",car(s).asAtom());
-  s = cdr(s);
-  EXPECT_STREQ("C",car(s).asAtom());
-  EXPECT_EQ(NIL,cdr(s));
+  EXPECT_STREQ("A",s.car().asAtom());
+  s = s.cdr();
+  EXPECT_STREQ("B",s.car().asAtom());
+  s = s.cdr();
+  EXPECT_STREQ("C",s.car().asAtom());
+  EXPECT_EQ(S::NIL,s.cdr());
   reset();
 }
 
 TEST(AST, QuoteA) {
   supply("'Z");
   auto s = Parser::result();
-  ASSERT_NE(NIL,s);
+  ASSERT_NE(S::NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("QUOTE",car(s).asAtom());
-  s = cdr(s);
-  EXPECT_STREQ("Z",car(s).asAtom());
-  EXPECT_EQ(NIL,cdr(s));
+  EXPECT_STREQ("QUOTE",s.car().asAtom());
+  s = s.cdr();
+  EXPECT_STREQ("Z",s.car().asAtom());
+  EXPECT_EQ(S::NIL,s.cdr());
   reset();
 }
 
 TEST(AST, QuoteAA) {
   supply("''Z");
   auto s = Parser::result();
-  ASSERT_NE(NIL,s);
+  ASSERT_NE(S::NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("QUOTE",car(s).asAtom());
-  s = cdr(s);
+  EXPECT_STREQ("QUOTE",s.car().asAtom());
+  s = s.cdr();
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  s = car(s);
-  EXPECT_STREQ("QUOTE",car(s).asAtom());
-  s = cdr(s);
-  EXPECT_STREQ("Z",car(s).asAtom());
-  EXPECT_EQ(NIL,cdr(s));
+  s = s.car();
+  EXPECT_STREQ("QUOTE",s.car().asAtom());
+  s = s.cdr();
+  EXPECT_STREQ("Z",s.car().asAtom());
+  EXPECT_EQ(S::NIL,s.cdr());
   reset();
 }
 
@@ -118,8 +129,8 @@ TEST(AST, Pair) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_FALSE(islist(s));
-  EXPECT_STREQ("HELLO",car(s).asAtom());
-  EXPECT_STREQ("WORLD",cdr(s).asAtom());
+  EXPECT_STREQ("HELLO",s.car().asAtom());
+  EXPECT_STREQ("WORLD",s.cdr().asAtom());
   reset();
 }
 
@@ -129,8 +140,8 @@ TEST(AST, PairYZ) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_FALSE(islist(s));
-  EXPECT_STREQ("Y",car(s).asAtom());
-  EXPECT_STREQ("Z",cdr(s).asAtom());
+  EXPECT_STREQ("Y",s.car().asAtom());
+  EXPECT_STREQ("Z",s.cdr().asAtom());
   reset();
 }
 
@@ -178,14 +189,14 @@ TEST(AST, QuoteListInList) {
 
 TEST(AST, NIL) {
   supply("NIL");
-  EXPECT_EQ(NIL, Parser::result());
+  EXPECT_EQ(S::NIL, Parser::result());
   reset();
 }
 
 TEST(AST, EmptyListNiL) {
   supply("()");
   EXPECT_EQ(Status::accept, status());
-  EXPECT_EQ(NIL, Parser::result());
+  EXPECT_EQ(S::NIL, Parser::result());
   reset();
 }
 
@@ -255,7 +266,7 @@ TEST(AST, LibNDefun) {
   reset();
 }
 
-TEST(AST, OneSquare) {
+TEST(AST, SquareBrackets) {
   supply(""
     "(set 'ndefun\n"
       "'(nlambda (name parameters body)\n"

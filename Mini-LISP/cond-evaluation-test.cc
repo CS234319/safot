@@ -31,6 +31,7 @@
 
 #include <string.h>
 #include <gtest/gtest.h>
+#include "eval.h"
 #include "test.h"
 
 void getUniqueNames(std::string *unique_names, int size) {

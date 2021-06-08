@@ -1,3 +1,5 @@
 *.d
 test
 mini-lisp
+store
+*.back

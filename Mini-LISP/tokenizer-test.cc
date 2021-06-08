@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
-#include "tokenizer.cc"
+#include "tokenizer.h"
 #include "test.h"
 
 #include <string.h>
+
+
 
 static void t(const char *s) {
   Tokenizer::initialize(strdup(s));
@@ -13,8 +15,6 @@ using Tokenizer::$;
 
 static const char* nextS() {
   H h = next();
-  D(h);
-  D(Strings::pool + h);
   return Strings::pool + h;
 }
 
@@ -88,8 +88,6 @@ TEST(Tokenizer, Char) {
 TEST(Tokenizer, Atom) {
   t("atom");
   auto s = nextS();
-  D(s);
-  D("A");
   EXPECT_STREQ("ATOM", s);
 }
 

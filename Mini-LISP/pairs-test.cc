@@ -1,8 +1,10 @@
 #include <iostream>
 #include "gtest/gtest.h"
-#include "pairs.cc"
+#include "mini-lisp.h"
 #include "test.h"
 
+namespace Pairs {
+extern H allocate(); 
 /* Sanity of free/allocate; someday: deal with exhausted memory */
 TEST(Pairs, Representation) {
   using namespace Pairs;
@@ -15,4 +17,5 @@ TEST(Pairs, Representation) {
   EXPECT_EQ(Pairs::to_go(), before - 1);
   Pairs::free(h);
   EXPECT_EQ(Pairs::to_go(), before);
+}
 }

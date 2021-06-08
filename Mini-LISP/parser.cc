@@ -52,7 +52,7 @@ namespace Parser {
   extern enum Status status() {
     return current_status;
   }
-  S $$ = NIL;
+  S $$ = S::NIL;
   extern S result() {
     return $$; 
   }
@@ -73,9 +73,9 @@ namespace Parser {
   }
 
   void store() {
-    M4("Store on rule",~top, "of", $$, $$.index, ~top, stack());
-    Pairs::get(Stack::pop()).data = $$.index;
-    M1(" --Store", $$.index, Pairs::get($$.index), ~top, stack());
+    M4("Store on rule",~top, "of", $$, $$.handle, ~top, stack());
+    Pairs::get(Stack::pop()).data = $$.handle;
+    M1(" --Store", $$.handle, Pairs::get($$.handle), ~top, stack());
   }
 
   H &location(H h) {
@@ -169,7 +169,7 @@ namespace Parser {
           }
           break;
         case X1:
-          $$ = cons(QUOTE, cons($$, NIL)); 
+          $$ = S::QUOTE.cons($$.cons(S::NIL)); 
           reduce();
           continue;
         case X2:
@@ -180,7 +180,7 @@ namespace Parser {
           continue;
         case T:
           if (token == '.') {
-            location(1) = $$.index;
+            location(1) = $$.handle;
             shift(T1, '.', X);
             continue;
           }
@@ -192,8 +192,8 @@ namespace Parser {
         case T1:
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
-          $$ = cons(location(1), $$);
-          location(1)= $$.index;
+          $$ = S(location(1)).cons($$);
+          location(1)= $$.handle;
           M1("Update T1: ",$$, ~top, stack());
           continue;
         case T2:
@@ -213,11 +213,11 @@ namespace Parser {
           break;
         case L1:
           reduce(); 
-          $$ = cons(Stack::pop(), $$);
+          $$ = S(Stack::pop()).cons($$);
           M1("Set", $$);
           continue;
         case L2:
-          $$ = NIL;
+          $$ = S::NIL;
           reduce(); 
           continue;
       }
@@ -228,6 +228,4 @@ namespace Parser {
     M1("ACCEPT",$$); 
     current_status = accept;
   }
-
-
 }

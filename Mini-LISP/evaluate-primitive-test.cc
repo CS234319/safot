@@ -20,9 +20,9 @@
  *
  */
 
-
 #include <string.h>
 #include <gtest/gtest.h>
+#include "eval.h"
 #include "test.h"
 
 // ----------------------------
@@ -121,5 +121,3 @@ TEST(EvalPrimitive, RealErrors) {
     EXPECT_EQ(eval(parse("(cdr ())")) , S("something−went−wrong-atomic"));
     EXPECT_EQ(eval(parse("(cdr nil)")), S("something−went−wrong-atomic"));
 }
-
-

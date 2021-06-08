@@ -8,6 +8,8 @@
 #include <string.h>
 #include <gtest/gtest.h>
 #include "test.h"
+#include "eval.h"
+
 
 // ----------------------------
 // Test: primitives_functions

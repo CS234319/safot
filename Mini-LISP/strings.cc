@@ -1,13 +1,33 @@
 #include "mini-lisp.h"
 #include "stack-trace.h"
+
 #define SILENT 1 
-#if SILENT
-#undef D
-#define D(...) 0
-#endif
 
 // Planned global data layout.
 static const bool active = true; 
+#if SILENT
+#undef D
+#undef M
+#define D(...) 0
+#define M(...) 0
+#else 
+#include "dump.h"
+#include <iostream>
+#include <sstream>
+#include <cstring>
+namespace Strings {
+  extern H current;  
+  extern String pool;  
+
+  String dump() {
+    std::ostringstream o;
+    for (int c = current; c <= 0; c += strlen(pool+c) + 1)
+      o << "\n\t P" << c << "(" << strlen(pool+c) << ")=" <<  pool + c;
+    return strdup(o.str().c_str());
+  }
+}
+#endif
+
 
 namespace Strings { // Atoms are never freed in mini-lisp
   define(M = 1024); // We use a total of M + sizeof("NIL") (typically 4) bytes
@@ -15,19 +35,12 @@ namespace Strings { // Atoms are never freed in mini-lisp
     char buffer[M] = "BOTTOM";
     char nil[sizeof("NIL")] = "NIL";
   } data;
-  auto buffer = data.buffer;
+  char *buffer = data.buffer;
   const char *const nil = data.nil;
   const char *const pool = nil;
-  static H current = 0;
-  static H size(String s) {
-    for (H $ = 0;; ++$)
-      if (s[$] == '\0')
-        return $ + 1;
-  }
-  char upper(char c) {
-    return c < 'a' || c > 'z' ? c : c - 'a' + 'A';
-  }
-
+  H current = 0;
+  static H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
+  char upper(char c) { return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; }
   bool eq(const char *s1, const char *s2) {
     for (; upper(*s1) == upper(*s2); ++s1, ++s2)
       if (*s1 == '\0')
@@ -41,23 +54,19 @@ namespace Strings { // Atoms are never freed in mini-lisp
    * to allow one string to be realizes the suffix of a previously allocated string  
    */ 
   H allocate(String s) {
-    D((long) pool, (long) nil);
-    D(s, size(s), current);
-    D((long) buffer, (long) pool, pool-buffer);
-    D((long) nil, (long) (nil-buffer), (long) (nil-pool));
-    for (const char *p = pool + current; p <= pool; ++p)
-      if (eq(s, p))
-        return (D(s, p - pool)), p - pool;
+    M("Search:", s, size(s), dump());
+    for (H $ = 0; $ >= current; --$) 
+      if (eq(s, pool+$))
+        return (M("Found:", s, $, pool+$)), $;
     const H n = size(s);
-    D(s, size(s), n, current);
-    D((long) buffer, (long) pool, pool-buffer);
     current -= n;
+    M("Allocate:", s, pool+current,  nil-pool);
     normally(current < 0);
     normally(pool + current >= buffer);
-
     for (H h = 0; h < n; ++h) // Only case in code to change the pool 
       const_cast<char&>(pool[current + h]) = upper(s[h]);
-    D(s, pool + current, current);
+    normally(current < 0);
+    M("Return", s, pool + current, current,dump());
     return current;
   }
 }

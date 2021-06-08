@@ -24,7 +24,7 @@ extern bool dumping;
 #define dITERATE(...) ITERATE(DUMMY,## __VA_ARGS__) 
 
 #define D(...)        BEFORE                                      dITERATE(__VA_ARGS__) AFTER
-#define M(X,...)     BEFORE __VALUE(X)                           dITERATE(__VA_ARGS__) AFTER
+#define M(X,...)      BEFORE __VALUE(X)                           dITERATE(__VA_ARGS__) AFTER
 #define M2(X,Y,...)   BEFORE __VALUE(X) __VALUE(Y)                dITERATE(__VA_ARGS__) AFTER
 #define M1(X,...)     BEFORE __VALUE(X)                           dITERATE(__VA_ARGS__) AFTER
 #define M2(X,Y,...)   BEFORE __VALUE(X) __VALUE(Y)                dITERATE(__VA_ARGS__) AFTER
@@ -46,7 +46,6 @@ extern bool dumping;
 #define BEFORE  (dumping?0: (     \
                   dumping = true, \
                   (LOCATE
-
 #define AFTER     <<std::endl       \
                   ),                 \
                   dumping = false)  \

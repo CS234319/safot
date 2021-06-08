@@ -9,9 +9,8 @@ is allowed, and used extensively: A word is constituted by two consecutive
 halves. No particular byte or halves ordering is assumed. */
 
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
-typedef int16_t half; /// Half a word/JVM's short | 16 bits signed integer | handle of an S-expression 
-typedef int32_t word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
-
+typedef int16_t Half; /// Half a word/JVM's short | 16 bits signed integer | handle of an S-expression 
+typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
 
 /*@ Types for S-Expressions@ S-Expressions come in two varieties: (1) Dotted
  pairs (pairs for short) are compound S-expressions defined by two, smaller,
@@ -24,7 +23,7 @@ typedef int32_t word; /// Machine word/JVM's int  | 32 bits signed integer | an 
 
 Type S;     // An S-expression represented by its handle
 Type Pair;  // A compound S-expression, i.e., a dotted pair
-Type Atom;  // An atomic S-expression, i.e., a memory address
+// Type Atom;  // An atomic S-expression, i.e., a memory address
 
 
 /*@ Types for S-Expressions@ S-Expressions come in two varieties: 
@@ -34,32 +33,32 @@ are the characters in this byte and all bytes that follow  until the first
 occurrence of the null byte, i.e., a byte in which all bits are zero, 
 denoted in C by \verb/'\0'/ and mathematically by~$\natural$.  */
 
-typedef const byte *const Atom; // Underlining representation of atoms as pointers to characters
+typedef const char *const Atom; // Underlining representation of atoms as pointers to characters
 Type S;
 Type Pair;
 
 Type S { // An S-expression represented by its handle
   Representation {
-    perspective(half handle) // The inner representation 
+    perspective(Half handle) // The inner representation 
   };
-  // construct S(half h) by (handle(h));
+  // construct S(Half h) by (handle(h));
   property bool null() returns (handle == 0)
   property bool atom() returns (handle <= 0)
   property bool pair() returns (handle > 0) 
   property bool eq(S s) returns (atom() && handle == s.handle)
+  S(Half h): handle(h) {} 
   property Pair $_p$(); /// Interpreted as handle of pair, retrieves the pair behind (mutable)  
   property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
 };
 
 Type Pair { // The different perspectives of a pair.
   Representation {
-    perspective(word cons)        /// I.   | A single word with two halves: 
-    perspective(const S car, cdr)       /// II.  | A pair of car and cdr, each in a half word.
-    perspective(half foo, rest)   /// III. | An unused pair item in the list of pairs. 
-    perspective(half value, next) /// IV.  | An data item in the stack used in the parser. 
+    perspective(Word cons)        /// I.   | A single word with two halves: 
+    perspective(Half car, cdr)    /// II.  | A pair of car and cdr, each in a half word.
+    perspective(Half foo, rest)   /// III. | An unused pair item in the list of pairs. 
+    perspective(Half value, next) /// IV.  | An data item in the stack used in the parser. 
   };
 };
-
 
 /*@ The Store$ 
 The store provides an abstract memory model that manages the allocation and 
@@ -74,19 +73,23 @@ the details of the frugality. Here we present an abstract model of a
 */
 
 Context Store {
-  Provides function S make(S, S);           /// Returns (handle of) pair with given values of (handles of) its two components
-  Provides function S make(Atom);           /// Returns (handle of) atom with given text; 
-  Provides procedure free(S);               /// Marks an S-expession handle previously returned by make as no longer in use 
+  Provides function S make(S car, S cdr); /// Returns (handle of) pair with given values of (handles of) its two components
+  Provides function S make(Atom);         /// Returns (handle of) atom with given text; 
+  Provides procedure free(S);             /// Marks an S-expression handle previously returned by make as no longer in use 
 }
 
 Context Store { 
-  Provides constant(word) $m$;                   /// halfow many bytes are used by the store 
-  Provides constant(half) $M_1$;                 /// halfow many atoms are initially available 
-  Provides constant(half) $M_2$;                 /// halfow many pairs are initially available 
-  Provides function half available();            /// halfow many pairs remain available for allocation 
-  Provides function half allocated();            /// halfow many pairs were allocated 
-  Provides function half available();            /// halfow many chars remain available for allocation 
-  Provides function half allocated();            /// halfow many chars were allocated 
+  // Global:
+  Provides constant(Word) $m$;    /// how many bytes are used by the store 
+  // Atoms:
+  Provides constant(Half) $M_a$;  /// how many atoms are initially available 
+  Provides function Half $v_a$(); /// how many chars remain available for allocation 
+  Provides function Half $v_a$(); /// how many chars were allocated 
+  Allocate Half current = 0;
+  // Pairs
+  Provides constant(Half) $M_p$;  /// how many pairs are initially available 
+  Provides function Half $v_p$(); /// how many pairs remain available for allocation 
+  Provides function Half $u_p$(); /// how many pairs were allocated 
 }
 
 Context Store { // Prototype for store.h
@@ -95,47 +98,92 @@ Context Store { // Prototype for store.h
 }
 
 Context Store { 
-  Let half $M_1$ = 1 << 12;
-  Let half $M_2$ = (1 << 15) - $M_1$ + 3; 
-  Let word $m$ = $M_1$ + $M_2$ * sizeof (Pair);
-  Let half NIL_SIZE = sizeof "NIL";
+  Let Half $M_a$ = 1 << 12;
+  Let Half $M_p$ = (1 << 15) - $M_a$ + 3; 
+  Let Word $m$ = $M_a$ + $M_p$ * sizeof (Pair);
+  Let Half NIL_SIZE = sizeof "NIL";
 }
 
-static union  {
+Allocate static union  {
   char block[Store::$m$];
   struct {
-   char A0[Store::$M_1$ - Store::NIL_SIZE];
+   char A0[Store::$M_a$ - Store::NIL_SIZE];
    char A[Store::NIL_SIZE] = { 'N', 'I', 'L', '\0' };
-   Pair P[Store::$M_2$];
+   Pair P[Store::$M_p$];
   };
 } memory; 
-
 
 Context Store { 
   Let array(Pair) P = memory.P - 1;
   Let array(Pair) P0 = memory.P - 1;
-  Let array(Pair) P1 = memory.P + $M_2$;
+  Let array(Pair) P1 = memory.P + $M_p$;
   Let array(char) A  = memory.A;
   Let array(char) A0  = memory.A0;
-  Let array(char) A1  = memory.A + $M_1$;
+  Let array(char) A1  = memory.A + $M_a$;
 }
 
-Context Atoms { Let half $h_0$ = Store::A0 - Store::A, $h_1$ = 0;  } 
-Context Pairs { Let half $h_0$ = memory.P - Store::P, $h_1$ = Store::P1 - memory.P;  } 
+Context Atoms { Let Half $h_0$ = Store::A0 - Store::A, $h_1$ = 0;  } 
+Context Pairs { Let Half $h_0$ = memory.P - Store::P, $h_1$ = Store::P1 - memory.P;  } 
 
 
 Context Store {   
-  Let half $h_0$ = min(Atoms::$h_0$, Pairs::$h_0$), $h_1$ = max(Atoms::$h_1$, Pairs::$h_1$);
+  Let Half $h_0$ = min(Atoms::$h_0$, Pairs::$h_0$), $h_1$ = max(Atoms::$h_1$, Pairs::$h_1$);
 }
 
-Context Pairs { Let half $n$ = $h_1$ - $h_0$ + 1; };
-Context Atoms { Let half $n$ = $h_1$ - $h_0$ + 1; }; 
-Context Store { Let half $n$ = $h_1$ - $h_0$ + 1; };
+Context Pairs { Let Half $n$ = $h_1$ - $h_0$ + 1; };
+Context Atoms { Let Half $n$ = $h_1$ - $h_0$ + 1; }; 
+Context Store { Let Half $n$ = $h_1$ - $h_0$ + 1; };
 
 Context Store {
-  half mark(half h)   { return h + (1 << 15); } 
-  half marked(half h) { return h < Atoms::$h_0$ || h > Atoms::$h_1$; } 
+  Half mark(Half h)   { return h + (1 << 15); } 
+  Half marked(Half h) { return h < Atoms::$h_0$ || h > Atoms::$h_1$; } 
 }
+
+/* Making an S expression from an input string is by moving the pool pointer
+ * down and then copying the input there. A bit of optimization saves some
+ * space by refraining from allocating the same string twice; moreover, there
+ * is also a minimal attempt to allow one string to be realizes the suffix of a
+ * previously allocated string */ 
+
+static Half size(const char *s) { for (Half $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
+static char upper(char c) { return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; }
+static bool eq(const char *s1, const char *s2) {
+  for (; upper(*s1) == upper(*s2); ++s1, ++s2)
+    if (*s1 == '\0')
+      return true;
+  return false;
+}
+
+S Store::make(Atom s) {
+  for (Half $ = 0; $ >= current; --$) 
+    if (eq(s, A+$))
+      return $;
+  const Half n = ::size(s);
+  current -= n;
+  for (Half h = 0; h < n; ++h) // Only case in code to change the pool 
+    const_cast<char&>(A[current + h]) = ::upper(s[h]);
+  return S(current);
+}
+
+S Store::make(Atom s) {
+  const H $ = next();
+  remaining--, next() = pool[next()].next;
+    D($, next(), remaining);
+    return $;
+  }
+
+H make(H car, H cdr) {
+  H $ = allocate();
+  pool[$].car = car;
+  pool[$].cdr = cdr;
+  return S($);
+}
+
+  void free(H h) {
+    D(h, remaining);
+    pool[h].next = next(), remaining++, next() = h;
+  }
+
 
 #undef min
 #undef max
@@ -163,7 +211,7 @@ TEST(Atoms, $h_0$) {
 TEST(Atoms, $h_1$) { 
   using Context Atoms; 
   EXPECT_EQ($h_1$, 0);
-  EXPECT_EQ((Atom) Store::A + $h_1$, (Atom) Store::P);
+  EXPECT_EQ((const char *const) Store::A + $h_1$, (const char *const) Store::P);
 }
 
 TEST(Atoms, $n$) { 
@@ -183,7 +231,7 @@ TEST(Pairs, $h_1$) {
   EXPECT_GT($h_1$, $h_0$);
   EXPECT_EQ($h_1$, $n$);
   EXPECT_EQ(Store::P1 - memory.P, $h_1$);
-  EXPECT_EQ(Store::$M_2$, $h_1$);
+  EXPECT_EQ(Store::$M_p$, $h_1$);
 }
 
 TEST(Pairs, $n$) { 
@@ -191,20 +239,20 @@ TEST(Pairs, $n$) {
   EXPECT_GT($n$,0);
   EXPECT_LT($n$,sizeof memory);
   EXPECT_LT($n$,sizeof memory.P);
-  EXPECT_EQ($n$, Store::$M_2$);
+  EXPECT_EQ($n$, Store::$M_p$);
   EXPECT_EQ($n$,sizeof memory.P / sizeof memory.P[0]);
 }
 
 TEST(Store, minimalSize) {
   using Context Store;
-  EXPECT_GT((half) $M_1$, 100);
-  EXPECT_GT((half) $M_2$, 100);
+  EXPECT_GT((Half) $M_a$, 100);
+  EXPECT_GT((Half) $M_p$, 100);
 }
 
 TEST(Store, overflow) {
   using Context Store;
-  EXPECT_GT((half) $M_2$ + 1, 0);
-  EXPECT_LT((half) - $M_1$ - 1, 0);
+  EXPECT_GT((Half) $M_p$ + 1, 0);
+  EXPECT_LT((Half) - $M_a$ - 1, 0);
 }
 
 TEST(Marking, Pairs) { 
@@ -251,7 +299,7 @@ TEST(Marking, Atoms2) {
 
 TEST(Marking, MarkingIsMarked) { 
   using Context Store;
-  for (half h = $h_0$; h <= $h_1$; ++h)
+  for (Half h = $h_0$; h <= $h_1$; ++h)
     EXPECT_TRUE(marked(mark(h)));
 }
 
@@ -259,8 +307,8 @@ TEST(Store, PrimitiveSizs) {
   using Context Store;
   EXPECT_EQ(sizeof(byte), 1);
   EXPECT_EQ(sizeof(char), 1);
-  EXPECT_EQ(sizeof(half), 2);
-  EXPECT_EQ(sizeof(word), 4);
+  EXPECT_EQ(sizeof(Half), 2);
+  EXPECT_EQ(sizeof(Word), 4);
   EXPECT_EQ(sizeof(Pair), 4);
   EXPECT_EQ(sizeof(S), 2);
 }
@@ -311,16 +359,16 @@ TEST(Store, correctCounting) {
 
 TEST(Store, ConversionToIntDoesNotBreakArrayLimits) {
   using Context Store;
-  EXPECT_EQ((half) $M_1$, $M_1$); 
-  EXPECT_EQ((half) $M_2$, $M_2$); 
+  EXPECT_EQ((Half) $M_a$, $M_a$); 
+  EXPECT_EQ((Half) $M_p$, $M_p$); 
 }
 
 TEST(ByteOrdering, Word) { 
   union {
-    word w;
+    Word w;
     struct {
-      half h1;
-      half h2;
+      Half h1;
+      Half h2;
     };
     struct {
       byte b1;
@@ -330,8 +378,8 @@ TEST(ByteOrdering, Word) {
     };
   } v;
   v.w = 0xDEAD'BEEF;
-  EXPECT_EQ(v.h1,(half)  0xBEEF);
-  EXPECT_EQ(v.h2,(half)  0xDEAD);
+  EXPECT_EQ(v.h1,(Half)  0xBEEF);
+  EXPECT_EQ(v.h2,(Half)  0xDEAD);
   EXPECT_EQ(v.b1,(byte)  0xEF);
   EXPECT_EQ(v.b2,(byte)  0xBE);
   EXPECT_EQ(v.b3,(byte)  0xAD);
@@ -340,7 +388,7 @@ TEST(ByteOrdering, Word) {
 
 TEST(ByteOrdering, Half) { 
   union {
-    half h;
+    Half h;
     struct {
       byte b1;
       byte b2;
@@ -350,5 +398,3 @@ TEST(ByteOrdering, Half) {
   EXPECT_EQ(v.b1, (byte) 0xFE);
   EXPECT_EQ(v.b2, (byte) 0xCA);
 }
-
-
