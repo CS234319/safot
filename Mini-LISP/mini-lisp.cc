@@ -65,9 +65,10 @@ static S REPL() {
   Eval:
     try {
       S e = s.eval();
-    } catch (S error) {
-      print("Error: ");
-      print(error);
+    } catch (Pair error) {
+      print("Error");
+      print(error.car);
+      print(error.cdr);
     }
   Print:
     print(s), print("\n");

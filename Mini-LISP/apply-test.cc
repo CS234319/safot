@@ -89,7 +89,3 @@ TEST(Apply, self_apply) {
             parse("'apply"), parse("'(null T NIL))")
             ), S("NIL"));
 }
-
-
-
-

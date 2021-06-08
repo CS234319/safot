@@ -3,8 +3,7 @@
 
 #define SILENT 1 
 
-// Planned global data layout.
-static const bool active = true; 
+
 #if SILENT
 #undef D
 #undef M

@@ -11,6 +11,7 @@ representation Pair {
   perspective(W cons: 32)
   perspective(H car, cdr :16)
   perspective(H data, next :16)
+  perspective(H value, errorCode :16)
 };
 
 /** A pool of all pairs is managed by the pairs module (see pairs.cc). The pool
@@ -53,6 +54,8 @@ namespace Strings {
 
 union S; 
 
+#undef NULL
+
 /* An S expression is identified by a 16 bits handle (the type H).
  * It is an atom is the handle is non-positive (the index zero is 
  * reserved for the special NIL atom). It is an internal node */
@@ -61,45 +64,30 @@ representation S { // Representation of an S expression
   perspective(H handle)
   construct S(H h) by (handle(h));
   property String asAtom() returns  (Strings::pool + handle)
-  property bool isTrue() returns(!null())
 
   property Pair asPair() returns  (Pairs::get(handle))
-
-
-  // Perspective II: a sign bit (pool designator) and an index into 
-  // into that pool. 
-  perspective( H bits : 15;  bool sign: 1)
-  construct S() by(bits(0), sign(0))
 
   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
   construct S(String s) by(handle(Strings::allocate(s)))
   /* Nullary atomic/utility functions are public data members; */ 
   static const S NIL, T;
-  static const S NDEFUN; 
-  static const S DEFUN;
-  static const S NLAMBDA;
-  static const S LAMBDA;
-  static const S QUOTE;
-  static const S ATOM;
-  static const S CAR;
-  static const S CDR;
-  static const S COND;
-  static const S CONS;
-  static const S ERROR;
-  static const S EVAL;
-  static const S SET;
-  static const S EQ;
+  static const S CAR, CDR, CONS;
+  static const S NULL, ATOM, EQ, COND;
+  static const S QUOTE, EVAL;
+  static const S DEFUN, NDEFUN; 
+  static const S LAMBDA, NLAMBDA;
+  static const S ERROR, SET;
   // Named atoms for exceptions
-  static const S REDUNDANT;
-  static const S MISSING;
+  static const S REDUNDANT, MISSING;
   // The list of all atomic functions
   static const S ATOMIC_FUNCTIONS; 
   /** Unary atomic functions are methods that take no parameters*/
-  bool atom(void) const; 
-  bool null(void) const; 
-  S car(void) const; 
-  S cdr(void) const;
-  S eval(void) const;
+  bool atom() const; 
+  bool null() const; 
+  bool t() const; 
+  S car() const; 
+  S cdr() const;
+  S eval() const; 
   /** Binary atomic functions are methods that take one parameter */
   bool eq(S other) const; 
   S error(S kind) const; 
