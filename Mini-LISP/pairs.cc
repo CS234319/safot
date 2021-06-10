@@ -35,10 +35,11 @@ namespace Pairs {
     return inner;
   }
 
+
   H allocate() {
     D(next(), remaining);
-    normally(remaining > 0);
-    normally(next() != 0);
+    remaining > 0 || die(S::EXHAUSTED);
+    next() != 0 || die(S::EXHAUSTED);;
     const H $ = next();
     remaining--, next() = pool[next()].next;
     D($, next(), remaining);

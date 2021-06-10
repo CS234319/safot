@@ -23,6 +23,9 @@ const S S::REDUNDANT("redundant");
 const S S::MISSING("missing");
 const S S::UNDEFINED("undefined");
 const S S::INVALID("invalid");
+const S S::BUG("bug");
+const S S::EMPTY("empty");
+const S S::EXHAUSTED("exhausted");
 
 extern S eval(S s); 
 

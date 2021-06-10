@@ -60,11 +60,10 @@ namespace Strings { // Atoms are never freed in mini-lisp
     const H n = size(s);
     current -= n;
     M("Allocate:", s, pool+current,  nil-pool);
-    normally(current < 0);
-    normally(pool + current >= buffer);
+    current < 0 || die(S::ATOM);
+    pool + current >= buffer || die(S::EXHAUSTED);
     for (H h = 0; h < n; ++h) // Only case in code to change the pool 
       const_cast<char&>(pool[current + h]) = upper(s[h]);
-    normally(current < 0);
     M("Return", s, pool + current, current,dump());
     return current;
   }
