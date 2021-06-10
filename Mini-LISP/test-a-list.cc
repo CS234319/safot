@@ -16,7 +16,7 @@
 
 TEST(Lookup, T) {
   EXPECT_STRUE(lookup("T"));
-  EXPECT_TRUE(lookup("T").eq(S::T));
+  EXPECT_TRUE(lookup("T").eq(T));
 }
 
 TEST(Lookup, NIL) {
@@ -27,17 +27,17 @@ TEST(Lookup, NIL) {
 }
 
 TEST(Lookup, FailurBarBaz) {
-  EXPECT_EXCEPTION(lookup("bar baz"),S("bar baz"), S::UNDEFINED);
+  EXPECT_EXCEPTION(lookup("bar baz"),S("bar baz"), UNDEFINED);
 }
 
 TEST(Lookup, FailureFooBarBaz) {
-  EXPECT_EXCEPTION(lookup("foo" "bar" "baz"), S("foo" "bar" "baz"), S::UNDEFINED);
-  EXPECT_EXCEPTION(lookup("Y"), S("Y"), S::UNDEFINED);
+  EXPECT_EXCEPTION(lookup("foo" "bar" "baz"), S("foo" "bar" "baz"), UNDEFINED);
+  EXPECT_EXCEPTION(lookup("Y"), S("Y"), UNDEFINED);
 }
 
 TEST(Lookup, Failure) {
-  EXPECT_EXCEPTION(lookup(UNIQUE), S(UNIQUE), S::UNDEFINED);
-  EXPECT_EXCEPTION(lookup("Y"), S("Y"), S::UNDEFINED);
+  EXPECT_EXCEPTION(lookup(UNIQUE), S(UNIQUE), UNDEFINED);
+  EXPECT_EXCEPTION(lookup("Y"), S("Y"), UNDEFINED);
 }
 
 TEST(Lookup, SetGoodLookup) {
@@ -49,7 +49,7 @@ TEST(Lookup, SetGoodLookup) {
 TEST(Lookup, TeaAndCofee) {
   set("coffee","tea");
   EXPECT_EQ(lookup("coffee"), S("tea"));
-  EXPECT_EXCEPTION(lookup("tea"),S("tea"), S::UNDEFINED);
+  EXPECT_EXCEPTION(lookup("tea"),S("tea"), UNDEFINED);
   set("tea","coffee");
   EXPECT_STRUE(lookup("tea"));
   EXPECT_STRUE(lookup("coffee"));

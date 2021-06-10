@@ -1,6 +1,6 @@
 #include "a-list.h"
 #include "basics.h"
-S alist = S::NIL; 
+S alist = NIL; 
 
 #define BUGGY 0
 
@@ -15,8 +15,8 @@ S alist = S::NIL;
 #endif
 
 namespace {
-  static const S x1(set(S::NIL, S::NIL));  // (set (quote nil) (quote nil))
-  static const S x2(set(S::T, S::T));      // (set (quote t) (quote t))
+  static const S x1(set(NIL, NIL));  // (set (quote nil) (quote nil))
+  static const S x2(set(T, T));      // (set (quote t) (quote t))
 }
 
 S set(S name, S value) { return (alist = name.cons(value).cons(alist)), value; }
@@ -25,7 +25,7 @@ S lookup(S id, S as) {
   D(id, as, alist);
   return 
       as.null() ?  
-         (M("DONE"), id.error(S::UNDEFINED)): 
+         (M("DONE"), id.error(UNDEFINED)): 
       as.car().car().eq(id) ? 
           (M("FOUND"), as.car().cdr()): (M("RECURSE"), lookup(id, as.cdr())); 
 }
@@ -36,7 +36,7 @@ S bind(S names, S values, S alist) {
   if (names.null()) 
     return values.null() ?  alist : values.error(REDUNDANT); 
   if (values.null()) 
-    names.error(S::MISSING);
+    names.error(MISSING);
   return names.car().cons(values.car()).cons(bind(names.cdr(), values.cdr(), alist));
 }
 

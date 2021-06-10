@@ -3,9 +3,8 @@
 #include "mini-lisp.h"
 
 inline bool exists(S x, S xs) { return !xs.null() && (xs.car().eq(x) || exists(x, xs.cdr())); } 
-inline bool atomic(S name) { return exists(name, S::ATOMIC_FUNCTIONS); }
 inline bool islist(S s) { return s.null() || !s.atom() && islist(s.cdr()); }
-inline S list() { return S::NIL; }
+inline S list() { return NIL; }
 inline S list(S s) { return s.cons(list()); }
 inline S list(S s1, S s2) { return s1.cons(list(s2)); }
 inline S list(S s1, S s2, S s3) { return s1.cons(list(s2, s3)); }

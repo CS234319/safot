@@ -10,7 +10,7 @@ namespace Stack {
   void push(H h1,H h2, H h3, H h4, H h5) { push(h5); push(h1, h2, h3, h4); }
 
   H pop() {
-    !empty() || die(S::EMPTY); 
+    !empty() || die(EMPTY); 
     auto free = top;
     auto p = S(top).asPair();
     auto $ = p.data;
@@ -25,7 +25,7 @@ namespace Stack {
   }
 
   H& peep() {
-    !empty() || die(S::EMPTY); 
+    !empty() || die(EMPTY); 
     return Pairs::get(top).data;
   }
 
@@ -34,7 +34,7 @@ namespace Stack {
       if (i == offset)
         return Pairs::get(h).data;
       h = Pairs::get(h).next;
-      h != 0 || die(S::EXHAUSTED);
+      h != 0 || die(EXHAUSTED);
     }
  }
 }

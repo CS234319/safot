@@ -19,8 +19,9 @@ TEST_OBJS = \
 		test-ast.o \
 		test-atomic.cc \
 		test-basics.o \
-		test-cond-evaluation.o \
+		test-eval-cond.o \
 		test-evaluate-primitive.o \
+		test-eval-atomic.cc \
 		test-main.o \
 		test-pairs.o \
 		test-parser.o \

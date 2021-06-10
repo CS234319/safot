@@ -38,8 +38,8 @@ namespace Pairs {
 
   H allocate() {
     D(next(), remaining);
-    remaining > 0 || die(S::EXHAUSTED);
-    next() != 0 || die(S::EXHAUSTED);;
+    remaining > 0 || die(EXHAUSTED);
+    next() != 0 || die(EXHAUSTED);;
     const H $ = next();
     remaining--, next() = pool[next()].next;
     D($, next(), remaining);
@@ -57,8 +57,7 @@ namespace Pairs {
     return $;
   }
 
-  void free(H h) {
-    D(h, remaining);
+  void free(H h) { D(h, remaining);
     pool[h].next = next(), remaining++, next() = h;
   }
 }

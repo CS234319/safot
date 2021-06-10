@@ -11,22 +11,10 @@
  * Tests of mini-lisp basics; should be renamed one day
  */
 
-TEST(AtomicFunctionsList, AfterSet) {
-  EXPECT_TRUE(atomic("car"));
-  EXPECT_TRUE(atomic("cdr"));
-  EXPECT_TRUE(atomic("cons"));
-  EXPECT_TRUE(atomic("NULL"));
-
-  EXPECT_FALSE(atomic("NIL"));
-  EXPECT_FALSE(atomic("T"));
-  EXPECT_FALSE(atomic("X"));
-  EXPECT_FALSE(atomic(""));
-}
-
 TEST(List, Empty) {
   S s = list();  
   EXPECT_TRUE(islist(s));
-  EXPECT_EQ(S::NIL,s);
+  EXPECT_EQ(NIL,s);
   EXPECT_TRUE(s.null());
 }
 
@@ -35,10 +23,10 @@ TEST(List, Singleton) {
   EXPECT_TRUE(islist(s));
   EXPECT_TRUE(s.car().eq(S("A")));
   EXPECT_TRUE(s.car().eq("A")); 
-  EXPECT_TRUE(s.cdr().eq(S::NIL)); 
+  EXPECT_TRUE(s.cdr().eq(NIL)); 
   EXPECT_TRUE(s.cdr().eq("NIL")); 
   EXPECT_TRUE(s.cdr().eq(S("NIL")));
-  EXPECT_EQ(S::NIL,s.cdr());
+  EXPECT_EQ(NIL,s.cdr());
 }
 
 TEST(List, Many) {
@@ -61,13 +49,13 @@ TEST(Exists, Trivial) {
 TEST(Exists, Empty) {
   EXPECT_FALSE(exists(S("A"),list()));
   EXPECT_FALSE(exists(S("B"),list()));
-  EXPECT_FALSE(exists(S::NIL,list()));
+  EXPECT_FALSE(exists(NIL,list()));
 }
 
 TEST(Exists, Singleton) {
   EXPECT_TRUE(exists(S("A"),list("A")));
   EXPECT_FALSE(exists(S("A"),list("B")));
-  EXPECT_FALSE(exists(S::NIL,list("B")));
+  EXPECT_FALSE(exists(NIL,list("B")));
 }
 
 TEST(Exists, Many) {
@@ -80,5 +68,5 @@ TEST(Exists, Many) {
   EXPECT_TRUE(exists(S("A"),list("B", "B", "a", "D")));
   EXPECT_TRUE(exists(S("a"),list("B", "B", "A", "D")));
   EXPECT_FALSE(exists(S("X"),list("B", "B", "A", "D","C")));
-  EXPECT_FALSE(exists(S::NIL,list("B")));
+  EXPECT_FALSE(exists(NIL,list("B")));
 }

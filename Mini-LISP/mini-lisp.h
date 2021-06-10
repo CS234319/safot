@@ -54,7 +54,6 @@ namespace Strings {
 
 union S; 
 
-#undef NULL
 
 /* An S expression is identified by a 16 bits handle (the type H).
  * It is an atom is the handle is non-positive (the index zero is 
@@ -70,17 +69,6 @@ representation S { // Representation of an S expression
   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
   construct S(String s) by(handle(Strings::allocate(s)))
   /* Nullary atomic/utility functions are public data members; */ 
-  static const S NIL, T;
-  static const S CAR, CDR, CONS;
-  static const S NULL, ATOM, EQ, COND;
-  static const S QUOTE, EVAL;
-  static const S DEFUN, NDEFUN; 
-  static const S LAMBDA, NLAMBDA;
-  static const S ERROR, SET;
-  // The list of all atomic functions
-  static const S ATOMIC_FUNCTIONS; 
-  // Named atoms for exceptions
-  static const S MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 
   /** Unary atomic functions are methods that take no parameters*/
   bool atom() const; 
@@ -97,8 +85,18 @@ representation S { // Representation of an S expression
   S snoc(S car) const;
   S error(S kind) const; 
 };
+#undef NULL
+// Names of atoms that represent atomic functions 
+extern const S NIL, T; //
+extern const S CAR, CDR, CONS;
+extern const S NULL, ATOM, EQ, COND;
+extern const S QUOTE, EVAL;
+extern const S DEFUN, NDEFUN; 
+extern const S ERROR, SET;
+ // Named atoms for exceptions
+extern const S MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 
-inline bool die(S s) { throw S::BUG.cons(s); }
+inline bool die(S s) { throw BUG.cons(s); }
 extern const S REDUNDANT;
 
 #undef construct

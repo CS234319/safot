@@ -15,6 +15,7 @@ S a0("");
 S a1("T");
 S a2("NIL");
 S a3("FOO BAR");
+S a4("BAR");
 S s1(t,n);
 S s2(s1,s1);
 S s3(s2,s1);
@@ -30,9 +31,9 @@ TEST(Atomic, snoc) {
 }
 
 TEST(Atomic,Handles) {
-  EXPECT_EQ(S::NIL.handle,0);
-  EXPECT_EQ(S::NIL.handle,n.handle);
-  EXPECT_EQ(S::T.handle,-2);
+  EXPECT_EQ(NIL.handle,0);
+  EXPECT_EQ(NIL.handle,n.handle);
+  EXPECT_EQ(T.handle,-2);
   EXPECT_EQ(t.handle, -2);
   EXPECT_EQ(a0.handle, -1);
   EXPECT_LE(S("IL").handle, 0);
@@ -41,65 +42,65 @@ TEST(Atomic,Handles) {
 }
 
 TEST(Atomic,Throw) {
-  EXPECT_EXCEPTION(throw S::CDR.cons(S::CAR).asPair(), S::CDR, S::CAR);
+  EXPECT_EXCEPTION(throw a3.error(a4).asPair(), a3, a4);
 }
 
 TEST(Atomic,Error) {
-  EXPECT_EXCEPTION(S::NDEFUN.error(S::LAMBDA), S::NDEFUN, S::LAMBDA);
+  EXPECT_EXCEPTION(a4.error(a3), a4, a3);
 }
 
 TEST(Atomic,EQ) {
-  EXPECT_FALSE(a0.eq(S::T));
-  EXPECT_FALSE(a0.eq(S::NIL));
-  EXPECT_FALSE(S::NIL.eq(S::T));
-  EXPECT_FALSE(S::T.eq(S::NIL));
+  EXPECT_FALSE(a0.eq(T));
+  EXPECT_FALSE(a0.eq(NIL));
+  EXPECT_FALSE(NIL.eq(T));
+  EXPECT_FALSE(T.eq(NIL));
   EXPECT_TRUE(S("aBC").eq(S("AbC")));
   EXPECT_TRUE(S("ABC").eq(S("ABC")));
-  EXPECT_TRUE(S("nIl").eq(S::NIL));
+  EXPECT_TRUE(S("nIl").eq(NIL));
   EXPECT_TRUE(S("NIL").eq(S("nil")));
-  EXPECT_TRUE(S::NIL.eq(S("nil")));
-  EXPECT_TRUE(S::NIL.eq(S("NIL")));
-  EXPECT_TRUE(S::NIL.eq(S::NIL));
-  EXPECT_TRUE(S::T.eq(S::T));
-  EXPECT_TRUE(S::T.eq("T"));
-  EXPECT_TRUE(S::T.eq(S("T")));
+  EXPECT_TRUE(NIL.eq(S("nil")));
+  EXPECT_TRUE(NIL.eq(S("NIL")));
+  EXPECT_TRUE(NIL.eq(NIL));
+  EXPECT_TRUE(T.eq(T));
+  EXPECT_TRUE(T.eq("T"));
+  EXPECT_TRUE(T.eq(S("T")));
 }
 
 TEST(Atomic,NE) {
-  EXPECT_TRUE(a0.ne(S::T));
-  EXPECT_TRUE(a0.ne(S::NIL));
-  EXPECT_TRUE(S::NIL.ne(S::T));
-  EXPECT_TRUE(S::T.ne(S::NIL));
+  EXPECT_TRUE(a0.ne(T));
+  EXPECT_TRUE(a0.ne(NIL));
+  EXPECT_TRUE(NIL.ne(T));
+  EXPECT_TRUE(T.ne(NIL));
   EXPECT_FALSE(S("aBC").ne(S("AbC")));
   EXPECT_FALSE(S("ABC").ne(S("ABC")));
-  EXPECT_FALSE(S("nIl").ne(S::NIL));
+  EXPECT_FALSE(S("nIl").ne(NIL));
   EXPECT_FALSE(S("NIL").ne(S("nil")));
-  EXPECT_FALSE(S::NIL.ne(S("nil")));
-  EXPECT_FALSE(S::NIL.ne(S("NIL")));
-  EXPECT_FALSE(S::NIL.ne(S::NIL));
-  EXPECT_FALSE(S::T.ne(S::T));
-  EXPECT_FALSE(S::T.ne("T"));
-  EXPECT_FALSE(S::T.ne(S("T")));
+  EXPECT_FALSE(NIL.ne(S("nil")));
+  EXPECT_FALSE(NIL.ne(S("NIL")));
+  EXPECT_FALSE(NIL.ne(NIL));
+  EXPECT_FALSE(T.ne(T));
+  EXPECT_FALSE(T.ne("T"));
+  EXPECT_FALSE(T.ne(S("T")));
 }
 
 TEST(Atomic,car) {
   EXPECT_EQ(s1.car(), t);
   EXPECT_EQ(s2.car(), s1);
   EXPECT_EQ(s3.car(), s2);
-  EXPECT_EXCEPTION(a0.car() , a0,S::CAR);
-  EXPECT_EXCEPTION(a1.car() , a1,S::CAR);
-  EXPECT_EXCEPTION(a2.car(),a2,S::CAR);
-  EXPECT_EXCEPTION(a3.car(),a3,S::CAR);
+  EXPECT_EXCEPTION(a0.car() , a0,CAR);
+  EXPECT_EXCEPTION(a1.car() , a1,CAR);
+  EXPECT_EXCEPTION(a2.car(),a2,CAR);
+  EXPECT_EXCEPTION(a3.car(),a3,CAR);
 }
 
 TEST(Atomic,cdr) {
   EXPECT_EQ(s1.cdr(), n);
   EXPECT_EQ(s2.cdr(), s1);
   EXPECT_EQ(s3.cdr(), s1);
-  EXPECT_EXCEPTION(a0.cdr(),a0,S::CDR);
-  EXPECT_EXCEPTION(a1.cdr(),a1,S::CDR);
-  EXPECT_EXCEPTION(a2.cdr(),a2,S::CDR);
-  EXPECT_EXCEPTION(a3.cdr(),a3,S::CDR);
+  EXPECT_EXCEPTION(a0.cdr(),a0,CDR);
+  EXPECT_EXCEPTION(a1.cdr(),a1,CDR);
+  EXPECT_EXCEPTION(a2.cdr(),a2,CDR);
+  EXPECT_EXCEPTION(a3.cdr(),a3,CDR);
 }
 
 TEST(Atomic,atom) {
@@ -141,41 +142,47 @@ TEST(Atomic, EvalLiterals) {
 }
 
 TEST(Atomic, EvalUndefined0) {
-  EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),S::UNDEFINED);
+  EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),UNDEFINED);
 }
 
 TEST(Atomic, EvalUndefined) {
-  EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),S::UNDEFINED);
+  EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED);
 }
 
 TEST(Atomic, EvalNil) {
-  CAREFULLY(EXPECT_EQ(S::NIL.eval(), S::NIL));
+  CAREFULLY(EXPECT_EQ(NIL.eval(), NIL));
 }
 
 TEST(Atomic, EvalT) {
-  CAREFULLY(EXPECT_EQ(S::T.eval(), S::T));
+  CAREFULLY(EXPECT_EQ(T.eval(), T));
 }
 
 TEST(Atomic, EvalAtom) {
   S q = list("atom", "nil"); 
   S s = q.eval();
-  CAREFULLY(EXPECT_EQ(s, S::T)); 
+  CAREFULLY(EXPECT_EQ(s, T)); 
 }
 
 TEST(Atomic, EvalCDR) {
-  S i = S::CDR.cons(S("X").cons("Y").q());
+  S i = CDR.cons(S("X").cons("Y").q());
   S o = S("Y");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
 
 TEST(Atomic, EvalCAR) {
-  S i = S::CAR.cons(S("X").cons("Y").q());
+  S i = CAR.cons(S("X").cons("Y").q());
   S o = S("X");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
 
+TEST(Atomic, EvalQuote) {
+  S i =  list("A", "B", "C").q();
+  CAREFULLY(EXPECT_EQ(i.eval().car(),"A") << i); 
+  CAREFULLY(EXPECT_EQ(i.eval().cdr().car(),"B") << i); 
+}
+
 TEST(Atomic, EvalCARList) {
-  S i =  list(S::CAR, list("A", "B", "C")).q();
+  S i =  list(CAR, list("A", "B", "C").q());
   S o = S("A");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }

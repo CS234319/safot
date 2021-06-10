@@ -14,24 +14,20 @@ TEST(Strings, Layout) {
 }
 
 TEST(Strings, Indices) {
-  EXPECT_EQ(S::NIL,S::NIL);
-  EXPECT_NE(S::NIL,S::T);
-  EXPECT_NE(S::T,S::NIL);
-  EXPECT_EQ(S::T,S::T);
-  EXPECT_NE(S::T.cons(S::T),S::T.cons(S::T));
-  EXPECT_NE(S::NIL.cons(S::NIL),S::NIL.cons(S::NIL));
-  EXPECT_EQ(S::LAMBDA, S::LAMBDA);
-  EXPECT_EQ(S::LAMBDA, S("lambda"));
-  EXPECT_NE(S::LAMBDA, S::NLAMBDA);
-  EXPECT_NE(S::NLAMBDA, S::LAMBDA);
-  EXPECT_NE(S::NLAMBDA, S::LAMBDA);
-  EXPECT_EQ(S::NLAMBDA, S::NLAMBDA);
+  EXPECT_EQ(NIL,NIL);
+  EXPECT_NE(NIL,T);
+  EXPECT_NE(T,NIL);
+  EXPECT_EQ(T,T);
+  EXPECT_NE(T.cons(T),T.cons(T));
+  EXPECT_NE(NIL.cons(NIL),NIL.cons(NIL));
+  EXPECT_EQ(CAR.handle, S("CAR").handle);
+  EXPECT_NE(CDR.handle, S("CDR").handle);
 }
 
 TEST(Strings, NIL) {
-  EXPECT_EQ(0,S::NIL.handle);
+  EXPECT_EQ(0,NIL.handle);
   EXPECT_EQ(0,S("NIL").handle);
-  EXPECT_EQ(S::NIL,S("NIL"));
+  EXPECT_EQ(NIL,S("NIL"));
 }
 }
 

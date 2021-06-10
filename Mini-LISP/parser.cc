@@ -52,7 +52,7 @@ namespace Parser {
   extern enum Status status() {
     return current_status;
   }
-  S $$ = S::NIL;
+  S $$ = NIL;
   extern S result() {
     return $$; 
   }
@@ -169,7 +169,7 @@ namespace Parser {
           }
           break;
         case X1:
-          $$ = S::QUOTE.cons($$.cons(S::NIL)); 
+          $$ = QUOTE.cons($$.cons(NIL)); 
           reduce();
           continue;
         case X2:
@@ -217,7 +217,7 @@ namespace Parser {
           M1("Set", $$);
           continue;
         case L2:
-          $$ = S::NIL;
+          $$ = NIL;
           reduce(); 
           continue;
       }

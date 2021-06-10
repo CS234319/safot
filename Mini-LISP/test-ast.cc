@@ -43,40 +43,40 @@ TEST(AST, AtomLong) {
 
 TEST(AST, List0) {
   supply("()");
-  EXPECT_EQ(S::NIL, result());
+  EXPECT_EQ(NIL, result());
   reset();
 }
 
 TEST(AST, List1) {
   supply("(HELLO)");
   auto s = Parser::result();
-  ASSERT_NE(S::NIL,s);
+  ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
   EXPECT_STREQ("HELLO",s.car().asAtom());
-  EXPECT_EQ(S::NIL,s.cdr());
+  EXPECT_EQ(NIL,s.cdr());
   reset();
 }
 
 TEST(AST, List2) {
   supply("(1 2)");
   auto s = Parser::result();
-  ASSERT_NE(S::NIL,s);
+  ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
   EXPECT_STREQ("1",s.car().asAtom());
   s = s.cdr();
   EXPECT_STREQ("2",s.car().asAtom());
-  EXPECT_EQ(S::NIL,s.cdr());
+  EXPECT_EQ(NIL,s.cdr());
   reset();
 }
 
 TEST(AST, List3) {
   supply("(A B C)");
   auto s = Parser::result();
-  ASSERT_NE(S::NIL,s);
+  ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
@@ -85,28 +85,28 @@ TEST(AST, List3) {
   EXPECT_STREQ("B",s.car().asAtom());
   s = s.cdr();
   EXPECT_STREQ("C",s.car().asAtom());
-  EXPECT_EQ(S::NIL,s.cdr());
+  EXPECT_EQ(NIL,s.cdr());
   reset();
 }
 
 TEST(AST, QuoteA) {
   supply("'Z");
   auto s = Parser::result();
-  ASSERT_NE(S::NIL,s);
+  ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
   EXPECT_STREQ("QUOTE",s.car().asAtom());
   s = s.cdr();
   EXPECT_STREQ("Z",s.car().asAtom());
-  EXPECT_EQ(S::NIL,s.cdr());
+  EXPECT_EQ(NIL,s.cdr());
   reset();
 }
 
 TEST(AST, QuoteAA) {
   supply("''Z");
   auto s = Parser::result();
-  ASSERT_NE(S::NIL,s);
+  ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
@@ -119,7 +119,7 @@ TEST(AST, QuoteAA) {
   EXPECT_STREQ("QUOTE",s.car().asAtom());
   s = s.cdr();
   EXPECT_STREQ("Z",s.car().asAtom());
-  EXPECT_EQ(S::NIL,s.cdr());
+  EXPECT_EQ(NIL,s.cdr());
   reset();
 }
 
@@ -189,14 +189,14 @@ TEST(AST, QuoteListInList) {
 
 TEST(AST, NIL) {
   supply("NIL");
-  EXPECT_EQ(S::NIL, Parser::result());
+  EXPECT_EQ(NIL, Parser::result());
   reset();
 }
 
 TEST(AST, EmptyListNiL) {
   supply("()");
   EXPECT_EQ(Status::accept, status());
-  EXPECT_EQ(S::NIL, Parser::result());
+  EXPECT_EQ(NIL, Parser::result());
   reset();
 }
 
