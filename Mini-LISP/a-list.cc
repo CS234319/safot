@@ -25,7 +25,7 @@ S lookup(S id, S as) {
   D(id, as, alist);
   return 
       as.null() ?  
-         (M("DONE"), id.error(S::MISSING)): 
+         (M("DONE"), id.error(S::UNDEFINED)): 
       as.car().car().eq(id) ? 
           (M("FOUND"), as.car().cdr()): (M("RECURSE"), lookup(id, as.cdr())); 
 }

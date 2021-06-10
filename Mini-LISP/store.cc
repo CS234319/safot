@@ -55,8 +55,8 @@ Type Pair { // The different perspectives of a pair.
   Representation {
     perspective(Word cons)        /// I.   | A single word with two halves: 
     perspective(Half car, cdr)    /// II.  | A pair of car and cdr, each in a half word.
-    perspective(Half foo, rest)   /// III. | An unused pair item in the list of pairs. 
-    perspective(Half value, next) /// IV.  | An data item in the stack used in the parser. 
+    perspective(Half prev, next)  /// III. | An unused pair item in the list of pairs. 
+    perspective(Half head, rest)  /// IV.  | An data item in the stack used in the parser. 
   };
 };
 
@@ -84,7 +84,7 @@ Context Store {
   // Atoms:
   Provides constant(Half) $M_a$;  /// how many atoms are initially available 
   Provides function Half $v_a$(); /// how many chars remain available for allocation 
-  Provides function Half $v_a$(); /// how many chars were allocated 
+  Provides function Half $u_a$(); /// how many chars were allocated 
   Allocate Half current = 0;
   // Pairs
   Provides constant(Half) $M_p$;  /// how many pairs are initially available 
@@ -107,36 +107,40 @@ Context Store {
 Allocate static union  {
   char block[Store::$m$];
   struct {
-   char A0[Store::$M_a$ - Store::NIL_SIZE];
+   char $A_0$[Store::$M_a$ - Store::NIL_SIZE];
    char A[Store::NIL_SIZE] = { 'N', 'I', 'L', '\0' };
    Pair P[Store::$M_p$];
   };
 } memory; 
 
 Context Store { 
+  using Context Store;
+constexpr auto x =3;
+constexpr auto y = x *x;
   Let array(Pair) P = memory.P - 1;
-  Let array(Pair) P0 = memory.P - 1;
-  Let array(Pair) P1 = memory.P + $M_p$;
+  Let array(Pair) $P_0$ = memory.P - 1;
+  Let array(Pair) $P_1$ = memory.P + $M_p$;
   Let array(char) A  = memory.A;
-  Let array(char) A0  = memory.A0;
-  Let array(char) A1  = memory.A + $M_a$;
+  Let array(char) $A_0$  = memory.$A_0$;
+  Let array(char) $A_1$  = memory.A + $M_a$;
+  Let Half $L_a$ = $A_0$ - A, $H_a$ = 0;   
+  Let Half $L_p$ = memory.P - P, $H_p$ = $P_1$ - memory.P;   
+  Let Half $L$ = min($L_a$, $L_p$ ), $H$ = max($H_a$, $H_p$);
+  Let Half $N_p$ = $H_p$ - $L_p$ + 1;
+  Let Half $N_a$ = $H_a$ - $H_a$ + 1;
+  Let Half $N$ = $H$ - $L$ + 1;
+  Half  
 }
-
-Context Atoms { Let Half $h_0$ = Store::A0 - Store::A, $h_1$ = 0;  } 
-Context Pairs { Let Half $h_0$ = memory.P - Store::P, $h_1$ = Store::P1 - memory.P;  } 
 
 
 Context Store {   
-  Let Half $h_0$ = min(Atoms::$h_0$, Pairs::$h_0$), $h_1$ = max(Atoms::$h_1$, Pairs::$h_1$);
 }
 
-Context Pairs { Let Half $n$ = $h_1$ - $h_0$ + 1; };
-Context Atoms { Let Half $n$ = $h_1$ - $h_0$ + 1; }; 
-Context Store { Let Half $n$ = $h_1$ - $h_0$ + 1; };
-
 Context Store {
-  Half mark(Half h)   { return h + (1 << 15); } 
-  Half marked(Half h) { return h < Atoms::$h_0$ || h > Atoms::$h_1$; } 
+  Half flip(Half h)   { return h + (1 << 15); } 
+  bool red(Half h) { return h < $L$ || h > $H$; } 
+  void flip(Pair &p)  { Pair.car = flip(p.car); }
+  bool red(Pair p) { return red(p.car);  }
 }
 
 /* Making an S expression from an input string is by moving the pool pointer
@@ -165,25 +169,57 @@ S Store::make(Atom s) {
   return S(current);
 }
 
-S Store::make(Atom s) {
-  const H $ = next();
-  remaining--, next() = pool[next()].next;
-    D($, next(), remaining);
-    return $;
+static Half init() {
+  for (Half h = $L_p$  + 1; h < $H_p$; ++h) {
+    P[h].prev = h - 1;
+    P[h].next = h + 1;
   }
-
-H make(H car, H cdr) {
-  H $ = allocate();
-  pool[$].car = car;
-  pool[$].cdr = cdr;
-  return S($);
+  P[$L_p$ ].prev = 0;
+  P[$L_p$ ].next = $L_p$  + 1;
+  P[$H_p$].prev = $H_p$ - 1;
+  P[$H_p$].next = 0;
+  for (Half h = $L_p$; h <= $H_p$; ++h) 
+    flip[P[h]];
+  return $L_p$;
 }
 
-  void free(H h) {
-    D(h, remaining);
-    pool[h].next = next(), remaining++, next() = h;
-  }
+static Half next = init;
+static Half $v_p$ = $n_p$; 
 
+static Half make(Pair p) {
+  const Half h = 1 + (p.cons ^ (p.cons <<< 7)) % $N_p$;
+  if (P[h].cons == p.cons) 
+    return h;
+  if (h == next || !red(P[h])) {
+    flip(P[next]);
+    next = P[next].next;
+    flip(P[next]);
+    P[h] = p;
+    return h;
+  }
+  flip(P[h]);
+  const Half prev = P[h].prev, next = P[h].next;
+  if (prev != 0) {
+    flip(P[prev]);
+    P[prev].next = next; 
+    flip(P[prev]);
+  }
+  if (next != 0) {
+    flip(P[next]);
+    P[next].prev = prev; 
+    flip(P[next]);
+  }
+  return h;
+}
+
+S make(Half car, Half cdr) {
+  return make(Pair(car,cdr));
+}
+
+void free(Half h) {
+  D(h, remaining);
+  pool[h].next = next(), remaining++, next() = h;
+}
 
 #undef min
 #undef max
@@ -197,114 +233,92 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
 TEST(SExpression, size) { 
   EXPECT_EQ(2, sizeof(S));
 }
 
+using Context Store;
 
-TEST(Atoms, $h_0$) { 
-  using Context Atoms; 
-  EXPECT_LT($h_0$,0);
-  EXPECT_GE(Store::A - Store::A0,$h_0$);
+TEST(Atoms, $L_a$) { 
+  EXPECT_LT($L_a$,0);
+  EXPECT_GE(A - $A_0$,$L_a$);
 }
 
-TEST(Atoms, $h_1$) { 
-  using Context Atoms; 
-  EXPECT_EQ($h_1$, 0);
-  EXPECT_EQ((const char *const) Store::A + $h_1$, (const char *const) Store::P);
+TEST(Atoms, $H_a$) { 
+  EXPECT_EQ($H_a$, 0);
+  EXPECT_EQ((const char *const) A + $H_a$, (const char *const) P);
 }
 
-TEST(Atoms, $n$) { 
-  using Context Atoms; 
-  EXPECT_GT($h_1$, $h_0$);
-  EXPECT_GT($n$, 0);
-  EXPECT_EQ($n$, sizeof memory.A0 + 1);
+TEST(Atoms, $N$) { 
+  EXPECT_GT($H_a$, $L_a$);
+  EXPECT_GT($N$, 0);
+  EXPECT_EQ($N$, sizeof memory.$A_0$ + 1);
 }
 
-TEST(Pairs, $h_0$) { 
-  using Context Pairs; 
-  EXPECT_EQ($h_0$, 1);
+TEST(Pairs, $L_p$) { 
+  EXPECT_GT($L_p$, $H_a$);
+  EXPECT_LT($L_p$, $H_p$);
+  EXPECT_EQ($L_p$, 1);
 }
 
-TEST(Pairs, $h_1$) { 
-  using Context Pairs; 
-  EXPECT_GT($h_1$, $h_0$);
-  EXPECT_EQ($h_1$, $n$);
-  EXPECT_EQ(Store::P1 - memory.P, $h_1$);
-  EXPECT_EQ(Store::$M_p$, $h_1$);
+TEST(Pairs, $H_p$) { 
+  EXPECT_GT($H_p$, $L_p$);
+  EXPECT_EQ($H_p$, $N_p$);
+  EXPECT_EQ($P_1$ - memory.P, $H_p$);
+  EXPECT_EQ($M_p$, $H_p$);
 }
 
-TEST(Pairs, $n$) { 
-  using Context Pairs; 
-  EXPECT_GT($n$,0);
-  EXPECT_LT($n$,sizeof memory);
-  EXPECT_LT($n$,sizeof memory.P);
-  EXPECT_EQ($n$, Store::$M_p$);
-  EXPECT_EQ($n$,sizeof memory.P / sizeof memory.P[0]);
+TEST(Pairs, $N_p$) { 
+  EXPECT_GT($N_p$,0);
+  EXPECT_LT($N_p$,sizeof memory);
+  EXPECT_LT($N_p$,sizeof memory.P);
+  EXPECT_EQ($N_p$, $M_p$);
+  EXPECT_EQ($N$,sizeof memory.P / sizeof memory.P[0]);
 }
 
 TEST(Store, minimalSize) {
-  using Context Store;
   EXPECT_GT((Half) $M_a$, 100);
   EXPECT_GT((Half) $M_p$, 100);
 }
 
 TEST(Store, overflow) {
-  using Context Store;
   EXPECT_GT((Half) $M_p$ + 1, 0);
   EXPECT_LT((Half) - $M_a$ - 1, 0);
 }
 
 TEST(Marking, Pairs) { 
-  using Context Pairs;
-  EXPECT_LT(Store::mark($h_0$), Atoms::$h_0$);   
-  EXPECT_LT(Store::mark($h_1$), Atoms::$h_0$);   
-  EXPECT_LT(Store::mark(($h_0$ + $h_1$)/2), Atoms::$h_0$);   
-  EXPECT_LT(Store::mark($h_1$-1), Atoms::$h_0$);   
-  EXPECT_LT(Store::mark($h_0$+1), Atoms::$h_0$);   
-  EXPECT_EQ(Store::mark(Store::mark($h_0$)), $h_0$);
-  EXPECT_EQ(Store::mark(Store::mark($h_1$)), $h_1$);
-  EXPECT_EQ(Store::mark(Store::mark(($h_0$ + $h_1$)/2)),($h_0$ + $h_1$)/2);
-  EXPECT_EQ(Store::mark(Store::mark($h_0$ + 1)),$h_0$ + 1 );
-  EXPECT_EQ(Store::mark(Store::mark($h_1$ + 1)), $h_1$ + 1);
+  EXPECT_LT(flip($L_p$), $L_a$);   
+  EXPECT_LT(flip($H_p$), $L_a$);   
+  EXPECT_LT(flip(($L_p$ + $H_p$)/2), $L_a$);   
+  EXPECT_LT(flip($L_p$-1), $L_a$);   
+  EXPECT_LT(flip($L_p$+1), $L_a$);   
+  EXPECT_EQ(flip(flip($p_p$)), $p_p$);
+  EXPECT_EQ(flip(flip($H_p$)), $H_p$);
+  EXPECT_EQ(flip(flip(($p_p$ + $H_p$)/2)),($p_p$ + $H_p$)/2);
+  EXPECT_EQ(flip(flip($H_p$ + 1)),$H_p$ + 1 );
+  EXPECT_EQ(flip(flip($H_p$ + 1)), $H_p$ + 1);
 }
 
-TEST(Marking, Atoms1) { 
-  using Context Atoms;
-  EXPECT_GT(Store::mark($h_0$), $h_1$);   
-  EXPECT_LT(Store::mark($h_1$),0);
-  EXPECT_GT(Store::mark(($h_0$ + $h_1$)/2), Pairs::$h_1$);   
-  EXPECT_GT(Store::mark($h_1$-1), Pairs::$h_1$);   
-  EXPECT_GT(Store::mark($h_0$+1), Pairs::$h_1$);   
-  EXPECT_EQ(Store::mark(Store::mark($h_0$)), $h_0$);
-  EXPECT_EQ(Store::mark(Store::mark($h_1$)), $h_1$);
-  EXPECT_EQ(Store::mark(Store::mark(($h_0$ + $h_1$)/2)),($h_0$ + $h_1$)/2);
-  EXPECT_EQ(Store::mark(Store::mark($h_0$ + 1)),$h_0$ + 1 );
-  EXPECT_EQ(Store::mark(Store::mark($h_1$ + 1)), $h_1$ + 1);
-}
-
-TEST(Marking, Atoms2) { 
-  using Context Atoms;
-  EXPECT_GT(Store::mark($h_0$), $h_1$);   
-  EXPECT_LT(Store::mark($h_1$),0);
-  EXPECT_GT(Store::mark(($h_0$ + $h_1$)/2), Pairs::$h_1$);   
-  EXPECT_GT(Store::mark($h_1$-1), Pairs::$h_1$);   
-  EXPECT_GT(Store::mark($h_0$+1), Pairs::$h_1$);   
-  EXPECT_EQ(Store::mark(Store::mark($h_0$)), $h_0$);
-  EXPECT_EQ(Store::mark(Store::mark($h_1$)), $h_1$);
-  EXPECT_EQ(Store::mark(Store::mark(($h_0$ + $h_1$)/2)),($h_0$ + $h_1$)/2);
-  EXPECT_EQ(Store::mark(Store::mark($h_0$ + 1)),$h_0$ + 1 );
-  EXPECT_EQ(Store::mark(Store::mark($h_1$ + 1)), $h_1$ + 1);
+TEST(Marking, Atoms) { 
+  EXPECT_GT(flip($L_a$), $H_a$);   
+  EXPECT_LT(flip($H_a$),0);
+  EXPECT_GT(flip(($L_a$ + $H_a$)/2), $H_p$);   
+  EXPECT_GT(flip($H_a$-1), $H_p$);   
+  EXPECT_GT(flip($L_a$+1), $H_p$);   
+  EXPECT_EQ(flip(flip($L_a$)), $L_a$);
+  EXPECT_EQ(flip(flip($H_a$)), $H_a$);
+  EXPECT_EQ(flip(flip(($L_a$ + $H_a$)/2)),($L_a$ + $H_a$)/2);
+  EXPECT_EQ(flip(flip($L_a$ + 1)),$L_a$ + 1 );
+  EXPECT_EQ(flip(flip($H_a$ + 1)), $H_a$ + 1);
 }
 
 TEST(Marking, MarkingIsMarked) { 
-  using Context Store;
-  for (Half h = $h_0$; h <= $h_1$; ++h)
-    EXPECT_TRUE(marked(mark(h)));
+  for (Half h = $L$; h <= $H$; ++h)
+    EXPECT_TRUE(red(flip(h)));
 }
 
 TEST(Store, PrimitiveSizs) { 
-  using Context Store;
   EXPECT_EQ(sizeof(byte), 1);
   EXPECT_EQ(sizeof(char), 1);
   EXPECT_EQ(sizeof(Half), 2);
@@ -314,14 +328,12 @@ TEST(Store, PrimitiveSizs) {
 }
 
 TEST(Store, NIL) {
-  using Context Store;
-  EXPECT_STREQ((char *) memory.P, A1);
+  EXPECT_STREQ((char *) memory.P, $A_1$);
   EXPECT_STREQ(A, "NIL");
   EXPECT_STREQ((char *)P, "NIL");
 }
 
 TEST(Store, innerAndOuterArrays) {
-  using Context Store;
   EXPECT_EQ(A,memory.A);
   EXPECT_GE(P + 1,memory.P);
   EXPECT_LE(P + 1,memory.P);
@@ -330,7 +342,6 @@ TEST(Store, innerAndOuterArrays) {
 }
 
 TEST(Store, twoArrayAreConsecutive) {
-  using Context Store;
   EXPECT_GE(memory.A + sizeof(memory.A), (char *)memory.P);
   EXPECT_LE(memory.A + sizeof(memory.A), (char *)memory.P);
   EXPECT_EQ(memory.A + sizeof(memory.A) - (char *)memory.P,0);
@@ -338,7 +349,6 @@ TEST(Store, twoArrayAreConsecutive) {
 }
 
 TEST(Store, computedSize) {
-  using Context Store;
   EXPECT_LE(sizeof memory.block - $m$, 0);
   EXPECT_GE($m$ - sizeof memory.block, 0);
   EXPECT_EQ($m$ - sizeof memory.block, 0);
@@ -346,19 +356,16 @@ TEST(Store, computedSize) {
 }
 
 TEST(Store, actualSize) {
-  using Context Store;
   EXPECT_EQ(sizeof memory.block, sizeof memory);
   EXPECT_EQ(sizeof memory.block - sizeof memory, 0);
   EXPECT_EQ(sizeof memory - sizeof memory.block, 0);
 }
 
 TEST(Store, correctCounting) {
-  using Context Store;
   EXPECT_EQ(sizeof memory.block, sizeof memory);
 }
 
 TEST(Store, ConversionToIntDoesNotBreakArrayLimits) {
-  using Context Store;
   EXPECT_EQ((Half) $M_a$, $M_a$); 
   EXPECT_EQ((Half) $M_p$, $M_p$); 
 }

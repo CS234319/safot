@@ -21,6 +21,8 @@ const S S::EQ("eq");
 const S S::NULL("null");
 const S S::REDUNDANT("redundant"); 
 const S S::MISSING("missing");
+const S S::UNDEFINED("undefined");
+const S S::INVALID("invalid");
 
 extern S eval(S s); 
 
@@ -28,6 +30,7 @@ extern S eval(S s);
 bool S::atom() const { return handle <= 0; }
 bool S::null() const { return handle == 0; }
 bool S::t()    const { return handle != 0; }
+S    S::q()    const { return snoc(S::QUOTE); }
 S    S::car()  const { return atom() ? error(CAR) : asPair().car; }
 S    S::cdr()  const { return atom() ? error(CDR) : asPair().cdr; }
 S    S::eval() const { return ::eval(*this); }
@@ -35,7 +38,13 @@ S    S::error(S kind) const { throw cons(kind).asPair(); }
 
 // Binary
 S S::cons(S cdr) const { return S(*this, cdr); }
+S S::snoc(S car) const { return S(car, *this); }
+
 
 bool S::eq(S other) const { return handle == other.handle && atom(); }
+bool S::ne(S other) const { return handle != other.handle && atom(); }
 
-const S S::ATOMIC_FUNCTIONS = list(S::ATOM,S::CAR,S::CDR,S::COND,S::CONS,S::EQ,S::ERROR,S::EVAL,S::NULL, S::SET);
+const S S::ATOMIC_FUNCTIONS = list(
+    S::CAR,   S::CDR,  S::CONS,
+    S::ATOM,  S::NULL,  S::EQ,  S::COND, 
+    S::ERROR, S::SET, S::EVAL);

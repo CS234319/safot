@@ -28,79 +28,79 @@
 // ----------------------------
 // Test: car
 TEST(EvalPrimitive, car) {
-  EXPECT_EQ(eval(parse("(car '())"))    , S("NIL"));
-  EXPECT_EQ(eval(parse("(car nil)"))    , S("NIL"));
-  EXPECT_EQ(eval(parse("(car '(b.a))")) , S("B"));
-  EXPECT_EQ(eval(parse("(car '(b a))")) , S("B"));
+  CAREFULLY(EXPECT_EQ(eval("(car '())"), S("NIL")));
+  EXPECT_EQ(eval("(car nil)")    , S("NIL"));
+  EXPECT_EQ(eval("(car '(b.a))") , S("B"));
+  EXPECT_EQ(eval("(car '(b a))") , S("B"));
 }
 
 // ----------------------------
 // Test: cdr
 TEST(EvalPrimitive, cdr) {
-    EXPECT_EQ(eval(parse("(cdr '())"))    , S("NIL"));
-    EXPECT_EQ(eval(parse("(cdr nil)"))    , S("NIL"));
-    EXPECT_EQ(eval(parse("(cdr '(a.b))")) , S("b"));
-    EXPECT_EQ(eval(parse("(cdr '(a b))")) , S("(b)"));
-    EXPECT_EQ(eval(parse("(cdr '(b))"))   , S("NIL"));
+    EXPECT_EQ(eval("(cdr '())")    , S("NIL"));
+    EXPECT_EQ(eval("(cdr nil)")    , S("NIL"));
+    EXPECT_EQ(eval("(cdr '(a.b))") , S("b"));
+    EXPECT_EQ(eval("(cdr '(a b))") , S("(b)"));
+    EXPECT_EQ(eval("(cdr '(b))")   , S("NIL"));
 }
 
 // ----------------------------
 // Test: cons
 TEST(EvalPrimitive, cons) {
-    EXPECT_EQ(eval(parse("(cons 'a '(b c))")) , S("(A B C)"));
-    EXPECT_EQ(eval(parse("(cons 'b nil)"))    , S("NIL"));
-    EXPECT_EQ(eval(parse("(cons 'a 'b)"))     , S("(A.B)"));
+    EXPECT_EQ(eval("(cons 'a '(b c))") , S("(A B C)"));
+    EXPECT_EQ(eval("(cons 'b nil)")    , S("NIL"));
+    EXPECT_EQ(eval("(cons 'a 'b)")     , S("(A.B)"));
 }
 
 // ----------------------------
 // Test: eq
 TEST(EvalPrimitive, eq) {
-    EXPECT_EQ(eval(parse("(eq 'a 'a)"))          , S("T"));
-    EXPECT_EQ(eval(parse("(eq 'a 'b)"))          , S("NIL"));
-    EXPECT_EQ(eval(parse("(eq t t)"))            , S("T"));
-    EXPECT_EQ(eval(parse("(eq t nil)"))          , S("NIL"));
-    EXPECT_EQ(eval(parse("(eq nil nil)"))        , S("T"));
-    EXPECT_EQ(eval(parse("(eq '(a a) '(a a))"))  , S("NIL"));
+    EXPECT_EQ(eval("(eq 'a 'a)")          , S("T"));
+    EXPECT_EQ(eval("(eq 'a 'b)")          , S("NIL"));
+    EXPECT_EQ(eval("(eq t t)")            , S("T"));
+    EXPECT_EQ(eval("(eq t nil)")          , S("NIL"));
+    EXPECT_EQ(eval("(eq nil nil)")        , S("T"));
+    EXPECT_EQ(eval("(eq '(a a) '(a a))")  , S("NIL"));
 }
 
 // ----------------------------
 // Test: cond
 TEST(EvalPrimitive, cond) {
-    EXPECT_EQ(eval(parse("(cond (t 'A))"))                     , S("A"));
-    EXPECT_EQ(eval(parse("(cond (nil 'A) (t 'B))"))            , S("B"));
-    EXPECT_EQ(eval(parse("(cond (nil 'A) (t 'B) (t 'C))"))     , S("B"));
-    EXPECT_EQ(eval(parse("(cond (nil 'A) (nil 'B) (nil 'C))")) , S("NIL"));
-    EXPECT_EQ(eval(parse("(cond)"))                            , S("NIL"));
+    EXPECT_EQ(eval("(cond (t 'A))")                     , S("A"));
+    EXPECT_EQ(eval("(cond (nil 'A) (t 'B))")            , S("B"));
+    EXPECT_EQ(eval("(cond (nil 'A) (t 'B) (t 'C))")     , S("B"));
+    EXPECT_EQ(eval("(cond (nil 'A) (nil 'B) (nil 'C))") , S("NIL"));
+    EXPECT_EQ(eval("(cond)")                            , S("NIL"));
 }
 
 // ----------------------------
 // Test: set
 TEST(EvalPrimitive, set) {
-    EXPECT_EQ(eval(parse("(set 'a '(b c))")) , S("(b c)"));
-    EXPECT_EQ(eval(parse("(set 'b nil)"))    , S("NIL"));
+    EXPECT_EQ(eval("(set 'a '(b c))") , S("(b c)"));
+    EXPECT_EQ(eval("(set 'b nil)")    , S("NIL"));
 }
 
 // ----------------------------
 // Test: atom
 TEST(EvalPrimitive, atom) {
-    EXPECT_EQ(eval(parse("(atom nil)"))    , S("T"));
-    EXPECT_EQ(eval(parse("(atom t)"))      , S("T"));
-    EXPECT_EQ(eval(parse("(atom '(a a))")) , S("NIL"));
-    EXPECT_EQ(eval(parse("(atom 'a)"))     , S("T"));
+    EXPECT_EQ(eval("(atom nil)")    , S("T"));
+    EXPECT_EQ(eval("(atom t)")      , S("T"));
+    EXPECT_EQ(eval("(atom '(a a))") , S("NIL"));
+    EXPECT_EQ(eval("(atom 'a)")     , S("T"));
 }
 
 // ----------------------------
 // Test: eval
 TEST(EvalPrimitive, eval) {
-    EXPECT_EQ(eval(parse("(eval t)"))   , S("T"));
-    EXPECT_EQ(eval(parse("(eval nil)")) , S("NIL"));
+    EXPECT_EQ(eval("(eval t)")   , S("T"));
+    EXPECT_EQ(eval("(eval nil)") , S("NIL"));
 }
 
 // ----------------------------
 // Test: error
 TEST(EvalPrimitive, error) {
-    EXPECT_EQ(eval(parse("(error)"))         , S(""));
-    EXPECT_EQ(eval(parse("(error 'my_err)")) , S("my_err"));
+    EXPECT_EQ(eval("(error)")         , S(""));
+    EXPECT_EQ(eval("(error 'my_err)") , S("my_err"));
 }
 
 // ----------------------------
@@ -112,12 +112,12 @@ TEST(EvalPrimitive, RealErrors) {
      *     In lisp syntax: "(error 'something−went−wrong atomic)"
      *
      * Note:
-     *     Atomic function: "cond" can't failed.
+     *     Atom,ic function: "cond" can't failed.
      *
      */
-    EXPECT_EQ(eval(parse("(car 'a)")) , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval(parse("(car ())")) , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval(parse("(cdr t)"))  , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval(parse("(cdr ())")) , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval(parse("(cdr nil)")), S("something−went−wrong-atomic"));
+    EXPECT_EQ(eval("(car 'a)") , S("something−went−wrong-atomic"));
+    EXPECT_EQ(eval("(car ())") , S("something−went−wrong-atomic"));
+    EXPECT_EQ(eval("(cdr t)")  , S("something−went−wrong-atomic"));
+    EXPECT_EQ(eval("(cdr ())") , S("something−went−wrong-atomic"));
+    EXPECT_EQ(eval("(cdr nil)"), S("something−went−wrong-atomic"));
 }

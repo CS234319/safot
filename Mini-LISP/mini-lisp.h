@@ -78,7 +78,7 @@ representation S { // Representation of an S expression
   static const S LAMBDA, NLAMBDA;
   static const S ERROR, SET;
   // Named atoms for exceptions
-  static const S REDUNDANT, MISSING;
+  static const S REDUNDANT, MISSING, UNDEFINED, INVALID;
   // The list of all atomic functions
   static const S ATOMIC_FUNCTIONS; 
   /** Unary atomic functions are methods that take no parameters*/
@@ -88,10 +88,13 @@ representation S { // Representation of an S expression
   S car() const; 
   S cdr() const;
   S eval() const; 
+  S q() const; 
   /** Binary atomic functions are methods that take one parameter */
   bool eq(S other) const; 
-  S error(S kind) const; 
+  bool ne(S other) const; 
   S cons(S cdr) const;
+  S snoc(S car) const;
+  S error(S kind) const; 
 };
 #undef construct
 #endif // MINI_LISP_H 
