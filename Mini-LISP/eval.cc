@@ -41,7 +41,7 @@ S apply_unary_atomic(S atomic_function, S xs) {
   if (xs.atom())
     return xs.error(S::INVALID);
   if (xs.cdr().t())
-    return xs.error(S::REDUNDANT);
+    return xs.error(REDUNDANT);
   const S first = xs.car();
   if (atomic_function.eq(S::EVAL))
     return first.car().eval();

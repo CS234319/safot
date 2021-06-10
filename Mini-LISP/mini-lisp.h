@@ -80,7 +80,7 @@ representation S { // Representation of an S expression
   // The list of all atomic functions
   static const S ATOMIC_FUNCTIONS; 
   // Named atoms for exceptions
-  static const S REDUNDANT, MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
+  static const S MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 
   /** Unary atomic functions are methods that take no parameters*/
   bool atom() const; 
@@ -99,7 +99,7 @@ representation S { // Representation of an S expression
 };
 
 inline bool die(S s) { throw S::BUG.cons(s); }
-
+extern const S REDUNDANT;
 
 #undef construct
 #endif // MINI_LISP_H 

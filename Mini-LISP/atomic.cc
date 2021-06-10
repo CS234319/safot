@@ -1,5 +1,8 @@
 // An implementation of mini-lisp in mini-C++
 #include "basics.h"
+#include "eval.h"
+
+const S REDUNDANT("redundant"); 
 
 /* Nullary atomic functions */
 bool S::atom() const { return handle <= 0; }
@@ -35,7 +38,6 @@ const S S::ERROR("error");
 const S S::EVAL("eval");
 const S S::EQ("eq");
 const S S::NULL("null");
-const S S::REDUNDANT("redundant"); 
 const S S::MISSING("missing");
 const S S::UNDEFINED("undefined");
 const S S::INVALID("invalid");
@@ -47,6 +49,6 @@ extern S eval(S s);
 
 const S S::ATOMIC_FUNCTIONS = list(
   S::CAR,   S::CDR,  S::CONS,
-  S::ATOM,  S::NULL,  S::EQ,  S::COND, 
-  S::ERROR, S::SET, S::EVAL, S::QUOTE
+  S::ATOM,  S::NULL, S::EQ,  S::COND, 
+  S::ERROR, S::SET,  S::EVAL, S::QUOTE
 );
