@@ -1,5 +1,6 @@
 #include "io.h"
 #include "basics.h"
+
 inline auto operator == (const S s1,const S s2) { return s1.handle == s2.handle; }
 inline auto operator != (const S s1,const S s2) { return s1.handle != s2.handle; }
 
@@ -15,8 +16,6 @@ inline S parse(const char *s) {
 inline S parse(const std::string& s) {
     return parse(s.c_str());
 }
-
-#define STRINGIFY(X) #X 
 
 #define LINE_STRING STRINGIZE(__LINE__)
 #define STRINGIZE(x) STRINGIZE2(x)

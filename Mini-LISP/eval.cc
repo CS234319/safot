@@ -2,7 +2,7 @@
 #include "a-list.h"
 #include "basics.h"
 
-#define BUGGY 0
+#define BUGGY 1
 
 #if !BUGGY
 #undef D
@@ -20,11 +20,8 @@ S bug(S s) {
 }
 
 
-S evaluate_list(S xs) {
-  D(xs);
-  if (xs.null())
-    return S::NIL;
-  return xs.car().eval().cons(evaluate_list(xs.cdr()));
+S evaluate_list(S xs) { M(xs);
+  return xs.null() ?  S::NIL: xs.car().eval().cons(evaluate_list(xs.cdr()));
 }
 
 S evaluate_cond(S test_forms) {
@@ -83,7 +80,6 @@ S apply_binary_atomic(S atomic_function, S xs) {
   return bug(atomic_function.cons(xs));
 }
 
-
 S apply_eager_atomic(S atomic_function, S actuals) {
   D(atomic_function, actuals);
   static const S unaries = list(S::CAR, S::CDR, S::ATOM, S::NULL, S::EVAL);
@@ -96,11 +92,12 @@ S apply_atomic(S atomic_function, S actuals) {
   M(atomic_function, actuals);
   if (atomic_function.eq(S::COND)) 
     return evaluate_cond(actuals);
+  if (atomic_function.eq(S::QUOTE)) 
+    return evaluate_cond(actuals);
   return apply_eager_atomic(atomic_function, evaluate_list(actuals));
 }
 
-S evaluate_atomic(S s) {
-  M(s);
+S evaluate_atomic(S s) { M(s);
   return apply_atomic(s.car(), s.cdr());
 }
 
@@ -108,9 +105,7 @@ S apply(S s, S args) {
   return S::NIL;
 }
 
-S eval(S s) {
-  D(s);
-  if (s.car().eq(S::QUOTE)) return s.cdr(); 
+S eval(S s) { M(s);
   if (s.atom()) return lookup(s);
   if (atomic(s.car())) return evaluate_atomic(s);
   return apply(eval(s.car()), s.cdr());

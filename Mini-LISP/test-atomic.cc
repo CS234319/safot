@@ -136,8 +136,8 @@ TEST(Atomic, null) {
 
 
 TEST(Atomic, EvalLiterals) {
-  EXPECT_EQ(t.eval(),t);
-  EXPECT_EQ(n.eval(),n);
+  CAREFULLY(EXPECT_EQ(t.eval(),t));
+  CAREFULLY(EXPECT_EQ(n.eval(),n));
 }
 
 TEST(Atomic, EvalUndefined0) {
@@ -165,17 +165,18 @@ TEST(Atomic, EvalAtom) {
 TEST(Atomic, EvalCDR) {
   S i = S::CDR.cons(S("X").cons("Y").q());
   S o = S("Y");
-  EXPECT_EQ(i.eval(),o) << i; 
+  CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
 
 TEST(Atomic, EvalCAR) {
   S i = S::CAR.cons(S("X").cons("Y").q());
   S o = S("X");
-  EXPECT_EQ(i.eval(),o) << i; 
+  CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
+
 TEST(Atomic, EvalCARList) {
   S i =  list(S::CAR, list("A", "B", "C")).q();
   S o = S("A");
-  EXPECT_EQ(i.eval(),o) << i; 
+  CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
 

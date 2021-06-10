@@ -77,10 +77,11 @@ representation S { // Representation of an S expression
   static const S DEFUN, NDEFUN; 
   static const S LAMBDA, NLAMBDA;
   static const S ERROR, SET;
-  // Named atoms for exceptions
-  static const S REDUNDANT, MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
   // The list of all atomic functions
   static const S ATOMIC_FUNCTIONS; 
+  // Named atoms for exceptions
+  static const S REDUNDANT, MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
+
   /** Unary atomic functions are methods that take no parameters*/
   bool atom() const; 
   bool null() const; 

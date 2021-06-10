@@ -14,7 +14,7 @@ std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
 }
 
 std::ostream& operator<<(std::ostream &os, Pair p) {
-  return os << "[" << p.car << "." << p.cdr << "]";
+  return os << "[" << S(p.car) << "." << S(p.cdr)  << "]";
 }
 
 String operator ~(S s) {
