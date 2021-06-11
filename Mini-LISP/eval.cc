@@ -65,10 +65,12 @@ S apply_atomic(S s) { M(s);
     return evaluate_cond(s.cdr());
   if (f.eq(CAR)) 
     return only(s).car();
-  if (f.eq(ATOM))
-    return only(s).atom(); 
   if (f.eq(CDR)) 
     return only(s).cdr();
+  if (f.eq(ATOM))
+    return only(s).atom() ? T : NIL; 
+  if (f.eq(NULL))
+    return only(s).null() ? T : NIL; 
   if (f.eq(EVAL))
     return only(s).eval();
   if (f.eq(NULL))

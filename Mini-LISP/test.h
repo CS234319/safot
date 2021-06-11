@@ -1,8 +1,16 @@
 #include "io.h"
 #include "basics.h"
 
-inline auto operator == (const S s1,const S s2) { return s1.handle == s2.handle; }
-inline auto operator != (const S s1,const S s2) { return s1.handle != s2.handle; }
+inline auto operator == (const S s1,const S s2) { 
+  if (s1.handle == s2.handle)
+    return true;
+  if (s1.atom() || s2.atom())
+    return false;
+  return s1.car() == s2.car() && s1.cdr() == s2.cdr();
+}
+
+// inline auto operator != (const S s1,const S s2) { 
+  // return !(s1.handle == s2.handle); }
 
 inline S parse(const char *s) {
     Parser::reset();

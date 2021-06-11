@@ -159,8 +159,12 @@ TEST(Atomic, EvalNil) {
   CAREFULLY_EXPECT(EQ, NIL.eval(), NIL);
 }
 
-TEST(Atomic, EvalQuote) {
-  EXPECT_EQ(list(EVAL, list(QUOTE, a3)), a3);
+TEST(Atomic, EvalAndQuote) {
+  EXPECT_EQ(list(EVAL, list(QUOTE, T)).eval(), T);
+}
+
+TEST(Atomic, EvaluatingQuote) {
+  EXPECT_EQ(list(QUOTE, s3).eval(), s3);
 }
 
 TEST(Atomic, EvalT) {
@@ -178,21 +182,31 @@ TEST(Atomic, EvalAtomT) {
 }
 
 TEST(Atomic, EvalAtomS) {
-  CAREFULLY_EXPECT(EQ, list(ATOM,a0).eval(), T); 
-  CAREFULLY_EXPECT(EQ, list(ATOM,a1).eval(), T); 
-  CAREFULLY_EXPECT(EQ, list(ATOM,a2).eval(), T); 
-  CAREFULLY_EXPECT(EQ, list(ATOM,a3).eval(), T); 
-  CAREFULLY_EXPECT(EQ, list(ATOM,s1).eval(), NIL); 
-  CAREFULLY_EXPECT(EQ, list(ATOM,s2).eval(), NIL); 
-  CAREFULLY_EXPECT(EQ, list(ATOM,s3).eval(), NIL); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,a0.q()).eval(), T); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,a1.q()).eval(), T); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,a2.q()).eval(), T); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,a3.q()).eval(), T); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,s1.q()).eval(), NIL); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,s2.q()).eval(), NIL); 
+  CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
+}
+
+TEST(Atomic, EvalAtomNasty) {
+  CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
 }
 
 
 TEST(Atomic, EvalCDR) {
-  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
+  S i = list(CDR, list(QUOTE, S("X").cons(S("Y"))));
   S o = S("Y");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
+
+TEST(Atomic, EvalCDRList) {
+  S i = list(CDR, list("A", "B", "C").q());
+  CAREFULLY(EXPECT_EQ(i.eval(),list("B", "C")) << i); 
+}
+
 
 TEST(Atomic, EvalCAR) {
   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
