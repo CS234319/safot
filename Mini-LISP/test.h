@@ -9,8 +9,8 @@ inline auto operator == (const S s1,const S s2) {
   return s1.car() == s2.car() && s1.cdr() == s2.cdr();
 }
 
-// inline auto operator != (const S s1,const S s2) { 
-  // return !(s1.handle == s2.handle); }
+inline auto operator != (const S s1,const S s2) { 
+ return !(s1.handle == s2.handle); }
 
 inline S parse(const char *s) {
     Parser::reset();
