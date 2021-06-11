@@ -2,13 +2,17 @@
 #include "a-list.h"
 #include "basics.h"
 
-#define BUGGY 1
+#define BUGGY 0
 
 #if !BUGGY
 #undef D
 #undef M
+#undef M2
+#undef M3
 #define D(...) 0
 #define M(...) 0
+#define M2(...) 0
+#define M3(...) 0
 #else 
 #include "dump.h"
 #include "io.h"

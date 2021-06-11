@@ -12,21 +12,21 @@ TEST_OBJS = \
 	$(OBJS) \
 		dump.o \
 		io.o \
-		test-fluentons.cc \
 		stack-trace.o \
-		test-a-list.o  \
-		test-apply.o \
-		test-ast.o \
-		test-basics.o \
-		test-eval-cond.o \
-		test-evaluate-primitive.o \
-		test-eval-atomic.cc \
-		test-main.o \
-		test-pairs.o \
-		test-parser.o \
-		test-stack.o \
-		test-strings.o \
-		test-tokenizer.o \
+		t-fluentons.cc \
+		t-a-list.o  \
+		t-apply.o \
+		t-ast.o \
+		t-basics.o \
+		t-eval-cond.o \
+		t-evaluate-primitive.o \
+		t-eval-atomic.cc \
+		t-main.o \
+		t-pairs.o \
+		t-parser.o \
+		t-stack.o \
+		t-strings.o \
+		t-tokenizer.o \
 
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
