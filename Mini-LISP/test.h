@@ -31,12 +31,12 @@ inline S parse(const std::string& s) {
   }  
 
 
-#define CAREFULLY_EXPECT(K,v1,v2,m) \
+#define CAREFULLY_EXPECT(K,v1,v2,...) \
   try { \
-    EXPECT_##K(v1,v2) m;  \
+    EXPECT_##K(v1,v2) __VA_ARGS__ ;  \
   } catch (Pair p) { \
     ADD_FAILURE() << p << " exception while checking [" << \
-        #v1 << " " << #K << " " << #v2 "] \t" m ; \
+        #v1 << " " << #K << " " << #v2 "] \t" __VA_ARGS__ ; \
   }  
 
 #define CAREFULLY(...) try { __VA_ARGS__; } catch (Pair p) { \

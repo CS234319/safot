@@ -45,7 +45,11 @@ else
     $(error Build mode $(BUILD_MODE) not supported by this Makefile)
 endif
 
-CFLAGS += -MD -MP -w
+CFLAGS += -MD -MP -w 
+
+test: $(TEST_OBJS)
+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+
 
 all: test mini-lisp 
 
@@ -59,9 +63,6 @@ dump.cc: dump.h
 
 mini-lisp: mini-lisp.o	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
-
-test: $(TEST_OBJS)
-	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 store: store.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

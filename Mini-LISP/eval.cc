@@ -27,34 +27,43 @@ S bug(S s) {
   return s.error(T);
 }
 
-S evaluate_list(S xs) { M(xs);
-  D(xs.car());
-  D(xs.cdr());
-  return xs.null() ?  NIL: xs.car().eval().cons(evaluate_list(xs.cdr()));
-}
+#define FUN(Return, Name, ArgumentType) \
+  Return Name(ArgumentType _) { \
+    auto $$ = Name; \
+    M(_); \
+    Return __ =  
 
-S evaluate_cond(S test_forms) {
-  D(test_forms);
-  if (test_forms.null())
-    return NIL;
-  if (test_forms.car().atom())
-    return test_forms.car().error(COND);
-  if (test_forms.car().car().eval().t())
-    return test_forms.car().cdr().car().eval();
-  return evaluate_cond(test_forms.cdr());
-}
+#define IS(X)    \
+    X; \
+    M("RETURN", __); \
+    return __; \
+  } 
+
+FUN(S, evaluate_list, S) IS(
+  _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
+) 
+
+FUN(S, evaluate_cond, S)  IS( 
+    _.null() ?  NIL:
+    _.car().atom() ?  _.car().error(COND):
+      _.car().car().eval().t() ? _.car().cdr().car().eval():
+        $$(_.cdr()) ;
+)
 
 S apply_atomic(S f, S a) { M(f, a);
   if (f.eq(QUOTE))
-    return a;
+    return a.car();
   if (f.eq(COND))
     return evaluate_cond(a);
+  if (f.eq(CAR)) {
+    S xs = evaluate_list(a);
+    D(xs);
+    return xs.car().car();
+  }
   if (f.eq(EVAL))
     return evaluate_list(a).eval();
-  if (f.eq(CAR)) 
-    return evaluate_list(a).car();
   if (f.eq(CDR))
-    return evaluate_list(a).cdr();
+    return evaluate_list(a).car().cdr();
   if (f.eq(NULL))
     return a.null(); 
   if (f.eq(ATOM))
@@ -62,20 +71,32 @@ S apply_atomic(S f, S a) { M(f, a);
   return bug(f.cons(a));
 }
 
+
 S evaluate_atomic(S s) { M(s);
   return apply_atomic(s.car(), s.cdr());
 }
+
+FUN(S, eval, S) IS( 
+  _.atom() ? lookup(_):
+    atomic(_.car()) ? evaluate_atomic(_):
+      apply($$(_.car()), _.cdr())
+)
+
+
+
+S xevaluate_list(S xs) { M(xs);
+    auto x = xevaluate_list;
+    auto result = xs.null() ?  NIL: xs.car().eval().cons(evaluate_list(xs.cdr()));
+    D(result);
+    return result;
+}
+
+
 
 S NLAMBDA("nlambda"), LAMBDA("lambda");
 
 S apply(S s, S args) {
   return NIL;
-}
-
-S eval(S s) { M(s);
-  if (s.atom()) return lookup(s);
-  if (atomic(s.car())) return evaluate_atomic(s);
-  return apply(eval(s.car()), s.cdr());
 }
 
 S defun(S name, S parameters, S body) {
