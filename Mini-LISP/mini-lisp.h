@@ -64,41 +64,82 @@ representation S { // Representation of an S expression
   construct S(H h) by (handle(h));
   property String asAtom() returns  (Strings::pool + handle)
 
-  property Pair asPair() returns  (Pairs::get(handle))
 
   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
   construct S(String s) by(handle(Strings::allocate(s)))
-  /* Nullary atomic/utility functions are public data members; */ 
 
-  /** Unary atomic functions are methods that take no parameters*/
-  bool atom() const; 
-  bool null() const; 
-  bool t() const; 
-  S car() const; 
-  S cdr() const;
-  S eval() const; 
-  S q() const; 
-  /** Binary atomic functions are methods that take one parameter */
-  bool eq(S other) const; 
-  bool ne(S other) const; 
-  S cons(S cdr) const;
-  S snoc(S car) const;
-  S error(S kind) const; 
+  /** Most atomic functions of mini-lisp are implemented as a collection of
+   * fluentons: these are methods provided by type S designed to make it
+   * possible to write Mini-Lisp expressions in the fluent-, rather than the
+   * list- or nested style. To demonstrate, consider the definition of the Mini-Lisp
+   * library function lookup to conduct a search in a given a-list:
+   
+(defun lookup (id a-list) 
+  (cond 
+    ((null a-list) 
+      (error 'unbound-variable id))
+    ((eq id (car (car a-list))) 
+      (car (cdr (car a-list)))) 
+    (t (lookup id (cdr a-list))))) 
+
+With the fluentons of type S, this function is written as 
+
+S lookup(S id, S a_list) { 
+  return 
+    a_list.null() ?  
+      id.error(UNDEFINED) : 
+    a_list.car().car().eq(id) ?  
+      a_list.car().cdr() : 
+    lookup(id, a_list.cdr()); 
+}
+
+A fluenton is a method designed to be used in expressions such as the above, in
+which instead of writing '(cdr (car a)}' in 'cdr(car(a))', we write
+a.car().cdr(). Most fluentons return an S, that can be fluently continued by a
+another fluenton. Some fluentons are sinks: they return a boolean that can be
+used in a conditional expression. 
+
+Fluentons which do not implement an atomic function of mini-Lisp are called
+auxiliary fluentons.
+*/
+
+  // Unary atomic functions are parameterless fluentons 
+  bool atom() const; /// Sink: Atomic function of Mini-Lisp 
+  bool null() const; /// Sink: Atomic function of Mini-Lisp 
+  bool t() const;    /// Sink: Auxiliary fluenton, complements null
+  S car() const;     /// Atomic function of Mini-Lisp 
+  S cdr() const;     /// Atomic function of Mini-Lisp 
+  S eval() const;    /// Atomic function of Mini-Lisp 
+  S q() const;       /// Implements library functions quote
+
+  // Another kind of fluentons, are those that convert their implicit
+  // argument into some other type.
+  Pair p() const;        /// Converts to type Pair 
+  Pair a() const;        /// Converts to type Atom 
+  // Binary atomic functions are fluentons that take one parameter */
+  bool eq(S other) const; /// Sink: Atomic function of Mini-Lisp 
+  bool ne(S other) const; /// Sink: Auxiliary fluenton, complements eq 
+  S cons(S cdr) const;    /// Atomic function of Mini-Lisp 
+  S snoc(S car) const;    /// Auxiliary fluenton, complements eq 
+  S error(S kind) const;  /// Atomic function of Mini-Lisp
 };
+
 #undef NULL
-// Names of atoms that represent atomic functions 
+// Fluenton sources of Names of atoms that represent atomic functions 
 extern const S NIL, T; //
 extern const S CAR, CDR, CONS;
-extern const S NULL, ATOM, EQ, COND;
+extern const S ATOM, EQ, NE, NULL, COND;
 extern const S QUOTE, EVAL;
 extern const S DEFUN, NDEFUN; 
 extern const S ERROR, SET;
- // Named atoms for exceptions
-extern const S MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 
+// Named atoms for exceptions; for the idiom error(MISSING) to abort execution
+// on the case an error of kind MISSING is found in the context of the S
+// expression named s.
+extern const S MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED, REDUNDANT;
+
+// Additional fluentons.
 inline bool die(S s) { throw BUG.cons(s); }
-extern const S REDUNDANT;
 
 #undef construct
 #endif // MINI_LISP_H 
-   

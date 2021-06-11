@@ -27,8 +27,9 @@ S bug(S s) {
   return s.error(T);
 }
 
-
 S evaluate_list(S xs) { M(xs);
+  D(xs.car());
+  D(xs.cdr());
   return xs.null() ?  NIL: xs.car().eval().cons(evaluate_list(xs.cdr()));
 }
 
@@ -43,65 +44,22 @@ S evaluate_cond(S test_forms) {
   return evaluate_cond(test_forms.cdr());
 }
 
-S apply_unary_atomic(S atomic_function, S xs) { M(atomic_function, xs);
-  if (xs.null())
-    return atomic_function.error(MISSING);
-  if (xs.atom())
-    return xs.error(INVALID);
-  if (xs.cdr().t())
-    return xs.error(REDUNDANT);
-  const S first = xs.car();
-  if (atomic_function.eq(EVAL))
-    return first.car().eval();
-  if (atomic_function.eq( CAR)) 
-    return first.car();
-  if (atomic_function.eq(CDR))
-    return first.cdr();
-  if (atomic_function.eq(NULL))
-    return first.null() ? T : NIL;
-  if (atomic_function.eq(ATOM))
-    return first.atom() ? T : NIL;
-  return bug(atomic_function);
-}
-
-S apply_binary_atomic(S atomic_function, S xs) {M(atomic_function, xs);
-  if (xs.null())
-    return atomic_function.error(MISSING);
-  if (xs.atom())
-    return xs.error(INVALID);
-  if (xs.cdr().null())
-    return xs.error(MISSING);
-  if (xs.cdr().atom())
-    return xs.error(INVALID);
-  if (xs.cdr().cdr().t())
-    return xs.error(INVALID);
-
-  const S first = xs.car();
-  const S second = xs.cdr().car();;
-
-  if (atomic_function.eq(CONS))
-    return first.cons(second);
-  if (atomic_function.eq(EQ))
-    return first.eq(second) ? T : NIL;
-  if (atomic_function.eq(SET))
-    return set(first, second);
-  return bug(atomic_function.cons(xs));
-}
-
-S apply_eager_atomic(S atomic_function, S actuals) {
-  D(atomic_function, actuals);
-  static const S unaries = list(CAR, CDR, ATOM, NULL, EVAL);
-  if (exists(atomic_function, unaries)) 
-    return apply_unary_atomic(atomic_function, actuals);
-  return apply_binary_atomic(atomic_function, actuals);
-}
-
-S apply_atomic(S atomic_function, S actuals) { M(atomic_function, actuals);
-  if (atomic_function.eq(COND)) 
-    return evaluate_cond(actuals);
-  if (atomic_function.eq(QUOTE)) 
-    return actuals; 
-  return apply_eager_atomic(atomic_function, evaluate_list(actuals));
+S apply_atomic(S f, S a) { M(f, a);
+  if (f.eq(QUOTE))
+    return a;
+  if (f.eq(COND))
+    return evaluate_cond(a);
+  if (f.eq(EVAL))
+    return evaluate_list(a).eval();
+  if (f.eq(CAR)) 
+    return evaluate_list(a).car();
+  if (f.eq(CDR))
+    return evaluate_list(a).cdr();
+  if (f.eq(NULL))
+    return a.null(); 
+  if (f.eq(ATOM))
+    return evaluate_list(a).atom(); 
+  return bug(f.cons(a));
 }
 
 S evaluate_atomic(S s) { M(s);

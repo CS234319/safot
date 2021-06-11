@@ -21,13 +21,13 @@ namespace {
 
 S set(S name, S value) { return (alist = name.cons(value).cons(alist)), value; }
 
-S lookup(S id, S as) { 
-  D(id, as, alist);
+S lookup(S id, S a_list) { 
   return 
-      as.null() ?  
-         (M("DONE"), id.error(UNDEFINED)): 
-      as.car().car().eq(id) ? 
-          (M("FOUND"), as.car().cdr()): (M("RECURSE"), lookup(id, as.cdr())); 
+    a_list.null() ?  
+      id.error(UNDEFINED): 
+    a_list.car().car().eq(id) ?  
+      a_list.car().cdr(): 
+    lookup(id, a_list.cdr()); 
 }
 
 S lookup(S s) { D(s,alist); return lookup(s, alist); }
@@ -39,4 +39,3 @@ S bind(S names, S values, S alist) {
     names.error(MISSING);
   return names.car().cons(values.car()).cons(bind(names.cdr(), values.cdr(), alist));
 }
-

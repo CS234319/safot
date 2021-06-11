@@ -25,12 +25,12 @@ TEST(Atomic, cons) {
   EXPECT_TRUE(s3.cons(a2).cdr().eq(a2));
 }
 
-TEST(Atomic, snoc) {
+TEST(Fluenton, snoc) {
   EXPECT_TRUE(a3.snoc(s2).cdr().eq(a3));
   EXPECT_TRUE(s3.snoc(a2).car().eq(a2));
 }
 
-TEST(Atomic,Handles) {
+TEST(Implementation,Handles) {
   EXPECT_EQ(NIL.handle,0);
   EXPECT_EQ(NIL.handle,n.handle);
   EXPECT_EQ(T.handle,-2);
@@ -42,7 +42,7 @@ TEST(Atomic,Handles) {
 }
 
 TEST(Atomic,Throw) {
-  EXPECT_EXCEPTION(throw a3.error(a4).asPair(), a3, a4);
+  EXPECT_EXCEPTION(throw a3.cons(a4).p(), a3, a4);
 }
 
 TEST(Atomic,Error) {
@@ -66,7 +66,7 @@ TEST(Atomic,EQ) {
   EXPECT_TRUE(T.eq(S("T")));
 }
 
-TEST(Atomic,NE) {
+TEST(Fluenton,NE) {
   EXPECT_TRUE(a0.ne(T));
   EXPECT_TRUE(a0.ne(NIL));
   EXPECT_TRUE(NIL.ne(T));
@@ -113,7 +113,7 @@ TEST(Atomic,atom) {
   EXPECT_FALSE(s3.atom());
 }
 
-TEST(Atomic, t) {
+TEST(Fluenton, t) {
   EXPECT_TRUE(a0.t());
   EXPECT_TRUE(a1.t());
   EXPECT_FALSE(a2.t());
@@ -151,6 +151,7 @@ TEST(Atomic, EvalUndefined) {
 
 TEST(Atomic, EvalNil) {
   CAREFULLY(EXPECT_EQ(NIL.eval(), NIL));
+  CAREFULLY_EXPECT(EQ, NIL.eval(), NIL,);
 }
 
 TEST(Atomic, EvalT) {
@@ -170,14 +171,13 @@ TEST(Atomic, EvalCDR) {
 }
 
 TEST(Atomic, EvalCAR) {
-  S i = CAR.cons(S("X").cons("Y").q());
+  S i = list(CAR, list(QUOTE, S("X"), S("Y"))); 
   S o = S("X");
-  CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
+  CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
 }
 
 TEST(Atomic, EvalQuote) {
   S i =  list("A", "B", "C").q();
-  CAREFULLY(EXPECT_EQ(i.eval().car(),"A") << i); 
   CAREFULLY(EXPECT_EQ(i.eval().cdr().car(),"B") << i); 
 }
 

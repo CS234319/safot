@@ -12,7 +12,7 @@ namespace Stack {
   H pop() {
     !empty() || die(EMPTY); 
     auto free = top;
-    auto p = S(top).asPair();
+    auto p = S(top).p();
     auto $ = p.data;
     top = p.next;
     Pairs::free(free);

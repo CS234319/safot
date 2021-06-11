@@ -1,23 +1,22 @@
 OBJS = \
-	atomic.o \
+		strings.o \
+		pairs.o \
+		stack.o  \
+		tokenizer.o \
+		parser.o \
+		fluentons.o \
 		a-list.o \
 		eval.o \
-	  io.o \
-		pairs.o \
-		parser.o \
-		stack.o  \
-		strings.o \
-		tokenizer.o \
 
 TEST_OBJS = \
 	$(OBJS) \
 		dump.o \
 		io.o \
+		test-fluentons.cc \
 		stack-trace.o \
 		test-a-list.o  \
 		test-apply.o \
 		test-ast.o \
-		test-atomic.cc \
 		test-basics.o \
 		test-eval-cond.o \
 		test-evaluate-primitive.o \
@@ -48,7 +47,7 @@ endif
 
 CFLAGS += -MD -MP -w
 
-all: mini-lisp test
+all: test mini-lisp 
 
 dump.cc: dump.h
 

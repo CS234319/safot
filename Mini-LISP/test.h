@@ -23,6 +23,22 @@ inline S parse(const std::string& s) {
 
 #define UNIQUE "UNIQUE" LINE_STRING
 
+#define CAREFULLY_EXPECT2(K,m) \
+  try { \
+    EXPECT_##K m;  \
+  } catch (Pair p) { \
+    ADD_FAILURE() << p << " thrown in " #K m ; \
+  }  
+
+
+#define CAREFULLY_EXPECT(K,v1,v2,m) \
+  try { \
+    EXPECT_##K(v1,v2) m;  \
+  } catch (Pair p) { \
+    ADD_FAILURE() << p << " exception while checking [" << \
+        #v1 << " " << #K << " " << #v2 "] \t" m ; \
+  }  
+
 #define CAREFULLY(...) try { __VA_ARGS__; } catch (Pair p) { \
   ADD_FAILURE() << p << " exception on " << #__VA_ARGS__; }  
 

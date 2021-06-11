@@ -4,17 +4,19 @@
 
 const S REDUNDANT("redundant"); 
 
-/* Nullary atomic functions */
+/* Parameterless fluentons */
 bool S::atom() const { return handle <= 0; }
 bool S::null() const { return handle == 0; }
 bool S::t()    const { return handle != 0; }
-S    S::q()    const { return snoc(QUOTE); }
-S    S::car()  const { return atom() ? error(CAR) : asPair().car; }
-S    S::cdr()  const { return atom() ? error(CDR) : asPair().cdr; }
+S    S::q()    const { return QUOTE.cons(cons(NIL)); }
+S    S::car()  const { return atom() ? error(CAR) : p().car; }
+S    S::cdr()  const { return atom() ? error(CDR) : p().cdr; }
 S    S::eval() const { return ::eval(*this); }
-S    S::error(S kind) const { throw cons(kind).asPair(); }
 
-// Binary
+S    S::error(S kind) const { throw cons(kind).p(); }
+
+Pair S::p() const { return Pairs::get(handle); };
+//  
 S S::cons(S cdr) const { return S(*this, cdr); }
 S S::snoc(S car) const { return S(car, *this); }
 bool S::eq(S other) const { return handle == other.handle && atom(); }
