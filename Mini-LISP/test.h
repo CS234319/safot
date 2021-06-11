@@ -53,5 +53,5 @@ inline S parse(const std::string& s) {
     EXPECT_EQ(p.car, value); \
   } \
   if (!caught) \
-      ADD_FAILURE() << "Evaluating " << #x << " should have thrown " << S(value,code); \
+    ADD_FAILURE() << "Evaluating " << #x << " should have thrown " << S(value,code); \
 }

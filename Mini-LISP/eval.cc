@@ -23,19 +23,17 @@ const S ATOMIC_FUNCTIONS = list(
 inline bool atomic(S name) { return exists(name, ATOMIC_FUNCTIONS); }
 
 /** Assertions like */ 
-S bug(S s) {
-  return s.error(T);
-}
+S bug(S s) { return s.error(T); }
 
 #define FUN(Return, Name, ArgumentType) \
   Return Name(ArgumentType _) { \
     auto $$ = Name; \
-    M(_); \
+    M3("[",_,"]"); \
     Return __ =  
 
 #define IS(X)    \
     X; \
-    M("RETURN", __); \
+    M2("-->", __); \
     return __; \
   } 
 
@@ -50,30 +48,37 @@ FUN(S, evaluate_cond, S)  IS(
         $$(_.cdr()) ;
 )
 
-S apply_atomic(S f, S a) { M(f, a);
+S only(S s) {
+  s.pair() || die(s);  
+  S a = evaluate_list(s.cdr());
+  a.null() && s.error(MISSING).t();
+  a.atom() && s.error(INVALID).t();
+  a.cdr().t() && s.error(REDUNDANT).t(); 
+  return a.car();
+}
+
+S apply_atomic(S s) { M(s);
+  S f = s.car();
   if (f.eq(QUOTE))
-    return a.car();
+    return s.cdr().car();
   if (f.eq(COND))
-    return evaluate_cond(a);
-  if (f.eq(CAR)) {
-    S xs = evaluate_list(a);
-    D(xs);
-    return xs.car().car();
-  }
-  if (f.eq(EVAL))
-    return evaluate_list(a).eval();
-  if (f.eq(CDR))
-    return evaluate_list(a).car().cdr();
-  if (f.eq(NULL))
-    return a.null(); 
+    return evaluate_cond(s.cdr());
+  if (f.eq(CAR)) 
+    return only(s).car();
   if (f.eq(ATOM))
-    return evaluate_list(a).atom(); 
-  return bug(f.cons(a));
+    return only(s).atom(); 
+  if (f.eq(CDR)) 
+    return only(s).cdr();
+  if (f.eq(EVAL))
+    return only(s).eval();
+  if (f.eq(NULL))
+    return only(s).null();
+  return bug(s);
 }
 
 
 S evaluate_atomic(S s) { M(s);
-  return apply_atomic(s.car(), s.cdr());
+  return apply_atomic(s);
 }
 
 FUN(S, eval, S) IS( 
@@ -81,16 +86,6 @@ FUN(S, eval, S) IS(
     atomic(_.car()) ? evaluate_atomic(_):
       apply($$(_.car()), _.cdr())
 )
-
-
-
-S xevaluate_list(S xs) { M(xs);
-    auto x = xevaluate_list;
-    auto result = xs.null() ?  NIL: xs.car().eval().cons(evaluate_list(xs.cdr()));
-    D(result);
-    return result;
-}
-
 
 
 S NLAMBDA("nlambda"), LAMBDA("lambda");

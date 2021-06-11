@@ -6,9 +6,11 @@ const S REDUNDANT("redundant");
 
 /* Parameterless fluentons */
 bool S::atom() const { return handle <= 0; }
+bool S::pair() const { return handle >  0; }
 bool S::null() const { return handle == 0; }
 bool S::t()    const { return handle != 0; }
 S    S::q()    const { return QUOTE.cons(cons(NIL)); }
+S    S::l()    const { return cons(NIL); };
 S    S::car()  const { return atom() ? error(CAR) : p().car; }
 S    S::cdr()  const { return atom() ? error(CDR) : p().cdr; }
 S    S::eval() const { return ::eval(*this); }

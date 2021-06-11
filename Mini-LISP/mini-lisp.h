@@ -104,13 +104,15 @@ auxiliary fluentons.
 */
 
   // Unary atomic functions are parameterless fluentons 
-  bool atom() const; /// Sink: Atomic function of Mini-Lisp 
-  bool null() const; /// Sink: Atomic function of Mini-Lisp 
-  bool t() const;    /// Sink: Auxiliary fluenton, complements null
-  S car() const;     /// Atomic function of Mini-Lisp 
-  S cdr() const;     /// Atomic function of Mini-Lisp 
-  S eval() const;    /// Atomic function of Mini-Lisp 
-  S q() const;       /// Implements library functions quote
+  bool atom() const; /// sink: Atomic function of Mini-Lisp 
+  bool pair() const; /// auxiliary sink: complements atom 
+  bool null() const; /// sink: Atomic function of Mini-Lisp 
+  bool t() const;    /// sink: Auxiliary fluenton, complements null
+  S car() const;     /// atomic function of Mini-Lisp 
+  S cdr() const;     /// atomic function of Mini-Lisp 
+  S eval() const;    /// atomic function of Mini-Lisp 
+  S q() const;       /// implements library functions quote
+  S l() const;       /// returns a singleton list containing this S expression 
 
   // Another kind of fluentons, are those that convert their implicit
   // argument into some other type.
@@ -136,7 +138,7 @@ extern const S ERROR, SET;
 // Named atoms for exceptions; for the idiom error(MISSING) to abort execution
 // on the case an error of kind MISSING is found in the context of the S
 // expression named s.
-extern const S MISSING, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED, REDUNDANT;
+extern const S MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 
 // Additional fluentons.
 inline bool die(S s) { throw BUG.cons(s); }

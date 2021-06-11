@@ -123,6 +123,11 @@ TEST(Fluenton, t) {
   EXPECT_TRUE(s3.t());
 }
 
+TEST(Fluenton, l) {
+  EXPECT_EQ(a3.l().car(), a3);
+  EXPECT_EQ(s2.l().cdr(), NIL);
+}
+
 TEST(Atomic, null) {
   EXPECT_FALSE(t.null());
   EXPECT_TRUE(n.null());
@@ -154,6 +159,10 @@ TEST(Atomic, EvalNil) {
   CAREFULLY_EXPECT(EQ, NIL.eval(), NIL);
 }
 
+TEST(Atomic, EvalQuote) {
+  EXPECT_EQ(list(EVAL, list(QUOTE, a3)), a3);
+}
+
 TEST(Atomic, EvalT) {
   CAREFULLY(EXPECT_EQ(T.eval(), T));
 }
@@ -179,9 +188,8 @@ TEST(Atomic, EvalAtomS) {
 }
 
 
-
 TEST(Atomic, EvalCDR) {
-  S i = CDR.cons(S("X").cons("Y").q());
+  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
   S o = S("Y");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
@@ -191,6 +199,34 @@ TEST(Atomic, EvalCAR) {
   S o = S("X");
   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
 }
+
+TEST(Atomic, EvalCAR_EXTRA) {
+  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))), NIL);
+  EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
+}
+
+TEST(Atomic, EvalCAR_MISSING) {
+  S i = CAR.l(); 
+  EXPECT_EXCEPTION(i.eval() , i,MISSING);
+}
+
+TEST(Atomic, EvalAtom_EXTRA) {
+  S i = list(ATOM, list(QUOTE, S("X").cons(S("Y"))), NIL);
+  EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
+}
+
+TEST(Atomic, EvalAtom_MISSING) {
+  S i = ATOM.l(); 
+  EXPECT_EXCEPTION(i.eval() , i,MISSING);
+}
+
+
+TEST(Atomic, EvalCAR_Missing) {
+  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
+  S o = S("X");
+  CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
+}
+
 
 TEST(Fluenton, EvalQuote) {
   S i =  list("A", "B", "C").q();
