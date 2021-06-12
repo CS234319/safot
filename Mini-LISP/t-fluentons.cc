@@ -25,18 +25,6 @@ TEST(Fluenton, snoc) {
   EXPECT_TRUE(a3.snoc(s2).cdr().eq(a3));
   EXPECT_TRUE(s3.snoc(a2).car().eq(a2));
 }
-
-TEST(Implementation,Handles) {
-  EXPECT_EQ(NIL.handle,0);
-  EXPECT_EQ(NIL.handle,n.handle);
-  EXPECT_EQ(T.handle,-2);
-  EXPECT_EQ(t.handle, -2);
-  EXPECT_EQ(a0.handle, -1);
-  EXPECT_LE(S("IL").handle, 0);
-  EXPECT_LE(S("L").handle, 0);
-  EXPECT_LE(S("").handle, 0);
-}
-
 TEST(Atomic,Throw) {
   EXPECT_EXCEPTION(throw a3.cons(a4).p(), a3, a4);
 }
@@ -150,31 +138,29 @@ TEST(Atomic, EvalUndefined) {
   EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED);
 }
 
-TEST(Atomic, EvalTSanity) {
-  CAREFULLY_EXPECT(NE, list(T, T), NIL);
-  CAREFULLY_EXPECT(NE, list(T, T).eval(), NIL);
-  CAREFULLY_EXPECT(NE, list(T, list(T, T), T, list(NIL, T, NIL)).eval(), NIL);
+TEST(Atomic, EvalSanityT) {
+  EXPECT_EXCEPTION(list(T, T).eval(), list(T,T), INVALID);
 }
 
-
-TEST(Atomic, EvalSanity) {
-  CAREFULLY_EXPECT(NE, list(NIL, T), NIL);
-  CAREFULLY_EXPECT(NE, list(NIL, T).eval(), NIL);
-  CAREFULLY_EXPECT(NE, list(NIL, list(T, T), T, list(NIL, T, NIL)).eval(), NIL);
+TEST(Atomic, EvalSanity1) {
+  EXPECT_EXCEPTION(list(NIL).eval(), list(NIL), INVALID);
+  EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
+  EXPECT_EXCEPTION(list(NIL, list(NIL, NIL)).eval(), 
+                   list(NIL, list(NIL, NIL)), INVALID);
 }
 
-TEST(Atomic, EvalUnquoted) {
-  EXPECT_EXCEPTION(list(NIL, T).eval(),S(UNIQUE),UNDEFINED);
-}
-
-TEST(Atomic, EvalNullFalse1) {
-  EXPECT_EQ(list(NULL, T).eval(),T);
+TEST(Atomic, EvalSanity2) {
+  EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
 }
 
 TEST(Atomic, EvalNil) {
-  CAREFULLY(EXPECT_EQ(NIL.eval(), NIL));
   CAREFULLY_EXPECT(EQ,NIL.eval(), NIL);
-  CAREFULLY_EXPECT(NE,list(T, T).eval(), NIL);
+  EXPECT_EXCEPTION(list(NIL, T).eval(),list(NIL, T),INVALID);
+}
+
+TEST(Atomic, EvalT) {
+  CAREFULLY_EXPECT(EQ,T.eval(), T);
+  EXPECT_EXCEPTION(list(T, NIL).eval(),list(T, NIL), INVALID);
 }
 
 TEST(Atomic, EvalNullTrue) {
@@ -186,18 +172,10 @@ TEST(Atomic, EvalNullFalseQuote) {
   CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
 } 
 
-TEST(Atomic, EvalNullFalse) {
-  CAREFULLY_EXPECT_NIL(list(NULL, T).eval());
-  CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
-  CAREFULLY_EXPECT_NIL(list(NULL, list(NIL, T)).eval());
-  CAREFULLY_EXPECT_NIL(list(NULL, list(T, T)).eval());
-}
-
 TEST(Atomic, EvalNullMore) {
-  CAREFULLY_EXPECT_NIL(list(NULL, list(T, T)).eval());
+  EXPECT_EXCEPTION(list(NULL, list(T, T)).eval(), list(T,T), INVALID);
   CAREFULLY_EXPECT_T(list(NULL, NIL).eval());
 }
-
 
 TEST(Atomic, EvalAndQuote) {
   EXPECT_EQ(list(EVAL, list(QUOTE, T)).eval(), T);
@@ -205,10 +183,6 @@ TEST(Atomic, EvalAndQuote) {
 
 TEST(Atomic, EvaluatingQuote) {
   EXPECT_EQ(list(QUOTE, s3).eval(), s3);
-}
-
-TEST(Atomic, EvalT) {
-  CAREFULLY(EXPECT_EQ(T.eval(), T));
 }
 
 TEST(Atomic, EvalAtomNil) {

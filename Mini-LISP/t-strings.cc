@@ -29,5 +29,14 @@ TEST(Strings, NIL) {
   EXPECT_EQ(0,S("NIL").handle);
   EXPECT_EQ(NIL,S("NIL"));
 }
+
+TEST(Strings,Handles) {
+  EXPECT_EQ(NIL.handle,0);
+  EXPECT_EQ(T.handle,-2);
+  EXPECT_LE(S("IL").handle, 0);
+  EXPECT_LE(S("L").handle, 0);
+  EXPECT_LE(S("").handle, 0);
+}
+
 }
 

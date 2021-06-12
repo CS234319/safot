@@ -10,7 +10,6 @@
 #include "test.h"
 #include "eval.h"
 
-
 TEST(Apply, atom) {
   EXPECT_EQ(apply(parse("'atom"), parse("'(a)")), NIL);
   EXPECT_EQ(apply(ATOM, S("a").l().q()), NIL);

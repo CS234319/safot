@@ -126,14 +126,14 @@ auxiliary fluentons.
   S error(S kind) const;  /// Atomic function of Mini-Lisp
 
   // More fluentons
-  bool n0() const;     
-  bool n1() const;
-  bool n2() const;
-  bool n3() const;
+  bool n0() const;  /// Sink: true iff this is a list of length 0
+  bool n1() const;  /// Sink: true iff this is a list of length 1
+  bool n2() const;  /// Sink: true iff this is a list of length 2
+  bool n3() const;  /// Sink: true iff this is a list of length 3
 
-  S $_1$() const; 
-  S $_2$() const; 
-  S $_3$() const; 
+  S $1$() const;  /// first element in a list
+  S $2$() const;  /// second element in a list
+  S $3$() const;  /// third element in a list
 };
 
 #undef NULL

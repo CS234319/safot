@@ -82,17 +82,19 @@ S evaluate_atomic_function(S s) { M(s);
 
 S NLAMBDA("nlambda"), LAMBDA("lambda");
 
-S apply_decomposed_lambda(S tag, S formals, S body, S args) {
+
+S apply(S f, S args) {
+  f.n3() || f.cons(args).error(INVALID).t();   
+  const auto saved_alist = alist;
+  const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
+  alist = bind(f.$2$(), actuals, alist);
+  const auto result = f.$3$().eval();
+  alist = saved_alist;
+  return result;
 }
 
 S apply_defined_function(S f, S args) {
-  f.n3() || f.cons(args).error(INVALID).t();   
-  const auto saved_alist = alist;
-  const auto actuals = f.$_1$().eq(NLAMBDA)? args : f.$_1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
-  alist = bind(f.$_2$(), actuals, alist);
-  const auto result = f.$_3$().eval();
-  alist = saved_alist;
-  return result;
+  apply(f,args);
 }
 
 FUN(S, eval, S) IS( 
