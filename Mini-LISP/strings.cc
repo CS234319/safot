@@ -1,4 +1,4 @@
-#include "mini-lisp.h"
+#include "00.h"
 #include "stack-trace.h"
 
 #define SILENT 1 

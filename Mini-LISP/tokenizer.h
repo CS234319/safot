@@ -1,6 +1,6 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
-#include "mini-lisp.h"
+#include "00.h"
 namespace Tokenizer {
   enum { undefined = 128, $};
   const char tokens[] = "()[].\'";

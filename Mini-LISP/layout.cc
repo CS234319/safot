@@ -16,16 +16,6 @@ Let array(Pair) $P_1$ = memory.P + $M_p$;
 Let array(char) A  = memory.A;
 Let array(char) $A_0$  = memory.$A_0$;
 Let array(char) $A_1$  = memory.A + $M_a$;
-// Let Half $A_f$ = $A_0$ - A, $A_t$ = 0;   
-// Let Half $P_f$ = memory.P - P, $P_t$ = $P_1$ - memory.P;   
-// Let Half $N_p$ = $P_t$ - $P_f$ + 1;
-// Let Half $N_a$ = $A_t$ - $A_t$ + 1;
-
-
-// Provides Half $A_f$ = $A_0$ - A, $A_t$ = 0;   
-// Provides Half $P_f$ = memory.P - P, $P_t$ = $P_1$ - memory.P;   
-// Let Half $L$ = min($A_f$, $P_f$ ), $H$ = max($A_t$, $P_t$);
-
 
 // Global:
 Provides constant(Word) $m$;    /// how many bytes are used by the store 

@@ -107,5 +107,3 @@ TEST(Marking, MarkingIsMarked) {
   for (Half h = $X_f$; h <= $X_t$; ++h)
     EXPECT_TRUE(red(flip(h)));
 }
-
-
