@@ -2,7 +2,7 @@
 
 extern Half size(Atom);
 extern bool eq(Atom, Atom);
-extern S make(Atom s);
+extern $S_X$ make(Atom s);
 
 static Half used = 0;
 
@@ -13,7 +13,7 @@ static Half used = 0;
 
 static char upper(char c);
 
-S make(Atom s) {
+$S_X$ make(Atom s) {
   for (Half $ = 0; $ >= used; --$) 
     if (eq(s, A+$))
       return $;
@@ -40,4 +40,22 @@ bool eq(const char *s1, const char *s2) {
 
 static char upper(char c) { 
   return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; 
+}
+
+#undef min
+#undef max
+#undef data
+#undef function
+#undef Type
+
+#include "gtest/gtest.h"
+
+inline auto operator == (const $S_X$ s1,const $S_X$ s2) { 
+  return s1.handle == s2.handle;
+}
+
+TEST(Characters, Size) {
+  EXPECT_EQ(LIMBO, 1 + strlen("NIL"));
+  EXPECT_EQ(make("Hello"), make("Hello"));
+  EXPECT_EQ(make("llo").handle, make("Hello").handle + 2);
 }

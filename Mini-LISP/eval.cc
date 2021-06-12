@@ -2,7 +2,7 @@
 #include "a-list.h"
 #include "basics.h"
 
-#define BUGGY 0
+#define BUGGY 1
 
 #if !BUGGY
 #undef D
@@ -61,7 +61,7 @@ S only(S s) {
   return a.car();
 }
 
-S apply_atomic(S s) { M(s);
+S evaluate_atomic_function(S s) { M(s);
   S f = s.car();
   if (f.eq(QUOTE))
     return s.cdr().car();
@@ -77,28 +77,29 @@ S apply_atomic(S s) { M(s);
     return only(s).null() ? T : NIL; 
   if (f.eq(EVAL))
     return only(s).eval();
-  if (f.eq(NULL))
-    return only(s).null();
   return bug(s);
 }
 
+S NLAMBDA("nlambda"), LAMBDA("lambda");
 
-S evaluate_atomic(S s) { M(s);
-  return apply_atomic(s);
+S apply_decomposed_lambda(S tag, S formals, S body, S args) {
+}
+
+S apply_defined_function(S f, S args) {
+  f.n3() || f.cons(args).error(INVALID).t();   
+  const auto saved_alist = alist;
+  const auto actuals = f.$_1$().eq(NLAMBDA)? args : f.$_1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
+  alist = bind(f.$_2$(), actuals, alist);
+  const auto result = f.$_3$().eval();
+  alist = saved_alist;
+  return result;
 }
 
 FUN(S, eval, S) IS( 
   _.atom() ? lookup(_):
-    atomic(_.car()) ? evaluate_atomic(_):
-      apply($$(_.car()), _.cdr())
+    atomic(_.car()) ? evaluate_atomic_function(_):
+      apply_defined_function($$(_.car()), _.cdr())
 )
-
-
-S NLAMBDA("nlambda"), LAMBDA("lambda");
-
-S apply(S s, S args) {
-  return NIL;
-}
 
 S defun(S name, S parameters, S body) {
   return set(name, list(LAMBDA, parameters, body));

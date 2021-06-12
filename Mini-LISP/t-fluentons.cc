@@ -2,10 +2,6 @@
 #include "gtest/gtest.h"
 #include "test.h"
 
-// Mark here every exceptions that was tested; 
-// Add test that all exceptions were checked.
-// Add tests that error strings are meaningful; consult with Yossi on how
-
 /**
  * Tests of mini-lisp basics; should be renamed one day
  */
@@ -154,10 +150,54 @@ TEST(Atomic, EvalUndefined) {
   EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED);
 }
 
+TEST(Atomic, EvalTSanity) {
+  CAREFULLY_EXPECT(NE, list(T, T), NIL);
+  CAREFULLY_EXPECT(NE, list(T, T).eval(), NIL);
+  CAREFULLY_EXPECT(NE, list(T, list(T, T), T, list(NIL, T, NIL)).eval(), NIL);
+}
+
+
+TEST(Atomic, EvalSanity) {
+  CAREFULLY_EXPECT(NE, list(NIL, T), NIL);
+  CAREFULLY_EXPECT(NE, list(NIL, T).eval(), NIL);
+  CAREFULLY_EXPECT(NE, list(NIL, list(T, T), T, list(NIL, T, NIL)).eval(), NIL);
+}
+
+TEST(Atomic, EvalUnquoted) {
+  EXPECT_EXCEPTION(list(NIL, T).eval(),S(UNIQUE),UNDEFINED);
+}
+
+TEST(Atomic, EvalNullFalse1) {
+  EXPECT_EQ(list(NULL, T).eval(),T);
+}
+
 TEST(Atomic, EvalNil) {
   CAREFULLY(EXPECT_EQ(NIL.eval(), NIL));
-  CAREFULLY_EXPECT(EQ, NIL.eval(), NIL);
+  CAREFULLY_EXPECT(EQ,NIL.eval(), NIL);
+  CAREFULLY_EXPECT(NE,list(T, T).eval(), NIL);
 }
+
+TEST(Atomic, EvalNullTrue) {
+  EXPECT_T(list(NULL, NIL).eval());
+  EXPECT_T(list(NULL, list()).eval());
+}
+
+TEST(Atomic, EvalNullFalseQuote) {
+  CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
+} 
+
+TEST(Atomic, EvalNullFalse) {
+  CAREFULLY_EXPECT_NIL(list(NULL, T).eval());
+  CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
+  CAREFULLY_EXPECT_NIL(list(NULL, list(NIL, T)).eval());
+  CAREFULLY_EXPECT_NIL(list(NULL, list(T, T)).eval());
+}
+
+TEST(Atomic, EvalNullMore) {
+  CAREFULLY_EXPECT_NIL(list(NULL, list(T, T)).eval());
+  CAREFULLY_EXPECT_T(list(NULL, NIL).eval());
+}
+
 
 TEST(Atomic, EvalAndQuote) {
   EXPECT_EQ(list(EVAL, list(QUOTE, T)).eval(), T);
@@ -234,13 +274,11 @@ TEST(Atomic, EvalAtom_MISSING) {
   EXPECT_EXCEPTION(i.eval() , i,MISSING);
 }
 
-
 TEST(Atomic, EvalCAR_Missing) {
   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
   S o = S("X");
   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
 }
-
 
 TEST(Fluenton, EvalQuote) {
   S i =  list("A", "B", "C").q();
@@ -252,4 +290,3 @@ TEST(Atomic, EvalCARList) {
   S o = S("A");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
-

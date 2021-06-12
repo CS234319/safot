@@ -23,7 +23,7 @@ static Half init() {
   return $P_f$;
 }
 
-static Half make(Pair p) {
+static $S_X$ make(Pair p) {
   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
   if (P[h].cons == p.cons) 
     return h;
@@ -49,7 +49,7 @@ static Half make(Pair p) {
   return h;
 }
 
-S make(Half car, Half cdr) {
+$S_X$ make(Half car, Half cdr) {
   return make(Pair(car,cdr));
 }
 

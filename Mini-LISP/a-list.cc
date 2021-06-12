@@ -21,13 +21,13 @@ namespace {
 
 S set(S name, S value) { return (alist = name.cons(value).cons(alist)), value; }
 
-S lookup(S id, S a_list) { 
+S lookup(S id, S alist) { 
   return 
-    a_list.null() ?  
+    alist.null() ?  
       id.error(UNDEFINED): 
-    a_list.car().car().eq(id) ?  
-      a_list.car().cdr(): 
-    lookup(id, a_list.cdr()); 
+    alist.car().car().eq(id) ?  
+      alist.car().cdr(): 
+    lookup(id, alist.cdr()); 
 }
 
 S lookup(S s) { D(s,alist); return lookup(s, alist); }

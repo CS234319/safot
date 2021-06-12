@@ -1,6 +1,7 @@
 #include "store.h"
 
 Let Word $m$ = $M_a$ + $M_p$ * sizeof (Pair);
+
 static union {
   char block[$m$];
   struct {

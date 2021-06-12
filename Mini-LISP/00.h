@@ -124,6 +124,16 @@ auxiliary fluentons.
   S cons(S cdr) const;    /// Atomic function of Mini-Lisp 
   S snoc(S car) const;    /// Auxiliary fluenton, complements eq 
   S error(S kind) const;  /// Atomic function of Mini-Lisp
+
+  // More fluentons
+  bool n0() const;     
+  bool n1() const;
+  bool n2() const;
+  bool n3() const;
+
+  S $_1$() const; 
+  S $_2$() const; 
+  S $_3$() const; 
 };
 
 #undef NULL

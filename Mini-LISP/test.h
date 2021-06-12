@@ -31,13 +31,24 @@ inline S parse(const std::string& s) {
 
 #define UNIQUE "UNIQUE" LINE_STRING
 
-#define CAREFULLY_EXPECT2(K,m) \
+#define EXPECT_NIL(v) EXPECT_EQ(v,NIL)
+#define EXPECT_T(v) EXPECT_EQ(v,T)
+
+#define CAREFULLY_EXPECT_NIL(v,...) \
   try { \
-    EXPECT_##K m;  \
+    EXPECT_NIL(v) __VA_ARGS__ ;  \
   } catch (Pair p) { \
-    ADD_FAILURE() << p << " thrown in " #K m ; \
+    ADD_FAILURE() << p << " exception while checking [" \
+        << " NIL " << #v "] \t" __VA_ARGS__ ; \
   }  
 
+#define CAREFULLY_EXPECT_T(v,...) \
+  try { \
+    EXPECT_T(v) __VA_ARGS__ ;  \
+  } catch (Pair p) { \
+    ADD_FAILURE() << p << " exception while checking ["  \
+        << " T " << #v "] \t" __VA_ARGS__ ; \
+  }  
 
 #define CAREFULLY_EXPECT(K,v1,v2,...) \
   try { \
