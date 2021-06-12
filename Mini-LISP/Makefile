@@ -47,11 +47,13 @@ endif
 
 CFLAGS += -MD -MP -w 
 
+store: store.o words.o characters.o
+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
-
-all: test mini-lisp 
+all: test mini-lisp store 
 
 dump.cc: dump.h
 
@@ -64,8 +66,6 @@ dump.cc: dump.h
 mini-lisp: mini-lisp.o	$(OBJS) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
-store: store.o
-	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
 
 # -include $(SRC:%.c=%.d)
