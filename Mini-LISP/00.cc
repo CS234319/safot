@@ -49,7 +49,7 @@ static S REPL() {
     prompt("> ");
   Read:
     if (getline(&line, &n, stdin) < 0) 
-      throw;
+      return NIL;
     supply((char*)line);
     switch (status()) {
       case ready:
@@ -77,10 +77,5 @@ static S REPL() {
 }
 
 int main(int argc, char **argv) {
-  try {
-    REPL();
-  } catch (int e) {
-
-  }
-	return 0;
+  return REPL();
 }
