@@ -39,7 +39,7 @@ int print(S s) {
 }
 
 // Realizes the famous "Read, Evaluate, Print, Loop" of interpreters
-static S REPL() {
+static int REPL() {
   static size_t n = 0;
   static auto line = (char *) malloc (n + 1);
   using namespace Parser;
@@ -49,7 +49,7 @@ static S REPL() {
     prompt("> ");
   Read:
     if (getline(&line, &n, stdin) < 0) 
-      return NIL;
+      return 0;
     supply((char*)line);
     switch (status()) {
       case ready:

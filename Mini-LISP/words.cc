@@ -8,6 +8,19 @@ static bool red(Half h);
 static void flip(Pair &p);
 static bool red(Pair p); 
 
+Half free($S_X$ s) {
+  auto const h = s.handle;
+  if (red(P[h])) return h; 
+  P[h].next = next; 
+  P[h].prev = $P_x$; 
+  flip(P[h]);
+
+  flip(P[next]);
+  P[next].prev = h;
+  flip(P[next]);
+
+  return next = h;
+}
 
 static Half init() {
   for (Half h = $P_f$  + 1; h < $P_t$; ++h) {
@@ -20,22 +33,28 @@ static Half init() {
   P[$P_t$].next = $P_x$;
   for (Half h = $P_f$; h <= $P_t$; ++h) 
     flip(P[h]);
-  return $P_f$;
+  return next = $P_f$;
 }
 
 static $S_X$ make(Pair p) {
+  auto h = next;
+  flip(P[next]);
+  next = P[next].next;
+  P[next].prev = $P_x$;
+  flip(P[next]);
+  P[h] = p;
+  return h;
+}
+
+static $S_X$ require(Pair p) {
   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
   if (P[h].cons == p.cons) 
     return h;
-  if (h == next || !red(P[h])) {
-    flip(P[next]);
-    next = P[next].next;
-    flip(P[next]);
-    P[h] = p;
-    return h;
-  }
+  if (h == next || !red(P[h]))
+    return make(p);
   flip(P[h]);
   const Half prev = P[h].prev, next = P[h].next;
+  P[h]= p;
   if (prev != $P_x$) {
     flip(P[prev]);
     P[prev].next = next; 
@@ -48,23 +67,27 @@ static $S_X$ make(Pair p) {
   }
   return h;
 }
+$S_X$ make(Half car, Half cdr) { return make(Pair(car,cdr)); }
+$S_X$ require(Half car, Half cdr) { return require(Pair(car,cdr)); }
 
-$S_X$ make(Half car, Half cdr) {
-  return make(Pair(car,cdr));
+Pair peep(Half h) {
+  flip(P[h]);
+  const Pair result = P[h];
+  flip(P[h]);
+  return result;
 }
 
-int remaining;
+#include <stdio.h>
 
-void free(Half h) {
-  P[h].next = next; 
-  P[h].prev = $P_x$; 
-  flip(P[next]);
-  P[next].prev = h;
-  remaining++; 
-  next = h;
+Half length() {
+  Half result = 0;
+  for (Half h = next; h != $P_x$; h = peep(h).next) // printf("%d ", h), 
+      ++result;
+  return result;
 }
 
 Half flip(Half h)  { return h + (1 << 15); } 
+Half xflip(Half h)  { return h; } 
 bool red(Half h)   { return h < $X_f$ || h > $X_t$; } 
 void flip(Pair &p) { p.car = flip(p.car); }
 bool red(Pair p)   { return red(p.car);  }
@@ -75,7 +98,150 @@ bool red(Pair p)   { return red(p.car);  }
 #undef function
 #undef Type
 
+int valid() {
+  Half length = 0;
+  for (Half h = next, h2 = peep(h).next ; h != $P_x$; h = peep(h).next) { 
+    ++length;
+    if (!red(P[h])) return length; 
+    if (h2 != $P_x$) h2 = peep(h2).next;
+    if (h2 != $P_x$) h2 = peep(h2).next;
+    if (h == h2) return -length; 
+  } 
+  return 0;
+}
+
 #include "gtest/gtest.h"
+
+TEST(Words, Init) { 
+  init();
+  EXPECT_NE(next, $P_x$);
+  EXPECT_EQ(next, 1);
+  EXPECT_EQ(next, $P_f$);
+  EXPECT_TRUE($P_x$ < $P_f$ || $P_x$ > $P_t$);
+  EXPECT_EQ(peep(1).next, 2);
+  EXPECT_EQ(peep(1).prev, 0);
+  EXPECT_EQ(peep(2).next, 3);
+  EXPECT_EQ(peep(2).prev, 1);
+  EXPECT_EQ(peep($P_t$).prev, $P_t$-1);
+  EXPECT_EQ(peep($P_t$).next, $P_x$);
+  EXPECT_EQ(length(), $P_n$);
+}
+
+TEST(Words, MakeLength1) { 
+  init();
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(next,1);
+  auto s1 = make(2,3);
+  EXPECT_EQ(next,2);
+  EXPECT_EQ(s1.handle,1);
+  EXPECT_EQ(P[s1.handle].car,2);
+  EXPECT_EQ(P[s1.handle].cdr,3);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-1);
+}
+
+TEST(Words, MakeLength2) { 
+  init();
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(next,1);
+  auto s1 = make(2,3);
+  EXPECT_EQ(next,2);
+  EXPECT_EQ(s1.handle,1);
+  EXPECT_EQ(P[s1.handle].car,2);
+  EXPECT_EQ(P[s1.handle].cdr,3);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-1);
+  auto s2 = make(4,5);
+  EXPECT_EQ(next,3);
+  EXPECT_EQ(s2.handle,2);
+  EXPECT_EQ(P[s2.handle].car,4);
+  EXPECT_EQ(P[s2.handle].cdr,5);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-2);
+  auto s3 = make(6,7);
+  EXPECT_EQ(next,4);
+  EXPECT_EQ(s3.handle,3);
+  EXPECT_EQ(P[s3.handle].car,6);
+  EXPECT_EQ(P[s3.handle].cdr,7);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-3);
+}
+
+TEST(Words, RequireLength2) { 
+  init();
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(next,1);
+  auto s1 = require(2,3);
+  EXPECT_EQ(next,1);
+  EXPECT_NE(s1.handle,1);
+  EXPECT_EQ(P[s1.handle].car,2);
+  EXPECT_EQ(P[s1.handle].cdr,3);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-1);
+  auto s2 = require(4,5);
+  EXPECT_EQ(P[s2.handle].car,4);
+  EXPECT_EQ(P[s2.handle].cdr,5);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(next,1);
+  EXPECT_EQ(length(), $P_n$-2);
+  auto s3 = require(6,7);
+  EXPECT_EQ(next,1);
+  EXPECT_EQ(P[s3.handle].car,6);
+  EXPECT_EQ(P[s3.handle].cdr,7);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-3);
+}
+
+TEST(Words, MakeLength3) { 
+  init();
+  auto s1 = make(2,3);
+  auto s2 = make(4,5);
+  auto s3 = make(6,7);
+  free(s1);
+  EXPECT_EQ(next, 1);
+}
+
+
+TEST(Words, Reuse) { 
+  init();
+  EXPECT_EQ(valid(),0);
+  auto s1 = require(0,0);
+  EXPECT_EQ(valid(),0);
+  auto s2 = require(2,3);
+  EXPECT_EQ(valid(),0);
+  auto s3 = require(3,2);
+  EXPECT_EQ(valid(),0);
+  auto s4 = require(2,3);
+  EXPECT_EQ(valid(),0);
+  auto s5 = require(0,0);
+  EXPECT_EQ(valid(),0);
+  auto s6 = require(3,2);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(s1.handle, s5.handle);
+  EXPECT_EQ(s2.handle, s4.handle);
+  EXPECT_EQ(s3.handle, s6.handle);
+  EXPECT_EQ(length(), $P_n$-3);
+  EXPECT_FALSE(red(P[s1.handle]));
+  free(s1);
+  EXPECT_TRUE(red(P[s1.handle]));
+  EXPECT_EQ(valid(),0);
+  free(s2);
+  EXPECT_TRUE(red(P[s1.handle]));
+  EXPECT_EQ(valid(),0);
+  EXPECT_FALSE(red(P[s3.handle]));
+  EXPECT_FALSE(red(P[s6.handle]));
+  free(s3);
+  EXPECT_TRUE(red(P[s6.handle]));
+  EXPECT_TRUE(red(P[s3.handle]));
+  EXPECT_EQ(valid(),0);
+  free(s3);
+  free(s5);
+  free(s4);
+  EXPECT_TRUE(red(P[s1.handle]));
+  EXPECT_TRUE(red(P[s2.handle]));
+  EXPECT_TRUE(red(P[s3.handle]));
+  EXPECT_EQ(valid(),0);
+}
 
 TEST(Marking, Pairs) { 
   EXPECT_LT(flip($P_f$), $A_f$);   

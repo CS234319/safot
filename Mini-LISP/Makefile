@@ -47,6 +47,7 @@ endif
 
 CFLAGS += -MD -MP -w 
 
+store:
 all: test mini-lisp store 
 store: layout.o words.o characters.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

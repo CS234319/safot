@@ -28,14 +28,14 @@
   \endLTR
   \pagebreak[3]%
   \openin\tempFile=\fileName
-  \begingroup\endlinechar=-1
+  \begingroup\endlinechar=-1%
   \loop\unless\ifeof \tempFile
   \read\tempFile to\fileline % Read one line and store it into \fileline
-  \immediate\write\kernelFile {\unexpanded\expandafter{\fileline}}
+  \immediate\write\kernelFile {\unexpanded\expandafter{\fileline}}%
   \repeat
-  \immediate\write \kernelFile {¢}
-  \immediate\write \kernelFile {\unexpanded\expandafter{\pagebreak}[3]}
-  \immediate\write \kernelFile {¢}
+  \immediate\write \kernelFile {¢}%
+  \immediate\write \kernelFile {\unexpanded\expandafter{\pagebreak}[3]}%
+  \immediate\write \kernelFile {¢}%
   \endgroup
   \closein \tempFile
 }
@@ -2215,8 +2215,7 @@ command)| של שפות אחרות. למעשה, cond מכלילה את האופ�
 לא ניתן להגדיר פונקציות שהן normal באמצעות \E|defun|, אך ניתן להוסיף את הפונקציה
 quote לרשימת ה-a-list באמצעות set
 \begin{LIBRARY}
-(set 'quote
-  '(nlambda (x) x))
+(set 'quote '(nlambda (x) x))
 \end{LIBRARY}
 כפי שראינו מיני-ליספ מגדירה גם פונקציה lambda שהסמנטיקה שלה היא normal המאפשרת
 ליצור ביטוי~$λ$ מבלי להשתמש ב-quote
@@ -2226,25 +2225,23 @@ quote לרשימת ה-a-list באמצעות set
 \end{LISP}
 נוכל לכן להגדיר את הפונקציה lambda באמצעות
 \begin{LIBRARY}
-(set 'lambda
-  '(nlambda (parameters-list body) ('lambda parameters-list body)))
+(set 'lambda '(nlambda (parameters body) ('lambda parameters body)))
 \end{LIBRARY}
-כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters-list
+כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters
 ו-\E|body|. הפונקציה אינה משערכת פרמטרים אלו ומחזירה ביטוי lambda המוגדר על ידם
 \begin{LISP}
-  ('lambda parameters-list body)
+  ('lambda parameters body)
 \end{LISP}
 גם הפונקציה nlambda מסייעת להגדרת ביטויי nlambda באופן דומה, וניתן להגדירה
 באמצעות
 \begin{LIBRARY}
-(set 'nlambda
-  '(nlambda (parameters-list body) ('nlambda parameters-list body)))
+(set 'nlambda '(nlambda (parameters body) ('nlambda parameters body)))
 \end{LIBRARY}
 כלומר, גם הפונקציה nlambda היא פונקציה שמקבלת שני פרמטרים שאינם משוערכים
-(\E|parameters-list| ו-\E|body|) ומחזירה ביטוי nlambda המוגדר על ידי
+(\E|parameters| ו-\E|body|) ומחזירה ביטוי nlambda המוגדר על ידי
 שני הפרמטרים הללו
 \begin{LISP}
-  ('nlambda parameters-list body)
+  ('nlambda parameters body)
 \end{LISP}
 לאחר הגדרה זו של הפונקציה nlambda הכתיב
 \begin{LISP}
@@ -2258,9 +2255,8 @@ quote לרשימת ה-a-list באמצעות set
 
 ניתן גם להגדיר את הפונקציה defun באמצעות ביטוי nlambda
 \begin{LIBRARY}
-(set 'defun
-  '(nlambda (name parameters body)
-    (set name (lambda parameters body))))
+(set 'defun '(nlambda (name parameters body)
+  (set name (lambda parameters body))))
 \end{LIBRARY}
 כלומר, הפונקציה defun היא ביטוי nlambda אשר מקבל שלושה פרמטרים: \E|name|,
 \E|parameters| ו-\E|body|, ואשר קושר (באמצעות \E|set|) את הפרמטר אל ביטוי
@@ -2268,8 +2264,7 @@ quote לרשימת ה-a-list באמצעות set
 
 ניתן גם להגדיר את הפונקציה ndefun המגדירה פונקציה שהסמנטיקה שלה היא normal
 \begin{LIBRARY}
-(set 'ndefun
-  '(nlambda (name parameters body)
+(set 'ndefun '(nlambda (name parameters body)
     (set name (nlambda parameters body))))
 \end{LIBRARY}
 גוף ההגדרה זהה לזה של defun אלא ש-ndefun יוצרת ביטוי nlambda במקום ביטוי

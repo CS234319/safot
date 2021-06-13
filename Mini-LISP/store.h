@@ -61,9 +61,11 @@ The store provides an abstract memory model that manages the frugal allocation
 and de-allocation of S-expressions objects.
 */
 
-Provides function $S_X$ make($S_X$, $S_X$);  /// Returns (handle of) pair with given values of (handles of) its two components
-Provides function $S_X$ make(Atom);  /// Returns (handle of) atom with given text; 
-Provides procedure free($S_X$);      /// Marks an S-expression handle previously returned by make as no longer in use 
+Provides function $S_X$ make($S_X$, $S_X$);     /// Returns (handle of) newly allocated pair with given values of (handles of) its two components
+Provides function $S_X$ make(Atom);             /// Returns (handle of) of newly allocated atom with given text; 
+Provides function $S_X$ require($S_X$, $S_X$);  /// Same as make, but may reuse previously allocated pair
+Provides function $S_X$ require(Atom);          /// Same as make, but may reuse previously allocated atom, or suffix of an atom 
+Provides function Half free($S_X$);             /// Marks an S-expression handle previously returned by make as no longer in use 
 
 Provides data array(char) A;
 Provides data array(Pair) P;
@@ -74,6 +76,6 @@ Let Half $M_p$ = (1 << 15) - $M_a$ + 2;
 Let Half LIMBO = sizeof "NIL";
 
 Let Half $A_f$ = LIMBO - $M_a$, $A_t$ = 0, $A_n$ = range($A_f$, $A_t$);
-Let Half $P_f$ = 1, $P_t$ = $M_p$, $P_n$ = $M_p$, $P_x$ = 17;
+Let Half $P_f$ = 1, $P_t$ = $M_p$, $P_n$ = $M_p$, $P_x$ = 0;
 Let Half $X_f$ = min($A_f$, $P_f$), $X_t$ = max($A_t$, $P_t$);
 Let Word $X_n$ = range($X_f$, $X_t$);
