@@ -23,7 +23,7 @@ typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an 
  either Atom or Pair 
 */
 
-Type $S_X$;     // An S-expression represented by its handle
+struct $S_X$;     // An S-expression represented by its handle
 
 /*@ Atoms$ An atomic S-expression is a C like string: a memory address of a
 byte storing the first character of the atom's text. The text of an atom is
@@ -35,7 +35,7 @@ typedef const char *const Atom; // Underlining representation of atoms as pointe
 
 Type Pair;  // A compound S-expression, i.e., a dotted pair
 
-Type $S_X$ { // An S-expression represented by its handle
+struct $S_X$ { // An S-expression represented by its handle
   Representation {
     perspective(Half handle) // The inner representation 
   };

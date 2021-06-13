@@ -1,6 +1,6 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
-#include "00.h"
+#include "S.h"
 namespace Tokenizer {
   enum { undefined = 128, $};
   const char tokens[] = "()[].\'";
@@ -12,7 +12,6 @@ namespace Tokenizer {
   extern H unget(); 
   extern H peep();
 }
-  extern bool exists(const char, String s); 
-
+extern bool exists(const char, String s); 
 #endif
 

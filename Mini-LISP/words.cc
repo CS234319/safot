@@ -8,16 +8,21 @@ static bool red(Half h);
 static void flip(Pair &p);
 static bool red(Pair p); 
 
+#define DIE die(__LINE__); 
+auto inline die(int t) {
+  throw t;
+}
+#include "colors.h"
+
 Half free($S_X$ s) {
   auto const h = s.handle;
-  if (red(P[h])) return h; 
-  P[h].next = next; 
-  P[h].prev = $P_x$; 
-  flip(P[h]);
-
-  flip(P[next]);
-  P[next].prev = h;
-  flip(P[next]);
+  is.red(next) || DIE;
+  is.black(h) || DIE;
+  paint.red(h);
+  is.red(h) || die(s);
+  set.red(h).next().to(next); 
+  set.red[h].prev().to($P_x$); 
+  set.red(next).prev() = h;
 
   return next = h;
 }
@@ -36,6 +41,7 @@ static Half init() {
   return next = $P_f$;
 }
 
+
 static $S_X$ make(Pair p) {
   auto h = next;
   flip(P[next]);
@@ -43,8 +49,13 @@ static $S_X$ make(Pair p) {
   P[next].prev = $P_x$;
   flip(P[next]);
   P[h] = p;
+
+  is.white(h)  || die(p.cons(h).cons("Not white"));
+  is.white.car = p.car || die(p.cons(h).cons(("Not same"));
+  p == P[h] || die(p.cons(h).cons(("Not same"));
   return h;
 }
+
 
 static $S_X$ require(Pair p) {
   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
@@ -61,10 +72,14 @@ static $S_X$ require(Pair p) {
     flip(P[prev]);
   }
   if (next != $P_x$) {
+    isred.(h)
     flip(P[next]);
     P[next].prev = prev; 
     flip(P[next]);
   }
+  is.white(h)  || die(p.cons(h).cons("Not white"));
+  p == P[h] || die(p.cons(h).cons(("Not same"));
+  is.white(h) 
   return h;
 }
 $S_X$ make(Half car, Half cdr) { return make(Pair(car,cdr)); }
@@ -85,12 +100,6 @@ Half length() {
       ++result;
   return result;
 }
-
-Half flip(Half h)  { return h + (1 << 15); } 
-Half xflip(Half h)  { return h; } 
-bool red(Half h)   { return h < $X_f$ || h > $X_t$; } 
-void flip(Pair &p) { p.car = flip(p.car); }
-bool red(Pair p)   { return red(p.car);  }
 
 #undef min
 #undef max

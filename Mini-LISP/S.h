@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <iostream>
-#ifndef MINI_LISP_H
-#define MINI_LISP_H 
+#ifndef S_H
+#define S_H 
 
 #include "hacks.h"
 
@@ -54,7 +54,6 @@ namespace Strings {
 
 union S; 
 
-
 /* An S expression is identified by a 16 bits handle (the type H).
  * It is an atom is the handle is non-positive (the index zero is 
  * reserved for the special NIL atom). It is an internal node */
@@ -63,8 +62,6 @@ representation S { // Representation of an S expression
   perspective(H handle)
   construct S(H h) by (handle(h));
   property String asAtom() returns  (Strings::pool + handle)
-
-
   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
   construct S(String s) by(handle(Strings::allocate(s)))
 
@@ -109,7 +106,9 @@ auxiliary fluentons.
   bool null() const; /// sink: Atomic function of Mini-Lisp 
   bool t() const;    /// sink: Auxiliary fluenton, complements null
   S car() const;     /// atomic function of Mini-Lisp 
+  S rac() const;     /// auxiliary: same as car, except no checking is made 
   S cdr() const;     /// atomic function of Mini-Lisp 
+  S rdc() const;     /// auxiliary: same as car, except no checking is made 
   S eval() const;    /// atomic function of Mini-Lisp 
   S q() const;       /// implements library functions quote
   S l() const;       /// returns a singleton list containing this S expression 
@@ -135,7 +134,6 @@ auxiliary fluentons.
   S $2$() const;  /// second element in a list
   S $3$() const;  /// third element in a list
 };
-
 #undef NULL
 // Fluenton sources of Names of atoms that represent atomic functions 
 extern const S NIL, T; //
@@ -154,4 +152,4 @@ extern const S MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 inline bool die(S s) { throw BUG.cons(s); }
 
 #undef construct
-#endif // MINI_LISP_H 
+#endif // S_H 

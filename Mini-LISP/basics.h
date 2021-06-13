@@ -1,6 +1,6 @@
 #ifndef BASICS_H
 #define BASICS_H
-#include "00.h"
+#include "S.h"
 
 inline bool exists(S x, S xs) { return !xs.null() && (xs.car().eq(x) || exists(x, xs.cdr())); } 
 inline bool islist(S s) { return s.null() || !s.atom() && islist(s.cdr()); }

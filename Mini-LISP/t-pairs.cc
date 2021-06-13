@@ -1,6 +1,6 @@
 #include <iostream>
 #include "gtest/gtest.h"
-#include "00.h"
+#include "S.h"
 #include "test.h"
 
 namespace Pairs {

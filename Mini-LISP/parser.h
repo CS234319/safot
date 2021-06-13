@@ -1,6 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include "00.h"
+#include "S.h"
 #include "tokenizer.h"
 
 /** An implementation of a simple, single instance hand tailored LL(1) parser.
