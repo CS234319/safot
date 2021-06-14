@@ -4,12 +4,11 @@ static Half init();
 static Half next = init();
 
 static Half flip(Half h); 
-static bool red(Half h); 
 static void flip(Pair &p);
-static bool red(Pair p); 
 
-#define DIE die(__LINE__); 
-auto inline die(int t) {
+#define DIE die(__LINE__) 
+
+bool inline die(int t) {
   throw t;
 }
 #include "colors.h"
@@ -19,11 +18,10 @@ Half free($S_X$ s) {
   is.red(next) || DIE;
   is.black(h) || DIE;
   paint.red(h);
-  is.red(h) || die(s);
-  set.red(h).next().to(next); 
-  set.red[h].prev().to($P_x$); 
-  set.red(next).prev() = h;
-
+  is.red(h) || DIE;
+  set.red(h).next(next); 
+  set.red(h).prev($P_x$); 
+  set.red(next).prev(h);
   return next = h;
 }
 
@@ -37,7 +35,7 @@ static Half init() {
   P[$P_t$].prev = $P_t$ - 1;
   P[$P_t$].next = $P_x$;
   for (Half h = $P_f$; h <= $P_t$; ++h) 
-    flip(P[h]);
+    paint.red(h);
   return next = $P_f$;
 }
 
@@ -50,9 +48,10 @@ static $S_X$ make(Pair p) {
   flip(P[next]);
   P[h] = p;
 
-  is.white(h)  || die(p.cons(h).cons("Not white"));
-  is.white.car = p.car || die(p.cons(h).cons(("Not same"));
-  p == P[h] || die(p.cons(h).cons(("Not same"));
+  is.white(h)  || DIE;
+  assume.white.car(h) == p.car || DIE; 
+  assume.white.cdr(h) == p.cdr || DIE; 
+  p.cons == P[h].cons ||  DIE;
   return h;
 }
 
@@ -61,25 +60,14 @@ static $S_X$ require(Pair p) {
   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
   if (P[h].cons == p.cons) 
     return h;
-  if (h == next || !red(P[h]))
+  if (h == next || isnt.red(h))
     return make(p);
-  flip(P[h]);
-  const Half prev = P[h].prev, next = P[h].next;
-  P[h]= p;
-  if (prev != $P_x$) {
-    flip(P[prev]);
-    P[prev].next = next; 
-    flip(P[prev]);
-  }
-  if (next != $P_x$) {
-    isred.(h)
-    flip(P[next]);
-    P[next].prev = prev; 
-    flip(P[next]);
-  }
-  is.white(h)  || die(p.cons(h).cons("Not white"));
-  p == P[h] || die(p.cons(h).cons(("Not same"));
-  is.white(h) 
+  const Half prev = assume.red.prev(h), next = assume.red.next(h);
+  P[h] = p;
+  if (prev != $P_x$) set.red(prev).next(next);
+  if (next != $P_x$) set.red(next).prev(prev); 
+  is.white(h)  || DIE;
+  p.cons == P[h].cons || DIE;
   return h;
 }
 $S_X$ make(Half car, Half cdr) { return make(Pair(car,cdr)); }
@@ -111,7 +99,7 @@ int valid() {
   Half length = 0;
   for (Half h = next, h2 = peep(h).next ; h != $P_x$; h = peep(h).next) { 
     ++length;
-    if (!red(P[h])) return length; 
+    if (isnt.red(h)) return length; 
     if (h2 != $P_x$) h2 = peep(h2).next;
     if (h2 != $P_x$) h2 = peep(h2).next;
     if (h == h2) return -length; 
@@ -120,6 +108,22 @@ int valid() {
 }
 
 #include "gtest/gtest.h"
+TEST(Colors,is) { 
+  init();
+  auto s = make(12,14);
+  auto h = s.handle;
+  EXPECT_TRUE(is.white(h));
+  EXPECT_FALSE(is.red(h));
+  EXPECT_FALSE(is.black(h));
+  paint.red(h);
+  EXPECT_FALSE(is.white(h));
+  EXPECT_TRUE(is.red(h));
+  EXPECT_FALSE(is.black(h));
+  paint.black(h);
+  EXPECT_FALSE(is.white(h));
+  EXPECT_FALSE(is.red(h));
+  EXPECT_TRUE(is.black(h));
+}
 
 TEST(Words, Init) { 
   init();
@@ -230,25 +234,24 @@ TEST(Words, Reuse) {
   EXPECT_EQ(s2.handle, s4.handle);
   EXPECT_EQ(s3.handle, s6.handle);
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_FALSE(red(P[s1.handle]));
-  free(s1);
-  EXPECT_TRUE(red(P[s1.handle]));
+  EXPECT_FALSE(is.red(s1.handle));
+  EXPECT_TRUE(is.red(s1.handle));
   EXPECT_EQ(valid(),0);
   free(s2);
-  EXPECT_TRUE(red(P[s1.handle]));
+  EXPECT_TRUE(is.red(s1.handle));
   EXPECT_EQ(valid(),0);
-  EXPECT_FALSE(red(P[s3.handle]));
-  EXPECT_FALSE(red(P[s6.handle]));
+  EXPECT_FALSE(is.red(s3.handle));
+  EXPECT_FALSE(is.red(s6.handle));
   free(s3);
-  EXPECT_TRUE(red(P[s6.handle]));
-  EXPECT_TRUE(red(P[s3.handle]));
+  EXPECT_TRUE(is.red(s6.handle));
+  EXPECT_TRUE(is.red(s3.handle));
   EXPECT_EQ(valid(),0);
   free(s3);
   free(s5);
   free(s4);
-  EXPECT_TRUE(red(P[s1.handle]));
-  EXPECT_TRUE(red(P[s2.handle]));
-  EXPECT_TRUE(red(P[s3.handle]));
+  EXPECT_TRUE(is.red(s1.handle));
+  EXPECT_TRUE(is.red(s2.handle));
+  EXPECT_TRUE(is.red(s3.handle));
   EXPECT_EQ(valid(),0);
 }
 
@@ -279,6 +282,40 @@ TEST(Marking, Atoms) {
 }
 
 TEST(Marking, MarkingIsMarked) { 
+  init();
   for (Half h = $X_f$; h <= $X_t$; ++h)
-    EXPECT_TRUE(red(flip(h)));
+    EXPECT_TRUE(is.red(h));
 }
+
+
+TEST(Marking, Bounds) { 
+  EXPECT_LT(mark($P_f$), $P_f$);   
+  EXPECT_LT(mark($P_t$), $P_t$);   
+  EXPECT_LT(mark(($P_f$ + $P_t$)/2), $A_f$);
+  EXPECT_LT(mark($P_f$-1), $X_f$);
+  EXPECT_LT(mark($P_f$+1), $X_f$);   
+  EXPECT_EQ(mark(mark($P_f$)), $P_f$);
+  EXPECT_EQ(mark(mark($P_t$)), $P_t$);
+  EXPECT_EQ(mark(mark(($P_f$ + $P_t$)/2)),($P_f$ + $P_t$)/2);
+  EXPECT_EQ(mark(mark($P_f$ - 1)),$P_f$ + 1 );
+  EXPECT_EQ(mark(mark($P_f$ + 1)), $P_f$ + 1);
+  EXPECT_EQ(mark(mark($P_t$ - 1)),$P_t$ + 1 );
+  EXPECT_EQ(mark(mark($P_t$ + 1)), $P_t$ + 1);
+}
+
+TEST(Marking, Atoms1) { 
+  EXPECT_GT(mark($A_f$), $X_t$);   
+  EXPECT_LT(mark($A_t$), $A_f$);
+  EXPECT_GT(mark(($A_t$ + $A_t$)/2), $X_t$);
+  EXPECT_GT(mark($A_t$-1), $X_t$);   
+  EXPECT_GT(mark($A_f$+1), $X_t$);   
+  EXPECT_EQ(mark(mark($A_f$)),$A_f$);
+  EXPECT_EQ(mark(mark($A_t$)),$A_t$);
+  EXPECT_EQ(mark(mark(($A_t$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
+  EXPECT_EQ(mark(mark($A_f$ - 1)), $A_f$ - 1 );
+  EXPECT_EQ(mark(mark($A_t$ - 1)), $A_t$ - 1);
+  EXPECT_EQ(mark(mark($A_f$ + 1)), $A_f$ + 1 );
+  EXPECT_EQ(mark(mark($A_t$ + 1)), $A_t$ - 1);
+}
+
+

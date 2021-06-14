@@ -51,6 +51,7 @@ Type Pair { // The different perspectives of a pair.
     perspective(Half car, cdr)    /// II.  | A pair of car and cdr, each in a half word.
     perspective(Half prev, next)  /// III. | An unused pair item in the list of pairs. 
     perspective(Half head, rest)  /// IV.  | An data item in the stack used in the parser. 
+    perspective(Half h1, h2)      /// V.  | A pair of car and cdr, each in a half word.
   };
   Pair(Half r, Half d): car(r), cdr(d) {}
   Pair() {}

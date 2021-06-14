@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 }
 
 TEST(SExpression, size) { 
-  EXPECT_EQ(2, sizeof(S));
+  EXPECT_EQ(2, sizeof($S_X$));
 }
 
 TEST(Atoms, $A_f$) { 
@@ -103,12 +103,15 @@ TEST(Store, overflow) {
   EXPECT_LT((Half) - $M_a$ - 1, 0);
 }
 
+struct S: $S_X$ {};
+
 TEST(Store, PrimitiveSizs) { 
   EXPECT_EQ(sizeof(byte), 1);
   EXPECT_EQ(sizeof(char), 1);
   EXPECT_EQ(sizeof(Half), 2);
   EXPECT_EQ(sizeof(Word), 4);
   EXPECT_EQ(sizeof(Pair), 4);
+  EXPECT_EQ(sizeof($S_X$), 2);
   EXPECT_EQ(sizeof(S), 2);
 }
 
