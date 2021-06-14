@@ -3,8 +3,8 @@
 static Half init();
 static Half next = init();
 
-static Half flip(Half h); 
-static void flip(Pair &p);
+static Half mark(Half h); 
+static void mark(Pair &p);
 
 #define DIE die(__LINE__) 
 
@@ -41,11 +41,11 @@ static Half init() {
 
 
 static $S_X$ make(Pair p) {
+  assume.red.prev(next) == $P_x$ || DIE; 
   auto h = next;
-  flip(P[next]);
-  next = P[next].next;
-  P[next].prev = $P_x$;
-  flip(P[next]);
+  next = assume.red.next(next);
+  assume.red.prev(next) == h || DIE;
+  set.red(next).prev($P_x$);  
   P[h] = p;
 
   is.white(h)  || DIE;
@@ -54,7 +54,6 @@ static $S_X$ make(Pair p) {
   p.cons == P[h].cons ||  DIE;
   return h;
 }
-
 
 static $S_X$ require(Pair p) {
   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
@@ -70,21 +69,15 @@ static $S_X$ require(Pair p) {
   p.cons == P[h].cons || DIE;
   return h;
 }
+
 $S_X$ make(Half car, Half cdr) { return make(Pair(car,cdr)); }
 $S_X$ require(Half car, Half cdr) { return require(Pair(car,cdr)); }
-
-Pair peep(Half h) {
-  flip(P[h]);
-  const Pair result = P[h];
-  flip(P[h]);
-  return result;
-}
 
 #include <stdio.h>
 
 Half length() {
   Half result = 0;
-  for (Half h = next; h != $P_x$; h = peep(h).next) // printf("%d ", h), 
+  for (Half h = next; h != $P_x$; h = assume.red.next(h)) // printf("%d ", h), 
       ++result;
   return result;
 }
@@ -97,11 +90,11 @@ Half length() {
 
 int valid() {
   Half length = 0;
-  for (Half h = next, h2 = peep(h).next ; h != $P_x$; h = peep(h).next) { 
+  for (Half h = next, h2 = h ; h != $P_x$; h = assume.red.next(h)) { 
     ++length;
     if (isnt.red(h)) return length; 
-    if (h2 != $P_x$) h2 = peep(h2).next;
-    if (h2 != $P_x$) h2 = peep(h2).next;
+    if (h2 != $P_x$) h2 = assume.red.next(h2);
+    if (h2 != $P_x$) h2 = assume.red.next(h2);
     if (h == h2) return -length; 
   } 
   return 0;
@@ -115,14 +108,23 @@ TEST(Colors,is) {
   EXPECT_TRUE(is.white(h));
   EXPECT_FALSE(is.red(h));
   EXPECT_FALSE(is.black(h));
+  EXPECT_FALSE(isnt.white(h));
+  EXPECT_TRUE(isnt.red(h));
+  EXPECT_TRUE(isnt.black(h));
   paint.red(h);
   EXPECT_FALSE(is.white(h));
   EXPECT_TRUE(is.red(h));
   EXPECT_FALSE(is.black(h));
+  EXPECT_TRUE(isnt.white(h));
+  EXPECT_FALSE(isnt.red(h));
+  EXPECT_FALSE(isnt.black(h));
   paint.black(h);
   EXPECT_FALSE(is.white(h));
   EXPECT_FALSE(is.red(h));
   EXPECT_TRUE(is.black(h));
+  EXPECT_TRUE(isnt.white(h));
+  EXPECT_TRUE(isnt.red(h));
+  EXPECT_FALSE(isnt.black(h));
 }
 
 TEST(Words, Init) { 
@@ -130,13 +132,12 @@ TEST(Words, Init) {
   EXPECT_NE(next, $P_x$);
   EXPECT_EQ(next, 1);
   EXPECT_EQ(next, $P_f$);
-  EXPECT_TRUE($P_x$ < $P_f$ || $P_x$ > $P_t$);
-  EXPECT_EQ(peep(1).next, 2);
-  EXPECT_EQ(peep(1).prev, 0);
-  EXPECT_EQ(peep(2).next, 3);
-  EXPECT_EQ(peep(2).prev, 1);
-  EXPECT_EQ(peep($P_t$).prev, $P_t$-1);
-  EXPECT_EQ(peep($P_t$).next, $P_x$);
+  EXPECT_EQ(assume.red.next(1), 2);
+  EXPECT_EQ(assume.red.prev(1), 0);
+  EXPECT_EQ(assume.red.next(2), 3);
+  EXPECT_EQ(assume.red.prev(2), 1);
+  EXPECT_EQ(assume.red.prev($P_t$), $P_t$-1);
+  EXPECT_EQ(assume.red.next($P_t$), $P_x$);
   EXPECT_EQ(length(), $P_n$);
 }
 
@@ -256,29 +257,29 @@ TEST(Words, Reuse) {
 }
 
 TEST(Marking, Pairs) { 
-  EXPECT_LT(flip($P_f$), $A_f$);   
-  EXPECT_LT(flip($P_t$), $A_f$);   
-  EXPECT_LT(flip(($P_f$ + $P_t$)/2), $A_f$);   
-  EXPECT_LT(flip($P_f$-1), $A_f$);   
-  EXPECT_LT(flip($P_f$+1), $A_f$);   
-  EXPECT_EQ(flip(flip($P_f$)), $P_f$);
-  EXPECT_EQ(flip(flip($P_t$)), $P_t$);
-  EXPECT_EQ(flip(flip(($P_f$ + $P_t$)/2)),($P_f$ + $P_t$)/2);
-  EXPECT_EQ(flip(flip($P_t$ + 1)),$P_t$ + 1 );
-  EXPECT_EQ(flip(flip($P_t$ + 1)), $P_t$ + 1);
+  EXPECT_LT(mark($P_f$), $A_f$);   
+  EXPECT_LT(mark($P_t$), $A_f$);   
+  EXPECT_LT(mark(($P_f$ + $P_t$)/2), $A_f$);   
+  EXPECT_LT(mark($P_f$-1), $A_f$);   
+  EXPECT_LT(mark($P_f$+1), $A_f$);   
+  EXPECT_EQ(mark(mark($P_f$)), $P_f$);
+  EXPECT_EQ(mark(mark($P_t$)), $P_t$);
+  EXPECT_EQ(mark(mark(($P_f$ + $P_t$)/2)),($P_f$ + $P_t$)/2);
+  EXPECT_EQ(mark(mark($P_t$ + 1)),$P_t$ + 1 );
+  EXPECT_EQ(mark(mark($P_t$ + 1)), $P_t$ + 1);
 }
 
 TEST(Marking, Atoms) { 
-  EXPECT_GT(flip($A_f$), $A_t$);   
-  EXPECT_LT(flip($A_t$),0);
-  EXPECT_GT(flip(($A_f$ + $A_t$)/2), $P_t$);   
-  EXPECT_GT(flip($A_t$-1), $P_t$);   
-  EXPECT_GT(flip($A_f$+1), $P_t$);   
-  EXPECT_EQ(flip(flip($A_f$)), $A_f$);
-  EXPECT_EQ(flip(flip($A_t$)), $A_t$);
-  EXPECT_EQ(flip(flip(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
-  EXPECT_EQ(flip(flip($A_f$ + 1)),$A_f$ + 1 );
-  EXPECT_EQ(flip(flip($A_t$ + 1)), $A_t$ + 1);
+  EXPECT_GT(mark($A_f$), $A_t$);   
+  EXPECT_LT(mark($A_t$),0);
+  EXPECT_GT(mark(($A_f$ + $A_t$)/2), $P_t$);   
+  EXPECT_GT(mark($A_t$-1), $P_t$);   
+  EXPECT_GT(mark($A_f$+1), $P_t$);   
+  EXPECT_EQ(mark(mark($A_f$)), $A_f$);
+  EXPECT_EQ(mark(mark($A_t$)), $A_t$);
+  EXPECT_EQ(mark(mark(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
+  EXPECT_EQ(mark(mark($A_f$ + 1)),$A_f$ + 1 );
+  EXPECT_EQ(mark(mark($A_t$ + 1)), $A_t$ + 1);
 }
 
 TEST(Marking, MarkingIsMarked) { 
@@ -317,5 +318,4 @@ TEST(Marking, Atoms1) {
   EXPECT_EQ(mark(mark($A_f$ + 1)), $A_f$ + 1 );
   EXPECT_EQ(mark(mark($A_t$ + 1)), $A_t$ - 1);
 }
-
 

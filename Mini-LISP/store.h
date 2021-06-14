@@ -76,7 +76,8 @@ Let Half $M_p$ = (1 << 15) - $M_a$ + 2;
 
 Let Half LIMBO = sizeof "NIL";
 
-Let Half $A_f$ = LIMBO - $M_a$, $A_t$ = 0, $A_n$ = range($A_f$, $A_t$);
+Let Half $A_f$ = LIMBO - $M_a$, $A_t$ = 0, $A_n$ = range($A_f$, $A_t$), $A_x$ = $A_f$ -1;
 Let Half $P_f$ = 1, $P_t$ = $M_p$, $P_n$ = $M_p$, $P_x$ = 0;
-Let Half $X_f$ = min($A_f$, $P_f$), $X_t$ = max($A_t$, $P_t$);
+Let Half $X_f$ = min($A_f$, $P_f$), $X_t$ = max($A_t$, $P_t$); 
 Let Word $X_n$ = range($X_f$, $X_t$);
+Let Half $X_x$ = $X_t$ + 1; 

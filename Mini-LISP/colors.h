@@ -1,6 +1,3 @@
-Half flip(Half h)  { return h + (1 << 15); } 
-void flip(Pair &p) { p.car = flip(p.car); }
-
 inline Half mark(Half h)   { return h + (1 << 15); } 
 inline bool marked(Half h) { return h < $X_f$ || h > $X_t$; } 
 
@@ -12,9 +9,10 @@ static struct {
 
 static struct {
   inline bool white(Half h) { return !is.white(h); }  
-  inline bool red(Half h)   { return !is.white(h); }  
-  inline bool black(Half h) { return !is.white(h); }  
-} isnt;
+  inline bool red(Half h)   { return !is.red(h); }  
+  inline bool black(Half h) { return !is.black(h); }  
+} 
+isnt;
 
 
 static struct {
@@ -92,4 +90,3 @@ static struct {
     inline auto rest(Half h) { return into.black(h).rest; }
    } black;
 } assume;
-
