@@ -7,10 +7,8 @@ static Half mark(Half h);
 static void mark(Pair &p);
 
 #define DIE die(__LINE__) 
-
-bool inline die(int t) {
-  throw t;
-}
+#include "stdio.h"
+bool inline die(int t) { throw t; }
 #include "colors.h"
 
 Half free($S_X$ s) {
@@ -39,18 +37,17 @@ static Half init() {
   return next = $P_f$;
 }
 
-
 static $S_X$ make(Pair p) {
-  assume.red.prev(next) == $P_x$ || DIE; 
+  get.red.prev(next) == $P_x$ || DIE; 
   auto h = next;
-  next = assume.red.next(next);
-  assume.red.prev(next) == h || DIE;
+  next = get.red.next(next);
+  get.red.prev(next) == h || DIE;
   set.red(next).prev($P_x$);  
   P[h] = p;
 
   is.white(h)  || DIE;
-  assume.white.car(h) == p.car || DIE; 
-  assume.white.cdr(h) == p.cdr || DIE; 
+  get.white.car(h) == p.car || DIE; 
+  get.white.cdr(h) == p.cdr || DIE; 
   p.cons == P[h].cons ||  DIE;
   return h;
 }
@@ -61,7 +58,7 @@ static $S_X$ require(Pair p) {
     return h;
   if (h == next || isnt.red(h))
     return make(p);
-  const Half prev = assume.red.prev(h), next = assume.red.next(h);
+  const Half prev = get.red.prev(h), next = get.red.next(h);
   P[h] = p;
   if (prev != $P_x$) set.red(prev).next(next);
   if (next != $P_x$) set.red(next).prev(prev); 
@@ -77,7 +74,7 @@ $S_X$ require(Half car, Half cdr) { return require(Pair(car,cdr)); }
 
 Half length() {
   Half result = 0;
-  for (Half h = next; h != $P_x$; h = assume.red.next(h)) // printf("%d ", h), 
+  for (Half h = next; h != $P_x$; h = get.red.next(h)) // printf("%d ", h), 
       ++result;
   return result;
 }
@@ -90,17 +87,58 @@ Half length() {
 
 int valid() {
   Half length = 0;
-  for (Half h = next, h2 = h ; h != $P_x$; h = assume.red.next(h)) { 
+  for (Half h = next, h2 = h ; h != $P_x$; h = get.red.next(h)) { 
     ++length;
     if (isnt.red(h)) return length; 
-    if (h2 != $P_x$) h2 = assume.red.next(h2);
-    if (h2 != $P_x$) h2 = assume.red.next(h2);
+    if (h2 != $P_x$) h2 = get.red.next(h2);
+    if (h2 != $P_x$) h2 = get.red.next(h2);
     if (h == h2) return -length; 
   } 
   return 0;
 }
 
 #include "gtest/gtest.h"
+TEST(Colors, paintRed) { 
+  try {
+  init();
+  auto h = make(0xDE,0xAD).handle;
+  EXPECT_TRUE(is.white(h));
+  EXPECT_EQ(P[h].car, 0xDE);
+  EXPECT_EQ(P[h].cdr, 0xAD);
+  paint.red(h); 
+  EXPECT_TRUE(is.red(h));
+  EXPECT_EQ(get.red.prev(h), 0xDE);
+  EXPECT_EQ(get.red.next(h), 0xAD);
+  paint.white(h); 
+  EXPECT_TRUE(is.white(h));
+  EXPECT_EQ(P[h].car, 0xDE);
+  EXPECT_EQ(P[h].cdr, 0xAD);
+  EXPECT_EQ(get.white.car(h), 0xDE);
+  EXPECT_EQ(get.white.cdr(h), 0xAD);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+TEST(Colors, paintBlack) { 
+  init();
+  auto s = make(0xAB,0xCD);
+  auto h = s.handle;
+  EXPECT_TRUE(is.white(h));
+  EXPECT_EQ(P[h].car, 0xAB);
+  EXPECT_EQ(P[h].cdr, 0xCD);
+  paint.black(h); 
+  EXPECT_TRUE(is.black(h));
+  EXPECT_EQ(get.black.head(h), 0xAB);
+  EXPECT_EQ(get.black.rest(h), 0xCD);
+  paint.white(h); 
+  EXPECT_TRUE(is.white(h));
+  EXPECT_EQ(P[h].car, 0xAB);
+  EXPECT_EQ(P[h].cdr, 0xCB);
+  EXPECT_EQ(get.white.car(h), 0xAB);
+  EXPECT_EQ(get.white.cdr(h), 0xCD);
+}
+
 TEST(Colors,is) { 
   init();
   auto s = make(12,14);
@@ -132,12 +170,12 @@ TEST(Words, Init) {
   EXPECT_NE(next, $P_x$);
   EXPECT_EQ(next, 1);
   EXPECT_EQ(next, $P_f$);
-  EXPECT_EQ(assume.red.next(1), 2);
-  EXPECT_EQ(assume.red.prev(1), 0);
-  EXPECT_EQ(assume.red.next(2), 3);
-  EXPECT_EQ(assume.red.prev(2), 1);
-  EXPECT_EQ(assume.red.prev($P_t$), $P_t$-1);
-  EXPECT_EQ(assume.red.next($P_t$), $P_x$);
+  EXPECT_EQ(get.red.next(1), 2);
+  EXPECT_EQ(get.red.prev(1), 0);
+  EXPECT_EQ(get.red.next(2), 3);
+  EXPECT_EQ(get.red.prev(2), 1);
+  EXPECT_EQ(get.red.prev($P_t$), $P_t$-1);
+  EXPECT_EQ(get.red.next($P_t$), $P_x$);
   EXPECT_EQ(length(), $P_n$);
 }
 
@@ -287,7 +325,6 @@ TEST(Marking, MarkingIsMarked) {
   for (Half h = $X_f$; h <= $X_t$; ++h)
     EXPECT_TRUE(is.red(h));
 }
-
 
 TEST(Marking, Bounds) { 
   EXPECT_LT(mark($P_f$), $P_f$);   

@@ -11,15 +11,7 @@ static struct {
   inline bool white(Half h) { return !is.white(h); }  
   inline bool red(Half h)   { return !is.red(h); }  
   inline bool black(Half h) { return !is.black(h); }  
-} 
-isnt;
-
-
-static struct {
-  static inline auto white(Half h) { } 
-  static inline auto red(Half h)   { P[h].h1 = mark(P[h].h1); } 
-  static inline auto black(Half h) { P[h].h2 = mark(P[h].h2); } 
-} clear; 
+} isnt;
 
 static struct {
   auto white(Half h) { 
@@ -40,9 +32,33 @@ static struct {
 } into;
 
 static struct {
-  inline void white(Half h) { } 
-  inline void red(Half h)   { P[h].h1 = mark(P[h].h1); } 
-  inline void black(Half h) { P[h].h2 = mark(P[h].h2); } 
+  struct {
+    inline auto car(Half h) { return into.white(h).car; }
+    inline auto cdr(Half h) { return into.white(h).cdr; }
+  } white; 
+  struct {
+    inline auto prev(Half h) { return into.red(h).prev; }
+    inline auto next(Half h) { return into.red(h).next; }
+  } red;
+  struct {
+    inline auto head(Half h) { return into.black(h).head; }
+    inline auto rest(Half h) { return into.black(h).rest; }
+   } black;
+} get;
+
+static struct {
+  inline void white(Half h) { 
+    if (marked(P[h].h1)) P[h].h1 =  mark(P[h].h1);
+    if (marked(P[h].h2)) P[h].h2 =  mark(P[h].h2);
+  } 
+  inline void red(Half h) { 
+    if (!marked(P[h].h1)) P[h].h1 = mark(P[h].h1);
+    if (marked(P[h].h2)) P[h].h2  = mark(P[h].h2);
+  } 
+  inline void black(Half h) { 
+    if (marked(P[h].h1)) P[h].h1  = mark(P[h].h1);
+    if (!marked(P[h].h2)) P[h].h2 = mark(P[h].h2);
+  } 
 } paint; 
 
 auto white1(Half h) { return h; }
@@ -76,17 +92,4 @@ static struct {
  Black black(Half h) { return Black(h); } 
 } set;
 
-static struct {
-  struct {
-    inline auto car(Half h) { return into.white(h).car; }
-    inline auto cdr(Half h) { return into.white(h).cdr; }
-  } white; 
-  struct {
-    inline auto prev(Half h) { return into.red(h).prev; }
-    inline auto next(Half h) { return into.red(h).next; }
-  } red;
-  struct {
-    inline auto head(Half h) { return into.black(h).head; }
-    inline auto rest(Half h) { return into.black(h).rest; }
-   } black;
-} assume;
+
