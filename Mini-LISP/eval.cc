@@ -31,7 +31,7 @@ S bug(S s) { return s.error(T); }
 
 #define FUN(Return, Name, ArgumentType) \
   Return Name(ArgumentType _) { \
-    auto $$ = Name; \
+    const auto $$ = Name; \
     M3("[",_,"]"); \
     Return __ =  
 
@@ -47,17 +47,17 @@ FUN(S, evaluate_list, S) IS(
 
 FUN(S, evaluate_cond, S)  IS( 
     _.null() ?  NIL:
-    _.car().atom() ?  _.car().error(COND):
-      _.car().car().eval().t() ? _.car().cdr().car().eval():
+    _.car().atom() ? _.car().error(COND):
+      _.car().car().eval().t() ? _.car().cdr().eval():
         $$(_.cdr()) ;
 )
 
 S only(S s) {
   s.pair() || die(s);  
+  s.cdr().cdr().t() && s.error(REDUNDANT).t(); 
   S a = evaluate_list(s.cdr());
   a.null() && s.error(MISSING).t();
   a.atom() && s.error(INVALID).t();
-  a.cdr().t() && s.error(REDUNDANT).t(); 
   return a.car();
 }
 
@@ -65,10 +65,14 @@ S evaluate_atomic_function(S s) { M(s);
   S f = s.car();
   if (f.eq(QUOTE))
     return s.cdr().car();
+  if (f.eq(CAR)) { 
+    s.more2() || s.error(REDUNDANT).t();
+    s.less2() || s.error(MISSING).t();
+    s.n2() || s.error(CAR).t();
+    return s.$2$().car();
+  }
   if (f.eq(COND))
     return evaluate_cond(s.cdr());
-  if (f.eq(CAR)) 
-    return only(s).car();
   if (f.eq(CDR)) 
     return only(s).cdr();
   if (f.eq(ATOM))

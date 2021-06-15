@@ -16,6 +16,33 @@ S s1(t,n);
 S s2(s1,s1);
 S s3(s2,s1);
 
+TEST(Fluentons, more) {
+  EXPECT_FALSE(list().more0());
+  EXPECT_TRUE(list(T).more0());
+  EXPECT_TRUE(list(T, NIL).more0());
+  EXPECT_TRUE(list(T, NIL, T).more0());
+  EXPECT_TRUE(list(T, NIL, T, NIL).more0());
+
+  EXPECT_FALSE(list().more1());
+  EXPECT_FALSE(list(T).more1());
+  EXPECT_TRUE(list(T, NIL).more1());
+  EXPECT_TRUE(list(T, NIL, T).more1());
+  EXPECT_TRUE(list(T, NIL, T, NIL).more1());
+
+  EXPECT_FALSE(list().more2());
+  EXPECT_FALSE(list(T).more2());
+  EXPECT_FALSE(list(T, NIL).more2());
+  EXPECT_TRUE(list(T, NIL, T).more2());
+  EXPECT_TRUE(list(T, NIL, T, NIL).more2());
+
+  EXPECT_FALSE(list().more3());
+  EXPECT_FALSE(list(T).more3());
+  EXPECT_FALSE(list(T, NIL).more3());
+  EXPECT_FALSE(list(T, NIL, T).more3());
+  EXPECT_TRUE(list(T, NIL, T, NIL).more3());
+}
+
+
 TEST(Atomic, cons) {
   EXPECT_TRUE(a3.cons(s2).car().eq(a3));
   EXPECT_TRUE(s3.cons(a2).cdr().eq(a2));
@@ -235,7 +262,8 @@ TEST(Atomic, EvalCAR_EXTRA) {
 
 TEST(Atomic, EvalCAR_MISSING) {
   S i = CAR.l(); 
-  EXPECT_EXCEPTION(i.eval() , i,MISSING);
+  EXPECT_EQ(i, list(CAR));
+  EXPECT_EXCEPTION(i.eval(), i, MISSING);
 }
 
 TEST(Atomic, EvalAtom_EXTRA) {

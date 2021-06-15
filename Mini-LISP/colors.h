@@ -25,8 +25,8 @@ static struct {
     return Pair(mark(P[h].h1), P[h].h2);
   }
   auto black(Half h) { 
-    marked(P[h].h1) || DIE;
-    !marked(P[h].h2)  || DIE;
+    !marked(P[h].h1) || DIE;
+    marked(P[h].h2)  || DIE;
     return Pair(P[h].h1, mark(P[h].h2));
   }
 } into;

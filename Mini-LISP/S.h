@@ -66,10 +66,11 @@ representation S { // Representation of an S expression
   construct S(String s) by(handle(Strings::allocate(s)))
 
   /** Most atomic functions of mini-lisp are implemented as a collection of
-   * fluentons: these are methods provided by type S designed to make it
-   * possible to write Mini-Lisp expressions in the fluent-, rather than the
-   * list- or nested style. To demonstrate, consider the definition of the Mini-Lisp
-   * library function lookup to conduct a search in a given a-list:
+   * fluentons: these are methods provided by type S and specifically designed
+   * to make it possible to write Mini-Lisp expressions in the fluent-, rather
+   * than the list- or nested style. To demonstrate, consider the definition of
+   * the Mini-Lisp library function lookup to conduct a search in a given
+   * a-list:
    
 (defun lookup (id a-list) 
   (cond 
@@ -116,7 +117,7 @@ auxiliary fluentons.
   // Another kind of fluentons, are those that convert their implicit
   // argument into some other type.
   Pair p() const;        /// Converts to type Pair 
-  Pair a() const;        /// Converts to type Atom 
+  String a() const;        /// Converts to type Atom 
   // Binary atomic functions are fluentons that take one parameter */
   bool eq(S other) const; /// Sink: Atomic function of Mini-Lisp 
   bool ne(S other) const; /// Sink: Auxiliary fluenton, complements eq 
@@ -130,9 +131,19 @@ auxiliary fluentons.
   bool n2() const;  /// Sink: true iff this is a list of length 2
   bool n3() const;  /// Sink: true iff this is a list of length 3
 
-  S $1$() const;  /// first element in a list
-  S $2$() const;  /// second element in a list
-  S $3$() const;  /// third element in a list
+  bool more0() const;  /// Sink: true iff this is a list of length at least 0
+  bool more1() const;  /// Sink: true iff this is a list of length at least 1 
+  bool more2() const;  /// Sink: true iff this is a list of length at least 2
+  bool more3() const;  /// Sink: true iff this is a list of length at least 3
+
+  bool less0() const;  /// Sink: true iff this is a list of length at most 0
+  bool less1() const;  /// Sink: true iff this is a list of length at most 1 
+  bool less2() const;  /// Sink: true iff this is a list of length at most 2
+  bool less3() const;  /// Sink: true iff this is a list of length at most 3
+
+  S $1$() const;  /// Auxiliary pipe: first element in a list
+  S $2$() const;  /// Auxiliary pipe: second element in a list
+  S $3$() const;  /// Auxiliary pipe: third element in a list
 };
 #undef NULL
 // Fluenton sources of Names of atoms that represent atomic functions 

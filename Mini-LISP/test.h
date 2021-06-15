@@ -68,8 +68,9 @@ inline S parse(const std::string& s) {
     x;\
     caught = false; \
   } catch (Pair p) { \
-    EXPECT_EQ(S(p.cdr), code); \
-    EXPECT_EQ(S(p.car), value); \
+    fflush(stdout); \
+    EXPECT_EQ(S(p.cdr), code)  << "Actual error code is: " << S(p.cdr);  \
+    EXPECT_EQ(S(p.car), value) << "Error body is: " << S(p.car);  \
   } \
   if (!caught) \
     ADD_FAILURE() << "Evaluating " << #x << " should have thrown " << S(value,code); \

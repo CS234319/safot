@@ -13,7 +13,6 @@ bool inline die(int t) { throw t; }
 
 Half free($S_X$ s) {
   auto const h = s.handle;
-  is.red(next) || DIE;
   is.black(h) || DIE;
   paint.red(h);
   is.red(h) || DIE;
@@ -37,18 +36,27 @@ static Half init() {
   return next = $P_f$;
 }
 
-static $S_X$ make(Pair p) {
+
+static auto allocate() {
   get.red.prev(next) == $P_x$ || DIE; 
-  auto h = next;
+  const auto h = next;
   next = get.red.next(next);
   get.red.prev(next) == h || DIE;
   set.red(next).prev($P_x$);  
-  P[h] = p;
+  get.red.prev(next) == h || DIE;
+  set.red(next).prev($P_x$);  
+  return h;
+}
+ 
 
+static $S_X$ make(Pair p) {
+  const auto h = allocate();
+  P[h] = p;
   is.white(h)  || DIE;
   get.white.car(h) == p.car || DIE; 
   get.white.cdr(h) == p.cdr || DIE; 
   p.cons == P[h].cons ||  DIE;
+  paint.black(h);
   return h;
 }
 
@@ -56,8 +64,11 @@ static $S_X$ require(Pair p) {
   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
   if (P[h].cons == p.cons) 
     return h;
-  if (h == next || isnt.red(h))
-    return make(p);
+  if (h == next || isnt.red(h)) {
+    const auto h = allocate();
+    P[h] = p;
+    return h; 
+  }
   const Half prev = get.red.prev(h), next = get.red.next(h);
   P[h] = p;
   if (prev != $P_x$) set.red(prev).next(next);
@@ -67,7 +78,7 @@ static $S_X$ require(Pair p) {
   return h;
 }
 
-$S_X$ make(Half car, Half cdr) { return make(Pair(car,cdr)); }
+$S_X$ make( Half car, Half cdr) { return make(Pair(car,cdr)); }
 $S_X$ require(Half car, Half cdr) { return require(Pair(car,cdr)); }
 
 #include <stdio.h>
@@ -100,44 +111,73 @@ int valid() {
 #include "gtest/gtest.h"
 TEST(Colors, paintRed) { 
   try {
-  init();
-  auto h = make(0xDE,0xAD).handle;
-  EXPECT_TRUE(is.white(h));
-  EXPECT_EQ(P[h].car, 0xDE);
-  EXPECT_EQ(P[h].cdr, 0xAD);
-  paint.red(h); 
-  EXPECT_TRUE(is.red(h));
-  EXPECT_EQ(get.red.prev(h), 0xDE);
-  EXPECT_EQ(get.red.next(h), 0xAD);
-  paint.white(h); 
-  EXPECT_TRUE(is.white(h));
-  EXPECT_EQ(P[h].car, 0xDE);
-  EXPECT_EQ(P[h].cdr, 0xAD);
-  EXPECT_EQ(get.white.car(h), 0xDE);
-  EXPECT_EQ(get.white.cdr(h), 0xAD);
+    init();
+    auto h = make(0xDE,0xAD).handle;
+    EXPECT_TRUE(is.white(h));
+    EXPECT_EQ(P[h].car, 0xDE);
+    EXPECT_EQ(P[h].cdr, 0xAD);
+    paint.red(h); 
+    EXPECT_TRUE(is.red(h));
+    EXPECT_EQ(get.red.prev(h), 0xDE);
+    EXPECT_EQ(get.red.next(h), 0xAD);
+    paint.white(h); 
+    EXPECT_TRUE(is.white(h));
+    EXPECT_EQ(P[h].car, 0xDE);
+    EXPECT_EQ(P[h].cdr, 0xAD);
+    EXPECT_EQ(get.white.car(h), 0xDE);
+    EXPECT_EQ(get.white.cdr(h), 0xAD);
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
 
 TEST(Colors, paintBlack) { 
-  init();
-  auto s = make(0xAB,0xCD);
-  auto h = s.handle;
-  EXPECT_TRUE(is.white(h));
-  EXPECT_EQ(P[h].car, 0xAB);
-  EXPECT_EQ(P[h].cdr, 0xCD);
-  paint.black(h); 
-  EXPECT_TRUE(is.black(h));
-  EXPECT_EQ(get.black.head(h), 0xAB);
-  EXPECT_EQ(get.black.rest(h), 0xCD);
-  paint.white(h); 
-  EXPECT_TRUE(is.white(h));
-  EXPECT_EQ(P[h].car, 0xAB);
-  EXPECT_EQ(P[h].cdr, 0xCB);
-  EXPECT_EQ(get.white.car(h), 0xAB);
-  EXPECT_EQ(get.white.cdr(h), 0xCD);
+  try {
+    init();
+    auto h = make(0xAB,0xCD).handle;
+    EXPECT_TRUE(is.white(h));
+    EXPECT_EQ(P[h].car, 0xAB);
+    EXPECT_EQ(P[h].cdr, 0xCD);
+    paint.black(h); 
+    EXPECT_TRUE(is.black(h));
+    EXPECT_EQ(get.black.head(h), 0xAB);
+    EXPECT_EQ(get.black.rest(h), 0xCD);
+    paint.white(h); 
+    EXPECT_TRUE(is.white(h));
+    EXPECT_EQ(P[h].car, 0xAB);
+    EXPECT_EQ(P[h].cdr, 0xCD);
+    EXPECT_EQ(get.white.car(h), 0xAB);
+    EXPECT_EQ(get.white.cdr(h), 0xCD);
+  } catch(int e) {
+      ADD_FAILURE() << "Died at line " << e;
+  }
 }
+TEST(Colors, blackWhiteBlack) { 
+  try {
+    init();
+    auto h = make(0xAB,0xCD).handle;
+    EXPECT_TRUE(is.white(h));
+    EXPECT_EQ(P[h].car, 0xAB);
+    EXPECT_EQ(P[h].cdr, 0xCD);
+    paint.black(h); 
+    EXPECT_TRUE(is.black(h));
+    EXPECT_EQ(get.black.head(h), 0xAB);
+    EXPECT_EQ(get.black.rest(h), 0xCD);
+    paint.white(h); 
+    EXPECT_TRUE(is.white(h));
+    EXPECT_EQ(P[h].car, 0xAB);
+    EXPECT_EQ(P[h].cdr, 0xCD);
+    EXPECT_EQ(get.white.car(h), 0xAB);
+    EXPECT_EQ(get.white.cdr(h), 0xCD);
+    paint.black(h); 
+    EXPECT_TRUE(is.black(h));
+    EXPECT_EQ(get.black.head(h), 0xAB);
+    EXPECT_EQ(get.black.rest(h), 0xCD);
+  } catch(int e) {
+      ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
 
 TEST(Colors,is) { 
   init();
@@ -155,7 +195,7 @@ TEST(Colors,is) {
   EXPECT_FALSE(is.black(h));
   EXPECT_TRUE(isnt.white(h));
   EXPECT_FALSE(isnt.red(h));
-  EXPECT_FALSE(isnt.black(h));
+  EXPECT_TRUE(isnt.black(h));
   paint.black(h);
   EXPECT_FALSE(is.white(h));
   EXPECT_FALSE(is.red(h));
@@ -244,15 +284,46 @@ TEST(Words, RequireLength2) {
   EXPECT_EQ(length(), $P_n$-3);
 }
 
-TEST(Words, MakeLength3) { 
-  init();
-  auto s1 = make(2,3);
-  auto s2 = make(4,5);
-  auto s3 = make(6,7);
-  free(s1);
-  EXPECT_EQ(next, 1);
+TEST(Words, MakeThree) { 
+  try {
+    init();
+    auto s1 = make(2,3);
+    auto s2 = make(4,5);
+    auto s3 = make(6,7);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
 }
 
+TEST(Words, MakeThreeFree) { 
+  try {
+    init();
+    auto s1 = make(2,3);
+    auto s2 = make(4,5);
+    auto s3 = make(6,7);
+    free(s1);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+
+TEST(Words, MakeLength3) { 
+  try {
+    init();
+    auto s1 = make(2,3);
+    auto s2 = make(4,5);
+    auto s3 = make(6,7);
+    free(s1);
+    EXPECT_EQ(next, 1);
+    free(s3);
+    EXPECT_EQ(next, 3);
+    free(s2);
+    EXPECT_EQ(next, 2);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
 
 TEST(Words, Reuse) { 
   init();
@@ -273,7 +344,6 @@ TEST(Words, Reuse) {
   EXPECT_EQ(s2.handle, s4.handle);
   EXPECT_EQ(s3.handle, s6.handle);
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_FALSE(is.red(s1.handle));
   EXPECT_TRUE(is.red(s1.handle));
   EXPECT_EQ(valid(),0);
   free(s2);

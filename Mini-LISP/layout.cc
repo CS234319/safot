@@ -115,17 +115,10 @@ TEST(Array, Properties) {
   EXPECT_TRUE($P_x$ < $P_f$ || $P_x$ > $P_t$);
   EXPECT_EQ($P_t$ - $P_f$ + 1,  $P_n$);
 
-  EXPECT_TRUE($X_x$ < $A_f$ || $A_x$ > $P_t$);
-  EXPECT_TRUE($P_f$ < $P_t$);
-  EXPECT_TRUE($P_n$ > 0);
-  EXPECT_EQ($P_t$ - $P_f$ + 1, $P_n$);
-
-  EXPECT_EQ($P_t$ - $P_f$ + 1, $P_n$);
-  EXPECT_TRUE($A_x$ < $A_f$ || $A_x$ > $P_t$);
-  EXPECT_TRUE($A_f$ < $A_t$);
-  EXPECT_TRUE($A_n$ > 0);
-  EXPECT_EQ($A_t$ - $A_f$ + 1, $A_n$);
-
+  EXPECT_TRUE($X_x$ < $X_f$ || $X_x$ > $X_t$);
+  EXPECT_TRUE($X_f$ < $X_t$);
+  EXPECT_TRUE($X_n$ > 0);
+  EXPECT_EQ($X_t$ - $X_f$ + 1, $X_n$);
 }
 
 TEST(Store, PrimitiveSizs) { 
