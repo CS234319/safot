@@ -111,7 +111,7 @@ auxiliary fluentons.
   S cdr() const;     /// atomic function of Mini-Lisp 
   S rdc() const;     /// auxiliary: same as car, except no checking is made 
   S eval() const;    /// atomic function of Mini-Lisp 
-  S q() const;       /// implements library functions quote
+  S q() const;       /// Return the list (QUOTE this), where this is the receiver 
   S l() const;       /// returns a singleton list containing this S expression 
 
   // Another kind of fluentons, are those that convert their implicit

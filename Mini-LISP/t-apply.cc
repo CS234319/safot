@@ -17,36 +17,18 @@ TEST(Apply, atom) {
 // ----------------------------
 // Test: primitives_functions
 TEST(Apply, primitives_functions) {
-    EXPECT_EQ(apply(
-            parse("'atom"), parse("'(a)")
-            ), S("T"));
+    EXPECT_EQ(apply(ATOM.q(), list("A").q()), NIL); 
     EXPECT_EQ(apply(
             parse("'null"), parse("'(a)")
             ), S("NIL"));
-    EXPECT_EQ(apply(
-            parse("'null"), parse("'(NIL)")
-            ), S("T"));
-    EXPECT_EQ(apply(
-            parse("'cons"), parse("'(a b)")
-            ), S("(A . B)"));
-    EXPECT_EQ(apply(
-            parse("'eq"), parse("'(a a)")
-            ), S("T"));
-    EXPECT_EQ(apply(
-            parse("'eq"), parse("'(a b)")
-            ), S("NIL"));
-    EXPECT_EQ(apply(
-            parse("'set"), parse("'(b T)")
-            ), S("T"));
-    EXPECT_EQ(apply(
-            parse("'set"), parse("'(a '(b c))")
-            ), S("'(B C)"));
-    EXPECT_EQ(apply(
-            parse("'eval"), parse("'(t)")
-            ), S("T"));
-    EXPECT_EQ(apply(
-            parse("'eval"), parse("'(nil)")
-            ), S("NIL"));
+    EXPECT_EQ(apply( parse("'null"), parse("'(NIL)")), S("T"));
+    EXPECT_EQ(apply( parse("'cons"), parse("'(a b)")), S("(A . B)"));
+    EXPECT_EQ(apply( parse("'eq"), parse("'(a a)")), S("T"));
+    EXPECT_EQ(apply( parse("'eq"), parse("'(a b)")), S("NIL"));
+    EXPECT_EQ(apply( parse("'set"), parse("'(b T)")), S("T"));
+    EXPECT_EQ(apply( parse("'set"), parse("'(a '(b c))")), S("'(B C)"));
+    EXPECT_EQ(apply( parse("'eval"), parse("'(t)")), S("T"));
+    EXPECT_EQ(apply( parse("'eval"), parse("'(nil)")), S("NIL"));
 }
 
 // ----------------------------
@@ -85,10 +67,6 @@ TEST(Apply, recursive_functions) {
 // ----------------------------
 // Test: self_apply:
 TEST(Apply, self_apply) {
-    EXPECT_EQ(apply(
-            parse("'apply"), parse("'(null NIL NIL))")
-            ), S("T"));
-    EXPECT_EQ(apply(
-            parse("'apply"), parse("'(null T NIL))")
-            ), S("NIL"));
+    EXPECT_EQ(apply( parse("'apply"), parse("'(null NIL NIL))")), S("T"));
+    EXPECT_EQ(apply( parse("'apply"), parse("'(null T NIL))")), S("NIL"));
 }

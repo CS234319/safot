@@ -61,10 +61,10 @@ static int REPL() {
         prompt("?");
         goto Start;
     }
-    S s = result();
+    const S s = result();
   Eval:
     try {
-      S e = s.eval();
+      const S e = s.eval();
     } catch (Pair error) {
       print("Error");
       print(error.car);
