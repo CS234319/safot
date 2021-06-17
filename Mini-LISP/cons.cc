@@ -6,48 +6,43 @@ typedef std::function<bool ()> Predicate;
 #define UNIQUE2(X,Y)    X##Y
 
 #define Promise(P) \
-  struct UNIQUE(Promise) {                                           \
-    typedef const char *const string;                                \
-    string file;                                                     \
-    const long line;                                                 \
-    string context, expression;                                      \
-    Predicate condition;                                 \
-    UNIQUE(Promise)(                                                 \
-      string file_, long line_, string context_,                     \
-        string expression_, Predicate condition_):       \
-          file(file_), line(line_), context(context_),               \
-            expression(expression_), condition(condition_) {}        \
-    ~UNIQUE(Promise)() {                                             \ 
-     if (condition()) return;                                       \
-     (void) fprintf(stderr,"%s(%d)/%s: '%s' = broken promise\n",     \
-         file, line, context, expression);                           \
-    }                                                                \
-  } UNIQUE(promise)                                                  \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})  \  
+  struct UNIQUE(Promise) {                                               \
+    typedef const char *const String;                                    \
+    String file;                                                         \
+    const long line;                                                     \
+    String context, expression;                                          \
+    Predicate predicate;                                                 \
+    UNIQUE(Promise)(String f, long l, String c, String e, Predicate p):  \
+      file(f), line(l), context(c), expression(e), predicate(p) {}       \ 
+    ~UNIQUE(Promise)() {                                                 \ 
+       if (predicate()) return;                                          \
+       (void) fprintf(stderr,"%s(%d)/%s: '%s' = broken promise\n",       \
+           file, line, context, expression);                             \
+        throw this;                                                      \
+    }                                                                    \
+  } UNIQUE(promise)                                                      \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})        \  
 ;
 
 #define Expect(P) \     
-  struct UNIQUE(Expect) {                                            \
-    typedef const char *const string;                                \
-    string file;                                                     \
-    const long line;                                                 \
-    string context, expression;                                      \
-    Predicate condition;                                 \
-    UNIQUE(Expect)(                                                  \
-      string file_, long line_, string context_,                     \
-        string expression_, Predicate condition_):       \
-          file(file_), line(line_), context(context_),               \
-            expression(expression_), condition(condition_) {         \
-   if (condition()) return;                                         \
-   (void) fprintf(stderr,"%s(%d)/%s: '%s' = unmet expectation\n",    \
-         file, line, context, expression);                           \
-    }                                                                \
-  } UNIQUE(Expect)                                                   \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})    \  
+  struct UNIQUE(Expect) {                                                \
+    typedef const char *const String;                                    \
+    String file;                                                         \
+    const long line;                                                     \
+    String context, expression;                                          \
+    Predicate predicate;                                                 \
+    UNIQUE(Expect)(String f, long l, String c, String e, Predicate p):   \
+      file(f), line(l), context(c), expression(e), predicate(p) {        \ 
+        if (predicate()) return;                                         \
+         (void) fprintf(stderr,"%s(%d)/%s: '%s' = unmet expectation\n",  \
+             file, line, context, expression);                           \
+        throw this;                                                      \
+    }                                                                    \
+  } UNIQUE(Expect)                                                       \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})        \  
 ;
 
 
-      //throw this;                                                    \
 
 int f() {
   int i = 3;
