@@ -206,9 +206,6 @@ TEST(Mark, Last) {
   EXPECT_FALSE(marked($P_t$ + 1));
 }
 
-
-
-
 TEST(Cons, hash) { 
   EXPECT_NE(hash(Cons(3,4)), hash(Cons(4,3)));
   EXPECT_NE(hash(Cons(3,4)), hash(Cons(4,3)));
@@ -219,7 +216,7 @@ TEST(Cons, hash) {
   EXPECT_GT(hash(Cons(4,5)), 4);
 }
 
-TEST(Colors, heapifyExists) { 
+TEST(Heapify, exists) { 
   try {
     heapify();
   } catch(int e) {
@@ -227,7 +224,7 @@ TEST(Colors, heapifyExists) {
   }
 }
 
-TEST(Colors, heapifyValid) { 
+TEST(Heapify, valid) { 
   try {
     heapify();
     EXPECT_EQ(valid(), 0);
@@ -236,7 +233,7 @@ TEST(Colors, heapifyValid) {
   }
 }
 
-TEST(Colors, heapifyLength) { 
+TEST(Heapify, length) { 
   try {
     heapify();
     valid();
@@ -246,51 +243,7 @@ TEST(Colors, heapifyLength) {
   }
 }
 
-
-TEST(Colors, requireExists) { 
-  try {
-    heapify();
-    require(0xDE,0xAD).handle;
-  } catch(int e) {
-    ADD_FAILURE() << "Died at line " << e;
-  }
-}
-
-TEST(Colors, requireWhite) { 
-  try {
-    heapify();
-    auto h = require(0xDE,0xAD).handle;
-    EXPECT_TRUE(Is(h).white());
-    EXPECT_EQ(P[h].h1, 0xDE);
-    EXPECT_EQ(P[h].h2, 0xAD);
-  } catch(int e) {
-    ADD_FAILURE() << "Died at line " << e;
-  }
-}
-
-TEST(Colors, is) { 
-  try {
-    heapify();
-    auto s = require(12,14);
-    auto h = s.handle;
-    EXPECT_TRUE(Is(h).white());
-    EXPECT_FALSE(Is(h).black());
-    EXPECT_FALSE(Is(h).brown());
-    paint.black(h);
-    EXPECT_FALSE(Is(h).white());
-    EXPECT_TRUE (Is(h).black());
-    EXPECT_FALSE(Is(h).brown());
-    paint.brown(h);
-    EXPECT_FALSE(Is(h).white());
-    EXPECT_FALSE(Is(h).black());
-    EXPECT_TRUE (Is(h).brown());
-  } catch(int e) {
-     ADD_FAILURE() << "Died at line " << e;
-  }
-}
-
-
-TEST(Heap, Init) { 
+TEST(Heapify, Black) { 
   heapify();
   EXPECT_NE(heap, $P_x$);
   EXPECT_EQ(heap, 1);
@@ -301,10 +254,27 @@ TEST(Heap, Init) {
   EXPECT_EQ(Black(2).prev(), 1);
   EXPECT_EQ(Black($P_t$).prev(), $P_t$-1);
   EXPECT_EQ(Black($P_t$).next(), $P_x$);
-  EXPECT_EQ(length(), $P_n$);
 }
 
-TEST(Heap, Fresh1) { 
+TEST(Heapify, BLACK) { 
+  heapify();
+  for (Half h = $P_f$; h <= $P_t$; ++h)
+    EXPECT_TRUE(Is(h).black()) << h;
+}
+
+TEST(Fresh, exists) { 
+  heapify();
+  fresh(15,21);
+}
+
+TEST(Fresh, correct) { 
+  heapify();
+  auto f = fresh(15,21);
+  EXPECT_EQ(f.head(), 15);
+  EXPECT_EQ(f.head(), 15);
+}
+
+TEST(Fresh, 1) { 
   heapify();
   EXPECT_EQ(valid(),0);
   EXPECT_EQ(heap,1);
@@ -313,68 +283,6 @@ TEST(Heap, Fresh1) {
   EXPECT_EQ(s1,1);
   EXPECT_EQ(valid(),0);
   EXPECT_EQ(length(), $P_n$-1);
-}
-
-TEST(Words, Require) { 
-  heapify();
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(heap,1);
-  auto s1 = require(2,3);
-  EXPECT_EQ(heap,1);
-  EXPECT_EQ(s1.handle,hash(Cons(2,3)));
-  EXPECT_EQ(P[s1.handle].h1,2);
-  EXPECT_EQ(P[s1.handle].h2,3);
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(length(), $P_n$-1);
-  auto s2 = require(4,5);
-  EXPECT_EQ(s2.handle,hash(Cons(4,5)));
-  EXPECT_EQ(heap,1);
-  EXPECT_EQ(P[s2.handle].h1,4);
-  EXPECT_EQ(P[s2.handle].h2,5);
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(length(), $P_n$-2);
-  auto s3 = require(6,7);
-  EXPECT_EQ(s3.handle,hash(Cons(6,7)));
-  EXPECT_EQ(P[s3.handle].h1,6);
-  EXPECT_EQ(P[s3.handle].h2,7);
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(length(), $P_n$-3);
-}
-
-TEST(Words, Require3) { 
-    heapify();
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(heap,1);
-  auto s1 = require(2,3);
-  EXPECT_EQ(heap,1);
-  EXPECT_NE(s1.handle,1);
-  EXPECT_EQ(P[s1.handle].h1,2);
-  EXPECT_EQ(P[s1.handle].h2,3);
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(length(), $P_n$-1);
-  auto s2 = require(4,5);
-  EXPECT_EQ(P[s2.handle].h1,4);
-  EXPECT_EQ(P[s2.handle].h2,5);
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(heap,1);
-  EXPECT_EQ(length(), $P_n$-2);
-  auto s3 = require(6,7);
-  EXPECT_EQ(heap,1);
-  EXPECT_EQ(P[s3.handle].h1,6);
-  EXPECT_EQ(P[s3.handle].h2,7);
-  EXPECT_EQ(valid(),0);
-  EXPECT_EQ(length(), $P_n$-3);
-}
-
-TEST(Words, MakeThree) { 
-  try {
-    heapify();
-    auto s1 = require(2,3);
-    auto s2 = require(4,5);
-    auto s3 = require(6,7);
-  } catch(int e) {
-    ADD_FAILURE() << "Died at line " << e;
-  }
 }
 
 TEST(Fresh, 3) { 
@@ -386,12 +294,10 @@ TEST(Fresh, 3) {
     free(s2);
     free(s1);
     free(s3);
-
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
-
 
 TEST(Fresh, Length) { 
   try {
@@ -420,6 +326,117 @@ TEST(Fresh, Length) {
     EXPECT_EQ(length(), $P_n$);
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+TEST(Require, exists) { 
+  try {
+    heapify();
+    require(0xDE,0xAD);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+TEST(Require, white) { 
+  try {
+    heapify();
+    auto h = require(0xDE,0xAD).handle;
+    EXPECT_TRUE(Is(h).white());
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+TEST(Require, correct) { 
+  try {
+    heapify();
+    auto h = require(0xDE,0xAD).handle;
+    EXPECT_EQ(P[h].h1, 0xDE);
+    EXPECT_EQ(P[h].h2, 0xAD);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+TEST(Require, 3) { 
+  try {
+    heapify();
+    auto s1 = require(2,3);
+    auto s2 = require(4,5);
+    auto s3 = require(6,7);
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
+TEST(Require, correct3) { 
+  heapify();
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(heap,1);
+  auto s1 = require(2,3);
+  EXPECT_EQ(heap,1);
+  EXPECT_NE(s1.handle,1);
+  EXPECT_EQ(P[s1.handle].h1,2);
+  EXPECT_EQ(P[s1.handle].h2,3);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-1);
+  auto s2 = require(4,5);
+  EXPECT_EQ(P[s2.handle].h1,4);
+  EXPECT_EQ(P[s2.handle].h2,5);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(heap,1);
+  EXPECT_EQ(length(), $P_n$-2);
+  auto s3 = require(6,7);
+  EXPECT_EQ(heap,1);
+  EXPECT_EQ(P[s3.handle].h1,6);
+  EXPECT_EQ(P[s3.handle].h2,7);
+}
+
+TEST(Require, Scenario) { 
+  heapify();
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(heap,1);
+  auto s1 = require(2,3);
+  EXPECT_EQ(heap,1);
+  EXPECT_EQ(s1.handle,hash(Cons(2,3)));
+  EXPECT_EQ(P[s1.handle].h1,2);
+  EXPECT_EQ(P[s1.handle].h2,3);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-1);
+  auto s2 = require(4,5);
+  EXPECT_EQ(s2.handle,hash(Cons(4,5)));
+  EXPECT_EQ(heap,1);
+  EXPECT_EQ(P[s2.handle].h1,4);
+  EXPECT_EQ(P[s2.handle].h2,5);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-2);
+  auto s3 = require(6,7);
+  EXPECT_EQ(s3.handle,hash(Cons(6,7)));
+  EXPECT_EQ(P[s3.handle].h1,6);
+  EXPECT_EQ(P[s3.handle].h2,7);
+  EXPECT_EQ(valid(),0);
+  EXPECT_EQ(length(), $P_n$-3);
+}
+
+TEST(Is, correct) { 
+  try {
+    heapify();
+    auto s = require(12,14);
+    auto h = s.handle;
+    EXPECT_TRUE(Is(h).white());
+    EXPECT_FALSE(Is(h).black());
+    EXPECT_FALSE(Is(h).brown());
+    paint.black(h);
+    EXPECT_FALSE(Is(h).white());
+    EXPECT_TRUE (Is(h).black());
+    EXPECT_FALSE(Is(h).brown());
+    paint.brown(h);
+    EXPECT_FALSE(Is(h).white());
+    EXPECT_FALSE(Is(h).black());
+    EXPECT_TRUE (Is(h).brown());
+  } catch(int e) {
+     ADD_FAILURE() << "Died at line " << e;
   }
 }
 
@@ -493,12 +510,6 @@ TEST(Marking, Atoms) {
   EXPECT_EQ(mark(mark($A_t$ + 1)), $A_t$ + 1);
   EXPECT_EQ(mark(mark($A_t$)), $A_t$);
   EXPECT_EQ(mark(mark(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
-}
-
-TEST(Heapify, AllIsBlack) { 
-  heapify();
-  for (Half h = $P_f$; h <= $P_t$; ++h)
-    EXPECT_TRUE(Is(h).black()) << h;
 }
 
 TEST(Marking, Bounds) { 
