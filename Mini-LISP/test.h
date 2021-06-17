@@ -42,6 +42,23 @@ inline S parse(const std::string& s) {
         << " NIL " << #v "] \t" __VA_ARGS__ ; \
   }  
 
+#define CAREFULLY_EXPECT_FALSE(v,...) \
+  try { \
+    EXPECT_FALSE(v) __VA_ARGS__ ;  \
+  } catch (Pair p) { \
+    ADD_FAILURE() << p << " exception in EXPECT_FALSE" \
+      << #v "] \t" __VA_ARGS__ ; \
+  }  
+
+
+#define CAREFULLY_EXPECT_TRUE(v,...) \
+  try { \
+    EXPECT_TRUE(v) __VA_ARGS__ ;  \
+  } catch (Pair p) { \
+    ADD_FAILURE() << p << " exception in EXPECT_TRUE" \
+      << #v "] \t" __VA_ARGS__ ; \
+  }  
+
 #define CAREFULLY_EXPECT_T(v,...) \
   try { \
     EXPECT_T(v) __VA_ARGS__ ;  \

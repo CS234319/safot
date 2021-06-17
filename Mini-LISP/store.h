@@ -10,7 +10,7 @@ halves. No particular byte or halves ordering is assumed. */
 
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
 typedef int16_t Half; /// Half a word/JVM's short | 16 bits signed integer | handle of an S-expression 
-typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
+typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted Cons S-expression   
 
 /*@ S-Expressions@ S-Expressions come in two varieties: (1) Dotted
  pairs (pairs for short) are compound S-expressions defined by two, smaller,
@@ -20,7 +20,7 @@ typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an 
 /*@ Type S@ represents S-expressions of both kinds. The type does not store the
  actual data of an S-expression, but rather a handle to this data.  When the
  handle is used to access the data, we obtain a value whose type is
- either Atom or Pair 
+ either Atom or Cons 
 */
 
 struct $S_X$;     // An S-expression represented by its handle
@@ -33,28 +33,26 @@ denoted in C by \verb/'\0'/ and mathematically by~$\natural$.  */
 
 typedef const char *const Atom; // Underlining representation of atoms as pointers to characters
 
-Type Pair;  // A compound S-expression, i.e., a dotted pair
+Type Cons;  // A compound S-expression, i.e., a dotted Cons
 
 struct $S_X$ { // An S-expression represented by its handle
   Representation {
     perspective(Half handle) // The inner representation 
   };
   $S_X$(Half h): handle(h) {}
-  property Pair $_p$(); /// Interpreted as handle of pair, retrieves the pair behind (mutable)  
+  property Cons $_p$(); /// Interpreted as handle of Cons, retrieves the Cons behind (mutable)  
   property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
 };
 
 
-Type Pair { // The different perspectives of a pair.
+Type Cons { // The different perspectives of a Cons.
   Representation {
-    perspective(Word cons)        /// I.   | A single word with two halves: 
-    perspective(Half car, cdr)    /// II.  | A pair of car and cdr, each in a half word.
-    perspective(Half prev, next)  /// III. | An unused pair item in the list of pairs. 
-    perspective(Half head, rest)  /// IV.  | An data item in the stack used in the parser. 
-    perspective(Half h1, h2)      /// V.  | A pair of car and cdr, each in a half word.
+    perspective(Word w)        /// I.   | A single word with two halves: 
+    perspective(Half h1, h2)      /// V.  | A Cons of car and cdr, each in a half word.
   };
-  Pair(Half r, Half d): car(r), cdr(d) {}
-  Pair() {}
+  auto set(Word w) { this->w = w; return this;}
+  Cons(Half h1, Half h2): h1(h1), h2(h2) {}
+  Cons() {}
 };
 
 /*@ The Store$ 
@@ -62,17 +60,18 @@ The store provides an abstract memory model that manages the frugal allocation
 and de-allocation of S-expressions objects.
 */
 
-Provides function $S_X$ make($S_X$, $S_X$);     /// Returns (handle of) newly allocated pair with given values of (handles of) its two components
-Provides function $S_X$ make(Atom);             /// Returns (handle of) of newly allocated atom with given text; 
-Provides function $S_X$ require($S_X$, $S_X$);  /// Same as make, but may reuse previously allocated pair
-Provides function $S_X$ require(Atom);          /// Same as make, but may reuse previously allocated atom, or suffix of an atom 
-Provides function Half free($S_X$);             /// Marks an S-expression handle previously returned by make as no longer in use 
+Provides function $S_X$ require($S_X$, $S_X$);  /// Returns (handle of) newly allocated Cons with given values of (handles of) its two components
+Provides function $S_X$ require(Atom);          /// Returns (handle of) newly allocated atom with given text; 
+
+// Provides function $S_X$ make($S_X$, $S_X$);     /// Returns (handle of) newly allocated Cons with given values of (handles of) its two components
+// Provides procedure free($S_X$);                 /// Marks an S-expression previously returned by make as no longer in use 
+
 
 Provides data array(char) A;
-Provides data array(Pair) P;
+Provides data array(Cons) P;
 
 Let Half $M_a$ = 1 << 12; 
-Let Half $M_p$ = (1 << 15) - $M_a$ + 2; 
+Let Half $M_p$ = (1 << 15) - $M_a$ + 1; 
 
 Let Half LIMBO = sizeof "NIL";
 

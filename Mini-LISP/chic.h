@@ -27,6 +27,8 @@
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__{}
 
+typedef enum { ok } OK;
+
 template<typename T> constexpr T max(T h1, T h2) { return h1 > h2 ? h1 : h2; } 
 template<typename T> constexpr T min(T h1, T h2) { return h1 < h2 ? h1 : h2; } 
 template<typename T> constexpr T range(T h1, T h2) { return h2 - h1 + 1; } 

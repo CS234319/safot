@@ -1,19 +1,19 @@
 #include "store.h"
 
-Let Word $m$ = $M_a$ + $M_p$ * sizeof (Pair);
+Let Word $m$ = $M_a$ + $M_p$ * sizeof (Cons);
 
 static union {
   char block[$m$];
   struct {
    char $A_0$[$M_a$ - LIMBO];
    char A[LIMBO] = { 'N', 'I', 'L', '\0' };
-   Pair P[$M_p$];
+   Cons P[$M_p$];
   };
 } memory; 
 
-Let array(Pair) P = memory.P - 1;
-Let array(Pair) $P_0$ = memory.P - 1;
-Let array(Pair) $P_1$ = memory.P + $M_p$;
+Let array(Cons) P = memory.P - 1;
+Let array(Cons) $P_0$ = memory.P - 1;
+Let array(Cons) $P_1$ = memory.P + $M_p$;
 Let array(char) A  = memory.A;
 Let array(char) $A_0$  = memory.$A_0$;
 Let array(char) $A_1$  = memory.A + $M_a$;
@@ -42,8 +42,12 @@ Provides Half collected$n_p$;     /// how many pairs were garbage collected
 #include "gtest/gtest.h"
 
 int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+  try {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+  } catch (int i) {
+    std::cerr << i;
+  }
 }
 
 TEST(SExpression, size) { 
@@ -127,7 +131,7 @@ TEST(Store, PrimitiveSizs) {
   EXPECT_EQ(sizeof(char), 1);
   EXPECT_EQ(sizeof(Half), 2);
   EXPECT_EQ(sizeof(Word), 4);
-  EXPECT_EQ(sizeof(Pair), 4);
+  EXPECT_EQ(sizeof(Cons), 4);
   EXPECT_EQ(sizeof($S_X$), 2);
   EXPECT_EQ(sizeof(S), 2);
 }
