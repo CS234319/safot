@@ -1,18 +1,64 @@
+#include <functional>
+typedef std::function<bool ()> Predicate;
+
+#define UNIQUE(X)       UNIQUE1(X,__LINE__)
+#define UNIQUE1(X,Y)    UNIQUE2(X,Y)
+#define UNIQUE2(X,Y)    X##Y
+
+#define Promise(P) \
+  struct UNIQUE(Promise) {                                           \
+    typedef const char *const string;                                \
+    string file;                                                     \
+    const long line;                                                 \
+    string context, expression;                                      \
+    Predicate condition;                                 \
+    UNIQUE(Promise)(                                                 \
+      string file_, long line_, string context_,                     \
+        string expression_, Predicate condition_):       \
+          file(file_), line(line_), context(context_),               \
+            expression(expression_), condition(condition_) {}        \
+    ~UNIQUE(Promise)() {                                             \ 
+     if (condition()) return;                                       \
+     (void) fprintf(stderr,"%s(%d)/%s: '%s' = broken promise\n",     \
+         file, line, context, expression);                           \
+    }                                                                \
+  } UNIQUE(promise)                                                  \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})  \  
+;
+
+#define Expect(P) \     
+  struct UNIQUE(Expect) {                                            \
+    typedef const char *const string;                                \
+    string file;                                                     \
+    const long line;                                                 \
+    string context, expression;                                      \
+    Predicate condition;                                 \
+    UNIQUE(Expect)(                                                  \
+      string file_, long line_, string context_,                     \
+        string expression_, Predicate condition_):       \
+          file(file_), line(line_), context(context_),               \
+            expression(expression_), condition(condition_) {         \
+   if (condition()) return;                                         \
+   (void) fprintf(stderr,"%s(%d)/%s: '%s' = unmet expectation\n",    \
+         file, line, context, expression);                           \
+    }                                                                \
+  } UNIQUE(Expect)                                                   \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})    \  
+;
+
+
+      //throw this;                                                    \
+
+int f() {
+  int i = 3;
+  Expect(i>2);
+  i = 8;
+  Promise(i>3);
+}
 #include "store.h"
 
 #define DIE die(__LINE__) 
 #include "stdio.h"
-
-#define POST(X) \
-  (X) || \
-  fprintf(stderr, "%s(%d)/%s: Postcondition '%s' failed \n", \
-     __FILE__, __LINE__, __PRETTY_FUNCTION__, #X) && die(__LINE__)
-
-#define PRE(X) \
-  (X) || \
-  fprintf(stderr, "%s(%d)/%s: Precondition '%s' failed \n", \
-      __FILE__, __LINE__, __PRETTY_FUNCTION__, #X)\
-&& die(__LINE__)
 
 bool inline die(int t) { throw t;  }
 
@@ -42,21 +88,21 @@ struct White: Is {
 struct Black: Is {
   Black(Half h): Is(h) {}
   auto prev(Half h) const { 
-    PRE(!marked(h));
+    Expect(!marked(h));
     h1() = mark(h); 
     return *this;
   }
   auto next(Half h) const { 
-    PRE(!marked(h));
+    Expect(!marked(h));
     h2() = mark(h); 
     return *this;
   }
   auto prev() const { 
-    PRE(marked(h1()));
+    Expect(marked(h1()));
     return mark(h1()); 
   }
   auto next() const { 
-    PRE(marked(h2()));
+    Expect(marked(h2()));
     return mark(h2()); 
   }
 };
@@ -86,18 +132,22 @@ static struct {
     return *this;
   }
   inline auto white(Half h) { 
+    Expect(h >= $P_f$ && h <= $P_t$)
+    Promise(Is(h).white());
     clean(P[h].h1).clean(P[h].h2);
-    POST(Is(h).white());
     return White(h);
   } 
   inline auto black(Half h) { 
+    f();
+    Expect(h >= $P_f$ && h <= $P_t$)
+    Promise(Is(h).black());
     stain(P[h].h1).stain(P[h].h2);
-    POST(Is(h).black());
     return Black(h);
   } 
   inline auto brown(Half h) { 
+    Expect(h >= $P_f$ && h <= $P_t$)
+    Promise(Is(h).brown()) 
     clean(P[h].h1).stain(P[h].h2);
-    POST(Is(h).brown());
     return Brown(h);
   } 
 } paint; 
@@ -116,7 +166,6 @@ auto fresh() {
 }
 
 auto fresh(Half h1, Half h2) {
-  printf("%s: %d \n", __PRETTY_FUNCTION__, __LINE__);
   return fresh().head(h1).rest(h2);
 }
 
@@ -128,27 +177,30 @@ Half hash(Cons c) {
   return $P_f$ + (c.w * 31 + 17) % $P_n$;
 }
 
-$S_X$ require(Cons c) {
-  PRE(is.white(c));
-  const Half h = hash(c);
+$S_X$ require(Cons c, Half h) {
+  Expect(is.white(c));
+  Promise(is.white(P[h]));
   if (P[h].w == c.w) return h; 
   if (!Is(h).black()) return fresh(c);
   const auto b = Black(h);
-  PRE(!marked(b.prev()));
-  PRE(!marked(b.next()));
+//  Sure(!marked(b.prev()));
+//  Sure(!marked(b.next()));
   const Half prev = b.prev(), next = b.next();
-  PRE(!marked(prev));
-  PRE(!marked(next));
-  PRE(prev == $P_x$ || Is(prev).black());
-  PRE(next == $P_x$ || Is(next).black());
+//  Sure(!marked(prev));
+// Sure(!marked(next));
+//  Sure(prev == $P_x$ || Is(prev).black());
+//  Sure(next == $P_x$ || Is(next).black());
   if (prev != $P_x$) Black(prev).next(next); 
   if (next != $P_x$) Black(next).prev(prev); 
   if (heap == h) heap = h;
   P[h] = c;
-  POST(is.white(P[h]));
   return h;
 }
 
+$S_X$ require(Cons c) {
+  return require(c, hash(c));
+}
+  
 static Half heapify() {
   for (Half h = $P_f$; h <= $P_t$; ++h) 
     Is(h).h1(h-1).h2(h+1);
@@ -173,7 +225,7 @@ auto valid() {
 
 void free($S_X$ s) {
   auto const h = s.handle;
-  PRE(Is(h).brown());
+  Expect(Is(h).brown());
   Black(h).prev($P_x$).next(heap); 
   heap = h;
 }
