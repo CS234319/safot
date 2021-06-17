@@ -44,14 +44,6 @@ typedef std::function<bool ()> Predicate;
 
 
 
-int f() {
-  int i = 3;
-  Expect(i>2);
-  i = 8;
-  Promise(i>3);
-}
-#include "store.h"
-
 #define DIE die(__LINE__) 
 #include "stdio.h"
 
