@@ -1,51 +1,18 @@
-#include <functional>
-typedef std::function<bool ()> Predicate;
+#include "dbc.h"
+#include "store.h"
 
-#define UNIQUE(X)       UNIQUE1(X,__LINE__)
-#define UNIQUE1(X,Y)    UNIQUE2(X,Y)
-#define UNIQUE2(X,Y)    X##Y
+#define FUN(Return, Name, ArgumentType) \
+  Return Name(ArgumentType _) { \
+    const auto $$ = Name; \
+    M3("[",_,"]"); \
+    Return __ =  
 
-#define Promise(P) \
-  struct UNIQUE(Promise) {                                               \
-    typedef const char *const String;                                    \
-    String file;                                                         \
-    const long line;                                                     \
-    String context, expression;                                          \
-    Predicate predicate;                                                 \
-    UNIQUE(Promise)(String f, long l, String c, String e, Predicate p):  \
-      file(f), line(l), context(c), expression(e), predicate(p) {}       \ 
-    ~UNIQUE(Promise)() {                                                 \ 
-       if (predicate()) return;                                          \
-       (void) fprintf(stderr,"%s(%d)/%s: '%s' = broken promise\n",       \
-           file, line, context, expression);                             \
-        throw this;                                                      \
-    }                                                                    \
-  } UNIQUE(promise)                                                      \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})        \  
-;
+#define IS(X)    \
+    X; \
+    M2("-->", __); \
+    return __; \
+  } 
 
-#define Expect(P) \     
-  struct UNIQUE(Expect) {                                                \
-    typedef const char *const String;                                    \
-    String file;                                                         \
-    const long line;                                                     \
-    String context, expression;                                          \
-    Predicate predicate;                                                 \
-    UNIQUE(Expect)(String f, long l, String c, String e, Predicate p):   \
-      file(f), line(l), context(c), expression(e), predicate(p) {        \ 
-        if (predicate()) return;                                         \
-         (void) fprintf(stderr,"%s(%d)/%s: '%s' = unmet expectation\n",  \
-             file, line, context, expression);                           \
-        throw this;                                                      \
-    }                                                                    \
-  } UNIQUE(Expect)                                                       \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})        \  
-;
-
-
-
-#define DIE die(__LINE__) 
-#include "stdio.h"
 
 bool inline die(int t) { throw t;  }
 
@@ -66,10 +33,10 @@ struct Is: $S_X$ {
 
 struct White: Is {
   White(Half h): Is(h) {}
-  void car(Half h) const { h1() = h; }
-  void cdr(Half h) const { h2() = h; }
-  Half car() const { return h1(); }
-  Half cdr() const { return h2(); } 
+  auto car(Half h) const { h1() = h; return *this; }
+  auto cdr(Half h) const { h2() = h; return *this; }
+  auto car() const { return h1(); }
+  auto cdr() const { return h2(); } 
 };
 
 struct Black: Is {
@@ -98,8 +65,8 @@ struct Brown: Is {
   Brown(Half h): Is(h) {}
   auto head(Half h) const { h1() = h;       return *this; }
   auto rest(Half h) const { h2() = mark(h); return *this; }
-  Half head() { return h1(); }
-  Half rest() { return mark(h2()); } 
+  auto head() { return h1(); }
+  auto rest() { return mark(h2()); } 
 }; 
 
 
@@ -125,7 +92,6 @@ static struct {
     return White(h);
   } 
   inline auto black(Half h) { 
-    f();
     Expect(h >= $P_f$ && h <= $P_t$)
     Promise(Is(h).black());
     stain(P[h].h1).stain(P[h].h2);
@@ -144,19 +110,19 @@ static struct {
 static Half heapify();
 static Half heap = heapify();
 
-auto fresh() {
-  heap != $P_x$ || DIE;
+auto inline fresh() {
+  Expect(heap != $P_x$)
   auto const __ = Black(heap); 
   heap = __.next();
   __.prev($P_x$);
   return Brown(__.handle);
 }
 
-auto fresh(Half h1, Half h2) {
+auto inline fresh(Half h1, Half h2) {
   return fresh().head(h1).rest(h2);
 }
 
-auto fresh(Cons c) {
+auto inline fresh(Cons c) {
   return fresh().head(c.h1).rest(c.h2);
 }
 
