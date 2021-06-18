@@ -2,7 +2,7 @@
 #include "a-list.h"
 #include "basics.h"
 
-#define BUGGY 1
+#define BUGGY 0
 
 #if !BUGGY
 #undef D

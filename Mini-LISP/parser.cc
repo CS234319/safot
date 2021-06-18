@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-#define DEBUG1  
+#define DEBUG1
 
 #ifdef DEBUG 
 #include <sstream>
