@@ -53,39 +53,52 @@ FUN(S, evaluate_cond, S)  IS(
 )
 
 S only(S s) {
-  s.pair() || die(s);  
-  s.cdr().cdr().t() && s.error(REDUNDANT).t(); 
-  S a = evaluate_list(s.cdr());
-  a.null() && s.error(MISSING).t();
-  a.atom() && s.error(INVALID).t();
-  return a.car();
+    s.pair() || die(s);
+    s.cdr().cdr().t() && s.error(REDUNDANT).t();
+    S a = evaluate_list(s.cdr());
+    a.null() && s.error(MISSING).t();
+    a.atom() && s.error(INVALID).t();
+    return a.car();
+}
+
+void checkNumberOfArgs(S s) {
+    S f = s.car();
+    S args = s.cdr();
+    // 1 Arg:
+    if (f.eq(QUOTE) || f.eq(CAR) || f.eq(CDR) ||
+        f.eq(ATOM) || f.eq(NULL) || f.eq(EVAL)) {
+        args.more1() && s.error(REDUNDANT).t();
+        args.less1() && s.error(MISSING).t();
+    }
+
+    // Cond:
+    if (f.eq(COND)) {
+        args.less1() && s.error(MISSING).t();
+    }
 }
 
 S evaluate_atomic_function(S s) { M(s);
-  S f = s.car();
-  if (f.eq(QUOTE))
-    return s.cdr().car();
-  if (f.eq(CAR)) { 
-    s.more2() || s.error(REDUNDANT).t();
-    s.less2() || s.error(MISSING).t();
-    s.n2() || s.error(CAR).t();
-    return s.$2$().car();
-  }
-  if (f.eq(COND))
-    return evaluate_cond(s.cdr());
-  if (f.eq(CDR)) 
-    return only(s).cdr();
-  if (f.eq(ATOM))
-    return only(s).atom() ? T : NIL; 
-  if (f.eq(NULL))
-    return only(s).null() ? T : NIL; 
-  if (f.eq(EVAL))
-    return only(s).eval();
-  return bug(s);
+    checkNumberOfArgs(s);
+    S f = s.car();
+    S args = s.cdr();
+    if (f.eq(QUOTE))
+        return args.car();
+    if (f.eq(CAR))
+        return only(s).car();
+    if (f.eq(COND))
+        return evaluate_cond(args);
+    if (f.eq(CDR))
+        return only(s).cdr();
+    if (f.eq(ATOM))
+        return only(s).atom() ? T : NIL;
+    if (f.eq(NULL))
+        return only(s).null() ? T : NIL;
+    if (f.eq(EVAL))
+        return only(s).eval();
+    return bug(s);
 }
 
 S NLAMBDA("nlambda"), LAMBDA("lambda");
-
 
 S apply(S f, S args) {
   f.n3() || f.cons(args).error(INVALID).t();   
