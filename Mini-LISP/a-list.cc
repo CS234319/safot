@@ -33,9 +33,9 @@ S lookup(S id, S alist) {
 S lookup(S s) { D(s,alist); return lookup(s, alist); }
 
 S bind(S names, S values, S alist) {
-  if (names.null()) 
-    return values.null() ?  alist : values.error(REDUNDANT); 
-  if (values.null()) 
-    names.error(MISSING);
+  if (names.null() && !values.null()) names.error(MISSING);
+  if (!names.null() && values.null()) values.error(MISSING);
+  if (names.null())
+    return values.null() ?  alist : values.error(REDUNDANT);
   return names.car().cons(values.car()).cons(bind(names.cdr(), values.cdr(), alist));
 }

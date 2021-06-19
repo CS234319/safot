@@ -16,18 +16,94 @@ S s1(t,n);
 S s2(s1,s1);
 S s3(s2,s1);
 
-TEST(Fluenton,RAC) { throw "DOR"; }
-TEST(Fluenton,RDC) { throw "DOR"; }
-TEST(Fluenton,n0) { throw "DOR"; }
-TEST(Fluenton,n1) { throw "DOR"; }
-TEST(Fluenton,n2) { throw "DOR"; }
-TEST(Fluenton,n3) { throw "DOR"; }
-TEST(Fluenton,less) { throw "DOR"; }
+TEST(Fluenton,n0) {
+    EXPECT_TRUE(list().n0());
+    EXPECT_FALSE(list(T).n0());
+    EXPECT_FALSE(list(T, NIL).n0());
+    EXPECT_FALSE(list(T, NIL, T).n0());
+    EXPECT_FALSE(list(T, NIL, T, NIL).n0());
+}
+
+TEST(Fluenton,n1) {
+    EXPECT_FALSE(list().n1());
+    EXPECT_TRUE(list(T).n1());
+    EXPECT_FALSE(list(T, NIL).n1());
+    EXPECT_FALSE(list(T, NIL, T).n1());
+    EXPECT_FALSE(list(T, NIL, T, NIL).n1());
+}
+
+TEST(Fluenton,n2) {
+    EXPECT_FALSE(list().n2());
+    EXPECT_FALSE(list(T).n2());
+    EXPECT_TRUE(list(T, NIL).n2());
+    EXPECT_FALSE(list(T, NIL, T).n2());
+    EXPECT_FALSE(list(T, NIL, T, NIL).n2());
+}
+
+TEST(Fluenton,n3) {
+    EXPECT_FALSE(list().n3());
+    EXPECT_FALSE(list(T).n3());
+    EXPECT_FALSE(list(T, NIL).n3());
+    EXPECT_TRUE(list(T, NIL, T).n3());
+    EXPECT_FALSE(list(T, NIL, T, NIL).n3());
+}
+
+TEST(Fluentons, more) {
+    EXPECT_FALSE(list().more0());
+    EXPECT_TRUE(list(T).more0());
+    EXPECT_TRUE(list(T, NIL).more0());
+    EXPECT_TRUE(list(T, NIL, T).more0());
+    EXPECT_TRUE(list(T, NIL, T, NIL).more0());
+
+    EXPECT_FALSE(list().more1());
+    EXPECT_FALSE(list(T).more1());
+    EXPECT_TRUE(list(T, NIL).more1());
+    EXPECT_TRUE(list(T, NIL, T).more1());
+    EXPECT_TRUE(list(T, NIL, T, NIL).more1());
+
+    EXPECT_FALSE(list().more2());
+    EXPECT_FALSE(list(T).more2());
+    EXPECT_FALSE(list(T, NIL).more2());
+    EXPECT_TRUE(list(T, NIL, T).more2());
+    EXPECT_TRUE(list(T, NIL, T, NIL).more2());
+
+    EXPECT_FALSE(list().more3());
+    EXPECT_FALSE(list(T).more3());
+    EXPECT_FALSE(list(T, NIL).more3());
+    EXPECT_FALSE(list(T, NIL, T).more3());
+    EXPECT_TRUE(list(T, NIL, T, NIL).more3());
+}
+
+TEST(Fluenton,less) {
+    EXPECT_FALSE(list().less0());
+    EXPECT_FALSE(list(T).less0());
+    EXPECT_FALSE(list(T, NIL).less0());
+    EXPECT_FALSE(list(T, NIL, T).less0());
+    EXPECT_FALSE(list(T, NIL, T, NIL).less0());
+
+    EXPECT_TRUE(list().less1());
+    EXPECT_FALSE(list(T).less1());
+    EXPECT_FALSE(list(T, NIL).less1());
+    EXPECT_FALSE(list(T, NIL, T).less1());
+    EXPECT_FALSE(list(T, NIL, T, NIL).less1());
+
+    EXPECT_TRUE(list().less2());
+    EXPECT_TRUE(list(T).less2());
+    EXPECT_FALSE(list(T, NIL).less2());
+    EXPECT_FALSE(list(T, NIL, T).less2());
+    EXPECT_FALSE(list(T, NIL, T, NIL).less2());
+
+    EXPECT_TRUE(list().less3());
+    EXPECT_TRUE(list(T).less3());
+    EXPECT_TRUE(list(T, NIL).less3());
+    EXPECT_FALSE(list(T, NIL, T).less3());
+    EXPECT_FALSE(list(T, NIL, T, NIL).less3());
+}
+
 TEST(Fluenton, EvalQuote) {
   S i =  list("A", "B", "C").q();
   CAREFULLY_EXPECT(EQ,i.eval().cdr().car(),"B", << i); 
 }
-
 
 TEST(Fluenton, t) {
   EXPECT_TRUE(a0.t());
@@ -44,11 +120,39 @@ TEST(Fluenton, l) {
   EXPECT_EQ(s2.l().cdr(), NIL);
 }
 
+TEST(Fluenton, rac) {
+    // Sanity check:
+    EXPECT_FALSE(islist(list(T).rac()));
+    EXPECT_FALSE(islist(list(T, NIL, ATOM, CAR).rac()));
+
+    // Data check:
+    EXPECT_TRUE(list(T).rac().eq(T));
+    EXPECT_TRUE(list(T, NIL).rac().eq(NIL));
+    EXPECT_TRUE(list(T, NIL, ATOM).rac().eq(ATOM));
+    EXPECT_TRUE(list(T, NIL, ATOM, CAR).rac().eq(CAR));
+}
+
+TEST(Fluenton, rdc) {
+    // Sanity check:
+    EXPECT_TRUE(islist(list(T).rdc()));
+    EXPECT_TRUE(islist(list(T, NIL, ATOM, CAR).rdc()));
+
+    // Check sizes:
+    EXPECT_TRUE(list(T, NIL).rdc().n1());
+    EXPECT_TRUE(list(T, NIL, ATOM).rdc().n2());
+    EXPECT_TRUE(list(T, NIL, ATOM, CAR).rdc().n3());
+
+    // Check data:
+    EXPECT_TRUE(list(T, NIL).rdc().rac().eq(T));
+    EXPECT_TRUE(list(T, NIL, ATOM).rdc().rac().eq(NIL));
+    EXPECT_TRUE(list(T, NIL, ATOM, CAR).rdc().rac().eq(ATOM));
+}
 
 TEST(Fluenton, snoc) {
   EXPECT_TRUE(a3.snoc(s2).cdr().eq(a3));
   EXPECT_TRUE(s3.snoc(a2).car().eq(a2));
 }
+
 TEST(Fluenton,NE) {
   EXPECT_TRUE(a0.ne(T));
   EXPECT_TRUE(a0.ne(NIL));
@@ -65,35 +169,6 @@ TEST(Fluenton,NE) {
   EXPECT_FALSE(T.ne("T"));
   EXPECT_FALSE(T.ne(S("T")));
 }
-
-
-
-TEST(Fluentons, more) {
-  EXPECT_FALSE(list().more0());
-  EXPECT_TRUE(list(T).more0());
-  EXPECT_TRUE(list(T, NIL).more0());
-  EXPECT_TRUE(list(T, NIL, T).more0());
-  EXPECT_TRUE(list(T, NIL, T, NIL).more0());
-
-  EXPECT_FALSE(list().more1());
-  EXPECT_FALSE(list(T).more1());
-  EXPECT_TRUE(list(T, NIL).more1());
-  EXPECT_TRUE(list(T, NIL, T).more1());
-  EXPECT_TRUE(list(T, NIL, T, NIL).more1());
-
-  EXPECT_FALSE(list().more2());
-  EXPECT_FALSE(list(T).more2());
-  EXPECT_FALSE(list(T, NIL).more2());
-  EXPECT_TRUE(list(T, NIL, T).more2());
-  EXPECT_TRUE(list(T, NIL, T, NIL).more2());
-
-  EXPECT_FALSE(list().more3());
-  EXPECT_FALSE(list(T).more3());
-  EXPECT_FALSE(list(T, NIL).more3());
-  EXPECT_FALSE(list(T, NIL, T).more3());
-  EXPECT_TRUE(list(T, NIL, T, NIL).more3());
-}
-
 
 TEST(FluentWhichIsAtomic,cons) {
   EXPECT_TRUE(a3.cons(s2).car().eq(a3));
