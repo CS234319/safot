@@ -27,6 +27,7 @@ TEST_OBJS = \
 		t-stack.o \
 		t-strings.o \
 		t-tokenizer.o \
+		t-error.o \
 
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
