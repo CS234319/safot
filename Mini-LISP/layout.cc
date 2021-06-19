@@ -1,38 +1,40 @@
-#include "store.h"
+#include "layout.h"
+#include "Word.h"
 
-Let Word $m$ = $M_a$ + $M_p$ * sizeof (Cons);
+Let Long $m$ = $M_a$ + $M_p$ * sizeof (Word);
 
 static union {
   char block[$m$];
   struct {
    char $A_0$[$M_a$ - LIMBO];
    char A[LIMBO] = { 'N', 'I', 'L', '\0' };
-   Cons P[$M_p$];
+   Word P[$M_p$];
   };
 } memory; 
 
-Let array(Cons) P = memory.P - 1;
-Let array(Cons) $P_0$ = memory.P - 1;
-Let array(Cons) $P_1$ = memory.P + $M_p$;
+Let array(Word) P = memory.P - 1;
+Let array(Word) $P_0$ = memory.P - 1;
+Let array(Word) $P_1$ = memory.P + $M_p$;
 Let array(char) A  = memory.A;
 Let array(char) $A_0$  = memory.$A_0$;
 Let array(char) $A_1$  = memory.A + $M_a$;
 
 // Global:
-Provides constant(Word) $m$;    /// how many bytes are used by the store 
+Provides constant(Long) $m$;    /// how many bytes are used by the store 
 // Atoms:
-Provides constant(Half) $M_a$;  /// how many atoms are initially available 
-Provides function Half $v_a$(); /// how many chars remain available for allocation 
-Provides function Half $u_a$(); /// how many chars were allocated 
+Provides constant(Short) $M_a$;  /// how many atoms are initially available 
+Provides function Short $v_a$(); /// how many chars remain available for allocation 
+Provides function Short $u_a$(); /// how many chars were allocated 
 // Pairs
-Provides constant(Half) $M_p$;  /// how many pairs are initially available 
+Provides constant(Short) $M_p$;  /// how many pairs are initially available 
 
 
-Provides Half m$_p$;              /// how many are currently available 
-Provides Half made$_p$;           /// how many pairs were made, reuses are counted
-Provides Half free$n_p$;          /// how many pairs were freed 
-Provides Half collected$n_p$;     /// how many pairs were garbage collected 
+Provides Short m$_p$;              /// how many are currently available 
+Provides Short made$_p$;           /// how many pairs were made, reuses are counted
+Provides Short free$n_p$;          /// how many pairs were freed 
+Provides Short collected$n_p$;     /// how many pairs were garbage collected 
 
+#include "Knob.h"
 #undef min
 #undef max
 #undef data
@@ -51,7 +53,7 @@ int main(int argc, char **argv) {
 }
 
 TEST(SExpression, size) { 
-  EXPECT_EQ(2, sizeof($S_X$));
+  EXPECT_EQ(2, sizeof(Knob));
 }
 
 TEST(Atoms, $A_f$) { 
@@ -68,7 +70,7 @@ TEST(Atoms, $A_t$) {
 TEST(Atoms, $X$) { 
   EXPECT_GT($X_t$, 0);
   EXPECT_LT($X_f$, 0);
-  EXPECT_EQ($X_n$, (Half)($A_n$ + $P_n$)); 
+  EXPECT_EQ($X_n$, (Short)($A_n$ + $P_n$)); 
   EXPECT_EQ($X_n$, $A_n$ + $P_n$); 
   EXPECT_GT($X_t$, $X_f$);
   EXPECT_GT($X_n$, 0); 
@@ -98,13 +100,13 @@ TEST(Pairs, $P_n$) {
 }
 
 TEST(Store, minimalSize) {
-  EXPECT_GT((Half) $M_a$, 100);
-  EXPECT_GT((Half) $M_p$, 100);
+  EXPECT_GT((Short) $M_a$, 100);
+  EXPECT_GT((Short) $M_p$, 100);
 }
 
 TEST(Store, overflow) {
-  EXPECT_GT((Half) $M_p$ + 1, 0);
-  EXPECT_LT((Half) - $M_a$ - 1, 0);
+  EXPECT_GT((Short) $M_p$ + 1, 0);
+  EXPECT_LT((Short) - $M_a$ - 1, 0);
 }
 
 
@@ -126,13 +128,13 @@ TEST(Array, Properties) {
 }
 
 TEST(Store, PrimitiveSizs) { 
-  struct S: $S_X$ {};
+  struct S: Knob {};
   EXPECT_EQ(sizeof(byte), 1);
   EXPECT_EQ(sizeof(char), 1);
-  EXPECT_EQ(sizeof(Half), 2);
+  EXPECT_EQ(sizeof(Short), 2);
+  EXPECT_EQ(sizeof(Long), 4);
   EXPECT_EQ(sizeof(Word), 4);
-  EXPECT_EQ(sizeof(Cons), 4);
-  EXPECT_EQ(sizeof($S_X$), 2);
+  EXPECT_EQ(sizeof(Knob), 2);
   EXPECT_EQ(sizeof(S), 2);
 }
 
@@ -178,16 +180,16 @@ TEST(Store, correctCounting) {
 }
 
 TEST(Store, ConversionToIntDoesNotBreakArrayLimits) {
-  EXPECT_EQ((Half) $M_a$, $M_a$); 
-  EXPECT_EQ((Half) $M_p$, $M_p$); 
+  EXPECT_EQ((Short) $M_a$, $M_a$); 
+  EXPECT_EQ((Short) $M_p$, $M_p$); 
 }
 
-TEST(ByteOrdering, Word) { 
+TEST(ByteOrdering, Long) { 
   union {
-    Word w;
+    Long w;
     struct {
-      Half h1;
-      Half h2;
+      Short s1;
+      Short s2;
     };
     struct {
       byte b1;
@@ -197,17 +199,17 @@ TEST(ByteOrdering, Word) {
     };
   } v;
   v.w = 0xDEAD'BEEF;
-  EXPECT_EQ(v.h1,(Half)  0xBEEF);
-  EXPECT_EQ(v.h2,(Half)  0xDEAD);
+  EXPECT_EQ(v.s1,(Short)  0xBEEF);
+  EXPECT_EQ(v.s2,(Short)  0xDEAD);
   EXPECT_EQ(v.b1,(byte)  0xEF);
   EXPECT_EQ(v.b2,(byte)  0xBE);
   EXPECT_EQ(v.b3,(byte)  0xAD);
   EXPECT_EQ(v.b4, (byte) 0xDE);
 }
 
-TEST(ByteOrdering, Half) { 
+TEST(ByteOrdering, Short) { 
   union {
-    Half h;
+    Short h;
     struct {
       byte b1;
       byte b2;

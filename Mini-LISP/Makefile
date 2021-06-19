@@ -50,8 +50,11 @@ CFLAGS += -MD -MP -w
 store:
 all: test mini-lisp store 
 
-store: layout.o cons.o characters.o
+store: Short.o heap.o Handle.o Id.o Sx.o text.o Knob.o Item.o Cons.o Word.o Pristine.o heap.o layout.o Pushdown.o Tokenizer.o Parser.o
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+
+gvim: 
+	gvim Parser.cc Parser.h Short.cc Word.cc Knob.cc Item.cc Cons.cc  Pristine.cc  heap.cc  layout.cc  Pushdown.cc  Makefile Short.h  Word.h  Knob.h  Item.h  Cons.h  Pristine.h  heap.h  layout.h  Pushdown.h 
 
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

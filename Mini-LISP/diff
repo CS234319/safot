@@ -1,1581 +1,1949 @@
 diff --git a/Mini-LISP/Makefile b/Mini-LISP/Makefile
-index 724a099..d151f85 100644
+index d151f85..7ddaba2 100644
 --- a/Mini-LISP/Makefile
 +++ b/Mini-LISP/Makefile
-@@ -47,10 +47,10 @@ endif
- 
- CFLAGS += -MD -MP -w 
- 
--test:
-+store:
+@@ -50,7 +50,7 @@ CFLAGS += -MD -MP -w
+ store:
  all: test mini-lisp store 
  
--store: layout.o words.o characters.o
-+store: layout.o cons.o characters.o
+-store: layout.o cons.o characters.o
++store: layout.o cons.o characters.o pushdown.o
  	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
  
  test: $(TEST_OBJS)
 diff --git a/Mini-LISP/chic.h b/Mini-LISP/chic.h
-index 70a94ab..aefdda3 100644
+index aefdda3..fa6a630 100644
 --- a/Mini-LISP/chic.h
 +++ b/Mini-LISP/chic.h
-@@ -27,6 +27,8 @@
+@@ -1,3 +1,5 @@
++#ifndef CHIC_H 
++#define CHIC_H
+ // Poor man's edition of a bit cleaner C/C++
+ //
+ #include <cstdint>         // Standard header providing integer types with widths 
+@@ -16,19 +18,18 @@
+ #define constant(type) const type 
+ #define action void
+ #define modifier 
+-#define data 
+ 
+ 
+ #define perspective(...) struct{__VA_ARGS__;};
+ #define Representation union
+-#define Type union
++#define Type struct
+ 
+ 
  #define	returns(x) const {return x;}
  #define by(...) :__VA_ARGS__{}
  
-+typedef enum { ok } OK;
-+
- template<typename T> constexpr T max(T h1, T h2) { return h1 > h2 ? h1 : h2; } 
- template<typename T> constexpr T min(T h1, T h2) { return h1 < h2 ? h1 : h2; } 
- template<typename T> constexpr T range(T h1, T h2) { return h2 - h1 + 1; } 
+ typedef enum { ok } OK;
+-
+ template<typename T> constexpr T max(T s1, T s2) { return s1 > s2 ? s1 : s2; } 
+ template<typename T> constexpr T min(T s1, T s2) { return s1 < s2 ? s1 : s2; } 
+ template<typename T> constexpr T range(T s1, T s2) { return s2 - s1 + 1; } 
++#endif
 diff --git a/Mini-LISP/cons.cc b/Mini-LISP/cons.cc
-index b91677c..a04173b 100644
+index aa128ff..f48d585 100644
 --- a/Mini-LISP/cons.cc
 +++ b/Mini-LISP/cons.cc
-@@ -4,88 +4,91 @@ static Half init();
- static Half next = init();
+@@ -1,6 +1,5 @@
+ #include "dbc.h"
+ #include "store.h"
+-
+ #define FUN(Return, Name, ArgumentType) \
+   Return Name(ArgumentType _) { \
+     const auto $$ = Name; \
+@@ -13,98 +12,7 @@
+     return __; \
+   } 
  
- static Half mark(Half h); 
--static void mark(Pair &p);
-+static void mark(Cons &p);
- 
- #define DIE die(__LINE__) 
- #include "stdio.h"
- bool inline die(int t) { throw t; }
--#include "colors.h"
- 
--Half free($S_X$ s) {
-+inline Half mark(Half h)   { return h + (1 << 15); } 
-+
-+struct White: $S_X$ {
-+  White(Half h): $S_X$(h) {}
-+  void car(Half h) { P[handle].car = h; }
-+  void cdr(Half h) { P[handle].cdr = h; }
-+  auto car() { return P[handle].h1; }
-+  auto cdr() { return P[handle].h2; }
-+};
-+
-+struct Black: $S_X$ {
-+  Black(Half h): $S_X$(h) {}
-+  auto prev(Half h) { P[handle].prev = mark(h); return *this;}
-+  auto next(Half h) { P[handle].next = h; return *this;}
-+  auto prev() { return P[handle].h1; } 
-+  auto next() { return mark(P[handle].h2); }
-+};
-+
-+struct Red: $S_X$ {
-+  Red(Half h): $S_X$(h) {}
-+  void head(Half h) { P[handle].head = mark(h); }
-+  void rest(Half h) { P[handle].rest = h; }
-+  auto head() { return mark(P[handle].h1); }
-+  auto rest() { return P[handle].h2; } 
-+}; 
-+
-+
-+static struct {
-+  inline bool white(Half h) { !marked(P[h].h1) && !marked(P[h].h2); } 
-+  inline bool black(Half h)   { marked(P[h].h1)  && !marked(P[h].h2); } 
-+  inline bool red(Half h) { !marked(P[h].h1) && marked(P[h].h2); } 
-+} is;
-+
-+static struct {
-+  inline bool white(Half h) { return !is.white(h); }  
-+  inline bool black(Half h)   { return !is.black(h); }  
-+  inline bool red(Half h) { return !is.red(h); }  
-+} isnt;
-+
-+static struct {
-+  inline auto white(Half h) { 
-+    if (marked(P[h].h1)) P[h].h1 =  mark(P[h].h1);
-+    if (marked(P[h].h2)) P[h].h2 =  mark(P[h].h2);
-+    return White(h);
-+  } 
-+  inline auto black(Half h) { 
-+    if (!marked(P[h].h1)) P[h].h1 = mark(P[h].h1);
-+    if (marked(P[h].h2)) P[h].h2  = mark(P[h].h2);
-+    return Black(h);
-+  } 
-+  inline auto red(Half h) { 
-+    if (marked(P[h].h1)) P[h].h1  = mark(P[h].h1);
-+    if (!marked(P[h].h2)) P[h].h2 = mark(P[h].h2);
-+    return Red(h);
-+  } 
-+} paint; 
-+
-+void free($S_X$ s) {
-   auto const h = s.handle;
--  is.black(h) || DIE;
--  paint.red(h);
--  is.red(h) || DIE;
--  set.red(h).next(next); 
--  set.red(h).prev($P_x$); 
--  set.red(next).prev(h);
--  return next = h;
-+  Black(s.handle).prev($P_x$).next(next); 
-+  next = h;
- }
- 
- static Half init() {
--  for (Half h = $P_f$  + 1; h < $P_t$; ++h) {
--    P[h].prev = h - 1;
--    P[h].next = h + 1;
+-
+-bool inline die(int t) { throw t;  }
+-
+-
+-struct Handle: Handle { 
+-  Handle(Short h): Handle(h) {}
+-  Handle(Handle s): Handle(s) {}
+-  inline Short &s1() const { return P[handle].s1; }
+-  inline Short &s2() const { return P[handle].s2; }
+-  inline auto s1(Short h) const { P[handle].s1 = h; return *this;}
+-  inline auto s2(Short h) const { P[handle].s2 = h; return *this;}
+-  inline bool cons() const { !marked(s1()) && !marked(s2()); } 
+-  inline bool Pristine() const { marked(s1()) && marked(s2()); } 
+-  inline bool item()   const { !marked(s1()) && marked(s2()); } 
+-};
+-
+-struct Cons: Handle {
+-  Cons(Short h): Handle(h) {}
+-  auto car(Short h) const { s1() = h; return *this; }
+-  auto cdr(Short h) const { s2() = h; return *this; }
+-  auto car() const { return s1(); }
+-  auto cdr() const { return s2(); } 
+-};
+-
+-struct Pristine: Handle {
+-  Pristine(Short h): Handle(h) {}
+-  auto prev(Short h) const { 
+-    Expect(!marked(h));
+-    s1() = mark(h); 
+-    return *this;
 -  }
--  P[$P_f$].prev = $P_x$;
--  P[$P_f$].next = $P_f$  + 1;
--  P[$P_t$].prev = $P_t$ - 1;
--  P[$P_t$].next = $P_x$;
-   for (Half h = $P_f$; h <= $P_t$; ++h) 
--    paint.red(h);
-+    Black(h).prev(h-1).next(h+1);
-+  Black($P_f$).prev($P_x$);
-+  Black($P_t$).next($P_x$);
-   return next = $P_f$;
- }
- 
--
--static auto allocate() {
--  get.red.prev(next) == $P_x$ || DIE; 
--  const auto h = next;
--  next = get.red.next(next);
--  get.red.prev(next) == h || DIE;
--  set.red(next).prev($P_x$);  
--  get.red.prev(next) == h || DIE;
--  set.red(next).prev($P_x$);  
--  return h;
--}
-- 
--
--static $S_X$ make(Pair p) {
--  const auto h = allocate();
--  P[h] = p;
--  is.white(h)  || DIE;
--  get.white.car(h) == p.car || DIE; 
--  get.white.cdr(h) == p.cdr || DIE; 
--  p.cons == P[h].cons ||  DIE;
--  paint.black(h);
--  return h;
--}
--
--static $S_X$ require(Pair p) {
--  const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
--  if (P[h].cons == p.cons) 
--    return h;
--  if (h == next || isnt.red(h)) {
--    const auto h = allocate();
--    P[h] = p;
--    return h; 
+-  auto next(Short h) const { 
+-    Expect(!marked(h));
+-    s2() = mark(h); 
+-    return *this;
 -  }
--  const Half prev = get.red.prev(h), next = get.red.next(h);
--  P[h] = p;
--  if (prev != $P_x$) set.red(prev).next(next);
--  if (next != $P_x$) set.red(next).prev(prev); 
--  is.white(h)  || DIE;
--  p.cons == P[h].cons || DIE;
--  return h;
--}
+-  auto prev() const { 
+-    Expect(marked(s1()));
+-    return mark(s1()); 
+-  }
+-  auto next() const { 
+-    Expect(marked(s2()));
+-    return mark(s2()); 
+-  }
+-};
 -
--$S_X$ make( Half car, Half cdr) { return make(Pair(car,cdr)); }
--$S_X$ require(Half car, Half cdr) { return require(Pair(car,cdr)); }
-+$S_X$ require(Half car, Half cdr) { return require(Cons(car,cdr)); }
- 
+-struct Item: Handle {
+-  Item(Short h): Handle(h) {}
+-  auto head(Short h) const { s1() = h;       return *this; }
+-  auto rest(Short h) const { s2() = mark(h); return *this; }
+-  auto head() { return s1(); }
+-  auto rest() { return mark(s2()); } 
+-}; 
+-
+-
+
+-static struct {
+-  auto clean(Short &h) {
+-    if (marked(h)) h = mark(h);
+-    return *this;
+-  }
+-  auto stain(Short &h){
+-    if (!marked(h)) h = mark(h);
+-    return *this;
+-  }
+-  inline auto cons(Short h) { 
+-    Expect(h >= $P_f$ && h <= $P_t$)
+-    Promise(Handle(h).cons());
+-    clean(P[h].s1).clean(P[h].s2);
+-    return Cons(h);
+-  } 
+-  inline auto Pristine(Short h) { 
+-    Expect(h >= $P_f$ && h <= $P_t$)
+-    Promise(Handle(h).Pristine());
+-    stain(P[h].s1).stain(P[h].s2);
+-    return Pristine(h);
+-  } 
+-  inline auto item(Short h) { 
+-    Expect(h >= $P_f$ && h <= $P_t$)
+-    Promise(Handle(h).item()) 
+-    clean(P[h].s1).stain(P[h].s2);
+-    return Item(h);
+-  } 
+-} paint; 
+-
++#include "colors.h"
  #include <stdio.h>
  
- Half length() {
-   Half result = 0;
--  for (Half h = next; h != $P_x$; h = get.red.next(h)) // printf("%d ", h), 
-+  for (Half h = next; h != $P_x$; h = get.black.next(h)) // printf("%d ", h), 
-       ++result;
-   return result;
- }
-@@ -98,28 +101,29 @@ Half length() {
- 
- int valid() {
-   Half length = 0;
--  for (Half h = next, h2 = h ; h != $P_x$; h = get.red.next(h)) { 
-+  for (Half h = next, h2 = h ; h != $P_x$; h = get.black.next(h)) { 
-     ++length;
--    if (isnt.red(h)) return length; 
--    if (h2 != $P_x$) h2 = get.red.next(h2);
--    if (h2 != $P_x$) h2 = get.red.next(h2);
-+    if (isnt.black(h)) return length; 
-+    if (h2 != $P_x$) h2 = get.black.next(h2);
-+    if (h2 != $P_x$) h2 = get.black.next(h2);
-     if (h == h2) return -length; 
-   } 
-   return 0;
+ static Short heapify();
+@@ -115,10 +23,10 @@ auto inline fresh() {
+   auto const __ = Pristine(heap); 
+   heap = __.next();
+   __.prev($P_x$);
+-  return Item(__.handle);
++  return Item(__.self);
  }
  
- #include "gtest/gtest.h"
--TEST(Colors, paintRed) { 
-+
-+TEST(Colors, paintBlack) { 
-   try {
-     init();
--    auto h = make(0xDE,0xAD).handle;
-+    auto h = require(0xDE,0xAD).handle;
-     EXPECT_TRUE(is.white(h));
-     EXPECT_EQ(P[h].car, 0xDE);
-     EXPECT_EQ(P[h].cdr, 0xAD);
--    paint.red(h); 
--    EXPECT_TRUE(is.red(h));
--    EXPECT_EQ(get.red.prev(h), 0xDE);
--    EXPECT_EQ(get.red.next(h), 0xAD);
-+    paint.black(h); 
-+    EXPECT_TRUE(is.black(h));
-+    EXPECT_EQ(get.black.prev(h), 0xDE);
-+    EXPECT_EQ(get.black.next(h), 0xAD);
-     paint.white(h); 
-     EXPECT_TRUE(is.white(h));
-     EXPECT_EQ(P[h].car, 0xDE);
-@@ -131,17 +135,17 @@ TEST(Colors, paintRed) {
-   }
+-auto inline fresh(Short s1, Short s2) {
++Item fresh(Short s1, Short s2) {
+   return fresh().head(s1).rest(s2);
  }
  
--TEST(Colors, paintBlack) { 
-+TEST(Colors, paintRed) { 
-   try {
-     init();
--    auto h = make(0xAB,0xCD).handle;
-+    auto h = require(0xAB,0xCD).handle;
-     EXPECT_TRUE(is.white(h));
-     EXPECT_EQ(P[h].car, 0xAB);
-     EXPECT_EQ(P[h].cdr, 0xCD);
--    paint.black(h); 
--    EXPECT_TRUE(is.black(h));
--    EXPECT_EQ(get.black.head(h), 0xAB);
--    EXPECT_EQ(get.black.rest(h), 0xCD);
-+    paint.red(h); 
-+    EXPECT_TRUE(is.red(h));
-+    EXPECT_EQ(get.red.head(h), 0xAB);
-+    EXPECT_EQ(get.red.rest(h), 0xCD);
-     paint.white(h); 
-     EXPECT_TRUE(is.white(h));
-     EXPECT_EQ(P[h].car, 0xAB);
-@@ -152,70 +156,75 @@ TEST(Colors, paintBlack) {
-       ADD_FAILURE() << "Died at line " << e;
-   }
+@@ -177,7 +85,7 @@ auto valid() {
  }
--TEST(Colors, blackWhiteBlack) { 
-+TEST(Colors, redWhiteRed) { 
+ 
+ void free(Handle s) {
+-  auto const h = s.handle;
++  auto const h = s.self;
+   Expect(Handle(h).item());
+   Pristine(h).prev($P_x$).next(heap); 
+   heap = h;
+@@ -283,7 +191,7 @@ TEST(Fresh, 1) {
+   heapify();
+   EXPECT_EQ(valid(),0);
+   EXPECT_EQ(heap,1);
+-  auto s1 = fresh().handle;
++  auto s1 = fresh().self;
+   EXPECT_EQ(heap,2);
+   EXPECT_EQ(s1,1);
+   EXPECT_EQ(valid(),0);
+@@ -346,7 +254,7 @@ TEST(Require, exists) {
+ TEST(Require, cons) { 
    try {
-     init();
--    auto h = make(0xAB,0xCD).handle;
-+    auto h = require(0xAB,0xCD).handle;
-     EXPECT_TRUE(is.white(h));
-     EXPECT_EQ(P[h].car, 0xAB);
-     EXPECT_EQ(P[h].cdr, 0xCD);
--    paint.black(h); 
--    EXPECT_TRUE(is.black(h));
--    EXPECT_EQ(get.black.head(h), 0xAB);
--    EXPECT_EQ(get.black.rest(h), 0xCD);
-+    paint.red(h); 
-+    EXPECT_TRUE(is.red(h));
-+    EXPECT_EQ(get.red.head(h), 0xAB);
-+    EXPECT_EQ(get.red.rest(h), 0xCD);
-     paint.white(h); 
-     EXPECT_TRUE(is.white(h));
-     EXPECT_EQ(P[h].car, 0xAB);
-     EXPECT_EQ(P[h].cdr, 0xCD);
-     EXPECT_EQ(get.white.car(h), 0xAB);
-     EXPECT_EQ(get.white.cdr(h), 0xCD);
--    paint.black(h); 
--    EXPECT_TRUE(is.black(h));
--    EXPECT_EQ(get.black.head(h), 0xAB);
--    EXPECT_EQ(get.black.rest(h), 0xCD);
-+    paint.red(h); 
-+    EXPECT_TRUE(is.red(h));
-+    EXPECT_EQ(get.red.head(h), 0xAB);
-+    EXPECT_EQ(get.red.rest(h), 0xCD);
+     heapify();
+-    auto h = require(0xDE,0xAD).handle;
++    auto h = require(0xDE,0xAD).self;
+     EXPECT_TRUE(Handle(h).cons());
    } catch(int e) {
--      ADD_FAILURE() << "Died at line " << e;
-+     ADD_FAILURE() << "Died at line " << e;
-   }
- }
- 
- 
--TEST(Colors,is) { 
--  init();
--  auto s = make(12,14);
--  auto h = s.handle;
--  EXPECT_TRUE(is.white(h));
--  EXPECT_FALSE(is.red(h));
--  EXPECT_FALSE(is.black(h));
--  EXPECT_FALSE(isnt.white(h));
--  EXPECT_TRUE(isnt.red(h));
--  EXPECT_TRUE(isnt.black(h));
--  paint.red(h);
--  EXPECT_FALSE(is.white(h));
--  EXPECT_TRUE(is.red(h));
--  EXPECT_FALSE(is.black(h));
--  EXPECT_TRUE(isnt.white(h));
--  EXPECT_FALSE(isnt.red(h));
--  EXPECT_TRUE(isnt.black(h));
--  paint.black(h);
--  EXPECT_FALSE(is.white(h));
--  EXPECT_FALSE(is.red(h));
--  EXPECT_TRUE(is.black(h));
--  EXPECT_TRUE(isnt.white(h));
--  EXPECT_TRUE(isnt.red(h));
--  EXPECT_FALSE(isnt.black(h));
-+TEST(Colors, is) { 
-+  try {
-+    init();
-+    auto s = require(12,14);
-+    auto h = s.handle;
-+    EXPECT_TRUE(is.white(h));
-+    EXPECT_FALSE(is.black(h));
-+    EXPECT_FALSE(is.red(h));
-+    EXPECT_FALSE(isnt.white(h));
-+    EXPECT_TRUE(isnt.black(h));
-+    EXPECT_TRUE(isnt.red(h));
-+    paint.black(h);
-+    EXPECT_FALSE(is.white(h));
-+    EXPECT_TRUE(is.black(h));
-+    EXPECT_FALSE(is.red(h));
-+    EXPECT_TRUE(isnt.white(h));
-+    EXPECT_FALSE(isnt.black(h));
-+    EXPECT_TRUE(isnt.red(h));
-+    paint.red(h);
-+    EXPECT_FALSE(is.white(h));
-+    EXPECT_FALSE(is.black(h));
-+    EXPECT_TRUE(is.red(h));
-+    EXPECT_TRUE(isnt.white(h));
-+    EXPECT_TRUE(isnt.black(h));
-+    EXPECT_FALSE(isnt.red(h));
-+  } catch(int e) {
-+     ADD_FAILURE() << "Died at line " << e;
-+  }
- }
- 
-+
- TEST(Words, Init) { 
-   init();
-   EXPECT_NE(next, $P_x$);
-   EXPECT_EQ(next, 1);
-   EXPECT_EQ(next, $P_f$);
--  EXPECT_EQ(get.red.next(1), 2);
--  EXPECT_EQ(get.red.prev(1), 0);
--  EXPECT_EQ(get.red.next(2), 3);
--  EXPECT_EQ(get.red.prev(2), 1);
--  EXPECT_EQ(get.red.prev($P_t$), $P_t$-1);
--  EXPECT_EQ(get.red.next($P_t$), $P_x$);
-+  EXPECT_EQ(get.black.next(1), 2);
-+  EXPECT_EQ(get.black.prev(1), 0);
-+  EXPECT_EQ(get.black.next(2), 3);
-+  EXPECT_EQ(get.black.prev(2), 1);
-+  EXPECT_EQ(get.black.prev($P_t$), $P_t$-1);
-+  EXPECT_EQ(get.black.next($P_t$), $P_x$);
-   EXPECT_EQ(length(), $P_n$);
- }
- 
-@@ -223,10 +232,10 @@ TEST(Words, MakeLength1) {
-   init();
-   EXPECT_EQ(valid(),0);
-   EXPECT_EQ(next,1);
--  auto s1 = make(2,3);
-+  auto s1 = allocate();
-   EXPECT_EQ(next,2);
-   EXPECT_EQ(s1.handle,1);
--  EXPECT_EQ(P[s1.handle].car,2);
-+  EXPECT_EQ(get.red.head(s1.handle),2);
-   EXPECT_EQ(P[s1.handle].cdr,3);
+     ADD_FAILURE() << "Died at line " << e;
+@@ -356,7 +264,7 @@ TEST(Require, cons) {
+ TEST(Require, correct) { 
+   try {
+     heapify();
+-    auto h = require(0xDE,0xAD).handle;
++    auto h = require(0xDE,0xAD).self;
+     EXPECT_EQ(P[h].s1, 0xDE);
+     EXPECT_EQ(P[h].s2, 0xAD);
+   } catch(int e) {
+@@ -381,21 +289,21 @@ TEST(Require, correct3) {
+   EXPECT_EQ(heap,1);
+   auto s1 = require(2,3);
+   EXPECT_EQ(heap,1);
+-  EXPECT_NE(s1.handle,1);
+-  EXPECT_EQ(P[s1.handle].s1,2);
+-  EXPECT_EQ(P[s1.handle].s2,3);
++  EXPECT_NE(s1.self,1);
++  EXPECT_EQ(P[s1.self].s1,2);
++  EXPECT_EQ(P[s1.self].s2,3);
    EXPECT_EQ(valid(),0);
    EXPECT_EQ(length(), $P_n$-1);
-@@ -236,21 +245,21 @@ TEST(Words, MakeLength2) {
-   init();
+   auto s2 = require(4,5);
+-  EXPECT_EQ(P[s2.handle].s1,4);
+-  EXPECT_EQ(P[s2.handle].s2,5);
++  EXPECT_EQ(P[s2.self].s1,4);
++  EXPECT_EQ(P[s2.self].s2,5);
    EXPECT_EQ(valid(),0);
-   EXPECT_EQ(next,1);
--  auto s1 = make(2,3);
-+  auto s1 = require(2,3);
-   EXPECT_EQ(next,2);
-   EXPECT_EQ(s1.handle,1);
-   EXPECT_EQ(P[s1.handle].car,2);
-   EXPECT_EQ(P[s1.handle].cdr,3);
+   EXPECT_EQ(heap,1);
+   EXPECT_EQ(length(), $P_n$-2);
+   auto s3 = require(6,7);
+   EXPECT_EQ(heap,1);
+-  EXPECT_EQ(P[s3.handle].s1,6);
+-  EXPECT_EQ(P[s3.handle].s2,7);
++  EXPECT_EQ(P[s3.self].s1,6);
++  EXPECT_EQ(P[s3.selfle].s2,7);
+ }
+ 
+ TEST(Require, Scenario) { 
+@@ -404,22 +312,22 @@ TEST(Require, Scenario) {
+   EXPECT_EQ(heap,1);
+   auto s1 = require(2,3);
+   EXPECT_EQ(heap,1);
+-  EXPECT_EQ(s1.handle,hash(Cons(2,3)));
+-  EXPECT_EQ(P[s1.handle].s1,2);
+-  EXPECT_EQ(P[s1.handle].s2,3);
++  EXPECT_EQ(s1.selfle,hash(Cons(2,3)));
++  EXPECT_EQ(P[s1.selfle].s1,2);
++  EXPECT_EQ(P[s1.selfle].s2,3);
    EXPECT_EQ(valid(),0);
    EXPECT_EQ(length(), $P_n$-1);
--  auto s2 = make(4,5);
-+  auto s2 = require(4,5);
-   EXPECT_EQ(next,3);
-   EXPECT_EQ(s2.handle,2);
-   EXPECT_EQ(P[s2.handle].car,4);
-   EXPECT_EQ(P[s2.handle].cdr,5);
+   auto s2 = require(4,5);
+-  EXPECT_EQ(s2.handle,hash(Cons(4,5)));
++  EXPECT_EQ(s2.selfle,hash(Cons(4,5)));
+   EXPECT_EQ(heap,1);
+-  EXPECT_EQ(P[s2.handle].s1,4);
+-  EXPECT_EQ(P[s2.handle].s2,5);
++  EXPECT_EQ(P[s2.selfle].s1,4);
++  EXPECT_EQ(P[s2.selfle].s2,5);
    EXPECT_EQ(valid(),0);
    EXPECT_EQ(length(), $P_n$-2);
--  auto s3 = make(6,7);
-+  auto s3 = require(6,7);
-   EXPECT_EQ(next,4);
-   EXPECT_EQ(s3.handle,3);
-   EXPECT_EQ(P[s3.handle].car,6);
-@@ -287,9 +296,9 @@ TEST(Words, RequireLength2) {
- TEST(Words, MakeThree) { 
-   try {
-     init();
--    auto s1 = make(2,3);
--    auto s2 = make(4,5);
--    auto s3 = make(6,7);
-+    auto s1 = require(2,3);
-+    auto s2 = require(4,5);
-+    auto s3 = require(6,7);
-   } catch(int e) {
-     ADD_FAILURE() << "Died at line " << e;
-   }
-@@ -298,9 +307,9 @@ TEST(Words, MakeThree) {
- TEST(Words, MakeThreeFree) { 
-   try {
-     init();
--    auto s1 = make(2,3);
--    auto s2 = make(4,5);
--    auto s3 = make(6,7);
-+    auto s1 = require(2,3);
-+    auto s2 = require(4,5);
-+    auto s3 = require(6,7);
-     free(s1);
-   } catch(int e) {
-     ADD_FAILURE() << "Died at line " << e;
-@@ -344,23 +353,23 @@ TEST(Words, Reuse) {
-   EXPECT_EQ(s2.handle, s4.handle);
-   EXPECT_EQ(s3.handle, s6.handle);
+   auto s3 = require(6,7);
+-  EXPECT_EQ(s3.handle,hash(Cons(6,7)));
+-  EXPECT_EQ(P[s3.handle].s1,6);
+-  EXPECT_EQ(P[s3.handle].s2,7);
++  EXPECT_EQ(s3.selfle,hash(Cons(6,7)));
++  EXPECT_EQ(P[s3.selfle].s1,6);
++  EXPECT_EQ(P[s3.selfle].s2,7);
+   EXPECT_EQ(valid(),0);
    EXPECT_EQ(length(), $P_n$-3);
--  EXPECT_TRUE(is.red(s1.handle));
-+  EXPECT_TRUE(is.black(s1.handle));
+ }
+@@ -428,7 +336,7 @@ TEST(Handle, correct) {
+   try {
+     heapify();
+     auto s = require(12,14);
+-    auto h = s.handle;
++    auto h = s.selfle;
+     EXPECT_TRUE(Handle(h).cons());
+     EXPECT_FALSE(Handle(h).Pristine());
+     EXPECT_FALSE(Handle(h).item());
+@@ -452,43 +360,43 @@ TEST(Words, Reuse) {
+ 
+   auto s1 = require(0,0);
+   EXPECT_TRUE(Handle(s1).cons());
+-  EXPECT_EQ(s1.handle, hash(P[s1.handle]));
++  EXPECT_EQ(s1.selfle, hash(P[s1.selfle]));
    EXPECT_EQ(valid(),0);
-   free(s2);
--  EXPECT_TRUE(is.red(s1.handle));
-+  EXPECT_TRUE(is.black(s1.handle));
+   EXPECT_EQ(length(), $P_n$-1);
+ 
+   auto s2 = require(2,3);
+   EXPECT_TRUE(Handle(s2).cons());
+-  EXPECT_EQ(s2.handle, hash(P[s2.handle]));
++  EXPECT_EQ(s2.selfle, hash(P[s2.selfle]));
    EXPECT_EQ(valid(),0);
--  EXPECT_FALSE(is.red(s3.handle));
--  EXPECT_FALSE(is.red(s6.handle));
-+  EXPECT_FALSE(is.black(s3.handle));
-+  EXPECT_FALSE(is.black(s6.handle));
-   free(s3);
--  EXPECT_TRUE(is.red(s6.handle));
--  EXPECT_TRUE(is.red(s3.handle));
-+  EXPECT_TRUE(is.black(s6.handle));
-+  EXPECT_TRUE(is.black(s3.handle));
+   EXPECT_EQ(length(), $P_n$-2);
+ 
+   auto s3 = require(3,2);
+-  EXPECT_EQ(s3.handle, hash(P[s3.handle]));
++  EXPECT_EQ(s3.selfle, hash(P[s3.selfle]));
+   EXPECT_TRUE(Handle(s3).cons());
    EXPECT_EQ(valid(),0);
-   free(s3);
-   free(s5);
-   free(s4);
--  EXPECT_TRUE(is.red(s1.handle));
--  EXPECT_TRUE(is.red(s2.handle));
--  EXPECT_TRUE(is.red(s3.handle));
-+  EXPECT_TRUE(is.black(s1.handle));
-+  EXPECT_TRUE(is.black(s2.handle));
-+  EXPECT_TRUE(is.black(s3.handle));
+   EXPECT_EQ(length(), $P_n$-3);
+ 
+   auto s4 = require(2,3);
+   EXPECT_TRUE(Handle(s4).cons());
+-  EXPECT_EQ(s4.handle, hash(P[s4.handle]));
++  EXPECT_EQ(s4.selfle, hash(P[s4.selfle]));
    EXPECT_EQ(valid(),0);
+   EXPECT_EQ(length(), $P_n$-3);
+ 
+   auto s5 = require(0,0);
+   EXPECT_TRUE(Handle(s5).cons());
+-  EXPECT_EQ(s5.handle, hash(P[s5.handle]));
++  EXPECT_EQ(s5.selfle, hash(P[s5.selfle]));
+   EXPECT_EQ(length(), $P_n$-3);
+   EXPECT_EQ(valid(),0);
+ 
+   auto s6 = require(3,2);
+   EXPECT_TRUE(Handle(s6).cons());
+-  EXPECT_EQ(s6.handle, hash(P[s6.handle]));
++  EXPECT_EQ(s6.selfle, hash(P[s6.selfle]));
+   EXPECT_EQ(length(), $P_n$-3);
+   EXPECT_EQ(valid(),0);
+ 
+-  EXPECT_EQ(s1.handle, s5.handle);
+-  EXPECT_EQ(s2.handle, s4.handle);
+-  EXPECT_EQ(s3.handle, s6.handle);
++  EXPECT_EQ(s1.selfle, s5.selfle);
++  EXPECT_EQ(s2.selfle, s4.selfle);
++  EXPECT_EQ(s3.selfle, s6.selfle);
  }
  
-@@ -393,7 +402,7 @@ TEST(Marking, Atoms) {
- TEST(Marking, MarkingIsMarked) { 
-   init();
-   for (Half h = $X_f$; h <= $X_t$; ++h)
--    EXPECT_TRUE(is.red(h));
-+    EXPECT_TRUE(is.black(h));
- }
- 
- TEST(Marking, Bounds) { 
+ TEST(Marking, Pairs) { 
 diff --git a/Mini-LISP/diff b/Mini-LISP/diff
-index 842bd99..43f5bbf 100644
+index 3f3098c..c6f18d2 100644
 --- a/Mini-LISP/diff
 +++ b/Mini-LISP/diff
-@@ -1,716 +0,0 @@
--diff --git a/Mini-LISP/S.h b/Mini-LISP/S.h
--index 43bd42d..0cd51b9 100644
----- a/Mini-LISP/S.h
--+++ b/Mini-LISP/S.h
--@@ -1,7 +1,7 @@
-- #include <cstdint>
-- #include <iostream>
---#ifndef MINI_LISP_H
---#define MINI_LISP_H 
--+#ifndef S_H
--+#define S_H 
+@@ -1,1581 +0,0 @@
+-diff --git a/Mini-LISP/Makefile b/Mini-LISP/Makefile
+-index 724a099..d151f85 100644
+---- a/Mini-LISP/Makefile
+-+++ b/Mini-LISP/Makefile
+-@@ -47,10 +47,10 @@ endif
 - 
-- #include "hacks.h"
+- CFLAGS += -MD -MP -w 
 - 
--@@ -54,7 +54,6 @@ namespace Strings {
+--test:
+-+store:
+- all: test mini-lisp store 
 - 
-- union S; 
+--store: layout.o words.o characters.o
+-+store: layout.o cons.o characters.o
+- 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 - 
---
-- /* An S expression is identified by a 16 bits handle (the type H).
--  * It is an atom is the handle is non-positive (the index zero is 
--  * reserved for the special NIL atom). It is an internal node */
--@@ -63,8 +62,6 @@ representation S { // Representation of an S expression
--   perspective(H handle)
--   construct S(H h) by (handle(h));
--   property String asAtom() returns  (Strings::pool + handle)
---
---
--   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
--   construct S(String s) by(handle(Strings::allocate(s)))
+- test: $(TEST_OBJS)
+-diff --git a/Mini-LISP/chic.h b/Mini-LISP/chic.h
+-index 70a94ab..aefdda3 100644
+---- a/Mini-LISP/chic.h
+-+++ b/Mini-LISP/chic.h
+-@@ -27,6 +27,8 @@
+- #define	returns(x) const {return x;}
+- #define by(...) :__VA_ARGS__{}
 - 
--@@ -109,7 +106,9 @@ auxiliary fluentons.
--   bool null() const; /// sink: Atomic function of Mini-Lisp 
--   bool t() const;    /// sink: Auxiliary fluenton, complements null
--   S car() const;     /// atomic function of Mini-Lisp 
--+  S rac() const;     /// auxiliary: same as car, except no checking is made 
--   S cdr() const;     /// atomic function of Mini-Lisp 
--+  S rdc() const;     /// auxiliary: same as car, except no checking is made 
--   S eval() const;    /// atomic function of Mini-Lisp 
--   S q() const;       /// implements library functions quote
--   S l() const;       /// returns a singleton list containing this S expression 
--@@ -135,7 +134,6 @@ auxiliary fluentons.
--   S $2$() const;  /// second element in a list
--   S $3$() const;  /// third element in a list
-- };
---
-- #undef NULL
-- // Fluenton sources of Names of atoms that represent atomic functions 
-- extern const S NIL, T; //
--@@ -154,4 +152,4 @@ extern const S MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
-- inline bool die(S s) { throw BUG.cons(s); }
-- 
-- #undef construct
---#endif // MINI_LISP_H 
--+#endif // S_H 
--diff --git a/Mini-LISP/a-list.h b/Mini-LISP/a-list.h
--index b4566f9..283c14a 100644
----- a/Mini-LISP/a-list.h
--+++ b/Mini-LISP/a-list.h
--@@ -1,6 +1,6 @@
-- #ifndef A_LIST
-- #define A_LIST
---#include "00.h"
--+#include "S.h"
-- extern S alist ;
-- extern S set(S name, S value);
-- extern S lookup(S id, S alist);
--diff --git a/Mini-LISP/basics.h b/Mini-LISP/basics.h
--index f574018..469e85f 100644
----- a/Mini-LISP/basics.h
--+++ b/Mini-LISP/basics.h
--@@ -1,6 +1,6 @@
-- #ifndef BASICS_H
-- #define BASICS_H
---#include "00.h"
--+#include "S.h"
-- 
-- inline bool exists(S x, S xs) { return !xs.null() && (xs.car().eq(x) || exists(x, xs.cdr())); } 
-- inline bool islist(S s) { return s.null() || !s.atom() && islist(s.cdr()); }
--diff --git a/Mini-LISP/diff b/Mini-LISP/diff
--index 411f853..e69de29 100644
----- a/Mini-LISP/diff
--+++ b/Mini-LISP/diff
--@@ -1,418 +0,0 @@
---diff --git a/Mini-LISP/Makefile b/Mini-LISP/Makefile
---index fe949b4..675c2fe 100644
------ a/Mini-LISP/Makefile
---+++ b/Mini-LISP/Makefile
---@@ -47,11 +47,13 @@ endif
--- 
--- CFLAGS += -MD -MP -w 
--- 
----test: $(TEST_OBJS)
---+store: store.o words.o characters.o
--- 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
--- 
---+test: $(TEST_OBJS)
---+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
--- 
----all: test mini-lisp 
---+all: test mini-lisp store 
--- 
--- dump.cc: dump.h
--- 
---@@ -64,8 +66,6 @@ dump.cc: dump.h
--- mini-lisp: mini-lisp.o	$(OBJS) 
--- 	$(CXX) $(LDFLAGS) -o $@ $^ 
--- 
----store: store.o
----	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
--- 
--- 
--- # -include $(SRC:%.c=%.d)
---diff --git a/Mini-LISP/chic.h b/Mini-LISP/chic.h
---index 7011486..70a94ab 100644
------ a/Mini-LISP/chic.h
---+++ b/Mini-LISP/chic.h
---@@ -27,5 +27,6 @@
--- #define	returns(x) const {return x;}
--- #define by(...) :__VA_ARGS__{}
--- 
----#define max(x,y) (x > y ? x : y) 
----#define min(x,y) (x < y ? x : y) 
---+template<typename T> constexpr T max(T h1, T h2) { return h1 > h2 ? h1 : h2; } 
---+template<typename T> constexpr T min(T h1, T h2) { return h1 < h2 ? h1 : h2; } 
---+template<typename T> constexpr T range(T h1, T h2) { return h2 - h1 + 1; } 
---diff --git a/Mini-LISP/store.cc b/Mini-LISP/store.cc
---index ccade6f..5cafd1c 100644
------ a/Mini-LISP/store.cc
---+++ b/Mini-LISP/store.cc
---@@ -1,231 +1,54 @@
----#include "chic.h"
---+#include "store.h"
--- 
----/*@ The Primitive Types@
----Our byte addressable underlining machine offers three primitive types: byte,
----half, and, word whose sizes are 8, 16, and 32 bits respectively.  These types
----are fixed width signed integers, represented in two's complement, and are
----similar to the types byte, short, and int of the Java virtual machine. Punning
----is allowed, and used extensively: A word is constituted by two consecutive
----halves. No particular byte or halves ordering is assumed. */
--- 
----typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
----typedef int16_t Half; /// Half a word/JVM's short | 16 bits signed integer | handle of an S-expression 
----typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
----
----/*@ Types for S-Expressions@ S-Expressions come in two varieties: (1) Dotted
---- pairs (pairs for short) are compound S-expressions defined by two, smaller,
---- S-expressions, and (2) atoms, which are a sequence of characters. 
----
---- The type is represents S-expressions of both kinds.  However, this type not
---- store the actual data of an S-expression, but rather a handle to this data.
---- When the handle is used to access the data, we obtain a value whose type is
---- either Atom or Pair */
----
----Type S;     // An S-expression represented by its handle
----Type Pair;  // A compound S-expression, i.e., a dotted pair
----// Type Atom;  // An atomic S-expression, i.e., a memory address
----
----
----/*@ Types for S-Expressions@ S-Expressions come in two varieties: 
----An atomic S-expression is a C like string: a memory address of a byte storing
----the first character, of the atom's text. The full text of an atom
----are the characters in this byte and all bytes that follow  until the first 
----occurrence of the null byte, i.e., a byte in which all bits are zero, 
----denoted in C by \verb/'\0'/ and mathematically by~$\natural$.  */
----
----typedef const char *const Atom; // Underlining representation of atoms as pointers to characters
----Type S;
----Type Pair;
----
----Type S { // An S-expression represented by its handle
----  Representation {
----    perspective(Half handle) // The inner representation 
----  };
----  // construct S(Half h) by (handle(h));
----  property bool null() returns (handle == 0)
----  property bool atom() returns (handle <= 0)
----  property bool pair() returns (handle > 0) 
----  property bool eq(S s) returns (atom() && handle == s.handle)
----  S(Half h): handle(h) {} 
----  property Pair $_p$(); /// Interpreted as handle of pair, retrieves the pair behind (mutable)  
----  property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
----};
----
----Type Pair { // The different perspectives of a pair.
----  Representation {
----    perspective(Word cons)        /// I.   | A single word with two halves: 
----    perspective(Half car, cdr)    /// II.  | A pair of car and cdr, each in a half word.
----    perspective(Half prev, next)  /// III. | An unused pair item in the list of pairs. 
----    perspective(Half head, rest)  /// IV.  | An data item in the stack used in the parser. 
----  };
----};
----
----/*@ The Store$ 
----The store provides an abstract memory model that manages the allocation and 
----delallocation of S-expressions objects. These come in two varieites: Atomic 
----S-expressions, the Pair,
----whihstorage two kinds of entities:
----the Pair, which represents 
----fo higher levels of the . However, other portions of the implementation need
----not worry about
----the details of the frugality. Here we present an abstract model of a 
----``store'' and the services it provides. 
----*/
----
----Context Store {
----  Provides function S make(S car, S cdr); /// Returns (handle of) pair with given values of (handles of) its two components
----  Provides function S make(Atom);         /// Returns (handle of) atom with given text; 
----  Provides procedure free(S);             /// Marks an S-expression handle previously returned by make as no longer in use 
----}
----
----Context Store { 
----  // Global:
----  Provides constant(Word) $m$;    /// how many bytes are used by the store 
----  // Atoms:
----  Provides constant(Half) $M_a$;  /// how many atoms are initially available 
----  Provides function Half $v_a$(); /// how many chars remain available for allocation 
----  Provides function Half $u_a$(); /// how many chars were allocated 
----  Allocate Half current = 0;
----  // Pairs
----  Provides constant(Half) $M_p$;  /// how many pairs are initially available 
----  Provides function Half $v_p$(); /// how many pairs remain available for allocation 
----  Provides function Half $u_p$(); /// how many pairs were allocated 
----}
----
----Context Store { // Prototype for store.h
----  Provides data array(char) A;
----  Provides data array(Pair) P;
----}
----
----Context Store { 
----  Let Half $M_a$ = 1 << 12;
----  Let Half $M_p$ = (1 << 15) - $M_a$ + 3; 
----  Let Word $m$ = $M_a$ + $M_p$ * sizeof (Pair);
----  Let Half NIL_SIZE = sizeof "NIL";
----}
----
----Allocate static union  {
----  char block[Store::$m$];
---+Let Word $m$ = $M_a$ + $M_p$ * sizeof (Pair);
---+static union  {
---+  char block[$m$];
---   struct {
----   char $A_0$[Store::$M_a$ - Store::NIL_SIZE];
----   char A[Store::NIL_SIZE] = { 'N', 'I', 'L', '\0' };
----   Pair P[Store::$M_p$];
---+   char $A_0$[$M_a$ - LIMBO];
---+   char A[LIMBO] = { 'N', 'I', 'L', '\0' };
---+   Pair P[$M_p$];
---   };
--- } memory; 
--- 
----Context Store { 
----  using Context Store;
----constexpr auto x =3;
----constexpr auto y = x *x;
----  Let array(Pair) P = memory.P - 1;
----  Let array(Pair) $P_0$ = memory.P - 1;
----  Let array(Pair) $P_1$ = memory.P + $M_p$;
----  Let array(char) A  = memory.A;
----  Let array(char) $A_0$  = memory.$A_0$;
----  Let array(char) $A_1$  = memory.A + $M_a$;
----  Let Half $L_a$ = $A_0$ - A, $H_a$ = 0;   
----  Let Half $L_p$ = memory.P - P, $H_p$ = $P_1$ - memory.P;   
----  Let Half $L$ = min($L_a$, $L_p$ ), $H$ = max($H_a$, $H_p$);
----  Let Half $N_p$ = $H_p$ - $L_p$ + 1;
----  Let Half $N_a$ = $H_a$ - $H_a$ + 1;
----  Let Half $N$ = $H$ - $L$ + 1;
----  Half  
----}
----
---+Let array(Pair) P = memory.P - 1;
---+Let array(Pair) $P_0$ = memory.P - 1;
---+Let array(Pair) $P_1$ = memory.P + $M_p$;
---+Let array(char) A  = memory.A;
---+Let array(char) $A_0$  = memory.$A_0$;
---+Let array(char) $A_1$  = memory.A + $M_a$;
---+// Let Half $A_f$ = $A_0$ - A, $A_t$ = 0;   
---+// Let Half $P_f$ = memory.P - P, $P_t$ = $P_1$ - memory.P;   
---+// Let Half $N_p$ = $P_t$ - $P_f$ + 1;
---+// Let Half $N_a$ = $A_t$ - $A_t$ + 1;
--- 
----Context Store {   
----}
--- 
----Context Store {
----  Half flip(Half h)   { return h + (1 << 15); } 
----  bool red(Half h) { return h < $L$ || h > $H$; } 
----  void flip(Pair &p)  { Pair.car = flip(p.car); }
----  bool red(Pair p) { return red(p.car);  }
----}
---+// Provides Half $A_f$ = $A_0$ - A, $A_t$ = 0;   
---+// Provides Half $P_f$ = memory.P - P, $P_t$ = $P_1$ - memory.P;   
---+// Let Half $L$ = min($A_f$, $P_f$ ), $H$ = max($A_t$, $P_t$);
--- 
----/* Making an S expression from an input string is by moving the pool pointer
---- * down and then copying the input there. A bit of optimization saves some
---- * space by refraining from allocating the same string twice; moreover, there
---- * is also a minimal attempt to allow one string to be realizes the suffix of a
---- * previously allocated string */ 
--- 
----static Half size(const char *s) { for (Half $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
----static char upper(char c) { return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; }
----static bool eq(const char *s1, const char *s2) {
----  for (; upper(*s1) == upper(*s2); ++s1, ++s2)
----    if (*s1 == '\0')
----      return true;
----  return false;
----}
---+// Global:
---+Provides constant(Word) $m$;    /// how many bytes are used by the store 
---+// Atoms:
---+Provides constant(Half) $M_a$;  /// how many atoms are initially available 
---+Provides function Half $v_a$(); /// how many chars remain available for allocation 
---+Provides function Half $u_a$(); /// how many chars were allocated 
---+// Pairs
---+Provides constant(Half) $M_p$;  /// how many pairs are initially available 
--- 
----S Store::make(Atom s) {
----  for (Half $ = 0; $ >= current; --$) 
----    if (eq(s, A+$))
----      return $;
----  const Half n = ::size(s);
----  current -= n;
----  for (Half h = 0; h < n; ++h) // Only case in code to change the pool 
----    const_cast<char&>(A[current + h]) = ::upper(s[h]);
----  return S(current);
----}
--- 
----static Half init() {
----  for (Half h = $L_p$  + 1; h < $H_p$; ++h) {
----    P[h].prev = h - 1;
----    P[h].next = h + 1;
----  }
----  P[$L_p$ ].prev = 0;
----  P[$L_p$ ].next = $L_p$  + 1;
----  P[$H_p$].prev = $H_p$ - 1;
----  P[$H_p$].next = 0;
----  for (Half h = $L_p$; h <= $H_p$; ++h) 
----    flip[P[h]];
----  return $L_p$;
----}
----
----static Half next = init;
----static Half $v_p$ = $n_p$; 
----
----static Half make(Pair p) {
----  const Half h = 1 + (p.cons ^ (p.cons <<< 7)) % $N_p$;
----  if (P[h].cons == p.cons) 
----    return h;
----  if (h == next || !red(P[h])) {
----    flip(P[next]);
----    next = P[next].next;
----    flip(P[next]);
----    P[h] = p;
----    return h;
----  }
----  flip(P[h]);
----  const Half prev = P[h].prev, next = P[h].next;
----  if (prev != 0) {
----    flip(P[prev]);
----    P[prev].next = next; 
----    flip(P[prev]);
----  }
----  if (next != 0) {
----    flip(P[next]);
----    P[next].prev = prev; 
----    flip(P[next]);
----  }
----  return h;
----}
----
----S make(Half car, Half cdr) {
----  return make(Pair(car,cdr));
----}
----
----void free(Half h) {
----  D(h, remaining);
----  pool[h].next = next(), remaining++, next() = h;
----}
---+Provides Half m$_p$;              /// how many are currently available 
---+Provides Half made$_p$;           /// how many pairs were made, reuses are counted
---+Provides Half free$n_p$;          /// how many pairs were freed 
---+Provides Half collected$n_p$;     /// how many pairs were garbage collected 
--- 
--- #undef min
--- #undef max
--- #undef data
--- #undef function
--- #undef Type
---+
--- #include "gtest/gtest.h"
--- 
--- int main(int argc, char **argv) {
---@@ -238,43 +61,41 @@ TEST(SExpression, size) {
---   EXPECT_EQ(2, sizeof(S));
--- }
--- 
----using Context Store;
----
----TEST(Atoms, $L_a$) { 
----  EXPECT_LT($L_a$,0);
----  EXPECT_GE(A - $A_0$,$L_a$);
---+TEST(Atoms, $A_f$) { 
---+  EXPECT_LT($A_f$,0);
---+  EXPECT_GE(A - $A_0$,$A_f$);
--- }
--- 
----TEST(Atoms, $H_a$) { 
----  EXPECT_EQ($H_a$, 0);
----  EXPECT_EQ((const char *const) A + $H_a$, (const char *const) P);
---+TEST(Atoms, $A_t$) { 
---+  EXPECT_EQ($A_t$, 0);
---+  EXPECT_EQ((const char *const) A + $A_t$, (const char *const) P);
--- }
--- 
----TEST(Atoms, $N$) { 
----  EXPECT_GT($H_a$, $L_a$);
----  EXPECT_GT($N$, 0);
----  EXPECT_EQ($N$, sizeof memory.$A_0$ + 1);
---+TEST(Atoms, $X_n$) { 
---+  EXPECT_GT($A_t$, $A_f$);
---+  EXPECT_GT($X_n$, 0);
---+  EXPECT_EQ($X_n$, sizeof memory.$A_0$ + 1);
--- }
--- 
----TEST(Pairs, $L_p$) { 
----  EXPECT_GT($L_p$, $H_a$);
----  EXPECT_LT($L_p$, $H_p$);
----  EXPECT_EQ($L_p$, 1);
---+TEST(Pairs, $P_f$) { 
---+  EXPECT_GT($P_f$, $A_t$);
---+  EXPECT_LT($P_f$, $P_t$);
---+  EXPECT_EQ($P_f$, 1);
--- }
--- 
----TEST(Pairs, $H_p$) { 
----  EXPECT_GT($H_p$, $L_p$);
----  EXPECT_EQ($H_p$, $N_p$);
----  EXPECT_EQ($P_1$ - memory.P, $H_p$);
----  EXPECT_EQ($M_p$, $H_p$);
---+TEST(Pairs, $P_t$) { 
---+  EXPECT_GT($P_t$, $P_f$);
---+  EXPECT_EQ($P_t$, $P_n$);
---+  EXPECT_EQ($P_1$ - memory.P, $P_t$);
---+  EXPECT_EQ($M_p$, $P_t$);
--- }
--- 
----TEST(Pairs, $N_p$) { 
----  EXPECT_GT($N_p$,0);
----  EXPECT_LT($N_p$,sizeof memory);
----  EXPECT_LT($N_p$,sizeof memory.P);
----  EXPECT_EQ($N_p$, $M_p$);
----  EXPECT_EQ($N$,sizeof memory.P / sizeof memory.P[0]);
---+TEST(Pairs, $P_n$) { 
---+  EXPECT_GT($P_n$,0);
---+  EXPECT_LT($P_n$,sizeof memory);
---+  EXPECT_LT($P_n$,sizeof memory.P);
---+  EXPECT_EQ($P_n$, $M_p$);
---+  EXPECT_EQ($X_n$,sizeof memory.P / sizeof memory.P[0]);
--- }
--- 
--- TEST(Store, minimalSize) {
---@@ -287,37 +108,6 @@ TEST(Store, overflow) {
---   EXPECT_LT((Half) - $M_a$ - 1, 0);
--- }
--- 
----TEST(Marking, Pairs) { 
----  EXPECT_LT(flip($L_p$), $L_a$);   
----  EXPECT_LT(flip($H_p$), $L_a$);   
----  EXPECT_LT(flip(($L_p$ + $H_p$)/2), $L_a$);   
----  EXPECT_LT(flip($L_p$-1), $L_a$);   
----  EXPECT_LT(flip($L_p$+1), $L_a$);   
----  EXPECT_EQ(flip(flip($p_p$)), $p_p$);
----  EXPECT_EQ(flip(flip($H_p$)), $H_p$);
----  EXPECT_EQ(flip(flip(($p_p$ + $H_p$)/2)),($p_p$ + $H_p$)/2);
----  EXPECT_EQ(flip(flip($H_p$ + 1)),$H_p$ + 1 );
----  EXPECT_EQ(flip(flip($H_p$ + 1)), $H_p$ + 1);
----}
----
----TEST(Marking, Atoms) { 
----  EXPECT_GT(flip($L_a$), $H_a$);   
----  EXPECT_LT(flip($H_a$),0);
----  EXPECT_GT(flip(($L_a$ + $H_a$)/2), $H_p$);   
----  EXPECT_GT(flip($H_a$-1), $H_p$);   
----  EXPECT_GT(flip($L_a$+1), $H_p$);   
----  EXPECT_EQ(flip(flip($L_a$)), $L_a$);
----  EXPECT_EQ(flip(flip($H_a$)), $H_a$);
----  EXPECT_EQ(flip(flip(($L_a$ + $H_a$)/2)),($L_a$ + $H_a$)/2);
----  EXPECT_EQ(flip(flip($L_a$ + 1)),$L_a$ + 1 );
----  EXPECT_EQ(flip(flip($H_a$ + 1)), $H_a$ + 1);
----}
----
----TEST(Marking, MarkingIsMarked) { 
----  for (Half h = $L$; h <= $H$; ++h)
----    EXPECT_TRUE(red(flip(h)));
----}
----
--- TEST(Store, PrimitiveSizs) { 
---   EXPECT_EQ(sizeof(byte), 1);
---   EXPECT_EQ(sizeof(char), 1);
--diff --git a/Mini-LISP/eval.h b/Mini-LISP/eval.h
--index 22fc0c3..db30dbd 100644
----- a/Mini-LISP/eval.h
--+++ b/Mini-LISP/eval.h
--@@ -1,4 +1,4 @@
---#include "00.h"
--+#include "S.h"
-- 
-- extern S evaluate_list(S);
-- extern S eval(S s); 
--diff --git a/Mini-LISP/io.h b/Mini-LISP/io.h
--index d59508c..222dfac 100644
----- a/Mini-LISP/io.h
--+++ b/Mini-LISP/io.h
--@@ -1,6 +1,6 @@
-- #include <iostream>
-- #include <sstream>
---#include "00.h"
--+#include "S.h"
-- #include "parser.h"
-- 
-- /** Auxiliary file that should not be used by production code, only 
--diff --git a/Mini-LISP/pairs.cc b/Mini-LISP/pairs.cc
--index 73b907c..821956e 100644
----- a/Mini-LISP/pairs.cc
--+++ b/Mini-LISP/pairs.cc
--@@ -1,4 +1,4 @@
---#include "00.h"
--+#include "S.h"
-- #include "stack-trace.h"
-- #define SILENT 1 
-- #if SILENT
--diff --git a/Mini-LISP/parser.h b/Mini-LISP/parser.h
--index ffc5245..ab92a5e 100644
----- a/Mini-LISP/parser.h
--+++ b/Mini-LISP/parser.h
--@@ -1,6 +1,6 @@
-- #ifndef PARSER_H
-- #define PARSER_H
---#include "00.h"
--+#include "S.h"
-- #include "tokenizer.h"
-- 
-- /** An implementation of a simple, single instance hand tailored LL(1) parser.
--diff --git a/Mini-LISP/stack.h b/Mini-LISP/stack.h
--index af19b0d..e29b6f5 100644
----- a/Mini-LISP/stack.h
--+++ b/Mini-LISP/stack.h
--@@ -1,4 +1,4 @@
---#include "00.h"
--+#include "S.h"
-- /* Manages a singleton stack of handles, used by the LL parsing algorithm. This
--  * stack is implemented as a dynamically allocated singly linked list, where
--  * each element is a pair of handles: One handle in the pair carries the data;
--diff --git a/Mini-LISP/store.h b/Mini-LISP/store.h
--index c3daca9..9c990e4 100644
----- a/Mini-LISP/store.h
--+++ b/Mini-LISP/store.h
--@@ -23,7 +23,7 @@ typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an
--  either Atom or Pair 
-- */
-- 
---Type $S_X$;     // An S-expression represented by its handle
--+struct $S_X$;     // An S-expression represented by its handle
-- 
-- /*@ Atoms$ An atomic S-expression is a C like string: a memory address of a
-- byte storing the first character of the atom's text. The text of an atom is
--@@ -35,7 +35,7 @@ typedef const char *const Atom; // Underlining representation of atoms as pointe
-- 
-- Type Pair;  // A compound S-expression, i.e., a dotted pair
-- 
---Type $S_X$ { // An S-expression represented by its handle
--+struct $S_X$ { // An S-expression represented by its handle
--   Representation {
--     perspective(Half handle) // The inner representation 
--   };
--diff --git a/Mini-LISP/strings.cc b/Mini-LISP/strings.cc
--index 7989480..c696757 100644
----- a/Mini-LISP/strings.cc
--+++ b/Mini-LISP/strings.cc
--@@ -1,4 +1,4 @@
---#include "00.h"
--+#include "S.h"
-- #include "stack-trace.h"
-- 
-- #define SILENT 1 
--diff --git a/Mini-LISP/t-pairs.cc b/Mini-LISP/t-pairs.cc
--index 9a3408c..2108849 100644
----- a/Mini-LISP/t-pairs.cc
--+++ b/Mini-LISP/t-pairs.cc
--@@ -1,6 +1,6 @@
-- #include <iostream>
-- #include "gtest/gtest.h"
---#include "00.h"
--+#include "S.h"
-- #include "test.h"
-- 
-- namespace Pairs {
--diff --git a/Mini-LISP/tokenizer.cc b/Mini-LISP/tokenizer.cc
--index 39e4d4f..23b6483 100644
----- a/Mini-LISP/tokenizer.cc
--+++ b/Mini-LISP/tokenizer.cc
--@@ -1,4 +1,4 @@
---#include "00.h"
--+#include "S.h"
-- #include "tokenizer.h"
-- #include "dump.h"
-- 
--diff --git a/Mini-LISP/tokenizer.h b/Mini-LISP/tokenizer.h
--index 2823e55..03f967b 100644
----- a/Mini-LISP/tokenizer.h
--+++ b/Mini-LISP/tokenizer.h
--@@ -1,6 +1,6 @@
-- #ifndef TOKENIZER_H
-- #define TOKENIZER_H
---#include "00.h"
--+#include "S.h"
-- namespace Tokenizer {
--   enum { undefined = 128, $};
--   const char tokens[] = "()[].\'";
--@@ -12,7 +12,6 @@ namespace Tokenizer {
--   extern H unget(); 
--   extern H peep();
-- }
---  extern bool exists(const char, String s); 
---
--+extern bool exists(const char, String s); 
-- #endif
-- 
--diff --git a/Mini-LISP/words.cc b/Mini-LISP/words.cc
--index fe0abef..5126827 100644
----- a/Mini-LISP/words.cc
--+++ b/Mini-LISP/words.cc
--@@ -8,16 +8,21 @@ static bool red(Half h);
-- static void flip(Pair &p);
-- static bool red(Pair p); 
-- 
--+#define DIE die(__LINE__); 
--+auto inline die(int t) {
--+  throw t;
--+}
--+#include "colors.h"
+-+typedef enum { ok } OK;
 -+
-- Half free($S_X$ s) {
--   auto const h = s.handle;
---  if (red(P[h])) return h; 
---  P[h].next = next; 
---  P[h].prev = $P_x$; 
---  flip(P[h]);
---
---  flip(P[next]);
---  P[next].prev = h;
---  flip(P[next]);
--+  is.red(next) || DIE;
--+  is.black(h) || DIE;
--+  paint.red(h);
--+  is.red(h) || die(s);
--+  set.red(h).next().to(next); 
--+  set.red[h].prev().to($P_x$); 
--+  set.red(next).prev() = h;
+- template<typename T> constexpr T max(T s1, T s2) { return s1 > s2 ? s1 : s2; } 
+- template<typename T> constexpr T min(T s1, T s2) { return s1 < s2 ? s1 : s2; } 
+- template<typename T> constexpr T range(T s1, T s2) { return s2 - s1 + 1; } 
+-diff --git a/Mini-LISP/cons.cc b/Mini-LISP/cons.cc
+-index b91677c..a04173b 100644
+---- a/Mini-LISP/cons.cc
+-+++ b/Mini-LISP/cons.cc
+-@@ -4,88 +4,91 @@ static Short init();
+- static Short next = init();
 - 
--   return next = h;
+- static Short mark(Short h); 
+--static void mark(Pair &p);
+-+static void mark(Cons &p);
+- 
+- #define DIE die(__LINE__) 
+- #include "stdio.h"
+- bool inline die(int t) { throw t; }
+--#include "colors.h"
+- 
+--Short free(Handle s) {
+-+inline Short mark(Short h)   { return h + (1 << 15); } 
+-+
+-+struct Cons: Handle {
+-+  Cons(Short h): Handle(h) {}
+-+  void car(Short h) { P[handle].car = h; }
+-+  void cdr(Short h) { P[handle].cdr = h; }
+-+  auto car() { return P[handle].s1; }
+-+  auto cdr() { return P[handle].s2; }
+-+};
+-+
+-+struct Pristine: Handle {
+-+  Pristine(Short h): Handle(h) {}
+-+  auto prev(Short h) { P[handle].prev = mark(h); return *this;}
+-+  auto next(Short h) { P[handle].next = h; return *this;}
+-+  auto prev() { return P[handle].s1; } 
+-+  auto next() { return mark(P[handle].s2); }
+-+};
+-+
+-+struct Red: Handle {
+-+  Red(Short h): Handle(h) {}
+-+  void head(Short h) { P[handle].head = mark(h); }
+-+  void rest(Short h) { P[handle].rest = h; }
+-+  auto head() { return mark(P[handle].s1); }
+-+  auto rest() { return P[handle].s2; } 
+-+}; 
+-+
+-+
+-+static struct {
+-+  inline bool cons(Short h) { !marked(P[h].s1) && !marked(P[h].s2); } 
+-+  inline bool Pristine(Short h)   { marked(P[h].s1)  && !marked(P[h].s2); } 
+-+  inline bool red(Short h) { !marked(P[h].s1) && marked(P[h].s2); } 
+-+} is;
+-+
+-+static struct {
+-+  inline bool cons(Short h) { return !is.cons(h); }  
+-+  inline bool Pristine(Short h)   { return !is.Pristine(h); }  
+-+  inline bool red(Short h) { return !is.red(h); }  
+-+} isnt;
+-+
+-+static struct {
+-+  inline auto cons(Short h) { 
+-+    if (marked(P[h].s1)) P[h].s1 =  mark(P[h].s1);
+-+    if (marked(P[h].s2)) P[h].s2 =  mark(P[h].s2);
+-+    return Cons(h);
+-+  } 
+-+  inline auto Pristine(Short h) { 
+-+    if (!marked(P[h].s1)) P[h].s1 = mark(P[h].s1);
+-+    if (marked(P[h].s2)) P[h].s2  = mark(P[h].s2);
+-+    return Pristine(h);
+-+  } 
+-+  inline auto red(Short h) { 
+-+    if (marked(P[h].s1)) P[h].s1  = mark(P[h].s1);
+-+    if (!marked(P[h].s2)) P[h].s2 = mark(P[h].s2);
+-+    return Red(h);
+-+  } 
+-+} paint; 
+-+
+-+void free(Handle s) {
+-   auto const h = s.handle;
+--  is.Pristine(h) || DIE;
+--  paint.red(h);
+--  is.red(h) || DIE;
+--  set.red(h).next(next); 
+--  set.red(h).prev($P_x$); 
+--  set.red(next).prev(h);
+--  return next = h;
+-+  Pristine(s.handle).prev($P_x$).next(next); 
+-+  next = h;
 - }
--@@ -36,6 +41,7 @@ static Half init() {
+- 
+- static Short init() {
+--  for (Short h = $P_f$  + 1; h < $P_t$; ++h) {
+--    P[h].prev = h - 1;
+--    P[h].next = h + 1;
+--  }
+--  P[$P_f$].prev = $P_x$;
+--  P[$P_f$].next = $P_f$  + 1;
+--  P[$P_t$].prev = $P_t$ - 1;
+--  P[$P_t$].next = $P_x$;
+-   for (Short h = $P_f$; h <= $P_t$; ++h) 
+--    paint.red(h);
+-+    Pristine(h).prev(h-1).next(h+1);
+-+  Pristine($P_f$).prev($P_x$);
+-+  Pristine($P_t$).next($P_x$);
 -   return next = $P_f$;
 - }
 - 
--+
-- static $S_X$ make(Pair p) {
--   auto h = next;
--   flip(P[next]);
--@@ -43,9 +49,14 @@ static $S_X$ make(Pair p) {
--   P[next].prev = $P_x$;
--   flip(P[next]);
--   P[h] = p;
--+
--+  is.white(h)  || die(p.cons(h).cons("Not white"));
--+  is.white.car = p.car || die(p.cons(h).cons(("Not same"));
--+  p == P[h] || die(p.cons(h).cons(("Not same"));
--   return h;
-- }
+--
+--static auto allocate() {
+--  get.red.prev(next) == $P_x$ || DIE; 
+--  const auto h = next;
+--  next = get.red.next(next);
+--  get.red.prev(next) == h || DIE;
+--  set.red(next).prev($P_x$);  
+--  get.red.prev(next) == h || DIE;
+--  set.red(next).prev($P_x$);  
+--  return h;
+--}
+-- 
+--
+--static Handle make(Pair p) {
+--  const auto h = allocate();
+--  P[h] = p;
+--  is.cons(h)  || DIE;
+--  get.cons.car(h) == p.car || DIE; 
+--  get.cons.cdr(h) == p.cdr || DIE; 
+--  p.cons == P[h].cons ||  DIE;
+--  paint.Pristine(h);
+--  return h;
+--}
+--
+--static Handle require(Pair p) {
+--  const Short h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
+--  if (P[h].cons == p.cons) 
+--    return h;
+--  if (h == next || isnt.red(h)) {
+--    const auto h = allocate();
+--    P[h] = p;
+--    return h; 
+--  }
+--  const Short prev = get.red.prev(h), next = get.red.next(h);
+--  P[h] = p;
+--  if (prev != $P_x$) set.red(prev).next(next);
+--  if (next != $P_x$) set.red(next).prev(prev); 
+--  is.cons(h)  || DIE;
+--  p.cons == P[h].cons || DIE;
+--  return h;
+--}
+--
+--Handle make( Short car, Short cdr) { return make(Pair(car,cdr)); }
+--Handle require(Short car, Short cdr) { return require(Pair(car,cdr)); }
+-+Handle require(Short car, Short cdr) { return require(Cons(car,cdr)); }
 - 
--+
-- static $S_X$ require(Pair p) {
--   const Half h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
--   if (P[h].cons == p.cons) 
--@@ -61,10 +72,14 @@ static $S_X$ require(Pair p) {
--     flip(P[prev]);
--   }
--   if (next != $P_x$) {
--+    isred.(h)
--     flip(P[next]);
--     P[next].prev = prev; 
--     flip(P[next]);
--   }
--+  is.white(h)  || die(p.cons(h).cons("Not white"));
--+  p == P[h] || die(p.cons(h).cons(("Not same"));
--+  is.white(h) 
--   return h;
-- }
-- $S_X$ make(Half car, Half cdr) { return make(Pair(car,cdr)); }
--@@ -86,12 +101,6 @@ Half length() {
+- #include <stdio.h>
+- 
+- Short length() {
+-   Short result = 0;
+--  for (Short h = next; h != $P_x$; h = get.red.next(h)) // printf("%d ", h), 
+-+  for (Short h = next; h != $P_x$; h = get.Pristine.next(h)) // printf("%d ", h), 
+-       ++result;
 -   return result;
 - }
+-@@ -98,28 +101,29 @@ Short length() {
 - 
---Half flip(Half h)  { return h + (1 << 15); } 
---Half xflip(Half h)  { return h; } 
---bool red(Half h)   { return h < $X_f$ || h > $X_t$; } 
---void flip(Pair &p) { p.car = flip(p.car); }
---bool red(Pair p)   { return red(p.car);  }
---
-- #undef min
-- #undef max
-- #undef data
-diff --git a/Mini-LISP/layout.cc b/Mini-LISP/layout.cc
-index 4f215de..2e856ba 100644
---- a/Mini-LISP/layout.cc
-+++ b/Mini-LISP/layout.cc
-@@ -1,19 +1,19 @@
- #include "store.h"
+- int valid() {
+-   Short length = 0;
+--  for (Short h = next, s2 = h ; h != $P_x$; h = get.red.next(h)) { 
+-+  for (Short h = next, s2 = h ; h != $P_x$; h = get.Pristine.next(h)) { 
+-     ++length;
+--    if (isnt.red(h)) return length; 
+--    if (s2 != $P_x$) s2 = get.red.next(s2);
+--    if (s2 != $P_x$) s2 = get.red.next(s2);
+-+    if (isnt.Pristine(h)) return length; 
+-+    if (s2 != $P_x$) s2 = get.Pristine.next(s2);
+-+    if (s2 != $P_x$) s2 = get.Pristine.next(s2);
+-     if (h == s2) return -length; 
+-   } 
+-   return 0;
+- }
+- 
+- #include "gtest/gtest.h"
+--TEST(Colors, paintRed) { 
+-+
+-+TEST(Colors, paintPristine) { 
+-   try {
+-     init();
+--    auto h = make(0xDE,0xAD).handle;
+-+    auto h = require(0xDE,0xAD).handle;
+-     EXPECT_TRUE(is.cons(h));
+-     EXPECT_EQ(P[h].car, 0xDE);
+-     EXPECT_EQ(P[h].cdr, 0xAD);
+--    paint.red(h); 
+--    EXPECT_TRUE(is.red(h));
+--    EXPECT_EQ(get.red.prev(h), 0xDE);
+--    EXPECT_EQ(get.red.next(h), 0xAD);
+-+    paint.Pristine(h); 
+-+    EXPECT_TRUE(is.Pristine(h));
+-+    EXPECT_EQ(get.Pristine.prev(h), 0xDE);
+-+    EXPECT_EQ(get.Pristine.next(h), 0xAD);
+-     paint.cons(h); 
+-     EXPECT_TRUE(is.cons(h));
+-     EXPECT_EQ(P[h].car, 0xDE);
+-@@ -131,17 +135,17 @@ TEST(Colors, paintRed) {
+-   }
+- }
+- 
+--TEST(Colors, paintPristine) { 
+-+TEST(Colors, paintRed) { 
+-   try {
+-     init();
+--    auto h = make(0xAB,0xCD).handle;
+-+    auto h = require(0xAB,0xCD).handle;
+-     EXPECT_TRUE(is.cons(h));
+-     EXPECT_EQ(P[h].car, 0xAB);
+-     EXPECT_EQ(P[h].cdr, 0xCD);
+--    paint.Pristine(h); 
+--    EXPECT_TRUE(is.Pristine(h));
+--    EXPECT_EQ(get.Pristine.head(h), 0xAB);
+--    EXPECT_EQ(get.Pristine.rest(h), 0xCD);
+-+    paint.red(h); 
+-+    EXPECT_TRUE(is.red(h));
+-+    EXPECT_EQ(get.red.head(h), 0xAB);
+-+    EXPECT_EQ(get.red.rest(h), 0xCD);
+-     paint.cons(h); 
+-     EXPECT_TRUE(is.cons(h));
+-     EXPECT_EQ(P[h].car, 0xAB);
+-@@ -152,70 +156,75 @@ TEST(Colors, paintPristine) {
+-       ADD_FAILURE() << "Died at line " << e;
+-   }
+- }
+--TEST(Colors, pristineConsPristine) { 
+-+TEST(Colors, redConsRed) { 
+-   try {
+-     init();
+--    auto h = make(0xAB,0xCD).handle;
+-+    auto h = require(0xAB,0xCD).handle;
+-     EXPECT_TRUE(is.cons(h));
+-     EXPECT_EQ(P[h].car, 0xAB);
+-     EXPECT_EQ(P[h].cdr, 0xCD);
+--    paint.Pristine(h); 
+--    EXPECT_TRUE(is.Pristine(h));
+--    EXPECT_EQ(get.Pristine.head(h), 0xAB);
+--    EXPECT_EQ(get.Pristine.rest(h), 0xCD);
+-+    paint.red(h); 
+-+    EXPECT_TRUE(is.red(h));
+-+    EXPECT_EQ(get.red.head(h), 0xAB);
+-+    EXPECT_EQ(get.red.rest(h), 0xCD);
+-     paint.cons(h); 
+-     EXPECT_TRUE(is.cons(h));
+-     EXPECT_EQ(P[h].car, 0xAB);
+-     EXPECT_EQ(P[h].cdr, 0xCD);
+-     EXPECT_EQ(get.cons.car(h), 0xAB);
+-     EXPECT_EQ(get.cons.cdr(h), 0xCD);
+--    paint.Pristine(h); 
+--    EXPECT_TRUE(is.Pristine(h));
+--    EXPECT_EQ(get.Pristine.head(h), 0xAB);
+--    EXPECT_EQ(get.Pristine.rest(h), 0xCD);
+-+    paint.red(h); 
+-+    EXPECT_TRUE(is.red(h));
+-+    EXPECT_EQ(get.red.head(h), 0xAB);
+-+    EXPECT_EQ(get.red.rest(h), 0xCD);
+-   } catch(int e) {
+--      ADD_FAILURE() << "Died at line " << e;
+-+     ADD_FAILURE() << "Died at line " << e;
+-   }
+- }
+- 
+- 
+--TEST(Colors,is) { 
+--  init();
+--  auto s = make(12,14);
+--  auto h = s.handle;
+--  EXPECT_TRUE(is.cons(h));
+--  EXPECT_FALSE(is.red(h));
+--  EXPECT_FALSE(is.Pristine(h));
+--  EXPECT_FALSE(isnt.cons(h));
+--  EXPECT_TRUE(isnt.red(h));
+--  EXPECT_TRUE(isnt.Pristine(h));
+--  paint.red(h);
+--  EXPECT_FALSE(is.cons(h));
+--  EXPECT_TRUE(is.red(h));
+--  EXPECT_FALSE(is.Pristine(h));
+--  EXPECT_TRUE(isnt.cons(h));
+--  EXPECT_FALSE(isnt.red(h));
+--  EXPECT_TRUE(isnt.Pristine(h));
+--  paint.Pristine(h);
+--  EXPECT_FALSE(is.cons(h));
+--  EXPECT_FALSE(is.red(h));
+--  EXPECT_TRUE(is.Pristine(h));
+--  EXPECT_TRUE(isnt.cons(h));
+--  EXPECT_TRUE(isnt.red(h));
+--  EXPECT_FALSE(isnt.Pristine(h));
+-+TEST(Colors, is) { 
+-+  try {
+-+    init();
+-+    auto s = require(12,14);
+-+    auto h = s.handle;
+-+    EXPECT_TRUE(is.cons(h));
+-+    EXPECT_FALSE(is.Pristine(h));
+-+    EXPECT_FALSE(is.red(h));
+-+    EXPECT_FALSE(isnt.cons(h));
+-+    EXPECT_TRUE(isnt.Pristine(h));
+-+    EXPECT_TRUE(isnt.red(h));
+-+    paint.Pristine(h);
+-+    EXPECT_FALSE(is.cons(h));
+-+    EXPECT_TRUE(is.Pristine(h));
+-+    EXPECT_FALSE(is.red(h));
+-+    EXPECT_TRUE(isnt.cons(h));
+-+    EXPECT_FALSE(isnt.Pristine(h));
+-+    EXPECT_TRUE(isnt.red(h));
+-+    paint.red(h);
+-+    EXPECT_FALSE(is.cons(h));
+-+    EXPECT_FALSE(is.Pristine(h));
+-+    EXPECT_TRUE(is.red(h));
+-+    EXPECT_TRUE(isnt.cons(h));
+-+    EXPECT_TRUE(isnt.Pristine(h));
+-+    EXPECT_FALSE(isnt.red(h));
+-+  } catch(int e) {
+-+     ADD_FAILURE() << "Died at line " << e;
+-+  }
+- }
+- 
+-+
+- TEST(Words, Init) { 
+-   init();
+-   EXPECT_NE(next, $P_x$);
+-   EXPECT_EQ(next, 1);
+-   EXPECT_EQ(next, $P_f$);
+--  EXPECT_EQ(get.red.next(1), 2);
+--  EXPECT_EQ(get.red.prev(1), 0);
+--  EXPECT_EQ(get.red.next(2), 3);
+--  EXPECT_EQ(get.red.prev(2), 1);
+--  EXPECT_EQ(get.red.prev($P_t$), $P_t$-1);
+--  EXPECT_EQ(get.red.next($P_t$), $P_x$);
+-+  EXPECT_EQ(get.Pristine.next(1), 2);
+-+  EXPECT_EQ(get.Pristine.prev(1), 0);
+-+  EXPECT_EQ(get.Pristine.next(2), 3);
+-+  EXPECT_EQ(get.Pristine.prev(2), 1);
+-+  EXPECT_EQ(get.Pristine.prev($P_t$), $P_t$-1);
+-+  EXPECT_EQ(get.Pristine.next($P_t$), $P_x$);
+-   EXPECT_EQ(length(), $P_n$);
+- }
+- 
+-@@ -223,10 +232,10 @@ TEST(Words, MakeLengts1) {
+-   init();
+-   EXPECT_EQ(valid(),0);
+-   EXPECT_EQ(next,1);
+--  auto s1 = make(2,3);
+-+  auto s1 = allocate();
+-   EXPECT_EQ(next,2);
+-   EXPECT_EQ(s1.handle,1);
+--  EXPECT_EQ(P[s1.handle].car,2);
+-+  EXPECT_EQ(get.red.head(s1.handle),2);
+-   EXPECT_EQ(P[s1.handle].cdr,3);
+-   EXPECT_EQ(valid(),0);
+-   EXPECT_EQ(length(), $P_n$-1);
+-@@ -236,21 +245,21 @@ TEST(Words, MakeLength2) {
+-   init();
+-   EXPECT_EQ(valid(),0);
+-   EXPECT_EQ(next,1);
+--  auto s1 = make(2,3);
+-+  auto s1 = require(2,3);
+-   EXPECT_EQ(next,2);
+-   EXPECT_EQ(s1.handle,1);
+-   EXPECT_EQ(P[s1.handle].car,2);
+-   EXPECT_EQ(P[s1.handle].cdr,3);
+-   EXPECT_EQ(valid(),0);
+-   EXPECT_EQ(length(), $P_n$-1);
+--  auto s2 = make(4,5);
+-+  auto s2 = require(4,5);
+-   EXPECT_EQ(next,3);
+-   EXPECT_EQ(s2.handle,2);
+-   EXPECT_EQ(P[s2.handle].car,4);
+-   EXPECT_EQ(P[s2.handle].cdr,5);
+-   EXPECT_EQ(valid(),0);
+-   EXPECT_EQ(length(), $P_n$-2);
+--  auto s3 = make(6,7);
+-+  auto s3 = require(6,7);
+-   EXPECT_EQ(next,4);
+-   EXPECT_EQ(s3.handle,3);
+-   EXPECT_EQ(P[s3.handle].car,6);
+-@@ -287,9 +296,9 @@ TEST(Words, RequireLength2) {
+- TEST(Words, MakeThree) { 
+-   try {
+-     init();
+--    auto s1 = make(2,3);
+--    auto s2 = make(4,5);
+--    auto s3 = make(6,7);
+-+    auto s1 = require(2,3);
+-+    auto s2 = require(4,5);
+-+    auto s3 = require(6,7);
+-   } catch(int e) {
+-     ADD_FAILURE() << "Died at line " << e;
+-   }
+-@@ -298,9 +307,9 @@ TEST(Words, MakeThree) {
+- TEST(Words, MakeThreeFree) { 
+-   try {
+-     init();
+--    auto s1 = make(2,3);
+--    auto s2 = make(4,5);
+--    auto s3 = make(6,7);
+-+    auto s1 = require(2,3);
+-+    auto s2 = require(4,5);
+-+    auto s3 = require(6,7);
+-     free(s1);
+-   } catch(int e) {
+-     ADD_FAILURE() << "Died at line " << e;
+-@@ -344,23 +353,23 @@ TEST(Words, Reuse) {
+-   EXPECT_EQ(s2.handle, s4.handle);
+-   EXPECT_EQ(s3.handle, s6.handle);
+-   EXPECT_EQ(length(), $P_n$-3);
+--  EXPECT_TRUE(is.red(s1.handle));
+-+  EXPECT_TRUE(is.Pristine(s1.handle));
+-   EXPECT_EQ(valid(),0);
+-   free(s2);
+--  EXPECT_TRUE(is.red(s1.handle));
+-+  EXPECT_TRUE(is.Pristine(s1.handle));
+-   EXPECT_EQ(valid(),0);
+--  EXPECT_FALSE(is.red(s3.handle));
+--  EXPECT_FALSE(is.red(s6.handle));
+-+  EXPECT_FALSE(is.Pristine(s3.handle));
+-+  EXPECT_FALSE(is.Pristine(s6.handle));
+-   free(s3);
+--  EXPECT_TRUE(is.red(s6.handle));
+--  EXPECT_TRUE(is.red(s3.handle));
+-+  EXPECT_TRUE(is.Pristine(s6.handle));
+-+  EXPECT_TRUE(is.Pristine(s3.handle));
+-   EXPECT_EQ(valid(),0);
+-   free(s3);
+-   free(s5);
+-   free(s4);
+--  EXPECT_TRUE(is.red(s1.handle));
+--  EXPECT_TRUE(is.red(s2.handle));
+--  EXPECT_TRUE(is.red(s3.handle));
+-+  EXPECT_TRUE(is.Pristine(s1.handle));
+-+  EXPECT_TRUE(is.Pristine(s2.handle));
+-+  EXPECT_TRUE(is.Pristine(s3.handle));
+-   EXPECT_EQ(valid(),0);
+- }
+- 
+-@@ -393,7 +402,7 @@ TEST(Marking, Atoms) {
+- TEST(Marking, MarkingIsMarked) { 
+-   init();
+-   for (Short h = $X_f$; h <= $X_t$; ++h)
+--    EXPECT_TRUE(is.red(h));
+-+    EXPECT_TRUE(is.Pristine(h));
+- }
+- 
+- TEST(Marking, Bounds) { 
+-diff --git a/Mini-LISP/diff b/Mini-LISP/diff
+-index 842bd99..43f5bbf 100644
+---- a/Mini-LISP/diff
+-+++ b/Mini-LISP/diff
+-@@ -1,716 +0,0 @@
+--diff --git a/Mini-LISP/S.h b/Mini-LISP/S.h
+--index 43bd42d..0cd51b9 100644
+----- a/Mini-LISP/S.h
+--+++ b/Mini-LISP/S.h
+--@@ -1,7 +1,7 @@
+-- #include <cstdint>
+-- #include <iostream>
+---#ifndef MINI_LISP_H
+---#define MINI_LISP_H 
+--+#ifndef S_H
+--+#define S_H 
+-- 
+-- #include "hacks.h"
+-- 
+--@@ -54,7 +54,6 @@ namespace Strings {
+-- 
+-- union S; 
+-- 
+---
+-- /* An S expression is identified by a 16 bits handle (the type H).
+--  * It is an atom is the handle is non-positive (the index zero is 
+--  * reserved for the special NIL atom). It is an internal node */
+--@@ -63,8 +62,6 @@ representation S { // Representation of an S expression
+--   perspective(H handle)
+--   construct S(H h) by (handle(h));
+--   property String asAtom() returns  (Strings::pool + handle)
+---
+---
+--   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
+--   construct S(String s) by(handle(Strings::allocate(s)))
+-- 
+--@@ -109,7 +106,9 @@ auxiliary fluentons.
+--   bool null() const; /// sink: Atomic function of Mini-Lisp 
+--   bool t() const;    /// sink: Auxiliary fluenton, complements null
+--   S car() const;     /// atomic function of Mini-Lisp 
+--+  S rac() const;     /// auxiliary: same as car, except no checking is made 
+--   S cdr() const;     /// atomic function of Mini-Lisp 
+--+  S rdc() const;     /// auxiliary: same as car, except no checking is made 
+--   S eval() const;    /// atomic function of Mini-Lisp 
+--   S q() const;       /// implements library functions quote
+--   S l() const;       /// returns a singleton list containing this S expression 
+--@@ -135,7 +134,6 @@ auxiliary fluentons.
+--   S $2$() const;  /// second element in a list
+--   S $3$() const;  /// third element in a list
+-- };
+---
+-- #undef NULL
+-- // Fluenton sources of Names of atoms that represent atomic functions 
+-- extern const S NIL, T; //
+--@@ -154,4 +152,4 @@ extern const S MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
+-- inline bool die(S s) { throw BUG.cons(s); }
+-- 
+-- #undef construct
+---#endif // MINI_LISP_H 
+--+#endif // S_H 
+--diff --git a/Mini-LISP/a-list.h b/Mini-LISP/a-list.h
+--index b4566f9..283c14a 100644
+----- a/Mini-LISP/a-list.h
+--+++ b/Mini-LISP/a-list.h
+--@@ -1,6 +1,6 @@
+-- #ifndef A_LIST
+-- #define A_LIST
+---#include "00.h"
+--+#include "S.h"
+-- extern S alist ;
+-- extern S set(S name, S value);
+-- extern S lookup(S id, S alist);
+--diff --git a/Mini-LISP/basics.h b/Mini-LISP/basics.h
+--index f574018..469e85f 100644
+----- a/Mini-LISP/basics.h
+--+++ b/Mini-LISP/basics.h
+--@@ -1,6 +1,6 @@
+-- #ifndef BASICS_H
+-- #define BASICS_H
+---#include "00.h"
+--+#include "S.h"
+-- 
+-- inline bool exists(S x, S xs) { return !xs.null() && (xs.car().eq(x) || exists(x, xs.cdr())); } 
+-- inline bool islist(S s) { return s.null() || !s.atom() && islist(s.cdr()); }
+--diff --git a/Mini-LISP/diff b/Mini-LISP/diff
+--index 411f853..e69de29 100644
+----- a/Mini-LISP/diff
+--+++ b/Mini-LISP/diff
+--@@ -1,418 +0,0 @@
+---diff --git a/Mini-LISP/Makefile b/Mini-LISP/Makefile
+---index fe949b4..675c2fe 100644
+------ a/Mini-LISP/Makefile
+---+++ b/Mini-LISP/Makefile
+---@@ -47,11 +47,13 @@ endif
+--- 
+--- CFLAGS += -MD -MP -w 
+--- 
+----test: $(TEST_OBJS)
+---+store: store.o words.o characters.o
+--- 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+--- 
+---+test: $(TEST_OBJS)
+---+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+--- 
+----all: test mini-lisp 
+---+all: test mini-lisp store 
+--- 
+--- dump.cc: dump.h
+--- 
+---@@ -64,8 +66,6 @@ dump.cc: dump.h
+--- mini-lisp: mini-lisp.o	$(OBJS) 
+--- 	$(CXX) $(LDFLAGS) -o $@ $^ 
+--- 
+----store: store.o
+----	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+--- 
+--- 
+--- # -include $(SRC:%.c=%.d)
+---diff --git a/Mini-LISP/chic.h b/Mini-LISP/chic.h
+---index 7011486..70a94ab 100644
+------ a/Mini-LISP/chic.h
+---+++ b/Mini-LISP/chic.h
+---@@ -27,5 +27,6 @@
+--- #define	returns(x) const {return x;}
+--- #define by(...) :__VA_ARGS__{}
+--- 
+----#define max(x,y) (x > y ? x : y) 
+----#define min(x,y) (x < y ? x : y) 
+---+template<typename T> constexpr T max(T s1, T s2) { return s1 > s2 ? s1 : s2; } 
+---+template<typename T> constexpr T min(T s1, T s2) { return s1 < s2 ? s1 : s2; } 
+---+template<typename T> constexpr T range(T s1, T s2) { return s2 - s1 + 1; } 
+---diff --git a/Mini-LISP/store.cc b/Mini-LISP/store.cc
+---index ccade6f..5cafd1c 100644
+------ a/Mini-LISP/store.cc
+---+++ b/Mini-LISP/store.cc
+---@@ -1,231 +1,54 @@
+----#include "chic.h"
+---+#include "store.h"
+--- 
+----/*@ The Primitive Types@
+----Our byte addressable underlining machine offers three primitive types: byte,
+----Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
+----are fixed width signed integers, represented in two's complement, and are
+----similar to the types byte, short, and int of the Java virtual machine. Punning
+----is allowed, and used extensively: A Long is constituted by two consecutive
+----halves. No particular byte or halves ordering is assumed. */
+--- 
+----typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
+----typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | handle of an S-expression 
+----typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
+----
+----/*@ Types for S-Expressions@ S-Expressions come in two varieties: (1) Dotted
+---- pairs (pairs for short) are compound S-expressions defined by two, smaller,
+---- S-expressions, and (2) atoms, which are a sequence of characters. 
+----
+---- The type is represents S-expressions of both kinds.  However, this type not
+---- store the actual data of an S-expression, but rather a handle to this data.
+---- When the handle is used to access the data, we obtain a value whose type is
+---- either Atom or Pair */
+----
+----Type S;     // An S-expression represented by its handle
+----Type Pair;  // A compound S-expression, i.e., a dotted pair
+----// Type Atom;  // An atomic S-expression, i.e., a memory address
+----
+----
+----/*@ Types for S-Expressions@ S-Expressions come in two varieties: 
+----An atomic S-expression is a C like string: a memory address of a byte storing
+----the first character, of the atom's text. The full text of an atom
+----are the characters in this byte and all bytes that follow  until the first 
+----occurrence of the null byte, i.e., a byte in which all bits are zero, 
+----denoted in C by \verb/'\0'/ and mathematically by~$\natural$.  */
+----
+----typedef const char *const Atom; // Underlining representation of atoms as pointers to characters
+----Type S;
+----Type Pair;
+----
+----Type S { // An S-expression represented by its handle
+----  Representation {
+----    perspective(Short handle) // The inner representation 
+----  };
+----  // construct S(Short h) by (handle(h));
+----  property bool null() returns (handle == 0)
+----  property bool atom() returns (handle <= 0)
+----  property bool pair() returns (handle > 0) 
+----  property bool eq(S s) returns (atom() && handle == s.handle)
+----  S(Short h): handle(h) {} 
+----  property Pair $_p$(); /// Interpreted as handle of pair, retrieves the pair behind (mutable)  
+----  property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
+----};
+----
+----Type Pair { // The different perspectives of a pair.
+----  Representation {
+----    perspective(Long cons)        /// I.   | A single Long with two halves: 
+----    perspective(Short car, cdr)    /// II.  | A pair of car and cdr, each in a Short Long.
+----    perspective(Short prev, next)  /// III. | An unused pair item in the list of pairs. 
+----    perspective(Short head, rest)  /// IV.  | An data item in the stack used in the parser. 
+----  };
+----};
+----
+----/*@ The Store$ 
+----The store provides an abstract memory model that manages the allocation and 
+----delallocation of S-expressions objects. These come in two varieites: Atomic 
+----S-expressions, the Pair,
+----whihstorage two kinds of entities:
+----the Pair, which represents 
+----fo higher levels of the . However, other portions of the implementation need
+----not worry about
+----the details of the frugality. Here we present an abstract model of a 
+----``store'' and the services it provides. 
+----*/
+----
+----Context Store {
+----  Provides function S make(S car, S cdr); /// Returns (handle of) pair with given values of (handles of) its two components
+----  Provides function S make(Atom);         /// Returns (handle of) atom with given text; 
+----  Provides procedure free(S);             /// Marks an S-expression handle previously returned by make as no longer in use 
+----}
+----
+----Context Store { 
+----  // Global:
+----  Provides constant(Long) $m$;    /// how many bytes are used by the store 
+----  // Atoms:
+----  Provides constant(Short) $M_a$;  /// how many atoms are initially available 
+----  Provides function Short $v_a$(); /// how many chars remain available for allocation 
+----  Provides function Short $u_a$(); /// how many chars were allocated 
+----  Allocate Short current = 0;
+----  // Pairs
+----  Provides constant(Short) $M_p$;  /// how many pairs are initially available 
+----  Provides function Short $v_p$(); /// how many pairs remain available for allocation 
+----  Provides function Short $u_p$(); /// how many pairs were allocated 
+----}
+----
+----Context Store { // Prototype for store.h
+----  Provides data array(char) A;
+----  Provides data array(Pair) P;
+----}
+----
+----Context Store { 
+----  Let Short $M_a$ = 1 << 12;
+----  Let Short $M_p$ = (1 << 15) - $M_a$ + 3; 
+----  Let Long $m$ = $M_a$ + $M_p$ * sizeof (Pair);
+----  Let Short NIL_SIZE = sizeof "NIL";
+----}
+----
+----Allocate static union  {
+----  char block[Store::$m$];
+---+Let Long $m$ = $M_a$ + $M_p$ * sizeof (Pair);
+---+static union  {
+---+  char block[$m$];
+---   struct {
+----   char $A_0$[Store::$M_a$ - Store::NIL_SIZE];
+----   char A[Store::NIL_SIZE] = { 'N', 'I', 'L', '\0' };
+----   Pair P[Store::$M_p$];
+---+   char $A_0$[$M_a$ - LIMBO];
+---+   char A[LIMBO] = { 'N', 'I', 'L', '\0' };
+---+   Pair P[$M_p$];
+---   };
+--- } memory; 
+--- 
+----Context Store { 
+----  using Context Store;
+----constexpr auto x =3;
+----constexpr auto y = x *x;
+----  Let array(Pair) P = memory.P - 1;
+----  Let array(Pair) $P_0$ = memory.P - 1;
+----  Let array(Pair) $P_1$ = memory.P + $M_p$;
+----  Let array(char) A  = memory.A;
+----  Let array(char) $A_0$  = memory.$A_0$;
+----  Let array(char) $A_1$  = memory.A + $M_a$;
+----  Let Short $L_a$ = $A_0$ - A, $H_a$ = 0;   
+----  Let Short $L_p$ = memory.P - P, $H_p$ = $P_1$ - memory.P;   
+----  Let Short $L$ = min($L_a$, $L_p$ ), $H$ = max($H_a$, $H_p$);
+----  Let Short $N_p$ = $H_p$ - $L_p$ + 1;
+----  Let Short $N_a$ = $H_a$ - $H_a$ + 1;
+----  Let Short $N$ = $H$ - $L$ + 1;
+----  Short  
+----}
+----
+---+Let array(Pair) P = memory.P - 1;
+---+Let array(Pair) $P_0$ = memory.P - 1;
+---+Let array(Pair) $P_1$ = memory.P + $M_p$;
+---+Let array(char) A  = memory.A;
+---+Let array(char) $A_0$  = memory.$A_0$;
+---+Let array(char) $A_1$  = memory.A + $M_a$;
+---+// Let Short $A_f$ = $A_0$ - A, $A_t$ = 0;   
+---+// Let Short $P_f$ = memory.P - P, $P_t$ = $P_1$ - memory.P;   
+---+// Let Short $N_p$ = $P_t$ - $P_f$ + 1;
+---+// Let Short $N_a$ = $A_t$ - $A_t$ + 1;
+--- 
+----Context Store {   
+----}
+--- 
+----Context Store {
+----  Short flip(Short h)   { return h + (1 << 15); } 
+----  bool red(Short h) { return h < $L$ || h > $H$; } 
+----  void flip(Pair &p)  { Pair.car = flip(p.car); }
+----  bool red(Pair p) { return red(p.car);  }
+----}
+---+// Provides Short $A_f$ = $A_0$ - A, $A_t$ = 0;   
+---+// Provides Short $P_f$ = memory.P - P, $P_t$ = $P_1$ - memory.P;   
+---+// Let Short $L$ = min($A_f$, $P_f$ ), $H$ = max($A_t$, $P_t$);
+--- 
+----/* Making an S expression from an input string is by moving the pool pointer
+---- * down and then copying the input there. A bit of optimization saves some
+---- * space by refraining from allocating the same string twice; moreover, there
+---- * is also a minimal attempt to allow one string to be realizes the suffix of a
+---- * previously allocated string */ 
+--- 
+----static Short size(const char *s) { for (Short $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
+----static char upper(char c) { return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; }
+----static bool eq(const char *s1, const char *s2) {
+----  for (; upper(*s1) == upper(*s2); ++s1, ++s2)
+----    if (*s1 == '\0')
+----      return true;
+----  return false;
+----}
+---+// Global:
+---+Provides constant(Long) $m$;    /// how many bytes are used by the store 
+---+// Atoms:
+---+Provides constant(Short) $M_a$;  /// how many atoms are initially available 
+---+Provides function Short $v_a$(); /// how many chars remain available for allocation 
+---+Provides function Short $u_a$(); /// how many chars were allocated 
+---+// Pairs
+---+Provides constant(Short) $M_p$;  /// how many pairs are initially available 
+--- 
+----S Store::make(Atom s) {
+----  for (Short $ = 0; $ >= current; --$) 
+----    if (eq(s, A+$))
+----      return $;
+----  const Short n = ::size(s);
+----  current -= n;
+----  for (Short h = 0; h < n; ++h) // Only case in code to change the pool 
+----    const_cast<char&>(A[current + h]) = ::upper(s[h]);
+----  return S(current);
+----}
+--- 
+----static Short init() {
+----  for (Short h = $L_p$  + 1; h < $H_p$; ++h) {
+----    P[h].prev = h - 1;
+----    P[h].next = h + 1;
+----  }
+----  P[$L_p$ ].prev = 0;
+----  P[$L_p$ ].next = $L_p$  + 1;
+----  P[$H_p$].prev = $H_p$ - 1;
+----  P[$H_p$].next = 0;
+----  for (Short h = $L_p$; h <= $H_p$; ++h) 
+----    flip[P[h]];
+----  return $L_p$;
+----}
+----
+----static Short next = init;
+----static Short $v_p$ = $n_p$; 
+----
+----static Short make(Pair p) {
+----  const Short h = 1 + (p.cons ^ (p.cons <<< 7)) % $N_p$;
+----  if (P[h].cons == p.cons) 
+----    return h;
+----  if (h == next || !red(P[h])) {
+----    flip(P[next]);
+----    next = P[next].next;
+----    flip(P[next]);
+----    P[h] = p;
+----    return h;
+----  }
+----  flip(P[h]);
+----  const Short prev = P[h].prev, next = P[h].next;
+----  if (prev != 0) {
+----    flip(P[prev]);
+----    P[prev].next = next; 
+----    flip(P[prev]);
+----  }
+----  if (next != 0) {
+----    flip(P[next]);
+----    P[next].prev = prev; 
+----    flip(P[next]);
+----  }
+----  return h;
+----}
+----
+----S make(Short car, Short cdr) {
+----  return make(Pair(car,cdr));
+----}
+----
+----void free(Short h) {
+----  D(h, remaining);
+----  pool[h].next = next(), remaining++, next() = h;
+----}
+---+Provides Short m$_p$;              /// how many are currently available 
+---+Provides Short made$_p$;           /// how many pairs were made, reuses are counted
+---+Provides Short free$n_p$;          /// how many pairs were freed 
+---+Provides Short collected$n_p$;     /// how many pairs were garbage collected 
+--- 
+--- #undef min
+--- #undef max
+--- #undef data
+--- #undef function
+--- #undef Type
+---+
+--- #include "gtest/gtest.h"
+--- 
+--- int main(int argc, char **argv) {
+---@@ -238,43 +61,41 @@ TEST(SExpression, size) {
+---   EXPECT_EQ(2, sizeof(S));
+--- }
+--- 
+----using Context Store;
+----
+----TEST(Atoms, $L_a$) { 
+----  EXPECT_LT($L_a$,0);
+----  EXPECT_GE(A - $A_0$,$L_a$);
+---+TEST(Atoms, $A_f$) { 
+---+  EXPECT_LT($A_f$,0);
+---+  EXPECT_GE(A - $A_0$,$A_f$);
+--- }
+--- 
+----TEST(Atoms, $H_a$) { 
+----  EXPECT_EQ($H_a$, 0);
+----  EXPECT_EQ((const char *const) A + $H_a$, (const char *const) P);
+---+TEST(Atoms, $A_t$) { 
+---+  EXPECT_EQ($A_t$, 0);
+---+  EXPECT_EQ((const char *const) A + $A_t$, (const char *const) P);
+--- }
+--- 
+----TEST(Atoms, $N$) { 
+----  EXPECT_GT($H_a$, $L_a$);
+----  EXPECT_GT($N$, 0);
+----  EXPECT_EQ($N$, sizeof memory.$A_0$ + 1);
+---+TEST(Atoms, $X_n$) { 
+---+  EXPECT_GT($A_t$, $A_f$);
+---+  EXPECT_GT($X_n$, 0);
+---+  EXPECT_EQ($X_n$, sizeof memory.$A_0$ + 1);
+--- }
+--- 
+----TEST(Pairs, $L_p$) { 
+----  EXPECT_GT($L_p$, $H_a$);
+----  EXPECT_LT($L_p$, $H_p$);
+----  EXPECT_EQ($L_p$, 1);
+---+TEST(Pairs, $P_f$) { 
+---+  EXPECT_GT($P_f$, $A_t$);
+---+  EXPECT_LT($P_f$, $P_t$);
+---+  EXPECT_EQ($P_f$, 1);
+--- }
+--- 
+----TEST(Pairs, $H_p$) { 
+----  EXPECT_GT($H_p$, $L_p$);
+----  EXPECT_EQ($H_p$, $N_p$);
+----  EXPECT_EQ($P_1$ - memory.P, $H_p$);
+----  EXPECT_EQ($M_p$, $H_p$);
+---+TEST(Pairs, $P_t$) { 
+---+  EXPECT_GT($P_t$, $P_f$);
+---+  EXPECT_EQ($P_t$, $P_n$);
+---+  EXPECT_EQ($P_1$ - memory.P, $P_t$);
+---+  EXPECT_EQ($M_p$, $P_t$);
+--- }
+--- 
+----TEST(Pairs, $N_p$) { 
+----  EXPECT_GT($N_p$,0);
+----  EXPECT_LT($N_p$,sizeof memory);
+----  EXPECT_LT($N_p$,sizeof memory.P);
+----  EXPECT_EQ($N_p$, $M_p$);
+----  EXPECT_EQ($N$,sizeof memory.P / sizeof memory.P[0]);
+---+TEST(Pairs, $P_n$) { 
+---+  EXPECT_GT($P_n$,0);
+---+  EXPECT_LT($P_n$,sizeof memory);
+---+  EXPECT_LT($P_n$,sizeof memory.P);
+---+  EXPECT_EQ($P_n$, $M_p$);
+---+  EXPECT_EQ($X_n$,sizeof memory.P / sizeof memory.P[0]);
+--- }
+--- 
+--- TEST(Store, minimalSize) {
+---@@ -287,37 +108,6 @@ TEST(Store, overflow) {
+---   EXPECT_LT((Short) - $M_a$ - 1, 0);
+--- }
+--- 
+----TEST(Marking, Pairs) { 
+----  EXPECT_LT(flip($L_p$), $L_a$);   
+----  EXPECT_LT(flip($H_p$), $L_a$);   
+----  EXPECT_LT(flip(($L_p$ + $H_p$)/2), $L_a$);   
+----  EXPECT_LT(flip($L_p$-1), $L_a$);   
+----  EXPECT_LT(flip($L_p$+1), $L_a$);   
+----  EXPECT_EQ(flip(flip($p_p$)), $p_p$);
+----  EXPECT_EQ(flip(flip($H_p$)), $H_p$);
+----  EXPECT_EQ(flip(flip(($p_p$ + $H_p$)/2)),($p_p$ + $H_p$)/2);
+----  EXPECT_EQ(flip(flip($H_p$ + 1)),$H_p$ + 1 );
+----  EXPECT_EQ(flip(flip($H_p$ + 1)), $H_p$ + 1);
+----}
+----
+----TEST(Marking, Atoms) { 
+----  EXPECT_GT(flip($L_a$), $H_a$);   
+----  EXPECT_LT(flip($H_a$),0);
+----  EXPECT_GT(flip(($L_a$ + $H_a$)/2), $H_p$);   
+----  EXPECT_GT(flip($H_a$-1), $H_p$);   
+----  EXPECT_GT(flip($L_a$+1), $H_p$);   
+----  EXPECT_EQ(flip(flip($L_a$)), $L_a$);
+----  EXPECT_EQ(flip(flip($H_a$)), $H_a$);
+----  EXPECT_EQ(flip(flip(($L_a$ + $H_a$)/2)),($L_a$ + $H_a$)/2);
+----  EXPECT_EQ(flip(flip($L_a$ + 1)),$L_a$ + 1 );
+----  EXPECT_EQ(flip(flip($H_a$ + 1)), $H_a$ + 1);
+----}
+----
+----TEST(Marking, MarkingIsMarked) { 
+----  for (Short h = $L$; h <= $H$; ++h)
+----    EXPECT_TRUE(red(flip(h)));
+----}
+----
+--- TEST(Store, PrimitiveSizs) { 
+---   EXPECT_EQ(sizeof(byte), 1);
+---   EXPECT_EQ(sizeof(char), 1);
+--diff --git a/Mini-LISP/eval.h b/Mini-LISP/eval.h
+--index 22fc0c3..db30dbd 100644
+----- a/Mini-LISP/eval.h
+--+++ b/Mini-LISP/eval.h
+--@@ -1,4 +1,4 @@
+---#include "00.h"
+--+#include "S.h"
+-- 
+-- extern S evaluate_list(S);
+-- extern S eval(S s); 
+--diff --git a/Mini-LISP/io.h b/Mini-LISP/io.h
+--index d59508c..222dfac 100644
+----- a/Mini-LISP/io.h
+--+++ b/Mini-LISP/io.h
+--@@ -1,6 +1,6 @@
+-- #include <iostream>
+-- #include <sstream>
+---#include "00.h"
+--+#include "S.h"
+-- #include "parser.h"
+-- 
+-- /** Auxiliary file that should not be used by production code, only 
+--diff --git a/Mini-LISP/pairs.cc b/Mini-LISP/pairs.cc
+--index 73b907c..821956e 100644
+----- a/Mini-LISP/pairs.cc
+--+++ b/Mini-LISP/pairs.cc
+--@@ -1,4 +1,4 @@
+---#include "00.h"
+--+#include "S.h"
+-- #include "stack-trace.h"
+-- #define SILENT 1 
+-- #if SILENT
+--diff --git a/Mini-LISP/parser.h b/Mini-LISP/parser.h
+--index ffc5245..ab92a5e 100644
+----- a/Mini-LISP/parser.h
+--+++ b/Mini-LISP/parser.h
+--@@ -1,6 +1,6 @@
+-- #ifndef PARSER_H
+-- #define PARSER_H
+---#include "00.h"
+--+#include "S.h"
+-- #include "tokenizer.h"
+-- 
+-- /** An implementation of a simple, single instance hand tailored LL(1) parser.
+--diff --git a/Mini-LISP/stack.h b/Mini-LISP/stack.h
+--index af19b0d..e29b6f5 100644
+----- a/Mini-LISP/stack.h
+--+++ b/Mini-LISP/stack.h
+--@@ -1,4 +1,4 @@
+---#include "00.h"
+--+#include "S.h"
+-- /* Manages a singleton stack of handles, used by the LL parsing algorithm. This
+--  * stack is implemented as a dynamically allocated singly linked list, where
+--  * each element is a pair of handles: One handle in the pair carries the data;
+--diff --git a/Mini-LISP/store.h b/Mini-LISP/store.h
+--index c3daca9..9c990e4 100644
+----- a/Mini-LISP/store.h
+--+++ b/Mini-LISP/store.h
+--@@ -23,7 +23,7 @@ typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an
+--  either Atom or Pair 
+-- */
+-- 
+---Type Handle;     // An S-expression represented by its handle
+--+struct Handle;     // An S-expression represented by its handle
+-- 
+-- /*@ Atoms$ An atomic S-expression is a C like string: a memory address of a
+-- byte storing the first character of the atom's text. The text of an atom is
+--@@ -35,7 +35,7 @@ typedef const char *const Atom; // Underlining representation of atoms as pointe
+-- 
+-- Type Pair;  // A compound S-expression, i.e., a dotted pair
+-- 
+---Type Handle { // An S-expression represented by its handle
+--+struct Handle { // An S-expression represented by its handle
+--   Representation {
+--     perspective(Short handle) // The inner representation 
+--   };
+--diff --git a/Mini-LISP/strings.cc b/Mini-LISP/strings.cc
+--index 7989480..c696757 100644
+----- a/Mini-LISP/strings.cc
+--+++ b/Mini-LISP/strings.cc
+--@@ -1,4 +1,4 @@
+---#include "00.h"
+--+#include "S.h"
+-- #include "stack-trace.h"
+-- 
+-- #define SILENT 1 
+--diff --git a/Mini-LISP/t-pairs.cc b/Mini-LISP/t-pairs.cc
+--index 9a3408c..2108849 100644
+----- a/Mini-LISP/t-pairs.cc
+--+++ b/Mini-LISP/t-pairs.cc
+--@@ -1,6 +1,6 @@
+-- #include <iostream>
+-- #include "gtest/gtest.h"
+---#include "00.h"
+--+#include "S.h"
+-- #include "test.h"
+-- 
+-- namespace Pairs {
+--diff --git a/Mini-LISP/tokenizer.cc b/Mini-LISP/tokenizer.cc
+--index 39e4d4f..23b6483 100644
+----- a/Mini-LISP/tokenizer.cc
+--+++ b/Mini-LISP/tokenizer.cc
+--@@ -1,4 +1,4 @@
+---#include "00.h"
+--+#include "S.h"
+-- #include "tokenizer.h"
+-- #include "dump.h"
+-- 
+--diff --git a/Mini-LISP/tokenizer.h b/Mini-LISP/tokenizer.h
+--index 2823e55..03f967b 100644
+----- a/Mini-LISP/tokenizer.h
+--+++ b/Mini-LISP/tokenizer.h
+--@@ -1,6 +1,6 @@
+-- #ifndef TOKENIZER_H
+-- #define TOKENIZER_H
+---#include "00.h"
+--+#include "S.h"
+-- namespace Tokenizer {
+--   enum { undefined = 128, $};
+--   const char tokens[] = "()[].\'";
+--@@ -12,7 +12,6 @@ namespace Tokenizer {
+--   extern H unget(); 
+--   extern H peep();
+-- }
+---  extern bool exists(const char, String s); 
+---
+--+extern bool exists(const char, String s); 
+-- #endif
+-- 
+--diff --git a/Mini-LISP/words.cc b/Mini-LISP/words.cc
+--index fe0abef..5126827 100644
+----- a/Mini-LISP/words.cc
+--+++ b/Mini-LISP/words.cc
+--@@ -8,16 +8,21 @@ static bool red(Short h);
+-- static void flip(Pair &p);
+-- static bool red(Pair p); 
+-- 
+--+#define DIE die(__LINE__); 
+--+auto inline die(int t) {
+--+  throw t;
+--+}
+--+#include "colors.h"
+--+
+-- Short free(Handle s) {
+--   auto const h = s.handle;
+---  if (red(P[h])) return h; 
+---  P[h].next = next; 
+---  P[h].prev = $P_x$; 
+---  flip(P[h]);
+---
+---  flip(P[next]);
+---  P[next].prev = h;
+---  flip(P[next]);
+--+  is.red(next) || DIE;
+--+  is.Pristine(h) || DIE;
+--+  paint.red(h);
+--+  is.red(h) || die(s);
+--+  set.red(h).next().to(next); 
+--+  set.red[h].prev().to($P_x$); 
+--+  set.red(next).prev() = h;
+-- 
+--   return next = h;
+-- }
+--@@ -36,6 +41,7 @@ static Short init() {
+--   return next = $P_f$;
+-- }
+-- 
+--+
+-- static Handle make(Pair p) {
+--   auto h = next;
+--   flip(P[next]);
+--@@ -43,9 +49,14 @@ static Handle make(Pair p) {
+--   P[next].prev = $P_x$;
+--   flip(P[next]);
+--   P[h] = p;
+--+
+--+  is.cons(h)  || die(p.cons(h).cons("Not cons"));
+--+  is.cons.car = p.car || die(p.cons(h).cons(("Not same"));
+--+  p == P[h] || die(p.cons(h).cons(("Not same"));
+--   return h;
+-- }
+-- 
+--+
+-- static Handle require(Pair p) {
+--   const Short h = $P_f$ + (p.cons ^ (p.cons << 7) ^ (p.cons >> 3)) % $P_n$;
+--   if (P[h].cons == p.cons) 
+--@@ -61,10 +72,14 @@ static Handle require(Pair p) {
+--     flip(P[prev]);
+--   }
+--   if (next != $P_x$) {
+--+    isred.(h)
+--     flip(P[next]);
+--     P[next].prev = prev; 
+--     flip(P[next]);
+--   }
+--+  is.cons(h)  || die(p.cons(h).cons("Not cons"));
+--+  p == P[h] || die(p.cons(h).cons(("Not same"));
+--+  is.cons(h) 
+--   return h;
+-- }
+-- Handle make(Short car, Short cdr) { return make(Pair(car,cdr)); }
+--@@ -86,12 +101,6 @@ Short length() {
+--   return result;
+-- }
+-- 
+---Short flip(Short h)  { return h + (1 << 15); } 
+---Short xflip(Short h)  { return h; } 
+---bool red(Short h)   { return h < $X_f$ || h > $X_t$; } 
+---void flip(Pair &p) { p.car = flip(p.car); }
+---bool red(Pair p)   { return red(p.car);  }
+---
+-- #undef min
+-- #undef max
+-- #undef data
+-diff --git a/Mini-LISP/layout.cc b/Mini-LISP/layout.cc
+-index 4f215de..2e856ba 100644
+---- a/Mini-LISP/layout.cc
+-+++ b/Mini-LISP/layout.cc
+-@@ -1,19 +1,19 @@
+- #include "store.h"
+- 
+--Let Long $m$ = $M_a$ + $M_p$ * sizeof (Pair);
+-+Let Long $m$ = $M_a$ + $M_p$ * sizeof (Cons);
+- 
  
--Let Word $m$ = $M_a$ + $M_p$ * sizeof (Pair);
-+Let Word $m$ = $M_a$ + $M_p$ * sizeof (Cons);
- 
- static union {
-   char block[$m$];
-   struct {
-    char $A_0$[$M_a$ - LIMBO];
-    char A[LIMBO] = { 'N', 'I', 'L', '\0' };
--   Pair P[$M_p$];
-+   Cons P[$M_p$];
-   };
- } memory; 
- 
--Let array(Pair) P = memory.P - 1;
--Let array(Pair) $P_0$ = memory.P - 1;
--Let array(Pair) $P_1$ = memory.P + $M_p$;
-+Let array(Cons) P = memory.P - 1;
-+Let array(Cons) $P_0$ = memory.P - 1;
-+Let array(Cons) $P_1$ = memory.P + $M_p$;
- Let array(char) A  = memory.A;
- Let array(char) $A_0$  = memory.$A_0$;
- Let array(char) $A_1$  = memory.A + $M_a$;
-@@ -127,7 +127,7 @@ TEST(Store, PrimitiveSizs) {
-   EXPECT_EQ(sizeof(char), 1);
-   EXPECT_EQ(sizeof(Half), 2);
-   EXPECT_EQ(sizeof(Word), 4);
--  EXPECT_EQ(sizeof(Pair), 4);
-+  EXPECT_EQ(sizeof(Cons), 4);
-   EXPECT_EQ(sizeof($S_X$), 2);
-   EXPECT_EQ(sizeof(S), 2);
- }
+--Let array(Pair) P = memory.P - 1;
+--Let array(Pair) $P_0$ = memory.P - 1;
+--Let array(Pair) $P_1$ = memory.P + $M_p$;
+-+Let array(Cons) P = memory.P - 1;
+-+Let array(Cons) $P_0$ = memory.P - 1;
+-+Let array(Cons) $P_1$ = memory.P + $M_p$;
+- Let array(char) A  = memory.A;
+- Let array(char) $A_0$  = memory.$A_0$;
+- Let array(char) $A_1$  = memory.A + $M_a$;
+-@@ -127,7 +127,7 @@ TEST(Store, PrimitiveSizs) {
+-   EXPECT_EQ(sizeof(char), 1);
+-   EXPECT_EQ(sizeof(Short), 2);
+-   EXPECT_EQ(sizeof(Long), 4);
+--  EXPECT_EQ(sizeof(Pair), 4);
+-+  EXPECT_EQ(sizeof(Cons), 4);
+-   EXPECT_EQ(sizeof(Handle), 2);
+-   EXPECT_EQ(sizeof(S), 2);
+- }
+-diff --git a/Mini-LISP/store.h b/Mini-LISP/store.h
+-index 90a56fa..0e9d610 100644
+---- a/Mini-LISP/store.h
+-+++ b/Mini-LISP/store.h
+-@@ -10,7 +10,7 @@ halves. No particular byte or halves ordering is assumed. */
+- 
+- typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
+- typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | handle of an S-expression 
+--typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
+-+typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted Cons S-expression   
+- 
+- /*@ S-Expressions@ S-Expressions come in two varieties: (1) Dotted
+-  pairs (pairs for short) are compound S-expressions defined by two, smaller,
+-@@ -20,7 +20,7 @@ typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an
+- /*@ Type S@ represents S-expressions of both kinds. The type does not store the
+-  actual data of an S-expression, but rather a handle to this data.  When the
+-  handle is used to access the data, we obtain a value whose type is
+-- either Atom or Pair 
+-+ either Atom or Cons 
+- */
+- 
+- struct Handle;     // An S-expression represented by its handle
+-@@ -33,28 +33,28 @@ denoted in C by \verb/'\0'/ and mathematically by~$\natural$.  */
+- 
+- typedef const char *const Atom; // Underlining representation of atoms as pointers to characters
+- 
+--Type Pair;  // A compound S-expression, i.e., a dotted pair
+-+Type Cons;  // A compound S-expression, i.e., a dotted Cons
+- 
+- struct Handle { // An S-expression represented by its handle
+-   Representation {
+-     perspective(Short handle) // The inner representation 
+-   };
+-   Handle(Short h): handle(h) {}
+--  property Pair $_p$(); /// Interpreted as handle of pair, retrieves the pair behind (mutable)  
+-+  property Cons $_p$(); /// Interpreted as handle of Cons, retrieves the Cons behind (mutable)  
+-   property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
+- };
+- 
+- 
+--Type Pair { // The different perspectives of a pair.
+-+Type Cons { // The different perspectives of a Cons.
+-   Representation {
+-     perspective(Long cons)        /// I.   | A single Long with two halves: 
+--    perspective(Short car, cdr)    /// II.  | A pair of car and cdr, each in a Short Long.
+--    perspective(Short prev, next)  /// III. | An unused pair item in the list of pairs. 
+-+    perspective(Short car, cdr)    /// II.  | A Cons of car and cdr, each in a Short Long.
+-+    perspective(Short prev, next)  /// III. | An unused Cons item in the list of pairs. 
+-     perspective(Short head, rest)  /// IV.  | An data item in the stack used in the parser. 
+--    perspective(Short s1, s2)      /// V.  | A pair of car and cdr, each in a Short Long.
+-+    perspective(Short s1, s2)      /// V.  | A Cons of car and cdr, each in a Short Long.
+-   };
+--  Pair(Short r, Short d): car(r), cdr(d) {}
+--  Pair() {}
+-+  Cons(Short r, Short d): car(r), cdr(d) {}
+-+  Cons() {}
+- };
+- 
+- /*@ The Store$ 
+-@@ -62,14 +62,15 @@ The store provides an abstract memory model that manages the frugal allocation
+- and de-allocation of S-expressions objects.
+- */
+- 
+--Provides function Handle make(Handle, Handle);     /// Returns (handle of) newly allocated pair with given values of (handles of) its two components
+-+Provides function Handle make(Handle, Handle);     /// Returns (handle of) newly allocated Cons with given values of (handles of) its two components
+- Provides function Handle make(Atom);             /// Returns (handle of) of newly allocated atom with given text; 
+--Provides function Handle require(Handle, Handle);  /// Same as make, but may reuse previously allocated pair
+-+Provides procedure free(Handle);                 /// Marks an S-expression previously returned by make as no longer in use 
+-+
+-+Provides function Handle require(Handle, Handle);  /// Same as make, but may reuse previously allocated Cons
+- Provides function Handle require(Atom);          /// Same as make, but may reuse previously allocated atom, or suffix of an atom 
+--Provides function Short free(Handle);             /// Marks an S-expression handle previously returned by make as no longer in use 
+- 
+- Provides data array(char) A;
+--Provides data array(Pair) P;
+-+Provides data array(Cons) P;
+- 
+- Let Short $M_a$ = 1 << 12; 
+- Let Short $M_p$ = (1 << 15) - $M_a$ + 2; 
+-diff --git a/Mini-LISP/t-fluentons.cc b/Mini-LISP/t-fluentons.cc
+-index 12c8200..e97a0bd 100644
+---- a/Mini-LISP/t-fluentons.cc
+-+++ b/Mini-LISP/t-fluentons.cc
+-@@ -20,8 +20,8 @@ TEST(Fluenton,RAC) { throw "DOR"; }
+- TEST(Fluenton,RDC) { throw "DOR"; }
+- TEST(Fluenton,n0) { throw "DOR"; }
+- TEST(Fluenton,n1) { throw "DOR"; }
+--TEST(Fluenton,n1) { throw "DOR"; }
+- TEST(Fluenton,n2) { throw "DOR"; }
+-+TEST(Fluenton,n3) { throw "DOR"; }
+- TEST(Fluenton,less) { throw "DOR"; }
+- TEST(Fluenton, EvalQuote) {
+-   S i =  list("A", "B", "C").q();
+-@@ -95,22 +95,22 @@ TEST(Fluentons, more) {
+- }
+- 
+- 
+--TEST(FluentWhichIsAtomic cons) {
+-+TEST(FluentWhichIsAtomic,cons) {
+-   EXPECT_TRUE(a3.cons(s2).car().eq(a3));
+-   EXPECT_TRUE(s3.cons(a2).cdr().eq(a2));
+- }
+- 
+- 
+--TEST(FluentWhichIsAtomicThrow) {
+-+TEST(FluentWhichIsAtomic,Throw) {
+-   EXPECT_EXCEPTION(throw a3.cons(a4).p(), a3, a4);
+- }
+- 
+--TEST(FluentWhichIsAtomicError) {
+-+TEST(FluentWhichIsAtomic,Error) {
+-   EXPECT_EXCEPTION(a4.error(a3), a4, a3);
+- }
+- 
+- 
+--TEST(FluentWhichIsAtomicEQ) {
+-+TEST(FluentWhichIsAtomic,EQ) {
+-   EXPECT_FALSE(a0.eq(T));
+-   EXPECT_FALSE(a0.eq(NIL));
+-   EXPECT_FALSE(NIL.eq(T));
+-@@ -127,7 +127,7 @@ TEST(FluentWhichIsAtomicEQ) {
+-   EXPECT_TRUE(T.eq(S("T")));
+- }
+- 
+--TEST(FluentWhichIsAtomiccar) {
+-+TEST(FluentWhichIsAtomic,car) {
+-   EXPECT_EQ(s1.car(), t);
+-   EXPECT_EQ(s2.car(), s1);
+-   EXPECT_EQ(s3.car(), s2);
+-@@ -137,7 +137,7 @@ TEST(FluentWhichIsAtomiccar) {
+-   EXPECT_EXCEPTION(a3.car(),a3,CAR);
+- }
+- 
+--TEST(FluentWhichIsAtomiccdr) {
+-+TEST(FluentWhichIsAtomic,cdr) {
+-   EXPECT_EQ(s1.cdr(), n);
+-   EXPECT_EQ(s2.cdr(), s1);
+-   EXPECT_EQ(s3.cdr(), s1);
+-@@ -147,7 +147,7 @@ TEST(FluentWhichIsAtomiccdr) {
+-   EXPECT_EXCEPTION(a3.cdr(),a3,CDR);
+- }
+- 
+--TEST(FluentWhichIsAtomicatom) {
+-+TEST(FluentWhichIsAtomic,atom) {
+-   EXPECT_TRUE(a0.atom());
+-   EXPECT_TRUE(a1.atom());
+-   EXPECT_TRUE(a2.atom());
+-@@ -157,7 +157,7 @@ TEST(FluentWhichIsAtomicatom) {
+-   EXPECT_FALSE(s3.atom());
+- }
+- 
+--TEST(FluentWhichIsAtomic null) {
+-+TEST(FluentWhichIsAtomic,null) {
+-   EXPECT_FALSE(t.null());
+-   EXPECT_TRUE(n.null());
+-   EXPECT_FALSE(a0.null());
+-@@ -170,77 +170,77 @@ TEST(FluentWhichIsAtomic null) {
+- }
+- 
+- 
+--TEST(FluentWhichIsAtomic EvalLiterals) {
+-+TEST(FluentWhichIsAtomic,EvalLiterals) {
+-   CAREFULLY(EXPECT_EQ(t.eval(),t));
+-   CAREFULLY(EXPECT_EQ(n.eval(),n));
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalUndefined0) {
+-+TEST(FluentWhichIsAtomic,EvalUndefined0) {
+-   EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),UNDEFINED);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalUndefined) {
+-+TEST(FluentWhichIsAtomic,EvalUndefined) {
+-   EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalSanityT) {
+-+TEST(FluentWhichIsAtomic,EvalSanityT) {
+-   EXPECT_EXCEPTION(list(T, T).eval(), list(T,T), INVALID);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalSanity1) {
+-+TEST(FluentWhichIsAtomic,EvalSanity1) {
+-   EXPECT_EXCEPTION(list(NIL).eval(), list(NIL), INVALID);
+-   EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
+-   EXPECT_EXCEPTION(list(NIL, list(NIL, NIL)).eval(), 
+-                    list(NIL, list(NIL, NIL)), INVALID);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalSanity2) {
+-+TEST(FluentWhichIsAtomic,EvalSanity2) {
+-   EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalNil) {
+-+TEST(FluentWhichIsAtomic,EvalNil) {
+-   CAREFULLY_EXPECT(EQ,NIL.eval(), NIL);
+-   EXPECT_EXCEPTION(list(NIL, T).eval(),list(NIL, T),INVALID);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalT) {
+-+TEST(FluentWhichIsAtomic,EvalT) {
+-   CAREFULLY_EXPECT(EQ,T.eval(), T);
+-   EXPECT_EXCEPTION(list(T, NIL).eval(),list(T, NIL), INVALID);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalNullTrue) {
+-+TEST(FluentWhichIsAtomic,EvalNullTrue) {
+-   EXPECT_T(list(NULL, NIL).eval());
+-   EXPECT_T(list(NULL, list()).eval());
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalNullFalseQuote) {
+-+TEST(FluentWhichIsAtomic,EvalNullFalseQuote) {
+-   CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
+- } 
+- 
+--TEST(FluentWhichIsAtomic EvalNullMore) {
+-+TEST(FluentWhichIsAtomic,EvalNullMore) {
+-   EXPECT_EXCEPTION(list(NULL, list(T, T)).eval(), list(T,T), INVALID);
+-   CAREFULLY_EXPECT_T(list(NULL, NIL).eval());
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAndQuote) {
+-+TEST(FluentWhichIsAtomic,EvalAndQuote) {
+-   EXPECT_EQ(list(EVAL, list(QUOTE, T)).eval(), T);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvaluatingQuote) {
+-+TEST(FluentWhichIsAtomic,EvaluatingQuote) {
+-   EXPECT_EQ(list(QUOTE, s3).eval(), s3);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAtomNil) {
+-+TEST(FluentWhichIsAtomic,EvalAtomNil) {
+-   CAREFULLY_EXPECT(EQ,list("atom", "nil").eval(), T); 
+-   CAREFULLY_EXPECT(EQ,list(ATOM,NIL).eval(), T); 
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAtomT) {
+-+TEST(FluentWhichIsAtomic,EvalAtomT) {
+-   CAREFULLY_EXPECT(EQ,list("atom", "T").eval(), T, ); 
+-   CAREFULLY_EXPECT(EQ, list(ATOM,T).eval(), T, ); 
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAtomS) {
+-+TEST(FluentWhichIsAtomic,EvalAtomS) {
+-   CAREFULLY_EXPECT(EQ, list(ATOM,a0.q()).eval(), T); 
+-   CAREFULLY_EXPECT(EQ, list(ATOM,a1.q()).eval(), T); 
+-   CAREFULLY_EXPECT(EQ, list(ATOM,a2.q()).eval(), T); 
+-@@ -250,57 +250,57 @@ TEST(FluentWhichIsAtomic EvalAtomS) {
+-   CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAtomNasty) {
+-+TEST(FluentWhichIsAtomic,EvalAtomNasty) {
+-   CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
+- }
+- 
+- 
+--TEST(FluentWhichIsAtomic EvalCDR) {
+-+TEST(FluentWhichIsAtomic,EvalCDR) {
+-   S i = list(CDR, list(QUOTE, S("X").cons(S("Y"))));
+-   S o = S("Y");
+-   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalCDRList) {
+-+TEST(FluentWhichIsAtomic,EvalCDRList) {
+-   S i = list(CDR, list("A", "B", "C").q());
+-   CAREFULLY(EXPECT_EQ(i.eval(),list("B", "C")) << i); 
+- }
+- 
+- 
+--TEST(FluentWhichIsAtomic EvalCAR) {
+-+TEST(FluentWhichIsAtomic,EvalCAR) {
+-   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
+-   S o = S("X");
+-   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalCAR_EXTRA) {
+-+TEST(FluentWhichIsAtomic,EvalCAR_EXTRA) {
+-   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))), NIL);
+-   EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalCAR_MISSING) {
+-+TEST(FluentWhichIsAtomic,EvalCAR_MISSING) {
+-   S i = CAR.l(); 
+-   EXPECT_EQ(i, list(CAR));
+-   EXPECT_EXCEPTION(i.eval(), i, MISSING);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAtom_EXTRA) {
+-+TEST(FluentWhichIsAtomic,EvalAtom_EXTRA) {
+-   S i = list(ATOM, list(QUOTE, S("X").cons(S("Y"))), NIL);
+-   EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalAtom_MISSING) {
+-+TEST(FluentWhichIsAtomic,EvalAtom_MISSING) {
+-   S i = ATOM.l(); 
+-   EXPECT_EXCEPTION(i.eval() , i,MISSING);
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalCAR_Missing) {
+-+TEST(FluentWhichIsAtomic,EvalCAR_Missing) {
+-   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
+-   S o = S("X");
+-   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
+- }
+- 
+--TEST(FluentWhichIsAtomic EvalCARList) {
+-+TEST(FluentWhichIsAtomic,EvalCARList) {
+-   S i =  list(CAR, list("A", "B", "C").q());
+-   S o = S("A");
+-   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
+-diff --git a/Mini-LISP/test.h b/Mini-LISP/test.h
+-index bbfc6b4..5e010bc 100644
+---- a/Mini-LISP/test.h
+-+++ b/Mini-LISP/test.h
+-@@ -42,6 +42,23 @@ inline S parse(const std::string& s) {
+-         << " NIL " << #v "] \t" __VA_ARGS__ ; \
+-   }  
+- 
+-+#define CAREFULLY_EXPECT_FALSE(v,...) \
+-+  try { \
+-+    EXPECT_FALSE(v) __VA_ARGS__ ;  \
+-+  } catch (Pair p) { \
+-+    ADD_FAILURE() << p << " exception in EXPECT_FALSE" \
+-+      << #v "] \t" __VA_ARGS__ ; \
+-+  }  
+-+
+-+
+-+#define CAREFULLY_EXPECT_TRUE(v,...) \
+-+  try { \
+-+    EXPECT_TRUE(v) __VA_ARGS__ ;  \
+-+  } catch (Pair p) { \
+-+    ADD_FAILURE() << p << " exception in EXPECT_TRUE" \
+-+      << #v "] \t" __VA_ARGS__ ; \
+-+  }  
+-+
+- #define CAREFULLY_EXPECT_T(v,...) \
+-   try { \
+-     EXPECT_T(v) __VA_ARGS__ ;  \
 diff --git a/Mini-LISP/store.h b/Mini-LISP/store.h
-index 90a56fa..0e9d610 100644
+index abeceb0..e4f07e5 100644
 --- a/Mini-LISP/store.h
 +++ b/Mini-LISP/store.h
-@@ -10,7 +10,7 @@ halves. No particular byte or halves ordering is assumed. */
+@@ -1,3 +1,5 @@
++#ifndef SX_H
++#define SX_H
+ #include "chic.h"
  
- typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
- typedef int16_t Half; /// Half a word/JVM's short | 16 bits signed integer | handle of an S-expression 
--typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted pair S-expression   
-+typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an dotted Cons S-expression   
- 
- /*@ S-Expressions@ S-Expressions come in two varieties: (1) Dotted
-  pairs (pairs for short) are compound S-expressions defined by two, smaller,
-@@ -20,7 +20,7 @@ typedef int32_t Word; /// Machine word/JVM's int  | 32 bits signed integer | an
- /*@ Type S@ represents S-expressions of both kinds. The type does not store the
-  actual data of an S-expression, but rather a handle to this data.  When the
-  handle is used to access the data, we obtain a value whose type is
-- either Atom or Pair 
-+ either Atom or Cons 
+ /*@ The Primitive Types@
+@@ -23,7 +25,7 @@ typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an
+  either Atom or Cons 
  */
  
- struct $S_X$;     // An S-expression represented by its handle
-@@ -33,28 +33,28 @@ denoted in C by \verb/'\0'/ and mathematically by~$\natural$.  */
+-struct Handle;     // An S-expression represented by its handle
++Type Handle;     // An S-expression represented by its handle
  
- typedef const char *const Atom; // Underlining representation of atoms as pointers to characters
+ /*@ Atoms$ An atomic S-expression is a C like string: a memory address of a
+ byte storing the first character of the atom's text. The text of an atom is
+@@ -35,11 +37,11 @@ typedef const char *const Atom; // Underlining representation of atoms as pointe
  
--Type Pair;  // A compound S-expression, i.e., a dotted pair
-+Type Cons;  // A compound S-expression, i.e., a dotted Cons
+ Type Cons;  // A compound S-expression, i.e., a dotted Cons
  
- struct $S_X$ { // An S-expression represented by its handle
+-struct Handle { // An S-expression represented by its handle
++Type Handle { // An S-expression represented by its handle
    Representation {
-     perspective(Half handle) // The inner representation 
+-    perspective(Short handle) // The inner representation 
++    perspective(const Short self) // The inner representation 
    };
-   $S_X$(Half h): handle(h) {}
--  property Pair $_p$(); /// Interpreted as handle of pair, retrieves the pair behind (mutable)  
-+  property Cons $_p$(); /// Interpreted as handle of Cons, retrieves the Cons behind (mutable)  
+-  Handle(Short h): handle(h) {}
++  Handle(Short h): self(h) {}
+   property Cons $_p$(); /// Interpreted as handle of Cons, retrieves the Cons behind (mutable)  
    property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
  };
+@@ -64,11 +66,10 @@ Provides function Handle require(Handle, Handle);  /// Returns (handle of) newly al
+ Provides function Handle require(Atom);          /// Returns (handle of) newly allocated atom with given text; 
+ 
+ // Provides function Handle make(Handle, Handle);     /// Returns (handle of) newly allocated Cons with given values of (handles of) its two components
+-// Provides procedure free(Handle);                 /// Marks an S-expression previously returned by make as no longer in use 
  
  
--Type Pair { // The different perspectives of a pair.
-+Type Cons { // The different perspectives of a Cons.
-   Representation {
-     perspective(Word cons)        /// I.   | A single word with two halves: 
--    perspective(Half car, cdr)    /// II.  | A pair of car and cdr, each in a half word.
--    perspective(Half prev, next)  /// III. | An unused pair item in the list of pairs. 
-+    perspective(Half car, cdr)    /// II.  | A Cons of car and cdr, each in a half word.
-+    perspective(Half prev, next)  /// III. | An unused Cons item in the list of pairs. 
-     perspective(Half head, rest)  /// IV.  | An data item in the stack used in the parser. 
--    perspective(Half h1, h2)      /// V.  | A pair of car and cdr, each in a half word.
-+    perspective(Half h1, h2)      /// V.  | A Cons of car and cdr, each in a half word.
-   };
--  Pair(Half r, Half d): car(r), cdr(d) {}
--  Pair() {}
-+  Cons(Half r, Half d): car(r), cdr(d) {}
-+  Cons() {}
- };
- 
- /*@ The Store$ 
-@@ -62,14 +62,15 @@ The store provides an abstract memory model that manages the frugal allocation
- and de-allocation of S-expressions objects.
- */
- 
--Provides function $S_X$ make($S_X$, $S_X$);     /// Returns (handle of) newly allocated pair with given values of (handles of) its two components
-+Provides function $S_X$ make($S_X$, $S_X$);     /// Returns (handle of) newly allocated Cons with given values of (handles of) its two components
- Provides function $S_X$ make(Atom);             /// Returns (handle of) of newly allocated atom with given text; 
--Provides function $S_X$ require($S_X$, $S_X$);  /// Same as make, but may reuse previously allocated pair
-+Provides procedure free($S_X$);                 /// Marks an S-expression previously returned by make as no longer in use 
-+
-+Provides function $S_X$ require($S_X$, $S_X$);  /// Same as make, but may reuse previously allocated Cons
- Provides function $S_X$ require(Atom);          /// Same as make, but may reuse previously allocated atom, or suffix of an atom 
--Provides function Half free($S_X$);             /// Marks an S-expression handle previously returned by make as no longer in use 
- 
- Provides data array(char) A;
--Provides data array(Pair) P;
-+Provides data array(Cons) P;
- 
- Let Half $M_a$ = 1 << 12; 
- Let Half $M_p$ = (1 << 15) - $M_a$ + 2; 
-diff --git a/Mini-LISP/t-fluentons.cc b/Mini-LISP/t-fluentons.cc
-index 12c8200..e97a0bd 100644
---- a/Mini-LISP/t-fluentons.cc
-+++ b/Mini-LISP/t-fluentons.cc
-@@ -20,8 +20,8 @@ TEST(Fluenton,RAC) { throw "DOR"; }
- TEST(Fluenton,RDC) { throw "DOR"; }
- TEST(Fluenton,n0) { throw "DOR"; }
- TEST(Fluenton,n1) { throw "DOR"; }
--TEST(Fluenton,n1) { throw "DOR"; }
- TEST(Fluenton,n2) { throw "DOR"; }
-+TEST(Fluenton,n3) { throw "DOR"; }
- TEST(Fluenton,less) { throw "DOR"; }
- TEST(Fluenton, EvalQuote) {
-   S i =  list("A", "B", "C").q();
-@@ -95,22 +95,22 @@ TEST(Fluentons, more) {
- }
- 
- 
--TEST(FluentWhichIsAtomic cons) {
-+TEST(FluentWhichIsAtomic,cons) {
-   EXPECT_TRUE(a3.cons(s2).car().eq(a3));
-   EXPECT_TRUE(s3.cons(a2).cdr().eq(a2));
- }
- 
- 
--TEST(FluentWhichIsAtomicThrow) {
-+TEST(FluentWhichIsAtomic,Throw) {
-   EXPECT_EXCEPTION(throw a3.cons(a4).p(), a3, a4);
- }
- 
--TEST(FluentWhichIsAtomicError) {
-+TEST(FluentWhichIsAtomic,Error) {
-   EXPECT_EXCEPTION(a4.error(a3), a4, a3);
- }
- 
- 
--TEST(FluentWhichIsAtomicEQ) {
-+TEST(FluentWhichIsAtomic,EQ) {
-   EXPECT_FALSE(a0.eq(T));
-   EXPECT_FALSE(a0.eq(NIL));
-   EXPECT_FALSE(NIL.eq(T));
-@@ -127,7 +127,7 @@ TEST(FluentWhichIsAtomicEQ) {
-   EXPECT_TRUE(T.eq(S("T")));
- }
- 
--TEST(FluentWhichIsAtomiccar) {
-+TEST(FluentWhichIsAtomic,car) {
-   EXPECT_EQ(s1.car(), t);
-   EXPECT_EQ(s2.car(), s1);
-   EXPECT_EQ(s3.car(), s2);
-@@ -137,7 +137,7 @@ TEST(FluentWhichIsAtomiccar) {
-   EXPECT_EXCEPTION(a3.car(),a3,CAR);
- }
- 
--TEST(FluentWhichIsAtomiccdr) {
-+TEST(FluentWhichIsAtomic,cdr) {
-   EXPECT_EQ(s1.cdr(), n);
-   EXPECT_EQ(s2.cdr(), s1);
-   EXPECT_EQ(s3.cdr(), s1);
-@@ -147,7 +147,7 @@ TEST(FluentWhichIsAtomiccdr) {
-   EXPECT_EXCEPTION(a3.cdr(),a3,CDR);
- }
- 
--TEST(FluentWhichIsAtomicatom) {
-+TEST(FluentWhichIsAtomic,atom) {
-   EXPECT_TRUE(a0.atom());
-   EXPECT_TRUE(a1.atom());
-   EXPECT_TRUE(a2.atom());
-@@ -157,7 +157,7 @@ TEST(FluentWhichIsAtomicatom) {
-   EXPECT_FALSE(s3.atom());
- }
- 
--TEST(FluentWhichIsAtomic null) {
-+TEST(FluentWhichIsAtomic,null) {
-   EXPECT_FALSE(t.null());
-   EXPECT_TRUE(n.null());
-   EXPECT_FALSE(a0.null());
-@@ -170,77 +170,77 @@ TEST(FluentWhichIsAtomic null) {
- }
- 
- 
--TEST(FluentWhichIsAtomic EvalLiterals) {
-+TEST(FluentWhichIsAtomic,EvalLiterals) {
-   CAREFULLY(EXPECT_EQ(t.eval(),t));
-   CAREFULLY(EXPECT_EQ(n.eval(),n));
- }
- 
--TEST(FluentWhichIsAtomic EvalUndefined0) {
-+TEST(FluentWhichIsAtomic,EvalUndefined0) {
-   EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),UNDEFINED);
- }
- 
--TEST(FluentWhichIsAtomic EvalUndefined) {
-+TEST(FluentWhichIsAtomic,EvalUndefined) {
-   EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED);
- }
- 
--TEST(FluentWhichIsAtomic EvalSanityT) {
-+TEST(FluentWhichIsAtomic,EvalSanityT) {
-   EXPECT_EXCEPTION(list(T, T).eval(), list(T,T), INVALID);
- }
- 
--TEST(FluentWhichIsAtomic EvalSanity1) {
-+TEST(FluentWhichIsAtomic,EvalSanity1) {
-   EXPECT_EXCEPTION(list(NIL).eval(), list(NIL), INVALID);
-   EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
-   EXPECT_EXCEPTION(list(NIL, list(NIL, NIL)).eval(), 
-                    list(NIL, list(NIL, NIL)), INVALID);
- }
- 
--TEST(FluentWhichIsAtomic EvalSanity2) {
-+TEST(FluentWhichIsAtomic,EvalSanity2) {
-   EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
- }
- 
--TEST(FluentWhichIsAtomic EvalNil) {
-+TEST(FluentWhichIsAtomic,EvalNil) {
-   CAREFULLY_EXPECT(EQ,NIL.eval(), NIL);
-   EXPECT_EXCEPTION(list(NIL, T).eval(),list(NIL, T),INVALID);
- }
- 
--TEST(FluentWhichIsAtomic EvalT) {
-+TEST(FluentWhichIsAtomic,EvalT) {
-   CAREFULLY_EXPECT(EQ,T.eval(), T);
-   EXPECT_EXCEPTION(list(T, NIL).eval(),list(T, NIL), INVALID);
- }
- 
--TEST(FluentWhichIsAtomic EvalNullTrue) {
-+TEST(FluentWhichIsAtomic,EvalNullTrue) {
-   EXPECT_T(list(NULL, NIL).eval());
-   EXPECT_T(list(NULL, list()).eval());
- }
- 
--TEST(FluentWhichIsAtomic EvalNullFalseQuote) {
-+TEST(FluentWhichIsAtomic,EvalNullFalseQuote) {
-   CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
- } 
- 
--TEST(FluentWhichIsAtomic EvalNullMore) {
-+TEST(FluentWhichIsAtomic,EvalNullMore) {
-   EXPECT_EXCEPTION(list(NULL, list(T, T)).eval(), list(T,T), INVALID);
-   CAREFULLY_EXPECT_T(list(NULL, NIL).eval());
- }
- 
--TEST(FluentWhichIsAtomic EvalAndQuote) {
-+TEST(FluentWhichIsAtomic,EvalAndQuote) {
-   EXPECT_EQ(list(EVAL, list(QUOTE, T)).eval(), T);
- }
- 
--TEST(FluentWhichIsAtomic EvaluatingQuote) {
-+TEST(FluentWhichIsAtomic,EvaluatingQuote) {
-   EXPECT_EQ(list(QUOTE, s3).eval(), s3);
- }
- 
--TEST(FluentWhichIsAtomic EvalAtomNil) {
-+TEST(FluentWhichIsAtomic,EvalAtomNil) {
-   CAREFULLY_EXPECT(EQ,list("atom", "nil").eval(), T); 
-   CAREFULLY_EXPECT(EQ,list(ATOM,NIL).eval(), T); 
- }
- 
--TEST(FluentWhichIsAtomic EvalAtomT) {
-+TEST(FluentWhichIsAtomic,EvalAtomT) {
-   CAREFULLY_EXPECT(EQ,list("atom", "T").eval(), T, ); 
-   CAREFULLY_EXPECT(EQ, list(ATOM,T).eval(), T, ); 
- }
- 
--TEST(FluentWhichIsAtomic EvalAtomS) {
-+TEST(FluentWhichIsAtomic,EvalAtomS) {
-   CAREFULLY_EXPECT(EQ, list(ATOM,a0.q()).eval(), T); 
-   CAREFULLY_EXPECT(EQ, list(ATOM,a1.q()).eval(), T); 
-   CAREFULLY_EXPECT(EQ, list(ATOM,a2.q()).eval(), T); 
-@@ -250,57 +250,57 @@ TEST(FluentWhichIsAtomic EvalAtomS) {
-   CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
- }
- 
--TEST(FluentWhichIsAtomic EvalAtomNasty) {
-+TEST(FluentWhichIsAtomic,EvalAtomNasty) {
-   CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
- }
- 
- 
--TEST(FluentWhichIsAtomic EvalCDR) {
-+TEST(FluentWhichIsAtomic,EvalCDR) {
-   S i = list(CDR, list(QUOTE, S("X").cons(S("Y"))));
-   S o = S("Y");
-   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
- }
- 
--TEST(FluentWhichIsAtomic EvalCDRList) {
-+TEST(FluentWhichIsAtomic,EvalCDRList) {
-   S i = list(CDR, list("A", "B", "C").q());
-   CAREFULLY(EXPECT_EQ(i.eval(),list("B", "C")) << i); 
- }
- 
- 
--TEST(FluentWhichIsAtomic EvalCAR) {
-+TEST(FluentWhichIsAtomic,EvalCAR) {
-   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
-   S o = S("X");
-   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
- }
- 
--TEST(FluentWhichIsAtomic EvalCAR_EXTRA) {
-+TEST(FluentWhichIsAtomic,EvalCAR_EXTRA) {
-   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))), NIL);
-   EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
- }
- 
--TEST(FluentWhichIsAtomic EvalCAR_MISSING) {
-+TEST(FluentWhichIsAtomic,EvalCAR_MISSING) {
-   S i = CAR.l(); 
-   EXPECT_EQ(i, list(CAR));
-   EXPECT_EXCEPTION(i.eval(), i, MISSING);
- }
- 
--TEST(FluentWhichIsAtomic EvalAtom_EXTRA) {
-+TEST(FluentWhichIsAtomic,EvalAtom_EXTRA) {
-   S i = list(ATOM, list(QUOTE, S("X").cons(S("Y"))), NIL);
-   EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
- }
- 
--TEST(FluentWhichIsAtomic EvalAtom_MISSING) {
-+TEST(FluentWhichIsAtomic,EvalAtom_MISSING) {
-   S i = ATOM.l(); 
-   EXPECT_EXCEPTION(i.eval() , i,MISSING);
- }
- 
--TEST(FluentWhichIsAtomic EvalCAR_Missing) {
-+TEST(FluentWhichIsAtomic,EvalCAR_Missing) {
-   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
-   S o = S("X");
-   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
- }
- 
--TEST(FluentWhichIsAtomic EvalCARList) {
-+TEST(FluentWhichIsAtomic,EvalCARList) {
-   S i =  list(CAR, list("A", "B", "C").q());
-   S o = S("A");
-   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
-diff --git a/Mini-LISP/test.h b/Mini-LISP/test.h
-index bbfc6b4..5e010bc 100644
---- a/Mini-LISP/test.h
-+++ b/Mini-LISP/test.h
-@@ -42,6 +42,23 @@ inline S parse(const std::string& s) {
-         << " NIL " << #v "] \t" __VA_ARGS__ ; \
-   }  
- 
-+#define CAREFULLY_EXPECT_FALSE(v,...) \
-+  try { \
-+    EXPECT_FALSE(v) __VA_ARGS__ ;  \
-+  } catch (Pair p) { \
-+    ADD_FAILURE() << p << " exception in EXPECT_FALSE" \
-+      << #v "] \t" __VA_ARGS__ ; \
-+  }  
-+
-+
-+#define CAREFULLY_EXPECT_TRUE(v,...) \
-+  try { \
-+    EXPECT_TRUE(v) __VA_ARGS__ ;  \
-+  } catch (Pair p) { \
-+    ADD_FAILURE() << p << " exception in EXPECT_TRUE" \
-+      << #v "] \t" __VA_ARGS__ ; \
-+  }  
-+
- #define CAREFULLY_EXPECT_T(v,...) \
-   try { \
-     EXPECT_T(v) __VA_ARGS__ ;  \
+-Provides data array(char) A;
+-Provides data array(Cons) P;
+
+ Let Short $M_a$ = 1 << 12; 
+ Let Short $M_p$ = (1 << 15) - $M_a$ + 1; 
+@@ -80,3 +81,4 @@ Let Short $P_f$ = 1, $P_t$ = $M_p$, $P_n$ = $M_p$, $P_x$ = 0;
+ Let Short $X_f$ = min($A_f$, $P_f$), $X_t$ = max($A_t$, $P_t$); 
+ Let Long $X_n$ = range($X_f$, $X_t$);
+ Let Short $X_x$ = $X_t$ + 1; 
++#endif
