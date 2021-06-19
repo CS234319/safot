@@ -21,7 +21,7 @@ static Knob fresh() {
 
 Item fresh(Short s1, Short s2) {
   Expect(!marked(s1));
-  Expect(marked(s1));
+  Expect(marked(s2));
   if (heap.x()) throw __LINE__; 
   return fresh().Item().head(s1).rest(s2);
 }
