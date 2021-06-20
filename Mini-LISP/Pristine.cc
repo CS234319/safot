@@ -4,6 +4,7 @@
 
 Short Pristine::count = 0;
 
+Pristine::Pristine(): Pristine($P_x$) {}
 Pristine::Pristine(Short s): Knob(s) {}
 
 bool Pristine::ok() const { return x() || marked(s1()) && marked(s2()); }
@@ -37,6 +38,8 @@ Pristine Pristine::next() const {
 }
 
 #include "Pushdown.h"
+#include "text.h"
+#include "Cons.h"
 static Pushdown p;
 
 #define UNCHIC
@@ -46,8 +49,19 @@ static Pushdown p;
 #include <gtest/gtest.h>
 
 
-
-TEST(Pristine, Count) {
+TEST(Pristine, 1Count) {
+  heapify();
+  p.clear();
+  EXPECT_TRUE(p.top.x());
+  EXPECT_TRUE(p.empty());
+  EXPECT_GE(Pristine::count,10);
+  int before = Pristine::count;
+  p.push(3);
+  EXPECT_EQ(Pristine::count, before - 1);
+}
+ 
+TEST(Pristine, 3Count) {
+  p.clear();
   EXPECT_TRUE(p.top.x());
   EXPECT_TRUE(p.empty());
   int before = Pristine::count;
@@ -56,12 +70,14 @@ TEST(Pristine, Count) {
   EXPECT_EQ(Pristine::count, before - 1);
   p.push(2);
   EXPECT_EQ(Pristine::count, before - 2);
+  require("ABC");
+  EXPECT_EQ(Pristine::count, before - 2);
+  require(12,13);
+  EXPECT_EQ(Pristine::count, before - 3);
   EXPECT_EQ(2,p.pop());
-  EXPECT_EQ(Pristine::count, before - 1);
+  EXPECT_EQ(Pristine::count, before - 2);
   EXPECT_EQ(3,p.pop());
-  EXPECT_EQ(Pristine::count, before);
+  EXPECT_EQ(Pristine::count, before - 1);
   EXPECT_TRUE(p.empty());
   EXPECT_TRUE(p.top.x());
 }
-
-

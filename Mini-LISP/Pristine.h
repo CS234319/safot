@@ -9,6 +9,7 @@ Type Pristine: private Knob {
   using Knob::x;
   // Statistics
   using Knob::Item, Knob::Cons;
+  Pristine();
   Pristine(Short h); 
   Pristine prev(Pristine); 
   Pristine next(Pristine); 

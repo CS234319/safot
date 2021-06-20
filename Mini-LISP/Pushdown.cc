@@ -1,9 +1,18 @@
 #include "Pushdown.h"
+#include "Short.h"
 
-bool Pushdown::empty() { return top.x(); } 
+bool Pushdown::empty() { 
+  Keep(top.ok());
+  return top.x(); 
+} 
 
-Pushdown Pushdown::push(Short data) { 
-  ++size, top = fresh(data, top.rest()); 
+Pushdown Pushdown::push(Short s) { 
+  Expect(!marked(s));
+  Keep(top.ok());
+  // Promise(!top.x());
+  // Promise(top.head() == s);
+  ++size, top = fresh(s, top.inner()); 
+
   return *this; 
 }
 

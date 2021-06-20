@@ -27,6 +27,6 @@ Type Pushdown {
   Short peep(Short h); // Peep deeper into the stack.
   void poke(Short v);    // Examine stack's, but without popping it.
   void poke(Short h, Short v);    // Change stack, without popping it. 
-  Item top = Item($P_x$);
+  Item top = Item();
   Short size = 0;
 };

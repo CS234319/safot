@@ -8,8 +8,7 @@
 
 #include "layout.h"
 
-Pristine heapify();
-Pristine heap = heapify();
+Pristine heap($P_x$);
 
 static Knob fresh() {
   Expect(!heap.x());
@@ -21,8 +20,9 @@ static Knob fresh() {
 
 Item fresh(Short s1, Short s2) {
   Expect(!marked(s1));
-  Expect(marked(s2));
+  Expect(!marked(s2));
   if (heap.x()) throw __LINE__; 
+  Item::count++;
   return fresh().Item().head(s1).rest(s2);
 }
 
@@ -51,13 +51,9 @@ Cons require(Word w) {
   
 Pristine heapify() {
   for (Short s = $P_f$ + 1; s <= $P_t$ - 1; ++s) 
-    Knob(s).s1(s-1).s2(s+1);
-  Knob($P_f$).s1($P_x$).s2($P_f$ +1);
-  Knob($P_t$).s2($P_x$).s2($P_t$ -1);
-  for (Short s = $P_f$; s <= $P_t$; ++s)  {
-    stain(P[s].s1);
-    stain(P[s].s2);
-  }
+    Pristine(s).prev(Pristine(s-1)).next(Pristine(s+1));
+  Pristine($P_f$).prev(Pristine()).next(Pristine($P_f$ +1));
+  Pristine($P_t$).next(Pristine()).prev(Pristine($P_t$ -1));
   Pristine::count = $P_n$;
   return heap = Pristine($P_f$);
 }
@@ -75,11 +71,13 @@ Short error() {
 }
 
 void free(Item i) {
+  Expect(i.ok());
   let h = i.inner();
   Expect(Knob(h).item());
   Pristine(h).prev($P_x$).next(heap); 
   heap = h;
-  Pristine::count--;
+  Pristine::count++;
+  Item::count--;
 }
 
 Cons require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
@@ -97,31 +95,6 @@ Short length() {
 #undef function
 
 #include "gtest/gtest.h"
-
-TEST(fresh, Exhausted) { 
-  for (;;)
-    fresh();
-}
-
-
-TEST(Mark, FixedPoint) { 
-  for (auto h = -32768; h != 32767; ++h)
-    EXPECT_NE(h, mark(h)) << h;
-}
-
-TEST(Mark, Last) {
-  EXPECT_FALSE(marked($P_t$ + 1));
-}
-
-TEST(Word, hash) { 
-  EXPECT_NE(Word(3,4).hash(), Word(4,3).hash());
-  EXPECT_NE(Word(3,4).hash(), Word(4,3).hash());
-  EXPECT_NE(Word(2,3).hash(), Word(4,5).hash());
-  EXPECT_NE(Word(2,3).hash(), Word(4,5).hash());
-  EXPECT_GT(Word(2,3).hash(), 4);
-  EXPECT_GT(Word(3,4).hash(), 3);
-  EXPECT_GT(Word(4,5).hash(), 4);
-}
 
 TEST(Heapify, exists) { 
   try {
@@ -165,21 +138,31 @@ TEST(Heapify, Pristine) {
 
 TEST(Heapify, AllPristine) { 
   heapify();
-  for (Short h = $P_f$; h <= $P_t$; ++h)
-    EXPECT_TRUE(Pristine(h).ok()) << h;
+  for (Short s = $P_f$; s <= $P_t$; ++s)
+    EXPECT_TRUE(Pristine(s).ok()) << s;
 }
 
 TEST(Fresh, exists) { 
   heapify();
-  fresh(15,21);
+  fresh(15,(21));
 }
 
 TEST(Fresh, correct) { 
   heapify();
-  auto f = fresh(15,21);
+  auto f = fresh(15,(21));
   EXPECT_EQ(f.head(), 15);
-  EXPECT_EQ(f.head(), 15);
+  EXPECT_EQ(f.rest().inner(), 21);
 }
+
+TEST(Fresh, Count) { 
+  heapify();
+  EXPECT_EQ(Pristine::count, $P_n$);
+  auto f = fresh(15,(21));
+  EXPECT_EQ(Pristine::count, $P_n$ -1);
+  free(f);
+  EXPECT_EQ(Pristine::count, $P_n$);
+}
+
 
 TEST(Fresh, 1) { 
   heapify();
@@ -373,58 +356,12 @@ TEST(Words, Reuse) {
   EXPECT_EQ(s3.inner(), s6.inner());
 }
 
-TEST(Marking, Pairs) { 
-  EXPECT_LT(mark($P_f$), $A_f$);   
-  EXPECT_LT(mark($P_t$), $A_f$);   
-  EXPECT_LT(mark(($P_f$ + $P_t$)/2), $A_f$);   
-  EXPECT_LT(mark($P_f$-1), $A_f$);   
-  EXPECT_LT(mark($P_f$+1), $A_f$);   
-  EXPECT_EQ(mark(mark($P_f$)), $P_f$);
-  EXPECT_EQ(mark(mark($P_t$)), $P_t$);
-  EXPECT_EQ(mark(mark(($P_f$ + $P_t$)/2)),($P_f$ + $P_t$)/2);
-  EXPECT_EQ(mark(mark($P_t$ + 1)),$P_t$ + 1 );
-  EXPECT_EQ(mark(mark($P_t$ + 1)), $P_t$ + 1);
-}
-
-TEST(Marking, Atoms) { 
-  EXPECT_GT(mark($A_f$), $A_t$);   
-  EXPECT_LT(mark($A_t$),0);
-  EXPECT_GT(mark(($A_f$ + $A_t$)/2), $P_t$);   
-  EXPECT_GT(mark($A_t$ - 1), $P_t$);   
-  EXPECT_GT(mark($A_f$ - 1), $P_t$);   
-  EXPECT_EQ(mark(mark($A_f$)), $A_f$);
-  EXPECT_EQ(mark(mark($A_f$ + 1)),$A_f$ + 1 );
-  EXPECT_EQ(mark(mark($A_t$ + 1)), $A_t$ + 1);
-  EXPECT_EQ(mark(mark($A_t$)), $A_t$);
-  EXPECT_EQ(mark(mark(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
-}
-
-TEST(Marking, Bounds) { 
-  EXPECT_LT(mark($P_f$), $P_f$);   
-  EXPECT_LT(mark($P_t$), $P_t$);   
-  EXPECT_LT(mark(($P_f$ + $P_t$)/2), $A_f$);
-  EXPECT_LT(mark($P_f$-1), $X_f$);
-  EXPECT_LT(mark($P_f$+1), $X_f$);   
-  EXPECT_EQ(mark(mark($P_f$)), $P_f$);
-  EXPECT_EQ(mark(mark($P_t$)), $P_t$);
-  EXPECT_EQ(mark(mark(($P_f$ + $P_t$)/2)),($P_f$ + $P_t$)/2);
-  EXPECT_EQ(mark(mark($P_f$ - 1)),$P_f$ - 1 );
-  EXPECT_EQ(mark(mark($P_f$ + 1)), $P_f$ + 1);
-  EXPECT_EQ(mark(mark($P_t$ - 1)),$P_t$ - 1 );
-  EXPECT_EQ(mark(mark($P_t$ + 1)), $P_t$ + 1);
-}
-
-TEST(Marking, Atoms1) { 
-  EXPECT_GT(mark($A_f$), $X_t$);   
-  EXPECT_LT(mark($A_t$), $A_f$);
-  EXPECT_GT(mark(($A_f$ + $A_t$)/2), $X_t$);
-  EXPECT_GT(mark($A_t$-1), $X_t$);   
-  EXPECT_GT(mark($A_f$+1), $X_t$);   
-  EXPECT_EQ(mark(mark($A_f$)),$A_f$);
-  EXPECT_EQ(mark(mark($A_t$)),$A_t$);
-  EXPECT_EQ(mark(mark(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
-  EXPECT_EQ(mark(mark($A_f$ - 1)), $A_f$ - 1 );
-  EXPECT_EQ(mark(mark($A_t$ - 1)), $A_t$ - 1);
-  EXPECT_EQ(mark(mark($A_f$ + 1)), $A_f$ + 1 );
-  EXPECT_EQ(mark(mark($A_t$ + 1)), $A_t$ + 1);
+TEST(Fresh, Exhausted) { 
+  heapify();
+  for (auto i = $P_f$ ; i <= $P_n$; ++i) {
+    let f = fresh().inner();
+    EXPECT_EQ(i, f);
+    EXPECT_EQ(Pristine::count, $P_n$ - i); 
+  }
+  EXPECT_TRUE(heap.x());
 }

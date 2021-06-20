@@ -22,11 +22,13 @@ typedef std::function<bool ()> Predicate;
        if (predicate()) return;                                          \
        (void) fprintf(stderr,"%s(%d)/%s: '%s' = broken promise\n",       \
            file, line, context, expression);                             \
-        throw this;                                                      \
+             throw *this;                                                \ 
     }                                                                    \
   } UNIQUE(promise)                                                      \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})        \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [&]{return P;})        \
 ;
+
+//       throw this;                                                      \
 
 #define Expect(P) \
   struct UNIQUE(Expect) {                                                \
@@ -40,11 +42,31 @@ typedef std::function<bool ()> Predicate;
         if (predicate()) return;                                         \
          (void) fprintf(stderr,"%s(%d)/%s: '%s' = unmet expectation\n",  \
              file, line, context, expression);                           \
-        throw this;                                                      \
+             throw *this;                                                \ 
     }                                                                    \
   } UNIQUE(Expect)                                                       \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [=]{return P;})        \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, [&]{return P;})        \
 ;
+
+
+#define Keep(X) Expect(P) Promise(X)
+#define xCurrent(X) ([=]{return X;})()
+
+#define Return(X) return ((__ = (X)),(__)); 
+
+#define FUN(Return, Name, ArgumentType) \
+  Return Name(ArgumentType _) { \
+    const auto $$ = Name; \
+    M3("[",_,"]"); \
+    Return __ =  
+
+#define IS(X)    \
+    X; \
+    M2("-->", __); \
+    return __; \
+  } 
+
+
 
 
 //
@@ -70,19 +92,6 @@ typedef std::function<bool ()> Predicate;
 #ifndef Type
 #error
 #endif
-
-#define FUN(Return, Name, ArgumentType) \
-  Return Name(ArgumentType _) { \
-    const auto $$ = Name; \
-    M3("[",_,"]"); \
-    Return __ =  
-
-#define IS(X)    \
-    X; \
-    M2("-->", __); \
-    return __; \
-  } 
-
 
 /*@ The Primitive Types@
 Our byte addressable underlining machine offers three primitive types: byte,

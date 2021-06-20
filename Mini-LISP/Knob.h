@@ -11,6 +11,7 @@ Type Knob: Handle { // An S-expression represented by its Knob
   typedef Handle Inner;
   // Composition
   Knob(Short);
+  Knob(); 
   // Inspectors:
   bool   cons()     const;
   bool   item()     const;

@@ -8,8 +8,8 @@
 #include "Pristine.h"
 #include "Short.h"
 
+Knob::Knob(): Knob($P_x$) {} 
 Knob::Knob(Short s): Inner(s) {}
-
 bool   Knob::x()  const { return inner() == $P_x$; } 
 Short  Knob::s1() const { return P[inner()].s1;  }
 Short  Knob::s2() const { return P[inner()].s2;  }
