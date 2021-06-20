@@ -16,15 +16,15 @@
  */
 Type Pushdown {
   Short pop();
-  Pushdown push(Short);
-  Pushdown push(Short,Short);
-  Pushdown push(Short,Short,Short);
-  Pushdown push(Short,Short,Short,Short);
-  Pushdown push(Short,Short,Short,Short,Short);
-  bool empty();
-  Pushdown clear(); // Clear the stack, returning all elements to the pool
-  Short peep();    // Examine stack's, but without popping it.
-  Short peep(Short h); // Peep deeper into the stack.
+  Pushdown& push(Short);
+  Pushdown& push(Short,Short);
+  Pushdown& push(Short,Short,Short);
+  Pushdown& push(Short,Short,Short,Short);
+  Pushdown& push(Short,Short,Short,Short,Short);
+  bool empty() const;
+  Pushdown& clear(); // Clear the stack, returning all elements to the pool
+  Short peep() const;    // Examine stack's, but without popping it.
+  Short peep(Short h) const; // Peep deeper into the stack.
   void poke(Short v);    // Examine stack's, but without popping it.
   void poke(Short h, Short v);    // Change stack, without popping it. 
   Item top = Item();

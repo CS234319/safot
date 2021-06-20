@@ -1,25 +1,25 @@
 #include "Pushdown.h"
 #include "Short.h"
 
-bool Pushdown::empty() { 
+extern bool Pushdown::empty() const { 
   Keep(top.ok());
   return top.x(); 
 } 
 
-Pushdown Pushdown::push(Short s) { 
+Pushdown& Pushdown::push(Short s) { 
   Expect(!marked(s));
   Keep(top.ok());
-  // Promise(!top.x());
-  // Promise(top.head() == s);
+  Promise(!top.x());
+  Promise(top.head() == s);
   ++size, top = fresh(s, top.inner()); 
 
   return *this; 
 }
 
-Pushdown Pushdown::push(Short h1,Short h2) { return push(h2).push(h1); }
-Pushdown Pushdown::push(Short h1,Short h2, Short h3) { return push(h3).push(h1, h2); }
-Pushdown Pushdown::push(Short h1,Short h2, Short h3, Short h4) { return push(h4).push(h1, h2, h3); }
-Pushdown Pushdown::push(Short h1,Short h2, Short h3, Short h4, Short h5) { return push(h5).push(h1, h2, h3, h4); }
+Pushdown& Pushdown::push(Short h1,Short h2) { return push(h2).push(h1); }
+Pushdown& Pushdown::push(Short h1,Short h2, Short h3) { return push(h3).push(h1, h2); }
+Pushdown& Pushdown::push(Short h1,Short h2, Short h3, Short h4) { return push(h4).push(h1, h2, h3); }
+Pushdown& Pushdown::push(Short h1,Short h2, Short h3, Short h4, Short h5) { return push(h5).push(h1, h2, h3, h4); }
 
 Short Pushdown::pop() {
   Expect(!empty());
@@ -31,35 +31,42 @@ Short Pushdown::pop() {
   return $;
 }
 
-Pushdown Pushdown::clear() {
+Pushdown& Pushdown::clear() {
   while (!empty()) 
     pop();
   return *this;
 }
 
-Short Pushdown::peep() {
+Short Pushdown::peep() const {
   Expect(!empty());
   return top.head();
 }
 
-Short Pushdown::peep(Short depth) {
+Short Pushdown::peep(Short depth) const {
   Expect(!empty());
-  Expect(depth < size);
+  Expect(depth <= size);
   Expect(depth >= 0);
-  for (auto i = top; --depth; i = i.rest())
+  Expect(!top.x());
+  for (auto i = top; ; i = i.rest(), --depth) {
+    Expect(i.ok());
+    Expect(!i.x());
     if (depth == 0)
       return i.head();
+  }
 }
 
 void Pushdown::poke(Short depth, Short value) {
   Expect(!empty());
   Expect(depth < size);
   Expect(depth >= 0);
-  for (auto i = top; --depth; i = i.rest())
+  for (auto i = top; ; i = i.rest(), --depth) {
+    Expect(i.ok());
+    Expect(!i.x());
     if (depth == 0) {
       i.head(value);
       return;
     }
+  }
 }
 
 
@@ -69,20 +76,40 @@ void Pushdown::poke(Short depth, Short value) {
 #include <string.h>
 #include <gtest/gtest.h>
 
-Pushdown p;
 
 TEST(Pushdown, Empty) {
+  Pushdown p;
   EXPECT_TRUE(p.empty());
 }
 
-TEST(Pushdown, Push) {
+TEST(Pushdown, 1Push) {
+  Pushdown p;
   p.push(3);
   EXPECT_FALSE(p.empty());
   EXPECT_EQ(3,p.pop());
   EXPECT_TRUE(p.empty());
 }
 
-TEST(Pushdown, Push2) {
+TEST(Pushdown, 2Push) {
+  Pushdown p;
+  p.push(3);
+  p.push(2);
+  EXPECT_EQ(2,p.pop());
+  EXPECT_EQ(3,p.pop());
+  EXPECT_TRUE(p.empty());
+}
+
+TEST(Pushdown, 2Push0) {
+  Pushdown p;
+  p.push(3).push(2);
+  EXPECT_EQ(2,p.pop());
+  EXPECT_EQ(3,p.pop());
+  EXPECT_TRUE(p.empty());
+}
+
+
+TEST(Pushdown, 2Push2) {
+  Pushdown p;
   p.push(2,3);
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
@@ -90,6 +117,7 @@ TEST(Pushdown, Push2) {
 }
 
 TEST(Pushdown, Push3) {
+  Pushdown p;
   p.push(1,2,3);
   EXPECT_EQ(1,p.pop());
   EXPECT_EQ(2,p.pop());
@@ -97,7 +125,25 @@ TEST(Pushdown, Push3) {
   EXPECT_TRUE(p.empty());
 }
 
-TEST(Pushdown, Peep) {
+TEST(Pushdown, Peep0) {
+  Pushdown p;
+  p.push(13);
+  EXPECT_EQ(13,p.peep());
+}
+
+TEST(Pushdown, 0Peep0) {
+  Pushdown p;
+  p.push(13).push(12);
+  EXPECT_EQ(12,p.peep(0));
+}
+
+TEST(Pushdown, 3Size) {
+  Pushdown p;
+  EXPECT_EQ(p.push(1,2,3).size, 3);
+}
+
+TEST(Pushdown, 3Peep) {
+  Pushdown p;
   p.push(1,2,3);
   EXPECT_EQ(1,p.peep());
   EXPECT_EQ(1,p.peep(0));
@@ -111,6 +157,7 @@ TEST(Pushdown, Peep) {
 
 
 TEST(Pushdown, Push4) {
+  Pushdown p;
   p.push(1,2,3,4);
   EXPECT_EQ(1,p.pop());
   EXPECT_EQ(2,p.pop());
@@ -120,6 +167,7 @@ TEST(Pushdown, Push4) {
 }
 
 TEST(Pushdown, Clear) {
+  Pushdown p;
   EXPECT_TRUE(p.empty());
   p.push(1,2,3,4);
   EXPECT_FALSE(p.empty());
@@ -130,6 +178,7 @@ TEST(Pushdown, Clear) {
 }
 
 TEST(Pushdown, TopZero) {
+  Pushdown p;
   EXPECT_TRUE(p.empty());
   EXPECT_TRUE(p.top.x());
   p.push(3);
@@ -139,7 +188,7 @@ TEST(Pushdown, TopZero) {
 } 
 
 TEST(Pushdown, Size) {
-  p.clear();
+  Pushdown p;
   EXPECT_EQ(p.size,0);
   p.push(__LINE__);
   EXPECT_EQ(p.size,1);
@@ -151,6 +200,8 @@ TEST(Pushdown, Size) {
   EXPECT_EQ(p.size,2);
   p.push(__LINE__);
   EXPECT_EQ(p.size,3);
+  p.pop();
+  EXPECT_EQ(p.size,2);
   p.pop();
   EXPECT_EQ(p.size,1);
   p.pop();
@@ -159,6 +210,7 @@ TEST(Pushdown, Size) {
 
 
 TEST(Pushdown, PushPush) {
+  Pushdown p;
   p.push(3);
   EXPECT_FALSE(p.empty());
   p.push(2);
@@ -166,21 +218,4 @@ TEST(Pushdown, PushPush) {
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
   EXPECT_TRUE(p.empty());
-}
-
-TEST(Item, Count) {
-  EXPECT_TRUE(p.top.x());
-  EXPECT_TRUE(p.empty());
-  int before = Item::count;
-  EXPECT_GE(before,2);
-  p.push(3);
-  EXPECT_EQ(Pristine::count, before - 1);
-  p.push(2);
-  EXPECT_EQ(Item::count, before - 2);
-  EXPECT_EQ(2,p.pop());
-  EXPECT_EQ(Item::count, before - 1);
-  EXPECT_EQ(3,p.pop());
-  EXPECT_EQ(Item::count, before);
-  EXPECT_TRUE(p.empty());
-  EXPECT_TRUE(p.top.x());
 }

@@ -8,7 +8,7 @@
 
 #include "layout.h"
 
-Pristine heap($P_x$);
+Pristine heap = heapify();
 
 static Knob fresh() {
   Expect(!heap.x());
@@ -36,6 +36,7 @@ static Cons require(Word w, Short s) {
   Expect(s <= $P_t$);
   if (P[s].l == w.l) return s; 
   if (!Pristine(s).ok()) return fresh().Cons().car(w.s1).cdr(w.s2);
+  Pristine::count--;
   Promise(Cons::ok(P[s]));
   auto prev = Pristine(s).prev(), next = Pristine(s).next();
   if (!prev.x()) prev.next(next); 
