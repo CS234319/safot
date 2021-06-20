@@ -61,6 +61,7 @@ TEST(Pristine, 1Count) {
 }
 
 TEST(Pristine, RequireCons) {
+  EXPECT_EQ(error(),0);
   Pushdown p;
   int before = Pristine::count;
   p.push(3,2,1);
@@ -80,6 +81,7 @@ TEST(Pristine, RequireCons) {
 }
 
 TEST(Pristine, nRequireCons) {
+  EXPECT_EQ(error(),0);
   heapify();
   Pushdown p;
   int before = Pristine::count;
@@ -100,6 +102,7 @@ TEST(Pristine, nRequireCons) {
 }
 
 TEST(Pristine, nPushPop) {
+  EXPECT_EQ(error(),0);
   heapify();
   Pushdown p;
   int before = Pristine::count;
@@ -122,6 +125,7 @@ TEST(Pristine, nPushPop) {
 
 TEST(Pristine, RequireAtom) {
   Pushdown p;
+  heapify();
   int before = Pristine::count;
   p.push(3,2,1);
   require("ABC");
@@ -145,6 +149,7 @@ TEST(Pristine, 1RequireAtom) {
 }
 
 TEST(Pristine, 1RequireCons) {
+  EXPECT_EQ(error(),0);
   heapify();
   int before = Pristine::count;
   EXPECT_EQ(Pristine::count, before);
@@ -156,6 +161,7 @@ TEST(Pristine, 1RequireCons) {
 
 
 TEST(Pristine, RequireBoth) {
+  EXPECT_EQ(error(),0);
   heapify();
   Pushdown p;
   EXPECT_TRUE(p.top.x());
