@@ -34,8 +34,16 @@ static Cons require(Word w, Short s) {
   Expect(Cons::ok(w));
   Expect(s >= $P_f$);
   Expect(s <= $P_t$);
-  if (P[s].l == w.l) return s; 
-  if (!Pristine(s).ok()) return fresh().Cons().car(w.s1).cdr(w.s2);
+  if (P[s].l == w.l) {
+    Cons::reuse++;
+    return s; 
+  };
+  Cons::count++;
+  if (!Pristine(s).ok()) {
+    Cons::miss++;
+    return fresh().Cons().car(w.s1).cdr(w.s2);
+  }
+  Expect(Pristine(s).ok());
   Pristine::count--;
   Promise(Cons::ok(P[s]));
   auto prev = Pristine(s).prev(), next = Pristine(s).next();
@@ -56,6 +64,10 @@ Pristine heapify() {
   Pristine($P_f$).prev(Pristine()).next(Pristine($P_f$ +1));
   Pristine($P_t$).next(Pristine()).prev(Pristine($P_t$ -1));
   Pristine::count = $P_n$;
+  Cons::count = 0;
+  Cons::reuse = 0;
+  Cons::miss = 0;
+  Item::count = 0;
   return heap = Pristine($P_f$);
 }
 

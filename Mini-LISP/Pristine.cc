@@ -61,6 +61,7 @@ TEST(Pristine, 1Count) {
 }
 
 TEST(Pristine, RequireCons) {
+  heapify();
   EXPECT_EQ(error(),0);
   Pushdown p;
   int before = Pristine::count;

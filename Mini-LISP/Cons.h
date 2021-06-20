@@ -5,11 +5,14 @@
 
 Type Cons: private Knob {
   using Knob::inner;
-  Cons(Short h);
-  Cons car(Short h); 
-  Cons cdr(Short h); 
-  Knob car() const;
-  Knob cdr() const;
+  static Short count; 
+  static Short reuse; 
+  static Short miss; 
+  Cons(Short);
+  Cons car(Short); 
+  Cons cdr(Short); 
+  Handle car() const;
+  Handle cdr() const;
   bool ok() const;
   static bool ok(Word);
 };
