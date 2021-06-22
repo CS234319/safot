@@ -8,9 +8,6 @@
 
 #include "layout.h"
 
-
-
-
 Pristine heap; 
 
 static Knob fresh() {
@@ -54,8 +51,8 @@ static Cons require(Word w, Short s) {
     return fresh().Cons().car(w.s1).cdr(w.s2);
   }
   Expect(Pristine(s).ok());
-  Pristine::count--;
   Promise(Cons::ok(P[s]));
+  Pristine::count--;
   auto prev = Pristine(s).prev(), next = Pristine(s).next();
   if (!prev.x()) prev.next(next); 
   if (!next.x()) next.prev(prev); 
@@ -89,6 +86,8 @@ void free(Item i) {
   let h = i.inner();
   Expect(Knob(h).item());
   Pristine(h).prev($P_x$).next(heap); 
+  if (!heap.x())
+    heap.prev(Pristine(h));
   heap = h;
   Pristine::count++;
   Item::count--;
@@ -98,7 +97,7 @@ Cons require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
 
 Short length() {
   Short result = 0;
-  for (auto h = heap; !h.x();  h = h.next()) // printf("%d ", h), 
+  for (auto h = heap; !h.x();  h = h.next()) 
       ++result;
   return result;
 }
@@ -106,10 +105,10 @@ Short length() {
 Boolean asymmetric() {
   int n;
   for (auto p = heap; !p.x(); p = p.next(), ++n) { 
-    if (!p.prev().x() && p.prev().next().inner() == p.inner()) 
-      return printf("%d: PREV h=%d;prev=%d;next=%d\n",n,p,p.prev(), p.next()), true;
-    if (!p.next().x() && p.next().prev().inner() == p.inner()) 
-      return printf("%d: NEXT h=%d;prev=%d;next=%d\n",n,p,p.prev(), p.next()), true;
+    if (!p.prev().x() && p.prev().next().inner() != p.inner()) 
+      return true;
+    if (!p.next().x() && p.next().prev().inner() != p.inner()) 
+      return true;
   }
   return false;
 }
@@ -252,6 +251,21 @@ TEST(Heapify, zeroes) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
+
+TEST(Heapify, FirstRequire) { 
+  try {
+    heapify();
+    EXPECT_EQ(Cons::count, 0);
+    EXPECT_EQ(Cons::miss, 0);
+    EXPECT_EQ(Cons::reuse, 0);
+    EXPECT_EQ(Item::count, 0);
+    EXPECT_EQ(Pristine::count, $P_n$);
+
+  } catch(int e) {
+    ADD_FAILURE() << "Died at line " << e;
+  }
+}
+
 
 TEST(Heapify, AllPristine) { 
   heapify();
@@ -398,7 +412,7 @@ TEST(Corruption, ofNext) {
   try {
     heapify();
     Pristine(Word(13,17).hash()).next(Word(17,13).hash());
-    EXPECT_FF(asymmetric());
+    EXPECT_TT(asymmetric());
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
@@ -679,7 +693,7 @@ void mess(Pushdown &p) {
     p.push(seed.hash());
 }
 
-TEST(Heap, churnPushdown) { 
+TEST(Churn, Pushdown) { 
   heapify();
   for (int i = 0; i < 200 ; i++) { 
     {
@@ -695,7 +709,7 @@ TEST(Heap, churnPushdown) {
   EXPECT_FF(Cons::corrupted());
 }  
 
-TEST(Heap, churnRequire) { 
+TEST(Churn, Require) { 
   heapify();
   int n = 0;
   for (Short i = 0;  ; i++) { 
@@ -754,23 +768,6 @@ TEST(Fresh, VirginLastCorrect) {
   EXPECT_EQ(Pristine::count, 0);
 }
 
-
-TEST(Fresh, ItemExhausted) { 
-  heapify();
-  EXPECT_EQ(Pristine::count, $P_n$); 
-  for (auto s = 1 ; s <= $P_n$; ++s) {
-    Item i = fresh(s, $P_x$);
-    EXPECT_EQ(i.inner(), s - $P_f$ + 1);
-    EXPECT_EQ(Item::count + Pristine::count, $P_n$); 
-    EXPECT_EQ(Pristine::count, $P_n$ - s); 
-    EXPECT_EQ(Item::count, s); 
-  }
-  EXPECT_TT(heap.x());
-  EXPECT_EQ(Pristine::count, 0);
-  EXPECT_FF(Item::corrupted());
-  EXPECT_FF(Pristine::corrupted());
-}
-
 TEST(Fresh, ItemAlmostExhausted) { 
   heapify();
   EXPECT_EQ(Pristine::count, $P_n$); 
@@ -804,27 +801,58 @@ TEST(Fresh, ItemLast) {
   EXPECT_FF(Pristine::corrupted());
   EXPECT_FF(Item::corrupted());
   EXPECT_FF(Cons::corrupted());
+  EXPECT_TT(Pristine::valid());
 }
 
+TEST(Fresh, ItemExhausted) { 
+  heapify();
+  EXPECT_EQ(Pristine::count, $P_n$); 
+  for (auto s = 1 ; s <= $P_n$; ++s) {
+    Item i = fresh(s, $P_x$);
+    EXPECT_EQ(i.inner(), s - $P_f$ + 1);
+    EXPECT_EQ(Item::count + Pristine::count, $P_n$); 
+    EXPECT_EQ(Pristine::count, $P_n$ - s); 
+    EXPECT_EQ(Item::count, s); 
+  }
+  EXPECT_TT(heap.x());
+  EXPECT_EQ(Pristine::count, 0);
+  EXPECT_FF(Item::corrupted());
+  EXPECT_FF(Pristine::corrupted());
+}
 
-TEST(Heap, DISABLED_churnBoth) { 
+TEST(Fresh, ItemExhaustedCycle) { 
+  heapify();
+  Pushdown p;
+  EXPECT_EQ(Pristine::count, $P_n$); 
+  for (auto s = 1 ; s <= $P_n$; ++s) 
+    p.push(s);
+  for (auto s = $P_n$ ; s >= 1; --s) 
+    EXPECT_EQ(s, p.pop()) << s;
+  EXPECT_EQ(Cons::count, 0);
+  EXPECT_EQ(Cons::miss, 0);
+  EXPECT_EQ(Cons::reuse, 0);
+  EXPECT_EQ(Item::count, 0);
+  EXPECT_EQ(Pristine::count, $P_n$);
+  EXPECT_TT(Pristine::valid());
+}
+
+TEST(Churn, churnBoth) { 
   heapify();
   for (int i = 0, n = 0;  ; i++) { 
     EXPECT_EQ(Item::count, 0);
     Pushdown p[10];
     for (int j = 0;  j <= i; ++j, ++n) {
       if (heap.x()) goto done;
-      EXPECT_GT(Pristine::count, 0);
-      EXPECT_FF(asymmetric());
       auto const c = require(i,j);
       int d = P[c.inner()].hash() % 10;
       mess(p[d]);
     }
     if (n > 8000) {
+      EXPECT_GT(Pristine::count, 0);
+      EXPECT_FF(asymmetric());
       EXPECT_FF(Pristine::corrupted());
       EXPECT_FF(Item::corrupted());
       EXPECT_FF(Cons::corrupted());
-      EXPECT_LT(n, 8000);
      }
   }
   done:

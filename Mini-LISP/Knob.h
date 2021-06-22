@@ -8,24 +8,27 @@ Type Item;
 Type Pristine;
 
 Type Knob: Handle { // An S-expression represented by its Knob
+  typedef Knob Self;
   typedef Handle Inner;
   // Composition
-  Knob(Short);
-  Knob(); 
-  // Inspectors:
-  Boolean   cons()     const;
-  Boolean   item()     const;
-  Boolean   pristine() const;
-  Boolean   x()        const;
-  Short  s1()       const;
-  Short  s2()       const;
-  // Convertors:
-  Type Cons      Cons()      const;
-  Type Item      Item()      const;
-  Type Pristine  Pristine()  const;
+  Constructor(Knob(Short));
+  Constructor(Knob());
+  // Properties:
+  Property(Short   s1);
+  Property(Short   s2);       
+  Property(Boolean ok);
+  Property(Boolean cons);
+  Property(Boolean item);
+  Property(Boolean pristine);
+  Property(Boolean x);
+
+  // Converters:
+  Type Cons     Cons()     const;
+  Type Item     Item()     const;
+  Type Pristine Pristine() const;
   // Mutators:
-  Knob s1(Short);
-  Knob s2(Short);
+  Selfer(s1(Short));
+  Selfer(s2(Short));
 };
   /*
     Short mark(Short h);

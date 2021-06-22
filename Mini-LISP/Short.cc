@@ -46,13 +46,9 @@ TEST(Stain, Word) {
   EXPECT_TT(Pristine(4).ok());
 }
 
-TEST(Mark, Distinct) { 
+TEST(Marking, Distinct) { 
   for (auto h = -32768; h != 32767; ++h)
     EXPECT_NE(h, mark(h)) << h;
-}
-
-TEST(Mark, Last) {
-  EXPECT_FF(marked($P_t$ + 1));
 }
 
 TEST(Marking, Pairs) { 

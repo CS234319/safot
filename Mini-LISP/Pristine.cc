@@ -14,16 +14,20 @@ Boolean Pristine::ok() const {
       return false;
   const Short p = prev().inner(), n = next().inner();
   if (p != $P_x$) {
-    Surely(0, *this,x(), p, n); 
-    Surely(0, prev(), next(), prev().inner(), next().inner()); 
     Expect(p >= $P_f$,p); 
     Expect(p <= $P_t$,p); 
-    return false;
+    if (p < $P_f$) 
+      return false;
+    if (p > $P_t$) 
+      return false;
   }
   if (n != $P_x$) {
     Expect(n >= $P_f$,n); 
     Expect(n <= $P_t$,n); 
-    return false;
+    if (n < $P_f$) 
+      return false;
+    if (n > $P_t$) 
+      return false;
   }
   return true;
 }
@@ -66,8 +70,16 @@ Pristine Pristine::next() const {
 #include <string.h>
 #include <gtest/gtest.h>
 
+TEST(Pristine, Count1Require) {
+  heapify();
+  auto const before = Pristine::count;
+  require(12,13); 
+  EXPECT_NE(Pristine::count, before);
+  EXPECT_EQ(Pristine::count, before - 1);
+}
 
-TEST(Pristine, 1Count) {
+TEST(Pristine, Count1Push) {
+  heapify();
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
@@ -78,7 +90,45 @@ TEST(Pristine, 1Count) {
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Pristine, RequireCons) {
+TEST(Require, Counters) {
+  heapify();
+  require(13,14);
+  EXPECT_EQ(Pristine::count, $P_n$ - 1);
+  EXPECT_EQ(Cons::count, 1);
+  EXPECT_EQ(Cons::miss, 0);
+  EXPECT_EQ(Cons::reuse, 0);
+  EXPECT_TT(Pristine::valid());
+}
+
+TEST(Pristine, RequireCons0) {
+  heapify();
+  EXPECT_TT(Pristine::valid());
+  int before = Pristine::count;
+  EXPECT_EQ(Pristine::count, before);
+  require(12,13);
+  EXPECT_NE(Pristine::count, before);
+  EXPECT_EQ(Pristine::count, before -1);
+  EXPECT_TT(Pristine::valid());
+}
+
+TEST(Pristine, RequireCons2) {
+  extern Boolean asymmetric();
+  EXPECT_FF(asymmetric());
+  heapify();
+  Pushdown p;
+  p.push(3,2,1);
+  EXPECT_FF(asymmetric());
+  require(12,13);
+  EXPECT_FF(asymmetric());
+  require(12,13);
+  EXPECT_FF(asymmetric());
+  p.pop();
+  EXPECT_FF(asymmetric());
+}
+
+TEST(Pristine, RequireCons3) {
+  extern Boolean asymmetric();
+  extern Boolean cyclic();
   heapify();
   EXPECT_TT(Pristine::valid());
   Pushdown p;
@@ -96,12 +146,17 @@ TEST(Pristine, RequireCons) {
   EXPECT_EQ(Pristine::count, before - 1);
   EXPECT_EQ(p.size,0);
   EXPECT_TT(p.top.x());
+  EXPECT_FF(asymmetric());
+  EXPECT_FF(cyclic());
+  EXPECT_FF(Cons::corrupted());
+  EXPECT_FF(Item::corrupted());
+  EXPECT_FF(Pristine::corrupted());
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Pristine, nRequireCons) {
-  EXPECT_TT(Pristine::valid());
+TEST(Pristine, RequireConsN) {
   heapify();
+  EXPECT_TT(Pristine::valid());
   Pushdown p;
   int before = Pristine::count;
   p.push(3,2,1);
@@ -120,7 +175,7 @@ TEST(Pristine, nRequireCons) {
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Pristine, nPushPop) {
+TEST(Pristine, PushPop1) {
   EXPECT_TT(Pristine::valid());
   heapify();
   Pushdown p;
@@ -167,17 +222,6 @@ TEST(Pristine, 1RequireAtom) {
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Pristine, 1RequireCons) {
-  EXPECT_TT(Pristine::valid());
-  heapify();
-  int before = Pristine::count;
-  EXPECT_EQ(Pristine::count, before);
-  require(12,13);
-  EXPECT_NE(Pristine::count, before);
-  EXPECT_EQ(Pristine::count, before -1);
-  EXPECT_TT(Pristine::valid());
-}
-
 TEST(Pristine, RequireBoth) {
   EXPECT_TT(Pristine::valid());
   heapify();
@@ -209,5 +253,4 @@ TEST(Pristine, RequireBoth) {
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
   EXPECT_TT(Pristine::valid());
-
 }

@@ -14,13 +14,12 @@ typedef std::function<bool()> Predicate;
 #define THROW throw *this
 
 #define __EXPRESSION(X) <<#X<<"="<<X<<"; "
-#define chicY(X)       << "" << #X << "= " <<  X << "; "
 
 #define X1(x1)           
-#define X2(x1,x2)           chicY(x2) 
-#define X3(x1,x2,x3)        chicY(x2)  chicY(x3) 
-#define X4(x1,x2,x3,x4)     chicY(x2)  chicY(x3) chicY(x4)
-#define X5(x1,x2,x3,x4,x5)  chicY(x2)  chicY(x3) chicY(x4) chicY(x5)
+#define X2(x1,x2)           __EXPRESSION(x2) 
+#define X3(x1,x2,x3)        __EXPRESSION(x2)  __EXPRESSION(x3) 
+#define X4(x1,x2,x3,x4)     __EXPRESSION(x2)  __EXPRESSION(x3) __EXPRESSION(x4)
+#define X5(x1,x2,x3,x4,x5)  __EXPRESSION(x2)  __EXPRESSION(x3) __EXPRESSION(x4) __EXPRESSION(x5)
 
 #define GET_MACRO(_0,_1,_2,_3,_4, _5, NAME,...) NAME
 #define ELABORATE(...)  GET_MACRO(_0,__VA_ARGS__,X5, X4,X3,X2,X1,X0)(__VA_ARGS__)
@@ -138,6 +137,11 @@ typedef std::function<bool()> Predicate;
 #define perspective(...) struct{__VA_ARGS__;};
 #define Representation union
 #define Type struct
+#define Constructor(X)  X 
+#define Property(X)     X() const
+#define Mutator(X)      X 
+#define Selfer(X)       Self X 
+#define Is(X)           { return X; }
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__{}
 

@@ -17,10 +17,10 @@ Short  Knob::s2() const { return P[inner()].s2;  }
 Knob Knob::s1(Short  s) { P[inner()].s1 = s; return  *this; }
 Knob Knob::s2(Short  s) { P[inner()].s2 = s; return  *this; }
 
+// Propertys:
 Cons     Knob::Cons()     const  { return  inner(); }
 Item     Knob::Item()     const  { return  inner(); }
 Pristine Knob::Pristine() const  { return  inner(); }
-
 Boolean     Knob::item()     const  { !marked(s1())  &&  marked(s2());   }
 Boolean     Knob::pristine() const  { marked(s1())   &&  marked(s2());   }
 Boolean     Knob::cons()     const  { !marked(s1())  &&  !marked(s2());  }
