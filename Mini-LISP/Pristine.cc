@@ -175,7 +175,8 @@ TEST(Pristine, RequireConsN) {
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Pristine, PushPop1) {
+TEST(Exercise, PushRequirePopRequire) {
+  enum {N = 16};
   EXPECT_TT(Pristine::valid());
   heapify();
   Pushdown p;
@@ -186,14 +187,19 @@ TEST(Pristine, PushPop1) {
       ++n;
       p.push(i+j);
       ++n;
-  EXPECT_TT(Pristine::valid());
     }
-  EXPECT_EQ(before - Pristine::count, 512);
+  EXPECT_TT(Pristine::valid());
+  EXPECT_EQ(before - Pristine::count, 2 * N * N);
   for (int i = 0;  i < 16; i++)  
-    for (int j = 0;  j < 16; j++) 
+    for (int j = 0;  j < 16; j++) {
+      require(i+50, j+100);
       p.pop();
+      require(i, j);
+    }
   EXPECT_TT(p.top.x());
   EXPECT_TT(Pristine::valid());
+  EXPECT_EQ(Cons::count, 2*N*N);
+  EXPECT_EQ(Pristine::count, $P_n$ - 2 * N *N); 
 }
 
 

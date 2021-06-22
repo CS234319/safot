@@ -125,8 +125,8 @@ Boolean cyclic() {
 Boolean weird() {
   for (auto h = $P_f$; h <= $P_t$; ++h) 
     if (Knob(h).weirdo()) 
-      return false;
-  return true;
+      return true;
+  return false;
 }
 
 Boolean Pristine::valid() {
@@ -363,6 +363,11 @@ TEST(Heapify, Acyclic) {
     EXPECT_EQ(Pristine(s).next().inner(), s+1) << s; 
   }
   EXPECT_FF(cyclic());
+}
+
+TEST(Heapify, Weirdos) { 
+  heapify();
+  EXPECT_FF(weird());
 }
 
 TEST(Heapify, valid) { 
@@ -698,42 +703,6 @@ void mess(Pushdown &p) {
     p.push(seed.hash());
 }
 
-TEST(Churn, Pushdown) { 
-  heapify();
-  for (int i = 0; i < 200 ; i++) { 
-    {
-      Pushdown p[103];
-      for (int j = 0;  j < i; j++) 
-        mess(p[Word(i,j).hash() % 10]); 
-    }
-    EXPECT_FF(Item::corrupted());
-    EXPECT_EQ(0, Item::count);
-  }
-  EXPECT_FF(Pristine::corrupted());
-  EXPECT_FF(Item::corrupted());
-  EXPECT_FF(Cons::corrupted());
-}  
-
-TEST(Churn, Require) { 
-  heapify();
-  int n = 0;
-  for (Short i = 0;  ; i++) { 
-    for (Short j = 0;  i <= j; j++) {
-      Cons c(require(i,j).inner());
-      ++n;
-      EXPECT_TT(c.ok());
-      EXPECT_EQ(i, c.car().inner());
-      EXPECT_EQ(j, c.cdr().inner());
-      EXPECT_EQ(n, Cons::count) << n;
-      if (n > 25000)
-        goto done;
-    }
-    EXPECT_FF(Pristine::corrupted());
-  }
-done:
-  EXPECT_FF(Pristine::corrupted());
-}  
-
 
 TEST(Fresh, VirginAlmostExhausted) { 
   heapify();
@@ -773,7 +742,7 @@ TEST(Fresh, VirginLastCorrect) {
   EXPECT_EQ(Pristine::count, 0);
 }
 
-TEST(Fresh, ItemAlmostExhausted) { 
+TEST(Exhaust, Almost) { 
   heapify();
   EXPECT_EQ(Pristine::count, $P_n$); 
   for (auto s = 1 ; s < $P_n$; ++s)
@@ -786,19 +755,16 @@ TEST(Fresh, ItemAlmostExhausted) {
   EXPECT_FF(Cons::corrupted());
 }
 
-TEST(Fresh, ItemLastCorrect) { 
+TEST(Exhaust, LateItemCorrect) { 
   heapify();
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
   Item i = fresh(-2, $P_x$); 
   EXPECT_EQ(i.head(), -2);
   EXPECT_EQ(i.rest().inner(),  $P_x$);
-  EXPECT_FF(Pristine::corrupted());
-  EXPECT_FF(Item::corrupted());
-  EXPECT_FF(Cons::corrupted());
 }
 
-TEST(Fresh, ItemLast) { 
+TEST(Exhaust, LastItem) { 
   heapify();
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
@@ -809,7 +775,7 @@ TEST(Fresh, ItemLast) {
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Fresh, ItemExhausted) { 
+TEST(Exhaust, Items) { 
   heapify();
   EXPECT_EQ(Pristine::count, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) {
@@ -825,7 +791,7 @@ TEST(Fresh, ItemExhausted) {
   EXPECT_FF(Pristine::corrupted());
 }
 
-TEST(Fresh, ItemExhaustedCycle) { 
+TEST(Exhaust, Cycle) { 
   heapify();
   Pushdown p;
   EXPECT_EQ(Pristine::count, $P_n$); 
@@ -841,7 +807,44 @@ TEST(Fresh, ItemExhaustedCycle) {
   EXPECT_TT(Pristine::valid());
 }
 
-TEST(Churn, churnBoth) { 
+TEST(Churn, Pushdown) { 
+  heapify();
+  for (int i = 0; i < 200 ; i++) { 
+    {
+      Pushdown p[103];
+      for (int j = 0;  j < i; j++) 
+        mess(p[Word(i,j).hash() % 10]); 
+    }
+    EXPECT_FF(Item::corrupted());
+    EXPECT_EQ(0, Item::count);
+  }
+  EXPECT_FF(Pristine::corrupted());
+  EXPECT_FF(Item::corrupted());
+  EXPECT_FF(Cons::corrupted());
+}  
+
+TEST(Churn, Require) { 
+  heapify();
+  int n = 0;
+  for (Short i = 0;  ; i++) { 
+    for (Short j = 0;  i <= j; j++) {
+      Cons c(require(i,j).inner());
+      ++n;
+      EXPECT_TT(c.ok());
+      EXPECT_EQ(i, c.car().inner());
+      EXPECT_EQ(j, c.cdr().inner());
+      EXPECT_EQ(n, Cons::count) << n;
+      if (n > 25000)
+        goto done;
+    }
+    EXPECT_FF(Pristine::corrupted());
+  }
+done:
+  EXPECT_FF(Pristine::corrupted());
+}  
+
+
+TEST(Churn, Both) { 
   heapify();
   for (int i = 0, n = 0;  ; i++) { 
     EXPECT_EQ(Item::count, 0);
@@ -849,6 +852,7 @@ TEST(Churn, churnBoth) {
     for (int j = 0; j <= i; ++j, ++n) {
       if (heap.x()) goto done;
       auto const c = require(i,j);
+      if (heap.x()) goto done;
       int d = P[c.inner()].hash() % 10;
       mess(p[d]);
     }
