@@ -3,3 +3,5 @@ test
 mini-lisp
 store
 *.back
+log
+diff

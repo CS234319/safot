@@ -24,8 +24,8 @@ static Knob fresh() {
 }
 
 Item fresh(Short s1, Short s2) {
-  Expect(!marked(s1));
-  Expect(!marked(s2));
+  Expect(white(s1));
+  Expect(white(s2));
   Expect(s2 == $P_x$ || s2 >= $P_f$ && s2 <= $P_t$);
   if (heap.x()) throw __LINE__; 
   Item::count++;
@@ -68,8 +68,6 @@ Cons require(Word w) {
 Pristine heapify() {
   for (Short s = $P_f$ + 1; s <= $P_t$ - 1; ++s) 
     Pristine(s).prev(Pristine(s-1)).next(Pristine(s+1));
-  for (Short s = $P_f$ + 1; s <= $P_t$ - 1; ++s) 
-    Expect(Pristine(s).ok()); 
   Pristine($P_f$).prev(Pristine()).next(Pristine($P_f$ +1));
   Pristine($P_t$).next(Pristine()).prev(Pristine($P_t$ -1));
   Pristine::count = $P_n$;
@@ -124,9 +122,16 @@ Boolean cyclic() {
   return false;
 }
 
+Boolean weird() {
+  for (auto h = $P_f$; h <= $P_t$; ++h) 
+    if (Knob(h).weirdo()) 
+      return false;
+  return true;
+}
+
 Boolean Pristine::valid() {
-  return !asymmetric() && !cyclic() && 
-      !Pristine::corrupted() && !Item::corrupted() && !Cons::corrupted(); 
+  return !asymmetric() && !cyclic() && !weird() &&
+    !Pristine::corrupted() && !Item::corrupted() && !Cons::corrupted(); 
 }
 
 Boolean Pristine::corrupted() {
@@ -220,10 +225,10 @@ TEST(Heapify, 5) {
   EXPECT_FF(p.x());
   Pristine(s).prev(Pristine(s-1)).next(Pristine(s+1));
   auto k = Knob(s);
-  EXPECT_TT(marked(k.s1()));
-  EXPECT_TT(marked(k.s2()));
-  EXPECT_EQ(mark(k.s1()), s-1);
-  EXPECT_EQ(mark(k.s2()), s + 1);
+  EXPECT_TT(black(k.s1()));
+  EXPECT_TT(black(k.s2()));
+  EXPECT_EQ(flip(k.s1()), s-1);
+  EXPECT_EQ(flip(k.s2()), s + 1);
 
   EXPECT_EQ(p.inner(), 5);
   EXPECT_EQ(p.prev().inner(), 4);
@@ -745,7 +750,7 @@ TEST(Fresh, VirginExhausted) {
     let f = fresh().inner();
     EXPECT_EQ(i, f - $P_f$ + 1);
     EXPECT_EQ(Pristine::count, $P_n$ - i); 
-    EXPECT_EQ(Item::count, 0); // This white box test corrupts the heap,
+    EXPECT_EQ(Item::count, 0); // This black box test corrupts the heap,
   }
   EXPECT_TT(heap.x());
   EXPECT_EQ(Pristine::count, 0);
@@ -841,7 +846,7 @@ TEST(Churn, churnBoth) {
   for (int i = 0, n = 0;  ; i++) { 
     EXPECT_EQ(Item::count, 0);
     Pushdown p[10];
-    for (int j = 0;  j <= i; ++j, ++n) {
+    for (int j = 0; j <= i; ++j, ++n) {
       if (heap.x()) goto done;
       auto const c = require(i,j);
       int d = P[c.inner()].hash() % 10;

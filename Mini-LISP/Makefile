@@ -51,7 +51,7 @@ CFLAGS += -MD -MP -w
 store:
 all: test mini-lisp store 
 
-FILES=heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Cons.o Word.o Pristine.o heap.o layout.o Pushdown.o Tokenizer.o Parser.o
+FILES=heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Cons.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o
 
 store: $(FILES) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
@@ -59,6 +59,9 @@ store: $(FILES)
 
 gvim: 
 	gvim chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile 
+
+wc: 
+	wc -l chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile 
 
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

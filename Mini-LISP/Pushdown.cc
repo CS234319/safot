@@ -11,7 +11,7 @@ extern Boolean Pushdown::empty() const {
 } 
 
 Pushdown& Pushdown::push(Short s) { 
-  Expect(!marked(s));
+  Expect(white(s));
   Keep(top.ok());
   Promise(!top.x());
   Promise(top.head() == s);

@@ -20,6 +20,7 @@ Type Knob: Handle { // An S-expression represented by its Knob
   Property(Boolean cons);
   Property(Boolean item);
   Property(Boolean pristine);
+  Property(Boolean weirdo);
   Property(Boolean x);
 
   // Converters:
@@ -31,7 +32,7 @@ Type Knob: Handle { // An S-expression represented by its Knob
   Selfer(s2(Short));
 };
   /*
-    Short mark(Short h);
-    Boolean marked(Short h);
+    Short flip(Short h);
+    Boolean black(Short h);
   */
 #endif

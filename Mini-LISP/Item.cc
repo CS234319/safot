@@ -6,10 +6,10 @@ static Short count;
 Item::Item(): Knob() {}
 Item::Item(Short s): Knob(s) {}
 Item Item::head(Short s) { s1(s);       return *this; }
-Item Item::rest(Short s) { s2(mark(s)); return *this; }
+Item Item::rest(Short s) { s2(flip(s)); return *this; }
 Short Item::head() const { return s1(); }
-Item Item::rest() const { return Item(mark(s2())); } 
-Boolean Item::ok() const { return x() || !marked(s1())  && marked(s2()); }
+Item Item::rest() const { return Item(flip(s2())); } 
+Boolean Item::ok() const { return x() || white(s1())  && black(s2()); }
 
 #include "Pushdown.h"
 static Pushdown p;

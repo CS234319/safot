@@ -10,7 +10,7 @@ Pristine::Pristine(Short s): Knob(s) {}
 Boolean Pristine::ok() const { 
   if (x()) 
     return true;
-  if (!marked(s1()) || !marked(s2()))
+  if (white(s1()) || white(s2()))
       return false;
   const Short p = prev().inner(), n = next().inner();
   if (p != $P_x$) {
@@ -35,29 +35,29 @@ Boolean Pristine::ok() const {
 Pristine Pristine::prev(Pristine p) { 
   Expect(!x());
   let s = p.inner();
-  Expect(!marked(s));
-  s1(mark(s)); 
+  Expect(white(s));
+  s1(flip(s)); 
   return *this;
 }
 
 Pristine Pristine::next(Pristine p) { 
   Expect(!x());
   let s = p.inner();
-  Expect(!marked(s));
-  s2(mark(s)); 
+  Expect(white(s));
+  s2(flip(s)); 
   return *this;
 }
 
 Pristine Pristine::prev() const { 
   Expect(!x());
-  Expect(marked(s1()));
-  return mark(s1()); 
+  Expect(black(s1()));
+  return flip(s1()); 
 }
 
 Pristine Pristine::next() const { 
   Expect(!x());
-  Expect(marked(s2()));
-  return mark(s2()); 
+  Expect(black(s2()));
+  return flip(s2()); 
 }
 
 #include "Pushdown.h"

@@ -5,12 +5,12 @@
 // Propertys:
 Handle Cons::car() const { return s1(); }
 Handle Cons::cdr() const { return s2(); } 
-Boolean Cons::ok() const { return !marked(s1()) && !marked(s2()); }
+Boolean Cons::ok() const { return white(s1()) && white(s2()); }
 
 Cons::Cons(Short s): Knob(s) {}
 Cons Cons::car(Short h) { s1(h); return *this; }
 Cons Cons::cdr(Short h) { s2(h); return *this; }
-Boolean Cons::ok(Word w) { return !marked(w.s1) && !marked(w.s2); } 
+Boolean Cons::ok(Word w) { return white(w.s1) && white(w.s2); } 
 
 #include "layout.h"
 #include "heap.h"
@@ -38,8 +38,8 @@ TEST(Cons, Hash13) {
   EXPECT_NE(w.l, 13);
   EXPECT_NE(w.s1, 13);
   EXPECT_NE(w.s2, 13);
-  EXPECT_TT(!marked(w.s1));
-  EXPECT_TT(!marked(w.s2));
+  EXPECT_TT(white(w.s1));
+  EXPECT_TT(white(w.s2));
   EXPECT_EQ(w.hash(), Word(13,13).hash());
 }
 
