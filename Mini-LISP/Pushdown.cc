@@ -1,7 +1,11 @@
 #include "Pushdown.h"
 #include "Short.h"
 
-extern bool Pushdown::empty() const { 
+extern Pushdown::~Pushdown() { 
+  clear();
+}
+
+extern Boolean Pushdown::empty() const { 
   Keep(top.ok());
   return top.x(); 
 } 
@@ -79,15 +83,15 @@ void Pushdown::poke(Short depth, Short value) {
 
 TEST(Pushdown, Empty) {
   Pushdown p;
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, 1Push) {
   Pushdown p;
   p.push(3);
-  EXPECT_FALSE(p.empty());
+  EXPECT_FF(p.empty());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, 2Push) {
@@ -96,7 +100,7 @@ TEST(Pushdown, 2Push) {
   p.push(2);
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, 2Push0) {
@@ -104,16 +108,15 @@ TEST(Pushdown, 2Push0) {
   p.push(3).push(2);
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
-
 
 TEST(Pushdown, 2Push2) {
   Pushdown p;
   p.push(2,3);
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, Push3) {
@@ -122,7 +125,7 @@ TEST(Pushdown, Push3) {
   EXPECT_EQ(1,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, Peep0) {
@@ -152,9 +155,8 @@ TEST(Pushdown, 3Peep) {
   EXPECT_EQ(1,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
-
 
 TEST(Pushdown, Push4) {
   Pushdown p;
@@ -163,28 +165,28 @@ TEST(Pushdown, Push4) {
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(4,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, Clear) {
   Pushdown p;
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
   p.push(1,2,3,4);
-  EXPECT_FALSE(p.empty());
+  EXPECT_FF(p.empty());
   p.clear(); 
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
   p.clear(); 
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, TopZero) {
   Pushdown p;
-  EXPECT_TRUE(p.empty());
-  EXPECT_TRUE(p.top.x());
+  EXPECT_TT(p.empty());
+  EXPECT_TT(p.top.x());
   p.push(3);
-  EXPECT_FALSE(p.top.x());
+  EXPECT_FF(p.top.x());
   p.clear(); 
-  EXPECT_TRUE(p.top.x());
+  EXPECT_TT(p.top.x());
 } 
 
 TEST(Pushdown, Size) {
@@ -212,10 +214,21 @@ TEST(Pushdown, Size) {
 TEST(Pushdown, PushPush) {
   Pushdown p;
   p.push(3);
-  EXPECT_FALSE(p.empty());
+  EXPECT_FF(p.empty());
   p.push(2);
-  EXPECT_FALSE(p.empty());
+  EXPECT_FF(p.empty());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(3,p.pop());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.empty());
 }
+
+TEST(Pushdown, Destructor) {
+  heapify();
+  {
+    Pushdown p;
+    p.push(1,2,3,4,5);
+    EXPECT_EQ(Item::count, 5);
+  }
+  EXPECT_EQ(Item::count, 0);
+}
+

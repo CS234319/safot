@@ -13,10 +13,10 @@ Type Knob: Handle { // An S-expression represented by its Knob
   Knob(Short);
   Knob(); 
   // Inspectors:
-  bool   cons()     const;
-  bool   item()     const;
-  bool   pristine() const;
-  bool   x()        const;
+  Boolean   cons()     const;
+  Boolean   item()     const;
+  Boolean   pristine() const;
+  Boolean   x()        const;
   Short  s1()       const;
   Short  s2()       const;
   // Convertors:
@@ -29,6 +29,6 @@ Type Knob: Handle { // An S-expression represented by its Knob
 };
   /*
     Short mark(Short h);
-    bool marked(Short h);
+    Boolean marked(Short h);
   */
 #endif

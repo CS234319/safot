@@ -3,6 +3,6 @@
 #include "chic.h"
 #include "Id.h"
 extern Id require(Text);
-extern bool eq(Text, Text);
+extern Boolean eq(Text, Text);
 #undef NULL
 #endif

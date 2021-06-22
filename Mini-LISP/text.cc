@@ -1,7 +1,7 @@
 #include "text.h"
 #include "layout.h"
 
-extern bool exists(char c, Text s) {
+extern Boolean exists(char c, Text s) {
   for (auto i = 0; s[i] != '\0'; ++i)
     if (c == s[i])
       return true;
@@ -36,7 +36,7 @@ static Short size(Text t) {
       return __ + 1; 
 }
 
-bool eq(const char *s1, const char *s2) {
+Boolean eq(const char *s1, const char *s2) {
   char upper(char c); 
   for (; upper(*s1) == upper(*s2); ++s1, ++s2)
     if (*s1 == '\0')

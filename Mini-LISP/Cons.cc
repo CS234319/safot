@@ -2,17 +2,13 @@
 
 #include "Short.h"
 
-Short Cons::count = 0;
-Short Cons::reuse = 0;
-Short Cons::miss = 0;
-
 Cons::Cons(Short s): Knob(s) {}
 Cons Cons::car(Short h) { s1(h); return *this; }
 Cons Cons::cdr(Short h) { s2(h); return *this; }
 Handle Cons::car() const { return s1(); }
 Handle Cons::cdr() const { return s2(); } 
-bool Cons::ok() const { return !marked(s1()) && !marked(s2()); }
-bool Cons::ok(Word w) { return !marked(w.s1) && !marked(w.s2); } 
+Boolean Cons::ok() const { return !marked(s1()) && !marked(s2()); }
+Boolean Cons::ok(Word w) { return !marked(w.s1) && !marked(w.s2); } 
 
 #include "layout.h"
 #include "heap.h"
@@ -40,8 +36,8 @@ TEST(Cons, Hash13) {
   EXPECT_NE(w.l, 13);
   EXPECT_NE(w.s1, 13);
   EXPECT_NE(w.s2, 13);
-  EXPECT_TRUE(!marked(w.s1));
-  EXPECT_TRUE(!marked(w.s2));
+  EXPECT_TT(!marked(w.s1));
+  EXPECT_TT(!marked(w.s2));
   EXPECT_EQ(w.hash(), Word(13,13).hash());
 }
 

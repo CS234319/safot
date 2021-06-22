@@ -21,7 +21,7 @@ Type Pushdown {
   Pushdown& push(Short,Short,Short);
   Pushdown& push(Short,Short,Short,Short);
   Pushdown& push(Short,Short,Short,Short,Short);
-  bool empty() const;
+  Boolean empty() const;
   Pushdown& clear(); // Clear the stack, returning all elements to the pool
   Short peep() const;    // Examine stack's, but without popping it.
   Short peep(Short h) const; // Peep deeper into the stack.
@@ -29,4 +29,5 @@ Type Pushdown {
   void poke(Short h, Short v);    // Change stack, without popping it. 
   Item top = Item();
   Short size = 0;
+  ~Pushdown();
 };

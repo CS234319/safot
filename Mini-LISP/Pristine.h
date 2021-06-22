@@ -15,10 +15,19 @@ Type Pristine: private Knob {
   Pristine next(Pristine); 
   Pristine prev() const;
   Pristine next() const; 
-  bool ok() const;
+  Boolean ok() const;
 
   static Short count;
+  static Boolean corrupted();
+  static Boolean valid();
 };
+
+inline std::ostream& operator<<(std::ostream &os, Pristine p) {
+  if (p.x())
+    return  os << "Px";
+  return os << "Pristine[" << p.prev().inner() << "." << p.next().inner()  << "]";
+}
+
 #endif
 
 

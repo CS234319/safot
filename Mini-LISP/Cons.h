@@ -5,16 +5,17 @@
 
 Type Cons: private Knob {
   using Knob::inner;
-  static Short count; 
-  static Short reuse; 
-  static Short miss; 
   Cons(Short);
   Cons car(Short); 
   Cons cdr(Short); 
   Handle car() const;
   Handle cdr() const;
-  bool ok() const;
-  static bool ok(Word);
+  Boolean ok() const;
+  static Boolean ok(Word);
+  static Short count; 
+  static Integer reuse; 
+  static Integer miss; 
+  static Boolean corrupted();
 };
 #endif
 

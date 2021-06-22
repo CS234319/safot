@@ -2,7 +2,7 @@
 #define TOKENIZER_H
 #include "chic.h"
 
-extern bool inline exists(char c, Text s);
+extern Boolean inline exists(char c, Text s);
 
 
 namespace Tokenizer {
@@ -16,6 +16,6 @@ namespace Tokenizer {
   extern Short unget(); 
   extern Short peep();
 }
-extern bool exists(const char, const char *const); 
+extern Boolean exists(const char, const char *const); 
 #endif
 

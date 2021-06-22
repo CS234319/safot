@@ -5,8 +5,7 @@
 Type Item: private Knob {
   using Knob::inner;
   using Knob::x;
-  static Short count;
-  bool ok() const;
+  Boolean ok() const;
   Item();
   Item(Short s);
 
@@ -14,5 +13,8 @@ Type Item: private Knob {
   Item rest(Short s);
   Item rest() const;
   Short head() const;
+
+  static Short count;
+  static Boolean corrupted();
 }; 
 #endif

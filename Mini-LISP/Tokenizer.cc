@@ -10,7 +10,7 @@
 
 namespace Tokenizer {
 static char *head;
-static bool pending = false;
+static Boolean pending = false;
 static inline char& C(); 
 
 extern void initialize(char *buffer) {
@@ -40,10 +40,10 @@ Short get() {
 static Short nextAtom();
 
 static char advance();
-static bool isToken();
-static bool isAtom();
-static bool isNewLine(); 
-static bool isIgnored();
+static Boolean isToken();
+static Boolean isAtom();
+static Boolean isNewLine(); 
+static Boolean isIgnored();
 
 extern Short unget() {
   pending = true;
@@ -97,19 +97,19 @@ static Short nextAtom() {
   return $.inner();
 }
 
-static bool isAtom() {
+static Boolean isAtom() {
   return !isToken() && !isIgnored();
 }
 
-static bool isNewLine() {
+static Boolean isNewLine() {
   return C() == '\n' || C() == '\r' || C() == '\0';
 }
 
-static bool isIgnored() {
+static Boolean isIgnored() {
   return C() == ' ' || C() == '\t' || isNewLine() || C() < ' ' || C() >= 127;
 }
 
-static bool isToken() {
+static Boolean isToken() {
   return exists(C(),tokens);
 }
 }

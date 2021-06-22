@@ -3,7 +3,7 @@
 
 #include <iostream>
 extern Short mark(Short h)   { return h + (1 << 15); } 
-extern bool marked(Short h) { return h < $X_f$ || h > $X_t$ + 1; } 
+extern Boolean marked(Short h) { return h < $X_f$ || h > $X_t$ + 1; } 
 
 extern void stain(Short &s) {
   Promise(marked(s));
@@ -25,11 +25,11 @@ TEST(Stain, Short) {
   Short s = 12;
   EXPECT_EQ(12,s);
   EXPECT_NE(12,mark(s));
-  EXPECT_FALSE(marked(12));
-  EXPECT_FALSE(marked(12));
+  EXPECT_FF(marked(12));
+  EXPECT_FF(marked(12));
   stain(s);
   EXPECT_NE(12,s);
-  EXPECT_TRUE(marked(s));
+  EXPECT_TT(marked(s));
   cleanse(s);
   EXPECT_EQ(12,s);
 }
@@ -37,13 +37,13 @@ TEST(Stain, Short) {
 TEST(Stain, Word) {
   P[4].s1 = 3;
   P[4].s2 = 2;
-  EXPECT_FALSE(Pristine(4).ok());
-  EXPECT_FALSE(marked(Knob(4).s1()));
+  EXPECT_FF(Pristine(4).ok());
+  EXPECT_FF(marked(Knob(4).s1()));
   stain(P[4].s1); 
-  EXPECT_TRUE(marked(Knob(4).s1()));
-  EXPECT_FALSE(Pristine(4).ok());
+  EXPECT_TT(marked(Knob(4).s1()));
+  EXPECT_FF(Pristine(4).ok());
   stain(P[4].s2); 
-  EXPECT_TRUE(Pristine(4).ok());
+  EXPECT_TT(Pristine(4).ok());
 }
 
 TEST(Mark, Distinct) { 
@@ -52,7 +52,7 @@ TEST(Mark, Distinct) {
 }
 
 TEST(Mark, Last) {
-  EXPECT_FALSE(marked($P_t$ + 1));
+  EXPECT_FF(marked($P_t$ + 1));
 }
 
 TEST(Marking, Pairs) { 

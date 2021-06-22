@@ -3,7 +3,7 @@
 #include "chic.h"
 
 Short mark(Short h);
-bool marked(Short h);
+Boolean marked(Short h);
 
 void stain(Short &);
 void cleanse(Short &); 

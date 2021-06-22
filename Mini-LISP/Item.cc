@@ -2,7 +2,6 @@
 
 #include "Short.h"
 
-Short Item::count = 0;
 static Short count;
 Item::Item(): Knob() {}
 Item::Item(Short s): Knob(s) {}
@@ -10,7 +9,7 @@ Item Item::head(Short s) { s1(s);       return *this; }
 Item Item::rest(Short s) { s2(mark(s)); return *this; }
 Short Item::head() const { return s1(); }
 Item Item::rest() const { return Item(mark(s2())); } 
-bool Item::ok() const { return x() || !marked(s1())  && marked(s2()); }
+Boolean Item::ok() const { return x() || !marked(s1())  && marked(s2()); }
 
 #include "Pushdown.h"
 static Pushdown p;
@@ -34,8 +33,8 @@ TEST(Item, 1Free) {
 
 TEST(Item, 1Count) {
   p.clear();
-  EXPECT_TRUE(p.top.x());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.top.x());
+  EXPECT_TT(p.empty());
   int before = Item::count;
   EXPECT_GE(before,0);
   p.push(3);
@@ -47,8 +46,8 @@ TEST(Item, 1Count) {
  
 TEST(Item, 3Count) {
   p.clear();
-  EXPECT_TRUE(p.top.x());
-  EXPECT_TRUE(p.empty());
+  EXPECT_TT(p.top.x());
+  EXPECT_TT(p.empty());
   EXPECT_GE(Item::count,0);
   int before = Item::count;
   p.push(3);
@@ -59,6 +58,6 @@ TEST(Item, 3Count) {
   EXPECT_EQ(Item::count, before + 1);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(Item::count, before);
-  EXPECT_TRUE(p.empty());
-  EXPECT_TRUE(p.top.x());
+  EXPECT_TT(p.empty());
+  EXPECT_TT(p.top.x());
 }
