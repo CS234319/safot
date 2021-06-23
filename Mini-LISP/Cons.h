@@ -1,8 +1,8 @@
 #ifndef CONS_H
 #define CONS_H
-#include "Word.h"
+#include "chic.h"
 #include "Knob.h"
-
+#include "Word.h"
 Type Cons: private Knob {
   using Knob::inner;
   Cons(Short);

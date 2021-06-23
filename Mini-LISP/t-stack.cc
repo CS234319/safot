@@ -71,8 +71,6 @@ TEST(Stack, TopZero) {
   EXPECT_T(top == 0);
 } 
 
-
-
 TEST(Stack, PushPush) {
   push(3);
   EXPECT_F(empty());

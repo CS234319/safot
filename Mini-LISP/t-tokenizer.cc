@@ -5,7 +5,6 @@
 #include <string.h>
 
 
-
 static void t(const char *s) {
   Tokenizer::initialize(strdup(s));
 }

@@ -3,9 +3,9 @@
 #include "Short.h"
 
 // Properties:
-Property(Handle  Cons::car) Is( s1())
-Property(Handle  Cons::cdr) Is( s2())
-Property(Boolean  Cons::ok) Is( white(s1()) && white(s2()))
+Property(Handle  Cons::car) Is(s1())
+Property(Handle  Cons::cdr) Is(s2())
+Property(Boolean  Cons::ok) Is(white(s1()) && white(s2()))
 
 Cons::Cons(Short s): Knob(s) {}
 Cons Cons::car(Short h) { s1(h); return *this; }
