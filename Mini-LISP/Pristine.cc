@@ -64,11 +64,7 @@ Pristine Pristine::next() const {
 #include "text.h"
 #include "Cons.h"
 
-#define UNCHIC
-#include "chic.h" 
-#undef function
-#include <string.h>
-#include <gtest/gtest.h>
+#include "Test.h" 
 
 TEST(Pristine, Count1Require) {
   heapify();
@@ -95,8 +91,8 @@ TEST(Require, Counters) {
   require(13,14);
   EXPECT_EQ(Pristine::count, $P_n$ - 1);
   EXPECT_EQ(Cons::count, 1);
-  EXPECT_EQ(Cons::miss, 0);
-  EXPECT_EQ(Cons::reuse, 0);
+  EXPECT_ZZ(Cons::miss);
+  EXPECT_ZZ(Cons::reuse);
   EXPECT_TT(Pristine::valid());
 }
 
@@ -144,7 +140,7 @@ TEST(Pristine, RequireCons3) {
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
   EXPECT_EQ(Pristine::count, before - 1);
-  EXPECT_EQ(p.size,0);
+  EXPECT_ZZ(p.size);
   EXPECT_TT(p.top.x());
   EXPECT_FF(asymmetric());
   EXPECT_FF(cyclic());
@@ -170,7 +166,7 @@ TEST(Pristine, RequireConsN) {
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
   EXPECT_EQ(Pristine::count, before - 25);
-  EXPECT_EQ(p.size,0);
+  EXPECT_ZZ(p.size);
   EXPECT_TT(p.top.x());
   EXPECT_TT(Pristine::valid());
 }

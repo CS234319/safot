@@ -75,11 +75,7 @@ void Pushdown::poke(Short depth, Short value) {
 
 
 #include "Pristine.h"
-#define UNCHIC
-#include "chic.h" 
-#include <string.h>
-#include <gtest/gtest.h>
-
+#include "Test.h"
 
 TEST(Pushdown, Empty) {
   Pushdown p;

@@ -35,21 +35,11 @@ Provides Short free$n_p$;          /// how many pairs were freed
 Provides Short collected$n_p$;     /// how many pairs were garbage collected 
 
 #include "Knob.h"
-#undef min
-#undef max
-#undef data
-#undef function
-#undef Type
-
-#include "gtest/gtest.h"
+#include "Test.h"
 
 int main(int argc, char **argv) {
-  try {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-  } catch (int i) {
-    std::cerr << i;
-  }
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
 
 TEST(SExpression, size) { 
@@ -62,7 +52,7 @@ TEST(Atoms, $A_f$) {
 }
 
 TEST(Atoms, $A_t$) { 
-  EXPECT_EQ($A_t$, 0);
+  EXPECT_ZZ($A_t$);
   EXPECT_EQ((const char *const) A + $A_t$, (const char *const) P);
 }
 
@@ -109,7 +99,6 @@ TEST(Store, overflow) {
   EXPECT_LT((Short) - $M_a$ - 1, 0);
 }
 
-
 TEST(Array, Properties) {
   EXPECT_TT($A_x$ < $A_f$ || $A_x$ > $A_t$);
   EXPECT_TT($A_f$ < $A_t$);
@@ -151,28 +140,28 @@ TEST(Store, innerAndOuterArrays) {
   EXPECT_EQ(A,memory.A);
   EXPECT_GE(P + 1,memory.P);
   EXPECT_LE(P + 1,memory.P);
-  EXPECT_EQ(P + 1 - memory.P,0);
+  EXPECT_ZZ(P + 1 - memory.P);
   EXPECT_EQ(P + 1,memory.P);
 }
 
 TEST(Store, twoArrayAreConsecutive) {
   EXPECT_GE(memory.A + sizeof(memory.A), (char *)memory.P);
   EXPECT_LE(memory.A + sizeof(memory.A), (char *)memory.P);
-  EXPECT_EQ(memory.A + sizeof(memory.A) - (char *)memory.P,0);
+  EXPECT_ZZ(memory.A + sizeof(memory.A) - (char *)memory.P);
   EXPECT_EQ((void *)(memory.A + sizeof memory.A), (void *)memory.P); 
 }
 
 TEST(Store, computedSize) {
   EXPECT_LE(sizeof memory.block - $m$, 0);
   EXPECT_GE($m$ - sizeof memory.block, 0);
-  EXPECT_EQ($m$ - sizeof memory.block, 0);
+  EXPECT_ZZ($m$ - sizeof memory.block);
   EXPECT_EQ(sizeof memory.block, $m$);
 }
 
 TEST(Store, actualSize) {
   EXPECT_EQ(sizeof memory.block, sizeof memory);
-  EXPECT_EQ(sizeof memory.block - sizeof memory, 0);
-  EXPECT_EQ(sizeof memory - sizeof memory.block, 0);
+  EXPECT_ZZ(sizeof memory.block - sizeof memory);
+  EXPECT_ZZ(sizeof memory - sizeof memory.block);
 }
 
 TEST(Store, correctCounting) {

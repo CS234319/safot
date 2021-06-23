@@ -13,12 +13,7 @@ Boolean Item::ok() const { return x() || white(s1())  && black(s2()); }
 
 #include "Pushdown.h"
 static Pushdown p;
-
-#define UNCHIC
-#include "chic.h" 
-#undef function
-#include <string.h>
-#include <gtest/gtest.h>
+#include "Test.h"
 
 TEST(Item, 1Push) {
   p.clear();
@@ -42,8 +37,6 @@ TEST(Item, 1Count) {
   EXPECT_EQ(Item::count, before + 1);
 }
 
-
- 
 TEST(Item, 3Count) {
   p.clear();
   EXPECT_TT(p.top.x());

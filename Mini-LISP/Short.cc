@@ -15,12 +15,9 @@ extern void cleanse(Short &s) {
   Promise(white(s));
   if (black(s)) s = flip(s);
 }
-#include <stdio.h>
-#include "Pristine.h"
-#undef Type
-#undef function
 
-#include "gtest/gtest.h"
+#include "Pristine.h"
+#include "Test.h"
 
 TEST(Stain, Short) {
   Short s = 12;

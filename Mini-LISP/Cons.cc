@@ -17,10 +17,7 @@ Boolean Cons::ok(Word w) { return white(w.s1) && white(w.s2); }
 #include "Pristine.h"
 #include "Word.h"
 
-#define UNCHIC
-#include "chic.h" 
-#undef function
-#include <gtest/gtest.h>
+#include "Test.h" 
 
 Word hash13() {
   auto const h = Word(13,13).hash();
@@ -54,14 +51,14 @@ TEST(Cons, Hash13a) {
   EXPECT_EQ(P[h1].hash(), P[h2].hash());
 
   EXPECT_EQ(Cons::miss, 1);
-  EXPECT_EQ(Cons::reuse, 0);
+  EXPECT_ZZ(Cons::reuse);
   EXPECT_EQ(Cons::count, 2);
 }
 
 
 TEST(Cons, count) {
   heapify();
-  EXPECT_EQ(Cons::count, 0);
+  EXPECT_ZZ(Cons::count);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
@@ -70,11 +67,11 @@ TEST(Cons, count) {
 
 TEST(Cons, reuse) {
   heapify();
-  EXPECT_EQ(Cons::reuse, 0);
+  EXPECT_ZZ(Cons::reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
-  EXPECT_EQ(Cons::reuse, 0);
+  EXPECT_ZZ(Cons::reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
@@ -88,7 +85,7 @@ TEST(Cons, reuse) {
 TEST(Cons, Miss) {
   enum { N = 220 };
   heapify();
-  EXPECT_EQ(Cons::miss,0);
+  EXPECT_ZZ(Cons::miss);
   int n = 0;
   for (int i = 0;  i < N; i++) { 
     for (int j = 0;  j < N; j++) {
@@ -105,6 +102,6 @@ TEST(Cons, Miss) {
   EXPECT_LT(n,N * N / 2);
   EXPECT_GT(Cons::miss,0);
   EXPECT_EQ(Cons::miss,6);
-  EXPECT_EQ(Cons::reuse,0);
+  EXPECT_ZZ(Cons::reuse);
   EXPECT_EQ(Cons::count,n);
 }

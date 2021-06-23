@@ -4,5 +4,5 @@
 #include "Id.h"
 extern Id require(Text);
 extern Boolean eq(Text, Text);
-#undef NULL
+//#undef NULL
 #endif

@@ -61,7 +61,7 @@ gvim:
 	gvim chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile 
 
 wc: 
-	wc -l chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile 
+	wc -l chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile | sort -n 
 
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

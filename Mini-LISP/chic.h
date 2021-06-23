@@ -97,10 +97,6 @@ typedef std::function<bool()> Predicate;
 
 
 
-
-#define EXPECT_TT  EXPECT_TRUE
-#define EXPECT_FF  EXPECT_FALSE
-
 #define Keep(X) Expect(P) Promise(X)
 #define xCurrent(X) ([=]{return X;})()
 
@@ -117,9 +113,6 @@ typedef std::function<bool()> Predicate;
     M2("-->", __); \
     return __; \
   } 
-
-
-
 
 #include <cstdint>         // Standard header providing integer types with widths 
 #define Provides extern

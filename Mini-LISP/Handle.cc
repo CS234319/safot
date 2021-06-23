@@ -1,16 +1,10 @@
 #include "Handle.h"
 #include "layout.h"
-
-
 Constructor(Handle::Handle(Short s)):  capsule(s) {}
 Property(Short Handle::inner) Is(capsule);
 Property(Boolean Handle::ok)  Is(capsule >= $X_f$ && capsule <= $X_t$)
 
-#define UNCHIC
-#include "chic.h" 
-#undef function
-#include <string.h>
-#include <gtest/gtest.h>
+#include "Test.h" 
 
 TEST(Handle, Construct) {
   const Handle h = Handle(17);

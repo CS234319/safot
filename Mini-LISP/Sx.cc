@@ -9,7 +9,6 @@ Sx::Sx(Handle h)     : Sx(h.inner()) {}
 Sx::Sx(Sx s1, Sx s2) : Sx(require(s1, s2).inner()) {}
 Sx::Sx(Text t)       : Sx(require(t)) {}
 
-
 const Sx NIL("NIL"); // Always define longer names first 
 const Sx SET("set"); // Save one letter by sharing with "T"
 const Sx T("T");     // Always define longer names first 
@@ -31,4 +30,3 @@ const Sx INVALID("invalid");
 const Sx BUG("bug");
 const Sx EMPTY("empty");
 const Sx EXHAUSTED("exhausted");
-
