@@ -7,12 +7,24 @@ Short Pristine::count = 0;
 Pristine::Pristine(): Pristine($P_x$) {}
 Pristine::Pristine(Short s): Knob(s) {}
 
-Boolean Pristine::ok() const { 
+Property(Pristine Pristine::prev) { 
+  Expect(!x());
+  Expect(black(s1()));
+  return flip(s1()); 
+}
+
+Property(Pristine Pristine::next) { 
+  Expect(!x());
+  Expect(black(s2()));
+  return flip(s2()); 
+}
+
+Property(Boolean Pristine::ok) { 
   if (x()) 
     return true;
   if (white(s1()) || white(s2()))
       return false;
-  const Short p = prev().inner(), n = next().inner();
+  let p = prev().inner(), n = next().inner();
   if (p != $P_x$) {
     Expect(p >= $P_f$,p); 
     Expect(p <= $P_t$,p); 
@@ -32,7 +44,7 @@ Boolean Pristine::ok() const {
   return true;
 }
 
-Pristine Pristine::prev(Pristine p) { 
+Pristine& Pristine::prev(Pristine p) { 
   Expect(!x());
   let s = p.inner();
   Expect(white(s));
@@ -40,26 +52,13 @@ Pristine Pristine::prev(Pristine p) {
   return *this;
 }
 
-Pristine Pristine::next(Pristine p) { 
+Pristine& Pristine::next(Pristine p) { 
   Expect(!x());
   let s = p.inner();
   Expect(white(s));
   s2(flip(s)); 
   return *this;
 }
-
-Pristine Pristine::prev() const { 
-  Expect(!x());
-  Expect(black(s1()));
-  return flip(s1()); 
-}
-
-Pristine Pristine::next() const { 
-  Expect(!x());
-  Expect(black(s2()));
-  return flip(s2()); 
-}
-
 #include "Pushdown.h"
 #include "text.h"
 #include "Cons.h"

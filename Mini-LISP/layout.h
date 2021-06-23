@@ -2,7 +2,6 @@
 #define LAYOUT_H
 #include "chic.h"
 #include "Word.h"
-
 Provides array(char) A;
 Provides array(Word) P;
 Let Short $M_a$ = 1 << 12; 

@@ -7,9 +7,9 @@ Item::Item(): Knob() {}
 Item::Item(Short s): Knob(s) {}
 Item Item::head(Short s) { s1(s);       return *this; }
 Item Item::rest(Short s) { s2(flip(s)); return *this; }
-Short Item::head() const { return s1(); }
-Item Item::rest() const { return Item(flip(s2())); } 
-Boolean Item::ok() const { return x() || white(s1())  && black(s2()); }
+Property(Short   Item::head) Is (s1())
+Property(Item    Item::rest) Is (Item(flip(s2())))
+Property(Boolean Item::  ok) Is (x() || white(s1())  && black(s2()))
 
 #include "Pushdown.h"
 static Pushdown p;

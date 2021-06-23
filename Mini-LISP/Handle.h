@@ -11,9 +11,6 @@ Type Handle { // An S-expression represented by its handle
   Property(Short inner); 
   Property(Cons $_p$); /// Interpreted as Knob of Cons, retrieves the Cons behind (mutable)  
   Property(Id $_a$);   /// Interpreted as Id of an atom, retrieves its text representation 
-  // Composition
-  // Decomposition
-  // Access
   private: struct { Short capsule; }; 
 };
 #endif

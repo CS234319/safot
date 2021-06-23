@@ -23,8 +23,7 @@ typedef std::function<bool()> Predicate;
 
 #define GET_MACRO(_0,_1,_2,_3,_4, _5, NAME,...) NAME
 #define ELABORATE(...)  GET_MACRO(_0,__VA_ARGS__,X5, X4,X3,X2,X1,X0)(__VA_ARGS__)
-#define ITERATE(...) \
-  (__EXPRESSION,__VA_ARGS__)
+#define ITERATE(...) (__EXPRESSION,__VA_ARGS__)
 
 #define VA_ARGS(...) DELME, ##__VA_ARGS__
 
@@ -48,7 +47,6 @@ typedef std::function<bool()> Predicate;
       [&]{ std::cerr ELABORATE(VA_ARGS(__VA_ARGS__)) << "\n"; return false;} \
      );                                                                  \
 ;
-
 
 #define Expect(P, ...) \
   struct UNIQUE(Expect) {                                                \
@@ -94,8 +92,6 @@ typedef std::function<bool()> Predicate;
       [&]{std::cerr ELABORATE(VA_ARGS(__VA_ARGS__))<<"\n";return false;} \
      );                                                                  \
 ;
-
-
 
 #define Keep(X) Expect(P) Promise(X)
 #define xCurrent(X) ([=]{return X;})()
@@ -157,7 +153,6 @@ typedef int64_t Integer; ///  like JVM's long    | 32 bits signed integer | an d
 typedef bool    Boolean; /// JVM's byte                |  8 bits signed integer | character in an atom
 typedef const char *const Text; // Representation of immutable srings
 
-
 // typedef enum { ok } OK;
 template<typename T> constexpr inline T max(T s1, T s2) { return s1 > s2 ? s1 : s2; } 
 template<typename T> constexpr inline T min(T s1, T s2) { return s1 < s2 ? s1 : s2; } 
@@ -173,7 +168,6 @@ halves. No particular byte or halves ordering is assumed. */
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | Knob of an S-expression 
 typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted Cons S-expression   
-
 #endif // CHIC_H
 
 

@@ -8,6 +8,6 @@ Type Word { // The different perspectives of a word.
   };
   Word(Short s1_, Short s2_);
   Word();
-  Short hash() const;
+  Property(Short hash);
 };
 #endif

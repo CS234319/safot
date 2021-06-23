@@ -2,10 +2,10 @@
 
 #include "Short.h"
 
-// Propertys:
-Handle Cons::car() const { return s1(); }
-Handle Cons::cdr() const { return s2(); } 
-Boolean Cons::ok() const { return white(s1()) && white(s2()); }
+// Properties:
+Property(Handle  Cons::car) Is( s1())
+Property(Handle  Cons::cdr) Is( s2())
+Property(Boolean  Cons::ok) Is( white(s1()) && white(s2()))
 
 Cons::Cons(Short s): Knob(s) {}
 Cons Cons::car(Short h) { s1(h); return *this; }

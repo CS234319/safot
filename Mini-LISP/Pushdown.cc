@@ -1,11 +1,9 @@
 #include "Pushdown.h"
 #include "Short.h"
 
-extern Pushdown::~Pushdown() { 
-  clear();
-}
+Pushdown::~Pushdown() { clear(); }
 
-extern Boolean Pushdown::empty() const { 
+Property(Boolean Pushdown::empty) { 
   Keep(top.ok());
   return top.x(); 
 } 
@@ -16,14 +14,13 @@ Pushdown& Pushdown::push(Short s) {
   Promise(!top.x());
   Promise(top.head() == s);
   ++size, top = fresh(s, top.inner()); 
-
   return *this; 
 }
 
-Pushdown& Pushdown::push(Short h1,Short h2) { return push(h2).push(h1); }
-Pushdown& Pushdown::push(Short h1,Short h2, Short h3) { return push(h3).push(h1, h2); }
-Pushdown& Pushdown::push(Short h1,Short h2, Short h3, Short h4) { return push(h4).push(h1, h2, h3); }
-Pushdown& Pushdown::push(Short h1,Short h2, Short h3, Short h4, Short h5) { return push(h5).push(h1, h2, h3, h4); }
+Pushdown& Pushdown::push(Short s1,Short s2) { return push(s2).push(s1); }
+Pushdown& Pushdown::push(Short s1,Short s2, Short s3) { return push(s3).push(s1, s2); }
+Pushdown& Pushdown::push(Short s1,Short s2, Short s3, Short s4) { return push(s4).push(s1, s2, s3); }
+Pushdown& Pushdown::push(Short s1,Short s2, Short s3, Short s4, Short h5) { return push(h5).push(s1, s2, s3, s4); }
 
 Short Pushdown::pop() {
   Expect(!empty());

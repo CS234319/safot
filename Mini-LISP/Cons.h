@@ -8,9 +8,9 @@ Type Cons: private Knob {
   Cons(Short);
   Cons car(Short); 
   Cons cdr(Short); 
-  Handle car() const;
-  Handle cdr() const;
-  Boolean ok() const;
+  Property(Handle car);
+  Property(Handle cdr);
+  Property(Boolean ok);
   static Boolean ok(Word);
   static Short count; 
   static Integer reuse; 

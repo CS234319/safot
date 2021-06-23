@@ -1,6 +1,5 @@
 #ifndef KNOB_H
 #define KNOB_H
-#include "chic.h"
 #include "Handle.h"
 
 Type Cons;
@@ -31,8 +30,4 @@ Type Knob: Handle { // An S-expression represented by its Knob
   Selfer(s1(Short));
   Selfer(s2(Short));
 };
-  /*
-    Short flip(Short h);
-    Boolean black(Short h);
-  */
 #endif

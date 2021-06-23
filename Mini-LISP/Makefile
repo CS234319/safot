@@ -56,9 +56,8 @@ FILES=heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Cons.o Word.o Prist
 store: $(FILES) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
 
-
 gvim: 
-	gvim chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile 
+	gvim chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile -c make
 
 wc: 
 	wc -l chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile | sort -n 

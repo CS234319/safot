@@ -9,14 +9,14 @@ Type Pristine: private Knob {
   using Knob::x;
   // Statistics
   using Knob::Item, Knob::Cons;
-  Pristine();
-  Pristine(Short h); 
-  Pristine prev(Pristine); 
-  Pristine next(Pristine); 
-  Pristine prev() const;
-  Pristine next() const; 
-  Boolean ok() const;
+  Constructor(Pristine());
+  Constructor(Pristine(Short));
+  Property(Pristine prev);
+  Property(Pristine next);
+  Property(Boolean ok);
 
+  Pristine& prev(Pristine); 
+  Pristine& next(Pristine); 
   static Short count;
   static Boolean corrupted();
   static Boolean valid();
