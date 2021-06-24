@@ -74,12 +74,33 @@ void Pushdown::poke(Short depth, Short value) {
 #include "Pristine.h"
 #include "Test.h"
 
-TEST(Pushdown, Empty) {
+TEST(Pushdown, empty) {
   Pushdown p;
   EXPECT_TT(p.empty());
 }
 
-TEST(Pushdown, 1Push) {
+TEST(Pushdown, push) {
+  Pushdown p;
+  p.clear().push(3);
+  EXPECT_TT(!p.empty());
+}
+
+TEST(Pushdown, clear) {
+  Pushdown p;
+  p.clear().push(3).push(7).push(19).pop();
+  p.push(21).pop();
+  p.push(23);
+  p.clear();
+  EXPECT_TT(p.empty());
+}
+
+TEST(Pushdown, pushPopEmpty) {
+  Pushdown p;
+  p.push(3).pop();
+  EXPECT_TT(p.empty());
+}
+
+TEST(Pushdown, correctPop1) {
   Pushdown p;
   p.push(3);
   EXPECT_FF(p.empty());
@@ -87,7 +108,7 @@ TEST(Pushdown, 1Push) {
   EXPECT_TT(p.empty());
 }
 
-TEST(Pushdown, 2Push) {
+TEST(Pushdown, correctPop2) {
   Pushdown p;
   p.push(3);
   p.push(2);
@@ -96,6 +117,17 @@ TEST(Pushdown, 2Push) {
   EXPECT_TT(p.empty());
 }
 
+TEST(Item, 1Count) {
+  heapify();
+  Pushdown p;
+  EXPECT_TT(p.top.x());
+  EXPECT_TT(p.empty());
+  int before = Item::count;
+  EXPECT_GE(before,0);
+  p.push(3);
+  EXPECT_GE(Item::count,1);
+  EXPECT_EQ(Item::count, before + 1);
+}
 TEST(Pushdown, 2Push0) {
   Pushdown p;
   p.push(3).push(2);

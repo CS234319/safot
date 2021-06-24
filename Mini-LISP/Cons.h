@@ -15,7 +15,6 @@ Type Cons: private Knob {
   static Short count; 
   static Integer reuse; 
   static Integer miss; 
-  static Boolean corrupted();
 };
 #endif
 

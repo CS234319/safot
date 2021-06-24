@@ -13,6 +13,5 @@ Type Item: private Knob {
   Item head(Short s);
   Item rest(Short s);
   static Short count;
-  static Boolean corrupted();
 }; 
 #endif

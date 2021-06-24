@@ -18,8 +18,6 @@ Type Pristine: private Knob {
   Pristine& prev(Pristine); 
   Pristine& next(Pristine); 
   static Short count;
-  static Boolean corrupted();
-  static Boolean valid();
 };
 
 inline std::ostream& operator<<(std::ostream &os, Pristine p) {
