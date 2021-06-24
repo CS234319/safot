@@ -71,7 +71,6 @@ TEST(Stack, TopZero) {
   EXPECT_TRUE(top == 0);
 } 
 
-int ¢ = 3;
 TEST(Stack, PushPush) {
   push(3);
   EXPECT_FALSE(empty());
