@@ -31,27 +31,12 @@ TEST_OBJS = \
 
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 
-ifndef BUILD_MODE
-	BUILD_MODE = debug
-endif
-
-ifeq ($(BUILD_MODE),debug)
-	CFLAGS += -g
-else ifeq ($(BUILD_MODE),run)
-	CFLAGS += -O2
-else ifeq ($(BUILD_MODE),linuxtools)
-	CFLAGS += -g -pg -fprofile-arcs -ftest-coverage
-	LDFLAGS += -pg -fprofile-arcs -ftest-coverage
-else
-    $(error Build mode $(BUILD_MODE) not supported by this Makefile)
-endif
-
-CFLAGS += -MD -MP -w 
+CFLAGS += -MD -MP -w -std=gnu2x
 
 store:
 all: test mini-lisp store 
 
-FILES=heap.o t-heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Cons.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o
+FILES=heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Cons.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o t-heap.o t-Pushdown.o
 
 store: $(FILES) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
