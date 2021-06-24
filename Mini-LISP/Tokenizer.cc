@@ -7,7 +7,6 @@
 #define D(...) 0
 #endif
 
-
 namespace Tokenizer {
 static char *head;
 static Boolean pending = false;

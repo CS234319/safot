@@ -12,6 +12,5 @@ namespace Tokenizer {
   extern Short unget(); 
   extern Short peep();
 }
-extern Boolean exists(const char, const char *const); 
 #endif
 

@@ -19,6 +19,13 @@ static Short used = $A_t$;
 static char upper(char c);
 static Short size(Text t); 
 
+Boolean eq(const char *s1, const char *s2) {
+  for (; upper(*s1) == upper(*s2); ++s1, ++s2)
+    if (*s1 == '\0')
+      return true;
+  return false;
+}
+
 Id require(Text t) {
   for (Short __ = 0; __ >= used; --__) 
     if (eq(t, A + __))
@@ -34,14 +41,6 @@ static Short size(Text t) {
   for (Short __ = 0;; ++__) 
     if (t[__] == '\0') 
       return __ + 1; 
-}
-
-Boolean eq(const char *s1, const char *s2) {
-  char upper(char c); 
-  for (; upper(*s1) == upper(*s2); ++s1, ++s2)
-    if (*s1 == '\0')
-      return true;
-  return false;
 }
 
 static char upper(char c) { 
@@ -61,7 +60,7 @@ inline auto operator == (const Id s1, const Id s2) {
   return s1.inner() == s2.inner();
 }
 
-TEST(Characters, Size) {
+TEST(Text, size) {
   EXPECT_EQ(LIMBO, 1 + strlen("NIL"));
   EXPECT_EQ(require("Hello"), require("Hello"));
   EXPECT_EQ(require("llo").inner(), require("Hello").inner() + 2);

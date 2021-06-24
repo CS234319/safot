@@ -55,7 +55,6 @@ TEST(Cons, Hash13a) {
   EXPECT_EQ(Cons::count, 2);
 }
 
-
 TEST(Cons, count) {
   heapify();
   EXPECT_ZZ(Cons::count);

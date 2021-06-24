@@ -1,7 +1,6 @@
 #include "Parser.h"
 #include "tokenizer.h"
-
-#include "stack-trace.h"
+#include "text.h"
 
 #include <string.h>
 
