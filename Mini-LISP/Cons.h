@@ -3,13 +3,15 @@
 #include "chic.h"
 #include "Knob.h"
 #include "Word.h"
+Type Sx;
 Type Cons: private Knob {
   using Knob::inner, Knob::x;
+  typedef Cons Self;
   Cons(Short);
-  Cons car(Short); 
-  Cons cdr(Short); 
-  Property(Handle car);
-  Property(Handle cdr);
+  Selfer(car(Sx)); 
+  Selfer(cdr(Sx)); 
+  Property(Sx car);
+  Property(Sx cdr);
   Property(Boolean ok);
   static Boolean ok(Word);
   static Short count; 
@@ -17,5 +19,3 @@ Type Cons: private Knob {
   static Integer miss; 
 };
 #endif
-
-

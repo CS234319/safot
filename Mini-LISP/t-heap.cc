@@ -205,7 +205,7 @@ TEST(Preserve, singletonConnected) {
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
   preserve(live);
-  EXPECT_EQ(Pristine::count, $P_n$-1);
+  EXPECT_EQ(dead.inner(), heap.inner());
 }
 
 TEST(Preserve, singletonCount) {
@@ -214,6 +214,25 @@ TEST(Preserve, singletonCount) {
   auto live = require(-2,-3);
   preserve(live);
   EXPECT_EQ(Pristine::count, $P_n$-1);
+}
+
+TEST(Preserve, pairCount) {
+  heapify();
+  auto dead1 = require(-3,-2);
+  auto dead2 = require(-5,-2);
+  auto live = require(-2,-3);
+  preserve(live);
+  EXPECT_EQ(Pristine::count, $P_n$-2);
+}
+
+TEST(Preserve, visit) {
+  heapify();
+  auto dead1 = require(-3,-2);
+  auto dead2 = require(-5,-2);
+  auto live1 = require(-2,-3);
+  auto live2 = require(live1.inner(),-4);
+  preserve(live2);
+  EXPECT_EQ(Pristine::count, $P_n$-2);
 }
 
 TEST(Heapify, exists) { 

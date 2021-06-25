@@ -4,13 +4,13 @@
 #include "Short.h"
 
 // Properties:
-Property(Handle  Cons::car) Is(s1())
-Property(Handle  Cons::cdr) Is(s2())
+Property(Sx  Cons::car) Is(Sx(s1()))
+Property(Sx  Cons::cdr) Is(Sx(s2()))
 Property(Boolean  Cons::ok) Is(white(s1()) && white(s2()))
 
 Cons::Cons(Short s): Knob(s) {}
-Cons Cons::car(Short h) { s1(h); return *this; }
-Cons Cons::cdr(Short h) { s2(h); return *this; }
+Cons Cons::car(Sx s) { s1(s.inner()); return *this; }
+Cons Cons::cdr(Sx s) { s2(s.inner()); return *this; }
 Boolean Cons::ok(Word w) { return white(w.s1) && white(w.s2); } 
 
 Short Cons::count = 0;

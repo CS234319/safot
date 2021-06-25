@@ -5,11 +5,12 @@
 
 Type Sx: private Handle { // An S-expression represented by its handle
   using Handle::inner;
+  typedef Sx Self;
   Sx(Short)      ;
   Sx(Handle)     ;
   Sx(Sx, Sx) ;
   Sx(Text t);
-
+  Property(Boolean atom);
   Sx cons(Sx cdr) const { return Sx(*this, cdr); }
 };
 

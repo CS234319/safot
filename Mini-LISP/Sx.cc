@@ -4,10 +4,14 @@
 #include "heap.h"
 #include "Cons.h"
 
+// Property(Cons Sx::cons(Sx cdr)) Is(Sx(*this, cdr));
 Sx::Sx(Short s)      : Handle(s) {}
 Sx::Sx(Handle h)     : Sx(h.inner()) {} 
 Sx::Sx(Sx s1, Sx s2) : Sx(require(s1, s2).inner()) {}
 Sx::Sx(Text t)       : Sx(require(t)) {}
+
+Property(Boolean Sx::atom) Is(inner() <= 0);
+
 
 const Sx NIL("NIL"); // Always define longer names first 
 const Sx SET("set"); // Save one letter by sharing with "T"

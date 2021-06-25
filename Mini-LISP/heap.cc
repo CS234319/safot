@@ -100,8 +100,17 @@ void mark(Cons c) {
  k.s1(flip(k.s1())); 
 }
 
+void visit(Cons c);
+void visit(Sx s) {
+  if (white(s.inner()) && !s.atom())
+    visit(Cons(s.inner()));
+}
+
 void visit(Cons c) {
+  Expect(c.ok());
   mark(c);
+  visit(c.car());
+  visit(c.cdr());
 }
 
 void preserve(Cons c) { 
