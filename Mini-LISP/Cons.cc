@@ -1,5 +1,6 @@
 #include "Cons.h"
 
+#include "Sx.h"
 #include "Short.h"
 
 // Properties:
@@ -12,6 +13,9 @@ Cons Cons::car(Short h) { s1(h); return *this; }
 Cons Cons::cdr(Short h) { s2(h); return *this; }
 Boolean Cons::ok(Word w) { return white(w.s1) && white(w.s2); } 
 
+Short Cons::count = 0;
+Integer Cons::reuse = 0;
+Integer Cons::miss = 0;
 #include "layout.h"
 #include "heap.h"
 #include "Pristine.h"

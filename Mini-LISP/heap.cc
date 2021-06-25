@@ -4,7 +4,6 @@
 #include "Short.h"
 #include "Word.h"
 #include "Cons.h"
-#include "Pristine.h"
 
 #include "layout.h"
 
@@ -78,25 +77,43 @@ Pristine heapify() {
   return heap = Pristine($P_f$);
 }
 
+void prepend(Pristine p) {
+  p.prev($P_x$).next(heap); 
+  if (!heap.x())
+    heap.prev(p);
+  heap = p;
+  Pristine::count++;
+}
 
 void free(Item i) {
   Expect(i.ok());
-  let h = i.inner();
-  Expect(Knob(h).item());
-  Pristine(h).prev($P_x$).next(heap); 
-  if (!heap.x())
-    heap.prev(Pristine(h));
-  heap = h;
-  Pristine::count++;
+  Expect(Knob(i.inner()).item());
+  prepend(Knob(i.inner()).Pristine());
   Item::count--;
 }
 
 Cons require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
 
-Short Cons::count = 0;
-Integer Cons::reuse = 0;
-Integer Cons::miss = 0;
+#include "mark.h"
+void mark(Cons c) {
+ auto k = Knob(c.inner()); 
+ k.s1(flip(k.s1())); 
+}
 
-Short Item::count = 0;
+void visit(Cons c) {
+  mark(c);
+}
+
+void preserve(Cons c) { 
+  visit(c);
+  for (auto s = $P_f$; s <= $P_t$; ++s) {
+    if (Knob(s).cons()) {
+      prepend(Pristine(s));
+    } else if (Knob(s).weirdo()) { 
+      mark(s); 
+      Surely(Knob(s).cons());
+    }
+  }
+}
 
 

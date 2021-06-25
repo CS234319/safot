@@ -114,6 +114,7 @@ typedef std::function<bool()> Predicate;
 #define Provides extern
 #define Let constexpr 
 #define let const auto 
+#define variable auto 
 #define Allocate 
 #define function   
 #define property inline  

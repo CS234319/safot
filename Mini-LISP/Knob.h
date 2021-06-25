@@ -9,10 +9,8 @@ Type Pristine;
 Type Knob: Handle { // An S-expression represented by its Knob
   typedef Knob Self;
   typedef Handle Inner;
-  // Composition
   Constructor(Knob(Short));
   Constructor(Knob());
-  // Properties:
   Property(Short   s1);
   Property(Short   s2);       
   Property(Boolean ok);

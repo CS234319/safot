@@ -7,3 +7,4 @@ Item Item::rest(Short s) { s2(flip(s)); return *this; }
 Property(Item Item::rest) Is(Item(flip(s2())))
 Property(Short Item::head) Is(s1())
 Property(Boolean Item::ok) Is(x() || white(s1())  && black(s2()))
+Short Item::count = 0;

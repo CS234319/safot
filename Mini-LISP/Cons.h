@@ -4,7 +4,7 @@
 #include "Knob.h"
 #include "Word.h"
 Type Cons: private Knob {
-  using Knob::inner;
+  using Knob::inner, Knob::x;
   Cons(Short);
   Cons car(Short); 
   Cons cdr(Short); 

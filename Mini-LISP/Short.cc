@@ -44,12 +44,17 @@ TEST(Stain, Word) {
   EXPECT_TT(Pristine(4).ok());
 }
 
-TEST(Marking, Distinct) { 
+TEST(Flip, distinct) { 
   for (auto s = -32768; s != 32767; ++s)
     EXPECT_NE(s, flip(s)) << s;
 }
 
-TEST(Marking, Pairs) { 
+TEST(Flip, reversible) { 
+  for (auto s = -32768; s != 32767; ++s)
+    EXPECT_EQ(s, flip(flip(s))) << s;
+}
+
+TEST(Flip, Pairs) { 
   EXPECT_LT(flip($P_f$), $A_f$);   
   EXPECT_LT(flip($P_t$), $A_f$);   
   EXPECT_LT(flip(($P_f$ + $P_t$)/2), $A_f$);   
@@ -62,45 +67,23 @@ TEST(Marking, Pairs) {
   EXPECT_EQ(flip(flip($P_t$ + 1)), $P_t$ + 1);
 }
 
-TEST(Marking, Atoms) { 
-  EXPECT_GT(flip($A_f$), $A_t$);   
-  EXPECT_LT(flip($A_t$),0);
-  EXPECT_GT(flip(($A_f$ + $A_t$)/2), $P_t$);   
-  EXPECT_GT(flip($A_t$ - 1), $P_t$);   
-  EXPECT_GT(flip($A_f$ - 1), $P_t$);   
-  EXPECT_EQ(flip(flip($A_f$)), $A_f$);
-  EXPECT_EQ(flip(flip($A_f$ + 1)),$A_f$ + 1 );
-  EXPECT_EQ(flip(flip($A_t$ + 1)), $A_t$ + 1);
-  EXPECT_EQ(flip(flip($A_t$)), $A_t$);
-  EXPECT_EQ(flip(flip(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
-}
-
-TEST(Marking, Bounds) { 
+TEST(Flip, P) { 
   EXPECT_LT(flip($P_f$), $P_f$);   
   EXPECT_LT(flip($P_t$), $P_t$);   
   EXPECT_LT(flip(($P_f$ + $P_t$)/2), $A_f$);
   EXPECT_LT(flip($P_f$-1), $X_f$);
   EXPECT_LT(flip($P_f$+1), $X_f$);   
-  EXPECT_EQ(flip(flip($P_f$)), $P_f$);
-  EXPECT_EQ(flip(flip($P_t$)), $P_t$);
-  EXPECT_EQ(flip(flip(($P_f$ + $P_t$)/2)),($P_f$ + $P_t$)/2);
-  EXPECT_EQ(flip(flip($P_f$ - 1)),$P_f$ - 1 );
-  EXPECT_EQ(flip(flip($P_f$ + 1)), $P_f$ + 1);
-  EXPECT_EQ(flip(flip($P_t$ - 1)),$P_t$ - 1 );
-  EXPECT_EQ(flip(flip($P_t$ + 1)), $P_t$ + 1);
 }
 
-TEST(Marking, Atoms1) { 
-  EXPECT_GT(flip($A_f$), $X_t$);   
-  EXPECT_LT(flip($A_t$), $A_f$);
+TEST(Flip, A) { 
+  EXPECT_GT(flip($A_f$), $A_t$);   
+  EXPECT_GT(flip(($A_f$ + $A_t$)/2), $P_t$);   
   EXPECT_GT(flip(($A_f$ + $A_t$)/2), $X_t$);
-  EXPECT_GT(flip($A_t$-1), $X_t$);   
+  EXPECT_GT(flip($A_f$), $X_t$);   
+  EXPECT_GT(flip($A_f$ - 1), $P_t$);   
   EXPECT_GT(flip($A_f$+1), $X_t$);   
-  EXPECT_EQ(flip(flip($A_f$)),$A_f$);
-  EXPECT_EQ(flip(flip($A_t$)),$A_t$);
-  EXPECT_EQ(flip(flip(($A_f$ + $A_t$)/2)),($A_f$ + $A_t$)/2);
-  EXPECT_EQ(flip(flip($A_f$ - 1)), $A_f$ - 1 );
-  EXPECT_EQ(flip(flip($A_t$ - 1)), $A_t$ - 1);
-  EXPECT_EQ(flip(flip($A_f$ + 1)), $A_f$ + 1 );
-  EXPECT_EQ(flip(flip($A_t$ + 1)), $A_t$ + 1);
+  EXPECT_GT(flip($A_t$ - 1), $P_t$);   
+  EXPECT_GT(flip($A_t$-1), $X_t$);   
+  EXPECT_LT(flip($A_t$), $A_f$);
+  EXPECT_LT(flip($A_t$),0);
 }

@@ -5,10 +5,21 @@
 #include "Pristine.h"
 #include "Short.h"
 #include "Cons.h"
+#include "Sx.h"
 
 #include "stdio.h"
+
+Short length() {
+  Short result = 0;
+  for (auto h = heap; !h.x();  h = h.next()) 
+      ++result;
+  return result;
+}
+
 static struct {
-  Boolean something() Is(asymmetric() || cyclic() || weirdos() || pristines() || items() || pairs()); 
+  Boolean something() Is(uncounted() || excess() || asymmetric() || cyclic() || weirdos() || pristines() || items() || pairs()); 
+  Boolean uncounted() Is(length() > Pristine::count); 
+  Boolean excess()   Is(length() < Pristine::count); 
   Boolean cyclic() {
     if (!heap.x())
       for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
@@ -100,14 +111,110 @@ static struct {
   }
 } corrupted;
 
-Short length() {
-  Short result = 0;
-  for (auto h = heap; !h.x();  h = h.next()) 
-      ++result;
-  return result;
+#include "Test.h"
+#include "mark.h"
+
+TEST(Mark, exists) {
+  heapify();
+  auto s = require(2,3);
+  mark(s);
 }
 
-#include "Test.h"
+TEST(Mark, correct) {
+  heapify();
+  auto s = require(2,3);
+  auto k = Knob(s.inner());
+  mark(s);
+  EXPECT_TT(k.weirdo());
+}
+
+TEST(Mark, flip) {
+  heapify();
+  auto c = require(2,3);
+  Short before = Knob(c.inner()).s1();
+  mark(c);
+  Short after = Knob(c.inner()).s1();
+  EXPECT_EQ(before, flip(after)); 
+  EXPECT_EQ(after, flip(before)); 
+}
+
+TEST(Mark, undo) {
+  heapify();
+  auto s = require(2,3);
+  auto k = Knob(s.inner());
+  EXPECT_TT(k.cons());
+  mark(s);
+  mark(s);
+  EXPECT_FF(k.weirdo());
+  EXPECT_TT(k.cons());
+}
+
+TEST(Mark, special) {
+  heapify();
+  auto s = require(2,3);
+  auto k = Knob(s.inner());
+  EXPECT_TT(k.cons());
+  mark(s);
+  EXPECT_FF(k.Cons().ok());
+  EXPECT_FF(k.Item().ok());
+  EXPECT_FF(k.Pristine().ok());
+}
+
+TEST(Mark, weird) {
+  heapify();
+  auto s = require(2,3);
+  mark(s);
+  EXPECT_FF(s.ok());
+}
+
+TEST(Preserve, exists) {
+  heapify();
+  auto s = require(2,3);
+  preserve(s);
+}
+
+TEST(Preserve, singletonKeep) {
+  heapify();
+  auto dead = require(-3,-2);
+  auto live = require(-2,-3);
+  EXPECT_TT(live.ok());
+  preserve(live);
+  EXPECT_TT(live.ok());
+}
+
+TEST(Preserve, singletonKill) {
+  heapify();
+  auto dead = require(-3,-2);
+  auto live = require(-2,-3);
+  EXPECT_TT(dead.ok());
+  preserve(live);
+  EXPECT_FF(dead.ok());
+}
+
+TEST(Preserve, singletonPristine) {
+  heapify();
+  auto dead = require(-3,-2);
+  auto live = require(-2,-3);
+  EXPECT_TT(dead.ok());
+  preserve(live);
+  EXPECT_TT(Knob(dead.inner()).Pristine().ok());
+}
+
+TEST(Preserve, singletonConnected) {
+  heapify();
+  auto dead = require(-3,-2);
+  auto live = require(-2,-3);
+  preserve(live);
+  EXPECT_EQ(Pristine::count, $P_n$-1);
+}
+
+TEST(Preserve, singletonCount) {
+  heapify();
+  auto dead = require(-3,-2);
+  auto live = require(-2,-3);
+  preserve(live);
+  EXPECT_EQ(Pristine::count, $P_n$-1);
+}
 
 TEST(Heapify, exists) { 
   heapify();

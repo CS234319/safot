@@ -25,7 +25,6 @@ inline std::ostream& operator<<(std::ostream &os, Pristine p) {
     return  os << "Px";
   return os << "Pristine[" << p.prev().inner() << "." << p.next().inner()  << "]";
 }
-
 #endif
 
 

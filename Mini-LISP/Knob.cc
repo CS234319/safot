@@ -12,10 +12,10 @@ Property(Boolean Knob::ok)       Is(x() || inner() >= $P_f$ && inner() <= $P_t$)
 Property(Boolean Knob::x)        Is(inner() == $P_x$)
 Property(Short   Knob::s1)       Is(P[inner()].s1)  
 Property(Short   Knob::s2)       Is(P[inner()].s2)  
-Property(Boolean Knob::item)     Is(white(s1()) && black(s2()))
-Property(Boolean Knob::pristine) Is(black(s1())  && black(s2()))
 Property(Boolean Knob::cons)     Is(white(s1()) && white(s2()))
-Property(Boolean Knob::weirdo)   Is( black(s1()) && white(s2()))
+Property(Boolean Knob::pristine) Is(black(s1()) && black(s2()))
+Property(Boolean Knob::item)     Is(white(s1()) && black(s2()))
+Property(Boolean Knob::weirdo)   Is(black(s1()) && white(s2()))
 Knob::Knob(): Knob($P_x$) {} 
 Knob::Knob(Short s): Inner(s) {}
 
