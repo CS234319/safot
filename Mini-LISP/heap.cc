@@ -118,6 +118,7 @@ void preserve(Sx c) {
   for (auto s = $P_f$; s <= $P_t$; ++s) {
     if (Knob(s).pair()) {
       prepend(Pristine(s));
+      Pair::count--;
     } else if (Knob(s).weirdo()) { 
       mark(s); 
       Surely(Knob(s).pair());

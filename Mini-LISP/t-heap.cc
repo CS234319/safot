@@ -220,9 +220,22 @@ TEST(Preserve, pairCount) {
   heapify();
   auto dead1 = require(-3,-2);
   auto dead2 = require(-5,-2);
+  auto dead3 = require(dead2,dead1);
+  auto live = require(-2,-3);
+  EXPECT_FF(corrupted.something());
+  EXPECT_EQ(Pair::count,4);
+  preserve(live);
+  EXPECT_EQ(Pair::count,1);
+  EXPECT_EQ(Pristine::count, $P_n$-1);
+}
+
+TEST(Preserve, tripleCount) {
+  heapify();
+  auto dead1 = require(-3,-2);
+  auto dead2 = require(-5,-2);
   auto live = require(-2,-3);
   preserve(live);
-  EXPECT_EQ(Pristine::count, $P_n$-2);
+  EXPECT_EQ(Pristine::count, $P_n$-1);
 }
 
 TEST(Preserve, visit) {
