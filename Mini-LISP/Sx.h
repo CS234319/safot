@@ -11,6 +11,8 @@ Type Sx: private Handle { // An S-expression represented by its handle
   Sx(Sx, Sx) ;
   Sx(Text t);
   Property(Boolean atom);
+  Property(Sx car);
+  Property(Sx cdr);
   Sx cons(Sx cdr) const { return Sx(*this, cdr); }
 };
 

@@ -95,25 +95,25 @@ void free(Item i) {
 Cons require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
 
 #include "mark.h"
-void mark(Cons c) {
- auto k = Knob(c.inner()); 
+
+void mark(Sx s) {
+ auto k = Knob(s.inner()); 
  k.s1(flip(k.s1())); 
 }
 
 void visit(Cons c);
+
 void visit(Sx s) {
-  if (white(s.inner()) && !s.atom())
-    visit(Cons(s.inner()));
+  if (white(s.inner()) && !s.atom()) {
+    auto car = s.car();
+    auto cdr = s.cdr();
+    mark(s);
+    visit(car);
+    visit(cdr);
+  } 
 }
 
-void visit(Cons c) {
-  Expect(c.ok());
-  mark(c);
-  visit(c.car());
-  visit(c.cdr());
-}
-
-void preserve(Cons c) { 
+void preserve(Sx c) { 
   visit(c);
   for (auto s = $P_f$; s <= $P_t$; ++s) {
     if (Knob(s).cons()) {
@@ -124,5 +124,3 @@ void preserve(Cons c) {
     }
   }
 }
-
-
