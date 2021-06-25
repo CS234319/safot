@@ -63,5 +63,5 @@ mini-lisp: 00.o	$(OBJS)
 # -include $(SRC:%.c=%.d)
 
 clean:
-		rm -fr $(OBJS) mini-lisp test store *.o *.d *~ *.backup memory *.back *.aux *.log
+		rm -fr $(OBJS) mini-lisp test store *.o *.d *~ *.backup memory *.back *.aux *.log delme*
 
