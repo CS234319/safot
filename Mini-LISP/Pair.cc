@@ -1,21 +1,21 @@
-#include "Cons.h"
+#include "Pair.h"
 
 #include "Sx.h"
 #include "Short.h"
 
 // Properties:
-Property(Sx  Cons::car) Is(Sx(s1()))
-Property(Sx  Cons::cdr) Is(Sx(s2()))
-Property(Boolean  Cons::ok) Is(white(s1()) && white(s2()))
+Property(Sx  Pair::car) Is(Sx(s1()))
+Property(Sx  Pair::cdr) Is(Sx(s2()))
+Property(Boolean  Pair::ok) Is(white(s1()) && white(s2()))
 
-Cons::Cons(Short s): Knob(s) {}
-Cons Cons::car(Sx s) { s1(s.inner()); return *this; }
-Cons Cons::cdr(Sx s) { s2(s.inner()); return *this; }
-Boolean Cons::ok(Word w) { return white(w.s1) && white(w.s2); } 
+Pair::Pair(Short s): Knob(s) {}
+Pair Pair::car(Sx s) { s1(s.inner()); return *this; }
+Pair Pair::cdr(Sx s) { s2(s.inner()); return *this; }
+Boolean Pair::ok(Word w) { return white(w.s1) && white(w.s2); } 
 
-Short Cons::count = 0;
-Integer Cons::reuse = 0;
-Integer Cons::miss = 0;
+Short Pair::count = 0;
+Integer Pair::reuse = 0;
+Integer Pair::miss = 0;
 #include "layout.h"
 #include "heap.h"
 #include "Pristine.h"
@@ -33,7 +33,7 @@ Word hash13() {
   }
 }
 
-TEST(Cons, Hash13) {
+TEST(Pair, Hash13) {
   Word w = hash13();
   EXPECT_NE(w.l, Word(13,13).l);
   EXPECT_NE(w.l, 13);
@@ -44,7 +44,7 @@ TEST(Cons, Hash13) {
   EXPECT_EQ(w.hash(), Word(13,13).hash());
 }
 
-TEST(Cons, Hash13a) {
+TEST(Pair, Hash13a) {
   heapify();
   auto c1 = require(13,13); 
   EXPECT_EQ(P[c1.inner()].hash(), Word(13,13).hash());
@@ -54,57 +54,57 @@ TEST(Cons, Hash13a) {
   EXPECT_NE(h1, h2);
   EXPECT_EQ(P[h1].hash(), P[h2].hash());
 
-  EXPECT_EQ(Cons::miss, 1);
-  EXPECT_ZZ(Cons::reuse);
-  EXPECT_EQ(Cons::count, 2);
+  EXPECT_EQ(Pair::miss, 1);
+  EXPECT_ZZ(Pair::reuse);
+  EXPECT_EQ(Pair::count, 2);
 }
 
-TEST(Cons, count) {
+TEST(Pair, count) {
   heapify();
-  EXPECT_ZZ(Cons::count);
+  EXPECT_ZZ(Pair::count);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
-  EXPECT_EQ(Cons::count, 25);
+  EXPECT_EQ(Pair::count, 25);
 }
 
-TEST(Cons, reuse) {
+TEST(Pair, reuse) {
   heapify();
-  EXPECT_ZZ(Cons::reuse);
+  EXPECT_ZZ(Pair::reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
-  EXPECT_ZZ(Cons::reuse);
+  EXPECT_ZZ(Pair::reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
-  EXPECT_EQ(Cons::reuse, 25);
+  EXPECT_EQ(Pair::reuse, 25);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       require(i,j);
-  EXPECT_EQ(Cons::reuse, 50);
+  EXPECT_EQ(Pair::reuse, 50);
 }
 
-TEST(Cons, Miss) {
+TEST(Pair, Miss) {
   enum { N = 220 };
   heapify();
-  EXPECT_ZZ(Cons::miss);
+  EXPECT_ZZ(Pair::miss);
   int n = 0;
   for (int i = 0;  i < N; i++) { 
     for (int j = 0;  j < N; j++) {
       require(i,j);
       ++n;
-      if (Cons::miss > 5) 
+      if (Pair::miss > 5) 
         break;
     }
-    if (Cons::miss > 5) 
+    if (Pair::miss > 5) 
       break;
   }
-  EXPECT_EQ(n,Cons::count);
+  EXPECT_EQ(n,Pair::count);
   EXPECT_GT(n * n,$P_n$);
   EXPECT_LT(n,N * N / 2);
-  EXPECT_GT(Cons::miss,0);
-  EXPECT_EQ(Cons::miss,6);
-  EXPECT_ZZ(Cons::reuse);
-  EXPECT_EQ(Cons::count,n);
+  EXPECT_GT(Pair::miss,0);
+  EXPECT_EQ(Pair::miss,6);
+  EXPECT_ZZ(Pair::reuse);
+  EXPECT_EQ(Pair::count,n);
 }

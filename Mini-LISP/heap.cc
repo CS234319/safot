@@ -3,7 +3,7 @@
 
 #include "Short.h"
 #include "Word.h"
-#include "Cons.h"
+#include "Pair.h"
 
 #include "layout.h"
 
@@ -35,32 +35,32 @@ static Item fresh(Word w) {
   return fresh(w.s1,w.s2); 
 }
 
-static Cons require(Word w, Short s) {
-  Expect(Cons::ok(w));
+static Pair require(Word w, Short s) {
+  Expect(Pair::ok(w));
   Expect(s != $P_x$);
   Expect(s >= $P_f$);
   Expect(s <= $P_t$);
   if (P[s].l == w.l) {
-    Cons::reuse++;
+    Pair::reuse++;
     return s; 
   };
-  Cons::count++;
+  Pair::count++;
   if (!Pristine(s).ok()) {
-    Cons::miss++;
-    return crude().Cons().car(w.s1).cdr(w.s2);
+    Pair::miss++;
+    return crude().Pair().car(w.s1).cdr(w.s2);
   }
   Expect(Pristine(s).ok());
-  Promise(Cons::ok(P[s]));
+  Promise(Pair::ok(P[s]));
   Pristine::count--;
   auto prev = Pristine(s).prev(), next = Pristine(s).next();
   if (!prev.x()) prev.next(next); 
   if (!next.x()) next.prev(prev); 
   if (heap.inner() == s) heap = next ;
   P[s] = w;
-  return Cons(s);
+  return Pair(s);
 }
 
-Cons require(Word w) {
+Pair require(Word w) {
   return require(w, w.hash());
 }
   
@@ -70,9 +70,9 @@ Pristine heapify() {
   Pristine($P_f$).prev(Pristine()).next(Pristine($P_f$ +1));
   Pristine($P_t$).next(Pristine()).prev(Pristine($P_t$ -1));
   Pristine::count = $P_n$;
-  Cons::count = 0;
-  Cons::reuse = 0;
-  Cons::miss = 0;
+  Pair::count = 0;
+  Pair::reuse = 0;
+  Pair::miss = 0;
   Item::count = 0;
   return heap = Pristine($P_f$);
 }
@@ -92,7 +92,7 @@ void free(Item i) {
   Item::count--;
 }
 
-Cons require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
+Pair require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
 
 #include "mark.h"
 
@@ -101,7 +101,7 @@ void mark(Sx s) {
  k.s1(flip(k.s1())); 
 }
 
-void visit(Cons c);
+void visit(Pair c);
 
 void visit(Sx s) {
   if (white(s.inner()) && !s.atom()) {
@@ -116,11 +116,11 @@ void visit(Sx s) {
 void preserve(Sx c) { 
   visit(c);
   for (auto s = $P_f$; s <= $P_t$; ++s) {
-    if (Knob(s).cons()) {
+    if (Knob(s).pair()) {
       prepend(Pristine(s));
     } else if (Knob(s).weirdo()) { 
       mark(s); 
-      Surely(Knob(s).cons());
+      Surely(Knob(s).pair());
     }
   }
 }

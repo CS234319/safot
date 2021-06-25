@@ -13,7 +13,7 @@ Type Sx: private Handle { // An S-expression represented by its handle
   Property(Boolean atom);
   Property(Sx car);
   Property(Sx cdr);
-  Sx cons(Sx cdr) const { return Sx(*this, cdr); }
+  Sx pair(Sx cdr) const { return Sx(*this, cdr); }
 };
 
 #undef NULL
@@ -31,7 +31,7 @@ extern const Sx ERROR, SET;
 extern const Sx MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
 
 /*
-  property Cons $_p$(); /// Interpreted as handle of Cons, retrieves the Cons behind (mutable)  
+  property Pair $_p$(); /// Interpreted as handle of Pair, retrieves the Pair behind (mutable)  
   property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
 */
 #endif

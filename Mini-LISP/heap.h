@@ -4,11 +4,11 @@
 #include "Sx.h"
 #include "Item.h"
 #include "Pristine.h"
-#include "Cons.h"
+#include "Pair.h"
 extern Pristine heapify();
 extern Pristine heap;
-extern Cons require(Sx, Sx); 
+extern Pair require(Sx, Sx); 
 extern Item fresh(Short, Short); 
 extern void free(Item); 
-extern void preserve(Cons); 
+extern void preserve(Pair); 
 #endif

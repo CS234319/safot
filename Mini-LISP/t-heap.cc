@@ -4,7 +4,7 @@
 #include "Pushdown.h"
 #include "Pristine.h"
 #include "Short.h"
-#include "Cons.h"
+#include "Pair.h"
 #include "Sx.h"
 
 #include "stdio.h"
@@ -47,21 +47,21 @@ static struct {
   }
   Boolean pairs() {
     try {
-      Expect(Cons::count >= 0);
-      Expect(Cons::count  <= $P_n$);
-      Expect(Cons::reuse  >= 0);
-      Expect(Cons::reuse  >= 0);
-      Expect(Cons::miss  >= 0);
-      Expect(Cons::count != 0 || Cons::reuse ==0)
-      Expect(Cons::count != 0 || Cons::miss ==0)
+      Expect(Pair::count >= 0);
+      Expect(Pair::count  <= $P_n$);
+      Expect(Pair::reuse  >= 0);
+      Expect(Pair::reuse  >= 0);
+      Expect(Pair::miss  >= 0);
+      Expect(Pair::count != 0 || Pair::reuse ==0)
+      Expect(Pair::count != 0 || Pair::miss ==0)
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let c = Cons(h);
+        let c = Pair(h);
         if (!c.ok()) 
           continue;
         ++n;
       }
-      Expect(n == Cons::count);
+      Expect(n == Pair::count);
       return false;
     } catch(...) {
       return true;
@@ -142,20 +142,20 @@ TEST(Mark, undo) {
   heapify();
   auto s = require(2,3);
   auto k = Knob(s.inner());
-  EXPECT_TT(k.cons());
+  EXPECT_TT(k.pair());
   mark(s);
   mark(s);
   EXPECT_FF(k.weirdo());
-  EXPECT_TT(k.cons());
+  EXPECT_TT(k.pair());
 }
 
 TEST(Mark, special) {
   heapify();
   auto s = require(2,3);
   auto k = Knob(s.inner());
-  EXPECT_TT(k.cons());
+  EXPECT_TT(k.pair());
   mark(s);
-  EXPECT_FF(k.Cons().ok());
+  EXPECT_FF(k.Pair().ok());
   EXPECT_FF(k.Item().ok());
   EXPECT_FF(k.Pristine().ok());
 }
@@ -303,9 +303,9 @@ TEST(Heapify, prefix) {
 
 TEST(Heapify, counters) { 
   heapify();
-  EXPECT_ZZ(Cons::count);
-  EXPECT_ZZ(Cons::miss);
-  EXPECT_ZZ(Cons::reuse);
+  EXPECT_ZZ(Pair::count);
+  EXPECT_ZZ(Pair::miss);
+  EXPECT_ZZ(Pair::reuse);
   EXPECT_ZZ(Item::count);
   EXPECT_EQ(Pristine::count, $P_n$);
 }
@@ -424,7 +424,7 @@ TEST(Fresh, correct) {
   EXPECT_EQ(f.head(), 15);
   EXPECT_EQ(f.rest().inner(), $P_x$);
   EXPECT_TT(f.ok());
-  EXPECT_FF(Cons(f.inner()).ok());
+  EXPECT_FF(Pair(f.inner()).ok());
   EXPECT_FF(Pristine(f.inner()).ok());
 }
 
@@ -495,10 +495,10 @@ TEST(Require, exists) {
   }
 }
 
-TEST(Require, cons) { 
+TEST(Require, pair) { 
   try {
     heapify();
-    Cons h = require(Sx(0xDE),Sx(0xAD));
+    Pair h = require(Sx(0xDE),Sx(0xAD));
     EXPECT_TT(h.ok());
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
@@ -708,9 +708,9 @@ TEST(Exhaust, andRestore) {
     p.push(s);
   for (auto s = $P_n$ ; s >= 1; --s) 
     EXPECT_EQ(s, p.pop()) << s;
-  EXPECT_ZZ(Cons::count);
-  EXPECT_ZZ(Cons::miss);
-  EXPECT_ZZ(Cons::reuse);
+  EXPECT_ZZ(Pair::count);
+  EXPECT_ZZ(Pair::miss);
+  EXPECT_ZZ(Pair::reuse);
   EXPECT_ZZ(Item::count);
   EXPECT_EQ(Pristine::count, $P_n$);
   EXPECT_FF(corrupted.cyclic());
@@ -742,12 +742,12 @@ TEST(Churn, Require) {
   int n = 0;
   for (Short i = 0;  ; i++) { 
     for (Short j = 0;  i <= j; j++) {
-      Cons c(require(i,j).inner());
+      Pair c(require(i,j).inner());
       ++n;
       EXPECT_TT(c.ok());
       EXPECT_EQ(i, c.car().inner());
       EXPECT_EQ(j, c.cdr().inner());
-      EXPECT_EQ(n, Cons::count) << n;
+      EXPECT_EQ(n, Pair::count) << n;
       if (n > 25000)
         goto done;
     }
@@ -792,9 +792,9 @@ TEST(Counting, pairs) {
   EXPECT_NE(Pristine::count, before);
   EXPECT_EQ(Pristine::count, before - 1);
   EXPECT_EQ(Pristine::count, $P_n$ - 1);
-  EXPECT_EQ(Cons::count, 1);
-  EXPECT_ZZ(Cons::miss);
-  EXPECT_ZZ(Cons::reuse);
+  EXPECT_EQ(Pair::count, 1);
+  EXPECT_ZZ(Pair::miss);
+  EXPECT_ZZ(Pair::reuse);
   EXPECT_FF(corrupted.something());
 }
 
@@ -889,7 +889,7 @@ TEST(Exercise, PushRequirePopRequire) {
     }
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(Cons::count, 2*N*N);
+  EXPECT_EQ(Pair::count, 2*N*N);
   EXPECT_EQ(Pristine::count, $P_n$ - 2 * N *N); 
 }
 

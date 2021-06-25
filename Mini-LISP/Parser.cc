@@ -37,12 +37,12 @@ namespace Parser {
 
    // AST: 
    E ::= X T   { $$ = NIL;                } // E1
-   T ::= . X   { $-1 = cons($-1,$$);      } // T1 Tricky 
+   T ::= . X   { $-1 = pair($-1,$$);      } // T1 Tricky 
    T ::= ''                                 // T2 
    X ::= ' X   { $$ = $1                  } // X1 Copy
    X ::= ( L ) { $$ = $1                  } // X2 Copy
    X ::= a     { $$ = $1                  } // X3 Copy
-   L ::= E L   { $$ = cons($1,$$);        } // L1: Cons 
+   L ::= E L   { $$ = pair($1,$$);        } // L1: Pair 
    L ::= ''    { $$ = NIL;                } // L2: Initialize
    */
 
@@ -164,7 +164,7 @@ namespace Parser {
           }
           break;
         case X1:
-          $$ = QUOTE.cons($$.cons(NIL)); 
+          $$ = QUOTE.pair($$.pair(NIL)); 
           reduce();
           continue;
         case X2:
@@ -187,7 +187,7 @@ namespace Parser {
         case T1:
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
-          $$ = Sx(stack.peep(1)).cons($$);
+          $$ = Sx(stack.peep(1)).pair($$);
           stack.poke(1,$$.inner());
           M1("Update T1: ",$$, ~top, stack());
           continue;
@@ -208,7 +208,7 @@ namespace Parser {
           break;
         case L1:
           reduce(); 
-          $$ = Sx(stack.pop()).cons($$);
+          $$ = Sx(stack.pop()).pair($$);
           M1("Set", $$);
           continue;
         case L2:

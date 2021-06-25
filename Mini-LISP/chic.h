@@ -149,8 +149,8 @@ halves. No particular byte or halves ordering is assumed. */
 
 typedef int8_t  Byte; /// JVM's byte                |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// like  JVM's short | 16 bits signed integer | Knob of an S-expression 
-typedef int32_t Long; ///   like  JVM's int    | 32 bits signed integer | an dotted Cons S-expression   
-typedef int64_t Integer; ///  like JVM's long    | 32 bits signed integer | an dotted Cons S-expression   
+typedef int32_t Long; ///   like  JVM's int    | 32 bits signed integer | an dotted Pair S-expression   
+typedef int64_t Integer; ///  like JVM's long    | 32 bits signed integer | an dotted Pair S-expression   
 typedef bool    Boolean; /// JVM's byte                |  8 bits signed integer | character in an atom
 typedef const char *const Text; // Representation of immutable srings
 
@@ -168,7 +168,7 @@ halves. No particular byte or halves ordering is assumed. */
 
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | Knob of an S-expression 
-typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted Cons S-expression   
+typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted Pair S-expression   
 #endif // CHIC_H
 
 

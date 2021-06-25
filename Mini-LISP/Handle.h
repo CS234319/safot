@@ -2,14 +2,14 @@
 #define HANDLE_H
 #include "chic.h"
 
-Type Cons;
+Type Pair;
 Type Id;
 
 Type Handle { // An S-expression represented by its handle 
   Constructor(Handle(Short));
   Property(Boolean ok); 
   Property(Short inner); 
-  Property(Cons $_p$); /// Interpreted as Knob of Cons, retrieves the Cons behind (mutable)  
+  Property(Pair $_p$); /// Interpreted as Knob of Pair, retrieves the Pair behind (mutable)  
   Property(Id $_a$);   /// Interpreted as Id of an atom, retrieves its text representation 
   private: struct { Short capsule; }; 
 };

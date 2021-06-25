@@ -1,13 +1,13 @@
-#ifndef CONS_H
-#define CONS_H
+#ifndef PAIR_H
+#define PAIR_H
 #include "chic.h"
 #include "Knob.h"
 #include "Word.h"
 Type Sx;
-Type Cons: private Knob {
+Type Pair: private Knob {
   using Knob::inner, Knob::x;
-  typedef Cons Self;
-  Cons(Short);
+  typedef Pair Self;
+  Pair(Short);
   Selfer(car(Sx)); 
   Selfer(cdr(Sx)); 
   Property(Sx car);

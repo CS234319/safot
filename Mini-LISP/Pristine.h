@@ -8,7 +8,7 @@ Type Pristine: private Knob {
   using Knob::inner;
   using Knob::x;
   // Statistics
-  using Knob::Item, Knob::Cons;
+  using Knob::Item, Knob::Pair;
   Constructor(Pristine());
   Constructor(Pristine(Short));
   Property(Pristine prev);

@@ -2,9 +2,9 @@
 
 #include "text.h"
 #include "heap.h"
-#include "Cons.h"
+#include "Pair.h"
 
-// Property(Cons Sx::cons(Sx cdr)) Is(Sx(*this, cdr));
+// Property(Pair Sx::pair(Sx cdr)) Is(Sx(*this, cdr));
 Sx::Sx(Short s)      : Handle(s) {}
 Sx::Sx(Handle h)     : Sx(h.inner()) {} 
 Sx::Sx(Sx s1, Sx s2) : Sx(require(s1, s2).inner()) {}
@@ -23,7 +23,7 @@ const Sx ATOM("atom");
 const Sx CAR("car");
 const Sx CDR("cdr");
 const Sx COND("cond");
-const Sx CONS("cons");
+const Sx CONS("pair");
 const Sx ERROR("error");
 const Sx EVAL("eval");
 const Sx EQ("eq");
