@@ -13,7 +13,7 @@ Pushdown& Pushdown::push(Short s) {
   Keep(top.ok());
   Promise(!top.x());
   Promise(top.head() == s);
-  ++size, top = fresh(s, top.inner()); 
+  ++size, top = fresh(s, top.handle()); 
   return *this; 
 }
 

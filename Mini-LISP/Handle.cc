@@ -1,8 +1,9 @@
 #include "Handle.h"
 #include "layout.h"
 Constructor(Handle::Handle(Short s)):  capsule(s) {}
-Property(Short Handle::inner) Is(capsule);
-Property(Boolean Handle::ok)  Is(capsule >= $X_f$ && capsule <= $X_t$)
+Property(Short Handle::handle) Is(capsule);
+Property(Boolean Handle::ok)  Is(handle() >= $X_f$ && handle() <= $X_t$)
+Property(Word& Handle::p)  Is(P[handle()]);
 
 #include "Test.h" 
 
@@ -12,7 +13,7 @@ TEST(Handle, Construct) {
 
 TEST(Handle, Inspect) {
   const Handle h = Handle(19);
-  EXPECT_EQ(h.inner(), 19);
+  EXPECT_EQ(h.handle(), 19);
 }
 
 TEST(Handle, ok) {

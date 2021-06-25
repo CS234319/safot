@@ -1,16 +1,16 @@
 #include "Pair.h"
 
-#include "Sx.h"
 #include "Short.h"
-
+#include "layout.h"
 // Properties:
-Property(Sx  Pair::car) Is(Sx(s1()))
-Property(Sx  Pair::cdr) Is(Sx(s2()))
-Property(Boolean  Pair::ok) Is(white(s1()) && white(s2()))
+Property(Word& Pair::p) Is(P[handle()])
+Property(Boolean  Pair::ok) Is(white(car().handle()) && white(cdr().handle()))
+Property(Sx  Pair::car) Is(p().s1)
+Property(Sx  Pair::cdr) Is(p().s2)
 
-Pair::Pair(Short s): Knob(s) {}
-Pair Pair::car(Sx s) { s1(s.inner()); return *this; }
-Pair Pair::cdr(Sx s) { s2(s.inner()); return *this; }
+Pair::Pair(Short s): Sx(s) {}
+Pair Pair::car(Sx s) { p().s1 = s.handle(); return *this; }
+Pair Pair::cdr(Sx s) { p().s2 = s.handle(); return *this; }
 Boolean Pair::ok(Word w) { return white(w.s1) && white(w.s2); } 
 
 Short Pair::count = 0;
@@ -47,10 +47,10 @@ TEST(Pair, Hash13) {
 TEST(Pair, Hash13a) {
   heapify();
   auto c1 = require(13,13); 
-  EXPECT_EQ(P[c1.inner()].hash(), Word(13,13).hash());
+  EXPECT_EQ(P[c1.handle()].hash(), Word(13,13).hash());
   Word w = hash13();
   auto c2 = require(w.s1, w.s2);
-  auto h1 = c1.inner(), h2 = c2.inner();
+  auto h1 = c1.handle(), h2 = c2.handle();
   EXPECT_NE(h1, h2);
   EXPECT_EQ(P[h1].hash(), P[h2].hash());
 

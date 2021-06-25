@@ -1,10 +1,9 @@
 #ifndef SX_H
 #define SX_H
-#include "chic.h"
 #include "Handle.h"
 
 Type Sx: private Handle { // An S-expression represented by its handle
-  using Handle::inner;
+  using Handle::handle;
   typedef Sx Self;
   Sx(Short)      ;
   Sx(Handle)     ;

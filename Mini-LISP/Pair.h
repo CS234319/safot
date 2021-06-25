@@ -1,11 +1,10 @@
 #ifndef PAIR_H
 #define PAIR_H
 #include "chic.h"
-#include "Knob.h"
+#include "Sx.h"
 #include "Word.h"
-Type Sx;
-Type Pair: private Knob {
-  using Knob::inner, Knob::x;
+
+Type Pair: Sx {
   typedef Pair Self;
   Pair(Short);
   Selfer(car(Sx)); 
@@ -13,9 +12,11 @@ Type Pair: private Knob {
   Property(Sx car);
   Property(Sx cdr);
   Property(Boolean ok);
+  Property(Boolean x);
   static Boolean ok(Word);
   static Short count; 
   static Integer reuse; 
   static Integer miss; 
+  private: Property(Word& p);
 };
 #endif

@@ -57,11 +57,11 @@ static char upper(char c) {
 #include "gtest/gtest.h"
 
 inline auto operator == (const Id s1, const Id s2) { 
-  return s1.inner() == s2.inner();
+  return s1.handle() == s2.handle();
 }
 
 TEST(Text, size) {
   EXPECT_EQ(LIMBO, 1 + strlen("NIL"));
   EXPECT_EQ(require("Hello"), require("Hello"));
-  EXPECT_EQ(require("llo").inner(), require("Hello").inner() + 2);
+  EXPECT_EQ(require("llo").handle(), require("Hello").handle() + 2);
 }

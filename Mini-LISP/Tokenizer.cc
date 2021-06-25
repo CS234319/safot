@@ -93,7 +93,7 @@ static Short nextAtom() {
   let $ = require(begin);
   C() = c;
   D($);
-  return $.inner();
+  return $.handle();
 }
 
 static Boolean isAtom() {

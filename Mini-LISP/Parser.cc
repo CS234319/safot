@@ -85,9 +85,9 @@ namespace Parser {
   }
 
   void store() {
-    M4("Store on rule",~top, "of", $$, $$.inner(), ~top, stack());
-    Item(stack.pop()).head($$.inner());
-    M1(" --Store", $$.inner(), Pairs::get($$.inner()), ~top, stack());
+    M4("Store on rule",~top, "of", $$, $$.handle(), ~top, stack());
+    Item(stack.pop()).head($$.handle());
+    M1(" --Store", $$.handle(), Pairs::get($$.handle()), ~top, stack());
   }
 
   void shift(Symbol rule, Short h1, Short h2, Short h3) {
@@ -175,7 +175,7 @@ namespace Parser {
           continue;
         case T:
           if (token == '.') {
-            stack.poke(1, $$.inner());
+            stack.poke(1, $$.handle());
             shift(T1, '.', X);
             continue;
           }
@@ -188,7 +188,7 @@ namespace Parser {
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
           $$ = Sx(stack.peep(1)).pair($$);
-          stack.poke(1,$$.inner());
+          stack.poke(1,$$.handle());
           M1("Update T1: ",$$, ~top, stack());
           continue;
         case T2:

@@ -19,7 +19,7 @@ Knob crude() {
   heap = heap.next();
   if (!heap.x())
     heap.prev($P_x$);
-  return old.inner(); 
+  return old.handle(); 
 }
 
 Item fresh(Short s1, Short s2) {
@@ -55,7 +55,7 @@ static Pair require(Word w, Short s) {
   auto prev = Pristine(s).prev(), next = Pristine(s).next();
   if (!prev.x()) prev.next(next); 
   if (!next.x()) next.prev(prev); 
-  if (heap.inner() == s) heap = next ;
+  if (heap.handle() == s) heap = next ;
   P[s] = w;
   return Pair(s);
 }
@@ -87,24 +87,24 @@ void prepend(Pristine p) {
 
 void free(Item i) {
   Expect(i.ok());
-  Expect(Knob(i.inner()).item());
-  prepend(Knob(i.inner()).Pristine());
+  Expect(Knob(i.handle()).item());
+  prepend(Knob(i.handle()).Pristine());
   Item::count--;
 }
 
-Pair require(Sx car, Sx cdr) { return require(Word(car.inner(),cdr.inner())); }
+Pair require(Sx car, Sx cdr) { return require(Word(car.handle(),cdr.handle())); }
 
 #include "mark.h"
 
 void mark(Sx s) {
- auto k = Knob(s.inner()); 
+ auto k = Knob(s.handle()); 
  k.s1(flip(k.s1())); 
 }
 
 void visit(Pair c);
 
 void visit(Sx s) {
-  if (white(s.inner()) && !s.atom()) {
+  if (white(s.handle()) && !s.atom()) {
     auto car = s.car();
     auto cdr = s.cdr();
     mark(s);

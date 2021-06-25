@@ -1,14 +1,14 @@
 #ifndef KNOB_H
 #define KNOB_H
-#include "Handle.h"
+#include "Pair.h"
 
-Type Pair;
 Type Item;
 Type Pristine;
 
-Type Knob: Handle { // An S-expression represented by its Knob
+Type Knob: private Pair { // An S-expression represented by its Knob
   typedef Knob Self;
-  typedef Handle Inner;
+  typedef Pair Super;
+  using Pair::handle;
   Constructor(Knob(Short));
   Constructor(Knob());
   Property(Short   s1);

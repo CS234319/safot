@@ -24,7 +24,7 @@ Property(Boolean Pristine::ok) {
     return true;
   if (white(s1()) || white(s2()))
       return false;
-  let p = prev().inner(), n = next().inner();
+  let p = prev().handle(), n = next().handle();
   if (p != $P_x$) {
     Expect(p >= $P_f$,p); 
     Expect(p <= $P_t$,p); 
@@ -46,7 +46,7 @@ Property(Boolean Pristine::ok) {
 
 Pristine& Pristine::prev(Pristine p) { 
   Expect(!x());
-  let s = p.inner();
+  let s = p.handle();
   Expect(white(s));
   s1(flip(s)); 
   return *this;
@@ -54,7 +54,7 @@ Pristine& Pristine::prev(Pristine p) {
 
 Pristine& Pristine::next(Pristine p) { 
   Expect(!x());
-  let s = p.inner();
+  let s = p.handle();
   Expect(white(s));
   s2(flip(s)); 
   return *this;

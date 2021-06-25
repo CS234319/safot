@@ -2,8 +2,7 @@
 #define ITEM_H
 #include "Knob.h"
 Type Item: private Knob {
-  using Knob::inner;
-  using Knob::x;
+  using Knob::x, Knob::handle;
   Item();
   Item(Short s);
 

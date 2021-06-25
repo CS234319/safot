@@ -10,5 +10,5 @@ extern Pristine heap;
 extern Pair require(Sx, Sx); 
 extern Item fresh(Short, Short); 
 extern void free(Item); 
-extern void preserve(Pair); 
+extern void preserve(Sx); 
 #endif

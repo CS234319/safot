@@ -23,7 +23,7 @@ static struct {
   Boolean cyclic() {
     if (!heap.x())
       for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
-        if (h.inner() == h2.inner()) 
+        if (h.handle() == h2.handle()) 
           return true;
         if (!h2.x()) h2 = h2.next();
         if (!h2.x()) h2 = h2.next();
@@ -38,9 +38,9 @@ static struct {
   }  
   Boolean asymmetric() {
     for (auto p = heap; !p.x(); p = p.next()) { 
-      if (!p.prev().x() && p.prev().next().inner() != p.inner()) 
+      if (!p.prev().x() && p.prev().next().handle() != p.handle()) 
         return true;
-      if (!p.next().x() && p.next().prev().inner() != p.inner()) 
+      if (!p.next().x() && p.next().prev().handle() != p.handle()) 
         return true;
     }
     return false;
@@ -123,7 +123,7 @@ TEST(Mark, exists) {
 TEST(Mark, correct) {
   heapify();
   auto s = require(2,3);
-  auto k = Knob(s.inner());
+  auto k = Knob(s.handle());
   mark(s);
   EXPECT_TT(k.weirdo());
 }
@@ -131,9 +131,9 @@ TEST(Mark, correct) {
 TEST(Mark, flip) {
   heapify();
   auto c = require(2,3);
-  Short before = Knob(c.inner()).s1();
+  Short before = Knob(c.handle()).s1();
   mark(c);
-  Short after = Knob(c.inner()).s1();
+  Short after = Knob(c.handle()).s1();
   EXPECT_EQ(before, flip(after)); 
   EXPECT_EQ(after, flip(before)); 
 }
@@ -141,7 +141,7 @@ TEST(Mark, flip) {
 TEST(Mark, undo) {
   heapify();
   auto s = require(2,3);
-  auto k = Knob(s.inner());
+  auto k = Knob(s.handle());
   EXPECT_TT(k.pair());
   mark(s);
   mark(s);
@@ -152,7 +152,7 @@ TEST(Mark, undo) {
 TEST(Mark, special) {
   heapify();
   auto s = require(2,3);
-  auto k = Knob(s.inner());
+  auto k = Knob(s.handle());
   EXPECT_TT(k.pair());
   mark(s);
   EXPECT_FF(k.Pair().ok());
@@ -197,7 +197,7 @@ TEST(Preserve, singletonPristine) {
   auto live = require(-2,-3);
   EXPECT_TT(dead.ok());
   preserve(live);
-  EXPECT_TT(Knob(dead.inner()).Pristine().ok());
+  EXPECT_TT(Knob(dead.handle()).Pristine().ok());
 }
 
 TEST(Preserve, singletonConnected) {
@@ -205,7 +205,7 @@ TEST(Preserve, singletonConnected) {
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
   preserve(live);
-  EXPECT_EQ(dead.inner(), heap.inner());
+  EXPECT_EQ(dead.handle(), heap.handle());
 }
 
 TEST(Preserve, singletonCount) {
@@ -230,7 +230,7 @@ TEST(Preserve, visit) {
   auto dead1 = require(-3,-2);
   auto dead2 = require(-5,-2);
   auto live1 = require(-2,-3);
-  auto live2 = require(live1.inner(),-4);
+  auto live2 = require(live1.handle(),-4);
   preserve(live2);
   EXPECT_EQ(Pristine::count, $P_n$-2);
 }
@@ -254,14 +254,14 @@ TEST(Heapify, entryFirst) {
   heapify();
   EXPECT_TT(Pristine($P_f$).prev().x()); 
   EXPECT_FF(Pristine($P_f$).next().x()); 
-  EXPECT_EQ(Pristine($P_f$).next().inner(), $P_f$+1); 
+  EXPECT_EQ(Pristine($P_f$).next().handle(), $P_f$+1); 
 }
 
 TEST(Heapify, entryLast) { 
   heapify();
   EXPECT_TT(Pristine($P_t$).next().x()); 
   EXPECT_FF(Pristine($P_t$).prev().x()); 
-  EXPECT_EQ(Pristine($P_t$).prev().inner(), $P_t$-1); 
+  EXPECT_EQ(Pristine($P_t$).prev().handle(), $P_t$-1); 
 }
 
 TEST(Heapify, entry5) { 
@@ -275,30 +275,30 @@ TEST(Heapify, entry5) {
   EXPECT_EQ(flip(k.s1()), s-1);
   EXPECT_EQ(flip(k.s2()), s + 1);
 
-  EXPECT_EQ(p.inner(), 5);
-  EXPECT_EQ(p.prev().inner(), 4);
-  EXPECT_EQ(p.next().inner(), 6);
+  EXPECT_EQ(p.handle(), 5);
+  EXPECT_EQ(p.prev().handle(), 4);
+  EXPECT_EQ(p.next().handle(), 6);
   EXPECT_TT(p.ok());
 }
 
 TEST(Heapify, entryBetween) { 
   heapify();
   for (Short s = $P_f$ + 1; s < $P_t$; ++s) {
-    EXPECT_EQ(Pristine(s).prev().inner(), s-1) << s; 
-    EXPECT_EQ(Pristine(s).next().inner(), s+1) << s; 
+    EXPECT_EQ(Pristine(s).prev().handle(), s-1) << s; 
+    EXPECT_EQ(Pristine(s).next().handle(), s+1) << s; 
   }
 }
 
 TEST(Heapify, prefix) { 
   heapify();
-  EXPECT_EQ(heap.inner(), $P_f$);
-  EXPECT_EQ(heap.inner(), $P_f$);
-  EXPECT_EQ(Pristine($P_f$).next().inner(), 2);
-  EXPECT_ZZ(Pristine($P_f$).prev().inner());
-  EXPECT_EQ(Pristine(2).next().inner(), 3);
-  EXPECT_EQ(Pristine(2).prev().inner(), $P_f$);
-  EXPECT_EQ(Pristine($P_t$).prev().inner(), $P_t$-1);
-  EXPECT_EQ(Pristine($P_t$).next().inner(), $P_x$);
+  EXPECT_EQ(heap.handle(), $P_f$);
+  EXPECT_EQ(heap.handle(), $P_f$);
+  EXPECT_EQ(Pristine($P_f$).next().handle(), 2);
+  EXPECT_ZZ(Pristine($P_f$).prev().handle());
+  EXPECT_EQ(Pristine(2).next().handle(), 3);
+  EXPECT_EQ(Pristine(2).prev().handle(), $P_f$);
+  EXPECT_EQ(Pristine($P_t$).prev().handle(), $P_t$-1);
+  EXPECT_EQ(Pristine($P_t$).next().handle(), $P_x$);
 }
 
 TEST(Heapify, counters) { 
@@ -417,22 +417,22 @@ TEST(Fresh, uncorrupting) {
 
 TEST(Fresh, correct) { 
   heapify();
-  Item f = fresh(15,$P_x$);
-  EXPECT_TT(f.ok());
-  EXPECT_EQ(f.inner(), 1);
-  EXPECT_EQ(heap.inner(), 2);
-  EXPECT_EQ(f.head(), 15);
-  EXPECT_EQ(f.rest().inner(), $P_x$);
-  EXPECT_TT(f.ok());
-  EXPECT_FF(Pair(f.inner()).ok());
-  EXPECT_FF(Pristine(f.inner()).ok());
+  Item i = fresh(15,$P_x$);
+  EXPECT_TT(i.ok());
+  EXPECT_EQ(i.handle(), 1);
+  EXPECT_EQ(heap.handle(), 2);
+  EXPECT_EQ(i.head(), 15);
+  EXPECT_EQ(i.rest().handle(), $P_x$);
+  EXPECT_TT(i.ok());
+  EXPECT_FF(Pair(i.handle()).ok());
+  EXPECT_FF(Pristine(i.handle()).ok());
 }
 
 TEST(Counters, AllocateFree) { 
   heapify();
-  auto f = fresh(15,(21));
+  auto i = fresh(15,(21));
   EXPECT_EQ(Pristine::count, $P_n$ -1);
-  free(f);
+  free(i);
   EXPECT_EQ(Pristine::count, $P_n$);
 }
 
@@ -468,17 +468,17 @@ TEST(Fresh, Length) {
     EXPECT_EQ(length(), Pristine::count);
 
     free(s1);
-    EXPECT_EQ(heap.inner(), 1);
+    EXPECT_EQ(heap.handle(), 1);
     EXPECT_EQ(length(), $P_n$ - 2);
     EXPECT_EQ(length(), Pristine::count);
 
     free(s3);
-    EXPECT_EQ(heap.inner(), 3);
+    EXPECT_EQ(heap.handle(), 3);
     EXPECT_EQ(length(), $P_n$ - 1);
     EXPECT_EQ(length(), Pristine::count);
 
     free(s2);
-    EXPECT_EQ(heap.inner(), 2);
+    EXPECT_EQ(heap.handle(), 2);
     EXPECT_EQ(length(), $P_n$);
     EXPECT_EQ(length(), Pristine::count);
   } catch(int e) {
@@ -508,7 +508,7 @@ TEST(Require, pair) {
 TEST(Require, correct) { 
   try {
     heapify();
-    Short h = require(Sx(0xDE),Sx(0xAD)).inner();
+    Short h = require(Sx(0xDE),Sx(0xAD)).handle();
     EXPECT_EQ(P[h].s1, 0xDE);
     EXPECT_EQ(P[h].s2, 0xAD);
   } catch(int e) {
@@ -530,53 +530,53 @@ TEST(Require, 3) {
 TEST(Require, correct3) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap.inner(),1);
+  EXPECT_EQ(heap.handle(),1);
   auto s1 = require(2,3);
-  EXPECT_EQ(heap.inner(),1);
-  EXPECT_NE(s1.inner(),1);
-  EXPECT_EQ(P[s1.inner()].s1,2);
-  EXPECT_EQ(P[s1.inner()].s2,3);
+  EXPECT_EQ(heap.handle(),1);
+  EXPECT_NE(s1.handle(),1);
+  EXPECT_EQ(P[s1.handle()].s1,2);
+  EXPECT_EQ(P[s1.handle()].s2,3);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
   EXPECT_EQ(length(), Pristine::count);
   auto s2 = require(4,5);
-  EXPECT_EQ(s2.car().inner(),4);
-  EXPECT_EQ(s2.cdr().inner(),5);
+  EXPECT_EQ(s2.car().handle(),4);
+  EXPECT_EQ(s2.cdr().handle(),5);
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap.inner(),1);
+  EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), Pristine::count);
   auto s3 = require(6,7);
-  EXPECT_EQ(heap.inner(),1);
-  EXPECT_EQ(s3.car().inner(),6);
-  EXPECT_EQ(P[s3.inner()].s2,7);
-  EXPECT_EQ(P[s3.inner()].s2,s3.cdr().inner());
+  EXPECT_EQ(heap.handle(),1);
+  EXPECT_EQ(s3.car().handle(),6);
+  EXPECT_EQ(P[s3.handle()].s2,7);
+  EXPECT_EQ(P[s3.handle()].s2,s3.cdr().handle());
 }
 
 TEST(Require, Scenario) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap.inner(),1);
+  EXPECT_EQ(heap.handle(),1);
   auto s1 = require(2,3);
-  EXPECT_EQ(heap.inner(),1);
-  EXPECT_EQ(s1.inner(),Word(2,3).hash());
-  EXPECT_EQ(P[s1.inner()].s1,2);
-  EXPECT_EQ(P[s1.inner()].s2,3);
+  EXPECT_EQ(heap.handle(),1);
+  EXPECT_EQ(s1.handle(),Word(2,3).hash());
+  EXPECT_EQ(P[s1.handle()].s1,2);
+  EXPECT_EQ(P[s1.handle()].s2,3);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
   EXPECT_EQ(length(), Pristine::count);
   auto s2 = require(4,5);
-  EXPECT_EQ(s2.inner(),Word(4,5).hash());
-  EXPECT_EQ(heap.inner(),1);
-  EXPECT_EQ(P[s2.inner()].s1,4);
-  EXPECT_EQ(P[s2.inner()].s2,5);
+  EXPECT_EQ(s2.handle(),Word(4,5).hash());
+  EXPECT_EQ(heap.handle(),1);
+  EXPECT_EQ(P[s2.handle()].s1,4);
+  EXPECT_EQ(P[s2.handle()].s2,5);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), Pristine::count);
   auto s3 = require(6,7);
-  EXPECT_EQ(s3.inner(),Word(6,7).hash());
-  EXPECT_EQ(P[s3.inner()].s1,6);
-  EXPECT_EQ(P[s3.inner()].s2,7);
+  EXPECT_EQ(s3.handle(),Word(6,7).hash());
+  EXPECT_EQ(P[s3.handle()].s1,6);
+  EXPECT_EQ(P[s3.handle()].s2,7);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_EQ(length(), Pristine::count);
@@ -590,20 +590,20 @@ TEST(Words, Reuse) {
 
   auto s1 = require(3,3);
   EXPECT_TT(s1.ok());
-  EXPECT_EQ(s1.inner(), P[s1.inner()].hash());
+  EXPECT_EQ(s1.handle(), P[s1.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
   EXPECT_EQ(length(), Pristine::count);
 
   auto s2 = require(2,3);
   EXPECT_TT(s2.ok());
-  EXPECT_EQ(s2.inner(),P[s2.inner()].hash());
+  EXPECT_EQ(s2.handle(),P[s2.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), Pristine::count);
 
   auto s3 = require(3,2);
-  EXPECT_EQ(s3.inner(), P[s3.inner()].hash());
+  EXPECT_EQ(s3.handle(), P[s3.handle()].hash());
   EXPECT_TT(s3.ok());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
@@ -611,28 +611,28 @@ TEST(Words, Reuse) {
 
   auto s4 = require(2,3);
   EXPECT_TT(s4.ok());
-  EXPECT_EQ(s4.inner(), P[s4.inner()].hash());
+  EXPECT_EQ(s4.handle(), P[s4.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_EQ(length(), Pristine::count);
 
   auto s5 = require(3,3);
   EXPECT_TT(s5.ok());
-  EXPECT_EQ(s5.inner(), P[s5.inner()].hash());
+  EXPECT_EQ(s5.handle(), P[s5.handle()].hash());
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_EQ(length(), Pristine::count);
   EXPECT_FF(corrupted.asymmetric());
 
   auto s6 = require(3,2);
   EXPECT_TT(s6.ok());
-  EXPECT_EQ(s6.inner(), P[s6.inner()].hash());
+  EXPECT_EQ(s6.handle(), P[s6.handle()].hash());
   EXPECT_EQ(length(), Pristine::count);
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_FF(corrupted.asymmetric());
 
-  EXPECT_EQ(s1.inner(), s5.inner());
-  EXPECT_EQ(s2.inner(), s4.inner());
-  EXPECT_EQ(s3.inner(), s6.inner());
+  EXPECT_EQ(s1.handle(), s5.handle());
+  EXPECT_EQ(s2.handle(), s4.handle());
+  EXPECT_EQ(s3.handle(), s6.handle());
 
   EXPECT_FF(corrupted.pristines());
   EXPECT_FF(corrupted.items());
@@ -669,7 +669,7 @@ TEST(Exhaust, LateItemCorrect) {
     Item i = fresh(s, $P_x$);
   Item i = fresh(-2, $P_x$); 
   EXPECT_EQ(i.head(), -2);
-  EXPECT_EQ(i.rest().inner(),  $P_x$);
+  EXPECT_EQ(i.rest().handle(),  $P_x$);
 }
 
 TEST(Exhaust, LastItem) { 
@@ -689,7 +689,7 @@ TEST(Exhaust, items) {
   EXPECT_EQ(Pristine::count, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) {
     Item i = fresh(s, $P_x$);
-    EXPECT_EQ(i.inner(), s - $P_f$ + 1);
+    EXPECT_EQ(i.handle(), s - $P_f$ + 1);
     EXPECT_EQ(Item::count + Pristine::count, $P_n$); 
     EXPECT_EQ(Pristine::count, $P_n$ - s); 
     EXPECT_EQ(Item::count, s); 
@@ -742,11 +742,11 @@ TEST(Churn, Require) {
   int n = 0;
   for (Short i = 0;  ; i++) { 
     for (Short j = 0;  i <= j; j++) {
-      Pair c(require(i,j).inner());
+      Pair c(require(i,j).handle());
       ++n;
       EXPECT_TT(c.ok());
-      EXPECT_EQ(i, c.car().inner());
-      EXPECT_EQ(j, c.cdr().inner());
+      EXPECT_EQ(i, c.car().handle());
+      EXPECT_EQ(j, c.cdr().handle());
       EXPECT_EQ(n, Pair::count) << n;
       if (n > 25000)
         goto done;
@@ -765,7 +765,7 @@ TEST(Churn, Both) {
       if (heap.x()) goto done;
       auto const c = require(i,j);
       if (heap.x()) goto done;
-      int d = P[c.inner()].hash() % 10;
+      int d = P[c.handle()].hash() % 10;
       mess(p[d]);
     }
   }
@@ -955,9 +955,9 @@ extern Knob crude();
 TEST(Crude, 1) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap.inner(),1);
-  auto s1 = crude().inner();
-  EXPECT_EQ(heap.inner(),2);
+  EXPECT_EQ(heap.handle(),1);
+  auto s1 = crude().handle();
+  EXPECT_EQ(heap.handle(),2);
   EXPECT_EQ(s1,1);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
@@ -967,7 +967,7 @@ TEST(Crude, 1) {
 TEST(Crude, almostExhausted) { 
   heapify();
   for (auto i = 1; i < $P_n$; ++i)
-    crude().inner();
+    crude().handle();
   EXPECT_FF(heap.x());
   EXPECT_EQ(Pristine::count, 1);
 }
@@ -976,8 +976,8 @@ TEST(Crude, exhausted) {
   heapify();
   EXPECT_EQ(Pristine::count, $P_n$); 
   for (auto i = 1; i <= $P_n$; ++i) {
-    auto const f = crude().inner();
-    EXPECT_EQ(i, f - $P_f$ + 1);
+    auto const s = crude().handle();
+    EXPECT_EQ(i, s);
     EXPECT_EQ(Pristine::count, $P_n$ - i); 
     EXPECT_ZZ(Item::count); // This black box test corrupts the heap,
   }
@@ -988,14 +988,14 @@ TEST(Crude, exhausted) {
 TEST(Crude, last) { 
   heapify();
   for (auto i = 1; i < $P_n$; ++i)
-    crude().inner();
+    crude().handle();
   crude();
 }
 
 TEST(Crude, lastCorrect) { 
   heapify();
   for (auto i = 1; i < $P_n$; ++i)
-    crude().inner();
+    crude().handle();
   crude();
   EXPECT_TT(heap.x());
   EXPECT_ZZ(Pristine::count);
