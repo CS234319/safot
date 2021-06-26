@@ -90,7 +90,7 @@ static Short nextAtom() {
   D(begin);
   char c = C();
   C() = '\0';
-  let $ = require(begin);
+  let $ = request(begin);
   C() = c;
   D($);
   return $.handle();

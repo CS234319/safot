@@ -127,6 +127,7 @@ typedef std::function<bool()> Predicate;
 #define perspective(...) struct{__VA_ARGS__;};
 #define Representation union
 #define Type struct
+#define Service static struct
 #define Constructor(X)  X 
 #define Property(X)     X() const
 #define Mutator(X)      X 

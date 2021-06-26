@@ -29,6 +29,6 @@ Pair Pair::unvisit() {
   return car(flip(car().handle())); 
 } 
 
-Short Pair::count = 0; // Accounting elsewhere please
+Short acounting.allocated = 0; // Accounting elsewhere please
 Integer Pair::reuse = 0;
 Integer Pair::miss = 0;

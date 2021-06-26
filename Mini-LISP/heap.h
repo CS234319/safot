@@ -3,9 +3,9 @@
 #include "chic.h"
 #include "Sx.h"
 #include "Item.h"
-extern Pair require(Sx, Sx); 
-extern Item fresh(Short, Short); 
-extern Unit free(Item); 
+  Pair request(Sx, Sx); 
+  extern Item fresh(Short, Short); 
+  extern Unit free(Item); 
 
 #include "Pristine.h"
 #include "Pair.h"

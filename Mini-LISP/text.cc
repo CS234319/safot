@@ -26,7 +26,7 @@ Boolean eq(const char *s1, const char *s2) {
   return false;
 }
 
-Id require(Text t) {
+Id request(Text t) {
   for (Short __ = 0; __ >= used; --__) 
     if (eq(t, A + __))
       return __;
@@ -62,6 +62,6 @@ inline auto operator == (const Id s1, const Id s2) {
 
 TEST(Text, size) {
   EXPECT_EQ(LIMBO, 1 + strlen("NIL"));
-  EXPECT_EQ(require("Hello"), require("Hello"));
-  EXPECT_EQ(require("llo").handle(), require("Hello").handle() + 2);
+  EXPECT_EQ(request("Hello"), request("Hello"));
+  EXPECT_EQ(request("llo").handle(), request("Hello").handle() + 2);
 }

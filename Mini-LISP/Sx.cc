@@ -7,8 +7,8 @@
 // Property(Pair Sx::pair(Sx cdr)) Is(Sx(*this, cdr));
 Sx::Sx(Short s)      : Handle(s) {}
 Sx::Sx(Handle h)     : Sx(h.handle()) {} 
-Sx::Sx(Sx s1, Sx s2) : Sx(require(s1, s2).handle()) {}
-Sx::Sx(Text t)       : Sx(require(t)) {}
+Sx::Sx(Sx s1, Sx s2) : Sx(request(s1, s2).handle()) {}
+Sx::Sx(Text t)       : Sx(request(t)) {}
 
 Property(Boolean Sx::atom) Is(handle() <= 0);
 Property(Sx Sx::car)  Is(p().s1) 

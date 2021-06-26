@@ -36,7 +36,7 @@ CFLAGS += -MD -MP -w -std=gnu2x
 store:
 all: test mini-lisp store 
 
-FILES=Purge.o t-Purge.o heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Pair.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o t-heap.o t-Pushdown.o
+FILES=accounting.o purge.o t-purge.o heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Pair.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o t-heap.o t-Pushdown.o
 
 store: $(FILES) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

@@ -83,11 +83,11 @@ TEST(Heapify, prefix) {
 
 TEST(Heapify, counters) { 
   heapify();
-  EXPECT_ZZ(Pair::count);
-  EXPECT_ZZ(Pair::miss);
+  EXPECT_ZZ(acounting.allocated);
+  EXPECT_ZZ(accounting.missed);
   EXPECT_ZZ(Pair::reuse);
-  EXPECT_ZZ(Item::count);
-  EXPECT_EQ(Pristine::count, $P_n$);
+  EXPECT_ZZ(accounting.itemized);
+  EXPECT_EQ(acounting.available, $P_n$);
 }
 
 TEST(Heapify, pristines) { 
@@ -130,16 +130,16 @@ TEST(Item, 3Count) {
   p.clear();
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  EXPECT_GE(Item::count,0);
-  int before = Item::count;
+  EXPECT_GE(accounting.itemized,0);
+  int before = accounting.itemized;
   p.push(3);
-  EXPECT_EQ(Item::count, before + 1);
+  EXPECT_EQ(accounting.itemized, before + 1);
   p.push(2);
-  EXPECT_EQ(Item::count, before + 2);
+  EXPECT_EQ(accounting.itemized, before + 2);
   EXPECT_EQ(2,p.pop());
-  EXPECT_EQ(Item::count, before + 1);
+  EXPECT_EQ(accounting.itemized, before + 1);
   EXPECT_EQ(3,p.pop());
-  EXPECT_EQ(Item::count, before);
+  EXPECT_EQ(accounting.itemized, before);
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
 }
@@ -229,18 +229,18 @@ TEST(Pair, Hash13) {
   EXPECT_EQ(w.hash(), Word(13,13).hash());
 }
 
-TEST(Pair, require) {
+TEST(Pair, request) {
   heapify();
-  auto d1 = require(-3,-2).handle();
-  auto l1 = require(-2,-3).handle();
-  auto d2 = require(d1,d1).handle();
-  auto l2 = require(l1,-4).handle();
-  auto d3 = require(d1,d2).handle();
-  auto l3 = require(l2,-5).handle();
-  auto d4 = require(d3,d2).handle();
-  auto l4 = require(l2,l3).handle();
-  auto d5 = require(d4,d3).handle();
-  auto l5 = require(l4,l4).handle();
+  auto d1 = request(-3,-2).handle();
+  auto l1 = request(-2,-3).handle();
+  auto d2 = request(d1,d1).handle();
+  auto l2 = request(l1,-4).handle();
+  auto d3 = request(d1,d2).handle();
+  auto l3 = request(l2,-5).handle();
+  auto d4 = request(d3,d2).handle();
+  auto l4 = request(l2,l3).handle();
+  auto d5 = request(d4,d3).handle();
+  auto l5 = request(l4,l4).handle();
 
 #define XE6(y1,y2,y3,y4,y5,y6) NE4(y1,y2,y3,y4,y5)  XE5(y2,y3,y4,y5,y6)
 #define XE5(y1,y2,y3,y4,y5)    NE4(y1,y2,y3,y4,y5)  XE4(y2,y3,y4,y5)
@@ -269,26 +269,26 @@ TEST(Pair, require) {
 
 TEST(Pair, Hash13a) {
   heapify();
-  auto c1 = require(13,13); 
+  auto c1 = request(13,13); 
   EXPECT_EQ(P[c1.handle()].hash(), Word(13,13).hash());
   Word w = hash13();
-  auto c2 = require(w.s1, w.s2);
+  auto c2 = request(w.s1, w.s2);
   auto h1 = c1.handle(), h2 = c2.handle();
   EXPECT_NE(h1, h2);
   EXPECT_EQ(P[h1].hash(), P[h2].hash());
 
-  EXPECT_EQ(Pair::miss, 1);
+  EXPECT_EQ(accounting.missed, 1);
   EXPECT_ZZ(Pair::reuse);
-  EXPECT_EQ(Pair::count, 2);
+  EXPECT_EQ(acounting.allocated, 2);
 }
 
 TEST(Pair, count) {
   heapify();
-  EXPECT_ZZ(Pair::count);
+  EXPECT_ZZ(acounting.allocated);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
-      require(i,j);
-  EXPECT_EQ(Pair::count, 25);
+      request(i,j);
+  EXPECT_EQ(acounting.allocated, 25);
 }
 
 TEST(Pair, reuse) {
@@ -296,48 +296,48 @@ TEST(Pair, reuse) {
   EXPECT_ZZ(Pair::reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
-      require(i,j);
+      request(i,j);
   EXPECT_ZZ(Pair::reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
-      require(i,j);
+      request(i,j);
   EXPECT_EQ(Pair::reuse, 25);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
-      require(i,j);
+      request(i,j);
   EXPECT_EQ(Pair::reuse, 50);
 }
 
 TEST(Pair, Miss) {
   enum { N = 220 };
   heapify();
-  EXPECT_ZZ(Pair::miss);
+  EXPECT_ZZ(accounting.missed);
   int n = 0;
   for (int i = 0;  i < N; i++) { 
     for (int j = 0;  j < N; j++) {
-      require(i,j);
+      request(i,j);
       ++n;
-      if (Pair::miss > 5) 
+      if (accounting.missed > 5) 
         break;
     }
-    if (Pair::miss > 5) 
+    if (accounting.missed > 5) 
       break;
   }
-  EXPECT_EQ(n,Pair::count);
+  EXPECT_EQ(n,acounting.allocated);
   EXPECT_GT(n * n,$P_n$);
   EXPECT_LT(n,N * N / 2);
-  EXPECT_GT(Pair::miss,0);
-  EXPECT_EQ(Pair::miss,6);
+  EXPECT_GT(accounting.missed,0);
+  EXPECT_EQ(accounting.missed,6);
   EXPECT_ZZ(Pair::reuse);
-  EXPECT_EQ(Pair::count,n);
+  EXPECT_EQ(acounting.allocated,n);
 }
 
 TEST(Counters, freshFree) { 
   heapify();
   auto i = fresh(15,21);
-  EXPECT_EQ(Pristine::count, $P_n$ -1);
+  EXPECT_EQ(acounting.available, $P_n$ -1);
   free(i);
-  EXPECT_EQ(Pristine::count, $P_n$);
+  EXPECT_EQ(acounting.available, $P_n$);
 }
 
 TEST(Fresh, 3) { 
@@ -357,62 +357,62 @@ TEST(Fresh, Length) {
   try {
     heapify();
     EXPECT_EQ(length(), $P_n$);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
 
     auto const s1 = fresh(2,3);
     EXPECT_EQ(length(), $P_n$ - 1);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
 
     auto const s2 = fresh(4,5);
     EXPECT_EQ(length(), $P_n$ - 2);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
 
     auto const s3 = fresh(6,7);
     EXPECT_EQ(length(), $P_n$ - 3);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
 
     free(s1);
     EXPECT_EQ(heap.handle(), 1);
     EXPECT_EQ(length(), $P_n$ - 2);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
 
     free(s3);
     EXPECT_EQ(heap.handle(), 3);
     EXPECT_EQ(length(), $P_n$ - 1);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
 
     free(s2);
     EXPECT_EQ(heap.handle(), 2);
     EXPECT_EQ(length(), $P_n$);
-    EXPECT_EQ(length(), Pristine::count);
+    EXPECT_EQ(length(), acounting.available);
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
 
-TEST(Require, exists) { 
+TEST(request, exists) { 
   try {
     heapify();
-    require(Sx(0xDE),Sx(0xAD));
+    request(Sx(0xDE),Sx(0xAD));
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
 
-TEST(Require, pair) { 
+TEST(request, pair) { 
   try {
     heapify();
-    Pair h = require(Sx(0xDE),Sx(0xAD));
+    Pair h = request(Sx(0xDE),Sx(0xAD));
     EXPECT_TT(h.ok());
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
 
-TEST(Require, correct) { 
+TEST(request, correct) { 
   try {
     heapify();
-    Short h = require(Sx(0xDE),Sx(0xAD)).handle();
+    Short h = request(Sx(0xDE),Sx(0xAD)).handle();
     EXPECT_EQ(P[h].s1, 0xDE);
     EXPECT_EQ(P[h].s2, 0xAD);
   } catch(int e) {
@@ -420,117 +420,117 @@ TEST(Require, correct) {
   }
 }
 
-TEST(Require, 3) { 
+TEST(request, 3) { 
   try {
     heapify();
-    auto s1 = require(2,3);
-    auto s2 = require(4,5);
-    auto s3 = require(6,7);
+    auto s1 = request(2,3);
+    auto s2 = request(4,5);
+    auto s3 = request(6,7);
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
 }
 
-TEST(Require, correct3) { 
+TEST(request, correct3) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
-  auto s1 = require(2,3);
+  auto s1 = request(2,3);
   EXPECT_EQ(heap.handle(),1);
   EXPECT_NE(s1.handle(),1);
   EXPECT_EQ(P[s1.handle()].s1,2);
   EXPECT_EQ(P[s1.handle()].s2,3);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), Pristine::count);
-  auto s2 = require(4,5);
+  EXPECT_EQ(length(), acounting.available);
+  auto s2 = request(4,5);
   EXPECT_EQ(s2.car().handle(),4);
   EXPECT_EQ(s2.cdr().handle(),5);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(length(), $P_n$-2);
-  EXPECT_EQ(length(), Pristine::count);
-  auto s3 = require(6,7);
+  EXPECT_EQ(length(), acounting.available);
+  auto s3 = request(6,7);
   EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(s3.car().handle(),6);
   EXPECT_EQ(P[s3.handle()].s2,7);
   EXPECT_EQ(P[s3.handle()].s2,s3.cdr().handle());
 }
 
-TEST(Require, Scenario) { 
+TEST(request, Scenario) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
-  auto s1 = require(2,3);
+  auto s1 = request(2,3);
   EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(s1.handle(),Word(2,3).hash());
   EXPECT_EQ(P[s1.handle()].s1,2);
   EXPECT_EQ(P[s1.handle()].s2,3);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), Pristine::count);
-  auto s2 = require(4,5);
+  EXPECT_EQ(length(), acounting.available);
+  auto s2 = request(4,5);
   EXPECT_EQ(s2.handle(),Word(4,5).hash());
   EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(P[s2.handle()].s1,4);
   EXPECT_EQ(P[s2.handle()].s2,5);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
-  EXPECT_EQ(length(), Pristine::count);
-  auto s3 = require(6,7);
+  EXPECT_EQ(length(), acounting.available);
+  auto s3 = request(6,7);
   EXPECT_EQ(s3.handle(),Word(6,7).hash());
   EXPECT_EQ(P[s3.handle()].s1,6);
   EXPECT_EQ(P[s3.handle()].s2,7);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 }
 
 TEST(Words, Reuse) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 
-  auto s1 = require(3,3);
+  auto s1 = request(3,3);
   EXPECT_TT(s1.ok());
   EXPECT_EQ(s1.handle(), P[s1.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 
-  auto s2 = require(2,3);
+  auto s2 = request(2,3);
   EXPECT_TT(s2.ok());
   EXPECT_EQ(s2.handle(),P[s2.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 
-  auto s3 = require(3,2);
+  auto s3 = request(3,2);
   EXPECT_EQ(s3.handle(), P[s3.handle()].hash());
   EXPECT_TT(s3.ok());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 
-  auto s4 = require(2,3);
+  auto s4 = request(2,3);
   EXPECT_TT(s4.ok());
   EXPECT_EQ(s4.handle(), P[s4.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 
-  auto s5 = require(3,3);
+  auto s5 = request(3,3);
   EXPECT_TT(s5.ok());
   EXPECT_EQ(s5.handle(), P[s5.handle()].hash());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
   EXPECT_FF(corrupted.asymmetric());
 
-  auto s6 = require(3,2);
+  auto s6 = request(3,2);
   EXPECT_TT(s6.ok());
   EXPECT_EQ(s6.handle(), P[s6.handle()].hash());
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_FF(corrupted.asymmetric());
 
@@ -556,12 +556,12 @@ void mess(Pushdown &p) {
 
 TEST(Exhaust, Almost) { 
   heapify();
-  EXPECT_EQ(Pristine::count, $P_n$); 
+  EXPECT_EQ(acounting.available, $P_n$); 
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
   EXPECT_FF(heap.x());
-  EXPECT_EQ(Pristine::count, 1);
-  EXPECT_EQ(Item::count, $P_n$ - 1);
+  EXPECT_EQ(acounting.available, 1);
+  EXPECT_EQ(accounting.itemized, $P_n$ - 1);
   EXPECT_FF(corrupted.pristines());
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pairs());
@@ -590,16 +590,16 @@ TEST(Exhaust, LastItem) {
 TEST(Exhaust, items) { 
   heapify();
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(Pristine::count, $P_n$); 
+  EXPECT_EQ(acounting.available, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) {
     Item i = fresh(s, $P_x$);
     EXPECT_EQ(i.handle(), s - $P_f$ + 1);
-    EXPECT_EQ(Item::count + Pristine::count, $P_n$); 
-    EXPECT_EQ(Pristine::count, $P_n$ - s); 
-    EXPECT_EQ(Item::count, s); 
+    EXPECT_EQ(accounting.itemized + acounting.available, $P_n$); 
+    EXPECT_EQ(acounting.available, $P_n$ - s); 
+    EXPECT_EQ(accounting.itemized, s); 
   }
   EXPECT_TT(heap.x());
-  EXPECT_ZZ(Pristine::count);
+  EXPECT_ZZ(acounting.available);
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pristines());
 }
@@ -607,16 +607,16 @@ TEST(Exhaust, items) {
 TEST(Exhaust, andRestore) { 
   heapify();
   Pushdown p;
-  EXPECT_EQ(Pristine::count, $P_n$); 
+  EXPECT_EQ(acounting.available, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) 
     p.push(s);
   for (auto s = $P_n$ ; s >= 1; --s) 
     EXPECT_EQ(s, p.pop()) << s;
-  EXPECT_ZZ(Pair::count);
-  EXPECT_ZZ(Pair::miss);
+  EXPECT_ZZ(acounting.allocated);
+  EXPECT_ZZ(accounting.missed);
   EXPECT_ZZ(Pair::reuse);
-  EXPECT_ZZ(Item::count);
-  EXPECT_EQ(Pristine::count, $P_n$);
+  EXPECT_ZZ(accounting.itemized);
+  EXPECT_EQ(acounting.available, $P_n$);
   EXPECT_FF(corrupted.cyclic());
   EXPECT_FF(corrupted.weirdos()); 
   EXPECT_FF(corrupted.pristines());
@@ -634,24 +634,24 @@ TEST(Churn, Pushdown) {
         mess(p[Word(i,j).hash() % 10]); 
     }
     EXPECT_FF(corrupted.items());
-    EXPECT_EQ(0, Item::count);
+    EXPECT_EQ(0, accounting.itemized);
   }
   EXPECT_FF(corrupted.pristines());
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pairs());
 }  
 
-TEST(Churn, Require) { 
+TEST(Churn, request) { 
   heapify();
   int n = 0;
   for (Short i = 0;  ; i++) { 
     for (Short j = 0;  i <= j; j++) {
-      Pair c(require(i,j).handle());
+      Pair c(request(i,j).handle());
       ++n;
       EXPECT_TT(c.ok());
       EXPECT_EQ(i, c.car().handle());
       EXPECT_EQ(j, c.cdr().handle());
-      EXPECT_EQ(n, Pair::count) << n;
+      EXPECT_EQ(n, acounting.allocated) << n;
       if (n > 25000)
         goto done;
     }
@@ -667,14 +667,14 @@ TEST(Churn, Both) {
     Pushdown p[10];
     for (int j = 0; j <= i; ++j, ++n) {
       if (heap.x()) goto done;
-      auto const c = require(i,j);
+      auto const c = request(i,j);
       if (heap.x()) goto done;
       int d = P[c.handle()].hash() % 10;
       mess(p[d]);
     }
   }
   done:
-    EXPECT_ZZ(Item::count);
+    EXPECT_ZZ(accounting.itemized);
     EXPECT_FF(corrupted.something());
 }
 
@@ -682,23 +682,23 @@ TEST(Counting, items) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  int before = Item::count;
+  int before = accounting.itemized;
   EXPECT_GE(before,0);
   p.push(3);
-  EXPECT_GE(Item::count,1);
-  EXPECT_EQ(Item::count, before + 1);
+  EXPECT_GE(accounting.itemized,1);
+  EXPECT_EQ(accounting.itemized, before + 1);
 }
 
 TEST(Counting, pairs) {
   heapify();
-  auto const before = Pristine::count;
-  require(13,14);
-  EXPECT_NE(Pristine::count, before);
-  EXPECT_EQ(Pristine::count, before - 1);
-  EXPECT_EQ(Pristine::count, $P_n$ - 1);
-  EXPECT_EQ(Pair::count, 1);
-  EXPECT_ZZ(Pair::miss);
-  EXPECT_ZZ(Pair::reuse);
+  auto const before = acounting.available;
+  request(13,14);
+  EXPECT_NE(acounting.available, before);
+  EXPECT_EQ(acounting.available, before - 1);
+  EXPECT_EQ(acounting.available, $P_n$ - 1);
+  EXPECT_EQ(acounting.allocated, 1);
+  EXPECT_ZZ(accounting.missed);
+  EXPECT_ZZ(accouinting.reused);
   EXPECT_FF(corrupted.something());
 }
 
@@ -707,10 +707,10 @@ TEST(Counting, itemsPristines2) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  EXPECT_GE(Pristine::count,10);
-  int before = Pristine::count;
+  EXPECT_GE(acounting.available,10);
+  int before = acounting.available;
   p.push(3);
-  EXPECT_EQ(Pristine::count, before - 1);
+  EXPECT_EQ(acounting.available, before - 1);
   EXPECT_FF(corrupted.something());
 }
 
@@ -720,9 +720,9 @@ TEST(Pristine, itemsPristines3) {
   Pushdown p;
   p.push(3,2,1);
   EXPECT_FF(corrupted.asymmetric());
-  require(12,13);
+  request(12,13);
   EXPECT_FF(corrupted.asymmetric());
-  require(12,13);
+  request(12,13);
   EXPECT_FF(corrupted.asymmetric());
   p.pop();
   EXPECT_FF(corrupted.asymmetric());
@@ -732,140 +732,140 @@ TEST(Pristine, itemsPristines4) {
   heapify();
   EXPECT_FF(corrupted.something());
   Pushdown p;
-  int before = Pristine::count;
+  int before = acounting.available;
   p.push(3,2,1);
-  EXPECT_EQ(Pristine::count, before - 3);
-  EXPECT_EQ(Pristine::count, before - 3);
-  require(12,13);
-  EXPECT_EQ(Pristine::count, before - 4);
-  require(12,13);
-  EXPECT_EQ(Pristine::count, before - 4);
+  EXPECT_EQ(acounting.available, before - 3);
+  EXPECT_EQ(acounting.available, before - 3);
+  request(12,13);
+  EXPECT_EQ(acounting.available, before - 4);
+  request(12,13);
+  EXPECT_EQ(acounting.available, before - 4);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
-  EXPECT_EQ(Pristine::count, before - 1);
+  EXPECT_EQ(acounting.available, before - 1);
   EXPECT_ZZ(p.size);
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Pristine, RequireConsN) {
+TEST(Pristine, requestConsN) {
   heapify();
   EXPECT_FF(corrupted.something());
   Pushdown p;
-  int before = Pristine::count;
+  int before = acounting.available;
   p.push(3,2,1);
-  EXPECT_EQ(Pristine::count, before - 3);
-  EXPECT_EQ(Pristine::count, before - 3);
+  EXPECT_EQ(acounting.available, before - 3);
+  EXPECT_EQ(acounting.available, before - 3);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
-      require(i,j);
-  EXPECT_EQ(Pristine::count, before - 28);
+      request(i,j);
+  EXPECT_EQ(acounting.available, before - 28);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
-  EXPECT_EQ(Pristine::count, before - 25);
+  EXPECT_EQ(acounting.available, before - 25);
   EXPECT_ZZ(p.size);
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Exercise, PushRequirePopRequire) {
+TEST(Exercise, PushrequestPoprequest) {
   enum {N = 16};
   EXPECT_FF(corrupted.something());
   heapify();
   Pushdown p;
-  int before = Pristine::count;
+  int before = acounting.available;
   for (int i = 0, n = 0;  i < 16; i++)  
     for (int j = 0;  j < 16; j++) {
-      require(i,j);
+      request(i,j);
       ++n;
       p.push(i+j);
       ++n;
     }
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(before - Pristine::count, 2 * N * N);
+  EXPECT_EQ(before - acounting.available, 2 * N * N);
   for (int i = 0;  i < 16; i++)  
     for (int j = 0;  j < 16; j++) {
-      require(i+50, j+100);
+      request(i+50, j+100);
       p.pop();
-      require(i, j);
+      request(i, j);
     }
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(Pair::count, 2*N*N);
-  EXPECT_EQ(Pristine::count, $P_n$ - 2 * N *N); 
+  EXPECT_EQ(acounting.allocated, 2*N*N);
+  EXPECT_EQ(acounting.available, $P_n$ - 2 * N *N); 
 }
 
-TEST(Pristine, RequireAtom) {
+TEST(Pristine, requestAtom) {
   Pushdown p;
   heapify();
-  int before = Pristine::count;
+  int before = acounting.available;
   p.push(3,2,1);
-  require("ABC");
-  EXPECT_EQ(Pristine::count, before - 3);
-  require("ABC");
-  require("CDE");
-  EXPECT_EQ(Pristine::count, before - 3);
+  request("ABC");
+  EXPECT_EQ(acounting.available, before - 3);
+  request("ABC");
+  request("CDE");
+  EXPECT_EQ(acounting.available, before - 3);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
-  EXPECT_EQ(Pristine::count, before);
+  EXPECT_EQ(acounting.available, before);
 }
 
-TEST(Pristine, 1RequireAtom) {
-  int before = Pristine::count;
-  EXPECT_EQ(Pristine::count, before);
-  require("Foo Bar");
-  EXPECT_NE(Pristine::count, before -1);
-  EXPECT_EQ(Pristine::count, before);
+TEST(Pristine, 1requestAtom) {
+  int before = acounting.available;
+  EXPECT_EQ(acounting.available, before);
+  request("Foo Bar");
+  EXPECT_NE(acounting.available, before -1);
+  EXPECT_EQ(acounting.available, before);
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Pristine, RequireBoth) {
+TEST(Pristine, requestBoth) {
   EXPECT_FF(corrupted.something());
   heapify();
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  int before = Pristine::count;
+  int before = acounting.available;
   EXPECT_GE(before,2);
   p.push(3);
-  EXPECT_EQ(Pristine::count, before -1);
+  EXPECT_EQ(acounting.available, before -1);
   p.push(2);
-  EXPECT_EQ(Pristine::count, before -2);
-  require("ABC");
-  EXPECT_EQ(Pristine::count, before -2);
-  require("CDE");
-  EXPECT_EQ(Pristine::count, before -2);
-  require("ABC");
-  EXPECT_EQ(Pristine::count, before -2);
-  require("CDE");
-  EXPECT_EQ(Pristine::count, before -2);
-  require(12,13);
-  EXPECT_EQ(Pristine::count, before -3);
-  require(12,13);
-  EXPECT_EQ(Pristine::count, before -3);
+  EXPECT_EQ(acounting.available, before -2);
+  request("ABC");
+  EXPECT_EQ(acounting.available, before -2);
+  request("CDE");
+  EXPECT_EQ(acounting.available, before -2);
+  request("ABC");
+  EXPECT_EQ(acounting.available, before -2);
+  request("CDE");
+  EXPECT_EQ(acounting.available, before -2);
+  request(12,13);
+  EXPECT_EQ(acounting.available, before -3);
+  request(12,13);
+  EXPECT_EQ(acounting.available, before -3);
   EXPECT_EQ(2,p.pop());
-  EXPECT_EQ(Pristine::count, before -2);
+  EXPECT_EQ(acounting.available, before -2);
   EXPECT_EQ(3,p.pop());
-  EXPECT_EQ(Pristine::count, before -1);
+  EXPECT_EQ(acounting.available, before -1);
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
 }
 
-extern Knob crude();
-TEST(Crude, 1) { 
+extern Knob pop();
+TEST(pop, 1) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
-  auto s1 = crude().handle();
+  auto s1 = pop().handle();
   EXPECT_EQ(heap.handle(),2);
   EXPECT_EQ(s1,1);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), Pristine::count);
+  EXPECT_EQ(length(), acounting.available);
 }
 
 TEST(Crude, almostExhausted) { 
@@ -873,20 +873,20 @@ TEST(Crude, almostExhausted) {
   for (auto i = 1; i < $P_n$; ++i)
     crude().handle();
   EXPECT_FF(heap.x());
-  EXPECT_EQ(Pristine::count, 1);
+  EXPECT_EQ(acounting.available, 1);
 }
 
 TEST(Crude, exhausted) { 
   heapify();
-  EXPECT_EQ(Pristine::count, $P_n$); 
+  EXPECT_EQ(acounting.available, $P_n$); 
   for (auto i = 1; i <= $P_n$; ++i) {
     auto const s = crude().handle();
     EXPECT_EQ(i, s);
-    EXPECT_EQ(Pristine::count, $P_n$ - i); 
-    EXPECT_ZZ(Item::count); // This black box test corrupts the heap,
+    EXPECT_EQ(acounting.available, $P_n$ - i); 
+    EXPECT_ZZ(accounting.itemized); // This black box test corrupts the heap,
   }
   EXPECT_TT(heap.x());
-  EXPECT_ZZ(Pristine::count);
+  EXPECT_ZZ(acounting.available);
 }
 
 TEST(Crude, last) { 
@@ -902,5 +902,5 @@ TEST(Crude, lastCorrect) {
     crude().handle();
   crude();
   EXPECT_TT(heap.x());
-  EXPECT_ZZ(Pristine::count);
+  EXPECT_ZZ(acounting.available);
 }

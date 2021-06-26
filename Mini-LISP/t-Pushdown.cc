@@ -57,11 +57,11 @@ TEST(Item, 1Count) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  int before = Item::count;
+  int before = accounting.itemized;
   EXPECT_GE(before,0);
   p.push(3);
-  EXPECT_GE(Item::count,1);
-  EXPECT_EQ(Item::count, before + 1);
+  EXPECT_GE(accounting.itemized,1);
+  EXPECT_EQ(accounting.itemized, before + 1);
 }
 
 TEST(Pushdown, 2Push0) {
@@ -197,7 +197,7 @@ TEST(Pushdown, Destructor) {
   {
     Pushdown p;
     p.push(1,2,3,4,5);
-    EXPECT_EQ(Item::count, 5);
+    EXPECT_EQ(accounting.itemized, 5);
   }
-  EXPECT_EQ(Item::count, 0);
+  EXPECT_EQ(accounting.itemized, 0);
 }
