@@ -3,12 +3,14 @@
 #include "chic.h"
 #include "Sx.h"
 #include "Item.h"
+extern Pair require(Sx, Sx); 
+extern Item fresh(Short, Short); 
+extern Unit free(Item); 
+
 #include "Pristine.h"
 #include "Pair.h"
 extern Pristine heapify();
 extern Pristine heap;
-extern Pair require(Sx, Sx); 
-extern Item fresh(Short, Short); 
-extern void free(Item); 
-extern void preserve(Sx); 
+extern Unit gobble(Pair);
+Knob crude(); 
 #endif

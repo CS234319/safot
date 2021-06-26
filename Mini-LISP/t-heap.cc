@@ -7,246 +7,13 @@
 #include "Pair.h"
 #include "Sx.h"
 
+#include "corrupted.h"
+
 #include "stdio.h"
-
-Short length() {
-  Short result = 0;
-  for (auto h = heap; !h.x();  h = h.next()) 
-      ++result;
-  return result;
-}
-
-static struct {
-  Boolean something() Is(uncounted() || excess() || asymmetric() || cyclic() || weirdos() || pristines() || items() || pairs()); 
-  Boolean uncounted() Is(length() > Pristine::count); 
-  Boolean excess()   Is(length() < Pristine::count); 
-  Boolean cyclic() {
-    if (!heap.x())
-      for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
-        if (h.handle() == h2.handle()) 
-          return true;
-        if (!h2.x()) h2 = h2.next();
-        if (!h2.x()) h2 = h2.next();
-      }
-    return false;
-  }
-  Boolean weirdos() {
-    for (auto h = $P_f$; h <= $P_t$; ++h) 
-      if (Knob(h).weirdo()) 
-        return true;
-    return false;
-  }  
-  Boolean asymmetric() {
-    for (auto p = heap; !p.x(); p = p.next()) { 
-      if (!p.prev().x() && p.prev().next().handle() != p.handle()) 
-        return true;
-      if (!p.next().x() && p.next().prev().handle() != p.handle()) 
-        return true;
-    }
-    return false;
-  }
-  Boolean pairs() {
-    try {
-      Expect(Pair::count >= 0);
-      Expect(Pair::count  <= $P_n$);
-      Expect(Pair::reuse  >= 0);
-      Expect(Pair::reuse  >= 0);
-      Expect(Pair::miss  >= 0);
-      Expect(Pair::count != 0 || Pair::reuse ==0)
-      Expect(Pair::count != 0 || Pair::miss ==0)
-      short n = 0; 
-      for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let c = Pair(h);
-        if (!c.ok()) 
-          continue;
-        ++n;
-      }
-      Expect(n == Pair::count);
-      return false;
-    } catch(...) {
-      return true;
-    }
-  }
-  Boolean pristines() {
-    try {
-      Expect(Pristine::count >= 0);
-      Expect(Pristine::count <= $P_n$);
-      short n = 0; 
-      for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let p = Pristine(h);
-        if (!p.ok()) 
-          continue;
-        ++n;
-        Expect(n <= Pristine::count);
-        Expect (Pristine(p.next()).x() || Pristine(p.next()).ok());
-        Expect (Pristine(p.prev()).x() || Pristine(p.prev()).ok());
-        if (!Pristine(p.next()).x())  
-          Expect(Pristine(p.next()).ok());
-        if (!Pristine(p.prev()).x())  
-          Expect(Pristine(p.prev()).ok());
-      }
-      Expect(n == Pristine::count, n, Pristine::count);
-      return false;
-    } catch(...) {
-      return true;
-    }
-  }
-  Boolean items() {
-    try {
-      Short  n = 0; 
-      for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let i = Item(h);
-        if (!i.ok()) 
-          continue;
-        ++n;
-        Expect(Item(i.rest()).x() || Item(i.rest()).ok());
-        Expect(n <= Item::count);
-        if (!Item(i.rest()).x())  
-          Expect(Item(i.rest()).ok());
-      }
-      return false;;
-    } catch(...) {
-      return true;
-    }
-  }
-} corrupted;
 
 #include "Test.h"
 #include "mark.h"
 
-TEST(Mark, exists) {
-  heapify();
-  auto s = require(2,3);
-  mark(s);
-}
-
-TEST(Mark, correct) {
-  heapify();
-  auto s = require(2,3);
-  auto k = Knob(s.handle());
-  mark(s);
-  EXPECT_TT(k.weirdo());
-}
-
-TEST(Mark, flip) {
-  heapify();
-  auto c = require(2,3);
-  Short before = Knob(c.handle()).s1();
-  mark(c);
-  Short after = Knob(c.handle()).s1();
-  EXPECT_EQ(before, flip(after)); 
-  EXPECT_EQ(after, flip(before)); 
-}
-
-TEST(Mark, undo) {
-  heapify();
-  auto s = require(2,3);
-  auto k = Knob(s.handle());
-  EXPECT_TT(k.pair());
-  mark(s);
-  mark(s);
-  EXPECT_FF(k.weirdo());
-  EXPECT_TT(k.pair());
-}
-
-TEST(Mark, special) {
-  heapify();
-  auto s = require(2,3);
-  auto k = Knob(s.handle());
-  EXPECT_TT(k.pair());
-  mark(s);
-  EXPECT_FF(k.Pair().ok());
-  EXPECT_FF(k.Item().ok());
-  EXPECT_FF(k.Pristine().ok());
-}
-
-TEST(Mark, weird) {
-  heapify();
-  auto s = require(2,3);
-  mark(s);
-  EXPECT_FF(s.ok());
-}
-
-TEST(Preserve, exists) {
-  heapify();
-  auto s = require(2,3);
-  preserve(s);
-}
-
-TEST(Preserve, singletonKeep) {
-  heapify();
-  auto dead = require(-3,-2);
-  auto live = require(-2,-3);
-  EXPECT_TT(live.ok());
-  preserve(live);
-  EXPECT_TT(live.ok());
-}
-
-TEST(Preserve, singletonKill) {
-  heapify();
-  auto dead = require(-3,-2);
-  auto live = require(-2,-3);
-  EXPECT_TT(dead.ok());
-  preserve(live);
-  EXPECT_FF(dead.ok());
-}
-
-TEST(Preserve, singletonPristine) {
-  heapify();
-  auto dead = require(-3,-2);
-  auto live = require(-2,-3);
-  EXPECT_TT(dead.ok());
-  preserve(live);
-  EXPECT_TT(Knob(dead.handle()).Pristine().ok());
-}
-
-TEST(Preserve, singletonConnected) {
-  heapify();
-  auto dead = require(-3,-2);
-  auto live = require(-2,-3);
-  preserve(live);
-  EXPECT_EQ(dead.handle(), heap.handle());
-}
-
-TEST(Preserve, singletonCount) {
-  heapify();
-  auto dead = require(-3,-2);
-  auto live = require(-2,-3);
-  preserve(live);
-  EXPECT_EQ(Pristine::count, $P_n$-1);
-}
-
-TEST(Preserve, pairCount) {
-  heapify();
-  auto dead1 = require(-3,-2);
-  auto dead2 = require(-5,-2);
-  auto dead3 = require(dead2,dead1);
-  auto live = require(-2,-3);
-  EXPECT_FF(corrupted.something());
-  EXPECT_EQ(Pair::count,4);
-  preserve(live);
-  EXPECT_EQ(Pair::count,1);
-  EXPECT_EQ(Pristine::count, $P_n$-1);
-}
-
-TEST(Preserve, tripleCount) {
-  heapify();
-  auto dead1 = require(-3,-2);
-  auto dead2 = require(-5,-2);
-  auto live = require(-2,-3);
-  preserve(live);
-  EXPECT_EQ(Pristine::count, $P_n$-1);
-}
-
-TEST(Preserve, visit) {
-  heapify();
-  auto dead1 = require(-3,-2);
-  auto dead2 = require(-5,-2);
-  auto live1 = require(-2,-3);
-  auto live2 = require(live1.handle(),-4);
-  preserve(live2);
-  EXPECT_EQ(Pristine::count, $P_n$-2);
-}
 
 TEST(Heapify, exists) { 
   heapify();
@@ -461,6 +228,44 @@ TEST(Pair, Hash13) {
   EXPECT_TT(white(w.s2));
   EXPECT_EQ(w.hash(), Word(13,13).hash());
 }
+
+TEST(Pair, require) {
+  heapify();
+  auto d1 = require(-3,-2).handle();
+  auto l1 = require(-2,-3).handle();
+  auto d2 = require(d1,d1).handle();
+  auto l2 = require(l1,-4).handle();
+  auto d3 = require(d1,d2).handle();
+  auto l3 = require(l2,-5).handle();
+  auto d4 = require(d3,d2).handle();
+  auto l4 = require(l2,l3).handle();
+  auto d5 = require(d4,d3).handle();
+  auto l5 = require(l4,l4).handle();
+
+#define XE6(y1,y2,y3,y4,y5,y6) NE4(y1,y2,y3,y4,y5)  XE5(y2,y3,y4,y5,y6)
+#define XE5(y1,y2,y3,y4,y5)    NE4(y1,y2,y3,y4,y5)  XE4(y2,y3,y4,y5)
+#define XE4(y1,y2,y3,y4)       NE3(y1,y2,y3,y4)     XE3(y2,y3,y4)
+#define XE3(y1,y2,y3)          NE2(y1,y2,y3)        XE2(y2,y3)
+#define XE2(y1,y2)             NE1(y1,y2)           XE1(y2)
+#define XE1(y1)                NE0(y1)              XE0()
+#define XE0()                  NE0()                
+
+
+#define NE5(x,y1,y2,y3,y4,y5) NE(x,y1)NE4(x,y2,y3,y4,y5); 
+#define NE4(x,y1,y2,y3,y4)    NE(x,y1)NE3(x,y2,y3,y4) 
+#define NE3(x,y1,y2,y3)       NE(x,y1)NE2(x,y2,y3)
+#define NE2(x,y1,y2)          NE(x,y1)NE1(x,y2)
+#define NE1(x,y1)             NE(x,y1)NE0(x)
+#define NE0(x)
+
+#define NE(x,y)               EXPECT_NE(x,y);
+
+  XE5(d1,d2,d3,d4,d5);
+  XE5(l1,l2,l3,l4,l5);
+  XE6(l1,d1,d2,d3,d4,d5);
+  XE6(d1,l1,l2,l3,l4,l5);
+}
+
 
 TEST(Pair, Hash13a) {
   heapify();

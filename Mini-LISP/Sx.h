@@ -1,7 +1,6 @@
 #ifndef SX_H
 #define SX_H
 #include "Handle.h"
-
 Type Sx: private Handle { // An S-expression represented by its handle
   using Handle::handle;
   typedef Sx Self;
@@ -12,7 +11,8 @@ Type Sx: private Handle { // An S-expression represented by its handle
   Property(Boolean atom);
   Property(Sx car);
   Property(Sx cdr);
-  Sx pair(Sx cdr) const { return Sx(*this, cdr); }
+  Type Pair Pair() const;
+  Sx cons(Sx cdr) const { return Sx(*this, cdr); }
 };
 
 #undef NULL

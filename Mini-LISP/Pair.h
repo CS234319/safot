@@ -3,7 +3,6 @@
 #include "chic.h"
 #include "Sx.h"
 #include "Word.h"
-
 Type Pair: Sx {
   typedef Pair Self;
   Pair(Short);
@@ -11,8 +10,18 @@ Type Pair: Sx {
   Selfer(cdr(Sx)); 
   Property(Sx car);
   Property(Sx cdr);
-  Property(Boolean ok);
-  Property(Boolean x);
+
+  Property(Boolean x); // Change someday to nil
+  Property(Boolean ok); // Consolidate variadic macro
+
+  Property(Boolean foreign);
+
+  Property(Boolean unseen);
+  Property(Boolean seen);
+
+  Selfer(visit()); // Consolidate variadic macro
+  Selfer(unvisit()); 
+
   static Boolean ok(Word);
   static Short count; 
   static Integer reuse; 

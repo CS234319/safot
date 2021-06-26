@@ -134,6 +134,8 @@ typedef std::function<bool()> Predicate;
 #define Is(X)           { return X; }
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__{}
+#define Unit int 
+
 
 #ifndef Type
 #error
@@ -192,4 +194,7 @@ typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an 
 #undef  asdfasdType              
 #undef  returns
 #undef  by
+#undef begin
+#undef end
+#undef Unit
 #endif

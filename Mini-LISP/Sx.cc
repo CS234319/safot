@@ -13,7 +13,11 @@ Sx::Sx(Text t)       : Sx(require(t)) {}
 Property(Boolean Sx::atom) Is(handle() <= 0);
 Property(Sx Sx::car)  Is(p().s1) 
 Property(Sx Sx::cdr)  Is(p().s2) 
+// Property(Pair Sx::Pair)  Is(Pair(handle())) 
 
+Pair Sx::Pair() const {
+  return ::Pair(handle());
+}
 const Sx NIL("NIL"); // Always define longer names first 
 const Sx SET("set"); // Save one letter by sharing with "T"
 const Sx T("T");     // Always define longer names first 

@@ -77,51 +77,22 @@ Pristine heapify() {
   return heap = Pristine($P_f$);
 }
 
-void prepend(Pristine p) {
+Unit prepend(Pristine p) {
   p.prev($P_x$).next(heap); 
   if (!heap.x())
     heap.prev(p);
   heap = p;
-  Pristine::count++;
+    Pristine::count++;
 }
 
-void free(Item i) {
+Unit gobble(Pair p) {
+  Expect(p.ok());
+  prepend(Pristine(p.handle())) | Pair::count--;
+}
+
+Unit free(Item i) {
   Expect(i.ok());
-  Expect(Knob(i.handle()).item());
-  prepend(Knob(i.handle()).Pristine());
-  Item::count--;
+  prepend(Pristine(i.handle())) | Item::count--;
 }
 
 Pair require(Sx car, Sx cdr) { return require(Word(car.handle(),cdr.handle())); }
-
-#include "mark.h"
-
-void mark(Sx s) {
- auto k = Knob(s.handle()); 
- k.s1(flip(k.s1())); 
-}
-
-void visit(Pair c);
-
-void visit(Sx s) {
-  if (white(s.handle()) && !s.atom()) {
-    auto car = s.car();
-    auto cdr = s.cdr();
-    mark(s);
-    visit(car);
-    visit(cdr);
-  } 
-}
-
-void preserve(Sx c) { 
-  visit(c);
-  for (auto s = $P_f$; s <= $P_t$; ++s) {
-    if (Knob(s).pair()) {
-      prepend(Pristine(s));
-      Pair::count--;
-    } else if (Knob(s).weirdo()) { 
-      mark(s); 
-      Surely(Knob(s).pair());
-    }
-  }
-}
