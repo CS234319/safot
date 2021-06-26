@@ -11,6 +11,5 @@ Type Item: private Knob {
   Property(Boolean ok);
   Item head(Short s);
   Item rest(Short s);
-  static Short count;
 }; 
 #endif

@@ -21,9 +21,10 @@ Type Knob: private Pair { // An S-expression represented by its Knob
   Property(Boolean x);
 
   // Converters:
-  Type Pair     Pair()     const;
-  Type Item     Item()     const;
-  Type Pristine Pristine() const;
+  Type Pair     Pair()       const;
+  Type Pair     Pair(Sx, Sx) const;
+  Type Item     Item()       const;
+  Type Pristine Pristine()   const;
   // Mutators:
   Selfer(s1(Short));
   Selfer(s2(Short));

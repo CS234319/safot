@@ -24,9 +24,6 @@ Type Pair: Sx {
   Selfer(unvisit()); 
 
   static Boolean ok(Word);
-  static Short count; 
-  static Integer reuse; 
-  static Integer miss; 
   private: Property(Word& p);
 };
 #endif

@@ -2,8 +2,6 @@
 #include "Short.h"
 #include "layout.h"
 
-Short acounting.available = 0;
-
 Pristine::Pristine(): Pristine($P_x$) {}
 Pristine::Pristine(Short s): Knob(s) {}
 

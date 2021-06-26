@@ -10,7 +10,6 @@
 #include "Pristine.h"
 #include "Pair.h"
 extern Pristine heapify();
-extern Pristine heap;
 extern Unit gobble(Pair);
 Knob crude(); 
 #endif

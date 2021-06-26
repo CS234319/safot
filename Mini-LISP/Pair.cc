@@ -28,7 +28,3 @@ Pair Pair::unvisit() {
   Promise(not seen()); 
   return car(flip(car().handle())); 
 } 
-
-Short acounting.allocated = 0; // Accounting elsewhere please
-Integer Pair::reuse = 0;
-Integer Pair::miss = 0;
