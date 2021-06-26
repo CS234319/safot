@@ -88,14 +88,14 @@ TEST(Visit, special) {
   EXPECT_FF(Pristine(p.handle()).ok());
 }
 
-TEST(Preserve, exists) {
+TEST(Purge, exists) {
   heapify();
   auto s = require(-2,-3);
   purge.preserving(s);
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Preserve, mess) {
+TEST(Purge, mess) {
   heapify();
   try { // Do not dare in real life!
     purge.preserving(require(2,3)); // Use a raw S-Expression.
@@ -105,7 +105,7 @@ TEST(Preserve, mess) {
   }
 }
 
-TEST(Preserve, singleton) {
+TEST(Purge, singleton) {
   heapify();
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
@@ -114,7 +114,7 @@ TEST(Preserve, singleton) {
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Preserve, singletonKill) {
+TEST(Purge, singletonKill) {
   heapify();
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
@@ -123,7 +123,7 @@ TEST(Preserve, singletonKill) {
   EXPECT_FF(dead.ok());
 }
 
-TEST(Preserve, singletonPristine) {
+TEST(Purge, singletonPristine) {
   heapify();
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
@@ -132,7 +132,7 @@ TEST(Preserve, singletonPristine) {
   EXPECT_TT(Knob(dead.handle()).Pristine().ok());
 }
 
-TEST(Preserve, singletonPrepended) {
+TEST(Purge, singletonPrepended) {
   heapify();
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
@@ -140,7 +140,7 @@ TEST(Preserve, singletonPrepended) {
   EXPECT_EQ(dead.handle(), heap.handle());
 }
 
-TEST(Preserve, singletonCount) {
+TEST(Purge, singletonCount) {
   heapify();
   auto dead = require(-3,-2);
   auto live = require(-2,-3);
@@ -148,7 +148,7 @@ TEST(Preserve, singletonCount) {
   EXPECT_EQ(Pristine::count, $P_n$-1);
 }
 
-TEST(Preserve, pairCount) {
+TEST(Purge, pairCount) {
   heapify();
   auto dead1 = require(-3,-2);
   auto dead2 = require(-5,-2);
@@ -161,7 +161,7 @@ TEST(Preserve, pairCount) {
   EXPECT_EQ(Pristine::count, $P_n$-1);
 }
 
-TEST(Preserve, tripleCount) {
+TEST(Purge, tripleCount) {
   heapify();
   auto dead1 = require(-3,-2);
   auto dead2 = require(-5,-2);
@@ -170,7 +170,7 @@ TEST(Preserve, tripleCount) {
   EXPECT_EQ(Pristine::count, $P_n$-1);
 }
 
-TEST(Preserve, live2) {
+TEST(Purge, live2a) {
   heapify();
   auto dead1 = require(-3,-2);
   auto dead2 = require(-5,-2);
@@ -181,7 +181,18 @@ TEST(Preserve, live2) {
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Preserve, live5) {
+TEST(Purge, live2b) {
+  heapify();
+  auto dead1 = require(-3,-2);
+  auto dead2 = require(-5,-2);
+  auto live1 = require(-2,-3);
+  auto live2 = require(-4,live1.handle());
+  purge.preserving(live2);
+  EXPECT_EQ($P_n$ - Pristine::count, 2);
+  EXPECT_FF(corrupted.something());
+}
+
+TEST(Purge, live5) {
   heapify();
   auto d1 = require(-3,-2).handle();
   auto l1 = require(-2,-3).handle();
@@ -206,7 +217,61 @@ TEST(Preserve, live5) {
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Preserve, live7) {
+TEST(Purge, t2a) {
+  heapify();
+  auto t1 = require(-2,-3);
+  auto t2 = require(t1.handle(),-4);
+  purge.preserving(t2);
+  EXPECT_EQ($P_n$ - Pristine::count, 0);
+  EXPECT_FF(corrupted.something());
+}
+
+TEST(Purge, t2b) {
+  heapify();
+  auto t1 = require(-2,-3);
+  auto t2 = require(-4,t1.handle());
+  purge.preserving(t2);
+  EXPECT_EQ($P_n$ - Pristine::count, 2);
+  EXPECT_FF(corrupted.something());
+}
+
+TEST(Purge, t5) {
+  heapify();
+  auto l1 = require(-2,-3).handle();
+  auto l2 = require(l1,-4).handle();
+  auto t1 = require(-2,-3);
+  auto t2 = require(t1.handle(),-4);
+  auto t3 = require(t2.handle(),-5);
+  auto t4 = require(t3,-6);
+  auto t5 = require(t4,-6);
+  auto l3 = require(l2,-5).handle();
+  auto l4 = require(l2,l3).handle();
+  auto l5 = require(l4,l4).handle();
+
+  purge.preserving(t5);
+  EXPECT_EQ($P_n$ - Pristine::count, 5);
+  EXPECT_FF(corrupted.something());
+}
+
+
+TEST(Purge, complete3) {
+  heapify();
+  auto live1 = require(-2,-3);
+  auto live2 = require(-3,-4);
+  auto live3 = require(-8,-6);
+
+  EXPECT_TT(live1.ok());
+  EXPECT_TT(live2.ok());
+  EXPECT_TT(live3.ok());
+  purge.preserving(live3);
+  EXPECT_TT(live1.ok());
+  EXPECT_TT(live2.ok());
+  EXPECT_TT(live3.ok());
+  EXPECT_EQ($P_n$ - Pristine::count, 3);
+}
+
+
+TEST(Purge, complete7) {
   heapify();
   auto live1 = require(-2,-3);
   auto live2 = require(-3,-4);
@@ -241,7 +306,7 @@ TEST(Sx, Pair1) {
   EXPECT_EQ(p.handle(), s.handle());
 }
 
-TEST(Preserve, live15) {
+TEST(Purge, complete15) {
   heapify();
   auto live1 = require(-1,-3);
   auto live2 = require(-2,-4);
@@ -268,7 +333,7 @@ TEST(Preserve, live15) {
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Preserve, live31) {
+TEST(Purge, live31) {
   heapify();
   auto live1 = require(-1,-3);
   auto live2 = require(-2,-4);
@@ -317,7 +382,7 @@ TEST(Preserve, live31) {
 }
 
 
-TEST(Preserve, DAG) {
+TEST(Purge, DAG) {
   heapify();
   auto dead1 = require(-3,-2);
   auto live1 = require(-2,-3);
@@ -332,5 +397,52 @@ TEST(Preserve, DAG) {
   purge.preserving(live4);
   EXPECT_EQ($P_n$ - Pristine::count, 5);
 }
+
+auto trailLeft(auto n) {
+  heapify(); Pair p[n];
+  p[0] = require(-2, -3);
+  for (auto i = 1; i < n; i++) p[i] = require(p[i-1],require(-i, -i));
+  for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i; 
+  purge.preserving(p[n]);
+  for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
+}
+TEST(Purge, trailLeft1) { trailLeft(1); }
+TEST(Purge, trailLeft2) { trailLeft(2); }
+TEST(Purge, trailLeft3) { trailLeft(3); }
+TEST(Purge, trailLeft4) { trailLeft(4); }
+TEST(Purge, trailLeft5) { trailLeft(5); }
+TEST(Purge, trailLeft6) { trailLeft(6); }
+TEST(Purge, trailLeft7) { trailLeft(7); }
+
+auto trailRight(auto n) {
+  heapify(); Pair p[n];
+  p[0] = require(-2, -3);
+  for (auto i = 1; i < n; i++) p[i] = require(p[i-1],require(-i, -i));
+  for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
+  purge.preserving(p[n]);
+  for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
+}
+TEST(Purge, traiRight1) { trailRight(1); }
+TEST(Purge, traiRight2) { trailRight(2); }
+TEST(Purge, traiRight3) { trailRight(3); }
+TEST(Purge, traiRight4) { trailRight(4); }
+TEST(Purge, traiRight5) { trailRight(5); }
+TEST(Purge, traiRight6) { trailRight(6); }
+TEST(Purge, traiRight7) { trailRight(7); }
+
+auto fibonnaci(auto n) {
+  heapify(); Pair p[n];
+  p[0] = require(-2, -3); p[1] = require(-5, -8);
+  for (auto i = 2; i < n; i++) p[i] = require(p[i-2], p[i-1]);
+  for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
+  purge.preserving(p[n]);
+  for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
+}
+TEST(Purge, Fibonnaci1) { fibonnaci(1); }
+TEST(Purge, Fibonnaci2) { fibonnaci(2); }
+TEST(Purge, Fibonnaci3) { fibonnaci(3); }
+TEST(Purge, Fibonnaci4) { fibonnaci(4); }
+TEST(Purge, Fibonnaci5) { fibonnaci(5); }
+TEST(Purge, Fibonnaci6) { fibonnaci(6); }
 
 

@@ -6,6 +6,7 @@
 Type Pair: Sx {
   typedef Pair Self;
   Pair(Short);
+  Pair(): Pair(1) {} 
   Selfer(car(Sx)); 
   Selfer(cdr(Sx)); 
   Property(Sx car);
