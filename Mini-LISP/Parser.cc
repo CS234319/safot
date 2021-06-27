@@ -164,7 +164,7 @@ namespace Parser {
           }
           break;
         case X1:
-          $$ = QUOTE.pair($$.pair(NIL)); 
+          $$ = QUOTE.cons($$.cons(NIL)); 
           reduce();
           continue;
         case X2:
@@ -187,7 +187,7 @@ namespace Parser {
         case T1:
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
-          $$ = Sx(stack.peep(1)).pair($$);
+          $$ = Sx(stack.peep(1)).cons($$);
           stack.poke(1,$$.handle());
           M1("Update T1: ",$$, ~top, stack());
           continue;
@@ -208,7 +208,7 @@ namespace Parser {
           break;
         case L1:
           reduce(); 
-          $$ = Sx(stack.pop()).pair($$);
+          $$ = Sx(stack.pop()).cons($$);
           M1("Set", $$);
           continue;
         case L2:

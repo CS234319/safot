@@ -14,8 +14,6 @@ Type Pristine: private Knob {
 
   Pristine& prev(Pristine); 
   Pristine& next(Pristine); 
-  // Statistics
-  static Short count;
 };
 inline std::ostream& operator<<(std::ostream &os, Pristine p) {
   if (p.x())

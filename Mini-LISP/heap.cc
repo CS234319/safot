@@ -42,34 +42,45 @@ static struct {
     accounting.init($P_n$);
     top = Pristine($P_f$);
   }
+  Pristine top;
   private:
     Unit panic() { throw EXHAUSTED; }
-    Pristine top;
-} heap ;
+} stack;
+
+const Pristine& heap = stack.top; 
 
 Item fresh(Short s1, Short s2) { 
   Expect(white(s1));
   Expect(white(s2));
   Expect(s2 == $P_x$ || s2 >= $P_f$ && s2 <= $P_t$);
-  if (heap.empty()) throw __LINE__; 
+  if (stack.empty()) throw __LINE__; 
   accounting.item();
-  return heap.pop().Item().head(s1).rest(s2);
-
+  return stack.pop().Item().head(s1).rest(s2);
 }
+
+#define Count(label,signature,value) (accounting.label() , value)  
+static inline auto reuse(Short s) { accounting.reuse(); return Pair(s);  }
+static inline auto hit(Word w, Short s) {  
+  accounting.hit();
+  stack.pick(Pristine(s)); 
+  P[s].l = w.l; 
+  return Pair(s);
+}
+
+static inline auto miss(Word w) {  accounting.miss(); return stack.pop().Pair(w.s1,w.s2); }
 
 static Pair request(Word w, Short s) {
   Expect(Pair::ok(w));
   Expect(s != $P_x$);
   Expect(s >= $P_f$);
   Expect(s <= $P_t$);
-  if (P[s].l == w.l) return accounting.reuse(), s; 
-  if (!Pristine(s).ok()) return accounting.miss(), heap.pop().Pair(w.s1,w.s2);
-  return pick(p), P[s].l = w.l, P[s].l;
+  return P[s].l == w.l ? reuse(s) :
+         Pristine(s).ok() ? hit(w,s) :
+         miss(w);
 }
 
-
 extern Pristine heapify() {
-  heap.init();
+  stack.init();
 }
 
 static Item fresh(Word w) { 
@@ -77,21 +88,24 @@ static Item fresh(Word w) {
 }
 
 static struct {
-  Boolean Pristine(Sx s) { return Pristine(s).ok(); }
+  Boolean Pristine(Short s) { return ::Pristine(s).ok(); }
 } bad;
 
 Pair request(Word w) {
-  return accounting.request(), request(w, w.hash());
+  return  request(w, w.hash());
 }
   
-Unit gobble(Pair p) {
+Unit collect(Pair p) { accounting.collect(); 
   Expect(p.ok());
-  push(Pristine(p.handle())) | accounting.allocated--;
+  stack.push(Pristine(p.handle()));
 }
 
 Unit free(Item i) {
   Expect(i.ok());
-  push(Pristine(i.handle())) | accounting.itemized--;
+  stack.push(Pristine(i.handle())) | accounting.unitem();
 }
 
-Pair request(Sx car, Sx cdr) { return request(Word(car.handle(),cdr.handle())); }
+Pair request(Sx car, Sx cdr) { 
+  accounting.request();
+  return request(Word(car.handle(),cdr.handle())); 
+}

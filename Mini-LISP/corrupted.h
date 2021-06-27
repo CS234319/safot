@@ -2,6 +2,8 @@
 #define CORRUPTED_H
 #include "heap.h"
 
+#include "accounting.h"
+
 inline Short length() {
   Short result = 0;
   for (auto h = heap; !h.x();  h = h.next()) 
@@ -12,8 +14,8 @@ inline Short length() {
 
 static struct {
   Boolean something() Is(uncounted() || excess() || asymmetric() || cyclic() || weirdos() || pristines() || items() || pairs()); 
-  Boolean uncounted() Is(length() > Pristine::count); 
-  Boolean excess()   Is(length() < Pristine::count); 
+  Boolean uncounted() Is(length() > accounting.unused); 
+  Boolean excess()   Is(length() < accounting.unused); 
   Boolean cyclic() {
     if (!heap.x())
       for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
@@ -41,13 +43,13 @@ static struct {
   }
   Boolean pairs() {
     try {
-      Expect(Pair::count >= 0);
-      Expect(Pair::count  <= $P_n$);
-      Expect(Pair::reuse  >= 0);
-      Expect(Pair::reuse  >= 0);
-      Expect(Pair::miss  >= 0);
-      Expect(Pair::count != 0 || Pair::reuse ==0)
-      Expect(Pair::count != 0 || Pair::miss ==0)
+      Expect(accounting.pairs >= 0);
+      Expect(accounting.pairs  <= $P_n$);
+      Expect(accounting.reused  >= 0);
+      Expect(accounting.reused  >= 0);
+      Expect(accounting.missed >= 0);
+      Expect(accounting.pairs != 0 || accounting.reused ==0)
+      Expect(accounting.pairs != 0 || accounting.missed ==0)
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
         let c = Pair(h);
@@ -55,7 +57,7 @@ static struct {
           continue;
         ++n;
       }
-      Expect(n == Pair::count);
+      Expect(n == accounting.pairs);
       return false;
     } catch(...) {
       return true;
@@ -63,15 +65,15 @@ static struct {
   }
   Boolean pristines() {
     try {
-      Expect(Pristine::count >= 0);
-      Expect(Pristine::count <= $P_n$);
+      Expect(accounting.unused >= 0);
+      Expect(accounting.unused <= $P_n$);
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
         let p = Pristine(h);
         if (!p.ok()) 
           continue;
         ++n;
-        Expect(n <= Pristine::count);
+        Expect(n <= accounting.unused);
         Expect (Pristine(p.next()).x() || Pristine(p.next()).ok());
         Expect (Pristine(p.prev()).x() || Pristine(p.prev()).ok());
         if (!Pristine(p.next()).x())  
@@ -79,7 +81,7 @@ static struct {
         if (!Pristine(p.prev()).x())  
           Expect(Pristine(p.prev()).ok());
       }
-      Expect(n == Pristine::count, n, Pristine::count);
+      Expect(n == accounting.unused, n, accounting.unused);
       return false;
     } catch(...) {
       return true;
@@ -94,7 +96,7 @@ static struct {
           continue;
         ++n;
         Expect(Item(i.rest()).x() || Item(i.rest()).ok());
-        Expect(n <= Item::count);
+        Expect(n <= accounting.items);
         if (!Item(i.rest()).x())  
           Expect(Item(i.rest()).ok());
       }

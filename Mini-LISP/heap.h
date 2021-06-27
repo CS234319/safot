@@ -7,6 +7,7 @@
   extern Item fresh(Short, Short); 
   extern Unit free(Item); 
 
+extern const Pristine& heap;
 #include "Pristine.h"
 #include "Pair.h"
 extern Pristine heapify();

@@ -83,11 +83,11 @@ TEST(Heapify, prefix) {
 
 TEST(Heapify, counters) { 
   heapify();
-  EXPECT_ZZ(acounting.allocated);
+  EXPECT_ZZ(accounting.unused);
   EXPECT_ZZ(accounting.missed);
-  EXPECT_ZZ(Pair::reuse);
-  EXPECT_ZZ(accounting.itemized);
-  EXPECT_EQ(acounting.available, $P_n$);
+  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_EQ(accounting.unused, $P_n$);
 }
 
 TEST(Heapify, pristines) { 
@@ -130,16 +130,16 @@ TEST(Item, 3Count) {
   p.clear();
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  EXPECT_GE(accounting.itemized,0);
-  int before = accounting.itemized;
+  EXPECT_GE(accounting.items,0);
+  int before = accounting.items;
   p.push(3);
-  EXPECT_EQ(accounting.itemized, before + 1);
+  EXPECT_EQ(accounting.items, before + 1);
   p.push(2);
-  EXPECT_EQ(accounting.itemized, before + 2);
+  EXPECT_EQ(accounting.items, before + 2);
   EXPECT_EQ(2,p.pop());
-  EXPECT_EQ(accounting.itemized, before + 1);
+  EXPECT_EQ(accounting.items, before + 1);
   EXPECT_EQ(3,p.pop());
-  EXPECT_EQ(accounting.itemized, before);
+  EXPECT_EQ(accounting.items, before);
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
 }
@@ -278,34 +278,34 @@ TEST(Pair, Hash13a) {
   EXPECT_EQ(P[h1].hash(), P[h2].hash());
 
   EXPECT_EQ(accounting.missed, 1);
-  EXPECT_ZZ(Pair::reuse);
-  EXPECT_EQ(acounting.allocated, 2);
+  EXPECT_ZZ(accounting.reused);
+  EXPECT_EQ(accounting.used, 2);
 }
 
 TEST(Pair, count) {
   heapify();
-  EXPECT_ZZ(acounting.allocated);
+  EXPECT_ZZ(accounting.used);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_EQ(acounting.allocated, 25);
+  EXPECT_EQ(accounting.used, 25);
 }
 
-TEST(Pair, reuse) {
+TEST(Pair, reused) {
   heapify();
-  EXPECT_ZZ(Pair::reuse);
+  EXPECT_ZZ(accounting.reused);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_ZZ(Pair::reuse);
+  EXPECT_ZZ(accounting.reused);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_EQ(Pair::reuse, 25);
+  EXPECT_EQ(accounting.reused, 25);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_EQ(Pair::reuse, 50);
+  EXPECT_EQ(accounting.reused, 50);
 }
 
 TEST(Pair, Miss) {
@@ -323,21 +323,21 @@ TEST(Pair, Miss) {
     if (accounting.missed > 5) 
       break;
   }
-  EXPECT_EQ(n,acounting.allocated);
+  EXPECT_EQ(n,accounting.used);
   EXPECT_GT(n * n,$P_n$);
   EXPECT_LT(n,N * N / 2);
   EXPECT_GT(accounting.missed,0);
   EXPECT_EQ(accounting.missed,6);
-  EXPECT_ZZ(Pair::reuse);
-  EXPECT_EQ(acounting.allocated,n);
+  EXPECT_ZZ(accounting.reused);
+  EXPECT_EQ(accounting.used,n);
 }
 
 TEST(Counters, freshFree) { 
   heapify();
   auto i = fresh(15,21);
-  EXPECT_EQ(acounting.available, $P_n$ -1);
+  EXPECT_EQ(accounting.unused, $P_n$ -1);
   free(i);
-  EXPECT_EQ(acounting.available, $P_n$);
+  EXPECT_EQ(accounting.unused, $P_n$);
 }
 
 TEST(Fresh, 3) { 
@@ -357,34 +357,34 @@ TEST(Fresh, Length) {
   try {
     heapify();
     EXPECT_EQ(length(), $P_n$);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
 
     auto const s1 = fresh(2,3);
     EXPECT_EQ(length(), $P_n$ - 1);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
 
     auto const s2 = fresh(4,5);
     EXPECT_EQ(length(), $P_n$ - 2);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
 
     auto const s3 = fresh(6,7);
     EXPECT_EQ(length(), $P_n$ - 3);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
 
     free(s1);
     EXPECT_EQ(heap.handle(), 1);
     EXPECT_EQ(length(), $P_n$ - 2);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
 
     free(s3);
     EXPECT_EQ(heap.handle(), 3);
     EXPECT_EQ(length(), $P_n$ - 1);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
 
     free(s2);
     EXPECT_EQ(heap.handle(), 2);
     EXPECT_EQ(length(), $P_n$);
-    EXPECT_EQ(length(), acounting.available);
+    EXPECT_EQ(length(), accounting.unused);
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
@@ -442,14 +442,14 @@ TEST(request, correct3) {
   EXPECT_EQ(P[s1.handle()].s2,3);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
   auto s2 = request(4,5);
   EXPECT_EQ(s2.car().handle(),4);
   EXPECT_EQ(s2.cdr().handle(),5);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(length(), $P_n$-2);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
   auto s3 = request(6,7);
   EXPECT_EQ(heap.handle(),1);
   EXPECT_EQ(s3.car().handle(),6);
@@ -468,7 +468,7 @@ TEST(request, Scenario) {
   EXPECT_EQ(P[s1.handle()].s2,3);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
   auto s2 = request(4,5);
   EXPECT_EQ(s2.handle(),Word(4,5).hash());
   EXPECT_EQ(heap.handle(),1);
@@ -476,61 +476,61 @@ TEST(request, Scenario) {
   EXPECT_EQ(P[s2.handle()].s2,5);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
   auto s3 = request(6,7);
   EXPECT_EQ(s3.handle(),Word(6,7).hash());
   EXPECT_EQ(P[s3.handle()].s1,6);
   EXPECT_EQ(P[s3.handle()].s2,7);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
 }
 
-TEST(Words, Reuse) { 
+TEST(Words, reused) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
 
   auto s1 = request(3,3);
   EXPECT_TT(s1.ok());
   EXPECT_EQ(s1.handle(), P[s1.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
 
   auto s2 = request(2,3);
   EXPECT_TT(s2.ok());
   EXPECT_EQ(s2.handle(),P[s2.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
 
   auto s3 = request(3,2);
   EXPECT_EQ(s3.handle(), P[s3.handle()].hash());
   EXPECT_TT(s3.ok());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
 
   auto s4 = request(2,3);
   EXPECT_TT(s4.ok());
   EXPECT_EQ(s4.handle(), P[s4.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
 
   auto s5 = request(3,3);
   EXPECT_TT(s5.ok());
   EXPECT_EQ(s5.handle(), P[s5.handle()].hash());
   EXPECT_EQ(length(), $P_n$-3);
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
   EXPECT_FF(corrupted.asymmetric());
 
   auto s6 = request(3,2);
   EXPECT_TT(s6.ok());
   EXPECT_EQ(s6.handle(), P[s6.handle()].hash());
-  EXPECT_EQ(length(), acounting.available);
+  EXPECT_EQ(length(), accounting.unused);
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_FF(corrupted.asymmetric());
 
@@ -556,12 +556,12 @@ void mess(Pushdown &p) {
 
 TEST(Exhaust, Almost) { 
   heapify();
-  EXPECT_EQ(acounting.available, $P_n$); 
+  EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
   EXPECT_FF(heap.x());
-  EXPECT_EQ(acounting.available, 1);
-  EXPECT_EQ(accounting.itemized, $P_n$ - 1);
+  EXPECT_EQ(accounting.unused, 1);
+  EXPECT_EQ(accounting.items, $P_n$ - 1);
   EXPECT_FF(corrupted.pristines());
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pairs());
@@ -590,16 +590,16 @@ TEST(Exhaust, LastItem) {
 TEST(Exhaust, items) { 
   heapify();
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(acounting.available, $P_n$); 
+  EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) {
     Item i = fresh(s, $P_x$);
     EXPECT_EQ(i.handle(), s - $P_f$ + 1);
-    EXPECT_EQ(accounting.itemized + acounting.available, $P_n$); 
-    EXPECT_EQ(acounting.available, $P_n$ - s); 
-    EXPECT_EQ(accounting.itemized, s); 
+    EXPECT_EQ(accounting.items + accounting.unused, $P_n$); 
+    EXPECT_EQ(accounting.unused, $P_n$ - s); 
+    EXPECT_EQ(accounting.items, s); 
   }
   EXPECT_TT(heap.x());
-  EXPECT_ZZ(acounting.available);
+  EXPECT_ZZ(accounting.unused);
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pristines());
 }
@@ -607,16 +607,16 @@ TEST(Exhaust, items) {
 TEST(Exhaust, andRestore) { 
   heapify();
   Pushdown p;
-  EXPECT_EQ(acounting.available, $P_n$); 
+  EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) 
     p.push(s);
   for (auto s = $P_n$ ; s >= 1; --s) 
     EXPECT_EQ(s, p.pop()) << s;
-  EXPECT_ZZ(acounting.allocated);
+  EXPECT_ZZ(accounting.used);
   EXPECT_ZZ(accounting.missed);
-  EXPECT_ZZ(Pair::reuse);
-  EXPECT_ZZ(accounting.itemized);
-  EXPECT_EQ(acounting.available, $P_n$);
+  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_EQ(accounting.unused, $P_n$);
   EXPECT_FF(corrupted.cyclic());
   EXPECT_FF(corrupted.weirdos()); 
   EXPECT_FF(corrupted.pristines());
@@ -634,7 +634,7 @@ TEST(Churn, Pushdown) {
         mess(p[Word(i,j).hash() % 10]); 
     }
     EXPECT_FF(corrupted.items());
-    EXPECT_EQ(0, accounting.itemized);
+    EXPECT_EQ(0, accounting.items);
   }
   EXPECT_FF(corrupted.pristines());
   EXPECT_FF(corrupted.items());
@@ -651,7 +651,7 @@ TEST(Churn, request) {
       EXPECT_TT(c.ok());
       EXPECT_EQ(i, c.car().handle());
       EXPECT_EQ(j, c.cdr().handle());
-      EXPECT_EQ(n, acounting.allocated) << n;
+      EXPECT_EQ(n, accounting.used) << n;
       if (n > 25000)
         goto done;
     }
@@ -674,7 +674,7 @@ TEST(Churn, Both) {
     }
   }
   done:
-    EXPECT_ZZ(accounting.itemized);
+    EXPECT_ZZ(accounting.items);
     EXPECT_FF(corrupted.something());
 }
 
@@ -682,23 +682,23 @@ TEST(Counting, items) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  int before = accounting.itemized;
+  int before = accounting.items;
   EXPECT_GE(before,0);
   p.push(3);
-  EXPECT_GE(accounting.itemized,1);
-  EXPECT_EQ(accounting.itemized, before + 1);
+  EXPECT_GE(accounting.items,1);
+  EXPECT_EQ(accounting.items, before + 1);
 }
 
 TEST(Counting, pairs) {
   heapify();
-  auto const before = acounting.available;
+  auto const before = accounting.unused;
   request(13,14);
-  EXPECT_NE(acounting.available, before);
-  EXPECT_EQ(acounting.available, before - 1);
-  EXPECT_EQ(acounting.available, $P_n$ - 1);
-  EXPECT_EQ(acounting.allocated, 1);
+  EXPECT_NE(accounting.unused, before);
+  EXPECT_EQ(accounting.unused, before - 1);
+  EXPECT_EQ(accounting.unused, $P_n$ - 1);
+  EXPECT_EQ(accounting.used, 1);
   EXPECT_ZZ(accounting.missed);
-  EXPECT_ZZ(accouinting.reused);
+  EXPECT_ZZ(accounting.reused);
   EXPECT_FF(corrupted.something());
 }
 
@@ -707,10 +707,10 @@ TEST(Counting, itemsPristines2) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  EXPECT_GE(acounting.available,10);
-  int before = acounting.available;
+  EXPECT_GE(accounting.unused,10);
+  int before = accounting.unused;
   p.push(3);
-  EXPECT_EQ(acounting.available, before - 1);
+  EXPECT_EQ(accounting.unused, before - 1);
   EXPECT_FF(corrupted.something());
 }
 
@@ -732,18 +732,18 @@ TEST(Pristine, itemsPristines4) {
   heapify();
   EXPECT_FF(corrupted.something());
   Pushdown p;
-  int before = acounting.available;
+  int before = accounting.unused;
   p.push(3,2,1);
-  EXPECT_EQ(acounting.available, before - 3);
-  EXPECT_EQ(acounting.available, before - 3);
+  EXPECT_EQ(accounting.unused, before - 3);
+  EXPECT_EQ(accounting.unused, before - 3);
   request(12,13);
-  EXPECT_EQ(acounting.available, before - 4);
+  EXPECT_EQ(accounting.unused, before - 4);
   request(12,13);
-  EXPECT_EQ(acounting.available, before - 4);
+  EXPECT_EQ(accounting.unused, before - 4);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
-  EXPECT_EQ(acounting.available, before - 1);
+  EXPECT_EQ(accounting.unused, before - 1);
   EXPECT_ZZ(p.size);
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
@@ -753,18 +753,18 @@ TEST(Pristine, requestConsN) {
   heapify();
   EXPECT_FF(corrupted.something());
   Pushdown p;
-  int before = acounting.available;
+  int before = accounting.unused;
   p.push(3,2,1);
-  EXPECT_EQ(acounting.available, before - 3);
-  EXPECT_EQ(acounting.available, before - 3);
+  EXPECT_EQ(accounting.unused, before - 3);
+  EXPECT_EQ(accounting.unused, before - 3);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_EQ(acounting.available, before - 28);
+  EXPECT_EQ(accounting.unused, before - 28);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
-  EXPECT_EQ(acounting.available, before - 25);
+  EXPECT_EQ(accounting.unused, before - 25);
   EXPECT_ZZ(p.size);
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
@@ -775,7 +775,7 @@ TEST(Exercise, PushrequestPoprequest) {
   EXPECT_FF(corrupted.something());
   heapify();
   Pushdown p;
-  int before = acounting.available;
+  int before = accounting.unused;
   for (int i = 0, n = 0;  i < 16; i++)  
     for (int j = 0;  j < 16; j++) {
       request(i,j);
@@ -784,7 +784,7 @@ TEST(Exercise, PushrequestPoprequest) {
       ++n;
     }
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(before - acounting.available, 2 * N * N);
+  EXPECT_EQ(before - accounting.unused, 2 * N * N);
   for (int i = 0;  i < 16; i++)  
     for (int j = 0;  j < 16; j++) {
       request(i+50, j+100);
@@ -793,32 +793,32 @@ TEST(Exercise, PushrequestPoprequest) {
     }
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
-  EXPECT_EQ(acounting.allocated, 2*N*N);
-  EXPECT_EQ(acounting.available, $P_n$ - 2 * N *N); 
+  EXPECT_EQ(accounting.used, 2*N*N);
+  EXPECT_EQ(accounting.unused, $P_n$ - 2 * N *N); 
 }
 
 TEST(Pristine, requestAtom) {
   Pushdown p;
   heapify();
-  int before = acounting.available;
+  int before = accounting.unused;
   p.push(3,2,1);
   request("ABC");
-  EXPECT_EQ(acounting.available, before - 3);
+  EXPECT_EQ(accounting.unused, before - 3);
   request("ABC");
   request("CDE");
-  EXPECT_EQ(acounting.available, before - 3);
+  EXPECT_EQ(accounting.unused, before - 3);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(1,p.pop());
-  EXPECT_EQ(acounting.available, before);
+  EXPECT_EQ(accounting.unused, before);
 }
 
 TEST(Pristine, 1requestAtom) {
-  int before = acounting.available;
-  EXPECT_EQ(acounting.available, before);
+  int before = accounting.unused;
+  EXPECT_EQ(accounting.unused, before);
   request("Foo Bar");
-  EXPECT_NE(acounting.available, before -1);
-  EXPECT_EQ(acounting.available, before);
+  EXPECT_NE(accounting.unused, before -1);
+  EXPECT_EQ(accounting.unused, before);
   EXPECT_FF(corrupted.something());
 }
 
@@ -828,79 +828,30 @@ TEST(Pristine, requestBoth) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  int before = acounting.available;
+  int before = accounting.unused;
   EXPECT_GE(before,2);
   p.push(3);
-  EXPECT_EQ(acounting.available, before -1);
+  EXPECT_EQ(accounting.unused, before -1);
   p.push(2);
-  EXPECT_EQ(acounting.available, before -2);
+  EXPECT_EQ(accounting.unused, before -2);
   request("ABC");
-  EXPECT_EQ(acounting.available, before -2);
+  EXPECT_EQ(accounting.unused, before -2);
   request("CDE");
-  EXPECT_EQ(acounting.available, before -2);
+  EXPECT_EQ(accounting.unused, before -2);
   request("ABC");
-  EXPECT_EQ(acounting.available, before -2);
+  EXPECT_EQ(accounting.unused, before -2);
   request("CDE");
-  EXPECT_EQ(acounting.available, before -2);
+  EXPECT_EQ(accounting.unused, before -2);
   request(12,13);
-  EXPECT_EQ(acounting.available, before -3);
+  EXPECT_EQ(accounting.unused, before -3);
   request(12,13);
-  EXPECT_EQ(acounting.available, before -3);
+  EXPECT_EQ(accounting.unused, before -3);
   EXPECT_EQ(2,p.pop());
-  EXPECT_EQ(acounting.available, before -2);
+  EXPECT_EQ(accounting.unused, before -2);
   EXPECT_EQ(3,p.pop());
-  EXPECT_EQ(acounting.available, before -1);
+  EXPECT_EQ(accounting.unused, before -1);
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
 }
 
-extern Knob pop();
-TEST(pop, 1) { 
-  heapify();
-  EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap.handle(),1);
-  auto s1 = pop().handle();
-  EXPECT_EQ(heap.handle(),2);
-  EXPECT_EQ(s1,1);
-  EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(length(), $P_n$-1);
-  EXPECT_EQ(length(), acounting.available);
-}
-
-TEST(Crude, almostExhausted) { 
-  heapify();
-  for (auto i = 1; i < $P_n$; ++i)
-    crude().handle();
-  EXPECT_FF(heap.x());
-  EXPECT_EQ(acounting.available, 1);
-}
-
-TEST(Crude, exhausted) { 
-  heapify();
-  EXPECT_EQ(acounting.available, $P_n$); 
-  for (auto i = 1; i <= $P_n$; ++i) {
-    auto const s = crude().handle();
-    EXPECT_EQ(i, s);
-    EXPECT_EQ(acounting.available, $P_n$ - i); 
-    EXPECT_ZZ(accounting.itemized); // This black box test corrupts the heap,
-  }
-  EXPECT_TT(heap.x());
-  EXPECT_ZZ(acounting.available);
-}
-
-TEST(Crude, last) { 
-  heapify();
-  for (auto i = 1; i < $P_n$; ++i)
-    crude().handle();
-  crude();
-}
-
-TEST(Crude, lastCorrect) { 
-  heapify();
-  for (auto i = 1; i < $P_n$; ++i)
-    crude().handle();
-  crude();
-  EXPECT_TT(heap.x());
-  EXPECT_ZZ(acounting.available);
-}
