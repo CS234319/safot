@@ -105,6 +105,8 @@ TEST(Purge, exists) {
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pairs());
   EXPECT_FF(corrupted.something()); 
+  EXPECT_EQ(accounting.visit,1);
+  EXPECT_ZZ(accounting.collect);
 }
 
 TEST(Purge, mess) {
@@ -236,7 +238,7 @@ TEST(Purge, t2a) {
   auto t1 = request(-2,-3);
   auto t2 = request(t1.handle(),-4);
   purge.preserving(t2);
-  EXPECT_EQ(accounting.used, 0);
+  EXPECT_EQ(accounting.used, 2);
   EXPECT_FF(corrupted.something());
 }
 
@@ -272,12 +274,21 @@ TEST(Purge, complete3) {
   heapify();
   auto live1 = request(-2,-3);
   auto live2 = request(-3,-4);
-  auto live3 = request(-8,-6);
+  auto live3 = request(live1,live2);
+  EXPECT_EQ(accounting.used, 3);
 
   EXPECT_TT(live1.ok());
   EXPECT_TT(live2.ok());
   EXPECT_TT(live3.ok());
+  EXPECT_FF(live3.seen());
+  EXPECT_FF(live2.seen());
+  EXPECT_FF(live1.seen());
   purge.preserving(live3);
+  EXPECT_FF(live3.seen());
+  EXPECT_FF(live2.seen());
+  EXPECT_EQ(accounting.visit, 3);
+  EXPECT_EQ(accounting.collect, 0);
+  EXPECT_EQ(accounting.used, 3);
   EXPECT_TT(live1.ok());
   EXPECT_TT(live2.ok());
   EXPECT_TT(live3.ok());
@@ -294,7 +305,7 @@ TEST(Purge, complete7) {
 
   auto live5 = request(live1,live2);
   auto live6 = request(live3,live4);
-  auto live7 = request(live5,live5);
+  auto live7 = request(live5,live6);
   EXPECT_TT(live1.ok());
   EXPECT_TT(live2.ok());
   EXPECT_TT(live3.ok());
@@ -304,6 +315,9 @@ TEST(Purge, complete7) {
   EXPECT_TT(live7.ok());
   EXPECT_EQ(accounting.used, 7);
   purge.preserving(live7);
+  EXPECT_EQ(accounting.visit, 7);
+  EXPECT_EQ(accounting.collect, 0);
+  EXPECT_EQ(accounting.used, 7);
   EXPECT_TT(live1.ok());
   EXPECT_TT(live2.ok());
   EXPECT_TT(live3.ok());
@@ -342,8 +356,10 @@ TEST(Purge, complete15) {
   auto live15 = request(live13,live14);
 
   EXPECT_EQ(accounting.used, 15);
-  purge.preserving(live7);
+  purge.preserving(live15);
   EXPECT_EQ(accounting.used, 15);
+  EXPECT_EQ(accounting.visit, 15);
+  EXPECT_EQ(accounting.collect, 0);
   EXPECT_FF(corrupted.something());
 }
 
@@ -390,7 +406,7 @@ TEST(Purge, live31) {
   auto leave = request(love15,live15);
 
   EXPECT_EQ(accounting.used, 31);
-  purge.preserving(live7);
+  purge.preserving(leave);
   EXPECT_EQ(accounting.used, 31);
   EXPECT_FF(corrupted.something());
 }
@@ -409,17 +425,24 @@ TEST(Purge, DAG) {
   auto live4 = request(live2,live3);
   EXPECT_EQ(accounting.used, 9);
   purge.preserving(live4);
-  EXPECT_EQ(accounting.used, 5);
+  EXPECT_EQ(accounting.visit, 4);
+  EXPECT_EQ(accounting.collect, 5);
+  EXPECT_EQ(accounting.used, 4);
 }
 
 auto trailLeft(auto n) {
   heapify(); Pair p[n];
   p[0] = request(-2, -3);
+  EXPECT_FF(corrupted.something());
   for (auto i = 1; i < n; i++) p[i] = request(p[i-1],request(-i, -i));
+  EXPECT_FF(corrupted.something());
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i; 
-  purge.preserving(p[n]);
+  EXPECT_FF(corrupted.something());
+  purge.preserving(p[n-1]);
+  EXPECT_FF(corrupted.something());
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
+
 TEST(Purge, trailLeft1) { trailLeft(1); }
 TEST(Purge, trailLeft2) { trailLeft(2); }
 TEST(Purge, trailLeft3) { trailLeft(3); }
@@ -433,7 +456,7 @@ auto trailRight(auto n) {
   p[0] = request(-2, -3);
   for (auto i = 1; i < n; i++) p[i] = request(p[i-1],request(-i, -i));
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
-  purge.preserving(p[n]);
+  purge.preserving(p[n-1]);
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
 TEST(Purge, traiRight1) { trailRight(1); }
@@ -449,7 +472,7 @@ auto fibonnaci(auto n) {
   p[0] = request(-2, -3); p[1] = request(-5, -8);
   for (auto i = 2; i < n; i++) p[i] = request(p[i-2], p[i-1]);
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
-  purge.preserving(p[n]);
+  purge.preserving(p[n-1]);
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
 TEST(Purge, Fibonnaci1) { fibonnaci(1); }
@@ -458,6 +481,3 @@ TEST(Purge, Fibonnaci3) { fibonnaci(3); }
 TEST(Purge, Fibonnaci4) { fibonnaci(4); }
 TEST(Purge, Fibonnaci5) { fibonnaci(5); }
 TEST(Purge, Fibonnaci6) { fibonnaci(6); }
-
-
-

@@ -81,7 +81,6 @@ static struct {
         if (!Pristine(p.prev()).x())  
           Expect(Pristine(p.prev()).ok());
       }
-      Expect($P_n$ - n , accounting.used);
       Expect(n == accounting.unused, n, accounting.unused);
       return false;
     } catch(...) {

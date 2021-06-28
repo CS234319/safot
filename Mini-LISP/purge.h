@@ -5,7 +5,7 @@
 #include "layout.h"
 struct {
  Unit preserving(Sx s)  Is(mark(s), sweep())
-private:
+// private:
   Unit mark(Sx s) 
     Is(s.atom() or mark(s.Pair())) 
   Unit mark(Pair p) 

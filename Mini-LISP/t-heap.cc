@@ -149,6 +149,7 @@ TEST(Accounting, heapify) {
   EXPECT_ZZ(accounting.hit); 
   EXPECT_ZZ(accounting.miss); 
 }
+
 TEST(Accounting, Nesting) { 
   heapify();
   ++accounting.items;
