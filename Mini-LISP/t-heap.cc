@@ -83,9 +83,9 @@ TEST(Heapify, prefix) {
 
 TEST(Heapify, counters) { 
   heapify();
-  EXPECT_ZZ(accounting.unused);
-  EXPECT_ZZ(accounting.missed);
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.used);
+  EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.reuse);
   EXPECT_ZZ(accounting.items);
   EXPECT_EQ(accounting.unused, $P_n$);
 }
@@ -143,6 +143,7 @@ TEST(Item, 3Count) {
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
 }
+
 TEST(Corruption, makeCyclic) { 
   try {
     heapify();
@@ -277,8 +278,8 @@ TEST(Pair, Hash13a) {
   EXPECT_NE(h1, h2);
   EXPECT_EQ(P[h1].hash(), P[h2].hash());
 
-  EXPECT_EQ(accounting.missed, 1);
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_EQ(accounting.miss, 1);
+  EXPECT_ZZ(accounting.reuse);
   EXPECT_EQ(accounting.used, 2);
 }
 
@@ -291,44 +292,44 @@ TEST(Pair, count) {
   EXPECT_EQ(accounting.used, 25);
 }
 
-TEST(Pair, reused) {
+TEST(Pair, reuse) {
   heapify();
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_EQ(accounting.reused, 25);
+  EXPECT_EQ(accounting.reuse, 25);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
       request(i,j);
-  EXPECT_EQ(accounting.reused, 50);
+  EXPECT_EQ(accounting.reuse, 50);
 }
 
 TEST(Pair, Miss) {
   enum { N = 220 };
   heapify();
-  EXPECT_ZZ(accounting.missed);
+  EXPECT_ZZ(accounting.miss);
   int n = 0;
   for (int i = 0;  i < N; i++) { 
     for (int j = 0;  j < N; j++) {
       request(i,j);
       ++n;
-      if (accounting.missed > 5) 
+      if (accounting.miss > 5) 
         break;
     }
-    if (accounting.missed > 5) 
+    if (accounting.miss > 5) 
       break;
   }
   EXPECT_EQ(n,accounting.used);
   EXPECT_GT(n * n,$P_n$);
   EXPECT_LT(n,N * N / 2);
-  EXPECT_GT(accounting.missed,0);
-  EXPECT_EQ(accounting.missed,6);
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_GT(accounting.miss,0);
+  EXPECT_EQ(accounting.miss,6);
+  EXPECT_ZZ(accounting.reuse);
   EXPECT_EQ(accounting.used,n);
 }
 
@@ -486,7 +487,7 @@ TEST(request, Scenario) {
   EXPECT_EQ(length(), accounting.unused);
 }
 
-TEST(Words, reused) { 
+TEST(Words, reuse) { 
   heapify();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$);
@@ -613,8 +614,8 @@ TEST(Exhaust, andRestore) {
   for (auto s = $P_n$ ; s >= 1; --s) 
     EXPECT_EQ(s, p.pop()) << s;
   EXPECT_ZZ(accounting.used);
-  EXPECT_ZZ(accounting.missed);
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.reuse);
   EXPECT_ZZ(accounting.items);
   EXPECT_EQ(accounting.unused, $P_n$);
   EXPECT_FF(corrupted.cyclic());
@@ -691,14 +692,14 @@ TEST(Counting, items) {
 
 TEST(Counting, pairs) {
   heapify();
-  auto const before = accounting.unused;
+  const Integer before = accounting.unused;
   request(13,14);
   EXPECT_NE(accounting.unused, before);
   EXPECT_EQ(accounting.unused, before - 1);
   EXPECT_EQ(accounting.unused, $P_n$ - 1);
   EXPECT_EQ(accounting.used, 1);
-  EXPECT_ZZ(accounting.missed);
-  EXPECT_ZZ(accounting.reused);
+  EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.reuse);
   EXPECT_FF(corrupted.something());
 }
 
@@ -707,7 +708,7 @@ TEST(Counting, itemsPristines2) {
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
-  EXPECT_GE(accounting.unused,10);
+  EXPECT_GE(accounting.unused,10L);
   int before = accounting.unused;
   p.push(3);
   EXPECT_EQ(accounting.unused, before - 1);

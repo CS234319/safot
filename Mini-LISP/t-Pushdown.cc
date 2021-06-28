@@ -2,6 +2,7 @@
 #include "Pristine.h"
 #include "heap.h"
 #include "accounting.h"
+
 #include "Test.h"
 
 TEST(Pushdown, empty) {
@@ -20,7 +21,7 @@ TEST(Pushdown, clear) {
   heapify();
   Pushdown p;
   p.clear().push(3).push(7).push(19).pop();
-  p.push(21).pop();
+  p.push(21).pop(); 
   p.push(23);
   p.clear();
   EXPECT_TT(p.empty());

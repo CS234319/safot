@@ -33,10 +33,14 @@ SRCS = $(wildcard *.c) $(wildcard *.cc)
 
 CFLAGS += -MD -MP -w -std=gnu2x
 
+
 store:
 all: test mini-lisp store 
 
-FILES=accounting.o purge.o t-purge.o heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Pair.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o t-heap.o t-Pushdown.o
+FILES=Account.o Clicker.o t-Pushdown.o t-heap.o  accounting.o purge.o heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Pair.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o t-heap.o 
+
+Clicker.o: Clicker.h
+accounting.o: accounting.h
 
 store: $(FILES) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

@@ -45,11 +45,11 @@ static struct {
     try {
       Expect(accounting.pairs >= 0);
       Expect(accounting.pairs  <= $P_n$);
-      Expect(accounting.reused  >= 0);
-      Expect(accounting.reused  >= 0);
-      Expect(accounting.missed >= 0);
-      Expect(accounting.pairs != 0 || accounting.reused ==0)
-      Expect(accounting.pairs != 0 || accounting.missed ==0)
+      Expect(accounting.reuse  >= 0);
+      Expect(accounting.reuse  >= 0);
+      Expect(accounting.miss >= 0);
+      Expect(accounting.pairs != 0 || accounting.reuse ==0)
+      Expect(accounting.pairs != 0 || accounting.miss ==0)
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
         let c = Pair(h);
@@ -81,6 +81,7 @@ static struct {
         if (!Pristine(p.prev()).x())  
           Expect(Pristine(p.prev()).ok());
       }
+      Expect($P_n$ - n , accounting.used);
       Expect(n == accounting.unused, n, accounting.unused);
       return false;
     } catch(...) {

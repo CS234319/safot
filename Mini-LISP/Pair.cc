@@ -11,11 +11,9 @@ Property(Boolean Pair::foreign) Is(black(cdr().handle()))
 Property(Sx  Pair::car) Is(p().s1)
 Property(Sx  Pair::cdr) Is(p().s2)
 
-
 Pair::Pair(Short s): Sx(s) {}
-Pair Pair::car(Sx s) { p().s1 = s.handle(); return *this; }
-Pair Pair::cdr(Sx s) { p().s2 = s.handle(); return *this; }
-
+Pair Pair::car(Sx s) selfing(p().s1 = s.handle())
+Pair Pair::cdr(Sx s) selfing(p().s2 = s.handle())
 
 Boolean Pair::ok(Word w) Is(white(w.s1) && white(w.s2))
 
@@ -26,7 +24,7 @@ Pair Pair::visit()  { accounting.visit();
   return car(flip(car().handle())); 
 } 
 
-Pair Pair::unvisit() { 
+Pair Pair::unvisit() { accounting.unvisit();
   Expect(seen()); 
   Promise(not seen()); 
   return car(flip(car().handle())); 

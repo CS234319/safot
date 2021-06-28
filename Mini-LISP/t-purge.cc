@@ -100,7 +100,7 @@ TEST(Purge, mess) {
   heapify();
   try { // Do not dare in real life!
     purge.preserving(request(2,3)); // Use a raw S-Expression.
-    EXPECT_FF(corrupted.something()); // The heap may be corrupted, or an exception
+    EXPECT_TT(corrupted.something()); // The heap may be corrupted, or an exception
   } catch(...) {
     EXPECT_TT(true); // Something bad should happen' we don't know which 
   }

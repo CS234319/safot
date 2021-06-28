@@ -1,50 +1,33 @@
 #ifndef ACCOUNTING_H
 #define ACCOUNTING_H
-#include "chic.h"
-#define Fluenter(name) auto name()  
-#define doing(...)       { return (__VA_ARGS__), *this; }
-#define Capsule(...) private:struct{ __VA_ARGS__}_; public: 
+#include "Account.h"
+Type Function {
+  operator Integer() const { return provider(); }
+  Provider provider;
+  Function(Provider p): provider(p){} 
+};
 
-Service {
-  Capsule ( 
-    Short unused, used, pairs, items;
-    Integer pushs, pops, picks;
-    Integer collects, visits;
-    Integer requests, reused, provided, hits, missed;   
-    Fluenter(init) doing(
-                      unused = used = pairs = items = 
-                      pushs = pops = picks = 
-                      collects = visits = 
-                      requests = reused = provided = hits = missed = 
-                      0
-                   )
+#define Closure(X) Function([&](){return(X);})
+
+extern Type Accounting {
+  int N;
+  Clicker use, unuse;
+  Account used = Account(use, unuse); 
+  Function unused = Closure(N-used);  
+  Account pairs = used.kind(), items = used.kind();
+  Clicker allocate, pop = allocate.kind(), pick = allocate.kind();  
+  Clicker release, push = release.kind(), collect = release.kind();
+  Function live = Closure(allocate - release);
+  Clicker visit, unvisit; 
+  Clicker request, reuse = request.kind(), provide = request.kind(); 
+  Clicker hit = provide.kind(), miss = provide.kind();   
+
+  auto operator !() selfing(
+      !pairs | !items | 
+      !push  | !pop | !pick |
+      !collect | !visit | 
+      !request | !reuse | !hit | !miss 
   )
- const Short& unused = _.unused, used = _.used, pairs = _.pairs, items = _.items;
- const Integer& pops = _.pops, pushs = _.pushs, picks = _.picks;
- const Integer& collects = _.collects, visits = _.visits;
- const Integer& requests = _.requests, reused = _.reused, provided = _.provided, hits = _.hits, missed = _.missed;
-
-  private: 
-    Fluenter(use)     doing(_.used++ | _.unused--)
-    Fluenter(unuse)   doing(_.used-- | _.unused--)
-    Fluenter(provide) doing(use() | _.provided++)
-  public:
-    operator int() { return 0; }
-    Fluenter(push)    doing(_.pushs++ | unuse() )
-    Fluenter(pop)     doing(_.pops++  | use())
-    Fluenter(pick)    doing(_.picks++ | use())
-
-    Fluenter(collect) doing(_.collects++)
-    Fluenter(visit)   doing(_.visits++)
-
-   Fluenter(request) doing(_.requests++)
-   Fluenter(reuse)      doing(_.reused++)
-   Fluenter(hit)     doing(provide() | _.hits++) 
-   Fluenter(miss)    doing(provide() | _.missed++)
-
-  Fluenter(item)    doing(_.items++)
-  Fluenter(unitem)  doing(_.items--)
-
-  auto init(Short n) doing(_.init(), _.used = n)
+  auto init(Integer n) selfing(!*this, N = n) 
 } accounting;
 #endif

@@ -8,7 +8,6 @@
 #include "layout.h"
 #include "accounting.h"
 
-
 static struct {
   auto empty() { return top.x(); } 
   Knob pop() {
@@ -54,7 +53,7 @@ Item fresh(Short s1, Short s2) {
   Expect(white(s2));
   Expect(s2 == $P_x$ || s2 >= $P_f$ && s2 <= $P_t$);
   if (stack.empty()) throw __LINE__; 
-  accounting.item();
+  ++accounting.items;
   return stack.pop().Item().head(s1).rest(s2);
 }
 
@@ -97,14 +96,14 @@ Pair request(Word w) {
   
 Unit collect(Pair p) { accounting.collect(); 
   Expect(p.ok());
-  stack.push(Pristine(p.handle()));
+  stack.push(Pristine(p.handle())) | --accounting.pairs;
 }
 
 Unit free(Item i) {
   Expect(i.ok());
-  stack.push(Pristine(i.handle())) | accounting.unitem();
+  stack.push(Pristine(i.handle())) | --accounting.items;
 }
-
+ 
 Pair request(Sx car, Sx cdr) { 
   accounting.request();
   return request(Word(car.handle(),cdr.handle())); 

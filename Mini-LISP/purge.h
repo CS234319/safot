@@ -4,11 +4,12 @@
 #include "Pair.h"
 #include "layout.h"
 struct {
-  Unit preserving(Sx s) { mark(s), sweep(); }
+ Unit preserving(Sx s)  Is(mark(s), sweep())
 private:
-  Unit mark(Sx s) { s.atom() or mark(s.Pair()); }
-  Unit mark(Pair p) { p.seen() or do(mark(p.car()) | mark(p.cdr()), p.visit());
-  }
+  Unit mark(Sx s) 
+    Is(s.atom() or mark(s.Pair())) 
+  Unit mark(Pair p) 
+    Is(p.seen() or do(mark(p.car()) | mark(p.cdr()), p.visit()))
   Unit sweep() {
     for (auto s = $P_f$; s <= $P_t$; ++s) 
       consider(Pair(s)); 

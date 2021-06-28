@@ -6,6 +6,8 @@
 #include <iostream>
 
 typedef std::function<bool()> Predicate;
+typedef std::function<int()> Action;
+typedef std::function<long long()> Provider;
 
 #define UNIQUE(X)       UNIQUE1(X,__LINE__)
 #define UNIQUE1(X,Y)    UNIQUE2(X,Y)
@@ -93,7 +95,7 @@ typedef std::function<bool()> Predicate;
      );                                                                  \
 ;
 
-#define Keep(X) Expect(P) Promise(X)
+#define Keep(X) Expect(X) Promise(X)
 #define xCurrent(X) ([=]{return X;})()
 
 #define Return(X) return ((__ = (X)),(__)); 
@@ -111,6 +113,7 @@ typedef std::function<bool()> Predicate;
   } 
 
 #include <cstdint>         // Standard header providing integer types with widths 
+#define As(t) operator t() const
 #define Provides extern
 #define Let constexpr 
 #define let const auto 
@@ -122,21 +125,24 @@ typedef std::function<bool()> Predicate;
 #define array(type) type *const
 #define variable(type) type & 
 #define constant(type) const type 
-#define action void
 #define modifier 
 #define perspective(...) struct{__VA_ARGS__;};
 #define Representation union
 #define Type struct
-#define Service static struct
 #define Constructor(X)  X 
 #define Property(X)     X() const
 #define Mutator(X)      X 
 #define Selfer(X)       Self X 
-#define Is(X)           { return X; }
+#define Is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__{}
-#define Unit int 
 
+#define Unit int 
+#define Service static struct
+#define Fluenter(name) auto name()  
+#define selfing(...)  { return (__VA_ARGS__), *this; }
+#define do(...)  ((__VA_ARGS__), 0)
+#define Capsule(...) private: __VA_ARGS__; public: 
 
 #ifndef Type
 #error
