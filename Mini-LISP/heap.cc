@@ -57,6 +57,11 @@ Item fresh(Short s1, Short s2) {
   return stack.pop().Item().head(s1).rest(s2);
 }
 
+Unit free(Item i) {
+  Expect(i.ok());
+  stack.push(Pristine(i.handle())) | --accounting.items;
+}
+ 
 #define Count(label,signature,value) (accounting.label() , value)  
 static inline auto reuse(Short s) { accounting.reuse(); return Pair(s);  }
 static inline auto hit(Word w, Short s) {  
@@ -66,7 +71,9 @@ static inline auto hit(Word w, Short s) {
   return Pair(s);
 }
 
-static inline auto miss(Word w) {  accounting.miss(); return stack.pop().Pair(w.s1,w.s2); }
+static inline auto miss(Word w) {  
+  accounting.miss(); return stack.pop().Pair(w.s1,w.s2); 
+}
 
 static Pair request(Word w, Short s) {
   Expect(Pair::ok(w));
@@ -74,16 +81,12 @@ static Pair request(Word w, Short s) {
   Expect(s >= $P_f$);
   Expect(s <= $P_t$);
   return P[s].l == w.l ? reuse(s) :
-         Pristine(s).ok() ? hit(w,s) :
-         miss(w);
+         (++accounting.pairs, Pristine(s).ok()) ? hit(w,s) : miss(w);
 }
 
 extern Pristine heapify() {
   stack.init();
-}
-
-static Item fresh(Word w) { 
-  return fresh(w.s1,w.s2); 
+  accounting.init($P_n$);
 }
 
 static struct {
@@ -99,11 +102,7 @@ Unit collect(Pair p) { accounting.collect();
   stack.push(Pristine(p.handle())) | --accounting.pairs;
 }
 
-Unit free(Item i) {
-  Expect(i.ok());
-  stack.push(Pristine(i.handle())) | --accounting.items;
-}
- 
+
 Pair request(Sx car, Sx cdr) { 
   accounting.request();
   return request(Word(car.handle(),cdr.handle())); 

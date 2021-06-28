@@ -8,7 +8,6 @@ Type Function {
 };
 
 #define Closure(X) Function([&](){return(X);})
-
 extern Type Accounting {
   int N;
   Clicker use, unuse;
@@ -21,13 +20,6 @@ extern Type Accounting {
   Clicker visit, unvisit; 
   Clicker request, reuse = request.kind(), provide = request.kind(); 
   Clicker hit = provide.kind(), miss = provide.kind();   
-
-  auto operator !() selfing(
-      !pairs | !items | 
-      !push  | !pop | !pick |
-      !collect | !visit | 
-      !request | !reuse | !hit | !miss 
-  )
-  auto init(Integer n) selfing(!*this, N = n) 
+  auto init(Integer n) selfing(this->~Accounting(), N = n) 
 } accounting;
 #endif

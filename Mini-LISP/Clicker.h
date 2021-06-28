@@ -8,6 +8,7 @@ Type Clicker {
   Capsule(Integer i = 0; Clicker *parent = 0)
   Clicker(): i(0){}
   Clicker kind() { return Clicker(0,*this); } 
+  ~Clicker() { !(*this); }
   private: Clicker(int, Clicker& c): parent(&c) {}
 };
 #endif

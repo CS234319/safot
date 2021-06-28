@@ -125,6 +125,76 @@ TEST(Heapify, valid) {
   EXPECT_FF(corrupted.something());
 }
 
+TEST(Accounting, heapify) { 
+  heapify();
+  EXPECT_ZZ(accounting.used);
+  EXPECT_EQ(accounting.unused, $P_n$);
+  EXPECT_ZZ(accounting.use); 
+  EXPECT_ZZ(accounting.unuse); 
+  EXPECT_ZZ(accounting.pairs); 
+  EXPECT_ZZ(accounting.items); 
+  EXPECT_ZZ(accounting.pairs); 
+  EXPECT_ZZ(accounting.allocate); 
+  EXPECT_ZZ(accounting.pop); 
+  EXPECT_ZZ(accounting.pick); 
+  EXPECT_ZZ(accounting.release); 
+  EXPECT_ZZ(accounting.push); 
+  EXPECT_ZZ(accounting.collect); 
+  EXPECT_ZZ(accounting.live); 
+  EXPECT_ZZ(accounting.visit); 
+  EXPECT_ZZ(accounting.unvisit); 
+  EXPECT_ZZ(accounting.request); 
+  EXPECT_ZZ(accounting.reuse); 
+  EXPECT_ZZ(accounting.provide); 
+  EXPECT_ZZ(accounting.hit); 
+  EXPECT_ZZ(accounting.miss); 
+}
+TEST(Accounting, Nesting) { 
+  heapify();
+  ++accounting.items;
+  EXPECT_EQ(accounting.use, 1); 
+  EXPECT_EQ(accounting.used, 1); 
+  ++accounting.pairs;
+  EXPECT_EQ(accounting.use, 2); 
+  EXPECT_EQ(accounting.used, 2); 
+}
+
+TEST(Accounting, push) { 
+  heapify();
+  Pushdown p;
+  p.push(3);
+  EXPECT_EQ(accounting.use, 1); 
+  EXPECT_EQ(accounting.used, 1);
+  EXPECT_EQ(accounting.unuse, 0); 
+  EXPECT_EQ(accounting.unused, $P_n$ - 1);
+  EXPECT_EQ(accounting.pairs, 0); 
+  EXPECT_EQ(accounting.items, 1); 
+  EXPECT_EQ(accounting.allocate, 1); 
+  EXPECT_EQ(accounting.pop, 1); 
+  EXPECT_EQ(accounting.live, 1); 
+  EXPECT_ZZ(accounting.visit); 
+  EXPECT_ZZ(accounting.unvisit); 
+  EXPECT_ZZ(accounting.pick); 
+  EXPECT_ZZ(accounting.release); 
+  EXPECT_ZZ(accounting.push); 
+  EXPECT_ZZ(accounting.collect); 
+  EXPECT_ZZ(accounting.request); 
+  EXPECT_ZZ(accounting.reuse); 
+  EXPECT_ZZ(accounting.provide); 
+  EXPECT_ZZ(accounting.hit); 
+  EXPECT_ZZ(accounting.miss); 
+}
+
+TEST(Accounting, request) {
+  heapify();
+  EXPECT_ZZ(accounting.used);
+  for (int i = 0;  i <= 4; i++)  
+    for (int j = 0;  j <= 4; j++) 
+      request(i,j);
+  EXPECT_EQ(accounting.used, 25);
+}
+
+
 TEST(Item, 3Count) {
   Pushdown p;
   p.clear();
@@ -281,15 +351,6 @@ TEST(Pair, Hash13a) {
   EXPECT_EQ(accounting.miss, 1);
   EXPECT_ZZ(accounting.reuse);
   EXPECT_EQ(accounting.used, 2);
-}
-
-TEST(Pair, count) {
-  heapify();
-  EXPECT_ZZ(accounting.used);
-  for (int i = 0;  i <= 4; i++)  
-    for (int j = 0;  j <= 4; j++) 
-      request(i,j);
-  EXPECT_EQ(accounting.used, 25);
 }
 
 TEST(Pair, reuse) {

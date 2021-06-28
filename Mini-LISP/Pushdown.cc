@@ -8,20 +8,6 @@ Property(Boolean Pushdown::empty) {
   return top.x(); 
 } 
 
-Pushdown& Pushdown::push(Short s) { 
-  Expect(white(s));
-  Keep(top.ok());
-  Promise(!top.x());
-  Promise(top.head() == s);
-  ++size, top = fresh(s, top.handle()); 
-  return *this; 
-}
-
-Pushdown& Pushdown::push(Short s1,Short s2) { return push(s2).push(s1); }
-Pushdown& Pushdown::push(Short s1,Short s2, Short s3) { return push(s3).push(s1, s2); }
-Pushdown& Pushdown::push(Short s1,Short s2, Short s3, Short s4) { return push(s4).push(s1, s2, s3); }
-Pushdown& Pushdown::push(Short s1,Short s2, Short s3, Short s4, Short h5) { return push(h5).push(s1, s2, s3, s4); }
-
 Short Pushdown::pop() {
   Expect(!empty());
   let $ = top.head();
@@ -31,6 +17,21 @@ Short Pushdown::pop() {
   --size;
   return $;
 }
+
+
+Pushdown& Pushdown::push(Short s) { 
+  Expect(white(s));
+  Keep(top.ok());
+  Promise(!top.x());
+  Promise(top.head() == s);
+  ++size | do(top = fresh(s, top.handle())); 
+  return *this; 
+}
+
+Pushdown& Pushdown::push(Short s1,Short s2) { return push(s2).push(s1); }
+Pushdown& Pushdown::push(Short s1,Short s2, Short s3) { return push(s3).push(s1, s2); }
+Pushdown& Pushdown::push(Short s1,Short s2, Short s3, Short s4) { return push(s4).push(s1, s2, s3); }
+Pushdown& Pushdown::push(Short s1,Short s2, Short s3, Short s4, Short h5) { return push(h5).push(s1, s2, s3, s4); }
 
 Pushdown& Pushdown::clear() {
   while (!empty()) 

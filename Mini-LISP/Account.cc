@@ -118,3 +118,4 @@ TEST(Account, kind) {
   EXPECT_EQ(c11,1);
   EXPECT_EQ(c111,0);
 }
+
