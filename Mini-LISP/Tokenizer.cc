@@ -112,4 +112,3 @@ static Boolean isToken() {
   return exists(C(),tokens);
 }
 }
-

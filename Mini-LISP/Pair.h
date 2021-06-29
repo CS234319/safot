@@ -6,7 +6,7 @@
 Type Pair: Sx {
   typedef Pair Self;
   Pair(Short);
-  Pair(): Pair(1) {} 
+  Pair(); 
   Selfer(car(Sx)); 
   Selfer(cdr(Sx)); 
   Property(Sx car);
@@ -24,6 +24,9 @@ Type Pair: Sx {
   Selfer(unvisit()); 
 
   static Boolean ok(Word);
-  private: Property(Word& p);
+  protected:
+    Property(Word& p);
+    Property(Short& s1) Is(p().s1)
+    Property(Short& s2) Is(p().s2)
 };
 #endif

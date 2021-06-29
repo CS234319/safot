@@ -406,7 +406,7 @@ auto trailLeft(auto n) {
   p[0] = request(-2, -3);
   for (auto i = 1; i < n; i++) p[i] = request(p[i-1],request(-i, -i));
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i; 
-  purge.preserving(p[n]);
+  purge.preserving(p[n-1]);
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
 TEST(Purge, trailLeft1) { trailLeft(1); }
@@ -422,7 +422,7 @@ auto trailRight(auto n) {
   p[0] = request(-2, -3);
   for (auto i = 1; i < n; i++) p[i] = request(p[i-1],request(-i, -i));
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
-  purge.preserving(p[n]);
+  purge.preserving(p[n-1]);
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
 TEST(Purge, traiRight1) { trailRight(1); }
@@ -438,7 +438,7 @@ auto fibonnaci(auto n) {
   p[0] = request(-2, -3); p[1] = request(-5, -8);
   for (auto i = 2; i < n; i++) p[i] = request(p[i-2], p[i-1]);
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
-  purge.preserving(p[n]);
+  purge.preserving(p[n-1]);
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
 TEST(Purge, Fibonnaci1) { fibonnaci(1); }
@@ -447,5 +447,3 @@ TEST(Purge, Fibonnaci3) { fibonnaci(3); }
 TEST(Purge, Fibonnaci4) { fibonnaci(4); }
 TEST(Purge, Fibonnaci5) { fibonnaci(5); }
 TEST(Purge, Fibonnaci6) { fibonnaci(6); }
-
-

@@ -8,13 +8,13 @@ Pristine::Pristine(Short s): Knob(s) {}
 Property(Pristine Pristine::prev) { 
   Expect(!x());
   Expect(black(s1()));
-  return flip(s1()); 
+  Is(flip(s1())); 
 }
 
 Property(Pristine Pristine::next) { 
   Expect(!x());
   Expect(black(s2()));
-  return flip(s2()); 
+  Is(flip(s2())); 
 }
 
 Property(Boolean Pristine::ok) { 
