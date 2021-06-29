@@ -113,7 +113,14 @@ TEST(Purge, mess) {
   heapify();
   try { // Do not dare in real life!
     purge.preserving(request(2,3)); // Use a raw S-Expression.
+    EXPECT_EQ(accounting.pairs,1); // The heap may be corrupted, or an exception
+    EXPECT_EQ(accounting.items,0); // The heap may be corrupted, or an exception
+    EXPECT_EQ(accounting.used,1); // The heap may be corrupted, or an exception
+    EXPECT_EQ(accounting.use,1); // The heap may be corrupted, or an exception
     EXPECT_TT(corrupted.something()); // The heap may be corrupted, or an exception
+    EXPECT_EQ(accounting.used,1);
+    EXPECT_EQ(accounting.collect,0);
+    EXPECT_EQ(accounting.visit,1);
   } catch(...) {
     EXPECT_TT(true); // Something bad should happen' we don't know which 
   }

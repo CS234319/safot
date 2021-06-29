@@ -98,6 +98,15 @@ typedef std::function<long long()> Provider;
 #define Keep(X) Expect(X) Promise(X)
 #define xCurrent(X) ([=]{return X;})()
 
+#if 0
+#undef Expect
+#undef Promise
+#undef Keep
+#define Expect(...)
+#define Promise(...)
+#define Keep(...)
+#endif
+
 #define Return(X) return ((__ = (X)),(__)); 
 
 #define FUN(Return, Name, ArgumentType) \

@@ -6,7 +6,7 @@
 // Properties:
 Property(Word& Pair::p) Is(P[handle()])
 Property(Boolean Pair::ok)      Is(white(car().handle()) && white(cdr().handle()))
-Property(Boolean Pair::seen)    Is(black(car().handle()))
+Property(Boolean Pair::seen)    {Expect(white(cdr().handle())) Is(black(car().handle())) }
 Property(Boolean Pair::foreign) Is(black(cdr().handle()))
 Property(Sx  Pair::car) Is(p().s1)
 Property(Sx  Pair::cdr) Is(p().s2)
