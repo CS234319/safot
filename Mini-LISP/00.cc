@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "basics.h"
 #include "parser.h"
 
@@ -8,7 +6,14 @@ static inline auto prompt(String s) {
 }
 
 int print(String s) {
-  return fputs(s,stdout);
+    return fputs(s,stdout);
+}
+
+// Use to print the error code number
+int print(int num) {
+    char char_arr[100];
+    sprintf(char_arr, "%d", num); // itoa
+    return print(char_arr);
 }
 
 int print(S s);
@@ -38,18 +43,54 @@ int print(S s) {
   return print(")");
 }
 
+extern S alist ;
+
+// Check if the string is balance, use to support multi-line input in RELP:
+bool is_balance(const char* input) {
+    bool balance = true;
+    int count = 0;
+    for (int i = 0; input[i] != '\0'; i++) {
+        if (input[i] == '(') {
+            count++;
+        }
+        if (input[i] == ')') {
+            count--;
+        }
+        if (count < 0) {
+            balance = false;
+            break;
+        }
+    }
+    if (count != 0) {
+        balance = false;
+    }
+    return balance;
+}
+
+// Parse line, allow multi-line (e.g: "(car \n\n '(a.b)\n)")
+void get_input(char * line) {
+    line[0] = '\0';
+    int i = 0;
+    while(true) {
+        char c = getchar();
+        if ((c == '\n' && is_balance(line)) || c == EOF)
+            break;
+        line[i++] = c;
+        line[i] = '\0';
+    }
+}
+
 // Realizes the famous "Read, Evaluate, Print, Loop" of interpreters
 static int REPL() {
-  static size_t n = 0;
-  static auto line = (char *) malloc (n + 1);
+  static size_t max_size = 1<<12;
+  char * line = (char *) malloc (max_size);
   using namespace Parser;
 
   Start:
     reset();
     prompt("> ");
   Read:
-    if (getline(&line, &n, stdin) < 0) 
-      return 0;
+    get_input(line);
     supply((char*)line);
     switch (status()) {
       case ready:
@@ -63,12 +104,14 @@ static int REPL() {
     }
     const S s = result();
   Eval:
+    const S saved_alist = alist;
     try {
-      const S e = s.eval();
+       const S e = s.eval();
     } catch (Pair error) {
       print("Error");
       print(error.car);
       print(error.cdr);
+      alist = saved_alist; // Restore a-list in case of error
     }
   Print:
     print(s), print("\n");
@@ -77,5 +120,11 @@ static int REPL() {
 }
 
 int main(int argc, char **argv) {
-  return REPL();
+    try {
+        return REPL();
+    } catch (int error) {
+        print("ERROR: Unexpected exception caught");
+        print(error);
+        print("\n");
+    }
 }
