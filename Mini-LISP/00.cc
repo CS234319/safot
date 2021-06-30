@@ -83,7 +83,7 @@ void get_input(char * line) {
 // Realizes the famous "Read, Evaluate, Print, Loop" of interpreters
 static int REPL() {
   static size_t max_size = 1<<12;
-  char * line = (char *) malloc (max_size);
+  static char * line = (char *) malloc (max_size);
   using namespace Parser;
 
   Start:
