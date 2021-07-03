@@ -34,11 +34,10 @@
 #include "eval.h"
 #include "test.h"
 
-void getUniqueNames(std::string *unique_names, int size) {
-    for (int i=0; i < size; i++) {
-        unique_names[i] = "v_" + std::to_string(i);
-    }
-}
+extern S evaluate_cond(S s);
+S lookup(S id, S alist);
+extern S alist ;
+extern const S x;
 
 // ----------------------------
 // Test:
@@ -46,24 +45,60 @@ TEST(CondEvaluationOrder, CondEvaluationOrder) {
     // unique variables names:
     int total_variables = 6;
     std::string unique_names[total_variables];
-    getUniqueNames(unique_names, total_variables);
+    for (int i=0; i < total_variables; i++) {
+        unique_names[i] = "v_" + std::to_string(i);
+    }
 
     // Test:
     int var_idx = 0;
-    int total_defined = 3; // should evaluate the first 3
-    eval(parse("(cond "
-                 "((null (set '" + unique_names[var_idx++] + " 'x))  'x)  " // v_0 in a_list
-                 "((null (set '" + unique_names[var_idx++] + " 'x))  'x)  " // v_1 in a_list
-                 "((atom (set '" + unique_names[var_idx++] + " 'x))  'x)  " // v_2 in a_list
-                 "((null (set '" + unique_names[var_idx++] + " 'x))  'x)  " // v_3 NOT in a_list
-                 "((atom (set '" + unique_names[var_idx++] + " 'x))  'x)  " // v_4 NOT in a_list
-                 "((null (set '" + unique_names[var_idx++] + " 'x))  'x)  " // v_5 NOT in a_list
-                 ")"));
-    for (int i=0; i < total_defined; i++) {
-        EXPECT_EQ(eval(S(unique_names[i].c_str())), S("NIL"));
-    }
-    for (int i=total_defined; i < total_variables; i++) {
-        ASSERT_NE(eval(S(unique_names[i].c_str())), S("NIL"));
-    }
+
+    // Define S names:
+    S v_0(unique_names[var_idx++].c_str());
+    S v_1(unique_names[var_idx++].c_str());
+    S v_2(unique_names[var_idx++].c_str());
+    S v_3(unique_names[var_idx++].c_str());
+    S v_4(unique_names[var_idx++].c_str());
+    S v_5(unique_names[var_idx++].c_str());
+
+    // Define our cond:
+    S s = list(
+            list(
+                    list(NULL, list(SET, v_0.q(), x.q())),
+                    x.q()
+            ),
+            list(
+                    list(NULL, list(SET, v_1.q(), x.q())),
+                    x.q()
+            ),
+            list(
+                    list(ATOM, list(SET, v_2.q(), x.q())),
+                    x.q()
+            ),
+            list(
+                    list(NULL, list(SET, v_3.q(), x.q())),
+                    x.q()
+            ),
+            list(
+                    list(ATOM, list(SET, v_4.q(), x.q())),
+                    x.q()
+            ),
+            list(
+                    list(NULL, list(SET, v_5.q(), x.q())),
+                    x.q()
+            )
+    );
+
+    // Evaluate cond on the list:
+    evaluate_cond(s);
+
+    // Check if v0, v1, v2 are defined:
+    EXPECT_EQ(lookup(v_0, alist), x);
+    EXPECT_EQ(lookup(v_1, alist), x);
+    EXPECT_EQ(lookup(v_2, alist), x);
+
+    // Check if v3, v4, v5 are NOT defined:
+    EXPECT_EXCEPTION(lookup(v_3, alist), v_3, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(v_4, alist), v_4, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(v_5, alist), v_5, UNDEFINED);
 }
 

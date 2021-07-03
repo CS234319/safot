@@ -49,7 +49,7 @@ FUN(S, evaluate_list, S) IS(
 FUN(S, evaluate_cond, S)  IS( 
     _.null() ?  NIL:
     _.car().atom() ? _.car().error(COND):
-      _.car().car().eval().t() ? _.car().cdr().eval():
+      _.car().car().eval().t() ? _.car().cdr().car().eval():
         $$(_.cdr()) ;
 )
 
@@ -72,7 +72,7 @@ void checkNumberOfArgs(S s) {
     }
 
     // 2 Arg:
-    if (f.eq(CONS) || f.eq(SET)) {
+    if (f.eq(CONS) || f.eq(SET) || f.eq(EQ)) {
         s.more3() && s.error(REDUNDANT).t();
         s.less3() && s.error(MISSING).t();
     }
@@ -95,6 +95,8 @@ S evaluate_atomic_function(S s) { M(s);
         res = s.$2$().eval().cons(s.$3$().eval());
     } else if (f.eq(SET)) {
         res = set(s.$2$().eval(), s.$3$().eval());
+    } else if (f.eq(EQ)) {
+        res = s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
     } else if (f.eq(COND)) {
         res = evaluate_cond(s);
     } else if (f.eq(CDR)) {
@@ -105,6 +107,12 @@ S evaluate_atomic_function(S s) { M(s);
         res = only(s).null() ? T : NIL;
     } else if (f.eq(EVAL)) {
         res = only(s).eval();
+    } else if (f.eq(ERROR)) {
+        if (s.n1()) {
+            res = s.error(NIL);
+        } else {
+            res = s.error(s.cdr());
+        }
     } else {
         return bug(s);
     }

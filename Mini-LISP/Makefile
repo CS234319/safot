@@ -30,6 +30,7 @@ TEST_OBJS = \
 		t-error.o \
 		t-defun.o \
 		t-apply.o \
+		t-eval.o \
 
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 

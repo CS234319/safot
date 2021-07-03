@@ -22,102 +22,81 @@
 
 #include <string.h>
 #include <gtest/gtest.h>
-#include "eval.h"
 #include "test.h"
+
+extern S a;
+extern S b;
+extern S c;
+extern S x;
+extern S y;
+extern S z;
 
 // ----------------------------
 // Test: car
 TEST(ParseEvalAtomic, car) {
-  CAREFULLY(EXPECT_EQ(eval("(car '())"), NIL));
-  EXPECT_EQ(eval("(car nil)")    , NIL);
-  EXPECT_EQ(eval("(car '(b.a))") , S("B"));
-  EXPECT_EQ(eval("(car '(b a))") , S("B"));
+    EXPECT_EQ(parse("(car '(b a))").eval() , b);
+    EXPECT_EQ(parse("(car '(b a x y z))").eval() , b);
 }
 
 // ----------------------------
 // Test: cdr
 TEST(ParseEvalAtomic, cdr) {
-    EXPECT_EQ(eval("(cdr '())")    , NIL);
-    EXPECT_EQ(eval("(cdr nil)")    , NIL);
-    EXPECT_EQ(eval("(cdr '(a.b))") , S("b"));
-    EXPECT_EQ(eval("(cdr '(a b))") , S("(b)"));
-    EXPECT_EQ(eval("(cdr '(b))")   , NIL);
+    EXPECT_EQ(parse("(cdr '(a b))").eval() , list(b));
+    EXPECT_EQ(parse("(cdr '(a x y z))").eval() , list(x, y, z));
 }
 
 // ----------------------------
 // Test: cons
 TEST(ParseEvalAtomic, cons) {
-    EXPECT_EQ(eval("(cons 'a '(b c))") , S("(A B C)"));
-    EXPECT_EQ(eval("(cons 'b nil)")    , NIL);
-    EXPECT_EQ(eval("(cons 'a 'b)")     , S("(A.B)"));
+    EXPECT_EQ(parse("(cons 'a '(b c))").eval() , list(a, b, c));
+    EXPECT_EQ(parse("(cons 'b nil)").eval()    , b.cons(NIL));
+    EXPECT_EQ(parse("(cons 'a 'b)").eval()     , a.cons(b));
 }
 
 // ----------------------------
 // Test: eq
 TEST(ParseEvalAtomic, eq) {
-    EXPECT_EQ(eval("(eq 'a 'a)")          , NIL);
-    EXPECT_EQ(eval("(eq 'a 'b)")          , NIL);
-    EXPECT_EQ(eval("(eq t t)")            , NIL);
-    EXPECT_EQ(eval("(eq t nil)")          , NIL);
-    EXPECT_EQ(eval("(eq nil nil)")        , NIL);
-    EXPECT_EQ(eval("(eq '(a a) '(a a))")  , NIL);
-}
-
-// ----------------------------
-// Test: cond
-TEST(ParseEvalAtomic, cond) {
-    EXPECT_EQ(eval("(cond (t 'A))")                     , S("A"));
-    EXPECT_EQ(eval("(cond (nil 'A) (t 'B))")            , S("B"));
-    EXPECT_EQ(eval("(cond (nil 'A) (t 'B) (t 'C))")     , S("B"));
-    EXPECT_EQ(eval("(cond (nil 'A) (nil 'B) (nil 'C))") , NIL);
-    EXPECT_EQ(eval("(cond)")                            , NIL);
+    EXPECT_EQ(parse("(eq 'a 'a)").eval()          , T);
+    EXPECT_EQ(parse("(eq 'a 'b)").eval()          , NIL);
+    EXPECT_EQ(parse("(eq t t)").eval()            , T);
+    EXPECT_EQ(parse("(eq t nil)").eval()          , NIL);
+    EXPECT_EQ(parse("(eq nil nil)").eval()        , T);
 }
 
 // ----------------------------
 // Test: set
 TEST(ParseEvalAtomic, set) {
-    EXPECT_EQ(eval("(set 'a '(b c))") , "(b c)"); // May not work, check it out.
-    EXPECT_EQ(eval("(set 'b nil)")    , NIL);
+    EXPECT_EQ(parse("(set 'a '(b c))").eval() , list(b, c));
+    EXPECT_EQ(parse("(set 'b nil)").eval()    , NIL);
 }
 
 // ----------------------------
 // Test: atom
 TEST(ParseEvalAtomic, atom) {
-    EXPECT_EQ(eval("(atom nil)")    , NIL);
-    EXPECT_EQ(eval("(atom t)")      , NIL);
-    EXPECT_EQ(eval("(atom '(a a))") , NIL);
-    EXPECT_EQ(eval("(atom 'a)")     , NIL);
+    EXPECT_EQ(parse("(atom 'a)").eval()  , T);
+    EXPECT_EQ(parse("(atom t)").eval()      , T);
+    EXPECT_EQ(parse("(atom '(a a))").eval() , NIL);
 }
 
 // ----------------------------
 // Test: eval
 TEST(ParseEvalAtomic, eval) {
-    EXPECT_EQ(eval("(eval t)")   , NIL);
-    EXPECT_EQ(eval("(eval nil)") , NIL);
+    EXPECT_EQ(parse("(eval t)").eval()   , T);
+    EXPECT_EQ(parse("(eval nil)").eval() , NIL);
 }
 
 // ----------------------------
 // Test: error
 TEST(ParseEvalAtomic, error) {
-    EXPECT_EQ(eval("(error)")         , S(""));
-    EXPECT_EQ(eval("(error 'my_err)") , S("my_err"));
+    EXPECT_EXCEPTION(parse("(error)").eval()         ,  list(ERROR), NIL);
+    EXPECT_EXCEPTION(parse("(error 'my_err)").eval() , list(ERROR, S("MY_ERR").q()), list(S("MY_ERR").q()));
 }
 
 // ----------------------------
 // Test: errors cases
 TEST(ParseEvalAtomic, RealErrors) {
-    /*
-     * According to mini-Lisp doc:
-     *     If apply−trivial−atomic failed, error message is: "something−went−wrong atomic"
-     *     In lisp syntax: "(error 'something−went−wrong atomic)"
-     *
-     * Note:
-     *     Atom,ic function: "cond" can't failed.
-     *
-     */
-    EXPECT_EQ(eval("(car 'a)") , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval("(car ())") , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval("(cdr t)")  , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval("(cdr ())") , S("something−went−wrong-atomic"));
-    EXPECT_EQ(eval("(cdr nil)"), S("something−went−wrong-atomic"));
+    EXPECT_EXCEPTION(parse("(car ())").eval() , NIL, CAR);
+    EXPECT_EXCEPTION(parse("(car t)").eval() , T, CAR);
+    EXPECT_EXCEPTION(parse("(cdr t)").eval()  , T, CDR);
+    EXPECT_EXCEPTION(parse("(cdr nil)").eval() , NIL, CDR);
 }
