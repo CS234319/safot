@@ -18,10 +18,13 @@
 #include "io.h"
 #endif
 
+S NLAMBDA("nlambda"), LAMBDA("lambda");
+
 const S ATOMIC_FUNCTIONS = list(
   CAR,   CDR,  CONS,
   ATOM,  NULL, EQ,  COND, 
-  ERROR, SET,  EVAL, QUOTE
+  ERROR, SET,  EVAL, QUOTE,
+  DEFUN, NDEFUN, NLAMBDA, LAMBDA
 );
 
 inline bool atomic(S name) { return exists(name, ATOMIC_FUNCTIONS); }
@@ -41,6 +44,14 @@ S bug(S s) { return s.error(T); }
     M2("-->", __); \
     return __; \
   } 
+
+S defun(S name, S parameters, S body) {
+    return set(name, list(LAMBDA, parameters, body));
+}
+
+S ndefun(S name, S parameters, S body) {
+    return set(name, list(NLAMBDA, parameters, body));
+}
 
 FUN(S, evaluate_list, S) IS(
   _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
@@ -64,22 +75,23 @@ S only(S s) {
 
 void checkNumberOfArgs(S s) {
     S f = s.car();
-    // 1 Arg:
+    // 1 Args:
     if (f.eq(QUOTE) || f.eq(CAR) || f.eq(CDR) ||
         f.eq(ATOM) || f.eq(NULL) || f.eq(EVAL)) {
         s.more2() && s.error(REDUNDANT).t();
         s.less2() && s.error(MISSING).t();
     }
 
-    // 2 Arg:
-    if (f.eq(CONS) || f.eq(SET) || f.eq(EQ)) {
+    // 2 Args:
+    if (f.eq(CONS) || f.eq(SET) || f.eq(EQ) || f.eq(LAMBDA) || f.eq(NLAMBDA)) {
         s.more3() && s.error(REDUNDANT).t();
         s.less3() && s.error(MISSING).t();
     }
 
-    // Cond:
-    if (f.eq(COND)) {
-        s.less2() && s.error(MISSING).t();
+    // 3 Args:
+    if (f.eq(NDEFUN) || f.eq(DEFUN)) {
+        s.more4() && s.error(REDUNDANT).t();
+        s.less4() && s.error(MISSING).t();
     }
 }
 
@@ -87,9 +99,8 @@ S evaluate_atomic_function(S s) { M(s);
     checkNumberOfArgs(s);
     S f = s.car();
     S res = NIL;
-    if (f.eq(QUOTE)) {
-        res = s.cdr().car();
-    } else if (f.eq(CAR)) {
+    // Atomic functions:
+    if (f.eq(CAR)) {
         res = only(s).car();
     } else if (f.eq(CONS)) {
         res = s.$2$().eval().cons(s.$3$().eval());
@@ -98,29 +109,36 @@ S evaluate_atomic_function(S s) { M(s);
     } else if (f.eq(EQ)) {
         res = s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
     } else if (f.eq(COND)) {
-        res = evaluate_cond(s);
+        res = evaluate_cond(s.cdr());
     } else if (f.eq(CDR)) {
         res = only(s).cdr();
     } else if (f.eq(ATOM)) {
         res = only(s).atom() ? T : NIL;
-    } else if (f.eq(NULL)) {
-        res = only(s).null() ? T : NIL;
     } else if (f.eq(EVAL)) {
         res = only(s).eval();
     } else if (f.eq(ERROR)) {
-        if (s.n1()) {
-            res = s.error(NIL);
-        } else {
-            res = s.error(s.cdr());
-        }
+        res = s.error(s.cdr());
+    }
+    // Built-in functions:
+    else if (f.eq(NULL)) {
+        res = only(s).null() ? T : NIL;
+    } else if (f.eq(QUOTE)) {
+        res = s.cdr().car();
+    } else if (f.eq(NLAMBDA)) {
+        res = list(NLAMBDA, s.$2$(), s.$3$());
+    } else if (f.eq(LAMBDA)) {
+        res = list(LAMBDA, s.$2$(), s.$3$());
+    } else if (f.eq(NDEFUN)) {
+        ndefun(s.$2$(), s.$3$(), s.$4$());
+        res = s.$2$();
+    } else if (f.eq(DEFUN)) {
+        defun(s.$2$(), s.$3$(), s.$4$());
+        res = s.$2$();
     } else {
         return bug(s);
     }
     return res;
 }
-
-S NLAMBDA("nlambda"), LAMBDA("lambda");
-
 
 S apply(S f, S args) {
   f.n3() || f.cons(args).error(INVALID).t();
@@ -142,12 +160,4 @@ FUN(S, eval, S) IS(
     atomic(_.car()) ? evaluate_atomic_function(_):
       apply_defined_function($$(_.car()), _.cdr())
 )
-
-S defun(S name, S parameters, S body) {
-  return set(name, list(LAMBDA, parameters, body));
-}
-
-S ndefun(S name, S parameters, S body) {
-  return set(name, list(NLAMBDA, parameters, body));
-}
 

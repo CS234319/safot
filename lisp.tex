@@ -2516,7 +2516,7 @@ apply-decompsed-lambda
     car/1                                             &
     eager                                             &
     חילוץ האיבר הראשון ברשימה                         &
-    \lisp{(car '(b.a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(b.a))}~$⇒$ \lisp{B.A} \newline
     \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
     \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
     \lisp{(car 'a)}~$⇒$ \text{✗} \newline
@@ -2527,7 +2527,7 @@ apply-decompsed-lambda
     cdr/1                                             &
     eager                                             &
     חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
-    \lisp{(cdr '(a.b))}~$⇒$ \lisp{b} \newline
+    \lisp{(cdr '(a.b))}~$⇒$ \lisp{NIL} \newline
     \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
     \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
     \lisp{(cdr t)}~$⇒$ ✗ \newline
@@ -2549,7 +2549,7 @@ apply-decompsed-lambda
     eager                                             &
     הוספת איבר בתחילת רשימה                           &
     \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
-    \lisp{(cons 'b nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cons 'b nil)}~$⇒$ \lisp{(B)} \newline
     \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
 
     \rownumber                                        &
@@ -2748,8 +2748,8 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
     normal                                                                  &
     יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
     \lisp{(ndefun nlambda(p b)}\newline\mbox\quad\lisp{('nlambda p b))}     &
-    \T|(nlambda f (x y) (y x))|~$⇒$
-    \newline\mbox\quad\T|(nlambda f (x y) (y x)|
+    \T|(nlambda (x y) (y x))|~$⇒$
+    \newline\mbox\quad\T|(nlambda (x y) (y x)|
  ⏎
     \rownumber                                                              &
     quote/1                                                                 &

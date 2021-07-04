@@ -45,15 +45,18 @@ bool S::more0() const { return pair(); }
 bool S::more1() const { return pair() && cdr().more0(); }
 bool S::more2() const { return pair() && cdr().more1(); }
 bool S::more3() const { return pair() && cdr().more2(); }
+bool S::more4() const { return pair() && cdr().more3(); }
 
 bool S::less0() const { return false; }
 bool S::less1() const { return !more0(); }
 bool S::less2() const { return !more1(); }
 bool S::less3() const { return !more2(); }
+bool S::less4() const { return !more3(); }
 
 S S::$1$() const { return car(); } 
 S S::$2$() const { return cdr().$1$(); }
 S S::$3$() const { return cdr().$2$(); }
+S S::$4$() const { return cdr().$3$(); }
 
 /* Complete the definition of struct S */
 const S NIL("NIL"); // Always define longer names first 

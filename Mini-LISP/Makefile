@@ -31,6 +31,7 @@ TEST_OBJS = \
 		t-defun.o \
 		t-apply.o \
 		t-eval.o \
+		t-book.o \
 
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 

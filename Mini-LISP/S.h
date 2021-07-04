@@ -135,15 +135,18 @@ auxiliary fluentons.
   bool more1() const;  /// Sink: true iff this is a list of length at least 1 
   bool more2() const;  /// Sink: true iff this is a list of length at least 2
   bool more3() const;  /// Sink: true iff this is a list of length at least 3
+  bool more4() const;  /// Sink: true iff this is a list of length at least 4
 
   bool less0() const;  /// Sink: true iff this is a list of length at most 0
   bool less1() const;  /// Sink: true iff this is a list of length at most 1 
   bool less2() const;  /// Sink: true iff this is a list of length at most 2
   bool less3() const;  /// Sink: true iff this is a list of length at most 3
+  bool less4() const;  /// Sink: true iff this is a list of length at most 4
 
   S $1$() const;  /// Auxiliary pipe: first element in a list
   S $2$() const;  /// Auxiliary pipe: second element in a list
   S $3$() const;  /// Auxiliary pipe: third element in a list
+  S $4$() const;  /// Auxiliary pipe: forth element in a list
 };
 #undef NULL
 // Fluenton sources of Names of atoms that represent atomic functions 
