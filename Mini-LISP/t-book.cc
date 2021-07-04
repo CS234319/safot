@@ -207,3 +207,20 @@ TEST(Book, Mirror) {
     EXPECT_EXCEPTION(parse("(mirror 'a)").eval(), a, CDR); // Failed in (cdr x)
     EXPECT_EXCEPTION(parse("(mirror)").eval(), NIL, MISSING);
 }
+
+/*
+    Eval on eval
+*/
+TEST(Book, EvalOnEval) {
+    EXPECT_EQ(parse("(eval (eval T))").eval(), T);
+    EXPECT_EQ(parse("(eval (atom (eval (atom 'a))))").eval(), T);
+    EXPECT_EQ(parse("(eval (atom (eval (cdr '(a)))))").eval(), T);
+    EXPECT_EQ(parse("(eval (null (eval (cdr '(a)))))").eval(), T);
+    EXPECT_EQ(parse("(eval (atom (eval (car '(b a)))))").eval(), T);
+    EXPECT_EQ(parse("(eval (eval (eval (eval T))))").eval(), T);
+    EXPECT_EQ(parse("(eval (eval (eval (eval NIL))))").eval(), NIL);
+    EXPECT_EXCEPTION(parse("(eval (atom (eval (car 'a))))").eval(), a, CAR);
+    EXPECT_EXCEPTION(parse("(eval atom (atom (eval (car 'a))))").eval(),
+                     list(S("EVAL"), S("ATOM"), list(S("ATOM"), list(S("EVAL"), list(S("CAR"), list(S("QUOTE"), a))))),
+                     REDUNDANT);
+}
