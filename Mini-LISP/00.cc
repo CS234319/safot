@@ -97,16 +97,17 @@ static int REPL() {
         prompt("- ");
         goto Read;
       case accept:
-        break; 
+        break;
       case reject:
         prompt("?");
         goto Start;
     }
-    const S s = result();
   Eval:
+    S res = S("");
     const S saved_alist = alist;
     try {
-       const S e = s.eval();
+       const S e = result().eval();
+       res = e;
     } catch (Pair error) {
       print("Error");
       print(error.car);
@@ -114,7 +115,7 @@ static int REPL() {
       alist = saved_alist; // Restore a-list in case of error
     }
   Print:
-    print(s), print("\n");
+    print(res), print("\n");
   Loop:
     goto Start;
 }
