@@ -17,7 +17,7 @@ static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));
 }
 
-static auto supply(const char *s) {
+static auto feed(const char *s) {
   Parser::reset();
   return Parser::supply(strdup(s));
 }
@@ -43,7 +43,7 @@ TEST(Parser, AtomCharTokenizer) {
 }
 
 TEST(Parser, AtomChar) {
-  supply("z");
+  feed("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
@@ -53,56 +53,56 @@ extern std::ostream& operator<<(std::ostream &os, SExp s);
 
 
 TEST(Parser, Empty) {
-  supply("");
+  feed("");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, SingleTokenErrorOpenParen) {
-  supply("(");
+TEST(Parser, SingleTokenErroOpenParen) {
+  feed("(");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, SingleTokenErrorCloseParen) {
-  supply(")");
+TEST(Parser, SingleTokenErroCloseParen) {
+  feed(")");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, SingleTokenErrorQuote) {
-  supply("'");
+TEST(Parser, SingleTokenErroQuote) {
+  feed("'");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, SingleTokenErrorPeriod) {
-  supply(".");
+TEST(Parser, SingleTokenErroPeriod) {
+  feed(".");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
-TEST(Parser, SingleTokenErrorSquare) {
-  supply("[");
+TEST(Parser, SingleTokenErroSquare) {
+  feed("[");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::reject, status());
 }
 
 TEST(Parser, AtomLong) {
-  supply("Atom");
+  feed("Atom");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, List0) {
-  supply("()");
+  feed("()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
@@ -156,7 +156,7 @@ TEST(Parser, ListTokenization) {
 }
 
 TEST(Parser, List1) {
-  supply("(a)");
+  feed("(a)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
@@ -193,42 +193,42 @@ TEST(Parser, List1x) {
   D(!Symbol(h));
   EXPECT_EQ(h, ')');
 
-  supply("(a)");
+  feed("(a)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, List2) {
-  supply("(a b)");
+  feed("(a b)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, List3) {
-  supply("(a b c)");
+  feed("(a b c)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, List4) {
-  supply("(a b c d)");
+  feed("(a b c d)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, Pair) {
-  supply("a.b");
+  feed("a.b");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, PairInList) {
-  supply("(a.b)");
+  feed("(a.b)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
@@ -253,102 +253,102 @@ TEST(Parser, ListTokenizationNext) {
 }
 
 TEST(Parser, ParenPair) {
-  supply("(a.b)");
+  feed("(a.b)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 TEST(Parser, NilNilPair) {
-  supply("().()");
+  feed("().()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 TEST(Parser, EmptyNilPair) {
-  supply("().NIL");
+  feed("().NIL");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 TEST(Parser, NestedList) {
   reset();
-  supply("((a b) (c (d e)))");
+  feed("((a b) (c (d e)))");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QuoteAtom) {
-  supply("'A");
+  feed("'A");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QuotedListEmpty) {
-  supply("'()");
+  feed("'()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QuotedListSingleton) {
-  supply("'(a)");
+  feed("'(a)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QList2) {
-  supply("'(a 'b)");
+  feed("'(a 'b)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QList3) {
-  supply("(a 'b c)");
+  feed("(a 'b c)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QList4) {
-  supply("'(a 'b c 'd)");
+  feed("'(a 'b c 'd)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QPair) {
-  supply("'a.b");
+  feed("'a.b");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, QPairBoth) {
-  supply("'a.'b");
+  feed("'a.'b");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, qParenPair) {
-  supply("'(a.b)");
+  feed("'(a.b)");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 TEST(Parser, qNilNilPair) {
-  supply("().'()");
+  feed("().'()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
 }
 
 TEST(Parser, EmptyQNilPair) {
-  supply("().'NIL");
+  feed("().'NIL");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());

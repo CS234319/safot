@@ -1,4 +1,5 @@
 OBJS = \
+		read.o \
 		strings.o \
 		pairs.o \
 		stack.o  \
@@ -7,6 +8,7 @@ OBJS = \
 		fluentons.o \
 		a-list.o \
 		eval.o \
+		out.o 
 
 TEST_OBJS = \
 	$(OBJS) \
@@ -53,6 +55,10 @@ gvim:
 
 wc: 
 	wc -l chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile | sort -n 
+
+wc2: 
+	wc -l S.h $(OBJS:.o=.cc) $(OBJS:.o=.h) | sort -n 
+
 
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

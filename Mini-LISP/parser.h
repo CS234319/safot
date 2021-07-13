@@ -19,8 +19,7 @@ namespace Parser {
   extern S result(); // Result of parsing action; undefined if status is not accept 
   enum Status { ready, accept, reject}; // Should still work on resuming after NL 
   extern enum Status status();
-  extern void supply(char *input); // What to parse, ideally in installments
-  extern void supply(char *input); // What to parse, ideally in installments
+  extern void supply(const char *input); // What to parse, ideally in installments
   extern void reset(); // Must call before the first supply
 
   /* Used in the LL(1) parsing algorithm; integer range tricks are used to

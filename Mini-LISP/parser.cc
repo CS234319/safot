@@ -59,7 +59,7 @@ namespace Parser {
 
   static void parse();
 
-  extern void supply(char *buffer) {
+  extern void supply(String buffer) {
     D(buffer);
     Tokenizer::initialize(buffer);
     parse();

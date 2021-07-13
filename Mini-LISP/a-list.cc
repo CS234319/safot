@@ -1,6 +1,5 @@
 #include "a-list.h"
 #include "basics.h"
-S alist = NIL; 
 
 #define BUGGY 0
 
@@ -14,10 +13,11 @@ S alist = NIL;
 #include "io.h"
 #endif
 
-namespace {
-  static const S x1(set(NIL, NIL));  // (set (quote nil) (quote nil))
-  static const S x2(set(T, T));      // (set (quote t) (quote t))
-}
+S alist = NIL; 
+static S saved_alist = alist;
+
+void save() { saved_alist = alist; }
+void restore() { alist = saved_alist; }
 
 S set(S name, S value) { return (alist = name.cons(value).cons(alist)), value; }
 

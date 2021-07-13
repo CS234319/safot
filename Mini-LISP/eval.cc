@@ -98,46 +98,42 @@ void checkNumberOfArgs(S s) {
 S evaluate_atomic_function(S s) { M(s);
     checkNumberOfArgs(s);
     S f = s.car();
-    S res = NIL;
     // Atomic functions:
-    if (f.eq(CAR)) {
-        res = only(s).car();
-    } else if (f.eq(CONS)) {
-        res = s.$2$().eval().cons(s.$3$().eval());
-    } else if (f.eq(SET)) {
-        res = set(s.$2$().eval(), s.$3$().eval());
-    } else if (f.eq(EQ)) {
-        res = s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
-    } else if (f.eq(COND)) {
-        res = evaluate_cond(s.cdr());
-    } else if (f.eq(CDR)) {
-        res = only(s).cdr();
-    } else if (f.eq(ATOM)) {
-        res = only(s).atom() ? T : NIL;
-    } else if (f.eq(EVAL)) {
-        res = only(s).eval();
-    } else if (f.eq(ERROR)) {
-        res = s.error(s.cdr());
-    }
-    // Built-in functions:
-    else if (f.eq(NULL)) {
-        res = only(s).null() ? T : NIL;
-    } else if (f.eq(QUOTE)) {
-        res = s.cdr().car();
-    } else if (f.eq(NLAMBDA)) {
-        res = list(NLAMBDA, s.$2$(), s.$3$());
-    } else if (f.eq(LAMBDA)) {
-        res = list(LAMBDA, s.$2$(), s.$3$());
-    } else if (f.eq(NDEFUN)) {
+    if (f.eq(CAR)) 
+        return  only(s).car();
+     if (f.eq(CONS)) 
+        return  s.$2$().eval().cons(s.$3$().eval());
+     if (f.eq(SET)) 
+        return  set(s.$2$().eval(), s.$3$().eval());
+     if (f.eq(EQ)) 
+        return  s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
+     if (f.eq(COND)) 
+        return  evaluate_cond(s.cdr());
+     if (f.eq(CDR)) 
+        return  only(s).cdr();
+     if (f.eq(ATOM)) 
+        return  only(s).atom() ? T : NIL;
+     if (f.eq(EVAL)) 
+        return  only(s).eval();
+     if (f.eq(ERROR)) 
+        return  s.error(s.cdr());
+     if (f.eq(NULL)) 
+        return  only(s).null() ? T : NIL;
+     if (f.eq(QUOTE)) 
+        return  s.cdr().car();
+     if (f.eq(NLAMBDA)) 
+        return  list(NLAMBDA, s.$2$(), s.$3$());
+     if (f.eq(LAMBDA)) 
+        return  list(LAMBDA, s.$2$(), s.$3$());
+     if (f.eq(NDEFUN)) { 
         ndefun(s.$2$(), s.$3$(), s.$4$());
-        res = s.$2$();
-    } else if (f.eq(DEFUN)) {
+        return  s.$2$();
+     }
+     if (f.eq(DEFUN)) { 
         defun(s.$2$(), s.$3$(), s.$4$());
-        res = s.$2$();
-    } else {
-        return bug(s);
-    }
-    return res;
+        return  s.$2$();
+     }
+      return bug(s);
 }
 
 S apply(S f, S args) {
@@ -154,10 +150,8 @@ S apply_defined_function(S f, S args) {
   apply(f,args);
 }
 
-
 FUN(S, eval, S) IS(
     _.atom() ? lookup(_):
     atomic(_.car()) ? evaluate_atomic_function(_):
       apply_defined_function($$(_.car()), _.cdr())
 )
-

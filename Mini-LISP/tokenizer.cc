@@ -30,8 +30,8 @@ H get() {
   return last;
 }
 
-extern void initialize(char *buffer) {
-  head = buffer;
+extern void initialize(String buffer) {
+  head = const_cast<char *>(buffer);
   pending = false;
 }
 

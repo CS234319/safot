@@ -17,7 +17,7 @@ static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));
 }
 
-static auto supply(const char *s) {
+static auto feed(String s) {
   Parser::reset();
   return Parser::supply(strdup(s));
 }
@@ -27,7 +27,7 @@ using namespace Parser;
 extern std::ostream& operator<<(std::ostream &os, S s); 
 
 TEST(AST, AtomChar) {
-  supply("z");
+  feed("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
@@ -36,19 +36,19 @@ TEST(AST, AtomChar) {
 }
 
 TEST(AST, AtomLong) {
-  supply("Atom");
+  feed("Atom");
   EXPECT_STREQ("ATOM", S(result()).asAtom());   
   reset();
 }
 
 TEST(AST, List0) {
-  supply("()");
+  feed("()");
   EXPECT_EQ(NIL, result());
   reset();
 }
 
 TEST(AST, List1) {
-  supply("(HELLO)");
+  feed("(HELLO)");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -60,7 +60,7 @@ TEST(AST, List1) {
 }
 
 TEST(AST, List2) {
-  supply("(1 2)");
+  feed("(1 2)");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -74,7 +74,7 @@ TEST(AST, List2) {
 }
 
 TEST(AST, List3) {
-  supply("(A B C)");
+  feed("(A B C)");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -90,7 +90,7 @@ TEST(AST, List3) {
 }
 
 TEST(AST, QuoteA) {
-  supply("'Z");
+  feed("'Z");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -104,7 +104,7 @@ TEST(AST, QuoteA) {
 }
 
 TEST(AST, QuoteAA) {
-  supply("''Z");
+  feed("''Z");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -124,7 +124,7 @@ TEST(AST, QuoteAA) {
 }
 
 TEST(AST, Pair) {
-  supply("hello.world");
+  feed("hello.world");
   S s = Parser::result();
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
@@ -135,7 +135,7 @@ TEST(AST, Pair) {
 }
 
 TEST(AST, PairYZ) {
-  supply("Y.Z");
+  feed("Y.Z");
   S s = Parser::result();
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
@@ -146,90 +146,90 @@ TEST(AST, PairYZ) {
 }
 
 TEST(AST, AtomOutput) {
-  supply("Y");
+  feed("Y");
   EXPECT_STREQ("Y", ~Parser::result());
   reset();
 }
 
 TEST(AST, PairInList) {
-  supply("(Y.Z)");
+  feed("(Y.Z)");
   EXPECT_STREQ("(Y.Z)", ~Parser::result());
   reset();
 }
 
 TEST(AST, PairX) {
-  supply("Y.Z");
+  feed("Y.Z");
   EXPECT_STREQ("Y.Z", ~Parser::result());
   reset();
 }
 
 TEST(AST, QNestedList) {
-  supply("((a b) '(c (d e)))");
+  feed("((a b) '(c (d e)))");
   EXPECT_STREQ("((A B) (QUOTE (C (D E))))", ~Parser::result());
   reset();
 }
 
 TEST(AST, ListQuotePair) {
-  supply("(c d).'(a b)");
+  feed("(c d).'(a b)");
   EXPECT_STREQ("((C D) QUOTE (A B))", ~Parser::result());
   reset();
 }
 
 TEST(AST, QuoteInList) {
-  supply("(a 'b 'c)");
+  feed("(a 'b 'c)");
   EXPECT_STREQ("(A (QUOTE B) (QUOTE C))", ~Parser::result());
   reset();
 }
 
 TEST(AST, QuoteListInList) {
-  supply("(a '(foo bar)  'c)");
+  feed("(a '(foo bar)  'c)");
   EXPECT_STREQ("(A (QUOTE (FOO BAR)) (QUOTE C))", ~Parser::result());
   reset();
 }
 
 TEST(AST, NIL) {
-  supply("NIL");
+  feed("NIL");
   EXPECT_EQ(NIL, Parser::result());
   reset();
 }
 
 TEST(AST, EmptyListNiL) {
-  supply("()");
+  feed("()");
   EXPECT_EQ(Status::accept, status());
   EXPECT_EQ(NIL, Parser::result());
   reset();
 }
 
 TEST(AST, LibT) {
-  supply("(set (quote t) (quote t))");
+  feed("(set (quote t) (quote t))");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET (QUOTE T) (QUOTE T))", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibNil) {
-  supply("(set (quote nil) (quote nil))");
+  feed("(set (quote nil) (quote nil))");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET (QUOTE nil) (QUOTE nil))", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibLambda) {
-  supply("(set 'quote '(lambda (x) x)) ");
+  feed("(set 'quote '(lambda (x) x)) ");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET (QUOTE QUOTE) (QUOTE (LAMBDA (X) X)))", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibNLambda) {
-  supply("(set 'quote '(nlambda (x) x)) ");
+  feed("(set 'quote '(nlambda (x) x)) ");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET (QUOTE QUOTE) (QUOTE (NLAMBDA (X) X)))", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibDefun) {
-  supply(""
+  feed(""
 "(set 'defun\n"
   "'(nlambda (name parameters body)\n"
     "(set name (lambda parameters body))))"
@@ -249,7 +249,7 @@ TEST(AST, LibDefun) {
 }
 
 TEST(AST, LibNDefun) {
-  supply(""
+  feed(""
     "(set 'ndefun\n"
       "'(nlambda (name parameters body)\n"
     "(set name (nlambda parameters body))))\n"
@@ -267,7 +267,7 @@ TEST(AST, LibNDefun) {
 }
 
 TEST(AST, SquareBrackets) {
-  supply(""
+  feed(""
     "(set 'ndefun\n"
       "'(nlambda (name parameters body)\n"
     "(set name (nlambda parameters body]\n"
