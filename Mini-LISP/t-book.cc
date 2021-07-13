@@ -188,9 +188,7 @@ TEST(Book, BuiltInFunctionsT) {
     EXPECT_EQ(parse("(eq nil nil)").eval(), T);
 }
 
-/*
-    Zcar
-*/
+/* Zcar */
 TEST(Book, Zcar) {
     parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
     EXPECT_EQ(parse("(zcar 'a)").eval(), a);

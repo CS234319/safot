@@ -8,8 +8,8 @@ static FILE *file = stdout;
 int err() { return file = stderr, 0;  }
 int out()   { return file = stdout, 0; }
 
-int grunt(int result)  {
-  if (result >= 0) return result;
+bool grunt(int result)  {
+  if (result >= 0) return false;
   if (errno != 0) perror("mini-lisp"); 
   throw errno; 
 }
@@ -19,7 +19,7 @@ int put(String s)        { return grunt(fputs(s, file)); }
 int err(String   s)    { return put(s);  }
 int err(H h)           { return print(S(h));  }
 int print(String   line) { return put(line);       }
-int prompt(String  s)    { return print(s), print("\n");  }
+int prompt(String  s)    { return print(s);  }
 int print(H h)           { return print(S(h)); }
 int print(Pair p)        { return print("["), print(p.car), print("."), print(p.cdr), print("]"); }
 
