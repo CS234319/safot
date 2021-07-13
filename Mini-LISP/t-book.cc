@@ -198,9 +198,7 @@ TEST(Book, Zcar) {
     EXPECT_EXCEPTION(parse("(zcar)").eval(), NIL, MISSING);
 }
 
-/*
-    Mirror
-*/
+/* Mirror */
 TEST(Book, Mirror) {
     parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
     EXPECT_EQ(parse("(mirror '(a b))").eval(), list(b).cons(a));
@@ -208,9 +206,7 @@ TEST(Book, Mirror) {
     EXPECT_EXCEPTION(parse("(mirror)").eval(), NIL, MISSING);
 }
 
-/*
-    Eval on eval
-*/
+/* Eval on eval */
 TEST(Book, EvalOnEval) {
     EXPECT_EQ(parse("(eval (eval T))").eval(), T);
     EXPECT_EQ(parse("(eval (atom (eval (atom 'a))))").eval(), T);
