@@ -50,14 +50,9 @@ bool is_balance(const char* input) {
     bool balance = true;
     int count = 0;
     for (int i = 0; input[i] != '\0'; i++) {
-        if (input[i] == '(') {
-            count++;
-        }
-        if (input[i] == ')') {
-            count--;
-        }
-        if (count < 0) 
-          return false;
+        if (input[i] == '(') count++;
+        if (input[i] == ')') count--;
+        if (count < 0) return false;
     }
     return count == 0;
 }
