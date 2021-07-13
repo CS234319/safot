@@ -88,7 +88,6 @@ TEST(Apply, LambdaRac3CarFirstEval) {
     EXPECT_EQ(apply(f, list(CAR.cons(list(list(a, NIL).q())), b.q(), c.q())), c);
 }
 
-
 TEST(Apply, LambdaRac3CarLastEval) {
     S f = list(LAMBDA, list(x, y, z), z);
     EXPECT_EQ(apply(f, list(a.q(), b.q(), CAR.cons(list(list(c, NIL).q())))), c);

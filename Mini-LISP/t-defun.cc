@@ -51,7 +51,6 @@ TEST(NDefun, Rac3) {
     EXPECT_EQ(apply(f, list(a, b, c)), c);
 }
 
-
 TEST(NDefun, CarFirst) {
     S f = ndefun(a4, list(x, y), list(CAR, x));
     EXPECT_EQ(apply(f, list(list(a,b), c)), a);
