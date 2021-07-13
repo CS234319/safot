@@ -56,15 +56,10 @@ bool is_balance(const char* input) {
         if (input[i] == ')') {
             count--;
         }
-        if (count < 0) {
-            balance = false;
-            break;
-        }
+        if (count < 0) 
+          return false;
     }
-    if (count != 0) {
-        balance = false;
-    }
-    return balance;
+    return count == 0;
 }
 
 // Parse line, allow multi-line (e.g: "(car \n\n '(a.b)\n)")
