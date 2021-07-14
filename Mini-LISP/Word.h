@@ -6,8 +6,8 @@ Type Word { // The different perspectives of a word.
     perspective(Long l)        
     perspective(Short s1, s2)      
   };
-  Word(Short s1_, Short s2_);
-  Word();
+  Constructor Word(Short, Short);
+  Constructor Word();
   Property(Short hash);
 };
 #endif
