@@ -4,7 +4,7 @@
 Type Item: private Knob {
   using Knob::x, Knob::handle;
   Item();
-  Item(Short s);
+  Item(Short);
 
   Property(Item rest);
   Property(Short head);

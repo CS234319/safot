@@ -19,5 +19,5 @@ namespace Stack {
   bool empty();
   void clear(); // Clear the stack, returning all elements to the pool
   H &peep();    // Examine stack's, but without popping it.
-  H &peep(H h); // Peep deeper into the stack.
+  H &peep(H);   // Peep deeper into the stack.
 }

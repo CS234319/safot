@@ -2,9 +2,9 @@
 #define SHORT_H
 #include "chic.h"
 
-Short flip(Short h);
-Boolean black(Short h);
-Boolean white(Short h);
+Short flip(Short);
+Boolean black(Short);
+Boolean white(Short);
 
 void stain(Short &);
 void cleanse(Short &); 
