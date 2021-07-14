@@ -4,9 +4,11 @@
 #include "a-list.h"
 
 using namespace Parser;
+
 S eval() { /** Should only be called after the parser finished successfully */
-  print(Parser::result());
   try {
+    print("Parser: "); print(Parser::result()); print("\n");
+    print("Eval: "); print(Parser::result().eval());
     return Parser::result().eval();
   } catch (Pair x) { 
     throw err(),err("Error: kind = "), err(x.car), err(" Where = "), err(x.cdr), err("\n"),out();
@@ -26,8 +28,8 @@ int REPL() { /** Realizes the famous "Read, Evaluate, Print, Loop" of all
       supply(line);
       switch (status()) {
         case ready:      // More input must be waiting 
-          prompt("- ");  // Ask for more
-          goto Read;     // Loop again
+          prompt("- ");  // Prompt the user for more
+          goto Read;     // Loop again 
         case accept:     // Proceed to evaluation
           break;
         case reject:     // Parsing error 
@@ -35,7 +37,6 @@ int REPL() { /** Realizes the famous "Read, Evaluate, Print, Loop" of all
           goto Start;
       }
     Eval:
-      print(Parser::result());
       try {
         save();          // Prepare for an evaluation error
         const S result = eval(); 
