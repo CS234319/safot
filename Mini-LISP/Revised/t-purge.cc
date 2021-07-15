@@ -314,6 +314,7 @@ TEST(Purge, sanity_t2a) {
 
   EXPECT_EQ(accounting.allocate, 2);
   EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.leave,2);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_EQ(accounting.pairs, 2);
   EXPECT_EQ(accounting.pick, 2);
@@ -322,6 +323,7 @@ TEST(Purge, sanity_t2a) {
   EXPECT_EQ(accounting.reuse,1);
   EXPECT_EQ(accounting.use, 2);
   EXPECT_EQ(accounting.used, 2);
+  EXPECT_EQ(accounting.visit,2);
   EXPECT_ZZ(accounting.collect);
   EXPECT_ZZ(accounting.items);
   EXPECT_ZZ(accounting.miss);
@@ -329,14 +331,12 @@ TEST(Purge, sanity_t2a) {
   EXPECT_ZZ(accounting.push);
   EXPECT_ZZ(accounting.release);
   EXPECT_ZZ(accounting.unuse);
-  EXPECT_ZZ(accounting.leave);
-  EXPECT_ZZ(accounting.visit);
 
   purge.preserving(t2);
 
   EXPECT_EQ(accounting.allocate, 2);
   EXPECT_EQ(accounting.hit, 2);
-  EXPECT_EQ(accounting.leave, 2);
+  EXPECT_EQ(accounting.leave,4);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_EQ(accounting.pairs, 2);
   EXPECT_EQ(accounting.pick, 2);
@@ -345,8 +345,7 @@ TEST(Purge, sanity_t2a) {
   EXPECT_EQ(accounting.reuse,1);
   EXPECT_EQ(accounting.use, 2);
   EXPECT_EQ(accounting.used, 2);
-  EXPECT_EQ(accounting.visit, 2);
-  EXPECT_FF(corrupted.something());
+  EXPECT_EQ(accounting.visit,4);
   EXPECT_ZZ(accounting.collect);
   EXPECT_ZZ(accounting.items);
   EXPECT_ZZ(accounting.miss);
@@ -354,7 +353,6 @@ TEST(Purge, sanity_t2a) {
   EXPECT_ZZ(accounting.push);
   EXPECT_ZZ(accounting.release);
   EXPECT_ZZ(accounting.unuse);
-
 }
 
 TEST(Purge, t2b) {
@@ -395,10 +393,11 @@ TEST(Purge, complete3) {
   EXPECT_TT(live2.ok());
   EXPECT_TT(live3.ok());
   purge.preserving(live3);
-  EXPECT_TT(live1.ok());
-  EXPECT_TT(live2.ok());
+  EXPECT_FF(live1.ok());
+  EXPECT_FF(live2.ok());
   EXPECT_TT(live3.ok());
-  EXPECT_EQ(accounting.used, 3);
+
+  EXPECT_EQ(accounting.used, 1);
 }
 
 
@@ -412,6 +411,7 @@ TEST(Purge, complete7) {
   auto live5 = request(live1,live2);
   auto live6 = request(live3,live4);
   auto live7 = request(live5,live5);
+
   EXPECT_TT(live1.ok());
   EXPECT_TT(live2.ok());
   EXPECT_TT(live3.ok());
@@ -420,15 +420,23 @@ TEST(Purge, complete7) {
   EXPECT_TT(live6.ok());
   EXPECT_TT(live7.ok());
   EXPECT_EQ(accounting.used, 7);
+
   purge.preserving(live7);
-  EXPECT_TT(live1.ok());
-  EXPECT_TT(live2.ok());
-  EXPECT_TT(live3.ok());
-  EXPECT_TT(live4.ok());
-  EXPECT_TT(live5.ok());
-  EXPECT_TT(live6.ok());
+
   EXPECT_TT(live7.ok());
-  EXPECT_EQ(accounting.used, 7);
+  EXPECT_TT(live5.ok());
+  EXPECT_TT(live2.ok());
+  EXPECT_TT(live1.ok());
+
+  EXPECT_EQ(accounting.leave,4);
+  EXPECT_EQ(accounting.visit,4);
+  EXPECT_EQ(accounting.collect,3);
+  EXPECT_EQ(accounting.release,3);
+  EXPECT_EQ(accounting.used, 4);
+
+  EXPECT_FF(live3.ok());
+  EXPECT_FF(live4.ok());
+  EXPECT_FF(live6.ok());
 }
 
 TEST(Sx, Pair1) {

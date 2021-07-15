@@ -24,3 +24,4 @@ extern Type Accounting {
   auto init(Integer n) selfing(this->~Accounting(), N = n) 
 } accounting;
 #endif
+

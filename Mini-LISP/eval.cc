@@ -92,7 +92,7 @@ void checkNumberOfArgs(S s) {
 
 S evaluate_atomic_function(S s) { M(s);
   checkNumberOfArgs(s);
-  S f = s.car();
+  const S f = s.car();
   // Atomic functions:
   if (f.eq(CAR))    return only(s).car();
   if (f.eq(CONS))   return s.$2$().eval().cons(s.$3$().eval());

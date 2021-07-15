@@ -9,21 +9,21 @@
 #include "accounting.h"
 
 static struct {
-  auto empty() { return top.x(); } 
+  auto empty() { return first.x(); } 
   Knob pop() {
-    not top.x() or panic();  
-    Surely(top.prev().x());
+    not first.x() or panic();  
+    Surely(first.prev().x());
     accounting.pop();
-    let old = top;
-    top = top.next();
-    if (!top.x()) top.prev($P_x$);
+    let old = first;
+    first = first.next();
+    if (!first.x()) first.prev($P_x$);
     return old.handle(); 
   }
   Unit push(Pristine p) {
     accounting.push();
-    p.prev($P_x$).next(top); 
-    if (!top.x()) top.prev(p);
-    top = p;
+    p.prev($P_x$).next(first); 
+    if (!first.x()) first.prev(p);
+    first = p;
   }
   Unit pick(Pristine p) {
     Surely(p.ok());
@@ -31,7 +31,7 @@ static struct {
     auto prev = p.prev(), next = p.next();
     if (!prev.x()) prev.next(next); 
     if (!next.x()) next.prev(prev); 
-    if (top.handle() == p.handle()) top = next ;
+    if (first.handle() == p.handle()) first = next ;
   }
   Unit init() {
     for (Short s = $P_f$ + 1; s <= $P_t$ - 1; ++s) 
@@ -39,40 +39,40 @@ static struct {
     Pristine($P_f$).prev(Pristine()).next(Pristine($P_f$ +1));
     Pristine($P_t$).next(Pristine()).prev(Pristine($P_t$ -1));
     accounting.init($P_n$);
-    top = Pristine($P_f$);
+    first = Pristine($P_f$);
   }
-  Pristine top;
+  Pristine first;
   private:
     Unit panic() { throw EXHAUSTED; }
-} stack;
+} $H$;
 
-const Pristine& heap = stack.top; 
+const Pristine& heap = $H$.first; 
 
 Item fresh(Short s1, Short s2) { 
   Expect(white(s1));
   Expect(white(s2));
   Expect(s2 == $P_x$ || s2 >= $P_f$ && s2 <= $P_t$);
-  if (stack.empty()) throw __LINE__; 
+  if ($H$.empty()) throw __LINE__; 
   ++accounting.items;
-  return stack.pop().Item().head(s1).rest(s2);
+  return $H$.pop().Item().head(s1).rest(s2);
 }
 
 Unit free(Item i) {
   Expect(i.ok());
-  stack.push(Pristine(i.handle())) | --accounting.items;
+  $H$.push(Pristine(i.handle())) | --accounting.items;
 }
  
 #define Count(label,signature,value) (accounting.label() , value)  
 static inline auto reuse(Short s) { accounting.reuse(); return Pair(s);  }
 static inline auto hit(Word w, Short s) {  
   accounting.hit();
-  stack.pick(Pristine(s)); 
+  $H$.pick(Pristine(s)); 
   P[s].l = w.l; 
   return Pair(s);
 }
 
 static inline auto miss(Word w) {  
-  accounting.miss(); return stack.pop().Pair(w.s1,w.s2); 
+  accounting.miss(); return $H$.pop().Pair(w.s1,w.s2); 
 }
 
 static Pair request(Word w, Short s) {
@@ -84,7 +84,7 @@ static Pair request(Word w, Short s) {
 }
 
 extern Pristine heapify() {
-  stack.init();
+  $H$.init();
   accounting.init($P_n$);
 }
 
@@ -98,7 +98,7 @@ static Pair request(Word w) {
   
 Unit collect(Pair p) { accounting.collect(); 
   Expect(p.ok());
-  stack.push(Pristine(p.handle())) | --accounting.pairs;
+  $H$.push(Pristine(p.handle())) | --accounting.pairs;
 }
 
 
