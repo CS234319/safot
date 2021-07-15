@@ -45,13 +45,8 @@ S bug(S s) { return s.error(T); }
     return __; \
   } 
 
-S defun(S name, S parameters, S body) {
-    return set(name, list(LAMBDA, parameters, body));
-}
-
-S ndefun(S name, S parameters, S body) {
-    return set(name, list(NLAMBDA, parameters, body));
-}
+S defun(S name, S parameters, S body) { return set(name, list(LAMBDA, parameters, body)); }
+S ndefun(S name, S parameters, S body) { return set(name, list(NLAMBDA, parameters, body)); }
 
 FUN(S, evaluate_list, S) IS(
   _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
@@ -96,49 +91,36 @@ void checkNumberOfArgs(S s) {
 }
 
 S evaluate_atomic_function(S s) { M(s);
-    checkNumberOfArgs(s);
-    S f = s.car();
-    // Atomic functions:
-    if (f.eq(CAR)) 
-        return  only(s).car();
-     if (f.eq(CONS)) 
-        return  s.$2$().eval().cons(s.$3$().eval());
-     if (f.eq(SET)) 
-        return  set(s.$2$().eval(), s.$3$().eval());
-     if (f.eq(EQ)) 
-        return  s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
-     if (f.eq(COND)) 
-        return  evaluate_cond(s.cdr());
-     if (f.eq(CDR)) 
-        return  only(s).cdr();
-     if (f.eq(ATOM)) 
-        return  only(s).atom() ? T : NIL;
-     if (f.eq(EVAL)) 
-        return  only(s).eval();
-     if (f.eq(ERROR)) 
-        return  s.error(s.cdr());
-     if (f.eq(NULL)) 
-        return  only(s).null() ? T : NIL;
-     if (f.eq(QUOTE)) 
-        return  s.cdr().car();
-     if (f.eq(NLAMBDA)) 
-        return  list(NLAMBDA, s.$2$(), s.$3$());
-     if (f.eq(LAMBDA)) 
-        return  list(LAMBDA, s.$2$(), s.$3$());
-     if (f.eq(NDEFUN)) { 
-        ndefun(s.$2$(), s.$3$(), s.$4$());
-        return  s.$2$();
-     }
-     if (f.eq(DEFUN)) { 
-        defun(s.$2$(), s.$3$(), s.$4$());
-        return  s.$2$();
-     }
-      return bug(s);
+  checkNumberOfArgs(s);
+  S f = s.car();
+  // Atomic functions:
+  if (f.eq(CAR))    return only(s).car();
+  if (f.eq(CONS))   return s.$2$().eval().cons(s.$3$().eval());
+  if (f.eq(SET))    return set(s.$2$().eval(),          s.$3$().eval());
+  if (f.eq(EQ))     return s.$2$().eval().eq(s.$3$().eval())   ?         T     : NIL;
+  if (f.eq(COND))   return evaluate_cond(s.cdr());
+  if (f.eq(CDR))    return only(s).cdr();
+  if (f.eq(ATOM))   return only(s).atom()            ?         T     : NIL;
+  if (f.eq(EVAL))   return only(s).eval();
+  if (f.eq(ERROR))  return s.error(s.cdr());
+  if (f.eq(NULL))   return only(s).null()            ?         T     : NIL;
+  if (f.eq(QUOTE))  return s.cdr().car();
+  if (f.eq(NLAMBDA)) return list(NLAMBDA,             s.$2$(),     s.$3$());
+  if (f.eq(LAMBDA)) return list(LAMBDA,             s.$2$(),     s.$3$());
+  if (f.eq(NDEFUN)) { 
+    ndefun(s.$2$(), s.$3$(), s.$4$());
+    return  s.$2$();
+  }
+  if (f.eq(DEFUN)) { 
+    defun(s.$2$(), s.$3$(), s.$4$());
+    return  s.$2$();
+  }
+  return bug(s);
 }
 
 S apply(S f, S args) {
   f.n3() || f.cons(args).error(INVALID).t();
-  save();
+  save(); // #ERROR DOR? Are you sure.
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
   alist = bind(f.$2$(), actuals, alist);
   const auto result = f.$3$().eval();

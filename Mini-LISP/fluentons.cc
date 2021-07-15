@@ -1,4 +1,5 @@
-// An implementation of mini-lisp in mini-C++
+// Many more utility functions, including those used for fluent API 
+
 #include "basics.h"
 #include "eval.h"
 

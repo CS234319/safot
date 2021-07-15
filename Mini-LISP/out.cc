@@ -25,6 +25,7 @@ int print(Pair p)        { return print("["), print(p.car), print("."), print(p.
 
 /** Recursively print an S expression */
 int print(S s) {
+  // TODO pinpoint and fix the full cycle bug; hint dotted pairs.
   if (s.null()) return print("NIL");
   if (s.atom()) return print(s.asAtom());
   if (!islist(s)) return print("("), print(s.car()), print("."), print(s.cdr()), print(")");

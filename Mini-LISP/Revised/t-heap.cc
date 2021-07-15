@@ -142,7 +142,7 @@ TEST(Accounting, heapify) {
   EXPECT_ZZ(accounting.collect); 
   EXPECT_ZZ(accounting.live); 
   EXPECT_ZZ(accounting.visit); 
-  EXPECT_ZZ(accounting.unvisit); 
+  EXPECT_ZZ(accounting.leave); 
   EXPECT_ZZ(accounting.request); 
   EXPECT_ZZ(accounting.reuse); 
   EXPECT_ZZ(accounting.provide); 
@@ -174,7 +174,7 @@ TEST(Accounting, push) {
   EXPECT_EQ(accounting.pop, 1); 
   EXPECT_EQ(accounting.live, 1); 
   EXPECT_ZZ(accounting.visit); 
-  EXPECT_ZZ(accounting.unvisit); 
+  EXPECT_ZZ(accounting.leave); 
   EXPECT_ZZ(accounting.pick); 
   EXPECT_ZZ(accounting.release); 
   EXPECT_ZZ(accounting.push); 

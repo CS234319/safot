@@ -22,7 +22,7 @@ TEST(Visit, repertoire) {
   heapify();
   Pair p = request(-2,-3);
   p.visit();
-  p.unvisit();
+  p.leave();
   p.seen();
 }
 
@@ -36,7 +36,7 @@ TEST(Visit, seen) {
   Pair p = request(5,6);
   EXPECT_FF(p.seen());
   EXPECT_TT(p.visit().seen());
-  EXPECT_TT(!p.unvisit().seen());
+  EXPECT_TT(!p.leave().seen());
 }
 
 TEST(Visit, distinct) {
@@ -50,14 +50,14 @@ TEST(Visit, distinct) {
 TEST(Visit, unseen) {
   auto x = request(2,3);
   Word w = P[x.handle()];
-  EXPECT_FF(x.visit().unvisit().seen());
+  EXPECT_FF(x.visit().leave().seen());
 }
 
 TEST(Visit, reversible) {
   heapify();
   auto x = request(2,3);
   Word w = P[x.handle()];
-  EXPECT_FF(x.visit().unvisit().seen());
+  EXPECT_FF(x.visit().leave().seen());
   EXPECT_EQ(w.l,P[x.handle()].l);
 }
 
@@ -77,7 +77,7 @@ TEST(Visit, ok) {
   Pair p = request(2,3);
   EXPECT_TT(p.ok());
   EXPECT_TT(not p.visit().ok());
-  EXPECT_TT(p.unvisit().ok());
+  EXPECT_TT(p.leave().ok());
 }
 
 TEST(Visit, special) {
@@ -235,7 +235,7 @@ TEST(Purge, t2a) {
   EXPECT_ZZ(accounting.collect);
   EXPECT_ZZ(accounting.live);
   EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_ZZ(accounting.request);
   EXPECT_ZZ(accounting.reuse);
   EXPECT_ZZ(accounting.provide);
@@ -257,7 +257,7 @@ TEST(Purge, t2a) {
   EXPECT_ZZ(accounting.collect);
   EXPECT_EQ(accounting.live, 1);
   EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_EQ(accounting.request, 1);
   EXPECT_ZZ(accounting.reuse);
   EXPECT_EQ(accounting.provide,1);
@@ -279,7 +279,7 @@ TEST(Purge, t2a) {
   EXPECT_ZZ(accounting.collect);
   EXPECT_EQ(accounting.live, 1);
   EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_EQ(accounting.request, 2);
   EXPECT_EQ(accounting.reuse,1);
   EXPECT_EQ(accounting.provide, 1);
@@ -302,7 +302,7 @@ TEST(Purge, t2a) {
   EXPECT_ZZ(accounting.collect);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_EQ(accounting.request, 3);
   EXPECT_EQ(accounting.reuse,1);
   EXPECT_EQ(accounting.provide, 2);
@@ -325,7 +325,7 @@ TEST(Purge, t2a) {
   EXPECT_ZZ(accounting.collect);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_EQ(accounting.request, 3);
   EXPECT_EQ(accounting.reuse,1);
   EXPECT_EQ(accounting.provide, 2);

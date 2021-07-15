@@ -16,7 +16,7 @@ struct {
     }
     Unit consider(Pair p) {
       extern Unit collect(Pair);
-      p.foreign() or (p.seen() ? (p.unvisit(),0) : collect(p));
+      p.foreign() or (p.seen() ? (p.leave(),0) : collect(p));
     }
   )
 } purge;

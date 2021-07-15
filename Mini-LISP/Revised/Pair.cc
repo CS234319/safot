@@ -24,7 +24,7 @@ Pair Pair::visit()  { accounting.visit();
   return car(flip(s1())); 
 } 
 
-Pair Pair::unvisit() { accounting.unvisit();
+Pair Pair::leave() { accounting.leave();
   Expect(seen()); 
   Promise(not seen()); 
   return car(flip(s1())); 

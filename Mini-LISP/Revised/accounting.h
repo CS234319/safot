@@ -18,7 +18,7 @@ extern Type Accounting {
   Clicker allocate, pop = allocate.kind(), pick = allocate.kind();  
   Clicker release, push = release.kind(), collect = release.kind();
   Function live = Closure(allocate - release);
-  Clicker visit, unvisit; 
+  Clicker visit, leave; 
   Clicker request, reuse = request.kind(), provide = request.kind(); 
   Clicker hit = provide.kind(), miss = provide.kind();   
   auto init(Integer n) selfing(this->~Accounting(), N = n) 

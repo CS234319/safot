@@ -21,7 +21,7 @@ Type Pair: Sx {
   Property(Boolean seen);
 
   Selfer(visit()); // Consolidate variadic macro
-  Selfer(unvisit()); 
+  Selfer(leave()); 
 
   static Boolean ok(Word);
   protected:
