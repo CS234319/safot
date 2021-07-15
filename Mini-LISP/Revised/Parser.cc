@@ -1,5 +1,6 @@
 #include "Parser.h"
-#include "tokenizer.h"
+
+#include "Tokenizer.h"
 #include "text.h"
 
 #include <string.h>

@@ -4,8 +4,8 @@
 
 TEST(accounting, init) {
  accounting.init(17); 
- EXPECT_ZZ(accounting.requested);
- EXPECT_ZZ(accounting.provided);
+ EXPECT_ZZ(accounting.request);
+ EXPECT_ZZ(accounting.provide);
  EXPECT_ZZ(accounting.used);
  EXPECT_EQ(accounting.unused,17);
 }

@@ -1,5 +1,7 @@
 #ifndef CORRUPTED_H
 #define CORRUPTED_H
+
+#include "layout.h"
 #include "heap.h"
 
 #include "accounting.h"
@@ -10,7 +12,6 @@ inline Short length() {
       ++result;
   return result;
 }
-
 
 static struct {
   Boolean something() Is(uncounted() || excess() || asymmetric() || cyclic() || weirdos() || pristines() || items() || pairs()); 

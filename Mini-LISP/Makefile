@@ -40,25 +40,7 @@ SRCS = $(wildcard *.c) $(wildcard *.cc)
 CFLAGS += -MD -MP -w -std=gnu2x
 
 
-store:
-all: test mini-lisp store 
-
-FILES=t-misc.o t-Pushdown.o t-heap.o t-purge.o accounting.o heap.o Short.o Handle.o Id.o Sx.o text.o Knob.o Item.o Pair.o Word.o Pristine.o layout.o Pushdown.o Tokenizer.o Parser.o 
-
-accounting.o: accounting.h
-
-store: $(FILES) 
-	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
-
-gvim: 
-	gvim chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile -c make
-
-wc: 
-	wc -l chic.h $(FILES:.o=.cc) $(FILES:.o=.h) Makefile | sort -n 
-
-wc2: 
-	wc -l S.h $(OBJS:.o=.cc) $(OBJS:.o=.h) | sort -n 
-
+all: test mini-lisp 
 
 test: $(TEST_OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread

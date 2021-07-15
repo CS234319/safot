@@ -8,6 +8,7 @@ Type Function {
 };
 
 #define Closure(X) Function([&](){return(X);})
+
 extern Type Accounting {
   int N;
   Clicker use, unuse;

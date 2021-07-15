@@ -80,8 +80,7 @@ static Pair request(Word w, Short s) {
   Expect(s != $P_x$);
   Expect(s >= $P_f$);
   Expect(s <= $P_t$);
-  return P[s].l == w.l ? reuse(s) :
-         (++accounting.pairs, Pristine(s).ok()) ? hit(w,s) : miss(w);
+  return P[s].l == w.l ? reuse(s) : (++accounting.pairs,Pristine(s).ok()) ? hit(w,s) : miss(w);
 }
 
 extern Pristine heapify() {
@@ -93,7 +92,7 @@ static struct {
   Boolean Pristine(Short s) { return ::Pristine(s).ok(); }
 } bad;
 
-Pair request(Word w) {
+static Pair request(Word w) {
   return  request(w, w.hash());
 }
   
@@ -104,6 +103,5 @@ Unit collect(Pair p) { accounting.collect();
 
 
 Pair request(Sx car, Sx cdr) { 
-  accounting.request();
   return request(Word(car.handle(),cdr.handle())); 
 }

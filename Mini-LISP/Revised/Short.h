@@ -9,4 +9,3 @@ Boolean white(Short);
 void stain(Short &);
 void cleanse(Short &); 
 #endif
-
