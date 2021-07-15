@@ -1,5 +1,3 @@
-store:
-
 # CFLAGS += -MD -MP -w -std=gnu2x
 #
 CFLAGS += -w -std=gnu2x
@@ -10,15 +8,26 @@ TYPES=Handle.o Id.o Item.o Knob.o Pair.o Parser.o Pristine.o Pushdown.o Sx.o Tok
 PRODUCTION=$(PRIMITIVES) $(SERVICES) $(TYPES)
 TEST=t-heap.o t-misc.o t-purge.o t-Pushdown.o t-accounting.o 
 OBJECTS=$(PRODUCTION) $(TEST)
+SOURCES=$(OBJECTS:.o=.cc) 
+TARGETS=test .depend
 
-store: $(OBJECTS) 
-	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread
+test: # main target
 
-FOUND=Mak* chic*.h $(wildcard *.c) $(wildcard *.cc) $(wildcard *.h) 
+test: $(OBJECTS)  
+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
 
-accounting.o: accounting.h
+%.o: %.cc                                      # Compiling individual C++ files into ob
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c $<
 
-FILES=chic.h $(OBJECTS:.o=.cc) $(OBJECTS:.o=.h) 
+
+FILES=chic.h $(SOURCES) $(OBJECTS:.o=.h) 
+
+depend: .depend Makefile
+
+.depend: $(SOURCES) $(wildcard *.h) 
+	$(CXX) -w -MM $^ > "$@"
+
+include .depend
 
 list:
 	@echo $(FILES)
@@ -29,10 +38,5 @@ gvim:
 wc: 
 	wc -l chic.h $(FILES) Makefile | sort -n 
 
-
-%.o: %.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) -c $<
-
 clean:
-		rm -rf store $(OBJECTS) *.o *.d *~ *.backup memory *.back *.aux *.log delme*
-
+		rm -rf $(TARGETS) $(OBJECTS) *.o *.d *~ *.backup memory *.back *.aux *.log delme* diff
