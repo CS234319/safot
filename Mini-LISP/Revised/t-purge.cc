@@ -322,17 +322,39 @@ TEST(Purge, sanity_t2a) {
   EXPECT_EQ(accounting.reuse,1);
   EXPECT_EQ(accounting.use, 2);
   EXPECT_EQ(accounting.used, 2);
-  EXPECT_FF(corrupted.something());
   EXPECT_ZZ(accounting.collect);
   EXPECT_ZZ(accounting.items);
-  EXPECT_EQ(accounting.leave, 2);
   EXPECT_ZZ(accounting.miss);
   EXPECT_ZZ(accounting.pop);
   EXPECT_ZZ(accounting.push);
   EXPECT_ZZ(accounting.release);
   EXPECT_ZZ(accounting.unuse);
+  EXPECT_ZZ(accounting.leave);
+  EXPECT_ZZ(accounting.visit);
+
+  purge.preserving(t2);
+
+  EXPECT_EQ(accounting.allocate, 2);
+  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.leave, 2);
+  EXPECT_EQ(accounting.live, 2);
+  EXPECT_EQ(accounting.pairs, 2);
+  EXPECT_EQ(accounting.pick, 2);
+  EXPECT_EQ(accounting.provide, 2);
+  EXPECT_EQ(accounting.request, 3);
+  EXPECT_EQ(accounting.reuse,1);
+  EXPECT_EQ(accounting.use, 2);
   EXPECT_EQ(accounting.used, 2);
   EXPECT_EQ(accounting.visit, 2);
+  EXPECT_FF(corrupted.something());
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.unuse);
+
 }
 
 TEST(Purge, t2b) {
