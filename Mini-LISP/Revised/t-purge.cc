@@ -220,123 +220,119 @@ TEST(Purge, live5) {
   EXPECT_FF(corrupted.something());
 }
 
-TEST(Purge, t2a) {
+TEST(Purge, sanity_t2a) {
   heapify();
-  EXPECT_ZZ(accounting.use);
-  EXPECT_ZZ(accounting.unuse);
-  EXPECT_ZZ(accounting.used);
-  EXPECT_ZZ(accounting.pairs);
-  EXPECT_ZZ(accounting.items);
+
   EXPECT_ZZ(accounting.allocate);
-  EXPECT_ZZ(accounting.pop);
-  EXPECT_ZZ(accounting.pick);
-  EXPECT_ZZ(accounting.release);
-  EXPECT_ZZ(accounting.push);
   EXPECT_ZZ(accounting.collect);
-  EXPECT_ZZ(accounting.live);
-  EXPECT_ZZ(accounting.visit);
+  EXPECT_ZZ(accounting.hit);
+  EXPECT_ZZ(accounting.items);
   EXPECT_ZZ(accounting.leave);
+  EXPECT_ZZ(accounting.live);
+  EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.pairs);
+  EXPECT_ZZ(accounting.pick);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_ZZ(accounting.provide);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.release);
   EXPECT_ZZ(accounting.request);
   EXPECT_ZZ(accounting.reuse);
-  EXPECT_ZZ(accounting.provide);
-  EXPECT_ZZ(accounting.hit);
-  EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.unuse);
+  EXPECT_ZZ(accounting.use);
+  EXPECT_ZZ(accounting.used);
+  EXPECT_ZZ(accounting.visit);
 
   auto t1 = request(-2,-3);
 
-  EXPECT_EQ(accounting.use, 1);
-  EXPECT_ZZ(accounting.unuse);
-  EXPECT_EQ(accounting.used, 1);
-  EXPECT_EQ(accounting.pairs, 1);
-  EXPECT_ZZ(accounting.items);
   EXPECT_EQ(accounting.allocate, 1);
-  EXPECT_ZZ(accounting.pop);
-  EXPECT_EQ(accounting.pick, 1);
-  EXPECT_ZZ(accounting.release);
-  EXPECT_ZZ(accounting.push);
-  EXPECT_ZZ(accounting.collect);
-  EXPECT_EQ(accounting.live, 1);
-  EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.leave);
-  EXPECT_EQ(accounting.request, 1);
-  EXPECT_ZZ(accounting.reuse);
-  EXPECT_EQ(accounting.provide,1);
   EXPECT_EQ(accounting.hit, 1);
+  EXPECT_EQ(accounting.live, 1);
+  EXPECT_EQ(accounting.pairs, 1);
+  EXPECT_EQ(accounting.pick, 1);
+  EXPECT_EQ(accounting.provide,1);
+  EXPECT_EQ(accounting.request, 1);
+  EXPECT_EQ(accounting.use, 1);
+  EXPECT_EQ(accounting.used, 1);
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.reuse);
+  EXPECT_ZZ(accounting.unuse);
+  EXPECT_ZZ(accounting.visit);
 
   request(-2,-3); // Repeat the previous request
 
-  EXPECT_EQ(accounting.use, 1);
-  EXPECT_ZZ(accounting.unuse);
-  EXPECT_EQ(accounting.used, 1);
-  EXPECT_EQ(accounting.pairs, 1);
-  EXPECT_ZZ(accounting.items);
   EXPECT_EQ(accounting.allocate, 1);
-  EXPECT_ZZ(accounting.pop);
-  EXPECT_EQ(accounting.pick, 1);
-  EXPECT_ZZ(accounting.release);
-  EXPECT_ZZ(accounting.push);
-  EXPECT_ZZ(accounting.collect);
+  EXPECT_EQ(accounting.hit, 1);
   EXPECT_EQ(accounting.live, 1);
-  EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.leave);
+  EXPECT_EQ(accounting.pairs, 1);
+  EXPECT_EQ(accounting.pick, 1);
+  EXPECT_EQ(accounting.provide, 1);
   EXPECT_EQ(accounting.request, 2);
   EXPECT_EQ(accounting.reuse,1);
-  EXPECT_EQ(accounting.provide, 1);
-  EXPECT_EQ(accounting.hit, 1);
+  EXPECT_EQ(accounting.use, 1);
+  EXPECT_EQ(accounting.used, 1);
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.unuse);
+  EXPECT_ZZ(accounting.visit);
 
   auto t2 = request(t1.handle(),-4);
 
-  EXPECT_FF(corrupted.something());
-  EXPECT_EQ(accounting.use, 2);
-  EXPECT_ZZ(accounting.unuse);
-  EXPECT_EQ(accounting.used, 2);
-  EXPECT_EQ(accounting.pairs, 2);
-  EXPECT_ZZ(accounting.items);
   EXPECT_EQ(accounting.allocate, 2);
-  EXPECT_ZZ(accounting.pop);
-  EXPECT_EQ(accounting.pick, 2);
-  EXPECT_ZZ(accounting.release);
-  EXPECT_ZZ(accounting.push);
-  EXPECT_ZZ(accounting.collect);
+  EXPECT_EQ(accounting.hit, 2);
   EXPECT_EQ(accounting.live, 2);
-  EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.leave);
+  EXPECT_EQ(accounting.pairs, 2);
+  EXPECT_EQ(accounting.pick, 2);
+  EXPECT_EQ(accounting.provide, 2);
   EXPECT_EQ(accounting.request, 3);
   EXPECT_EQ(accounting.reuse,1);
-  EXPECT_EQ(accounting.provide, 2);
-  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.use, 2);
+  EXPECT_EQ(accounting.used, 2);
+  EXPECT_FF(corrupted.something());
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_ZZ(accounting.leave);
   EXPECT_ZZ(accounting.miss);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.unuse);
+  EXPECT_ZZ(accounting.visit);
 
   purge.preserving(t2);
 
-  EXPECT_FF(corrupted.something());
-  EXPECT_EQ(accounting.use, 2);
-  EXPECT_ZZ(accounting.unuse);
-  EXPECT_EQ(accounting.used, 2);
-  EXPECT_EQ(accounting.pairs, 2);
-  EXPECT_ZZ(accounting.items);
   EXPECT_EQ(accounting.allocate, 2);
-  EXPECT_ZZ(accounting.pop);
-  EXPECT_EQ(accounting.pick, 2);
-  EXPECT_ZZ(accounting.release);
-  EXPECT_ZZ(accounting.push);
-  EXPECT_ZZ(accounting.collect);
+  EXPECT_EQ(accounting.hit, 2);
   EXPECT_EQ(accounting.live, 2);
-  EXPECT_ZZ(accounting.visit);
-  EXPECT_ZZ(accounting.leave);
+  EXPECT_EQ(accounting.pairs, 2);
+  EXPECT_EQ(accounting.pick, 2);
+  EXPECT_EQ(accounting.provide, 2);
   EXPECT_EQ(accounting.request, 3);
   EXPECT_EQ(accounting.reuse,1);
-  EXPECT_EQ(accounting.provide, 2);
-  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.use, 2);
+  EXPECT_EQ(accounting.used, 2);
+  EXPECT_FF(corrupted.something());
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_EQ(accounting.leave, 2);
   EXPECT_ZZ(accounting.miss);
-
-
-
-  EXPECT_FF(corrupted.something());
-  EXPECT_ZZ(accounting.used);
-  EXPECT_FF(corrupted.something());
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.unuse);
+  EXPECT_EQ(accounting.used, 2);
+  EXPECT_EQ(accounting.visit, 2);
 }
 
 TEST(Purge, t2b) {
