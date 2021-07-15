@@ -16,7 +16,8 @@ extern Type Accounting {
   Function unused = Closure(N-used);  
   Account pairs = used.kind(), items = used.kind();
   Clicker allocate, pop = allocate.kind(), pick = allocate.kind();  
-  Clicker release, push = release.kind(), collect = release.kind();
+  Clicker release,  push = release.kind(); 
+  Clicker collect;
   Function live = Closure(allocate - release);
   Clicker visit, leave; 
   Clicker request, reuse = request.kind(), provide = request.kind(); 

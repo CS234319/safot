@@ -7,10 +7,62 @@
 #include "Test.h"
 
 TEST(Sx, Pair) {
+  heapify();
   Sx s(13);
   Pair p = s.Pair();
   EXPECT_EQ(p.handle(), s.handle());
 }
+
+TEST(Collect, Singleton) {
+  heapify();
+  auto s = request(-1,-2);
+  purge.preserving(s);
+  EXPECT_EQ(accounting.used, 1);
+} 
+
+TEST(Collect, ParentaToSingleton) {
+  heapify();
+  auto s1 = request(-1,-2);
+  auto s2 = request(s1, s1);
+  purge.preserving(s1);
+  EXPECT_EQ(accounting.used, 1);
+}
+
+TEST(Collect, ParentaToLeftSingleton) {
+  heapify();
+  auto s0 = request(-1,-2);
+  auto s1 = request(s0, s0);
+  auto s2 = request(s1, s0);
+  purge.preserving(s1);
+  EXPECT_EQ(accounting.used, 2);
+}
+
+TEST(Collect, ParentaToRightSingleton) {
+  heapify();
+  auto s0 = request(-1,-2);
+  auto s1 = request(s0, s0);
+  auto s2 = request(s1, s1);
+  purge.preserving(s1);
+  EXPECT_EQ(accounting.used, 2);
+}
+
+TEST(Collect, ParentaToBoth) {
+  heapify();
+  auto s1 = request(-1,-2);
+  auto s2 = request(-3,-4);
+  auto s3 = request(s1, s2);
+  auto s4 = request(s2, s3);
+  auto s5 = request(s3, s4);
+  purge.preserving(s5);
+  EXPECT_EQ(accounting.used, 5);
+  purge.preserving(s4);
+  EXPECT_EQ(accounting.used, 4);
+  purge.preserving(s3);
+  EXPECT_EQ(accounting.used, 3);
+  purge.preserving(s2);
+  EXPECT_EQ(accounting.used, 1);
+}
+
 
 TEST(Visit, exists) {
   heapify();
@@ -420,6 +472,7 @@ TEST(Purge, complete7) {
   EXPECT_TT(live6.ok());
   EXPECT_TT(live7.ok());
   EXPECT_EQ(accounting.used, 7);
+  EXPECT_EQ(accounting.pick, 7);
 
   purge.preserving(live7);
 
@@ -428,11 +481,13 @@ TEST(Purge, complete7) {
   EXPECT_TT(live2.ok());
   EXPECT_TT(live1.ok());
 
-  EXPECT_EQ(accounting.leave,4);
-  EXPECT_EQ(accounting.visit,4);
-  EXPECT_EQ(accounting.collect,3);
-  EXPECT_EQ(accounting.release,3);
+  EXPECT_EQ(accounting.leave, 4);
+  EXPECT_EQ(accounting.visit, 4);
+  EXPECT_EQ(accounting.collect, 3);
   EXPECT_EQ(accounting.used, 4);
+  EXPECT_EQ(accounting.release, 3);
+  EXPECT_EQ(accounting.push, 3);
+  EXPECT_EQ(accounting.pop, 0);
 
   EXPECT_FF(live3.ok());
   EXPECT_FF(live4.ok());
@@ -447,30 +502,42 @@ TEST(Sx, Pair1) {
 
 TEST(Purge, complete15) {
   heapify();
-  auto live1 = request(-1,-3);
-  auto live2 = request(-2,-4);
-  auto live3 = request(-3,-6);
-  auto live4 = request(-4,-4);
-  auto live5 = request(-5,-1);
-  auto live6 = request(-6,-7);
-  auto live7 = request(-7,-5);
-  auto live8 = request(-8,-2);
+  auto live1 = request(-1,-10);
+  auto live2 = request(-2,live1);
+  auto live3 = request(-3,live2);
+  auto live4 = request(-4,live3);
+  auto live5 = request(-5,live4);
+  auto live6 = request(-6,live5);
+  auto live7 = request(-7,live6);
 
-  auto live09 = request(live1,live2);
-  auto live10 = request(live3,live4);
-  auto live11 = request(live5,live6);
-  auto live12 = request(live7,live8);
+  auto dead08 = request(-8,-2);
+  auto dead09 = request(live1,live2);
+  auto dead10 = request(live3,live4);
+  auto dead11 = request(live5,live6);
+  auto dead12 = request(live7,dead08);
 
-  auto live13 = request(live09,live10);
-  auto live14 = request(live11,live12);
+  auto dead13 = request(dead09,dead10);
+  auto dead14 = request(dead11,dead12);
 
-  auto live15 = request(live13,live14);
+  auto dead15 = request(dead13,dead14);
+
+  EXPECT_TT(dead15.ok());
+  EXPECT_TT(live7.ok());
 
   EXPECT_EQ(accounting.used, 15);
+
   purge.preserving(live7);
-  EXPECT_EQ(accounting.used, 15);
+
+  EXPECT_EQ(accounting.collect, 8);
+  EXPECT_EQ(accounting.push, 8);
+  EXPECT_EQ(accounting.live, 7);
+
+  EXPECT_FF(dead15.ok());
+  EXPECT_TT(live7.ok());
+  EXPECT_EQ(accounting.used, 7);
   EXPECT_FF(corrupted.something());
 }
+
 
 TEST(Purge, live31) {
   heapify();
@@ -515,26 +582,31 @@ TEST(Purge, live31) {
   auto leave = request(love15,live15);
 
   EXPECT_EQ(accounting.used, 31);
+  EXPECT_EQ(accounting.live, 31);
+  EXPECT_EQ(accounting.collect, 0);
   purge.preserving(live7);
-  EXPECT_EQ(accounting.used, 31);
+  EXPECT_EQ(accounting.live, 1);
+  EXPECT_EQ(accounting.collect, 30);
+  EXPECT_EQ(accounting.used, 1);
   EXPECT_FF(corrupted.something());
 }
 
 
 TEST(Purge, DAG) {
   heapify();
-  auto dead1 = request(-3,-2);
   auto live1 = request(-2,-3);
-  auto dead2 = request(-5,-2);
   auto live2 = request(live1.handle(),-4);
-  auto dead3 = request(dead1,dead2);
   auto live3 = request(live2.handle(),-5);
-  auto dead4 = request(dead3,dead2);
-  auto dead5 = request(dead4,dead4);
   auto live4 = request(live2,live3);
-  EXPECT_EQ(accounting.used, 9);
+  auto dead1 = request(-3,-2);
+  auto dead2 = request(-5,-2);
+  auto dead3 = request(dead1,live2);
+  auto dead4 = request(live4,request(5,5));
+  auto dead5 = request(dead4,dead4);
+  EXPECT_EQ(accounting.used, 10);
   purge.preserving(live4);
-  EXPECT_EQ(accounting.used, 5);
+  EXPECT_EQ(accounting.used, 4);
+  EXPECT_EQ(accounting.collect, 6);
 }
 
 auto trailLeft(auto n) {
@@ -545,6 +617,7 @@ auto trailLeft(auto n) {
   purge.preserving(p[n-1]);
   for (auto i = 1; i > n; ++i) ASSERT_TT(p[i].ok()) << i;
 }
+
 TEST(Purge, trailLeft1) { trailLeft(1); }
 TEST(Purge, trailLeft2) { trailLeft(2); }
 TEST(Purge, trailLeft3) { trailLeft(3); }

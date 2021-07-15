@@ -25,7 +25,7 @@ FILES=chic.h $(SOURCES) $(OBJECTS:.o=.h)
 depend: .depend Makefile
 
 .depend: $(SOURCES) $(wildcard *.h) 
-	$(CXX) -w -MM $^ > "$@"
+	@$(CXX) -w -MM $^ > "$@"
 
 include .depend
 

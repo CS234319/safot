@@ -436,5 +436,5 @@ TEST(Layout, $A_f$) {
 }
 
 TEST(Layout, overlap) { 
-  EXPECT_STREQ((char *) (P - 1), A);
+  EXPECT_STREQ(reinterpret_cast<char *>(P), A);
 }
