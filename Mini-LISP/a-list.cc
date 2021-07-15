@@ -19,6 +19,11 @@ static S saved_alist = alist;
 void save() { saved_alist = alist; }
 void restore() { alist = saved_alist; }
 
+namespace {
+    static const S x1(set(NIL, NIL));  // (set (quote nil) (quote nil))
+    static const S x2(set(T, T));      // (set (quote t) (quote t))
+}
+
 S set(S name, S value) { return (alist = name.cons(value).cons(alist)), value; }
 
 S lookup(S id, S alist) { 

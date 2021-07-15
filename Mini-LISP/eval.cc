@@ -138,11 +138,11 @@ S evaluate_atomic_function(S s) { M(s);
 
 S apply(S f, S args) {
   f.n3() || f.cons(args).error(INVALID).t();
-  const auto saved_alist = alist;
+  save();
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
   alist = bind(f.$2$(), actuals, alist);
   const auto result = f.$3$().eval();
-  alist = saved_alist;
+  restore();
   return result;
 }
 
