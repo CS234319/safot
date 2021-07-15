@@ -1,9 +1,9 @@
 #ifndef PURGE_H
 #define PURGE_H
-#define do(...) ((__VA_ARGS__),0); 
 #include "Pair.h"
 #include "layout.h"
 struct {
+ Unit all() Is(sweep())
  Unit preserving(Sx s)  Is(mark(s), sweep())
  Capsule(
     Unit mark(Sx s) 

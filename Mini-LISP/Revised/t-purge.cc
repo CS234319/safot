@@ -531,11 +531,21 @@ TEST(Purge, complete15) {
   EXPECT_EQ(accounting.collect, 8);
   EXPECT_EQ(accounting.push, 8);
   EXPECT_EQ(accounting.live, 7);
-
   EXPECT_FF(dead15.ok());
   EXPECT_TT(live7.ok());
   EXPECT_EQ(accounting.used, 7);
   EXPECT_FF(corrupted.something());
+
+  purge.all();
+
+  EXPECT_EQ(accounting.collect, 15);
+  EXPECT_EQ(accounting.push, 15);
+  EXPECT_EQ(accounting.live, 0);
+  EXPECT_FF(dead15.ok());
+  EXPECT_FF(live7.ok());
+  EXPECT_EQ(accounting.used, 0);
+  EXPECT_FF(corrupted.something());
+
 }
 
 
