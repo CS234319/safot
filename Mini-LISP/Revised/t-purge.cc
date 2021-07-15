@@ -289,9 +289,51 @@ TEST(Purge, t2a) {
   auto t2 = request(t1.handle(),-4);
 
   EXPECT_FF(corrupted.something());
+  EXPECT_EQ(accounting.use, 2);
   EXPECT_ZZ(accounting.unuse);
-  EXPECT_EQ(accounting.used,2);
+  EXPECT_EQ(accounting.used, 2);
+  EXPECT_EQ(accounting.pairs, 2);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_EQ(accounting.allocate, 2);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_EQ(accounting.pick, 2);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_EQ(accounting.live, 2);
+  EXPECT_ZZ(accounting.visit);
+  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_EQ(accounting.request, 3);
+  EXPECT_EQ(accounting.reuse,1);
+  EXPECT_EQ(accounting.provide, 2);
+  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_ZZ(accounting.miss);
+
   purge.preserving(t2);
+
+  EXPECT_FF(corrupted.something());
+  EXPECT_EQ(accounting.use, 2);
+  EXPECT_ZZ(accounting.unuse);
+  EXPECT_EQ(accounting.used, 2);
+  EXPECT_EQ(accounting.pairs, 2);
+  EXPECT_ZZ(accounting.items);
+  EXPECT_EQ(accounting.allocate, 2);
+  EXPECT_ZZ(accounting.pop);
+  EXPECT_EQ(accounting.pick, 2);
+  EXPECT_ZZ(accounting.release);
+  EXPECT_ZZ(accounting.push);
+  EXPECT_ZZ(accounting.collect);
+  EXPECT_EQ(accounting.live, 2);
+  EXPECT_ZZ(accounting.visit);
+  EXPECT_ZZ(accounting.unvisit);
+  EXPECT_EQ(accounting.request, 3);
+  EXPECT_EQ(accounting.reuse,1);
+  EXPECT_EQ(accounting.provide, 2);
+  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_ZZ(accounting.miss);
+
+
+
   EXPECT_FF(corrupted.something());
   EXPECT_ZZ(accounting.used);
   EXPECT_FF(corrupted.something());
