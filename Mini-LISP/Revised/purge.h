@@ -2,7 +2,7 @@
 #define PURGE_H
 #include "Pair.h"
 #include "layout.h"
-struct {
+Service {
  Unit all() Is(sweep())
  Unit preserving(Sx s)  Is(mark(s), sweep())
  Capsule(

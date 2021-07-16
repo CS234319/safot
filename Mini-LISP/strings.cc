@@ -10,10 +10,7 @@
 #define D(...) 0
 #define M(...) 0
 #else 
-#include "dump.h"
-#include <iostream>
-#include <sstream>
-#include <cstring>
+
 namespace Strings {
   extern H current;  
   extern String pool;  

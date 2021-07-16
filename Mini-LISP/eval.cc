@@ -1,24 +1,11 @@
 #include "eval.h"
 #include "a-list.h"
 #include "basics.h"
-
-#define BUGGY 0
-
-#if !BUGGY
-#undef D
-#undef M
-#undef M2
-#undef M3
-#define D(...) 0
-#define M(...) 0
-#define M2(...) 0
-#define M3(...) 0
-#else
-#include "dump.h"
-#include "io.h"
-#endif
+#include "mode.h"
 
 S NLAMBDA("nlambda"), LAMBDA("lambda");
+
+#undef NULL
 
 const S ATOMIC_FUNCTIONS = list(
   CAR,   CDR,  CONS,
@@ -27,11 +14,14 @@ const S ATOMIC_FUNCTIONS = list(
   DEFUN, NDEFUN, NLAMBDA, LAMBDA
 );
 
-inline bool atomic(S name) { return exists(name, ATOMIC_FUNCTIONS); }
+bool atomic(S name) { return exists(name, ATOMIC_FUNCTIONS); }
+S defun(S name, S parameters, S body) { return set(name, list(LAMBDA, parameters, body)); }
+S ndefun(S name, S parameters, S body) { return set(name, list(NLAMBDA, parameters, body)); }
+
+S apply_defined_function(S f, S args) { apply(f,args); }
 
 /** Assertions like */ 
 S bug(S s) { return s.error(T); }
-
 
 #define FUN(Return, Name, ArgumentType) \
   Return Name(ArgumentType _) { \
@@ -45,8 +35,6 @@ S bug(S s) { return s.error(T); }
     return __; \
   } 
 
-S defun(S name, S parameters, S body) { return set(name, list(LAMBDA, parameters, body)); }
-S ndefun(S name, S parameters, S body) { return set(name, list(NLAMBDA, parameters, body)); }
 
 FUN(S, evaluate_list, S) IS(
   _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
@@ -70,21 +58,16 @@ S only(S s) {
 
 void checkNumberOfArgs(S s) {
     S f = s.car();
-    // 1 Args:
-    if (f.eq(QUOTE) || f.eq(CAR) || f.eq(CDR) ||
+    if (f.eq(QUOTE) || f.eq(CAR) || f.eq(CDR) || // 1 Args:
         f.eq(ATOM) || f.eq(NULL) || f.eq(EVAL)) {
         s.more2() && s.error(REDUNDANT).t();
         s.less2() && s.error(MISSING).t();
     }
-
-    // 2 Args:
-    if (f.eq(CONS) || f.eq(SET) || f.eq(EQ) || f.eq(LAMBDA) || f.eq(NLAMBDA)) {
+    if (f.eq(CONS) || f.eq(SET) || f.eq(EQ) || f.eq(LAMBDA) || f.eq(NLAMBDA)) { // 2 Args:
         s.more3() && s.error(REDUNDANT).t();
         s.less3() && s.error(MISSING).t();
     }
-
-    // 3 Args:
-    if (f.eq(NDEFUN) || f.eq(DEFUN)) {
+    if (f.eq(NDEFUN) || f.eq(DEFUN)) { // 3 Args:
         s.more4() && s.error(REDUNDANT).t();
         s.less4() && s.error(MISSING).t();
     }
@@ -94,19 +77,19 @@ S evaluate_atomic_function(S s) { M(s);
   checkNumberOfArgs(s);
   const S f = s.car();
   // Atomic functions:
-  if (f.eq(CAR))    return only(s).car();
-  if (f.eq(CONS))   return s.$2$().eval().cons(s.$3$().eval());
-  if (f.eq(SET))    return set(s.$2$().eval(),          s.$3$().eval());
-  if (f.eq(EQ))     return s.$2$().eval().eq(s.$3$().eval())   ?         T     : NIL;
-  if (f.eq(COND))   return evaluate_cond(s.cdr());
-  if (f.eq(CDR))    return only(s).cdr();
-  if (f.eq(ATOM))   return only(s).atom()            ?         T     : NIL;
-  if (f.eq(EVAL))   return only(s).eval();
-  if (f.eq(ERROR))  return s.error(s.cdr());
-  if (f.eq(NULL))   return only(s).null()            ?         T     : NIL;
-  if (f.eq(QUOTE))  return s.cdr().car();
-  if (f.eq(NLAMBDA)) return list(NLAMBDA,             s.$2$(),     s.$3$());
-  if (f.eq(LAMBDA)) return list(LAMBDA,             s.$2$(),     s.$3$());
+  if (f.eq(CAR))     return only(s).car();
+  if (f.eq(CONS))    return s.$2$().eval().cons(s.$3$().eval());
+  if (f.eq(SET))     return set(s.$2$().eval(),          s.$3$().eval());
+  if (f.eq(EQ))      return s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
+  if (f.eq(COND))    return evaluate_cond(s.cdr());
+  if (f.eq(CDR))     return only(s).cdr();
+  if (f.eq(ATOM))    return only(s).atom() ? T : NIL;
+  if (f.eq(EVAL))    return only(s).eval();
+  if (f.eq(ERROR))   return s.error(s.cdr());
+  if (f.eq(NULL))    return only(s).null() ? T : NIL;
+  if (f.eq(QUOTE))   return s.cdr().car();
+  if (f.eq(NLAMBDA)) return list(NLAMBDA, s.$2$(),  s.$3$());
+  if (f.eq(LAMBDA))  return list(LAMBDA, s.$2$(), s.$3$());
   if (f.eq(NDEFUN)) { 
     ndefun(s.$2$(), s.$3$(), s.$4$());
     return  s.$2$();
@@ -128,9 +111,6 @@ S apply(S f, S args) {
   return result;
 }
 
-S apply_defined_function(S f, S args) {
-  apply(f,args);
-}
 
 FUN(S, eval, S) IS(
     _.atom() ? lookup(_):

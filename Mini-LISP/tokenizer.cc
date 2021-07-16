@@ -2,11 +2,7 @@
 #include "tokenizer.h"
 #include "dump.h"
 
-#define SILENT 1
-#if SILENT
-#undef D
-#define D(...) 0
-#endif
+#include "mode.h"
 
 namespace Tokenizer {
 static char *head;
@@ -110,6 +106,7 @@ static bool isToken() {
   return exists(C(),tokens);
 }
 }
+
 extern bool exists(const char c, String s) {
   D(c, s);
   for (const char *p = s; *p; ++p)

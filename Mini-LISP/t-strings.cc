@@ -3,7 +3,6 @@
 #include "strings.h"
 #include "test.h"
 
- 
 namespace Strings {
   extern char *buffer; 
 

@@ -3,12 +3,14 @@
 
 Let Long $m$ = $M_a$ + $M_p$ * sizeof (Word);
 
-static union {
-  char block[$m$];
-  struct {
-   char $A_0$[$M_a$ - LIMBO];
-   char A[LIMBO] = { 'N', 'I', 'L', '\0' };
-   Word P[$M_p$];
+Service {
+  Representation {
+   char block[$m$];
+   struct {
+     char $A_0$[$M_a$ - LIMBO];
+     char A[LIMBO] = { 'N', 'I', 'L', '\0' };
+     Word P[$M_p$];
+    };
   };
 } memory; 
 

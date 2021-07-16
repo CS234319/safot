@@ -116,7 +116,6 @@ namespace Memory::Pairs {
   enum {min = 1; max = p;};
 }
 
-
 #include "gtest/gtest.h"
 
 TEST(Memory, ByteFlipping) { 

@@ -8,7 +8,7 @@
 #include "layout.h"
 #include "accounting.h"
 
-static struct {
+Service {
   auto empty() { return first.x(); } 
   Knob pop() {
     not first.x() or panic();  
