@@ -125,6 +125,7 @@ typedef std::function<long long()> Provider;
 #define As(t) operator t() const
 #define Provides extern
 #define Let constexpr 
+#define Service static struct 
 #define let const auto 
 #define variable auto 
 #define Allocate 

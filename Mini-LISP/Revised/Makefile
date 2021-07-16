@@ -4,7 +4,10 @@ CFLAGS += -w -std=gnu2x
 
 PRIMITIVES=Short.o Word.o
 SERVICES=accounting.o heap.o text.o layout.o 
-TYPES=Handle.o Id.o Item.o Knob.o Pair.o Parser.o Pristine.o Pushdown.o Sx.o Tokenizer.o 
+LISP_TYPES=Handle.o Id.o Item.o Knob.o Pair.o Parser.o Pristine.o Sx.o 
+OTHER_TYPES=Pushdown.o Tokenizer.o Parser.o 
+
+TYPES=$(LISP_TYPES) $(OTHER_TYPES)
 PRODUCTION=$(PRIMITIVES) $(SERVICES) $(TYPES)
 TEST=t-heap.o t-misc.o t-purge.o t-Pushdown.o t-accounting.o 
 OBJECTS=$(PRODUCTION) $(TEST)
