@@ -54,7 +54,7 @@ int REPL() { /** Realizes the famous "Read, Evaluate, Print, Loop" of all
 }
 
 int main(int argc, char **argv) {
-  printf("Read, evaluated, and printed successfully %d expressionsn\n", REPL());
+  printf("Read, evaluated, and printed successfully %d expressions\n", REPL());
   printf("Good bye!\n");
   return 0;
 }
