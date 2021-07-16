@@ -22,6 +22,7 @@ int print(String   line) { return put(line);       }
 int prompt(String  s)    { return print(s);  }
 int print(H h)           { return print(S(h)); }
 int print(Pair p)        { return print("["), print(p.car), print("."), print(p.cdr), print("]"); }
+int println(S s)           { return print(s), print("\n"); }
 
 /** Recursively print an S expression */
 int print(S s) {

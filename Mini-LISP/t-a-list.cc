@@ -3,7 +3,7 @@
 #include "a-list.h"
 #include "test.h"
 
-// Mark here every exceptions that was tested; 
+// Mark here every exceptions that was tested;
 // Add test that all exceptions were checked.
 // Add tests that error strings are meaningful; consult with Yossi on how
 
@@ -13,6 +13,7 @@
 
 #define EXPECT_STRUE(e) EXPECT_TRUE(e.t())
 #define EXPECT_SFALSE(e) EXPECT_TRUE(e.null())
+
 
 TEST(Lookup, T) {
   EXPECT_STRUE(lookup("T"));
@@ -42,15 +43,17 @@ TEST(Lookup, Failure) {
 
 TEST(Lookup, SetGoodLookup) {
   set("X","Y");
+  reset_set_counter();
   EXPECT_STRUE(lookup("X"));
 }
 
-
 TEST(Lookup, TeaAndCofee) {
   set("coffee","tea");
+  reset_set_counter();
   EXPECT_EQ(lookup("coffee"), S("tea"));
   EXPECT_EXCEPTION(lookup("tea"),S("tea"), UNDEFINED);
   set("tea","coffee");
+  reset_set_counter();
   EXPECT_STRUE(lookup("tea"));
   EXPECT_STRUE(lookup("coffee"));
   EXPECT_EQ(lookup("tea"), S("coffee"));
