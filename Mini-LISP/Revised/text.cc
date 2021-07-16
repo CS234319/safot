@@ -47,7 +47,6 @@ static char upper(char c) {
   return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; 
 }
 
-
 #undef min
 #undef max
 #undef data
@@ -60,8 +59,4 @@ inline auto operator == (const Id s1, const Id s2) {
   return s1.handle() == s2.handle();
 }
 
-TEST(Text, size) {
-  EXPECT_EQ(LIMBO, 1 + strlen("NIL"));
-  EXPECT_EQ(request("Hello"), request("Hello"));
-  EXPECT_EQ(request("llo").handle(), request("Hello").handle() + 2);
-}
+

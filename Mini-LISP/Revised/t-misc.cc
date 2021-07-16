@@ -6,6 +6,7 @@
 #include "Pristine.h"
 #include "Account.h"
 #include "Handle.h"
+#include "text.h"
 #include "Test.h"
 #include "Clicker.h"
 
@@ -14,6 +15,26 @@
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
+}
+
+TEST(Text, reusing) {
+  EXPECT_EQ(LIMBO, 1 + strlen("NIL"));
+  EXPECT_EQ(request("Hello").handle(), request("Hello").handle());
+  EXPECT_EQ(request("World").handle(), request("World").handle());
+  EXPECT_EQ(request("d").handle(), request("d").handle());
+  EXPECT_EQ(request("ld").handle(), request("ld").handle());
+  EXPECT_EQ(request("rld").handle(), request("rld").handle());
+  EXPECT_EQ(request("orld").handle(), request("orld").handle());
+  EXPECT_EQ(request("World").handle(), request("World").handle());
+  EXPECT_EQ(request("o").handle(), request("o").handle());
+}
+
+TEST(Text, overlap) {
+  EXPECT_EQ(request("Hello").handle(), request("Hello").handle());
+  EXPECT_EQ(request("World").handle(), request("World").handle());
+  EXPECT_EQ(request("llo").handle(), request("Hello").handle() + 2);
+  EXPECT_EQ(request("ld").handle(), request("World").handle() + 3);
+  EXPECT_EQ(request("o").handle(), request("Hello").handle() + 4);
 }
 
 TEST(SExpression, size) { 
@@ -357,31 +378,6 @@ TEST(Word, churnHash) {
     }
   }
 }
-TEST(Stain, Short) {
-  Short s = 12;
-  EXPECT_EQ(12,s);
-  EXPECT_NE(12,flip(s));
-  EXPECT_FF(black(12));
-  EXPECT_FF(black(12));
-  stain(s);
-  EXPECT_NE(12,s);
-  EXPECT_TT(black(s));
-  cleanse(s);
-  EXPECT_EQ(12,s);
-}
-
-TEST(Stain, Word) {
-  P[4].s1 = 3;
-  P[4].s2 = 2;
-  EXPECT_FF(Pristine(4).ok());
-  EXPECT_FF(black(Knob(4).s1()));
-  stain(P[4].s1); 
-  EXPECT_TT(black(Knob(4).s1()));
-  EXPECT_FF(Pristine(4).ok());
-  stain(P[4].s2); 
-  EXPECT_TT(Pristine(4).ok());
-}
-
 TEST(Flip, distinct) { 
   for (auto s = -32768; s != 32767; ++s)
     EXPECT_NE(s, flip(s)) << s;
