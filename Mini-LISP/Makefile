@@ -34,6 +34,7 @@ TEST_OBJS = \
 		t-apply.o \
 		t-eval.o \
 		t-book.o \
+		t-alist-global-local.o \
 
 SRCS = $(wildcard *.c) $(wildcard *.cc) 
 

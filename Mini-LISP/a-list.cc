@@ -16,15 +16,42 @@
 S alist = NIL; 
 static S saved_alist = alist;
 
-void save() { saved_alist = alist; }
-void restore() { alist = saved_alist; }
+static int count_sets = 0;
+static int count_eval = 0;
+
+void inc_eval_counter()      { count_eval++;   }
+void dec_eval_counter()      { count_eval--;   }
+int get_eval_counter()       { return count_eval; }
+void reset_eval_counter()    { count_eval = 0; }
+void reset_set_counter()     { count_sets = 0; }
+
+void restore_alist() {
+    /*
+     * This function call from error.
+     *
+     * In case of an error, we want to free all the set
+     * operations that occurred from the alist.
+     *
+     */
+    // Clean alist from all the local sets:
+    for (int i=0; i < count_sets; i++) {
+        alist = alist.cdr();
+    }
+
+    // Reset count_sets:
+    reset_set_counter();
+    reset_eval_counter();
+}
 
 namespace {
     static const S x1(set(NIL, NIL));  // (set (quote nil) (quote nil))
     static const S x2(set(T, T));      // (set (quote t) (quote t))
 }
 
-S set(S name, S value) { return (alist = name.cons(value).cons(alist)), value; }
+S set(S name, S value) {
+    count_sets++;
+    return (alist = name.cons(value).cons(alist)), value;
+}
 
 S lookup(S id, S alist) { 
   return 

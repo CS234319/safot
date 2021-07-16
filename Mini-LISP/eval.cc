@@ -120,11 +120,9 @@ S evaluate_atomic_function(S s) { M(s);
 
 S apply(S f, S args) {
   f.n3() || f.cons(args).error(INVALID).t();
-  save(); // #ERROR DOR? Are you sure.
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
   alist = bind(f.$2$(), actuals, alist);
   const auto result = f.$3$().eval();
-  restore();
   return result;
 }
 
@@ -132,8 +130,17 @@ S apply_defined_function(S f, S args) {
   apply(f,args);
 }
 
-FUN(S, eval, S) IS(
-    _.atom() ? lookup(_):
-    atomic(_.car()) ? evaluate_atomic_function(_):
-      apply_defined_function($$(_.car()), _.cdr())
-)
+S eval(S s) {
+    inc_eval_counter();
+    S res = NIL;
+    if (s.atom()) {
+        res = lookup(s);
+    } else if (atomic(s.car())) {
+        res = evaluate_atomic_function(s);
+    } else {
+        res = apply_defined_function(eval(s.car()), s.cdr());
+    }
+    dec_eval_counter();
+    if (get_eval_counter() == 0) reset_set_counter();
+    return res;
+}

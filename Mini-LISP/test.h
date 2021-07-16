@@ -1,5 +1,6 @@
 #include "io.h"
 #include "basics.h"
+#include "out.h"
 
 inline auto operator == (const S s1,const S s2) { 
   if (s1.handle == s2.handle)

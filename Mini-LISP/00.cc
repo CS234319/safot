@@ -38,13 +38,11 @@ int REPL() { /** Realizes the famous "Read, Evaluate, Print, Loop" of all
       }
     Eval:
       try {
-        save();          // Prepare for an evaluation error
         const S result = eval(); 
       Print:
         print(result), print("\n");
         ++n;
       } catch (...) { // Ignore evaluation error
-        restore();    // But restore the a-list to release parameter binding
       }
     Loop:
       goto Start;
