@@ -18,26 +18,20 @@ Property(Pristine Pristine::next) {
 }
 
 Property(Boolean Pristine::ok) { 
-  if (x()) 
-    return true;
-  if (white(s1()) || white(s2()))
-      return false;
+  if (x()) return true;
+  if (white(s1()) || white(s2())) return false;
   let p = prev().handle(), n = next().handle();
   if (p != $P_x$) {
     Expect(p >= $P_f$,p); 
     Expect(p <= $P_t$,p); 
-    if (p < $P_f$) 
-      return false;
-    if (p > $P_t$) 
-      return false;
+    if (p < $P_f$) return false;
+    if (p > $P_t$) return false;
   }
   if (n != $P_x$) {
     Expect(n >= $P_f$,n); 
     Expect(n <= $P_t$,n); 
-    if (n < $P_f$) 
-      return false;
-    if (n > $P_t$) 
-      return false;
+    if (n < $P_f$) return false;
+    if (n > $P_t$) return false;
   }
   return true;
 }
