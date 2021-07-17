@@ -3,15 +3,7 @@
 #include "parser.h"
 #include "test.h"
 
-#if !BUGGY
-#undef D
-#undef M
-#define D(...) 0
-#define M(...) 0
-#else 
-#include "dump.h"
-#endif
-
+#include "mode.h"
 
 static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));

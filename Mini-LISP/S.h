@@ -48,8 +48,8 @@ namespace Strings {
  * that if the index zero, the string behind it happens to be NIL. In a sense
  * the zero is also an index into the strings array.
  *
- * Both pools are consecutive in memory: There is a large static buffer in which 
- * both pools reside.
+ * Both pools are consecutive in memory: There is a large static buffer in
+ * which both pools reside.
  */
 
 union S; 
@@ -150,17 +150,34 @@ auxiliary fluentons.
 };
 #undef NULL
 // Fluenton sources of Names of atoms that represent atomic functions 
-extern const S NIL, T; //
-extern const S CAR, CDR, CONS;
-extern const S ATOM, EQ, NE, NULL, COND;
-extern const S QUOTE, EVAL;
-extern const S DEFUN, NDEFUN; 
-extern const S ERROR, SET;
+static const S NIL("nil");      
+static const S T("t");        
+static const S SET("set");      
+static const S NDEFUN("ndefun");   
+static const S DEFUN("defun");    
+static const S QUOTE("quote");    
+static const S ATOM("atom");     
+static const S CAR("car");      
+static const S CDR("cdr");      
+static const S COND("cond");     
+static const S CONS("cons");     
+static const S ERROR("error");    
+static const S EVAL("eval");     
+static const S EQ("eq");       
+static const S NULL("null");     
+static const S NLAMBDA("nlambda");   
+static const S LAMBDA("lambda");   
+static const S UNDEFINED("undefined");
+static const S INVALID("invalid");  
+static const S BUG("bug");      
 
-// Named atoms for exceptions; for the idiom error(MISSING) to abort execution
-// on the case an error of kind MISSING is found in the context of the S
-// expression named s.
-extern const S MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
+// Named atoms for exceptions; for the idiom s.error(MISSING) to abort
+// execution in the case that an error of kind MISSING occurs in the context of
+// the S expression named s.
+static const S MISSING("missing");  
+static const S REDUNDANT("redundant");  
+static const S EMPTY("empty");    
+static const S EXHAUSTED("exhausted");
 
 // Additional fluentons.
 inline bool die(S s) { throw BUG.cons(s); }

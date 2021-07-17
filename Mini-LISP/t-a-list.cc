@@ -14,6 +14,9 @@
 #define EXPECT_STRUE(e) EXPECT_TRUE(e.t())
 #define EXPECT_SFALSE(e) EXPECT_TRUE(e.null())
 
+TEST(Lookup, T0) {
+  CAREFULLY_EXPECT(EQ,lookup("T"),"T", << 2); 
+}
 
 TEST(Lookup, T) {
   EXPECT_STRUE(lookup("T"));

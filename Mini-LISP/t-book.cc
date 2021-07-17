@@ -5,21 +5,19 @@
  * Mini-lisp book - full testing
  */
 
-extern S a;
-extern S b;
-extern S c;
-extern S x;
-extern S y;
-extern S z;
-extern S LAMBDA;
-extern S NLAMBDA;
-
 /*
     (atom nil) ⇒ T
     (atom t) ⇒ T
     (atom '(a a)) ⇒ NIL
     (atom 'a) ⇒ T
 */
+
+static S a("a");
+static S b("b");
+static S c("b");
+static S x("x");
+static S y("y");
+
 TEST(Book, AtomicFunctionsAtom) {
     EXPECT_EQ(parse("(atom nil)").eval(), T);
     EXPECT_EQ(parse("(atom t)").eval(), T);

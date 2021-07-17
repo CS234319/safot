@@ -33,11 +33,11 @@
 #include <gtest/gtest.h>
 #include "eval.h"
 #include "test.h"
+#include "a-list.h"
 
 extern S evaluate_cond(S s);
-S lookup(S id, S alist);
-extern S alist ;
-extern const S x;
+
+static S x("x");
 
 // ----------------------------
 // Test:
@@ -92,13 +92,12 @@ TEST(CondEvaluationOrder, CondEvaluationOrder) {
     evaluate_cond(s);
 
     // Check if v0, v1, v2 are defined:
-    EXPECT_EQ(lookup(v_0, alist), x);
-    EXPECT_EQ(lookup(v_1, alist), x);
-    EXPECT_EQ(lookup(v_2, alist), x);
+    EXPECT_EQ(lookup(v_0, alist()), x);
+    EXPECT_EQ(lookup(v_1, alist()), x);
+    EXPECT_EQ(lookup(v_2, alist()), x);
 
     // Check if v3, v4, v5 are NOT defined:
-    EXPECT_EXCEPTION(lookup(v_3, alist), v_3, UNDEFINED);
-    EXPECT_EXCEPTION(lookup(v_4, alist), v_4, UNDEFINED);
-    EXPECT_EXCEPTION(lookup(v_5, alist), v_5, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(v_3, alist()), v_3, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(v_4, alist()), v_4, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(v_5, alist()), v_5, UNDEFINED);
 }
-

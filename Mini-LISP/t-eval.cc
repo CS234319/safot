@@ -6,19 +6,22 @@
  * Tests of eval function
  */
 
+static S a("a");
+static S b("b");
+static S c("c");
+static S x("x");
+static S y("y");
+static S z("z");
+
+static S a4("BAR");
+
 S expr("");
 S f("fun");
-extern S a;
-extern S b;
-extern S c;
-extern S x;
-extern S y;
-extern S z;
-
 
 extern S eval(S s);
 extern S defun(S name, S parameters, S body);
 extern S ndefun(S name, S parameters, S body);
+
 
 TEST(Eval, ReturnEmptyList) {
     // Define the function: "(ndefun f (x y) ())"
@@ -36,9 +39,9 @@ TEST(Eval, ReturnEmptyList) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -60,39 +63,33 @@ TEST(Eval, ReturnSameAtom) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
 
-TEST(Eval, ReturnID) {
-    // Define the function: "(ndefun f (x) x)"
-    ndefun(f, list(x), x);
-    
-    // Check different evaluations:
-    expr = f.cons(list(a));
-    EXPECT_EQ(expr.eval(), a);
-    expr = f.cons(list(list(a, b)));
-    EXPECT_EQ(expr.eval(), list(a, b));
-    expr = f.cons(list(list(x, y)));
-    EXPECT_EQ(expr.eval(), list(x, y));
-    expr = f.cons(list(list(CAR, CDR)));
-    EXPECT_EQ(expr.eval(), list(CAR, CDR));
-    expr = f.cons(list(list(a, b, c)));
-    EXPECT_EQ(expr.eval(), list(a, b, c));
-    
-    // Check evaluation errors:
-    expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
-    expr = f.cons(list());
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
-    expr = f.cons(f);
-    EXPECT_EXCEPTION(expr.eval(), f, CAR);
-}
+static S identity() { static S _ = ndefun(f, list(x), x); return _; }
+
+
+static S invoke(S f, S arguments) { return f.cons(arguments).eval(); }
+
+TEST(Eval, Identity0) { EXPECT_EQ(invoke(identity(), list(a)), a); }
+TEST(Eval, Identity1) { EXPECT_EQ(invoke(identity(), list(x.cons(y))), x.cons(y)); }
+TEST(Eval, Identity2) { EXPECT_EQ(invoke(identity(), list(list(a,b,c))), list(a,b,c)); }
+TEST(Eval, Identity3) { EXPECT_EQ(invoke(identity(), list(list(CAR, CDR))), list(CAR, CDR)); }
+TEST(Eval, Identity4) { EXPECT_EXCEPTION(invoke(identity(), list(a, b)), list(b), REDUNDANT); }
+TEST(Eval, Identity5) { EXPECT_EXCEPTION(invoke(identity(), list()), list(x), MISSING); }
 
 TEST(Eval, Car3) {
+    // Define the function: "(ndefun f (x y z) x)"
+    ndefun(f, list(x, y, z), x);
+    expr = f.cons(list(a, b, c));
+    EXPECT_EQ(expr.eval(), a);
+}
+
+TEST(Eval, Car3Long) {
     // Define the function: "(ndefun f (x y z) x)"
     ndefun(f, list(x, y, z), x);
 
@@ -108,9 +105,9 @@ TEST(Eval, Car3) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(z), MISSING);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y, z), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -131,9 +128,9 @@ TEST(Eval, Rac3) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(z), MISSING);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y, z), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -154,9 +151,9 @@ TEST(Eval, CarFirst) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -177,9 +174,9 @@ TEST(Eval, CarLast) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -200,9 +197,9 @@ TEST(Eval, Swap) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y) , MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -224,9 +221,9 @@ TEST(Eval, Set) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -248,9 +245,9 @@ TEST(Eval, SetAndCar) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
@@ -269,9 +266,9 @@ TEST(Eval, LambdaIdCar) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), c, UNDEFINED);
+    EXPECT_EXCEPTION(expr.eval(), b, UNDEFINED);
     expr = f.cons(list());
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(),list(x) , MISSING);
 }
 
 TEST(Eval, LambdaRac3QuoteEval) {
@@ -327,9 +324,9 @@ TEST(Eval, Mirror) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(b,c), REDUNDANT);
     expr = f.cons(list());
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }

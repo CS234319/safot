@@ -1,26 +1,10 @@
 #include "parser.h"
 #include "stack.h"
 #include "tokenizer.h"
-
-#include "stack-trace.h"
+#define PRODUCTION
+#include "mode.h"
 
 #include <string.h>
-
-#define DEBUG1
-
-#ifdef DEBUG 
-#include <sstream>
-#include "dump.h"
-#include "io.h"
-#else 
-#undef D
-#define D(...) 0
-#define M1(...) 0
-#define M2(...) 0
-#define M3(...) 0
-#define M4(...) 0
-#define __(...) 0
-#endif
 
 namespace Parser {
   /* Formal grammar of S expression

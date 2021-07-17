@@ -4,8 +4,6 @@
 #include "eval.h"
 #include "a-list.h"
 
-const S REDUNDANT("redundant"); 
-
 /* Parameterless fluentons */
 bool S::atom() const { return handle <= 0; }
 bool S::pair() const { return handle >  0; }
@@ -61,28 +59,6 @@ S S::$3$() const { return cdr().$2$(); }
 S S::$4$() const { return cdr().$3$(); }
 
 /* Complete the definition of struct S */
-const S NIL("NIL"); // Always define longer names first 
-const S SET("set"); // Save one letter by sharing with "T"
-const S T("T");     // Always define longer names first 
-const S NDEFUN("ndefun"); // Always define longer names first 
-const S DEFUN("defun");
-const S QUOTE("quote");
-const S ATOM("atom");
-const S CAR("car");
-const S CDR("cdr");
-const S COND("cond");
-const S CONS("cons");
-const S ERROR("error");
-const S EVAL("eval");
-const S EQ("eq");
-const S NULL("null");
-const S MISSING("missing");
-const S UNDEFINED("undefined");
-const S INVALID("invalid");
-const S BUG("bug");
-const S EMPTY("empty");
-const S EXHAUSTED("exhausted");
-
 extern S eval(S s); 
 
 

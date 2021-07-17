@@ -23,13 +23,14 @@
 #include <string.h>
 #include <gtest/gtest.h>
 #include "test.h"
+#include "mode.h"
 
-extern S a;
-extern S b;
-extern S c;
-extern S x;
-extern S y;
-extern S z;
+static S a("a");
+static S b("b");
+static S c("c");
+static S x("x");
+static S y("y");
+static S z("z");
 
 // ----------------------------
 // Test: car

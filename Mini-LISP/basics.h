@@ -3,7 +3,6 @@
 #define BASICS_H
 #include "S.h"
 
-
 inline bool exists(S x, S xs) { return !xs.null() && (xs.car().eq(x) || exists(x, xs.cdr())); } 
 inline bool islist(S s) { return s.null() || !s.atom() && islist(s.cdr()); }
 inline S list() { return NIL; }

@@ -2,62 +2,59 @@
 #include "gtest/gtest.h"
 #include "test.h"
 
-/**
- * Tests of mini-lisp basics; should be renamed one day
- */
-S t("t");
-S n("NIL");
-S a0("");
-S a1("T");
-S a2("NIL");
-S a3("FOO BAR");
-S a4("BAR");
-S s1(t,n);
-S s2(s1,s1);
-S s3(s2,s1);
+static S t("t");
+static S n("nil");
+static S a0("");
+static S a1("T");
+static S a2("NIL");
+static S a3("FOO BAR");
+static S a4("BAR");
+static S s1(t,n);
+static S s2(s1,s1);
+static S s3(s2,s1);
 
 TEST(Fluenton,n0) {
     EXPECT_TRUE(list().n0());
-    EXPECT_FALSE(list(T).n0());
-    EXPECT_FALSE(list(T, NIL).n0());
-    EXPECT_FALSE(list(T, NIL, T).n0());
-    EXPECT_FALSE(list(T, NIL, T, NIL).n0());
+    EXPECT_FALSE(list(t).n0());
+    EXPECT_FALSE(list(t, NIL).n0());
+    EXPECT_FALSE(list(t, NIL, t).n0());
+    EXPECT_FALSE(list(t, NIL, t, NIL).n0());
 }
 
 TEST(Fluenton,n1) {
     EXPECT_FALSE(list().n1());
-    EXPECT_TRUE(list(T).n1());
-    EXPECT_FALSE(list(T, NIL).n1());
-    EXPECT_FALSE(list(T, NIL, T).n1());
-    EXPECT_FALSE(list(T, NIL, T, NIL).n1());
+    EXPECT_TRUE(list(t).n1());
+    EXPECT_FALSE(list(t, NIL).n1());
+    EXPECT_FALSE(list(t, NIL, t).n1());
+    EXPECT_FALSE(list(t, NIL, t, NIL).n1());
 }
 
 TEST(Fluenton,n2) {
     EXPECT_FALSE(list().n2());
-    EXPECT_FALSE(list(T).n2());
-    EXPECT_TRUE(list(T, NIL).n2());
-    EXPECT_FALSE(list(T, NIL, T).n2());
-    EXPECT_FALSE(list(T, NIL, T, NIL).n2());
+    EXPECT_FALSE(list(t).n2());
+    EXPECT_TRUE(list(t, NIL).n2());
+    EXPECT_FALSE(list(t, NIL, t).n2());
+    EXPECT_FALSE(list(t, NIL, t, NIL).n2());
 }
 
 TEST(Fluenton,n3) {
     EXPECT_FALSE(list().n3());
-    EXPECT_FALSE(list(T).n3());
-    EXPECT_FALSE(list(T, NIL).n3());
-    EXPECT_TRUE(list(T, NIL, T).n3());
-    EXPECT_FALSE(list(T, NIL, T, NIL).n3());
+    EXPECT_FALSE(list(t).n3());
+    EXPECT_FALSE(list(t, NIL).n3());
+    EXPECT_TRUE(list(t, NIL, t).n3());
+    EXPECT_FALSE(list(t, NIL, t, NIL).n3());
 }
 
 TEST(Fluentons, more) {
     EXPECT_FALSE(list().more0());
-    EXPECT_TRUE(list(T).more0());
-    EXPECT_TRUE(list(T, NIL).more0());
-    EXPECT_TRUE(list(T, NIL, T).more0());
-    EXPECT_TRUE(list(T, NIL, T, NIL).more0());
+    EXPECT_TRUE(list(t).more0());
+    EXPECT_TRUE(list(t, NIL).more0());
+    EXPECT_TRUE(list(t, NIL, t).more0());
+    EXPECT_TRUE(list(t, NIL, t, NIL).more0());
 
     EXPECT_FALSE(list().more1());
-    EXPECT_FALSE(list(T).more1());
-    EXPECT_TRUE(list(T, NIL).more1());
+    EXPECT_FALSE(list(t).more1());
+    EXPECT_TRUE(list(t, NIL).more1());
     EXPECT_TRUE(list(T, NIL, T).more1());
     EXPECT_TRUE(list(T, NIL, T, NIL).more1());
 
@@ -105,7 +102,7 @@ TEST(Fluenton, EvalQuote) {
   CAREFULLY_EXPECT(EQ,i.eval().cdr().car(),"B", << i); 
 }
 
-TEST(Fluenton, t) {
+TEST(Fluenton, T) {
   EXPECT_TRUE(a0.t());
   EXPECT_TRUE(a1.t());
   EXPECT_FALSE(a2.t());
@@ -203,7 +200,7 @@ TEST(FluentWhichIsAtomic,EQ) {
 }
 
 TEST(FluentWhichIsAtomic,car) {
-  EXPECT_EQ(s1.car(), t);
+  EXPECT_EQ(s1.car(), T);
   EXPECT_EQ(s2.car(), s1);
   EXPECT_EQ(s3.car(), s2);
   EXPECT_EXCEPTION(a0.car() , a0,CAR);
@@ -233,7 +230,7 @@ TEST(FluentWhichIsAtomic,atom) {
 }
 
 TEST(FluentWhichIsAtomic,null) {
-  EXPECT_FALSE(t.null());
+  EXPECT_FALSE(T.null());
   EXPECT_TRUE(n.null());
   EXPECT_FALSE(a0.null());
   EXPECT_FALSE(a1.null());
@@ -244,9 +241,8 @@ TEST(FluentWhichIsAtomic,null) {
   EXPECT_FALSE(s3.null());
 }
 
-
 TEST(FluentWhichIsAtomic,EvalLiterals) {
-  CAREFULLY(EXPECT_EQ(t.eval(),t));
+  CAREFULLY(EXPECT_EQ(T.eval(),T));
   CAREFULLY(EXPECT_EQ(n.eval(),n));
 }
 

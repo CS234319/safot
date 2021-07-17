@@ -6,16 +6,10 @@
  * Tests of apply
  */
 
-S a("A");
-S b("B");
-S c("C");
-S x("X");
-S y("Y");
-S z("Z");
+static S a("A"), b("B"), c("C");
+static S x("X"), y("Y"), z("Z");
 
 extern S apply(S f, S args);
-extern S LAMBDA;
-extern S NLAMBDA;
 
 TEST(Apply, Empty) {
     S f = list(LAMBDA, NIL, NIL);

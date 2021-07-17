@@ -1,16 +1,10 @@
 #include "S.h"
 #include "stack-trace.h"
+#define PRODUCTION
+#include "mode.h"
 
-#define SILENT 1 
 
-
-#if SILENT
-#undef D
-#undef M
-#define D(...) 0
-#define M(...) 0
-#else 
-
+#ifndef PRODUCTION 
 namespace Strings {
   extern H current;  
   extern String pool;  

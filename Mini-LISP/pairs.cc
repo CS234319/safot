@@ -1,10 +1,7 @@
 #include "S.h"
 #include "stack-trace.h"
-#define SILENT 1 
-#if SILENT
-#undef D
-#define D(...) 0
-#endif
+#define PRODUCTION
+#include "mode.h"
 
 /* Global memory layout; we use no dynamic allocation of the host language.
  * TODO: deal with memory exhausting */

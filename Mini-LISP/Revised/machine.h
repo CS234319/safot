@@ -1,6 +1,5 @@
 #ifndef SX_H
 #define SX_H
-#include "chic.h"
 
 /*@ S-Expressions@ S-Expressions come in two varieties: (1) Dotted
  pairs (pairs for short) are compound S-expressions defined by two, smaller,

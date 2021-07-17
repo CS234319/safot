@@ -6,19 +6,17 @@
  * Tests of defun/ndefun
  */
 
-extern S a;
-extern S b;
-extern S c;
-extern S x;
-extern S y;
-extern S z;
-extern S a4;
 
-extern S LAMBDA;
-extern S NLAMBDA;
+static S a("a");
+static S b("b");
+static S c("b");
+static S x("y");
+static S y("y");
+static S z("z");
+static S a4("BAR");
+
 extern S defun(S name, S parameters, S body);
 extern S ndefun(S name, S parameters, S body);
-
 extern S apply(S f, S args);
 
 TEST(Defun, Empty) {

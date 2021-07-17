@@ -1,18 +1,18 @@
 #include "eval.h"
 #include "a-list.h"
 #include "basics.h"
-#include "mode.h"
 
-S NLAMBDA("nlambda"), LAMBDA("lambda");
+#define PRODUCTION
+#include "mode.h"
 
 #undef NULL
 
-const S ATOMIC_FUNCTIONS = list(
-  CAR,   CDR,  CONS,
-  ATOM,  NULL, EQ,  COND, 
-  ERROR, SET,  EVAL, QUOTE,
-  DEFUN, NDEFUN, NLAMBDA, LAMBDA
-);
+const auto ATOMIC_FUNCTIONS = list(
+    CAR,  CDR,  CONS,
+    ATOM,  NULL, EQ,  COND, 
+    ERROR, SET,  EVAL, QUOTE,
+    DEFUN, NDEFUN, NLAMBDA, LAMBDA);
+
 
 bool atomic(S name) { return exists(name, ATOMIC_FUNCTIONS); }
 S defun(S name, S parameters, S body) { return set(name, list(LAMBDA, parameters, body)); }
@@ -21,7 +21,7 @@ S ndefun(S name, S parameters, S body) { return set(name, list(NLAMBDA, paramete
 S apply_defined_function(S f, S args) { apply(f,args); }
 
 /** Assertions like */ 
-S bug(S s) { return s.error(T); }
+S bug(S s) { return s.error(BUG); }
 
 #define FUN(Return, Name, ArgumentType) \
   Return Name(ArgumentType _) { \
@@ -37,7 +37,7 @@ S bug(S s) { return s.error(T); }
 
 
 FUN(S, evaluate_list, S) IS(
-  _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
+ _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
 ) 
 
 FUN(S, evaluate_cond, S)  IS( 
@@ -102,24 +102,35 @@ S evaluate_atomic_function(S s) { M(s);
 }
 
 S apply(S f, S args) {
+  D(f,args);
   f.n3() || f.cons(args).error(INVALID).t();
+  D(f.$1$(),f.$2$(),f.$3$(),args,f.$1$().eq(NLAMBDA));
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
-  alist = bind(f.$2$(), actuals, alist);
+  alist() = bind(f.$2$(), actuals, alist());
   const auto result = f.$3$().eval();
   return result;
 }
 
-
 S eval(S s) {
+    D(s);
     inc_eval_counter();
     S res = NIL;
+    D(s);
     if (s.atom()) {
-        res = lookup(s);
-    } else if (atomic(s.car())) {
-        res = evaluate_atomic_function(s);
+       res = lookup(s);
+       D(s, res);
     } else {
-        res = apply_defined_function(eval(s.car()), s.cdr());
+      D(s, s.car(), s.cdr());
+      if (atomic(s.car())) {
+       D(s.car());
+       res = evaluate_atomic_function(s);
+       D(s, res);
+      } else {
+       res = apply_defined_function(eval(s.car()), s.cdr());
+       D(s, res);
+      }
     }
+    D(s,res);
     dec_eval_counter();
     if (get_eval_counter() == 0) reset_set_counter();
     return res;

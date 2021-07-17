@@ -1,35 +1,27 @@
-#include "io.h"
-/** An auxiliary file with lots of heavy weight C++ code and huge overhead.
- * This should not be in the production version. It is OK for testing and for
- * debugging.
- */
-#include <string.h>
+#ifndef DEBUGGING_H
+#define DEBUGGING_H
+
 #include "basics.h"
+#include "dump.h"
 #include "parser.h"
+#include "S.h"
 #include "stack.h"
 #include "stack-trace.h"
 
-std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
-  return os << o.str();
-}
 
-std::ostream& operator<<(std::ostream &os, Pair p) {
-  return os << "[" << S(p.car) << "." << S(p.cdr)  << "]";
-}
+#include <cstring>
+#include <iostream>
+#include <sstream>
+#include <string.h>
 
-String operator ~(S s) {
- std::ostringstream o;
- o << s;
- return strdup(o.str().c_str());
-}
+/** Auxiliary file that should not be used by production code, only 
+ * for debugging. 
+ */
 
-std::ostream& operator<<(std::ostream &os, S s) {
-  if (s.null())
-    return os << "nil";
-  if (s.atom())
-    return os << s.asAtom();
-  if (!islist(s))
-    return os << "" << s.car() << "." << s.cdr() << "";
+inline std::ostream& operator<<(std::ostream &os, S s) {
+  if (s.null()) return os << "nil";
+  if (s.atom()) return os << s.asAtom();
+  if (!islist(s)) return os << "" << s.car() << "." << s.cdr() << "";
   os << "(";
   for (;;) {
     os << S(s.car());
@@ -40,11 +32,30 @@ std::ostream& operator<<(std::ostream &os, S s) {
   return os << ")";
 }
 
-bool isRule(int i) {
+
+/** An auxiliary file with lots of heavy weight C++ code and huge overhead.
+ * This should not be in the production version. It is OK for testing and for
+ * debugging.
+ */
+inline std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
+  return os << o.str();
+}
+
+inline std::ostream& operator<<(std::ostream &os, Pair p) {
+  return os << "[" << S(p.car) << "." << S(p.cdr)  << "]";
+}
+
+inline String operator ~(S s) {
+ std::ostringstream o;
+ o << s;
+ return strdup(o.str().c_str());
+}
+
+inline bool isRule(int i) {
   return i> Parser::MIN_RULE && i < Parser::MAX_RULE;  
 }
 
-String operator ~(Parser::Symbol s) {
+inline String operator ~(Parser::Symbol s) {
     if (atom(s))
       return S(s).asAtom();
     switch (s) {
@@ -76,15 +87,15 @@ String operator ~(Parser::Symbol s) {
     return strdup(o.str().c_str());
   }
 
-static inline H& data(H h) {
+inline H& data(H h) {
   return Pairs::get(h).data;
 }
 
-static inline H next(H h) {
+inline H next(H h) {
   return Pairs::get(h).next;
 }
 
-String stack() {
+inline String stack() {
   static std::ostringstream o;
   o.str("");
   o << "[";
@@ -100,5 +111,4 @@ String stack() {
   o << "]";
   return strdup(o.str().c_str());
 }
-
-//  String h2s(H h) { return ~*reinterpret_cast<Symbol*>(&h); }
+#endif
