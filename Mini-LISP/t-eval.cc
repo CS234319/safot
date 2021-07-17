@@ -266,7 +266,7 @@ TEST(Eval, LambdaIdCar) {
 
     // Check evaluation errors:
     expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), b, UNDEFINED);
+    EXPECT_EXCEPTION(expr.eval(), c, UNDEFINED);
     expr = f.cons(list());
     EXPECT_EXCEPTION(expr.eval(),list(x) , MISSING);
 }
@@ -289,7 +289,7 @@ TEST(Eval, LambdaRac3QuoteEval) {
     expr = f.cons(list(a,b,c));
     EXPECT_EXCEPTION(expr.eval(), c, UNDEFINED);
     expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), NIL, MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(y, z), MISSING);
 }
 
 TEST(Eval, LambdaRac3CarFirstEval) {
@@ -326,7 +326,7 @@ TEST(Eval, Mirror) {
     expr = f.cons(list(a,b,c));
     EXPECT_EXCEPTION(expr.eval(), list(b,c), REDUNDANT);
     expr = f.cons(list());
-    EXPECT_EXCEPTION(expr.eval(), list(y), MISSING);
+    EXPECT_EXCEPTION(expr.eval(), list(x), MISSING);
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }

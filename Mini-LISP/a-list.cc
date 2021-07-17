@@ -36,8 +36,6 @@ S& alist() {
   return inner; 
 }
 
-static S saved_alist = alist();
-
 void restore_alist() {
     /*
      * This function call from error.

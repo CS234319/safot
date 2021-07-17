@@ -13,6 +13,11 @@ static S c("b");
 static S x("y");
 static S y("y");
 static S z("z");
+static S p("p");
+static S k("k");
+static S j("j");
+static S m("m");
+static S n("n");
 static S a4("BAR");
 
 extern S defun(S name, S parameters, S body);
@@ -55,22 +60,22 @@ TEST(NDefun, CarFirst) {
 }
 
 TEST(NDefun, CarLast) {
-    S f = ndefun(a4, list(x, y), list(CAR, y));
+    S f = ndefun(a4, list(p, j), list(CAR, j));
     EXPECT_EQ(apply(f, list(c, list(a,b))), a);
 }
 
 TEST(NDefun, Swap) {
-    S f = ndefun(a4, list(x, y), list(CONS, y, x));
-    EXPECT_EQ(apply(f, list(a, b)), b.cons(a));
+    S f = ndefun(a4, list(m, n), list(CONS, n, m));
+    EXPECT_EQ(apply(f, list(z, k)), k.cons(z));
 }
 
 TEST(NDefun, Set) {
-    S f = ndefun(a4, list(x, y), list(SET, x, y));
+    S f = ndefun(a4, list(p, y), list(SET, p, y));
     EXPECT_EQ(apply(f, list(a, b)), b);
 }
 
 TEST(NDefun, SetAndCar) {
-    S f = ndefun(a4, list(x, y), list(SET, x.q(), list(CAR, y)));
+    S f = ndefun(a4, list(m, n), list(SET, m.q(), list(CAR, n)));
     EXPECT_EQ(apply(f, list(a, list(b, c))), b);
 }
 
