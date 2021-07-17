@@ -89,7 +89,7 @@ include .depend
 
 
 tags:   $(SOURCES)
-	ctags $(SOURCES) > $@
+	@ctags $(SOURCES) > $@
 
 wc: 
 	@wc -l $(addsuffix .cc,$(MINI-LISP)) | sort -n 

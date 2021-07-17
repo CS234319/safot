@@ -1,45 +1,47 @@
-# CFLAGS += -MD -MP -w -std=gnu2x
-#
+all: test services
+services: tags .depend 
+
+.PHONY: all services clean wc gvim list
+
 CFLAGS += -w -std=gnu2x
 
-PRIMITIVES=Short.o Word.o
-SERVICES=accounting.o heap.o text.o layout.o 
-LISP_TYPES=Handle.o Id.o Item.o Knob.o Pair.o Parser.o Pristine.o Sx.o 
-OTHER_TYPES=Pushdown.o Tokenizer.o Parser.o 
 
-TYPES=$(LISP_TYPES) $(OTHER_TYPES)
-PRODUCTION=$(PRIMITIVES) $(SERVICES) $(TYPES)
-TEST=t-heap.o t-misc.o t-purge.o t-Pushdown.o t-accounting.o 
-OBJECTS=$(PRODUCTION) $(TEST)
-SOURCES=$(OBJECTS:.o=.cc) 
-TARGETS=test .depend
+PRIMITIVES=Short Word
+SERVICES=accounting heap text layout 
+TYPES=Handle Id Item Knob Pair Parser Pristine Sx 
+READ=Pushdown Tokenizer Parser 
+TESTERS=t-heap t-misc t-purge t-Pushdown t-accounting 
 
-test: # main target
+CORE            := $(PRIMITIVES) $(SERVICES) $(TYPES) $(READ)  
+TEST            := $(CORE) $(TESTERS)
+MODULES         := $(TEST)
 
-test: $(OBJECTS)  
-	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
+SOURCES         := $(addsuffix .cc,$(MODULES)) 
+HEADERS         := $(sort $(filter %.h,$(shell cat .depend)))
+
+test: $(addsuffix .o,$(TEST))
+	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread 
 
 %.o: %.cc                                      # Compiling individual C++ files into ob
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c $<
 
-
-FILES=chic.h $(SOURCES) $(OBJECTS:.o=.h) 
-
-depend: .depend Makefile
-
-.depend: $(SOURCES) $(wildcard *.h) 
+.depend: $(SOURCES)  $(HEADERS)
 	@$(CXX) -w -MM $^ > "$@"
 
 include .depend
 
+tags:   $(SOURCES) $(HEADERS)
+	@ctags $(SOURCES) > $@
+
 list:
-	@echo $(FILES)
+	@echo "HEADERS        = " $(HEADERS)
+	@echo "SOURCES        = " $(SOURCES)
 
 gvim: 
-	@gvim $(FILES) Makefile -c make
+	@gvim $(SOURCES) $(HEADERS) Makefile -c make
 
 wc: 
-	wc -l chic.h $(FILES) Makefile | sort -n 
+	@wc -l $(SOURCES) $(HEADERS) Makefile | sort -n 
 
 clean:
-		rm -rf $(TARGETS) $(OBJECTS) *.o *.d *~ *.backup memory *.back *.aux *.log delme* diff
+		rm -rf $(TARGETS) $(OBJECTS) *.o *.d *~ *.backup memory *.back *.aux *.log delme* diff .depend
