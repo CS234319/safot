@@ -18,19 +18,18 @@ static S x("x");
 static S y("y");
 static S z("z");
 
-static S a4("BAR");
-
 extern S defun(S name, S parameters, S body);
 extern S ndefun(S name, S parameters, S body);
 extern S apply(S f, S args);
 
 static S ndefun(S parameters, S body) { return ndefun(S("thingy"), parameters, body); }
+static S defun(S parameters, S body) { return defun(S("thingy"), parameters, body); }
 
-TEST(Defun, Empty) { S f = defun(a4, NIL, NIL); EXPECT_EQ(apply(f, NIL).eval(), NIL); }
-TEST(Defun, LambdaIdCar) { S f = defun(a4, list(x), x); EXPECT_EQ(apply(f, list(CAR.cons(list(list(a,b).q())))), a); }
-TEST(Defun, LambdaRac3CarFirstEval) { S f = defun(a4, list(x, y, z), z); EXPECT_EQ(apply(f, list(CAR.cons(list(list(a, NIL).q())), b.q(), c.q())), c); }
-TEST(Defun, LambdaRac3CarLastEval) { S f = defun(a4, list(x, y, z), z); EXPECT_EQ(apply(f, list(a.q(), b.q(), CAR.cons(list(list(c, NIL).q())))), c); }
-TEST(Defun, LambdaRac3QuoteEval) { S f = defun(a4, list(x, y, z), z); EXPECT_EQ(apply(f, list(a.q(), b.q(), c.q())), c); }
+TEST(Defun, Empty) { S f = defun(NIL, NIL); EXPECT_EQ(apply(f, NIL).eval(), NIL); }
+TEST(Defun, LambdaIdCar) { S f = defun(list(x), x); EXPECT_EQ(apply(f, list(CAR.cons(list(list(a,b).q())))), a); }
+TEST(Defun, LambdaRac3CarFirstEval) { S f = defun(list(x, y, z), z); EXPECT_EQ(apply(f, list(CAR.cons(list(list(a, NIL).q())), b.q(), c.q())), c); }
+TEST(Defun, LambdaRac3CarLastEval) { S f = defun(list(x, y, z), z); EXPECT_EQ(apply(f, list(a.q(), b.q(), CAR.cons(list(list(c, NIL).q())))), c); }
+TEST(Defun, LambdaRac3QuoteEval) { S f = defun(list(x, y, z), z); EXPECT_EQ(apply(f, list(a.q(), b.q(), c.q())), c); }
 TEST(NDefun, Car3) { S f = ndefun(list(x, y, z), x); EXPECT_EQ(apply(f, list(a, b, c)), a); }
 TEST(NDefun, CarFirst) { S f = ndefun(list(x, y), list(CAR, x)); EXPECT_EQ(apply(f, list(list(a,b), c)), a); }
 TEST(NDefun, CarLast1) { S f = ndefun(list(p, j), list(CAR, j)); EXPECT_EQ(apply(f, list(c, list(a,b))), a); }
