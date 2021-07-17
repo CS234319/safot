@@ -14,7 +14,7 @@
 
 static S a("a");
 static S b("b");
-static S c("b");
+static S c("c");
 static S x("x");
 static S y("y");
 
@@ -187,20 +187,55 @@ TEST(Book, BuiltInFunctionsT) {
 }
 
 /* Zcar */
-TEST(Book, Zcar) {
+TEST(Book, Zcar0) {
+    parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
+}
+TEST(Book, Zcar1) {
     parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
     EXPECT_EQ(parse("(zcar 'a)").eval(), a);
+}
+
+TEST(Book, Zcar2) {
+    parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
     EXPECT_EQ(parse("(zcar '(a b))").eval(), a);
-    EXPECT_EXCEPTION(parse("(zcar)").eval(), NIL, MISSING);
+}
+
+TEST(Book, Zcar3) {
+  parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
+  EXPECT_EXCEPTION(parse("(zcar)").eval(), list(x), MISSING);
+}
+
+TEST(Book, Zcar4) {
+parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
+EXPECT_EXCEPTION(parse("(zcar 'a 'b)").eval(), list(b), REDUNDANT);
 }
 
 /* Mirror */
-TEST(Book, Mirror) {
-    parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
-    EXPECT_EQ(parse("(mirror '(a b))").eval(), list(b).cons(a));
-    EXPECT_EXCEPTION(parse("(mirror 'a)").eval(), a, CDR); // Failed in (cdr x)
-    EXPECT_EXCEPTION(parse("(mirror)").eval(), NIL, MISSING);
+TEST(Book, Mirror1) {
+  parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+  EXPECT_EQ(parse("(mirror '(a b))").eval(), list(b).cons(a));
 }
+
+TEST(Book, Mirror2) {
+  parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+  EXPECT_EXCEPTION(parse("(mirror 'a)").eval(), a, CDR); // Failed in (cdr x)
+}
+
+TEST(Book, Mirror3) {
+  parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+  EXPECT_EXCEPTION(parse("(mirror)").eval(), list(x), MISSING);
+}
+
+TEST(Book, Mirror4) {
+  parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+  EXPECT_EXCEPTION(parse("(mirror 'a 'b 'c)").eval(), list(b, c), REDUNDANT);
+}
+
+TEST(Book, Mirror5) {
+  parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+  EXPECT_EXCEPTION(parse("(mirror 'a 'b)").eval(), list(b), REDUNDANT);
+}
+
 
 /* Eval on eval */
 TEST(Book, EvalOnEval) {
