@@ -52,6 +52,7 @@ TESTERS += t-eval
 TESTERS += t-book
 TESTERS += t-alist-global-local
 TESTERS += t-repl
+TESTERS += t-book-evaluate
 
 mini-lisp: $(addsuffix .o,$(MINI-LISP))
 
