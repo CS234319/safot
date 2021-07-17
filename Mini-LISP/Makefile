@@ -4,15 +4,16 @@ services: tags depend
 .PHONY: all services clean depend wc gvim
 
 HEADERS := $(sort $(filter %.h,$(shell cat .depend)))
-MODULES         := $(IMPLEMENTATION) $(TESTERS) $(REPL)  
+MODULES         := $(IMPLEMENTATION) $(TESTERS) $(REPL)
 TEST            := $(IMPLEMENTATION) $(TESTERS)
 IMPLEMENTATION  := $(READ) $(ENGINE) $(MACHINE) 
 SOURCES         := $(addsuffix .cc,$(MODULES)) 
 
 REPL += 00
-REPL += out 
-REPL += read 
+REPL += out
+REPL += read
 REPL += basics
+REPL += repl
 
 ENGINE += eval
 ENGINE += a-list
@@ -26,6 +27,9 @@ MACHINE += strings
 MACHINE += pairs
 MACHINE += dump
 
+TESTERS += out
+TESTERS += read
+TESTERS += repl
 TESTERS += dump
 TESTERS += t-fluentons
 TESTERS += t-a-list
@@ -47,6 +51,7 @@ TESTERS += t-apply
 TESTERS += t-eval
 TESTERS += t-book
 TESTERS += t-alist-global-local
+TESTERS += t-repl
 
 mini-lisp: $(addsuffix .o,$(MINI-LISP))
 
@@ -59,7 +64,7 @@ SOURCES         := $(addsuffix .cc,$(MODULES))
 test: $(addsuffix .o,$(TEST)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
 
-mini-lisp: $(addsuffix .o,$(MINI-LISP)) 
+mini-lisp: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 list:
