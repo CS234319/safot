@@ -78,7 +78,7 @@ TEST(Book, AtomicFunctionsCond) {
     (cons 'a 'b) ⇒ (A.B)
 */
 TEST(Book, AtomicFunctionsCons) {
-    EXPECT_EQ(parse("(cons 'a '(b c))").eval(), list(a, b, c));
+    EXPECT_EQ(parse("(cons 'p '(i u))").eval(), list(S("p"), S("i"), S("u")));
     EXPECT_EQ(parse("(cons 'b nil)").eval(), list(b));
     EXPECT_EQ(parse("(cons 'a 'b)").eval(), a.cons(b));
 }
@@ -100,14 +100,14 @@ TEST(Book, AtomicFunctionsEq) {
 
 /*
     (error) ⇒ ✗
-    (error A) ⇒ ✗
-    (error 'my−error 'message) ⇒ ✗
+    (error 'A) ⇒ ✗
+    (error 'message) ⇒ ✗
 */
 TEST(Book, AtomicFunctionsError) {
     S err = S("ERROR");
     EXPECT_EXCEPTION(parse("(error)").eval(), list(err), NIL);
-    EXPECT_EXCEPTION(parse("(error A)").eval(), list(err, a), list(a));
-    EXPECT_EXCEPTION(parse("(error 'my 'message)").eval(), list(err, S("MY").q(), S("MESSAGE").q()), list(S("MY").q(), S("MESSAGE").q()));
+    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list(a), INVALID);
+    EXPECT_EXCEPTION(parse("(error 'message)").eval(), list(S("MESSAGE")), INVALID);
 }
 
 /*
@@ -115,7 +115,7 @@ TEST(Book, AtomicFunctionsError) {
     (set 'b nil) ⇒ NIL
 */
 TEST(Book, AtomicFunctionsSet) {
-    EXPECT_EQ(parse("(set 'a '(b c))").eval(), list(b, c));
+    EXPECT_EQ(parse("(set 'a '(s d))").eval(), list(S("s"), S("d")));
     EXPECT_EQ(parse("(set 'b nil)").eval(), NIL);
 }
 
@@ -172,9 +172,9 @@ TEST(Book, BuiltInFunctionsNlambda) {
 */
 TEST(Book, BuiltInFunctionsQuote) {
     EXPECT_EQ(parse("(quote a)").eval(), a);
-    EXPECT_EQ(parse("(quote (b c))").eval(), list(b, c));
+    EXPECT_EQ(parse("(quote (m o))").eval(), list(S("m"), S("o")));
     EXPECT_EQ(parse("'a").eval(), a);
-    EXPECT_EQ(parse("'(b c)").eval(), list(b, c));
+    EXPECT_EQ(parse("'(n j)").eval(), list(S("n"), S("j")));
 }
 
 /*
@@ -214,6 +214,15 @@ EXPECT_EXCEPTION(parse("(zcar 'a 'b)").eval(), list(b), REDUNDANT);
 TEST(Book, Mirror1) {
   parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
   EXPECT_EQ(parse("(mirror '(a b))").eval(), list(b).cons(a));
+    EXPECT_EXCEPTION(parse("(zcar)").eval(), list(x), MISSING);
+}
+
+/* Mirror */
+TEST(Book, Mirror) {
+    parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+    EXPECT_EQ(parse("(mirror '(a b))").eval(), list(b).cons(a));
+    EXPECT_EXCEPTION(parse("(mirror 'a)").eval(), a, CDR); // Failed in (cdr x)
+    EXPECT_EXCEPTION(parse("(mirror)").eval(), list(x), MISSING);
 }
 
 TEST(Book, Mirror2) {

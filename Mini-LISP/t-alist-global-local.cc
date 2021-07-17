@@ -8,7 +8,7 @@
 
 static S x("x"); 
 extern S evaluate_cond(S s);
-extern S lookup(S id, S alist);
+extern S lookup(S id);
 extern S alist();
 
 
@@ -53,9 +53,9 @@ TEST(AlistGlobalLocal, SetWithNoError) {
     s.eval();
 
     // Check if v0, v1, v2 are defined:
-    EXPECT_EQ(lookup(v_0, alist()), x);
-    EXPECT_EQ(lookup(v_1, alist()), x);
-    EXPECT_EQ(lookup(v_2, alist()), x);
+    EXPECT_EQ(lookup(v_0), x);
+    EXPECT_EQ(lookup(v_1), x);
+    EXPECT_EQ(lookup(v_2), x);
 }
 
 
@@ -98,9 +98,9 @@ TEST(AlistGlobalLocal, SetWithError) {
     );
 
     // Evaluate cond on the list:
-    EXPECT_EXCEPTION(s.eval(), list(ERROR, b_2.q(), x.q()), list(b_2.q(), x.q()));
+    EXPECT_EXCEPTION(s.eval(), list(b_2, x.q()), INVALID);
 
     // Check if b0, b1, b2 are defined:
-    EXPECT_EXCEPTION(lookup(b_0, alist()), b_0, UNDEFINED);
-    EXPECT_EXCEPTION(lookup(b_1, alist()), b_1, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(b_1), b_1, UNDEFINED);
 }

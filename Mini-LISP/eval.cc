@@ -85,7 +85,7 @@ S evaluate_atomic_function(S s) { M(s);
   if (f.eq(CDR))     return only(s).cdr();
   if (f.eq(ATOM))    return only(s).atom() ? T : NIL;
   if (f.eq(EVAL))    return only(s).eval();
-  if (f.eq(ERROR))   return s.error(s.cdr());
+  if (f.eq(ERROR))   return s.error(s.cdr().eval());
   if (f.eq(NULL))    return only(s).null() ? T : NIL;
   if (f.eq(QUOTE))   return s.cdr().car();
   if (f.eq(NLAMBDA)) return list(NLAMBDA, s.$2$(),  s.$3$());
@@ -107,6 +107,7 @@ S apply(S f, S args) {
   D(f.$1$(),f.$2$(),f.$3$(),args,f.$1$().eq(NLAMBDA));
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
   alist() = bind(f.$2$(), actuals, alist());
+
   const auto result = f.$3$().eval();
   return result;
 }
