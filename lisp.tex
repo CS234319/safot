@@ -1562,8 +1562,7 @@ FOO
 המקבלת פרמטר x שהוא ביטוי~\E|S| מורכב, ומחזירה ביטוי מורכב אחר שבו ה-car וה-cdr
 שב-x הוחלפו.
 \begin{LISP}
-(defun ; define a new function
-  mirror; named mirror
+(defun mirror ; define a new function named mirror
   (x) ; which expects a single parameter, named x
   (cons (cdr x) (car x)); and whose body is this S-expression
 )
@@ -1635,8 +1634,7 @@ FOO
 \end{LISP}
 אז לאחר שיערוך הביטוי
 \begin{LISP}
-(defun
-  mirror (x)
+(defun mirror (x)
   (cons (cdr x) (car x))
 )
 \end{LISP}
@@ -2329,7 +2327,7 @@ quote לרשימת ה-a-list באמצעות set
 המשמשות לביצוע הגדרות. נגדיר למשל את הפונקציה \T|?:| אשר מתנהגת באופן דומה
 לאופרטור בשם זה בשפת~\CPL
 \begin{LISP}
-(ndefun ?:¢¢ (condition true-value false-value)
+(ndefun ?: (condition true-value false-value)
   (cond ((eval condition) (eval true-value))
         (t (eval false-value))))
 \end{LISP}
@@ -2339,10 +2337,10 @@ quote לרשימת ה-a-list באמצעות set
 הבוליאנית, הימנעות משיערוך הפרמטר השני. אחרת, ערכה של הפונקציה הבוליאנית הוא תוצאת
 שיערוך הפרמטר השני
 \begin{LISP}
-(ndefun &&¢¢ (x y)
+(ndefun && (x y)
   (cond ((eval x) (eval y))
         (t nil)))
-(ndefun ||¢¢ (x y)
+(ndefun || (x y)
   (cond ((eval x) t)
         (t (eval y))))
 \end{LISP}
