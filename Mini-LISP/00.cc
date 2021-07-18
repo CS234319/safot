@@ -11,7 +11,8 @@ static S eval() {
   try {
     return Parser::result().eval();
   } catch (Pair x) { 
-    throw err(),err("Error ["), err(x.cdr), err("] in "), err(x.cdr), err("\n"),out();
+    err("Error ["), err(x.cdr), err("] in "), err(x.car), err("\n"),out();
+    throw;
   }
 }
 
@@ -40,8 +41,6 @@ int REPL() {   int n = 0;
         const S result = eval(); 
     Print:
         print(result), print("\n");
-        print(Erroring::playback()), print("\n");
-        print(Printing::playback()), print("\n");
         ++n;
     } catch (...) { /* Ignore evaluation error */ }
     Loop:

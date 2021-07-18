@@ -11,94 +11,87 @@
 TEST(Empty, Empty) {
 }
 
-TEST(Recorder, Exists) {
-  Recorder x;
-  EXPECT_EQ(x.tape,(void *) 0);
-  EXPECT_EQ(x.length,0);
+struct RecorderTest: ::testing::Test {
+  Recorder recorder;
+};
+
+TEST_F(RecorderTest, Exists) {
+  EXPECT_EQ(recorder.tape,(void *) 0);
+  EXPECT_EQ(recorder.length,0);
 }
 
-TEST(Recorder, Start) {
-  Recorder x;
-  x.start();
-  EXPECT_NE(x.tape,(void *)0);
-  EXPECT_EQ(x.length,0);
+TEST_F(RecorderTest, Start) {
+  recorder.start();
+  EXPECT_NE(recorder.tape,(void *)0);
+  EXPECT_EQ(recorder.length,0);
 }
 
-TEST(Recorder, NoStartWrite) {
-  Recorder x;
-  x.record("A");
-  EXPECT_EQ(x.tape,(void *)0);
-  EXPECT_EQ(x.length,0);
+TEST_F(RecorderTest, NoStartWrite) {
+  recorder.record("A");
+  EXPECT_EQ(recorder.tape,(void *)0);
+  EXPECT_EQ(recorder.length,0);
 }
-TEST(Recorder, EmptyCheckContents) {
-  Recorder x;
-  x.record("Hello");
-  EXPECT_EQ(0, x.playback());
-  EXPECT_EQ(x.tape,(void *)0);
-  EXPECT_EQ(x.length,0);
+TEST_F(RecorderTest, EmptyCheckContents) {
+  recorder.record("Hello");
+  EXPECT_EQ(0, recorder.playback());
+  EXPECT_EQ(recorder.tape,(void *)0);
+  EXPECT_EQ(recorder.length,0);
 }
 
-TEST(Recorder, CharacterWrite) {
-  Recorder x;
-  x.start();
-  x.record("A");
-  EXPECT_EQ(x.length,1);
-  EXPECT_NE((void *)0, x.playback());
-  EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"A");
+TEST_F(RecorderTest, CharacterWrite) {
+  recorder.start();
+  recorder.record("A");
+  EXPECT_EQ(recorder.length,1);
+  EXPECT_NE((void *)0, recorder.playback());
+  EXPECT_STREQ(reinterpret_cast<char *>(recorder.tape),"A");
 }
 
-TEST(Recorder, HelloWrite) {
-  Recorder x;
-  x.start();
-  x.record("Hello");
-  EXPECT_EQ(x.length,5);
-  EXPECT_NE((void *)0, x.playback());
-  EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"Hello");
-}
-TEST(Recorder, WriteContents1) {
-  Recorder x;
-  x.start();
-  x.record("z");
-  EXPECT_STREQ("z", x.playback());
+TEST_F(RecorderTest, HelloWrite) {
+  recorder.start();
+  recorder.record("Hello");
+  EXPECT_EQ(recorder.length,5);
+  EXPECT_NE((void *)0, recorder.playback());
+  EXPECT_STREQ(reinterpret_cast<char *>(recorder.tape),"Hello");
 }
 
-TEST(Recorder, WriteContents2) {
-  Recorder x;
-  x.start();
-  x.record("CAKE");
-  EXPECT_STREQ("CAKE", x.playback());
+TEST_F(RecorderTest, WriteContents1) {
+  recorder.start();
+  recorder.record("z");
+  EXPECT_STREQ("z", recorder.playback());
 }
 
-TEST(Recorder, WriteTwice) {
-  Recorder x;
-  x.record("A B ");
-  x.record("C D");
+TEST_F(RecorderTest, WriteContents2) {
+  recorder.start();
+  recorder.record("CAKE");
+  EXPECT_STREQ("CAKE", recorder.playback());
 }
 
-TEST(Recorder, StartWriteTwice) {
-  Recorder x;
-  x.start();
-  x.record("A B ");
-  x.record("C D");
+TEST_F(RecorderTest, WriteTwice) {
+  recorder.record("A B ");
+  recorder.record("C D");
 }
 
-TEST(Recorder, Concatenate) {
-  Recorder x;
-  x.start();
-  x.record(" BABE");
-  x.record(" CAFE");
-  x.record(" DEAD");
-  EXPECT_STREQ(" BABE CAFE DEAD", x.playback());
-  EXPECT_EQ(x.length, strlen(" BABE CAFE DEAD"));
+TEST_F(RecorderTest, StartWriteTwice) {
+  recorder.start();
+  recorder.record("A B ");
+  recorder.record("C D");
 }
 
-TEST(Recorder, CorrectStart) {
-  Recorder x;
-  x.record(" BABE");
-  x.start();
-  x.record(" CAFE");
-  x.record(" DEAD");
-  EXPECT_STREQ(" CAFE DEAD", x.playback());
+TEST_F(RecorderTest, Concatenate) {
+  recorder.start();
+  recorder.record(" BABE");
+  recorder.record(" CAFE");
+  recorder.record(" DEAD");
+  EXPECT_STREQ(" BABE CAFE DEAD", recorder.playback());
+  EXPECT_EQ(recorder.length, strlen(" BABE CAFE DEAD"));
+}
+
+TEST_F(RecorderTest, CorrectStart) {
+  recorder.record(" BABE");
+  recorder.start();
+  recorder.record(" CAFE");
+  recorder.record(" DEAD");
+  EXPECT_STREQ(" CAFE DEAD", recorder.playback());
 }
 
 /**
@@ -155,7 +148,7 @@ TEST(REPL, StdoutAtom) {
 }
 
 TEST(REPL, StdoutDefun) {
-    string expr = "(defun f (x) (car 'x))";
+    string expr = "(defun f (recorder) (car 'x))";
     testing::internal::CaptureStdout();
     REPL(expr.c_str());
     string output = testing::internal::GetCapturedStdout();
@@ -166,7 +159,7 @@ TEST(REPL, StdoutDefun) {
 }
 
 TEST(REPL, StdoutNdefun) {
-    string expr = "(ndefun f (x) x)";
+    string expr = "(ndefun f (recorder) x)";
     testing::internal::CaptureStdout();
     REPL(expr.c_str());
     string output = testing::internal::GetCapturedStdout();
@@ -177,7 +170,7 @@ TEST(REPL, StdoutNdefun) {
 }
 
 TEST(REPL, StdoutZcar) {
-    string expr = "(defun zcar(x) (cond ((atom x) x) (t (car x))))";
+    string expr = "(defun zcar(recorder) (cond ((atom x) x) (t (car x))))";
     testing::internal::CaptureStdout();
     REPL(expr.c_str());
     string output = testing::internal::GetCapturedStdout();
