@@ -42,8 +42,7 @@ TEST(Recorder, CharacterWrite) {
   Recorder x;
   x.start();
   x.record("A");
-  fprintf(stderr, "Tape = %s %p length = %d\n", x.tape, x.tape, x.length);
-  EXPECT_EQ(x.length,3);
+  EXPECT_EQ(x.length,1);
   EXPECT_NE((void *)0, x.playback());
   EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"A");
 }
@@ -52,9 +51,9 @@ TEST(Recorder, HelloWrite) {
   Recorder x;
   x.start();
   x.record("Hello");
-  EXPECT_EQ(x.length,6);
+  EXPECT_EQ(x.length,5);
   EXPECT_NE((void *)0, x.playback());
-  EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"A");
+  EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"Hello");
 }
 TEST(Recorder, WriteContents1) {
   Recorder x;
@@ -83,15 +82,14 @@ TEST(Recorder, StartWriteTwice) {
   x.record("C D");
 }
 
-
-
 TEST(Recorder, Concatenate) {
   Recorder x;
   x.start();
   x.record(" BABE");
   x.record(" CAFE");
   x.record(" DEAD");
-  EXPECT_EQ(" BABE CAFE DEAD", x.playback());
+  EXPECT_STREQ(" BABE CAFE DEAD", x.playback());
+  EXPECT_EQ(x.length, strlen(" BABE CAFE DEAD"));
 }
 
 TEST(Recorder, CorrectStart) {
@@ -100,7 +98,7 @@ TEST(Recorder, CorrectStart) {
   x.start();
   x.record(" CAFE");
   x.record(" DEAD");
-  EXPECT_EQ(" CAFE DEAD", x.playback());
+  EXPECT_STREQ(" CAFE DEAD", x.playback());
 }
 
 /**

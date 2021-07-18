@@ -257,7 +257,7 @@ TEST(AST, LibNDefun) {
   reset();
 }
 
-TEST(AST, SquareBrackets) {
+TEST(DISABLED_AST, SquareBrackets) {
   feed(""
     "(set 'ndefun\n"
       "'(nlambda (name parameters body)\n"

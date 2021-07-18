@@ -1,4 +1,4 @@
-all: test mini-lisp services
+all: tester mini-lisp services test
 services: tags depend 
 
 .PHONY: all services clean depend wc gvim
@@ -25,12 +25,12 @@ READ += parser
 
 MACHINE += strings
 MACHINE += pairs
-MACHINE += dump
 
 TESTERS += out
 TESTERS += read
 TESTERS += repl
 TESTERS += dump
+
 TESTERS += recorder
 TESTERS += t-fluentons
 TESTERS += t-a-list
@@ -63,11 +63,14 @@ TEST            := $(IMPLEMENTATION) $(TESTERS)
 MODULES         := $(IMPLEMENTATION) $(TESTERS) $(REPL)  
 SOURCES         := $(addsuffix .cc,$(MODULES)) 
 
-test: $(addsuffix .o,$(TEST)) 
+tester: $(addsuffix .o,$(TEST)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
 
 mini-lisp: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
+
+test: tester
+	./$^ 
 
 list:
 	@echo "HEADERS        = " $(HEADERS)
@@ -103,10 +106,10 @@ wc:
 	@wc -l $(addsuffix .cc,$(TESTERS)) | sort -n 
 
 gvim: 
-	@gvim $(SOURCES) Makefile -c make
+	@gvim $(HEADERS) $(SOURCES) Makefile -c make
 
 clean:
-		rm -fr $(OBJS) mini-lisp test store *.o .depend
+		rm -fr $(OBJS) mini-lisp tester *.o .depend
 
 
 
