@@ -1866,7 +1866,7 @@ dotted-pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
     ((null a-list) ; (i) a-list was exhausted.
       (error UNDEFINED id))
     ((eq id (car (car a-list))) ; (ii) found in first dotted-pair
-      (car (cdr (car a-list)))) ; return value part of dotted pair
+      (cdr (car a-list))) ; return value part of dotted pair
     (t (lookup id (cdr a-list))))) ; (iii) otherwise, recursive call on remainder of a-list
 \end{KERNEL}
 גם בפונקציה lookup אנו רואים קריאה רקורסיבית עם cond המתפצל לשלושה מקרים: במקרה
@@ -2483,11 +2483,11 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
     actuals
     a-list))
 \end{KERNEL}
-הפונקציה apply-decompsed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
+הפונקציה apply-decomposed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
 הפרמטרים הפורמליים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
 הגדרנו.
 \begin{KERNEL}
-(defun apply-decompsed-lambda(tag formals body actuals a-list)
+(defun apply-decomposed-lambda(tag formals body actuals a-list)
   (evaluate body
     (cond ((eq tag 'nlambda) (bind formals actuals a-list))
           ((eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list))
@@ -2496,7 +2496,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
 \end{KERNEL}
 
 האבחנה בין הסוגים השונים של ביטוי ה-$λ$, נעשית באופן הבא בפונקציה
-apply-decompsed-lambda
+apply-decomposed-lambda
 \begin{itemize}
   ✦
   אם התגית של ביטוי ה-$λ$ היא האטום nlambda הקישור נעשה
@@ -2657,7 +2657,7 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
         (t (apply-eager-atomic ; all other atomics are eager
               atomic
               (evaluate-list actuals a-list)
-              a-list)))|)
+              a-list))))
 \end{KERNEL}
 \endminipage
 

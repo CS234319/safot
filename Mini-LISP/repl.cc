@@ -4,8 +4,8 @@ using namespace Parser;
 
 S eval() { /** Should only be called after the parser finished successfully */
     try {
-        prompt("Parser : "); println(Parser::result());
-        prompt("Eval   : "); println(Parser::result().eval());
+//        prompt("Parser : "); println(Parser::result());
+//        prompt("Eval   : "); println(Parser::result().eval());
         return Parser::result().eval();
     } catch (Pair x) {
         err(),err("Error: kind = "), err(x.car), err(" Where = "), err(x.cdr), err("\n"),out();
@@ -39,7 +39,7 @@ int REPL(const char* input) {
         try {
             const S result = eval();
         Print:
-            // Done inside eval helper function
+            println(result);
             ++n;
         } catch (...) {
         }

@@ -21,8 +21,7 @@ TEST(REPL, StdoutNil) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
         output,
-        "> Parser : NIL\n"
-          "Eval   : NIL\n"
+        "> NIL\n"
     );
 }
 
@@ -33,8 +32,7 @@ TEST(REPL, StdoutCar) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
             output,
-        "> Parser : (CAR (QUOTE (A B)))\n"
-          "Eval   : A\n"
+        "> A\n"
     );
 }
 
@@ -45,8 +43,7 @@ TEST(REPL, StdoutCdr) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
             output,
-    "> Parser : (CDR (QUOTE (A B)))\n"
-      "Eval   : (B)\n"
+    "> (B)\n"
     );
 }
 
@@ -57,8 +54,7 @@ TEST(REPL, StdoutAtom) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
             output,
-    "> Parser : (ATOM (QUOTE T))\n"
-      "Eval   : T\n"
+    "> T\n"
     );
 }
 
@@ -69,8 +65,7 @@ TEST(REPL, StdoutDefun) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
             output,
-    "> Parser : (DEFUN F (X) (CAR (QUOTE X)))\n"
-    "Eval   : F\n"
+    "> F\n"
     );
 }
 
@@ -81,8 +76,7 @@ TEST(REPL, StdoutNdefun) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
             output,
-    "> Parser : (NDEFUN F (X) X)\n"
-      "Eval   : F\n"
+    "> F\n"
     );
 }
 
@@ -93,8 +87,7 @@ TEST(REPL, StdoutZcar) {
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(
             output,
-    "> Parser : (DEFUN ZCAR (X) (COND ((ATOM X) X) (T (CAR X))))\n"
-      "Eval   : ZCAR\n"
+    "> ZCAR\n"
     );
 }
 
