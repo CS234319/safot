@@ -1,0 +1,37 @@
+\usepackage{listings}
+
+\newfontfamily \listingsfont[
+            Extension=.otf,
+						UprightFont=*-Regular,
+						BoldFont=*-Bold,
+						ItalicFont=*-Italic,
+						BoldItalicFont=*-BoldItalic,
+]{UMTypewriter}
+
+
+\let\ttfamily=\listingsfont
+\lstdefinestyle{bashfulStdout}{basicstyle=\sl\listingsfont\small,keywords={}}
+\newenvironment{interaction}%
+    {\parskip0pt\par\hrulefill\par}{\parskip0pt\par\hrulefill\par}
+
+\lstdefinestyle{numbered}{
+    backgroundcolor=\color{blue!20},
+    style=display,
+    numbers=right,
+    stepnumber=1,
+    numbersep=-6pt,
+    xleftmargin=3ex,
+    xrightmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    frame=trBL,
+}
+
+\lstdefinelanguage{Pascalx}{
+  language=Pascal,
+  morestring=[b]",
+  deletekeywords={writeln,output,integer},
+  morekeywords={[2]WriteLn,output,integer},
+  keywordstyle={[2]\color{blue}\listingsfont\bfseries\itshape}}
+
+
