@@ -1,5 +1,4 @@
-#include <cstdint>
-#include <iostream>
+// #include <iostream>
 #ifndef S_H
 #define S_H 
 
@@ -39,7 +38,6 @@ namespace Strings {
   extern String pool;              // The array of characters.
   extern H allocate(String);       // Allocate a sequence of 
   extern bool eq(String, String);  // Compare two strings equality.
-  extern H size(String);           // Number of bytes occupied by a string
   extern String nil;
 };
 

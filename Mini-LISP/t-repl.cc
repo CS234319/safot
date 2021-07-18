@@ -1,9 +1,107 @@
+#include "recorder.h"
+#include "test.h"
+#undef function
+
 #include <iostream>
 #include <fcntl.h>
 #include <stdio.h>
 #include "gtest/gtest.h"
-#include "test.h"
 #include "repl.h"
+
+TEST(Empty, Empty) {
+}
+
+TEST(Recorder, Exists) {
+  Recorder x;
+  EXPECT_EQ(x.tape,(void *) 0);
+  EXPECT_EQ(x.length,0);
+}
+
+TEST(Recorder, Start) {
+  Recorder x;
+  x.start();
+  EXPECT_NE(x.tape,(void *)0);
+  EXPECT_EQ(x.length,0);
+}
+
+TEST(Recorder, NoStartWrite) {
+  Recorder x;
+  x.record("A");
+  EXPECT_EQ(x.tape,(void *)0);
+  EXPECT_EQ(x.length,0);
+}
+TEST(Recorder, EmptyCheckContents) {
+  Recorder x;
+  x.record("Hello");
+  EXPECT_EQ(0, x.playback());
+  EXPECT_EQ(x.tape,(void *)0);
+  EXPECT_EQ(x.length,0);
+}
+
+TEST(Recorder, CharacterWrite) {
+  Recorder x;
+  x.start();
+  x.record("A");
+  fprintf(stderr, "Tape = %s %p length = %d\n", x.tape, x.tape, x.length);
+  EXPECT_EQ(x.length,3);
+  EXPECT_NE((void *)0, x.playback());
+  EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"A");
+}
+
+TEST(Recorder, HelloWrite) {
+  Recorder x;
+  x.start();
+  x.record("Hello");
+  EXPECT_EQ(x.length,6);
+  EXPECT_NE((void *)0, x.playback());
+  EXPECT_STREQ(reinterpret_cast<char *>(x.tape),"A");
+}
+TEST(Recorder, WriteContents1) {
+  Recorder x;
+  x.start();
+  x.record("z");
+  EXPECT_STREQ("z", x.playback());
+}
+
+TEST(Recorder, WriteContents2) {
+  Recorder x;
+  x.start();
+  x.record("CAKE");
+  EXPECT_STREQ("CAKE", x.playback());
+}
+
+TEST(Recorder, WriteTwice) {
+  Recorder x;
+  x.record("A B ");
+  x.record("C D");
+}
+
+TEST(Recorder, StartWriteTwice) {
+  Recorder x;
+  x.start();
+  x.record("A B ");
+  x.record("C D");
+}
+
+
+
+TEST(Recorder, Concatenate) {
+  Recorder x;
+  x.start();
+  x.record(" BABE");
+  x.record(" CAFE");
+  x.record(" DEAD");
+  EXPECT_EQ(" BABE CAFE DEAD", x.playback());
+}
+
+TEST(Recorder, CorrectStart) {
+  Recorder x;
+  x.record(" BABE");
+  x.start();
+  x.record(" CAFE");
+  x.record(" DEAD");
+  EXPECT_EQ(" CAFE DEAD", x.playback());
+}
 
 /**
  * Tests of REPL

@@ -1,7 +1,9 @@
 #include "out.h"
 
 #include "basics.h"
+#include <stdio.h>
 #include <errno.h>
+#include <stdlib.h>
 
 static FILE *file = stdout;
 
@@ -23,11 +25,10 @@ struct Recorder {
   void start() { if (tape == 0) tape = malloc(1); length = 0; }
   void record(String s) {
     if (tape == 0) return;
-    H n = Strings::size(s);
-    tape = realloc(tape, length + n);
-    for (int i = 0; i < n; ++i, length)
+    H n = size(s);
+    tape = realloc(tape, length += n);
+    for (int i = 0; i <= n; ++i)
       *head() = s[i];
-    length += n;
   }
 } rout, rerr;
 

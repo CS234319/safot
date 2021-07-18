@@ -1,3 +1,7 @@
+#ifndef HACKS_H
+#define HACKS_H
+
+#include <cstdint>
 /**
  * Some hacks to make the code look like pseudo code to be included in a book
  * describing the project 
@@ -22,3 +26,6 @@ typedef const char *const String;
 typedef int32_t W; // A full word of  32 bits; two half words
 typedef int16_t H; // Half a word including 16 bits.
 typedef int8_t byte; // A byte 
+
+static inline H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
+#endif

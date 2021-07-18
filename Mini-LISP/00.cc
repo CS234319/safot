@@ -49,6 +49,7 @@ int REPL() {   int n = 0;
   } catch (...) { return n; }
 }
 
+#include <stdio.h> 
 int main(int argc, char **argv) {
   printf("Read, evaluated, and printed successfully %d expressions\n", REPL());
   printf("Good bye!\n");

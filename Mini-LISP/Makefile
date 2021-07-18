@@ -31,6 +31,7 @@ TESTERS += out
 TESTERS += read
 TESTERS += repl
 TESTERS += dump
+TESTERS += recorder
 TESTERS += t-fluentons
 TESTERS += t-a-list
 TESTERS += t-apply
