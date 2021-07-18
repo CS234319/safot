@@ -2,6 +2,7 @@
 #include "out.h"
 
 extern int grunt(int);
+
 String read() {
   static char  *buffer = 0;
   static size_t length = 72;

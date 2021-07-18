@@ -29,7 +29,7 @@ namespace Strings { // Atoms are never freed in mini-lisp
   const char *const nil = data.nil;
   const char *const pool = nil;
   H current = 0;
-  static H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
+  H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
   char upper(char c) { return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; }
   bool eq(const char *s1, const char *s2) {
     for (; upper(*s1) == upper(*s2); ++s1, ++s2)
