@@ -1,7 +1,7 @@
 all: extract
 .PHONY: extract all
-extract:
-	./extract.awk ../../lisp.tex
+extract: ./00.awk
+	./00.awk ../../lisp.tex
 
 clean:
 		rm -f *.lisp *~
