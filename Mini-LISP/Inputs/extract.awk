@@ -5,4 +5,16 @@
 /\\end{LIBRARY}/  { out = ""; next; } 
 /\\end{LISP}/  { out = "";next;  } 
 /\\end{KERNEL}/  { out = "";next;  } 
-out != "" { printf("%s\n",$0)>out }
+/\( *n?defun/ { 
+  name = $0;
+  gsub("[()]"," ",name);
+  split(name,words);
+  name = words[2]
+  while (name in names)
+    name = name "x" 
+  names[name]++
+  out = name ".lisp";
+}
+out != "" { 
+  printf("%s\n",$0)>out 
+}
