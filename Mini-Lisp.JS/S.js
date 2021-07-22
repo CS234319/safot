@@ -15,18 +15,22 @@ module.exports = class S {
 		throw "Not implemented"
 	}
 
-	isNil() {
-		const Atom = require("./Atom")
-		return this.eq(Atom.nil)
-	}
-
 	cons(s) {
 		const Pair = require("./Pair")
 		return new Pair(this, s)
 	}
 
 	eq(s) {
-		throw "Not implemented"
+		return s.atom() && this.value === s.value
+	}
+
+	equal(s) {
+    	throw "Not implemented"
+  	}
+
+	null() {
+		const Atom = require("./Atom")
+		return this.eq(Atom.nil)
 	}
 
 	isList() {

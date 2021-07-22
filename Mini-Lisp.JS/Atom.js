@@ -6,40 +6,28 @@ module.exports = class Atom extends S {
 		this.value = value
 	}
 
-	deepCopy() {
-		return new Atom(this.value)
-	}
-
-	isAtom() {
+	atom() {
 		return true
 	}
 
 	car() {
-		if (this.isNil()) {
-			return Atom.nil
-		}
 		throw `CAR: ${this.value} is not a list`
 	}
 
 	cdr() {
-		if (this.isNil()) {
-			return Atom.nil
-		}
-
 		throw `CDR: ${this.value} is not a list`
 	}	
 
-  // Pull up?
-	eq(s) {
-		return s.isAtom() && this.value === s.value; 
-	}
+	equal(s) {
+    	return this.eq(s)
+  	}
 
 	isList() {
-		return this.isNil()
+		return this.null()
 	}
 
 	getListAsArray() {
-		return this.isNil() ? [] : null
+		return this.null() ? [] : null
 	}
 
 	toString() {

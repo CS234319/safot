@@ -1,55 +1,50 @@
 const S = require("./S")
 
 module.exports = class Pair extends S {
-	constructor(car, cdr) {
+	constructor(l, r) {
 		super() 
-		this.car = car
-		this.cdr = cdr
-	}
-  // Should not have; please remove systematically; ALL LISP IS about sharing S expressions.
-	deepCopy() {
-		return new Pair(this.car.deepCopy(), this.cdr.deepCopy())
+		this.l = l
+		this.r = r
 	}
 
-  // Rename: try to reuse names from book: isAtom -> atom
-	isAtom() {
+	atom() {
 		return false
 	}
 
 	car() {
-		return this.car
+		return this.l
 	}
 
 	cdr() {
-		return this.cdr
+		return this.r
 	}
 
-  // Buggy: It should only work if comparing to atoms, but different atoms may have same string, but different id. 
 	eq(s) {
-    return false
-		return car === this
+    	return false
 	}
-	equal(s) { // Add a function that does recursive comparison; crucial for testing; does not belong to mini-lisp.
-    return true;
-  }
+
+	equal(s) {
+		return (!s.atom() && 
+				this.l.equal(s.l) &&
+				this.r.equal(s.r))
+  	}
 
 	isList() {
-		return this.cdr.isList()
+		return this.r.isList()
 	}
 
 	getListAsArray() {
-		var list = this.cdr.getListAsArray()
-		list?.unshift(this.car)
+		var list = this.r.getListAsArray()
+		list?.unshift(this.l)
 		return list
 	}
 
-  // Follow code in out.h/out.cc
 	toString() {
 		const list = this.getListAsArray()
 		if (list) {
 			return "(" + list.join(" ") + ")"
 		}
 
-		return "(" + [this.car, this.cdr].join(" . ") + ")"
+		return "(" + [this.l, this.r].join(" . ") + ")"
 	}
 }
