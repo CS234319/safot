@@ -67,6 +67,16 @@ test('null', () => {
 	expect(list.null()).toBeFalsy()
 })
 
+test('quote', () => {
+	expect(nil).toBe(nil)
+	expect(t).toBe(t)
+	expect(a).toBe(a)
+	expect(pair).toBe(pair)
+	expect(list).toBe(list)
+	expect(a).not.toBe(b)
+	expect(list).not.toBe(pair)
+}) 
+
 test('isList', () => {
 	expect(nil.isList()).toBeTruthy()
 	expect(t.isList()).toBeFalsy()

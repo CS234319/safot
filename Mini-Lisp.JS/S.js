@@ -29,6 +29,10 @@ module.exports = class S {
 		return this.eq(Atom.nil)
 	}
 
+	quote() {
+		return this
+	}
+
 	isList() {
 		throw "Not implemented"
 	}
