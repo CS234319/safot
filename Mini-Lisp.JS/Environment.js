@@ -1,19 +1,17 @@
-// Check out and translate a-list.cc
-//
+const List = require("./List")
+
 module.exports = class Environment {
 	constructor() {
-		this.a_list = require("./Atom").nil
-    // Try to initialize to the list ((t.t) (nil.nil))
-    // t.cons(t).cons(nil.cons(nil).cons(nil) 
+		const Atom = require("./Atom")
+		const nil = Atom.nil
+		const t = Atom.t
+
+		this.a_list = List.create(t.cons(t), nil.cons(nil))
 	}
 
 	set(key, value) {
-		if (!key.isAtom()) {
-//Another non-compliance			throw `SET: ${key} is not an atom`
-		}
-
 		const pair = key.cons(value)
-		this.a_list = key.cons(value).cons(this.a_list)
-		return key.cons(value)
+		this.a_list = pair.cons(this.a_list)
+		return pair
 	}
 }
