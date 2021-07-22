@@ -1,0 +1,498 @@
+diff --git a/Mini-LISP/Revised/Clicker.cc b/Mini-LISP/Revised/Clicker.cc
+index 8b13789..b447648 100644
+--- a/Mini-LISP/Revised/Clicker.cc
++++ b/Mini-LISP/Revised/Clicker.cc
+@@ -1 +1 @@
+-
++#include "Clicker."
+diff --git a/Mini-LISP/Revised/Item.cc b/Mini-LISP/Revised/Item.cc
+index e09548b..8e74c0a 100644
+--- a/Mini-LISP/Revised/Item.cc
++++ b/Mini-LISP/Revised/Item.cc
+@@ -6,4 +6,4 @@ Item Item::head(Short s) { s1(s);       return *this; }
+ Item Item::rest(Short s) { s2(flip(s)); return *this; }
+ Property(Item Item::rest) Is(Item(flip(s2())))
+ Property(Short Item::head) Is(s1())
+-Property(Boolean Item::ok) Is(x() || white(s1())  && black(s2()))
++Property(Boolean Item::ok) Is(null() || white(s1())  && black(s2()))
+diff --git a/Mini-LISP/Revised/Item.h b/Mini-LISP/Revised/Item.h
+index 277d3d0..bb64523 100644
+--- a/Mini-LISP/Revised/Item.h
++++ b/Mini-LISP/Revised/Item.h
+@@ -2,7 +2,7 @@
+ #define ITEM_H
+ #include "Knob.h"
+ Type Item: private Knob {
+-  using Knob::x, Knob::handle;
++  using Knob::null, Knob::handle;
+   Item();
+   Item(Short);
+ 
+diff --git a/Mini-LISP/Revised/Knob.cc b/Mini-LISP/Revised/Knob.cc
+index ea1ab21..fa8db01 100644
+--- a/Mini-LISP/Revised/Knob.cc
++++ b/Mini-LISP/Revised/Knob.cc
+@@ -8,8 +8,8 @@
+ #include "Pristine.h"
+ #include "Short.h"
+ 
+-Property(Boolean Knob::ok)       Is(x() || handle() >= $P_f$ && handle() <= $P_t$)
+-Property(Boolean Knob::x)        Is(handle() == $P_x$)
++Property(Boolean Knob::ok)       Is(null() || handle() >= $P_f$ && handle() <= $P_t$)
++Property(Boolean Knob::null)     Is(handle() == $P_x$)
+ Property(Short   Knob::s1)       Is(P[handle()].s1)  
+ Property(Short   Knob::s2)       Is(P[handle()].s2)  
+ Property(Boolean Knob::pair)     Is(white(s1()) && white(s2()))
+diff --git a/Mini-LISP/Revised/Knob.h b/Mini-LISP/Revised/Knob.h
+index 5c105a8..3778aaf 100644
+--- a/Mini-LISP/Revised/Knob.h
++++ b/Mini-LISP/Revised/Knob.h
+@@ -18,7 +18,7 @@ Type Knob: private Pair { // An S-expression represented by its Knob
+   Property(Boolean item);
+   Property(Boolean pristine);
+   Property(Boolean weirdo);
+-  Property(Boolean x);
++  Property(Boolean null);
+ 
+   // Converters:
+   Type Pair     Pair()       const;
+diff --git a/Mini-LISP/Revised/Pair.h b/Mini-LISP/Revised/Pair.h
+index 4493c21..21ec0d2 100644
+--- a/Mini-LISP/Revised/Pair.h
++++ b/Mini-LISP/Revised/Pair.h
+@@ -12,7 +12,7 @@ Type Pair: Sx {
+   Property(Sx car);
+   Property(Sx cdr);
+ 
+-  Property(Boolean x); // Change someday to nil
++  Property(Boolean null); 
+   Property(Boolean ok); // Consolidate variadic macro
+ 
+   Property(Boolean foreign);
+diff --git a/Mini-LISP/Revised/Pristine.cc b/Mini-LISP/Revised/Pristine.cc
+index 2b069c3..ee7289c 100644
+--- a/Mini-LISP/Revised/Pristine.cc
++++ b/Mini-LISP/Revised/Pristine.cc
+@@ -6,19 +6,19 @@ Pristine::Pristine(): Pristine($P_x$) {}
+ Pristine::Pristine(Short s): Knob(s) {}
+ 
+ Property(Pristine Pristine::prev) { 
+-  Expect(!x());
++  Expect(!null());
+   Expect(black(s1()));
+   Is(flip(s1())); 
+ }
+ 
+ Property(Pristine Pristine::next) { 
+-  Expect(!x());
++  Expect(!null());
+   Expect(black(s2()));
+   Is(flip(s2())); 
+ }
+ 
+ Property(Boolean Pristine::ok) { 
+-  if (x()) return true;
++  if (null()) return true;
+   if (white(s1()) || white(s2())) return false;
+   let p = prev().handle(), n = next().handle();
+   if (p != $P_x$) {
+@@ -37,7 +37,7 @@ Property(Boolean Pristine::ok) {
+ }
+ 
+ Pristine& Pristine::prev(Pristine p) { 
+-  Expect(!x());
++  Expect(!null());
+   let s = p.handle();
+   Expect(white(s));
+   s1(flip(s)); 
+@@ -45,7 +45,7 @@ Pristine& Pristine::prev(Pristine p) {
+ }
+ 
+ Pristine& Pristine::next(Pristine p) { 
+-  Expect(!x());
++  Expect(!null());
+   let s = p.handle();
+   Expect(white(s));
+   s2(flip(s)); 
+diff --git a/Mini-LISP/Revised/Pristine.h b/Mini-LISP/Revised/Pristine.h
+index 409bece..b6a55e4 100644
+--- a/Mini-LISP/Revised/Pristine.h
++++ b/Mini-LISP/Revised/Pristine.h
+@@ -4,7 +4,7 @@
+ Type Pristine: private Knob {
+   // Decomposition
+   using Knob::handle;
+-  using Knob::x;
++  using Knob::null;
+   using Knob::Item, Knob::Pair;
+   Constructor(Pristine());
+   Constructor(Pristine(Short));
+@@ -16,7 +16,7 @@ Type Pristine: private Knob {
+   Pristine& next(Pristine); 
+ };
+ inline std::ostream& operator<<(std::ostream &os, Pristine p) {
+-  if (p.x())
++  if (p.null())
+     return  os << "Px";
+   return os << "Pristine[" << p.prev().handle() << "." << p.next().handle()  << "]";
+ }
+diff --git a/Mini-LISP/Revised/Pushdown.cc b/Mini-LISP/Revised/Pushdown.cc
+index 09ba835..4a34ea0 100644
+--- a/Mini-LISP/Revised/Pushdown.cc
++++ b/Mini-LISP/Revised/Pushdown.cc
+@@ -5,7 +5,7 @@ Pushdown::~Pushdown() { clear(); }
+ 
+ Property(Boolean Pushdown::empty) { 
+   Keep(top.ok());
+-  return top.x(); 
++  return top.null(); 
+ } 
+ 
+ Short Pushdown::pop() {
+@@ -22,7 +22,7 @@ Short Pushdown::pop() {
+ Pushdown& Pushdown::push(Short s) { 
+   Expect(white(s));
+   Keep(top.ok());
+-  Promise(!top.x());
++  Promise(!top.null());
+   Promise(top.head() == s);
+   ++size | do(top = fresh(s, top.handle())); 
+   return *this; 
+@@ -48,10 +48,10 @@ Short Pushdown::peep(Short depth) const {
+   Expect(!empty());
+   Expect(depth <= size);
+   Expect(depth >= 0);
+-  Expect(!top.x());
++  Expect(!top.null());
+   for (auto i = top; ; i = i.rest(), --depth) {
+     Expect(i.ok());
+-    Expect(!i.x());
++    Expect(!i.null());
+     if (depth == 0)
+       return i.head();
+   }
+@@ -63,7 +63,7 @@ void Pushdown::poke(Short depth, Short value) {
+   Expect(depth >= 0);
+   for (auto i = top; ; i = i.rest(), --depth) {
+     Expect(i.ok());
+-    Expect(!i.x());
++    Expect(!i.null());
+     if (depth == 0) {
+       i.head(value);
+       return;
+diff --git a/Mini-LISP/Revised/corrupted.h b/Mini-LISP/Revised/corrupted.h
+index 9404b53..52d3a55 100644
+--- a/Mini-LISP/Revised/corrupted.h
++++ b/Mini-LISP/Revised/corrupted.h
+@@ -8,7 +8,7 @@
+ 
+ inline Short length() {
+   Short result = 0;
+-  for (auto h = heap; !h.x();  h = h.next()) 
++  for (auto h = heap; !h.null();  h = h.next()) 
+       ++result;
+   return result;
+ }
+@@ -18,12 +18,12 @@ static struct {
+   Boolean uncounted() Is(length() > accounting.unused); 
+   Boolean excess()   Is(length() < accounting.unused); 
+   Boolean cyclic() {
+-    if (!heap.x())
+-      for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
++    if (!heap.null())
++      for (auto h = heap, h2 = heap.next(); !h2.null(); h = h.next()) { 
+         if (h.handle() == h2.handle()) 
+           return true;
+-        if (!h2.x()) h2 = h2.next();
+-        if (!h2.x()) h2 = h2.next();
++        if (!h2.null()) h2 = h2.next();
++        if (!h2.null()) h2 = h2.next();
+       }
+     return false;
+   }
+@@ -34,10 +34,10 @@ static struct {
+     return false;
+   }  
+   Boolean asymmetric() {
+-    for (auto p = heap; !p.x(); p = p.next()) { 
+-      if (!p.prev().x() && p.prev().next().handle() != p.handle()) 
++    for (auto p = heap; !p.null(); p = p.next()) { 
++      if (!p.prev().null() && p.prev().next().handle() != p.handle()) 
+         return true;
+-      if (!p.next().x() && p.next().prev().handle() != p.handle()) 
++      if (!p.next().null() && p.next().prev().handle() != p.handle()) 
+         return true;
+     }
+     return false;
+@@ -75,11 +75,11 @@ static struct {
+           continue;
+         ++n;
+         Expect(n <= accounting.unused);
+-        Expect (Pristine(p.next()).x() || Pristine(p.next()).ok());
+-        Expect (Pristine(p.prev()).x() || Pristine(p.prev()).ok());
+-        if (!Pristine(p.next()).x())  
++        Expect (Pristine(p.next()).null() || Pristine(p.next()).ok());
++        Expect (Pristine(p.prev()).null() || Pristine(p.prev()).ok());
++        if (!Pristine(p.next()).null())  
+           Expect(Pristine(p.next()).ok());
+-        if (!Pristine(p.prev()).x())  
++        if (!Pristine(p.prev()).null())  
+           Expect(Pristine(p.prev()).ok());
+       }
+       Expect(n == accounting.unused, n, accounting.unused);
+@@ -96,9 +96,9 @@ static struct {
+         if (!i.ok()) 
+           continue;
+         ++n;
+-        Expect(Item(i.rest()).x() || Item(i.rest()).ok());
++        Expect(Item(i.rest()).null() || Item(i.rest()).ok());
+         Expect(n <= accounting.items);
+-        if (!Item(i.rest()).x())  
++        if (!Item(i.rest()).null())  
+           Expect(Item(i.rest()).ok());
+       }
+       return false;;
+diff --git a/Mini-LISP/Revised/heap.cc b/Mini-LISP/Revised/heap.cc
+index d559bfb..0675dd0 100644
+--- a/Mini-LISP/Revised/heap.cc
++++ b/Mini-LISP/Revised/heap.cc
+@@ -9,29 +9,29 @@
+ #include "accounting.h"
+ 
+ Service {
+-  auto empty() { return first.x(); } 
++  auto empty() { return first.null(); } 
+   Knob pop() {
+-    not first.x() or panic();  
+-    Surely(first.prev().x());
++    not first.null() or panic();  
++    Surely(first.prev().null());
+     accounting.pop();
+     let old = first;
+     first = first.next();
+-    if (!first.x()) first.prev($P_x$);
++    first.null() or do(first.prev($P_x$));
+     return old.handle(); 
+   }
+   Unit push(Pristine p) {
+     accounting.push();
+     p.prev($P_x$).next(first); 
+-    if (!first.x()) first.prev(p);
++    first.null() or do(first.prev(p));
+     first = p;
+   }
+   Unit pick(Pristine p) {
+     Surely(p.ok());
+     accounting.pick();
+     auto prev = p.prev(), next = p.next();
+-    if (!prev.x()) prev.next(next); 
+-    if (!next.x()) next.prev(prev); 
+-    if (first.handle() == p.handle()) first = next ;
++    prev.null() or do(prev.next(next)); 
++    next.null() or do(next.prev(prev)); 
++    first.handle() == p.handle() or do(first = next);
+   }
+   Unit init() {
+     for (Short s = $P_f$ + 1; s <= $P_t$ - 1; ++s) 
+diff --git a/Mini-LISP/Revised/t-Pushdown.cc b/Mini-LISP/Revised/t-Pushdown.cc
+index eb52678..90524c6 100644
+--- a/Mini-LISP/Revised/t-Pushdown.cc
++++ b/Mini-LISP/Revised/t-Pushdown.cc
+@@ -56,7 +56,7 @@ TEST(Pushdown, correctPop2) {
+ TEST(Item, 1Count) {
+   heapify();
+   Pushdown p;
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_TT(p.empty());
+   int before = accounting.items;
+   EXPECT_GE(before,0);
+@@ -152,11 +152,11 @@ TEST(Pushdown, TopZero) {
+   heapify();
+   Pushdown p;
+   EXPECT_TT(p.empty());
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   p.push(3);
+-  EXPECT_FF(p.top.x());
++  EXPECT_FF(p.top.null());
+   p.clear(); 
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+ } 
+ 
+ TEST(Pushdown, Size) {
+diff --git a/Mini-LISP/Revised/t-heap.cc b/Mini-LISP/Revised/t-heap.cc
+index dd8b85a..2ac2974 100644
+--- a/Mini-LISP/Revised/t-heap.cc
++++ b/Mini-LISP/Revised/t-heap.cc
+@@ -21,7 +21,7 @@ TEST(Heapify, exists) {
+ 
+ TEST(Heapify, head) { 
+   heapify();
+-  EXPECT_FF(heap.x());
++  EXPECT_FF(heap.null());
+ }
+ 
+ TEST(Heapify, allPristine) { 
+@@ -32,22 +32,22 @@ TEST(Heapify, allPristine) {
+ 
+ TEST(Heapify, entryFirst) { 
+   heapify();
+-  EXPECT_TT(Pristine($P_f$).prev().x()); 
+-  EXPECT_FF(Pristine($P_f$).next().x()); 
++  EXPECT_TT(Pristine($P_f$).prev().null()); 
++  EXPECT_FF(Pristine($P_f$).next().null()); 
+   EXPECT_EQ(Pristine($P_f$).next().handle(), $P_f$+1); 
+ }
+ 
+ TEST(Heapify, entryLast) { 
+   heapify();
+-  EXPECT_TT(Pristine($P_t$).next().x()); 
+-  EXPECT_FF(Pristine($P_t$).prev().x()); 
++  EXPECT_TT(Pristine($P_t$).next().null()); 
++  EXPECT_FF(Pristine($P_t$).prev().null()); 
+   EXPECT_EQ(Pristine($P_t$).prev().handle(), $P_t$-1); 
+ }
+ 
+ TEST(Heapify, entry5) { 
+   const Short s = 5;
+   auto p = Pristine(s);
+-  EXPECT_FF(p.x());
++  EXPECT_FF(p.null());
+   Pristine(s).prev(Pristine(s-1)).next(Pristine(s+1));
+   auto k = Knob(s);
+   EXPECT_TT(black(k.s1()));
+@@ -199,7 +199,7 @@ TEST(Accounting, request) {
+ TEST(Item, 3Count) {
+   Pushdown p;
+   p.clear();
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_TT(p.empty());
+   EXPECT_GE(accounting.items,0);
+   int before = accounting.items;
+@@ -212,7 +212,7 @@ TEST(Item, 3Count) {
+   EXPECT_EQ(3,p.pop());
+   EXPECT_EQ(accounting.items, before);
+   EXPECT_TT(p.empty());
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+ }
+ 
+ TEST(Corruption, makeCyclic) { 
+@@ -323,14 +323,14 @@ TEST(Pair, request) {
+ #define XE0()                  NE0()                
+ 
+ 
+-#define NE5(x,y1,y2,y3,y4,y5) NE(x,y1)NE4(x,y2,y3,y4,y5); 
+-#define NE4(x,y1,y2,y3,y4)    NE(x,y1)NE3(x,y2,y3,y4) 
+-#define NE3(x,y1,y2,y3)       NE(x,y1)NE2(x,y2,y3)
+-#define NE2(x,y1,y2)          NE(x,y1)NE1(x,y2)
+-#define NE1(x,y1)             NE(x,y1)NE0(x)
+-#define NE0(x)
++#define NE5(null,y1,y2,y3,y4,y5) NE(null,y1)NE4(null,y2,y3,y4,y5); 
++#define NE4(null,y1,y2,y3,y4)    NE(null,y1)NE3(null,y2,y3,y4) 
++#define NE3(null,y1,y2,y3)       NE(null,y1)NE2(null,y2,y3)
++#define NE2(null,y1,y2)          NE(null,y1)NE1(null,y2)
++#define NE1(null,y1)             NE(null,y1)NE0(null)
++#define NE0(null)
+ 
+-#define NE(x,y)               EXPECT_NE(x,y);
++#define NE(null,y)               EXPECT_NE(null,y);
+ 
+   XE5(d1,d2,d3,d4,d5);
+   XE5(l1,l2,l3,l4,l5);
+@@ -622,7 +622,7 @@ TEST(Exhaust, Almost) {
+   EXPECT_EQ(accounting.unused, $P_n$); 
+   for (auto s = 1 ; s < $P_n$; ++s)
+     Item i = fresh(s, $P_x$);
+-  EXPECT_FF(heap.x());
++  EXPECT_FF(heap.null());
+   EXPECT_EQ(accounting.unused, 1);
+   EXPECT_EQ(accounting.items, $P_n$ - 1);
+   EXPECT_FF(corrupted.pristines());
+@@ -661,7 +661,7 @@ TEST(Exhaust, items) {
+     EXPECT_EQ(accounting.unused, $P_n$ - s); 
+     EXPECT_EQ(accounting.items, s); 
+   }
+-  EXPECT_TT(heap.x());
++  EXPECT_TT(heap.null());
+   EXPECT_ZZ(accounting.unused);
+   EXPECT_FF(corrupted.items());
+   EXPECT_FF(corrupted.pristines());
+@@ -729,9 +729,9 @@ TEST(Churn, Both) {
+   for (int i = 0, n = 0;  ; i++) { 
+     Pushdown p[10];
+     for (int j = 0; j <= i; ++j, ++n) {
+-      if (heap.x()) goto done;
++      if (heap.null()) goto done;
+       auto const c = request(i,j);
+-      if (heap.x()) goto done;
++      if (heap.null()) goto done;
+       int d = P[c.handle()].hash() % 10;
+       mess(p[d]);
+     }
+@@ -743,7 +743,7 @@ TEST(Churn, Both) {
+ 
+ TEST(Counting, items) {
+   Pushdown p;
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_TT(p.empty());
+   int before = accounting.items;
+   EXPECT_GE(before,0);
+@@ -768,7 +768,7 @@ TEST(Counting, pairs) {
+ TEST(Counting, itemsPristines2) {
+   heapify();
+   Pushdown p;
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_TT(p.empty());
+   EXPECT_GE(accounting.unused,10L);
+   int before = accounting.unused;
+@@ -808,7 +808,7 @@ TEST(Pristine, itemsPristines4) {
+   EXPECT_EQ(1,p.pop());
+   EXPECT_EQ(accounting.unused, before - 1);
+   EXPECT_ZZ(p.size);
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_FF(corrupted.something());
+ }
+ 
+@@ -829,7 +829,7 @@ TEST(Pristine, requestConsN) {
+   EXPECT_EQ(1,p.pop());
+   EXPECT_EQ(accounting.unused, before - 25);
+   EXPECT_ZZ(p.size);
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_FF(corrupted.something());
+ }
+ 
+@@ -854,7 +854,7 @@ TEST(Exercise, PushrequestPoprequest) {
+       p.pop();
+       request(i, j);
+     }
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_FF(corrupted.something());
+   EXPECT_EQ(accounting.used, 2*N*N);
+   EXPECT_EQ(accounting.unused, $P_n$ - 2 * N *N); 
+@@ -889,7 +889,7 @@ TEST(Pristine, requestBoth) {
+   EXPECT_FF(corrupted.something());
+   heapify();
+   Pushdown p;
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_TT(p.empty());
+   int before = accounting.unused;
+   EXPECT_GE(before,2);
+@@ -914,7 +914,7 @@ TEST(Pristine, requestBoth) {
+   EXPECT_EQ(3,p.pop());
+   EXPECT_EQ(accounting.unused, before -1);
+   EXPECT_TT(p.empty());
+-  EXPECT_TT(p.top.x());
++  EXPECT_TT(p.top.null());
+   EXPECT_FF(corrupted.something());
+ }
+ 
