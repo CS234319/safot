@@ -109,7 +109,7 @@ gvim:
 	@gvim $(HEADERS) $(SOURCES) Makefile -c make
 
 clean:
-		rm -fr $(OBJS) mini-lisp tester *.o .depend
+		rm -fr $(OBJS) mini-lisp tester *.o *~ .depend
 
 
 
