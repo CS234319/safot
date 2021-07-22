@@ -28,3 +28,13 @@ test('set', () => {
 	expected_list = b.cons(list).cons(expected_list)
 	expect(a_list).toStrictEqual(expected_list)
 })
+
+test('evaluate_cond', () => {	
+	expect(true).toBeFalsy()
+})
+
+test('evaluate', () => {	
+	expect(true).toBeFalsy()
+})
+
+
