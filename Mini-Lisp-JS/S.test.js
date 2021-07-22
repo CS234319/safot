@@ -100,5 +100,3 @@ test('toString', () => {
 	expect(pair.toString()).toBe("(b . a)")
 	expect(list.toString()).toBe("(b a x y z)")
 })
-
-

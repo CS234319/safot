@@ -18,7 +18,6 @@ module.exports = class Atom extends S {
 		if (this.isNil()) {
 			return Atom.nil
 		}
-
 		throw `CAR: ${this.value} is not a list`
 	}
 
@@ -30,8 +29,9 @@ module.exports = class Atom extends S {
 		throw `CDR: ${this.value} is not a list`
 	}	
 
+  // Pull up?
 	eq(s) {
-		return s.isAtom() ? this.value === s.value : false
+		return s.isAtom() && this.value === s.value; 
 	}
 
 	isList() {

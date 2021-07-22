@@ -68,7 +68,7 @@ int print(S s) {
   if (!islist(s)) return print("("), print(s.car()), print("."), print(s.cdr()), print(")");
   print("(") ;
   for (;;) {
-    print(S(s.car())); 
+    print(S(s.car())); // First recursive call
     if ((s = s.cdr()).null()) break;
     print(" ");
   }
