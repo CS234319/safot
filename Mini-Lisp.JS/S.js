@@ -1,9 +1,5 @@
 module.exports = class S {
-	deepCopy() {
-		throw "Not implemented"
-	}
-
-	isAtom() {
+	atom() {
 		throw "Not implemented"
 	}
 
