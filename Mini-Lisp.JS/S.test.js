@@ -1,15 +1,17 @@
 const Pair = require("./Pair")
 const Atom = require("./Atom")
-const List = require("./List")
+const ListCreator = require("./ListCreator")
 
+const lc = new ListCreator()
 const pair_as_array = ["b", "a"].map(val => new Atom(val))
 const pair = new Pair(...pair_as_array)
 const list_as_array = ["b", "a", "x", "y", "z"].map(val => new Atom(val))
-const list = List.create(...list_as_array)
-const list_tail = List.create(...list_as_array.slice(1))
+const list = lc.create(...list_as_array)
+const list_tail = lc.create(...list_as_array.slice(1))
 const a = new Atom("a")
 const b = new Atom("b")
 const c = new Atom("c")
+const complex_list = lc.create(list, lc.create(a, b, c), pair)
 const nil = Atom.nil
 const t = Atom.t
 
@@ -36,8 +38,8 @@ test('cdr', () => {
 })
 
 test('cons', () => {
-	expect(a.cons(List.create(b, c))).toStrictEqual(List.create(a, b, c))
-	expect(b.cons(nil)).toStrictEqual(List.create(b))
+	expect(a.cons(lc.create(b, c))).toStrictEqual(lc.create(a, b, c))
+	expect(b.cons(nil)).toStrictEqual(lc.create(b))
 	expect(a.cons(b)).toStrictEqual(new Pair(a, b))
 	expect(pair.cons(c)).toStrictEqual(new Pair(pair, c))
 })
@@ -51,6 +53,11 @@ test('eq', () => {
 	expect(t.eq(t)).toBeTruthy()
 	expect(t.eq(nil)).toBeFalsy()
 	expect(nil.eq(t)).toBeFalsy()
+})
+
+test('equal', () => {
+	expect(a.equal(a)).toBeTruthy()
+	expect(a.eq(b)).toBeFalsy()
 })
 
 test('null', () => {
@@ -82,4 +89,5 @@ test('toString', () => {
 	expect(a.toString()).toBe("a")
 	expect(pair.toString()).toBe("(b . a)")
 	expect(list.toString()).toBe("(b a x y z)")
+	expect(complex_list.toString()).toBe("((b a x y z) (a b c) (b . a))")
 })
