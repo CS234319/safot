@@ -12,12 +12,11 @@ module.exports = class Environment {
 	}
 
 	set(key, value) {
-		const pair = key.cons(value)
-		this.a_list = pair.cons(this.a_list)
-		return pair
+		this.a_list = key.cons(value).cons(this.a_list)
+		return value
 	}
 
 	aList() {
-		return a_list
+		return this.a_list
 	}
 }

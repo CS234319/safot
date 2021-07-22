@@ -47,4 +47,9 @@ module.exports = class Pair extends S {
 
 		return "(" + [this.l, this.r].join(" . ") + ")"
 	}
+
+	static ofAtoms(l, r) {
+		const Atom = require("./Atom")
+		return new Pair(new Atom(l), new Atom(r))
+	}
 }

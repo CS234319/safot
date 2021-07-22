@@ -13,4 +13,9 @@ module.exports = class ListCreator {
 
 		return carArg.cons(this.create(...cdrArgs))
 	}	
+
+	createAsAtoms() {
+		const atomsArray = Array.from(arguments).map(v => new Atom(v))
+		return this.create(...atomsArray)
+	}
 }
