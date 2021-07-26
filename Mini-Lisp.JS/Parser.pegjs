@@ -20,7 +20,7 @@ Pair
 	= car:S _ "." _ cdr:S { return new Pair(car, cdr) }
 
 Symbol
-	= [a-zA-Z]+ { return text().toUpperCase() }
+	= [a-zA-Z_]+ { return text().toUpperCase() }
 
 Quote
 	= "'" _ s:S { return lc.create(quote, s) }
