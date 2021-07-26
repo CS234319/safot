@@ -1,22 +1,25 @@
 const Environment = require('./Environment')
 const Atom = require('./Atom')
 const Primitive = require('./Primitive')
+const ListCreator = require('./ListCreator')
 
 module.exports = class Engine {
 	constructor() {
+		const lc = new ListCreator()
+
 		this.env = new Environment()
 		this.primitives = [
-			['CAR',   1, s => s.car()],
-			['CDR',   1, s => s.cdr()],
-			['QUOTE', 1, s => s],
-			['ATOM',  1, s => Engine.#boolToS(s.atom())],
-			['NULL',  1, s => Engine.#boolToS(s.null())],
-			['COND',  1, s => this.#evaluateCond(s)],
-			['ERROR', 1, s => this.#evaluateError(s)],
-			['EVAL',  1, s => this.evaluate(s)],
-			['CONS',  2, (s, t) => s.cons(t)],
-			['EQ',    2, (s, t) => Engine.#boolToS(s.eq(t))],
-			['SET',   2, (s, t) => this.env.set(s, t)]
+			['CAR',			1, s => s.car()],
+			['CDR',			1, s => s.cdr()],
+			['QUOTE',		1, s => s],
+			['ATOM',		1, s => Engine.#boolToS(s.atom())],
+			['NULL',		1, s => Engine.#boolToS(s.null())],
+			['ERROR',		1, s => this.#evaluateError(s)],
+			['EVAL',		1, s => s],
+			['CONS',		2, (s, t) => s.cons(t)],
+			['EQ',			2, (s, t) => Engine.#boolToS(s.eq(t))],
+			['SET',			2, (s, t) => this.env.set(s, t)],
+			['COND',		undefined, s => this.#evaluateCond(s)]
 		].map(tup => new Primitive(new Atom(tup[0]), tup[1], tup[2]))
 	}
 

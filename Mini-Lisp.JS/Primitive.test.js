@@ -4,7 +4,6 @@ const p = require('./Parser')
 const b = p.parse('b')
 const t = p.parse('t')
 const nil = p.parse('nil')
-const max_int = Number.MAX_SAFE_INTEGER
 
 const three_of_the_same = new Primitive(p.parse('three_of_the_same'), 3, function(a, b ,c) {	
 	return a.eq(b) && a.eq(c) ? t : nil
