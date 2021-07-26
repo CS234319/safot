@@ -6,22 +6,20 @@ module.exports = class Primitive {
 	}
 
 	run(args) {
-		const passedArgsLength = args.getListLength()
-		if (passedArgsLength === undefined) {
+		const argsArray = args.getListAsArray()
+		if (argsArray === undefined) {
 			throw `EVAL: didn't use list form when calling ${this.name}`
 		}
 
-		if (passedArgsLength < this.numArgs) {
-			`EVAL: too few arguments given to ${this.name}`
+		if (argsArray.length < this.numArgs) {
+			throw `EVAL: too few arguments given to ${this.name}`
 		}
 
-		if (passedArgsLength > this.numArgs) {
-			`EVAL: too many arguments given to ${this.name}`	
+		if (argsArray.length > this.numArgs) {
+			throw `EVAL: too many arguments given to ${this.name}`	
 		}
 
-		const firstArg = passedArgsLength >= 1 ? args.car() : undefined
-		const secondArg = passedArgsLength >= 2 ? args.cdr().car() : undefined
-		return this.closure(firstArg, secondArg)
+		return this.closure(...argsArray)
 	}
 
 	isWithName(name) {
