@@ -1,18 +1,18 @@
 module.exports = class S {
 	atom() {
-		throw "Not implemented"
+		throw 'Not implemented'
 	}
 
 	car() {
-		throw "Not implemented"		
+		throw 'Not implemented'		
 	}
 
 	cdr() {
-		throw "Not implemented"
+		throw 'Not implemented'
 	}
 
 	cons(s) {
-		const Pair = require("./Pair")
+		const Pair = require('./Pair')
 		return new Pair(this, s)
 	}
 
@@ -20,28 +20,24 @@ module.exports = class S {
 		return s.atom() && this.value === s.value
 	}
 
-	equal(s) {
-    	throw "Not implemented"
-  	}
-
 	null() {
-		const Atom = require("./Atom")
+		const Atom = require('./Atom')
 		return this.eq(Atom.nil)
 	}
 
-	quote() {
-		return this
-	}
-
 	isList() {
-		throw "Not implemented"
+		throw 'Not implemented'
 	}
 
 	getListAsArray() {
-		throw "Not implemented"
+		throw 'Not implemented'
+	}
+
+	getListLength() {
+		return this.getListAsArray()?.length
 	}
 
 	toString() {
-		throw "Not implemented"	
+		throw 'Not implemented'	
 	}
 }

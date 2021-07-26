@@ -4,5 +4,8 @@
   },
   "devDependencies": {
     "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "pegjs": "^0.10.0"
   }
 }

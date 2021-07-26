@@ -1,19 +1,17 @@
-const Pair = require("./Pair")
-const Atom = require("./Atom")
-const ListCreator = require("./ListCreator")
+const Pair = require('./Pair')
+const Atom = require('./Atom')
+const p = require('./Parser')
 
-const lc = new ListCreator()
-const pair_as_array = ["b", "a"].map(val => new Atom(val))
-const pair = new Pair(...pair_as_array)
-const list_as_array = ["b", "a", "x", "y", "z"].map(val => new Atom(val))
-const list = lc.create(...list_as_array)
-const list_tail = lc.create(...list_as_array.slice(1))
-const a = new Atom("a")
-const b = new Atom("b")
-const c = new Atom("c")
-const complex_list = lc.create(list, lc.create(a, b, c), pair)
-const nil = Atom.nil
-const t = Atom.t
+const pair = p.parse('(B . A)')
+const list = p.parse('(B A X Y Z)')
+const list_as_array = ['B', 'A', 'X', 'Y', 'Z'].map(val => new Atom(val))
+const list_tail = p.parse('(A X Y Z)')
+const complex_list = p.parse('((B A X Y Z) (A B C) (B . A))')
+const a = p.parse('A')
+const b = p.parse('B')
+const c = p.parse('C')
+const nil = p.parse('NIL')
+const t = p.parse('T')
 
 test('atom', () => {	
 	expect(a.atom()).toBeTruthy()
@@ -38,8 +36,8 @@ test('cdr', () => {
 })
 
 test('cons', () => {
-	expect(a.cons(lc.create(b, c))).toStrictEqual(lc.create(a, b, c))
-	expect(b.cons(nil)).toStrictEqual(lc.create(b))
+	expect(a.cons(p.parse('(b c)'))).toStrictEqual(p.parse('(a b c)'))
+	expect(b.cons(nil)).toStrictEqual(p.parse('(b)'))
 	expect(a.cons(b)).toStrictEqual(new Pair(a, b))
 	expect(pair.cons(c)).toStrictEqual(new Pair(pair, c))
 })
@@ -55,27 +53,12 @@ test('eq', () => {
 	expect(nil.eq(t)).toBeFalsy()
 })
 
-test('equal', () => {
-	expect(a.equal(a)).toBeTruthy()
-	expect(a.eq(b)).toBeFalsy()
-})
-
 test('null', () => {
 	expect(nil.null()).toBeTruthy()
 	expect(t.null()).toBeFalsy()
 	expect(pair.null()).toBeFalsy()
 	expect(list.null()).toBeFalsy()
 })
-
-test('quote', () => {
-	expect(nil).toBe(nil)
-	expect(t).toBe(t)
-	expect(a).toBe(a)
-	expect(pair).toBe(pair)
-	expect(list).toBe(list)
-	expect(a).not.toBe(b)
-	expect(list).not.toBe(pair)
-}) 
 
 test('isList', () => {
 	expect(nil.isList()).toBeTruthy()
@@ -88,16 +71,25 @@ test('isList', () => {
 test('getListAsArray', () => {
 	expect(nil.getListAsArray()).toStrictEqual([])
 	expect(list.getListAsArray()).toStrictEqual(list_as_array)
-	expect(t.getListAsArray()).toBe(null)
-	expect(a.getListAsArray()).toBe(null)
-	expect(pair.getListAsArray()).toStrictEqual(null)
+	expect(t.getListAsArray()).toStrictEqual(undefined)
+	expect(a.getListAsArray()).toStrictEqual(undefined)
+	expect(pair.getListAsArray()).toStrictEqual(undefined)
+})
+
+test('getListLength', () => {
+	expect(nil.getListLength()).toStrictEqual(0)
+	expect(list.getListLength()).toStrictEqual(list_as_array.length)
+	expect(t.getListLength()).toStrictEqual(undefined)
+	expect(a.getListLength()).toStrictEqual(undefined)
+	expect(pair.getListLength()).toStrictEqual(undefined)
 })
 
 test('toString', () => {
-	expect(nil.toString()).toBe("NIL")
-	expect(t.toString()).toBe("T")
-	expect(a.toString()).toBe("a")
-	expect(pair.toString()).toBe("(b . a)")
-	expect(list.toString()).toBe("(b a x y z)")
-	expect(complex_list.toString()).toBe("((b a x y z) (a b c) (b . a))")
+	expect(p.parse(nil.toString())).toStrictEqual(nil)
+	expect(p.parse(t.toString())).toStrictEqual(t)
+	expect(p.parse(a.toString())).toStrictEqual(a)
+	expect(p.parse(pair.toString())).toStrictEqual(pair)
+	expect(p.parse(list.toString())).toStrictEqual(list)
+	expect(p.parse(complex_list.toString())).toStrictEqual(complex_list)
 })
+

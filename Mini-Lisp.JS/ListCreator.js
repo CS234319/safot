@@ -1,4 +1,4 @@
-const Atom = require("./Atom")
+const Atom = require('./Atom')
 
 module.exports = class ListCreator {
 	create() {		
@@ -14,8 +14,8 @@ module.exports = class ListCreator {
 		return carArg.cons(this.create(...cdrArgs))
 	}	
 
-	createAsAtoms() {
-		const atomsArray = Array.from(arguments).map(v => new Atom(v))
+	ofAtoms() {
+		const atomsArray = Array.from(arguments).map(val => new Atom(val))
 		return this.create(...atomsArray)
 	}
 }
