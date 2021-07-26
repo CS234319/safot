@@ -11,7 +11,6 @@ const set = new Atom('SET')
 const quote = new Atom('QUOTE')
 
 test('parse', () => {
-
 	expect(P.parse('a')).toStrictEqual(a)
 	expect(P.parse('(a . b)')).toStrictEqual(new Pair(a, b))
 	expect(P.parse('(a b c)')).toStrictEqual(lc.create(a, b ,c))
