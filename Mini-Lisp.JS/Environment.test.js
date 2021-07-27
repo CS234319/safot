@@ -1,40 +1,38 @@
-const Atom = require('./Atom')
-const Pair = require('./Pair')
+const p = require('./Parser')
 const Environment = require('./Environment')
-const ListCreator = require('./ListCreator')
 
-const lc = new ListCreator()
-const t = Atom.t
-const nil = Atom.nil
-const a = new Atom("a")
-const b = new Atom("b")
-const pair = Pair.ofAtoms("b", "a")
-const list = lc.createAsAtoms("b", "a", "x", "y", "z")
+const t = p.parse('t')
+const nil = p.parse('nil')
+const a = p.parse('a')
 
 test('set', () => {	
 	const env = new Environment()
+	var expected_list = p.parse('((t . t) (nil . nil))')
+	expect(Reflect.get(env, 'alist')).toStrictEqual(expected_list)
 	
-	var a_list = env.aList()
-	var expected_list = lc.create(t.cons(t), nil.cons(nil))
-	expect(a_list).toStrictEqual(expected_list)
-	
-	expect(env.set(a, pair)).toStrictEqual(pair)
-	a_list = env.aList()
-	expected_list = a.cons(pair).cons(expected_list)
-	expect(a_list).toStrictEqual(expected_list)
+	expect(env.set(a, p.parse('(b . a)'))).toStrictEqual(p.parse('(b . a)'))
+	expected_list = p.parse('((a . (b . a)) (t . t) (nil . nil))')
+	expect(Reflect.get(env, 'alist')).toStrictEqual(expected_list)
 
-	expect(env.set(b, list)).toStrictEqual(list)
-	a_list = env.aList()
-	expected_list = b.cons(list).cons(expected_list)
-	expect(a_list).toStrictEqual(expected_list)
+	expect(env.set(a, p.parse('(b a x y z)'))).toStrictEqual(p.parse('(b a x y z)'))
+	expected_list = p.parse('((a . (b a x y z)) (a . (b . a)) (t . t) (nil . nil))')
+	expect(Reflect.get(env, 'alist')).toStrictEqual(expected_list)
 })
 
-test('evaluate_cond', () => {	
-	expect(true).toBeFalsy()
+test('lookup', () => {	
+	const env = new Environment()
+	expect(env.lookup(t)).toStrictEqual(t)
+	expect(env.lookup(nil)).toStrictEqual(nil)
+	expect(env.lookup(a)).toStrictEqual(undefined)
+	Reflect.set(env, 'alist', p.parse('((a . (b . a)) (t . t) (nil . nil))'))
+	expect(env.lookup(a)).toStrictEqual(p.parse('(b . a)'))
+	Reflect.set(env, 'alist', p.parse('((a . (b a x y z)) (a . (b . a)) (t . t) (nil . nil))'))
+	expect(env.lookup(a)).toStrictEqual(p.parse('(b a x y z)'))
 })
 
-test('evaluate', () => {	
-	expect(true).toBeFalsy()
+test('bind', () => {
+	const env = new Environment()
+	env.bind(p.parse('(a b c)'), p.parse('(c (a . b) (b a x y z))'))
+	const expected_list = p.parse('((c . (b a x y z)) (b . (a . b)) (a . c) (t . t) (nil . nil))')
+	expect(Reflect.get(env, 'alist')).toStrictEqual(expected_list)
 })
-
-

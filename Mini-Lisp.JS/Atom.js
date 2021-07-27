@@ -1,4 +1,4 @@
-const S = require("./S")
+const S = require('./S')
 
 module.exports = class Atom extends S {
 	constructor(value) {
@@ -18,22 +18,18 @@ module.exports = class Atom extends S {
 		throw `CDR: ${this.value} is not a list`
 	}	
 
-	equal(s) {
-    	return this.eq(s)
-  	}
-
 	isList() {
 		return this.null()
 	}
 
 	getListAsArray() {
-		return this.null() ? [] : null
+		return this.null() ? [] : undefined
 	}
 
 	toString() {
 		return this.value.toString()
 	}
 
-	static nil = new Atom("NIL")
-	static t = new Atom("T")
+	static nil = new Atom('NIL')
+	static t = new Atom('T')
 }

@@ -1,4 +1,5 @@
-const S = require("./S")
+const S = require('./S')
+const Atom = require('./Atom')
 
 module.exports = class Pair extends S {
 	constructor(l, r) {
@@ -23,12 +24,6 @@ module.exports = class Pair extends S {
     	return false
 	}
 
-	equal(s) {
-		return (!s.atom() && 
-				this.l.equal(s.l) &&
-				this.r.equal(s.r))
-  	}
-
 	isList() {
 		return this.r.isList()
 	}
@@ -42,14 +37,9 @@ module.exports = class Pair extends S {
 	toString() {
 		const list = this.getListAsArray()
 		if (list) {
-			return "(" + list.join(" ") + ")"
+			return '(' + list.join(' ') + ')'
 		}
 
-		return "(" + [this.l, this.r].join(" . ") + ")"
-	}
-
-	static ofAtoms(l, r) {
-		const Atom = require("./Atom")
-		return new Pair(new Atom(l), new Atom(r))
+		return '(' + [this.l, this.r].join(' . ') + ')'
 	}
 }
