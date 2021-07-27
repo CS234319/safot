@@ -4,9 +4,9 @@ const p = require('./Parser')
 
 const pair = p.parse('(B . A)')
 const list = p.parse('(B A X Y Z)')
-const list_as_array = ['B', 'A', 'X', 'Y', 'Z'].map(val => new Atom(val))
-const list_tail = p.parse('(A X Y Z)')
-const complex_list = p.parse('((B A X Y Z) (A B C) (B . A))')
+const listAsArray = ['B', 'A', 'X', 'Y', 'Z'].map(val => new Atom(val))
+const listTail = p.parse('(A X Y Z)')
+const complexList = p.parse('((B A X Y Z) (A B C) (B . A))')
 const a = p.parse('A')
 const b = p.parse('B')
 const c = p.parse('C')
@@ -30,7 +30,7 @@ test('car', () => {
 
 test('cdr', () => {
 	expect(pair.cdr()).toStrictEqual(a)
-	expect(list.cdr()).toStrictEqual(list_tail)
+	expect(list.cdr()).toStrictEqual(listTail)
 	expect((new Pair(a, pair).cdr())).toBe(pair)
 	expect((new Pair(a, list)).cdr()).toBe(list)
 })
@@ -70,7 +70,7 @@ test('isList', () => {
 
 test('getListAsArray', () => {
 	expect(nil.getListAsArray()).toStrictEqual([])
-	expect(list.getListAsArray()).toStrictEqual(list_as_array)
+	expect(list.getListAsArray()).toStrictEqual(listAsArray)
 	expect(t.getListAsArray()).toStrictEqual(undefined)
 	expect(a.getListAsArray()).toStrictEqual(undefined)
 	expect(pair.getListAsArray()).toStrictEqual(undefined)
@@ -78,7 +78,7 @@ test('getListAsArray', () => {
 
 test('getListLength', () => {
 	expect(nil.getListLength()).toStrictEqual(0)
-	expect(list.getListLength()).toStrictEqual(list_as_array.length)
+	expect(list.getListLength()).toStrictEqual(listAsArray.length)
 	expect(t.getListLength()).toStrictEqual(undefined)
 	expect(a.getListLength()).toStrictEqual(undefined)
 	expect(pair.getListLength()).toStrictEqual(undefined)
@@ -90,6 +90,6 @@ test('toString', () => {
 	expect(p.parse(a.toString())).toStrictEqual(a)
 	expect(p.parse(pair.toString())).toStrictEqual(pair)
 	expect(p.parse(list.toString())).toStrictEqual(list)
-	expect(p.parse(complex_list.toString())).toStrictEqual(complex_list)
+	expect(p.parse(complexList.toString())).toStrictEqual(complexList)
 })
 
