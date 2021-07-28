@@ -2,25 +2,41 @@ const Environment = require('./Environment')
 const Atom = require('./Atom')
 const Primitive = require('./Primitive')
 const ListCreator = require('./ListCreator')
+const p = require('./Parser')
 
 module.exports = class Engine {
 	constructor() {
-		const lc = new ListCreator()
-
 		this.env = new Environment()
+		this.env.set(Atom.nil, Atom.nil)
+		this.env.set(Atom.t, Atom.t)
+
+		this.#initPrimitives()
+		this.#initLibraryFunctions()
+	}
+
+	#initPrimitives() {
+		const lc = new ListCreator()
+		
 		this.primitives = [
 			['CAR',			1, s => s.car()],
 			['CDR',			1, s => s.cdr()],
 			['QUOTE',		1, s => s],
 			['ATOM',		1, s => Engine.#boolToS(s.atom())],
-			['NULL',		1, s => Engine.#boolToS(s.null())],
 			['ERROR',		1, s => this.#evaluateError(s)],
 			['EVAL',		1, s => s],
 			['CONS',		2, (s, t) => s.cons(t)],
 			['EQ',			2, (s, t) => Engine.#boolToS(s.eq(t))],
 			['SET',			2, (s, t) => this.env.set(s, t)],
-			['COND',		undefined, s => this.#evaluateCond(s)]
+			['LAMBDA',		2, (s, t) => lc.create(Atom.lambda, s, t)],
+			['NLAMBDA',		2, (s, t) => lc.create(Atom.nlambda, s, t)],
+			['DEFUN',		3, (s, t, u) => this.env.defun(s, t, u)],
+			['NDEFUN',		3, (s, t, u) => this.env.ndefun(s, t, u)],
+			['COND',		undefined, s => this.#evaluateCond(s)],
 		].map(tup => new Primitive(new Atom(tup[0]), tup[1], tup[2]))
+	}
+
+	#initLibraryFunctions() {
+		this.evaluate(p.parse("(defun null (x) (eq x nil))"))
 	}
 
 	evaluate(s) {
@@ -38,8 +54,7 @@ module.exports = class Engine {
 			return this.#applyPrimitive(primitive, s.cdr())
 		}
 
-		//TODO: replace with 'apply' method
-		return Atom.nil
+		return this.#apply(s.car(), s.cdr())
 	}
 
 	#evaluateError(s) {
@@ -59,34 +74,65 @@ module.exports = class Engine {
 		return this.evaluate(list.car()).cons(this.#evaluateList(list.cdr()))
 	}
 
-	#evaluateCond(test_forms) {
-		if (test_forms.null()) {
+	#evaluateCond(testForms) {
+		if (testForms.null()) {
 			return Atom.nil
 		}
 
-		if (test_forms.atom()) {
+		if (testForms.atom()) {
 			throw 'COND: test forms must be a list'
 		}
 
-		const curr_pair = test_forms.car()
+		const currPair = testForms.car()
 			
-		if (curr_pair.atom()) {
+		if (currPair.atom()) {
 			throw 'COND: all expressions in test forms must be pairs'
 		}
 
-		if (this.#evaluateToBool(curr_pair.car())) {
-			return this.evaluate(curr_pair.cdr().car())
+		if (this.#evaluateToBool(currPair.car())) {
+			return this.evaluate(currPair.cdr().car())
 		}
 
-		return this.#evaluateCond(test_forms.cdr())
+		return this.#evaluateCond(testForms.cdr())
 	}
 
 	#evaluateToBool(s) {
 		return !this.evaluate(s).null()
 	}
 
+	#apply(lambdaName, actuals) {
+		const lambda = this.evaluate(lambdaName)
+		if (lambda === undefined || lambda.atom()) {
+			throw `EVAL: undefined function ${lambdaName}`
+		}
+
+		const tag = lambda.car()
+		if (!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) {
+			throw `EVAL: lambda-expression tag is expected`
+		}
+
+		const lambdaExpActuals = lambda.cdr()
+		if (lambdaExpActuals.atom() || lambdaExpActuals.cdr().atom()) {
+			throw `EVAL: incorrect actuals for lambda-expression`	
+		}
+
+		return this.#applyDecomposedLambda(tag, lambdaExpActuals.car(), 
+										   lambdaExpActuals.cdr().car(), actuals)
+	}
+
+	#applyDecomposedLambda(tag, formals, body, actuals) {
+		const lambdaActuals = tag.eq(Atom.lambda) ? this.#evaluateList(actuals) : actuals
+		
+		this.env.bind(formals, lambdaActuals)
+		const result = this.evaluate(body)
+		this.env.unbind(formals.getListLength())
+
+		return result
+	}
+
 	#applyPrimitive(primitive, actuals) {
-		const args = ['COND', 'QUOTE'].some(name => primitive.isWithName(new Atom(name)))
+		const args = ['COND', 'QUOTE', 'LAMBDA', 'NLAMBDA', 'DEFUN', 'NDEFUN']
+			.some(name => primitive.isWithName(new Atom(name)))
 			? actuals 
 			: this.#evaluateList(actuals)
 		

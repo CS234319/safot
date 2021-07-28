@@ -3,17 +3,26 @@ const ListCreator = require('./ListCreator')
 
 module.exports = class Environment {
 	constructor() {
-		const nil = Atom.nil
-		const t = Atom.t
-
-		const lc = new ListCreator()
-
-		this.alist = lc.create(t.cons(t), nil.cons(nil))
+		this.alist = Atom.nil
 	}
 
 	set(key, value) {
 		this.alist = key.cons(value).cons(this.alist)
 		return value
+	}
+
+	defun(name, formals, body) {
+		return this.#genericDefun(name, formals, body, Atom.lambda)
+	}
+
+	ndefun(name, formals, body) {
+		return this.#genericDefun(name, formals, body, Atom.nlambda)
+	}
+
+	#genericDefun(name, formals, body, tag) {
+		const lc = new ListCreator()
+		const lambda = lc.create(tag, formals, body)
+		return this.set(name, lambda)	
 	}
 
 	lookup(s) {
@@ -25,9 +34,9 @@ module.exports = class Environment {
 			return undefined
 		}
 
-		const curr_pair = list.car()
-		return s.eq(curr_pair.car())
-			? curr_pair.cdr()
+		const currPair = list.car()
+		return s.eq(currPair.car())
+			? currPair.cdr()
 			: Environment.#lookup(s, list.cdr()) 
 	}
 
@@ -46,5 +55,11 @@ module.exports = class Environment {
 
 		this.set(names.car(), values.car())
 		this.bind(names.cdr(), values.cdr())
+	}
+
+	unbind(numPairs) {
+		for (let i = 0; i < numPairs; i++) {
+			this.alist = this.alist.cdr()	
+		}
 	}
 }

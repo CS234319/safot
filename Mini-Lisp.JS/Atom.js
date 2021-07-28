@@ -32,4 +32,6 @@ module.exports = class Atom extends S {
 
 	static nil = new Atom('NIL')
 	static t = new Atom('T')
+	static lambda = new Atom('LAMBDA')
+	static nlambda = new Atom('NLAMBDA')
 }
