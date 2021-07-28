@@ -3,7 +3,7 @@
 	const Atom = require("./Atom")
 	const ListCreator = require("./ListCreator")
 	const lc = new ListCreator()
-	const quote = new Atom("QUOTE")
+	const quote = Atom.quote
 }
 
 S
