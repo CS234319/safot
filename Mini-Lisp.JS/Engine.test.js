@@ -114,7 +114,7 @@ test('evaluate defun', () => {
 })
 
 test('evaluate ndefun', () => {
-	evaluateParse("(ndefun foo () 'a)").toString()
+	evaluateParse("(ndefun foo () 'a)")
 	expect(evaluateParse("(foo)")).toStrictEqual(a)
 	evaluateParse("(ndefun bar (xs) (car (cdr xs)))")
 	expect(evaluateParse("(bar (a b))")).toStrictEqual(b)
