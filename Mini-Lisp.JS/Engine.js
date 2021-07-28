@@ -66,7 +66,7 @@ module.exports = class Engine {
 		if (list.null()) {
 			return Atom.nil
 		}
-
+// Again, this error should be done differently
 		if (list.atom()) {
 			throw 'evaluateList: argument must be a list'
 		}
