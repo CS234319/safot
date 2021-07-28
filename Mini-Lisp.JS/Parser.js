@@ -154,14 +154,14 @@ function peg$parse(input, options) {
       peg$c8 = ".",
       peg$c9 = peg$literalExpectation(".", false),
       peg$c10 = function(car, cdr) { return new Pair(car, cdr) },
-      peg$c11 = /^[a-zA-Z_]/,
-      peg$c12 = peg$classExpectation([["a", "z"], ["A", "Z"], "_"], false, false),
+      peg$c11 = /^[!-&*-\-\/-Z\\\^-~]/,
+      peg$c12 = peg$classExpectation([["!", "&"], ["*", "-"], ["/", "Z"], "\\", ["^", "~"]], false, false),
       peg$c13 = function() { return text().toUpperCase() },
       peg$c14 = "'",
       peg$c15 = peg$literalExpectation("'", false),
       peg$c16 = function(s) { return lc.create(quote, s) },
-      peg$c17 = /^[ \t\n\r]/,
-      peg$c18 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false),
+      peg$c17 = /^[\0- \x7F-\uFFFF]/,
+      peg$c18 = peg$classExpectation([["\0", " "], ["\x7F", "\uFFFF"]], false, false),
 
       peg$currPos          = 0,
       peg$savedPos         = 0,
@@ -563,7 +563,7 @@ function peg$parse(input, options) {
   	const Atom = require("./Atom")
   	const ListCreator = require("./ListCreator")
   	const lc = new ListCreator()
-  	const quote = new Atom("QUOTE")
+  	const quote = Atom.quote
 
 
   peg$result = peg$startRuleFunction();
