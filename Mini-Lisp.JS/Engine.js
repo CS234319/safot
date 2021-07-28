@@ -5,10 +5,13 @@ const ListCreator = require('./ListCreator')
 const p = require('./Parser')
 
 module.exports = class Engine {
+	#env
+	#primitives
+
 	constructor() {
-		this.env = new Environment()
-		this.env.set(Atom.nil, Atom.nil)
-		this.env.set(Atom.t, Atom.t)
+		this.#env = new Environment()
+		this.#env.set(Atom.nil, Atom.nil)
+		this.#env.set(Atom.t, Atom.t)
 
 		this.#initPrimitives()
 		this.#initLibraryFunctions()
@@ -17,7 +20,7 @@ module.exports = class Engine {
 	#initPrimitives() {
 		const lc = new ListCreator()
 		
-		this.primitives = [
+		this.#primitives = [
 			['CAR',			1, s => s.car()],
 			['CDR',			1, s => s.cdr()],
 			['QUOTE',		1, s => s],
@@ -26,11 +29,11 @@ module.exports = class Engine {
 			['EVAL',		1, s => s],
 			['CONS',		2, (s, t) => s.cons(t)],
 			['EQ',			2, (s, t) => Engine.#boolToS(s.eq(t))],
-			['SET',			2, (s, t) => this.env.set(s, t)],
+			['SET',			2, (s, t) => this.#env.set(s, t)],
 			['LAMBDA',		2, (s, t) => lc.create(Atom.lambda, s, t)],
 			['NLAMBDA',		2, (s, t) => lc.create(Atom.nlambda, s, t)],
-			['DEFUN',		3, (s, t, u) => this.env.defun(s, t, u)],
-			['NDEFUN',		3, (s, t, u) => this.env.ndefun(s, t, u)],
+			['DEFUN',		3, (s, t, u) => this.#env.defun(s, t, u)],
+			['NDEFUN',		3, (s, t, u) => this.#env.ndefun(s, t, u)],
 			['COND',		undefined, s => this.#evaluateCond(s)],
 		].map(tup => new Primitive(new Atom(tup[0]), tup[1], tup[2]))
 	}
@@ -41,7 +44,7 @@ module.exports = class Engine {
 
 	evaluate(s) {
 		if (s.atom()) {
-			const binded = this.env.lookup(s)
+			const binded = this.#env.lookup(s)
 			if (binded === undefined) {
 				throw `EVAL: variable ${s} has no value`
 			}
@@ -49,7 +52,7 @@ module.exports = class Engine {
 			return binded
 		}
 
-		const primitive = this.primitives.find(p => p.isWithName(s.car()))
+		const primitive = this.#primitives.find(p => p.isWithName(s.car()))
 		if (primitive) {
 			return this.#applyPrimitive(primitive, s.cdr())
 		}
@@ -123,9 +126,9 @@ module.exports = class Engine {
 	#applyDecomposedLambda(tag, formals, body, actuals) {
 		const lambdaActuals = tag.eq(Atom.lambda) ? this.#evaluateList(actuals) : actuals
 		
-		this.env.bind(formals, lambdaActuals)
+		this.#env.bind(formals, lambdaActuals)
 		const result = this.evaluate(body)
-		this.env.unbind(formals.getListLength())
+		this.#env.unbind(formals.getListLength())
 
 		return result
 	}
