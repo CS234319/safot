@@ -53,9 +53,9 @@ TEST(Parser, Empty) {
 
 TEST(Parser, SingleTokenErroOpenParen) {
   feed("(");
-  ASSERT_NE(Status::ready, status());
+  ASSERT_NE(Status::reject, status());
   ASSERT_NE(Status::accept, status());
-  EXPECT_EQ(Status::reject, status());
+  EXPECT_EQ(Status::ready, status());
 }
 
 TEST(Parser, SingleTokenErroCloseParen) {
