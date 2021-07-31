@@ -15,8 +15,6 @@ function check_configurations() {
   pip show pytest &> /dev/null
   if [ "$?" == "1" ]; then
     echo "INFO: Installing pytest ..."
-
-    # Install:
     pip install pytest
   fi
 }
