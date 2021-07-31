@@ -104,6 +104,7 @@ $.*
 *.yy.cpp
 *.yy.h
 *.zip
+*.pyc
 
 # Prefixes // vim: +,/^\s*$/-1!sort -u
 texput.*
@@ -150,6 +151,7 @@ doc/tags
 .metadata/
 [Oo]bj/
 out/
+.idea
 
 # User defined (add below this line) // vim: +,$!sort -u
 .DS_Store

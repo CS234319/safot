@@ -76,7 +76,7 @@ class MiniLispShell:
             raise Exception("Must call start_mini_lisp() first")
 
         self.shell.sendline(input_str)
-        return re.sub(r"\r|\n|> ", "", self.shell.readline())
+        return re.sub(r"\r|\n|- |\?|> ", "", self.shell.readline())
 
     @staticmethod
     def _check_if_executable_exists(path: str) -> None:

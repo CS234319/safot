@@ -54,6 +54,18 @@ def test_error(shell):
     assert shell.feed("(error 'message)") == "Error [INVALID] in (MESSAGE)"
 
 
+def test_multi_line(shell):
+    """
+    Check multi-lines inputs
+    """
+    assert shell.feed("(\n)") == "NIL"
+    assert shell.feed("\n()") == "NIL"
+    assert shell.feed("()\n") == "NIL"
+    assert shell.feed("\n(\n)\n") == "NIL"
+    assert shell.feed("(car\n '(\na b\n)\n)") == "A"
+    assert shell.feed("(\n\ncar\n\n \n\n'\n\n(\na\n\n\nb\n)\n\n)") == "A"
+
+
 @pytest.fixture
 def shell():
     shell = MiniLispShell("../../../Mini-Lisp.Chic/mini-lisp")
