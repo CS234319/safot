@@ -65,6 +65,23 @@ def test_load_function_file(flow):
                                          "A\n"
 
 
+def test_is_function_file(flow):
+    """
+    Categorize file by it's name
+    """
+    assert flow.is_function_file("/tmp/lisp01.lisp") is False
+    assert flow.is_function_file("/tmp/lisp41.lisp") is False
+    assert flow.is_function_file("/tmp/lisp777.lisp") is False
+    assert flow.is_function_file("/tmp/lisp1111.lisp") is False
+    assert flow.is_function_file("/tmp/lisp41.txt") is False
+    assert flow.is_function_file("/tmp/lisp41") is False
+    assert flow.is_function_file("/tmp/eval.lisp") is True
+    assert flow.is_function_file("/tmp/blalbalbaab.lisp") is True
+    assert flow.is_function_file("/tmp/ppplisp01ppp.lisp") is True
+    assert flow.is_function_file("/tmp/blalbalbaab.txt") is True
+    assert flow.is_function_file("/tmp/blalbalbaab") is True
+
+
 @pytest.fixture
 def flow():
     return FlowTestFramework("../../../Mini-Lisp.Chic/mini-lisp")

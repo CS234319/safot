@@ -1,12 +1,8 @@
-import sys
-import tempfile
-import shutil
 import re
-import os
+import tempfile
 import logging
 from pathlib import Path
-from typing import List, Dict, Tuple
-from enum import Enum
+from typing import List, Union
 from lib.mini_lisp_shell import MiniLispShell
 
 
@@ -20,7 +16,6 @@ class FlowTestFramework:
     def __init__(self, mini_lisp: str):
         self.shell = MiniLispShell(mini_lisp)
         self.shell.start_mini_lisp()
-        pass
 
     def __del__(self):
         self.shell.close_mini_lisp()
@@ -55,3 +50,32 @@ class FlowTestFramework:
     @staticmethod
     def split_file(file: str) -> List[str]:
         return list(filter(None, Path(file).read_text().splitlines()))
+
+    @staticmethod
+    def is_function_file(file: Union[str, Path]) -> bool:
+        """
+        Check if file is a lisp function file or not, by it's name.
+
+        :param file: str or Path
+        :return: True if file name represents function file, else False
+        """
+        # Convert to Path:
+        if isinstance(file, str):
+            file = Path(file)
+
+        # Warn if suffix is not lisp:
+        if file.suffix != '.lisp':
+            logging.warning(f"Input file: {file} does not have endswith of '.lisp'")
+
+        # Categorize file:
+        s_expr_file_pattern = re.compile("(^lisp[0-9]+$)")
+        file_name = file.name.split(".")[0]
+        if s_expr_file_pattern.search(file_name):
+            return False
+        return True
+
+
+
+
+
+
