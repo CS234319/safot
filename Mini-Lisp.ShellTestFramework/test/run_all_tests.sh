@@ -12,15 +12,9 @@ function check_configurations() {
   fi
 
   # Check if pytest exists:
-  python -c "import pytest" &> /dev/null
-  if [ "$?" -eq "1" ]; then
+  pip show pytest &> /dev/null
+  if [ "$?" == "1" ]; then
     echo "INFO: Installing pytest ..."
-
-    # Check if pip exists:
-    if [ -z `which pip` ]; then
-        echo "ERROR: Can't find pip"
-        exit
-    fi
 
     # Install:
     pip install pytest
@@ -34,7 +28,7 @@ function run_pytest() {
     cd ${SCRIPT_PATH}/unit
 
     # Run all tests:
-    pytest
+    pytest -rA
 
     # Go back to directory:
     cd -

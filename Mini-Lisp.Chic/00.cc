@@ -29,12 +29,12 @@ int REPL() {   int n = 0;
       supply(line);
       switch (status()) {
         case ready:      // More input must be waiting 
-          prompt("- ");  // Prompt the user for more
+          prompt("- \n");// Prompt the user for more
           goto Read;     // Loop again 
         case accept:     // Proceed to evaluation
           break;
         case reject:     // Parsing error 
-          prompt("?");   // Admonish the client; continue
+          prompt("? \n");   // Admonish the client; continue
           goto Start;
       }
     Eval: try {

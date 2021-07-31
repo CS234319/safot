@@ -50,11 +50,14 @@ class MiniLispShell:
         if exception_type == AssertionError:
             raise AssertionError(exception_value)
 
+    def __del__(self):
+        self.close_mini_lisp()
+
     def start_mini_lisp(self):
         """
         Start mini-lisp shell
         """
-        self.shell = pexpect.spawn(self.mini_lisp, encoding='utf-8', echo=False)
+        self.shell = pexpect.spawn(self.mini_lisp, encoding='utf-8', echo=False, timeout=2, maxread=1)
         return self
 
     def close_mini_lisp(self):
@@ -75,6 +78,7 @@ class MiniLispShell:
         if not self.shell:
             raise Exception("Must call start_mini_lisp() first")
 
+        logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
         return re.sub(r"\r|\n|- |\?|> ", "", self.shell.readline())
 

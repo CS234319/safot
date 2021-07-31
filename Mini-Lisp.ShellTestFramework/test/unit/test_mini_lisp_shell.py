@@ -58,12 +58,20 @@ def test_multi_line(shell):
     """
     Check multi-lines inputs
     """
-    assert shell.feed("(\n)") == "NIL"
-    assert shell.feed("\n()") == "NIL"
-    assert shell.feed("()\n") == "NIL"
-    assert shell.feed("\n(\n)\n") == "NIL"
-    assert shell.feed("(car\n '(\na b\n)\n)") == "A"
-    assert shell.feed("(\n\ncar\n\n \n\n'\n\n(\na\n\n\nb\n)\n\n)") == "A"
+    # Test: (\n)
+    assert shell.feed("(") == ""
+    assert shell.feed(")") == "NIL"
+
+    # Test: (\n)
+    assert shell.feed("(") == ""
+    assert shell.feed(")") == "NIL"
+
+    # Test: (car\n'(\na b\n)\n)
+    assert shell.feed("(car") == ""
+    assert shell.feed("'(") == ""
+    assert shell.feed("a b") == ""
+    assert shell.feed(")") == ""
+    assert shell.feed(")") == "A"
 
 
 @pytest.fixture
