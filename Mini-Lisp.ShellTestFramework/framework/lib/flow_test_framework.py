@@ -24,7 +24,7 @@ class FlowTestFramework:
         """
         Feed the mini-lisp interpreter with functions declaration. (1 or more)
 
-        :param file: input file with the functions declations
+        :param file: input file with the functions declarations
         """
         for line in self.split_file(file):
             self.shell.feed(line)
@@ -37,7 +37,7 @@ class FlowTestFramework:
         :param file: input file with the s_expression
         :return: tmp file path
         """
-        _, out_file = tempfile.mkstemp(prefix=f"{Path(file).name}", suffix=".out")
+        _, out_file = tempfile.mkstemp(suffix=f"__{Path(file).name}.out")
         with open(out_file, mode='a') as stream:
             for line in self.split_file(file):
                 out = self.shell.feed(line)
