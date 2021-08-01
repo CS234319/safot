@@ -1,6 +1,10 @@
-all:
-	pegjs Parser.pegjs
+.PHONY: test
+
+test:
+	pegjs Parser.pegjs 
 	npm test
+
+Parser.js: Parser.pegjs
 
 install:
 	npm uninstall jest

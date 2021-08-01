@@ -51,6 +51,7 @@ namespace Parser {
  
   Symbol token;
   Symbol top;
+  static int p_counter = 0;
 
   void reduce() {
     M4("Reduce",~top,"returns",$$, stack());
@@ -102,7 +103,22 @@ namespace Parser {
 
   static void parse() {
     D(stack());
+    p_counter += getParenthesesBalanceCounter();
     while (!Stack::empty()) {
+      if (p_counter != 0 && Tokenizer::peep() == $){
+          // If we have $, but the parenthesis are not balanced,
+          // we don't want to continue the LL(1) parser with the $.
+          //
+          // What we want is to continue feeding our parser,
+          // with other characters until we have a balanced word.
+          //
+          // Thus, after we have such a sentence, we can use the $.
+          //
+          // With that way, we can parse multi-line sentences in REPL.
+          //
+          current_status = ready;
+          return;
+      }
       top  = (Symbol) Stack::pop();
       token = (Symbol) Tokenizer::get();
       __("LOOP", $$, ~token, ~top, stack());

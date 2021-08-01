@@ -80,3 +80,19 @@ extern bool exists(const char c, String s) {
       return true;
   return false;
 }
+
+extern int getParenthesesBalanceCounter() {
+    int count = 0;
+    auto saved_head = Tokenizer::head;
+    auto res = Tokenizer::next();
+    while(res != Tokenizer::$) {
+        if (res == '(') {
+            count ++;
+        } else if (res == ')') {
+            count --;
+        }
+        res = Tokenizer::next();
+    }
+    Tokenizer::head = saved_head;
+    return count;
+}

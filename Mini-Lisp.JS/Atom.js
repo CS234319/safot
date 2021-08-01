@@ -13,7 +13,8 @@ module.exports = class Atom extends S {
 	}
 
 	car() {
-		throw `CAR: ${this.#value} is not a list`
+    // Convert this to a throw of an S expression, and only an S expression.
+		throw `CAR: ${this.value} is not a list`
 	}
 
 	cdr() {

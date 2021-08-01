@@ -12,6 +12,6 @@ namespace Tokenizer {
   extern H unget(); 
   extern H peep();
 }
-extern bool exists(const char, String s); 
+extern bool exists(const char, String s);
+extern int getParenthesesBalanceCounter();
 #endif
-
