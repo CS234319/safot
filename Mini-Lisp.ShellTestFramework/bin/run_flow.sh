@@ -3,6 +3,16 @@
 # Script to run all the given lisp files.
 # For functions files, no output file
 # will generate.
+#
+# Args:
+#   lisp files
+#
+# Usage:
+#     run_flow.sh <file1> <file2> ...
+#
+# Example:
+#     ./bin/run_flow.sh ./test/inputs/*
+#
 ###########################################
 
 function check_configurations() {
