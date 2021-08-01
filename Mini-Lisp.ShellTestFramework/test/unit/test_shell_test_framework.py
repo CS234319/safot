@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from src.flow_test_framework import FlowTestFramework
+from framework.lib.flow_test_framework import FlowTestFramework
 
 
 def test_run_s_expr_file(flow, input_dir):

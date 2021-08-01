@@ -1,5 +1,5 @@
 import pytest
-from src.mini_lisp_shell import MiniLispShell
+from framework.lib.mini_lisp_shell import MiniLispShell
 
 
 def test_basic(shell):

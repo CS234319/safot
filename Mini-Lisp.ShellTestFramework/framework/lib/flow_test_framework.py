@@ -3,7 +3,7 @@ import tempfile
 import logging
 from pathlib import Path
 from typing import List, Union
-from src.mini_lisp_shell import MiniLispShell
+from framework.lib.mini_lisp_shell import MiniLispShell
 
 
 class FlowTestFramework:
