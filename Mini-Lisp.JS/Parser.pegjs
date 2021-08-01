@@ -20,12 +20,11 @@ Pair
 	= car:S _ "." _ cdr:S { return new Pair(car, cdr) }
 
 _
-	= [\u0000-\u0020\u007F-\uFFFF]*
+	= [\x00-\x20\x7F-\u10FFFF]*
 
 Symbol
-	= [^()'.\[\]\u0000-\u0020\u007F-\uFFFF]+
+	= [^()'.\[\]\x00-\x20\x7F-\u10FFFF]+
 		{ return text().toUpperCase() }
 
 Quote
 	= "'" _ s:S { return lc.create(quote, s) }
-
