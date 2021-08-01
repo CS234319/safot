@@ -20,15 +20,16 @@ function check_configurations() {
 }
 
 function run_pytest() {
-    # Enter unit-test directory:
+    # Get unit-test directory:
     SCRIPT=`realpath $0`
     SCRIPT_PATH=`dirname $SCRIPT`
-    cd ${SCRIPT_PATH}/unit
+    UNIT_TESTS_DIR=${SCRIPT_PATH}/../test/unit
+    cd ${UNIT_TESTS_DIR}
 
     # Run all tests:
-    pytest -rA
+    pytest -rA --rootdir=${UNIT_TESTS_DIR}
 
-    # Go back to directory:
+    # Restore pwd:
     cd -
 }
 

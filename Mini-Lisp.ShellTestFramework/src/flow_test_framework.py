@@ -3,7 +3,7 @@ import tempfile
 import logging
 from pathlib import Path
 from typing import List, Union
-from lib.mini_lisp_shell import MiniLispShell
+from src.mini_lisp_shell import MiniLispShell
 
 
 class FlowTestFramework:
@@ -73,9 +73,3 @@ class FlowTestFramework:
         if s_expr_file_pattern.search(file_name):
             return False
         return True
-
-
-
-
-
-
