@@ -1,6 +1,7 @@
 .PHONY: test
 
-test: Parser.pegjs
+test:
+	pegjs Parser.pegjs 
 	npm test
 
 Parser.js: Parser.pegjs

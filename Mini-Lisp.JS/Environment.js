@@ -2,12 +2,18 @@ const Atom = require('./Atom')
 const ListCreator = require('./ListCreator')
 
 module.exports = class Environment {
+	#alist
+
 	constructor() {
-		this.alist = Atom.nil
+		this.#alist = Atom.nil
+	}
+
+	getAList() {
+		return this.#alist
 	}
 
 	set(key, value) {
-		this.alist = key.cons(value).cons(this.alist)
+		this.#alist = key.cons(value).cons(this.#alist)
 		return value
 	}
 
@@ -26,7 +32,7 @@ module.exports = class Environment {
 	}
 
 	lookup(s) {
-		return Environment.#lookup(s, this.alist)
+		return Environment.#lookup(s, this.#alist)
 	}
 
 	static #lookup(s, list) {
@@ -59,7 +65,7 @@ module.exports = class Environment {
 
 	unbind(numPairs) {
 		for (let i = 0; i < numPairs; i++) {
-			this.alist = this.alist.cdr()	
+			this.#alist = this.#alist.cdr()	
 		}
 	}
 }

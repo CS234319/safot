@@ -1,9 +1,11 @@
 const S = require('./S')
 
 module.exports = class Atom extends S {
+	#value
+
 	constructor(value) {
 		super()
-		this.value = value
+		this.#value = value
 	}
 
 	atom() {
@@ -16,8 +18,12 @@ module.exports = class Atom extends S {
 	}
 
 	cdr() {
-		throw `CDR: ${this.value} is not a list`
+		throw `CDR: ${this.#value} is not a list`
 	}	
+
+	eq(s) {
+		return s.atom() && this.#value === s.#value
+	}
 
 	isList() {
 		return this.null()
@@ -28,7 +34,7 @@ module.exports = class Atom extends S {
 	}
 
 	toString() {
-		return this.value.toString()
+		return this.#value.toString()
 	}
 
 	static nil = new Atom('NIL')

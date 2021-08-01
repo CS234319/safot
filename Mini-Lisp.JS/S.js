@@ -17,7 +17,7 @@ module.exports = class S {
 	}
 
 	eq(s) {
-		return s.atom() && this.value === s.value
+		throw 'Not implemented'
 	}
 
 	null() {

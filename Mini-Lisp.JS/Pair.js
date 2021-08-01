@@ -2,10 +2,13 @@ const S = require('./S')
 const Atom = require('./Atom')
 
 module.exports = class Pair extends S {
+	#car
+	#cdr
+
 	constructor(l, r) {
 		super() 
-		this.l = l
-		this.r = r
+		this.#car = l
+		this.#cdr = r
 	}
 
 	atom() {
@@ -13,11 +16,11 @@ module.exports = class Pair extends S {
 	}
 
 	car() {
-		return this.l
+		return this.#car
 	}
 
 	cdr() {
-		return this.r
+		return this.#cdr
 	}
 
 	eq(s) {
@@ -25,12 +28,12 @@ module.exports = class Pair extends S {
 	}
 
 	isList() {
-		return this.r.isList()
+		return this.#cdr.isList()
 	}
 
 	getListAsArray() {
-		var list = this.r.getListAsArray()
-		list?.unshift(this.l)
+		var list = this.#cdr.getListAsArray()
+		list?.unshift(this.#car)
 		return list
 	}
 
@@ -40,6 +43,6 @@ module.exports = class Pair extends S {
 			return '(' + list.join(' ') + ')'
 		}
 
-		return '(' + [this.l, this.r].join(' . ') + ')'
+		return '(' + [this.#car, this.#cdr].join(' . ') + ')'
 	}
 }
