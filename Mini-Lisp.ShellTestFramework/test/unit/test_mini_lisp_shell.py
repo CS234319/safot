@@ -1,5 +1,5 @@
 import pytest
-from lib.mini_lisp_shell import MiniLispShell
+from framework.lib.mini_lisp_shell import MiniLispShell
 
 
 def test_basic(shell):
@@ -62,15 +62,20 @@ def test_multi_line(shell):
     assert shell.feed("(") == ""
     assert shell.feed(")") == "NIL"
 
-    # Test: (\n)
+    # Test: (\n\n)
     assert shell.feed("(") == ""
+    assert shell.feed("") == ""
     assert shell.feed(")") == "NIL"
 
     # Test: (car\n'(\na b\n)\n)
     assert shell.feed("(car") == ""
+    assert shell.feed("") == ""
     assert shell.feed("'(") == ""
+    assert shell.feed("") == ""
     assert shell.feed("a b") == ""
+    assert shell.feed("") == ""
     assert shell.feed(")") == ""
+    assert shell.feed("") == ""
     assert shell.feed(")") == "A"
 
 
@@ -79,8 +84,3 @@ def shell():
     shell = MiniLispShell("../../../Mini-Lisp.Chic/mini-lisp")
     shell.start_mini_lisp()
     return shell
-
-
-@pytest.fixture(scope="session")
-def shell_close(shell):
-    shell.close_mini_lisp()

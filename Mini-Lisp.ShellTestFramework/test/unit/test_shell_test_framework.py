@@ -1,9 +1,9 @@
 import pytest
 from pathlib import Path
-from lib.flow_test_framework import FlowTestFramework
+from framework.lib.flow_test_framework import FlowTestFramework
 
 
-def test_run_s_expr_file(flow):
+def test_run_s_expr_file(flow, input_dir):
     """
     Test the following file:
 
@@ -29,7 +29,6 @@ def test_run_s_expr_file(flow):
         B
     """
     # Define inputs:
-    input_dir = "../lisp_files/"
     s_expr_file = f"{input_dir}/lisp00.lisp"
 
     # Run s_expr:
@@ -39,13 +38,12 @@ def test_run_s_expr_file(flow):
                                          "B\n"
 
 
-def test_load_function_file(flow):
+def test_load_function_file(flow, input_dir):
     """
     Compile 2 functions: exists + id
     Run to s_expr files, which includes s_expr that use those functions.
     """
     # Define inputs:
-    input_dir = "../lisp_files/"
     functions_file = f"{input_dir}/fun.lisp"
     s_expr_file_1 = f"{input_dir}/lisp01.lisp"
     s_expr_file_2 = f"{input_dir}/lisp02.lisp"
@@ -85,3 +83,8 @@ def test_is_function_file(flow):
 @pytest.fixture
 def flow():
     return FlowTestFramework("../../../Mini-Lisp.Chic/mini-lisp")
+
+
+@pytest.fixture
+def input_dir():
+    return "../inputs/"

@@ -11,6 +11,13 @@ function check_configurations() {
       exit
   fi
 
+  # Check python version > 3:
+  which python3 &> /dev/null
+  if [ "$?" == "1" ]; then
+    echo "ERROR: require python version > 3"
+    exit
+  fi
+
   # Check if pytest exists:
   pip show pytest &> /dev/null
   if [ "$?" == "1" ]; then
@@ -20,16 +27,18 @@ function check_configurations() {
 }
 
 function run_pytest() {
-    # Enter unit-test directory:
+    # Get unit-test directory:
     SCRIPT=`realpath $0`
     SCRIPT_PATH=`dirname $SCRIPT`
-    cd ${SCRIPT_PATH}/unit
+    UNIT_TESTS_DIR=${SCRIPT_PATH}/../test/unit
+    export PYTHONPATH="${PYTHONPATH}:${SCRIPT_PATH}/../"
+    cd ${UNIT_TESTS_DIR}
 
     # Run all tests:
     pytest -rA
 
-    # Go back to directory:
-    cd -
+    # Restore pwd:
+    cd - &> /dev/null
 }
 
 check_configurations

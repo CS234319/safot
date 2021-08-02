@@ -77,6 +77,8 @@ class MiniLispShell:
         """
         if not self.shell:
             raise Exception("Must call start_mini_lisp() first")
+        if input_str == "":
+            return ""
 
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
