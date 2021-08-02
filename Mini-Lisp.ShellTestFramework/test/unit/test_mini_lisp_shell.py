@@ -33,8 +33,8 @@ def test_functions(shell):
     Compile functions and run s-expr
     """
     # Compile functions:
-    shell.feed("(defun mirror (x) (cons (cdr x) (car x)))")
-    shell.feed("(defun zcar(x) (cond ((atom x) x) (t (car x))))")
+    assert shell.feed("(defun mirror (x) (cons (cdr x) (car x)))") == "MIRROR"
+    assert shell.feed("(defun zcar(x) (cond ((atom x) x) (t (car x))))") == "ZCAR"
 
     # Use the functions:
     assert shell.feed("(mirror '(a b))") == "((B).A)"

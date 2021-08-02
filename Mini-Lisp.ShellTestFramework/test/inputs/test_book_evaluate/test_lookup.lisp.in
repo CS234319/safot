@@ -1,0 +1,5 @@
+(lookup 'a '(a.x b.NIL c.NIL))
+(lookup 'a '(b.NIL a.x c.NIL))
+(lookup 'a '(b.NIL c.NIL a.x))
+(lookup 'a '())
+(lookup)

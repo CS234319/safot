@@ -1,0 +1,7 @@
+(apply-atomic 'car '(a b) '(a.(x y) b.T))
+(apply-atomic 'cdr '(a b) '(a.(x y) b.T))
+(apply-atomic 'atom '(a b) '(a.x b.T))
+(apply-atomic 'atom '(a b) '(a.(x y) b.T))
+(apply-atomic 'eq '(a a) '(a.x b.T))
+(apply-atomic 'eq '(a b) '(a.x b.T))
+(apply-atomic 'eq '(a b) '(a.x b.x))

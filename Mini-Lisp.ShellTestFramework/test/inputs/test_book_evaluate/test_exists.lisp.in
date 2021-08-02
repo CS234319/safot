@@ -1,0 +1,4 @@
+(exists 'a '(a b))
+(exists 'a '(x y))
+(exists 'a '())
+(exists)

@@ -1,0 +1,6 @@
+((A.X) (B.Y))
+((A.X) (B.Y))
+((A.X) (B.Y) (C.T) (Z.T))
+Error [MISSING] in (FORMALS ACTUALS A-LIST)
+Error [INVALID] in (MISSING-FORMALS)
+Error [INVALID] in (MISSING-ACTUALS)

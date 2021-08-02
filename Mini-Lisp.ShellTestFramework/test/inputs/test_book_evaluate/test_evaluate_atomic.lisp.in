@@ -1,0 +1,7 @@
+(evaluate-atomic '(car a b) '(a.(x y) b.T))
+(evaluate-atomic '(cdr a b) '(a.(x y) b.T))
+(evaluate-atomic '(atom a b) '(a.x b.T))
+(evaluate-atomic '(atom a b) '(a.(x y) b.T))
+(evaluate-atomic '(eq a a) '(a.x b.T))
+(evaluate-atomic '(eq a b) '(a.x b.T))
+(evaluate-atomic '(eq a b) '(a.x b.x))

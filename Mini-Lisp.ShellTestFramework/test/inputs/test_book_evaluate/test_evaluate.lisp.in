@@ -1,0 +1,3 @@
+(evaluate 'a '(a.T))
+(evaluate 'a '(a.x))
+(evaluate 'a '())

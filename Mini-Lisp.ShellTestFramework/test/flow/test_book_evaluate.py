@@ -1,13 +1,14 @@
 import pytest
 import os
-from lib.flow_test_framework import FlowTestFramework
+from pathlib import Path
+from framework.lib.flow_test_framework import FlowTestFramework
 
 
 @pytest.fixture
 def flow():
     """
     Pre-process function.
-    This function occur before the flow tests.
+    This function occur before all the flow tests.
 
     Pre-process steps:
         1. Generate the latest lisp files from the book.
@@ -47,6 +48,8 @@ def flow():
     for file in files:
         flow.load_function_file(file)
 
+    return flow
+
 
 def test_exists(flow, input_dir, golden_dir):
     """
@@ -55,17 +58,23 @@ def test_exists(flow, input_dir, golden_dir):
     Using the exists.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_exists.lisp.in"
+    golden_file = golden_dir / "test_exists.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_is_atomic(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: is_atomic
 
-    Using the isAtomic.lisp file,
+    Using the is-atomic.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_is_atomic.lisp.in"
+    golden_file = golden_dir / "test_is_atomic.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_lookup(flow, input_dir, golden_dir):
@@ -75,7 +84,10 @@ def test_lookup(flow, input_dir, golden_dir):
     Using the lookup.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_lookup.lisp.in"
+    golden_file = golden_dir / "test_lookup.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_bind(flow, input_dir, golden_dir):
@@ -85,87 +97,114 @@ def test_bind(flow, input_dir, golden_dir):
     Using the bind.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_bind.lisp.in"
+    golden_file = golden_dir / "test_bind.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_apply_trivial_atomic(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: apply_trivial_atomic
 
-    Using the applyTrivialAtomic.lisp file,
+    Using the apply-trivial-atomic.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_apply_trivial_atomic.lisp.in"
+    golden_file = golden_dir / "test_apply_trivial_atomic.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_apply_eager_atomic(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: apply_eager_atomic
 
-    Using the applyEagerAtomic.lisp file,
+    Using the apply-eager-atomic.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_apply_eager_atomic.lisp.in"
+    golden_file = golden_dir / "test_apply_eager_atomic.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_evaluate(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: evaluate
 
-    Using the eval.lisp file,
+    Using the evaluate.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_evaluate.lisp.in"
+    golden_file = golden_dir / "test_evaluate.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_evaluate_list(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: evaluate_list
 
-    Using the evaluateList.lisp file,
+    Using the evaluate-list.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_evaluate_list.lisp.in"
+    golden_file = golden_dir / "test_evaluate_list.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_apply_atomic(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: apply_atomic
 
-    Using the applyAtomic.lisp file,
+    Using the apply-atomic.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_apply_atomic.lisp.in"
+    golden_file = golden_dir / "test_apply_atomic.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_evaluate_atomic(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: evaluate_atomic
 
-    Using the evaluateAtomic.lisp file,
+    Using the evaluate-atomic.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_evaluate_atomic.lisp.in"
+    golden_file = golden_dir / "test_evaluate_atomic.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_evaluate_cond(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: evaluate_cond
 
-    Using the evaluateCond.lisp file,
+    Using the evaluate-cond.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_evaluate_cond.lisp.in"
+    golden_file = golden_dir / "test_evaluate_cond.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_apply_decomposed_lambda(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: apply_decomposed_lambda
 
-    Using the applydecomposedLambda.lisp file,
+    Using the apply-decomposed-lambda.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_apply_decomposed_lambda.lisp.in"
+    golden_file = golden_dir / "test_apply_decomposed_lambda.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 def test_apply(flow, input_dir, golden_dir):
@@ -175,7 +214,10 @@ def test_apply(flow, input_dir, golden_dir):
     Using the apply.lisp file,
     auto generated from the Mini-lisp book
     """
-    raise NotImplementedError
+    in_file     = input_dir  / "test_apply.lisp.in"
+    golden_file = golden_dir / "test_apply.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
 @pytest.fixture
@@ -183,8 +225,8 @@ def input_dir():
     """
     return the input directory
     """
-    directory = "../../../Mini-Lisp.Inputs/"
-    return directory
+    directory = "../inputs/test_book_evaluate/"
+    return Path(directory)
 
 
 @pytest.fixture
@@ -192,5 +234,5 @@ def golden_dir():
     """
     return the golden directory
     """
-    directory = "../lisp_files/"
-    return directory
+    directory = "../golden/test_book_evaluate/"
+    return Path(directory)

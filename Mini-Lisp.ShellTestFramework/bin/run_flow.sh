@@ -5,13 +5,13 @@
 # will generate.
 #
 # Args:
-#   lisp files
+#     lisp files
 #
 # Usage:
-#     run_flow.sh <file1> <file2> ...
+#     > run_flow.sh <file1> <file2> ...
 #
 # Example:
-#     ./bin/run_flow.sh ./test/inputs/*
+#     > ./bin/run_flow.sh ./test/inputs/examples/*
 #
 ###########################################
 

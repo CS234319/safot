@@ -1,0 +1,3 @@
+(is-atomic 'car)
+(is-atomic 'ooo)
+(is-atomic)
