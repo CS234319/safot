@@ -18,7 +18,8 @@ class FlowTestFramework:
         self.shell.start_mini_lisp()
 
     def __del__(self):
-        self.shell.close_mini_lisp()
+        if self.shell:
+            self.shell.close_mini_lisp()
 
     def load_function_file(self, file: str) -> None:
         """

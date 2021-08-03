@@ -17,13 +17,15 @@ class MiniLispShell:
         ./test/unit/test_mini_lisp_shell.py
 
     For example:
+        >> from framework.lib.mini_lisp_shell import MiniLispShell
+        >>
         >> with MiniLispShell("../../Mini-Lisp.Chic/mini-lisp") as shell:
         >>     out1 = shell.feed("()")
         >>     out2 = shell.feed("(car '(a b))")
         >>     print(out1)
-        >>     > NIL
+        >>     NIL
         >>     print(out2)
-        >>     > A
+        >>     A
 
     The same example, but without using the with statement:
         >> shell = MiniLispShell("./mini-lisp")
@@ -31,9 +33,9 @@ class MiniLispShell:
         >> out1 = shell.feed("()")
         >> out2 = shell.feed("(car '(a b))")
         >> print(out1)
-        >> > NIL
+        >> NIL
         >> print(out2)
-        >> > A
+        >> A
         >> shell.close_mini_lisp()
     """
 

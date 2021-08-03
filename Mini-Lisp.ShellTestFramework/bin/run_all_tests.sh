@@ -5,7 +5,7 @@
 # Synopsis:
 #       % run_all_tests.sh unit # Run unit tests:
 #       % run_all_tests.sh flow # Run flow tests:
-#       % run_all_tests.sh all  # Run both unit and flow tests 
+#       % run_all_tests.sh all  # Run both unit and flow tests
 
 function check_configurations() {
   # Check python version > 3:
@@ -18,53 +18,42 @@ function check_configurations() {
   # Check if pytest exists:
   pip show pytest &> /dev/null
   if [ "$?" == "1" ]; then
-    echo "INFO: Installing pytest ..."
-    pip install pytest
+    echo "ERROR: Can't find pytest package"
+    exit
   fi
 }
 
 function run_unit_tests() {
-    # Get unit-test directory:
-    SCRIPT=`realpath $0`
-    SCRIPT_PATH=`dirname $SCRIPT`
-    UNIT_TESTS_DIR=${SCRIPT_PATH}/../test/unit
-    export PYTHONPATH="${PYTHONPATH}:${SCRIPT_PATH}/../"
-    cd ${UNIT_TESTS_DIR}
-
-    # Run all tests:
+    cd $1
     python3 -m pytest -rA
-
-    # Restore pwd:
     cd - &> /dev/null
 }
 
 function run_flow_tests() {
-    # Get flow-test directory:
-    SCRIPT=`realpath $0`
-    SCRIPT_PATH=`dirname $SCRIPT`
-    FLOW_TESTS_DIR=${SCRIPT_PATH}/../test/flow
-    export PYTHONPATH="${PYTHONPATH}:${SCRIPT_PATH}/../"
-    cd ${FLOW_TESTS_DIR}
-
-    # Run all tests:
+    cd $1
     python3 -m pytest -rA
-
-    # Restore pwd:
     cd - &> /dev/null
 }
 
 check_configurations
 
+SCRIPT_PATH=`realpath $0`
+SCRIPT_DIR=`dirname ${SCRIPT_PATH}`
+UNIT_TESTS_DIR="${SCRIPT_DIR}/../test/unit"
+FLOW_TESTS_DIR="${SCRIPT_DIR}/../test/flow"
+
+PROJECT_DIR=`realpath "${SCRIPT_DIR}/../"`
+export PYTHONPATH="${PYTHONPATH}:${PROJECT_DIR}/"
+
 if [ "$1" == "unit" ]; then
-  run_unit_tests
+  run_unit_tests ${UNIT_TESTS_DIR}
 fi
 
 if [ "$1" == "flow" ]; then
-  run_flow_tests
+  run_flow_tests ${FLOW_TESTS_DIR}
 fi
 
 if [ "$1" == "all" ]; then
-  run_unit_tests
-  run_flow_tests
+  run_unit_tests ${UNIT_TESTS_DIR}
+  run_flow_tests ${FLOW_TESTS_DIR}
 fi
-

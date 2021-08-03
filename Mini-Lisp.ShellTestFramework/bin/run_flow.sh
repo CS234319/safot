@@ -25,19 +25,19 @@ function check_configurations() {
 }
 
 function flow_runner() {
-  # Get src directory:
-  SCRIPT=`realpath $0`
-  SCRIPT_PATH=`dirname $SCRIPT`
-  SRC_DIR=${SCRIPT_PATH}/../framework/lib/
-  export PYTHONPATH="${PYTHONPATH}:${SCRIPT_PATH}/../"
-  cd ${SRC_DIR}
-
-  # Run flow:
-  python3 ${SRC_DIR}/flow_runner.py "$@"
-
-  # Restore pwd:
-  cd - &> /dev/null
+  cd ${PROJECT_DIR}/framework/lib/
+  python3 ${PROJECT_DIR}/framework/lib//flow_runner.py "$@"
+  cd -
 }
 
 check_configurations
+
+SCRIPT_PATH=`realpath $0`
+SCRIPT_DIR=`dirname ${SCRIPT_PATH}`
+UNIT_TESTS_DIR="${SCRIPT_DIR}/../test/unit"
+FLOW_TESTS_DIR="${SCRIPT_DIR}/../test/flow"
+
+export PROJECT_DIR=`realpath "${SCRIPT_DIR}/../"`
+export PYTHONPATH="${PYTHONPATH}:${PROJECT_DIR}/"
+
 flow_runner `realpath "$@" | tr "\n" " "`
