@@ -13,15 +13,6 @@ const t = Atom.t
 const nil = Atom.nil
 const q = Atom.quote
 
-test('parse accept', () => {
-	const stringsArray = ["a.b", "(a.b)", "().()", "().NIL", "'a.b",
-						 "'a.'b", "'(a.b)", "().'()", "().'NIL"]
-	
-	for (s of stringsArray) {
-		expect(() => p.parse(s)).not.toThrow()
-	}						 
-})
-
 test ('parse reject', () => {
 	const stringsArray = Array.from("()[].'")
 		.concat(['', '(()'])
@@ -54,6 +45,10 @@ test('parse nested list', () => {
 
 test('parse pair', () => {
 	expect(p.parse('(a . b)')).toStrictEqual(new Pair(a, b))
+	expect(p.parse('(a .b)')).toStrictEqual(new Pair(a, b))
+	expect(p.parse('(a. b)')).toStrictEqual(new Pair(a, b))
+	expect(p.parse('(a.b)')).toStrictEqual(new Pair(a, b))
+	expect(p.parse('(a\t.\nb)')).toStrictEqual(new Pair(a, b))
 })
 
 test('parse quote', () => {
