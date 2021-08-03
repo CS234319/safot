@@ -27,6 +27,12 @@ module.exports = class Pair extends S {
     	return false
 	}
 
+	equals(s) {
+		return !s.atom() &&
+				this.#car.equals(s.car()) && 
+				this.#cdr.equals(s.cdr())
+	}
+
 	isList() {
 		return this.#cdr.isList()
 	}

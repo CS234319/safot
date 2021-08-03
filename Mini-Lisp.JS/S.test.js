@@ -1,6 +1,9 @@
+const TestUtils = require('./TestUtils')
 const Pair = require('./Pair')
 const Atom = require('./Atom')
 const p = require('./Parser')
+
+const utils = new TestUtils()
 
 const pair = p.parse('(B . A)')
 const list = p.parse('(B A X Y Z)')
@@ -22,24 +25,26 @@ test('atom', () => {
 })
 
 test('car', () => {	
-	expect(pair.car()).toStrictEqual(b)
-	expect(list.car()).toStrictEqual(b)
-	expect((new Pair(pair, a)).car()).toBe(pair)
-	expect((new Pair(list, a)).car()).toBe(list)
+	utils.expectEquals(pair.car(), b)
+	utils.expectEquals(list.car(), b)
+	utils.expectException(() => Atom.atom.car(), Atom.atom, Atom.car)
+	utils.expectException(() => a.car(), a, Atom.car)
+	utils.expectException(() => nil.car(), nil, Atom.car)
 })
 
 test('cdr', () => {
-	expect(pair.cdr()).toStrictEqual(a)
-	expect(list.cdr()).toStrictEqual(listTail)
-	expect((new Pair(a, pair).cdr())).toBe(pair)
-	expect((new Pair(a, list)).cdr()).toBe(list)
+	utils.expectEquals(pair.cdr(), a)
+	utils.expectEquals(list.cdr(), listTail)
+	utils.expectException(() => Atom.atom.cdr(), Atom.atom, Atom.cdr)
+	utils.expectException(() => a.cdr(), a, Atom.cdr)
+	utils.expectException(() => nil.cdr(), nil, Atom.cdr)
 })
 
 test('cons', () => {
-	expect(a.cons(p.parse('(b c)'))).toStrictEqual(p.parse('(a b c)'))
-	expect(b.cons(nil)).toStrictEqual(p.parse('(b)'))
-	expect(a.cons(b)).toStrictEqual(new Pair(a, b))
-	expect(pair.cons(c)).toStrictEqual(new Pair(pair, c))
+	utils.expectEquals(a.cons(p.parse('(b c)')), p.parse('(a b c)'))
+	utils.expectEquals(b.cons(nil), p.parse('(b)'))
+	utils.expectEquals(a.cons(b), new Pair(a, b))
+	utils.expectEquals(pair.cons(c), new Pair(pair, c))
 })
 
 test('eq', () => {
@@ -53,11 +58,42 @@ test('eq', () => {
 	expect(nil.eq(t)).toBeFalsy()
 })
 
+test('equals', () => {
+	expect(a.equals(a)).toBeTruthy()
+	expect(a.equals(b)).toBeFalsy()
+	expect(pair.equals(pair)).toBeTruthy()
+	expect(list.equals(list)).toBeTruthy()
+	expect(nil.equals(nil)).toBeTruthy()
+	expect(t.equals(t)).toBeTruthy()
+	expect(t.equals(nil)).toBeFalsy()
+	expect(nil.equals(t)).toBeFalsy()
+	expect(p.parse('(a . (b c))').equals(p.parse('(a b c)'))).toBeTruthy()
+	expect(p.parse('(a . (b . (c . d)))').equals(
+		   p.parse('(a . (b . (c . d)))'))).toBeTruthy()
+	expect(p.parse('(a . (b . (c . d)))').equals(
+		   p.parse('(a . (b . (c . nil)))'))).toBeFalsy()
+})
+
 test('null', () => {
 	expect(nil.null()).toBeTruthy()
 	expect(t.null()).toBeFalsy()
 	expect(pair.null()).toBeFalsy()
 	expect(list.null()).toBeFalsy()
+})
+
+test('t', () => {
+	expect(nil.t()).toBeFalsy()
+	expect(t.t()).toBeTruthy()
+	expect(pair.t()).toBeTruthy()
+	expect(list.t()).toBeTruthy()
+})
+
+test('error', () => {
+	utils.expectException(() => a.error(), a)
+	utils.expectException(() => pair.error(), pair)
+	utils.expectException(() => list.error(), list)
+	utils.expectException(() => a.error(b), a, b)
+	utils.expectException(() => a.error(Atom.invalid), a, Atom.invalid)
 })
 
 test('isList', () => {
@@ -69,27 +105,27 @@ test('isList', () => {
 })
 
 test('getListAsArray', () => {
-	expect(nil.getListAsArray()).toStrictEqual([])
-	expect(list.getListAsArray()).toStrictEqual(listAsArray)
-	expect(t.getListAsArray()).toStrictEqual(undefined)
-	expect(a.getListAsArray()).toStrictEqual(undefined)
-	expect(pair.getListAsArray()).toStrictEqual(undefined)
+	utils.expectEquals(nil.getListAsArray(), [])
+	utils.expectEquals(list.getListAsArray(), listAsArray)
+	utils.expectEquals(t.getListAsArray(), undefined)
+	utils.expectEquals(a.getListAsArray(), undefined)
+	utils.expectEquals(pair.getListAsArray(), undefined)
 })
 
 test('getListLength', () => {
-	expect(nil.getListLength()).toStrictEqual(0)
-	expect(list.getListLength()).toStrictEqual(listAsArray.length)
-	expect(t.getListLength()).toStrictEqual(undefined)
-	expect(a.getListLength()).toStrictEqual(undefined)
-	expect(pair.getListLength()).toStrictEqual(undefined)
+	utils.expectEquals(nil.getListLength(), 0)
+	utils.expectEquals(list.getListLength(), listAsArray.length)
+	utils.expectEquals(t.getListLength(), undefined)
+	utils.expectEquals(a.getListLength(), undefined)
+	utils.expectEquals(pair.getListLength(), undefined)
 })
 
 test('toString', () => {
-	expect(p.parse(nil.toString())).toStrictEqual(nil)
-	expect(p.parse(t.toString())).toStrictEqual(t)
-	expect(p.parse(a.toString())).toStrictEqual(a)
-	expect(p.parse(pair.toString())).toStrictEqual(pair)
-	expect(p.parse(list.toString())).toStrictEqual(list)
-	expect(p.parse(complexList.toString())).toStrictEqual(complexList)
+	utils.expectEquals(p.parse(nil.toString()), nil)
+	utils.expectEquals(p.parse(t.toString()), t)
+	utils.expectEquals(p.parse(a.toString()), a)
+	utils.expectEquals(p.parse(pair.toString()), pair)
+	utils.expectEquals(p.parse(list.toString()), list)
+	utils.expectEquals(p.parse(complexList.toString()), complexList)
 })
 

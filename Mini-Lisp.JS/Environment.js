@@ -1,11 +1,14 @@
 const Atom = require('./Atom')
 const ListCreator = require('./ListCreator')
+const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
 	#alist
+	#alistBackup
 
 	constructor() {
 		this.#alist = Atom.nil
+		this.#alistBackup = Atom.nil
 	}
 
 	getAList() {
@@ -37,7 +40,7 @@ module.exports = class Environment {
 
 	static #lookup(s, list) {
 		if (list.null()) {
-			return undefined
+			return s.error(Atom.undefined)
 		}
 
 		const currPair = list.car()
@@ -46,26 +49,53 @@ module.exports = class Environment {
 			: Environment.#lookup(s, list.cdr()) 
 	}
 
-	bind(names, values) {
-		if (names.null() && values.null()) {
+	bind(keys, values) {
+		for (const s of [keys, values]) {
+			if (!s.isList()) {
+				return s.error(Atom.invalid)
+			}
+		}
+
+		this.#_bind(keys, values)
+	}
+
+	#_bind(keys, values) {
+		if (keys.null() && values.null()) {
 			return
 		}
 
-		if (names.null() || values.null()) {
-			throw 'BIND: Names and values lengths does not match'
+		if (keys.t() && values.null()) {
+			return keys.error(Atom.missing)
 		}
 
-		if (names.atom() || values.atom()) {
-			throw 'BIND: arguments should be lists'
+		if (keys.null() && values.t()) {
+			return values.error(Atom.redundant)
 		}
 
-		this.set(names.car(), values.car())
-		this.bind(names.cdr(), values.cdr())
+		this.set(keys.car(), values.car())
+		this.bind(keys.cdr(), values.cdr())
 	}
 
 	unbind(numPairs) {
+		if (this.#alist.getListLength() < numPairs) {
+			return this.#alist.error(Atom.invalid)
+		}
+
+		this.#_unbind(numPairs)
+	}
+
+	#_unbind(numPairs) {
 		for (let i = 0; i < numPairs; i++) {
 			this.#alist = this.#alist.cdr()	
 		}
+	}
+
+	backup() {
+		this.#alistBackup = this.#alist
+	}
+
+	restore() {
+		this.#alist = this.#alistBackup
+		this.#alistBackup = Atom.nil
 	}
 }

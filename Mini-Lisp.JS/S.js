@@ -1,14 +1,14 @@
 module.exports = class S {
 	atom() {
-		throw 'Not implemented'
+		return this.#errorNotImplemented()
 	}
 
 	car() {
-		throw 'Not implemented'		
+		return this.#errorNotImplemented()
 	}
 
 	cdr() {
-		throw 'Not implemented'
+		return this.#errorNotImplemented()
 	}
 
 	cons(s) {
@@ -17,7 +17,7 @@ module.exports = class S {
 	}
 
 	eq(s) {
-		throw 'Not implemented'
+		return this.#errorNotImplemented()
 	}
 
 	null() {
@@ -25,12 +25,21 @@ module.exports = class S {
 		return this.eq(Atom.nil)
 	}
 
+	t() {
+		return !this.null()	
+	}
+
+	error(kind) {
+		const EvaluationError = require('./EvaluationError')
+		throw new EvaluationError(kind ? this.cons(kind) : this)
+	}
+
 	isList() {
-		throw 'Not implemented'
+		return this.#errorNotImplemented()
 	}
 
 	getListAsArray() {
-		throw 'Not implemented'
+		return this.#errorNotImplemented()
 	}
 
 	getListLength() {
@@ -38,6 +47,10 @@ module.exports = class S {
 	}
 
 	toString() {
-		throw 'Not implemented'	
+		return this.#errorNotImplemented()
+	}
+
+	#errorNotImplemented() {
+		return this.error(Atom.bug)		
 	}
 }

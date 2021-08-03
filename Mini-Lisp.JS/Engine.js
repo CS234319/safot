@@ -21,21 +21,20 @@ module.exports = class Engine {
 		const lc = new ListCreator()
 		
 		this.#primitives = [
-			['CAR',			1, s => s.car()],
-			['CDR',			1, s => s.cdr()],
-			['QUOTE',		1, s => s],
-			['ATOM',		1, s => Engine.#boolToS(s.atom())],
-			['ERROR',		1, s => this.#evaluateError(s)],
-			['EVAL',		1, s => s],
-			['CONS',		2, (s, t) => s.cons(t)],
-			['EQ',			2, (s, t) => Engine.#boolToS(s.eq(t))],
-			['SET',			2, (s, t) => this.#env.set(s, t)],
-			['LAMBDA',		2, (s, t) => lc.create(Atom.lambda, s, t)],
-			['NLAMBDA',		2, (s, t) => lc.create(Atom.nlambda, s, t)],
-			['DEFUN',		3, (s, t, u) => this.#env.defun(s, t, u)],
-			['NDEFUN',		3, (s, t, u) => this.#env.ndefun(s, t, u)],
-			['COND',		undefined, s => this.#evaluateCond(s)],
-		].map(tup => new Primitive(new Atom(tup[0]), tup[1], tup[2]))
+			[Atom.car,			1, s => s.car()],
+			[Atom.cdr,			1, s => s.cdr()],
+			[Atom.quote,		1, s => s],
+			[Atom.atom,			1, s => Engine.#boolToS(s.atom())],
+			[Atom.eval,			1, s => s],
+			[Atom.cons,			2, (s, t) => s.cons(t)],
+			[Atom.eq,			2, (s, t) => Engine.#boolToS(s.eq(t))],
+			[Atom.set,			2, (s, t) => this.#env.set(s, t)],
+			[Atom.lambda,		2, (s, t) => lc.create(Atom.lambda, s, t)],
+			[Atom.nlambda,		2, (s, t) => lc.create(Atom.nlambda, s, t)],
+			[Atom.defun,		3, (s, t, u) => this.#env.defun(s, t, u)],
+			[Atom.ndefun,		3, (s, t, u) => this.#env.ndefun(s, t, u)],
+			[Atom.cond,			undefined, s => this.#evaluateCond(s)],
+		].map(tup => new Primitive(tup[0], tup[1], tup[2]))
 	}
 
 	#initLibraryFunctions() {
@@ -43,13 +42,23 @@ module.exports = class Engine {
 	}
 
 	evaluate(s) {
-		if (s.atom()) {
-			const binded = this.#env.lookup(s)
-			if (binded === undefined) {
-				throw `EVAL: variable ${s} has no value`
-			}
+		this.#env.backup()
 
-			return binded
+		try {
+			return this.#_evaluate(s)	
+		} catch (e) {
+			this.#env.restore()
+			throw e
+		}
+	}
+
+	#_evaluate(s) {
+		if (s.atom()) {
+			return this.#env.lookup(s)
+		}
+
+		if (!s.isList()) {
+			return s.error(Atom.invalid)
 		}
 
 		const primitive = this.#primitives.find(p => p.isWithName(s.car()))
@@ -57,24 +66,19 @@ module.exports = class Engine {
 			return this.#applyPrimitive(primitive, s.cdr())
 		}
 
-		return this.#apply(s.car(), s.cdr())
-	}
+		if (s.car().eq(Atom.error)) {
+			return s.error(this.#evaluateList(s.cdr()))
+		}
 
-	#evaluateError(s) {
-		//TODO: handle error correctly
-		throw `ERROR: ${s}`
+		return this.#apply(this.#_evaluate(s.car()), s.cdr())
 	}
 
 	#evaluateList(list) {
 		if (list.null()) {
 			return Atom.nil
 		}
-// Again, this error should be done differently
-		if (list.atom()) {
-			throw 'evaluateList: argument must be a list'
-		}
 
-		return this.evaluate(list.car()).cons(this.#evaluateList(list.cdr()))
+		return this.#_evaluate(list.car()).cons(this.#evaluateList(list.cdr()))
 	}
 
 	#evaluateCond(testForms) {
@@ -82,64 +86,48 @@ module.exports = class Engine {
 			return Atom.nil
 		}
 
-		if (testForms.atom()) {
-			throw 'COND: test forms must be a list'
-		}
-
 		const currPair = testForms.car()
 			
 		if (currPair.atom()) {
-			throw 'COND: all expressions in test forms must be pairs'
+			return currPair.error(Atom.cond)
 		}
 
-		if (this.#evaluateToBool(currPair.car())) {
-			return this.evaluate(currPair.cdr().car())
+		if (this.#_evaluate(currPair.car()).t()) {
+			return this.#_evaluate(currPair.cdr().car())
 		}
 
 		return this.#evaluateCond(testForms.cdr())
 	}
 
-	#evaluateToBool(s) {
-		return !this.evaluate(s).null()
+	#applyPrimitive(primitive, args) {
+		primitive.checkNumberOfArgs(args)
+		const actuals = primitive.isNormal() ? args : this.#evaluateList(args)	
+		return primitive.run(actuals)
 	}
 
-	#apply(lambdaName, actuals) {
-		const lambda = this.evaluate(lambdaName)
-		if (lambda === undefined || lambda.atom()) {
-			throw `EVAL: undefined function ${lambdaName}`
+	#apply(lambda, args) {
+		if (lambda.getListLength() !== 3) {
+			return this.#throwInvalidLambdaError(lambda, args)
 		}
 
 		const tag = lambda.car()
 		if (!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) {
-			throw `EVAL: lambda-expression tag is expected`
+			return this.#throwInvalidLambdaError(lambda, args)
 		}
 
-		const lambdaExpActuals = lambda.cdr()
-		if (lambdaExpActuals.atom() || lambdaExpActuals.cdr().atom()) {
-			throw `EVAL: incorrect actuals for lambda-expression`	
-		}
+		const actuals = tag.eq(Atom.lambda) ? this.#evaluateList(args) : args
+		const formals = lambda.cdr().car()
 
-		return this.#applyDecomposedLambda(tag, lambdaExpActuals.car(), 
-										   lambdaExpActuals.cdr().car(), actuals)
-	}
-
-	#applyDecomposedLambda(tag, formals, body, actuals) {
-		const lambdaActuals = tag.eq(Atom.lambda) ? this.#evaluateList(actuals) : actuals
-		
-		this.#env.bind(formals, lambdaActuals)
-		const result = this.evaluate(body)
+		this.#env.bind(formals, actuals)
+		const body = lambda.cdr().cdr().car()
+		const result = this.#_evaluate(body)
 		this.#env.unbind(formals.getListLength())
 
 		return result
 	}
 
-	#applyPrimitive(primitive, actuals) {
-		const args = ['COND', 'QUOTE', 'LAMBDA', 'NLAMBDA', 'DEFUN', 'NDEFUN']
-			.some(name => primitive.isWithName(new Atom(name)))
-			? actuals 
-			: this.#evaluateList(actuals)
-		
-		return primitive.run(args)
+	#throwInvalidLambdaError(lambda, args) {
+		return lambda.cons(args).error(Atom.invalid)
 	}
 
 	static #boolToS(bool) {

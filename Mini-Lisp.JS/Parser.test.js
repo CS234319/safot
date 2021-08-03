@@ -17,7 +17,7 @@ test ('parse reject', () => {
 	const stringsArray = Array.from("()[].'")
 		.concat(['', '(()'])
 	
-	for (s of stringsArray) {
+	for (const s of stringsArray) {
 		expect(() => p.parse(s)).toThrow(p.SyntaxError)
 	}
 })
