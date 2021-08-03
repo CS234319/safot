@@ -1,31 +1,23 @@
-#!/bin/bash
-###########################################
-# Script to run all the python unit-tests
-# of the Mini-Lisp shell.
-
-# Usage:
-#   Run all unit-tests:
-#       > run_all_tests.sh unit
+#!/bin/bash -f
 #
-#   Run all flow-tests:
-#       > run_all_tests.sh flow
+# Run all the python unit-tests of the Mini-Lisp shell.
 #
-#   Run all both:
-#       > run_all_tests.sh all
-#
-###########################################
+# Synopsis:
+#       % run_all_tests.sh unit # Run unit tests:
+#       % run_all_tests.sh flow # Run flow tests:
+#       % run_all_tests.sh all  # Run both unit and flow tests 
 
 function check_configurations() {
   # Check if python exists:
   if [ -z `which python` ]; then
-      echo "ERROR: Can't find python interpreter"
+      echo "ERROR: Cannot find the Python interpreter"
       exit
   fi
 
   # Check python version > 3:
   which python3 &> /dev/null
   if [ "$?" == "1" ]; then
-    echo "ERROR: require python version > 3"
+    echo "ERROR: require Python version > 3"
     exit
   fi
 
