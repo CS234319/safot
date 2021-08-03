@@ -51,10 +51,10 @@ test('checkNumberOfArgs', () => {
 
 test('run', () => {
 	s = p.parse('(a a a)')
-	expect(threeOfTheSame.run(s)).toStrictEqual(t)
+	utils.expectEquals(threeOfTheSame.run(s), t)
 
 	s = p.parse('(a b a)')
-	expect(threeOfTheSame.run(s)).toStrictEqual(nil)
+	utils.expectEquals(threeOfTheSame.run(s), nil)
 	
 	s = p.parse('(threeOfTheSame a a)')
 	utils.expectException(() => threeOfTheSame.run(s.cdr()), s, Atom.bug)
@@ -63,16 +63,16 @@ test('run', () => {
 	utils.expectException(() => threeOfTheSame.run(s.cdr()), s, Atom.bug)
 
 	s = p.parse("()")
-	expect(allOfTheSame.run(s)).toStrictEqual(t)
+	utils.expectEquals(allOfTheSame.run(s), t)
 
 	s = p.parse("()")
-	expect(allOfTheSame.run(s)).toStrictEqual(t)
+	utils.expectEquals(allOfTheSame.run(s), t)
 
 	s = p.parse("(a a a a a)")
-	expect(allOfTheSame.run(s)).toStrictEqual(t)
+	utils.expectEquals(allOfTheSame.run(s), t)
 
 	s = p.parse("(a a b a)")
-	expect(allOfTheSame.run(s)).toStrictEqual(nil)
+	utils.expectEquals(allOfTheSame.run(s), nil)
 })
 
 test('isWithName', () => {

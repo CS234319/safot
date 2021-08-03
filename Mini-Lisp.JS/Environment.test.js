@@ -15,39 +15,37 @@ const qa = p.parse("'a")
 
 test('set', () => {	
 	env = new Environment()
-	expect(env.set(a, p.parse('(b . a)'))).toStrictEqual(p.parse('(b . a)'))
+	utils.expectEquals(env.set(a, p.parse('(b . a)')), p.parse('(b . a)'))
 	expectedList = p.parse('((a . (b . a)))')
-	expect(env.getAList()).toStrictEqual(expectedList)
+	utils.expectEquals(env.getAList(), expectedList)
 
-	expect(env.set(a, p.parse('(b a x y z)'))).toStrictEqual(p.parse('(b a x y z)'))
+	utils.expectEquals(env.set(a, p.parse('(b a x y z)')), p.parse('(b a x y z)'))
 	expectedList = p.parse('((a . (b a x y z)) (a . (b . a)))')
-	expect(env.getAList()).toStrictEqual(expectedList)
+	utils.expectEquals(env.getAList(), expectedList)
 })
 
 test('defun', () => {
 	env = new Environment()
-	expect(env.defun(p.parse('foo'), nil, qa)).toStrictEqual(p.parse("(lambda () 'a)"))
+	utils.expectEquals(env.defun(p.parse('foo'), nil, qa), p.parse("(lambda () 'a)"))
 	expectedList = p.parse("((foo lambda () 'a))")
 
 	body = p.parse('(cons (x (cdr xs)))')
-	expect(env.defun(p.parse('bar'), p.parse('(x xs)'), body))
-		.toStrictEqual(p.parse("(lambda (x xs) (cons (x (cdr xs))))"))
+	utils.expectEquals(env.defun(p.parse('bar'), p.parse('(x xs)'), body), p.parse("(lambda (x xs) (cons (x (cdr xs))))"))
 	expectedList = p.parse("((bar lambda (x xs) (cons (x (cdr xs)))) " +
 							"(foo lambda () 'a))")
 })
 
 test('ndefun', () => {
 	env = new Environment()
-	expect(env.ndefun(p.parse('foo'), nil, qa)).toStrictEqual(p.parse("(nlambda () 'a)"))
+	utils.expectEquals(env.ndefun(p.parse('foo'), nil, qa), p.parse("(nlambda () 'a)"))
 	expectedList = p.parse("((foo nlambda () 'a))")
-	expect(env.getAList()).toStrictEqual(expectedList)
+	utils.expectEquals(env.getAList(), expectedList)
 
 	body = p.parse('(cons (x (cdr xs)))')
-	expect(env.ndefun(p.parse('bar'), p.parse('(x xs)'), body))
-		.toStrictEqual(p.parse("(nlambda (x xs) (cons (x (cdr xs))))"))
+	utils.expectEquals(env.ndefun(p.parse('bar'), p.parse('(x xs)'), body), p.parse("(nlambda (x xs) (cons (x (cdr xs))))"))
 	expectedList = p.parse("((bar nlambda (x xs) (cons (x (cdr xs)))) " +
 							"(foo nlambda () 'a))")
-	expect(env.getAList()).toStrictEqual(expectedList)
+	utils.expectEquals(env.getAList(), expectedList)
 })
 
 test('lookup', () => {	
@@ -57,10 +55,10 @@ test('lookup', () => {
 	utils.expectException(() => env.lookup(a), a, Atom.undefined)
 	
 	env.set(a, p.parse('(b . a)'))
-	expect(env.lookup(a)).toStrictEqual(p.parse('(b . a)'))
+	utils.expectEquals(env.lookup(a), p.parse('(b . a)'))
 	
 	env.set(a, p.parse('(b a x y z)'))
-	expect(env.lookup(a)).toStrictEqual(p.parse('(b a x y z)'))
+	utils.expectEquals(env.lookup(a), p.parse('(b a x y z)'))
 	utils.expectException(() => env.lookup(b), b, Atom.undefined)
 	
 	env = new Environment()
@@ -74,7 +72,7 @@ test('bind', () => {
 	env = new Environment()
 	env.bind(formals, actuals)
 	expectedList = p.parse('((c . (b a x y z)) (b . (a . b)) (a . c))')
-	expect(env.getAList()).toStrictEqual(expectedList)
+	utils.expectEquals(env.getAList(), expectedList)
 
 	utils.expectException(() => env.bind(a, nil), a, Atom.invalid)
 	utils.expectException(() => env.bind(a, p.parse('(a)')), a, Atom.invalid)
@@ -97,15 +95,9 @@ test('unbind', () => {
 	
 	env.bind(formals, actuals)
 	env.unbind(3)
-	expect(env.getAList()).toStrictEqual(nil)
+	utils.expectEquals(env.getAList(), nil)
 	
 	env.bind(formals, actuals)
 	env.unbind(2)
-	expect(p.parse('((a . c))')).toStrictEqual(p.parse('((c . (b a x y z)))'))
-	
-	// utils.expectException(() => env.unbind(2), p.parse('(c . (b a x y z))'), Atom.invalid)
-})
-
-test('backup', () => {
-		
+	utils.expectException(() => env.unbind(2), p.parse('((a . c))'), Atom.invalid)
 })

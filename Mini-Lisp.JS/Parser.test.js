@@ -2,6 +2,9 @@ const p = require('./Parser')
 const ListCreator = require('./ListCreator')
 const Atom = require('./Atom')
 const Pair = require('./Pair')
+const TestUtils = require('./TestUtils')
+
+const utils = new TestUtils()
 
 const lc = new ListCreator()
 const a = new Atom('A')
@@ -23,43 +26,40 @@ test ('parse reject', () => {
 })
 
 test('parse atoms', () => {
-	expect(p.parse('z')).toStrictEqual(new Atom('Z'))
-	expect(p.parse('a')).toStrictEqual(a)
-	expect(p.parse('nil')).toStrictEqual(nil)
-	expect(p.parse('t')).toStrictEqual(t)
+	utils.expectEquals(p.parse('z'), new Atom('Z'))
+	utils.expectEquals(p.parse('a'), a)
+	utils.expectEquals(p.parse('nil'), nil)
+	utils.expectEquals(p.parse('t'), t)
 })
 
 test('parse lists', () => {
-	expect(p.parse('()')).toStrictEqual(nil)
-	expect(p.parse('(a)')).toStrictEqual(lc.create(a))
-	expect(p.parse('(a b)')).toStrictEqual(lc.create(a, b))
-	expect(p.parse('(a b c)')).toStrictEqual(lc.create(a, b ,c))
-	expect(p.parse('(a b c d)')).toStrictEqual(lc.create(a, b ,c, d))
+	utils.expectEquals(p.parse('()'), nil)
+	utils.expectEquals(p.parse('(a)'), lc.create(a))
+	utils.expectEquals(p.parse('(a b)'), lc.create(a, b))
+	utils.expectEquals(p.parse('(a b c)'), lc.create(a, b ,c))
+	utils.expectEquals(p.parse('(a b c d)'), lc.create(a, b ,c, d))
 	
 })
 
 test('parse nested list', () => {
 	const expected = lc.create(lc.create(a, b), lc.create(c, lc.create(d, e)))
-	expect(p.parse('((a b) (c (d e)))')).toStrictEqual(expected)
+	utils.expectEquals(p.parse('((a b) (c (d e)))'), expected)
 })
 
 test('parse pair', () => {
-	expect(p.parse('(a . b)')).toStrictEqual(new Pair(a, b))
-	expect(p.parse('(a .b)')).toStrictEqual(new Pair(a, b))
-	expect(p.parse('(a. b)')).toStrictEqual(new Pair(a, b))
-	expect(p.parse('(a.b)')).toStrictEqual(new Pair(a, b))
-	expect(p.parse('(a\t.\nb)')).toStrictEqual(new Pair(a, b))
+	utils.expectEquals(p.parse('(a . b)'), new Pair(a, b))
+	utils.expectEquals(p.parse('(a .b)'), new Pair(a, b))
+	utils.expectEquals(p.parse('(a. b)'), new Pair(a, b))
+	utils.expectEquals(p.parse('(a.b)'), new Pair(a, b))
+	utils.expectEquals(p.parse('(a\t.\nb)'), new Pair(a, b))
 })
 
 test('parse quote', () => {
-	expect(p.parse("'a")).toStrictEqual(lc.create(q, a))
-	expect(p.parse("'()")).toStrictEqual(lc.create(q, nil))
-	expect(p.parse("'(a)")).toStrictEqual(lc.create(q, lc.create(a)))
-	expect(p.parse("'(a 'b)"))
-		.toStrictEqual(lc.create(q, lc.create(a, lc.create(q, b))))
-	expect(p.parse("(a 'b c)"))
-		.toStrictEqual(lc.create(a, lc.create(q, b), c))
-	expect(p.parse("'(a 'b c 'd)"))
-		.toStrictEqual(lc.create(q, lc.create(a, lc.create(q, b), c, lc.create(q, d))))
+	utils.expectEquals(p.parse("'a"), lc.create(q, a))
+	utils.expectEquals(p.parse("'()"), lc.create(q, nil))
+	utils.expectEquals(p.parse("'(a)"), lc.create(q, lc.create(a)))
+	utils.expectEquals(p.parse("'(a 'b)"), lc.create(q, lc.create(a, lc.create(q, b))))
+	utils.expectEquals(p.parse("(a 'b c)"), lc.create(a, lc.create(q, b), c))
+	utils.expectEquals(p.parse("'(a 'b c 'd)"), lc.create(q, lc.create(a, lc.create(q, b), c, lc.create(q, d))))
 		
 })
