@@ -8,12 +8,6 @@
 #       % run_all_tests.sh all  # Run both unit and flow tests 
 
 function check_configurations() {
-  # Check if python exists:
-  if [ -z `which python` ]; then
-      echo "ERROR: Cannot find the Python interpreter"
-      exit
-  fi
-
   # Check python version > 3:
   which python3 &> /dev/null
   if [ "$?" == "1" ]; then
@@ -38,7 +32,7 @@ function run_unit_tests() {
     cd ${UNIT_TESTS_DIR}
 
     # Run all tests:
-    pytest -rA
+    python3 -m pytest -rA
 
     # Restore pwd:
     cd - &> /dev/null
@@ -53,7 +47,7 @@ function run_flow_tests() {
     cd ${FLOW_TESTS_DIR}
 
     # Run all tests:
-    pytest -rA
+    python3 -m pytest -rA
 
     # Restore pwd:
     cd - &> /dev/null
