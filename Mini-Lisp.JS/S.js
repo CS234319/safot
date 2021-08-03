@@ -20,6 +20,10 @@ module.exports = class S {
 		return this.#errorNotImplemented()
 	}
 
+	equals(s) {
+		return this.#errorNotImplemented()
+	}
+
 	null() {
 		const Atom = require('./Atom')
 		return this.eq(Atom.nil)
