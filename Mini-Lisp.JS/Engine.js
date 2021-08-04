@@ -42,13 +42,15 @@ module.exports = class Engine {
 	}
 
 	evaluate(s) {
-		this.#env.backup()
+		this.#env.push()
 
 		try {
 			return this.#_evaluate(s)	
 		} catch (e) {
-			this.#env.restore()
+			this.#env.pop()
 			throw e
+		} finally {
+			this.#env.clearStack()
 		}
 	}
 
@@ -117,13 +119,16 @@ module.exports = class Engine {
 
 		const actuals = tag.eq(Atom.lambda) ? this.#evaluateList(args) : args
 		const formals = lambda.cdr().car()
-
-		this.#env.bind(formals, actuals)
 		const body = lambda.cdr().cdr().car()
-		const result = this.#_evaluate(body)
-		this.#env.unbind(formals.getListLength())
+		
+		this.#env.push()
+		this.#env.bind(formals, actuals)
 
-		return result
+		try {
+			return this.#_evaluate(body)
+		} finally {
+			this.#env.pop()	
+		}
 	}
 
 	#throwInvalidLambdaError(lambda, args) {
