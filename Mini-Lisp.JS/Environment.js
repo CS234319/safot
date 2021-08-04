@@ -4,11 +4,11 @@ const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
 	#alist
-	#alistBackup
+	#alistStack
 
 	constructor() {
 		this.#alist = Atom.nil
-		this.#alistBackup = Atom.nil
+		this.#alistStack = Atom.nil
 	}
 
 	getAList() {
@@ -50,10 +50,22 @@ module.exports = class Environment {
 	}
 
 	bind(keys, values) {
-		for (const s of [keys, values]) {
-			if (!s.isList()) {
-				return s.error(Atom.invalid)
-			}
+		const keysLength = keys.getListLength()
+		if (keysLength === undefined) {
+			return keys.error(Atom.invalid)
+		}
+		
+		const valuesLength = values.getListLength()
+		if (valuesLength === undefined) {
+			return values.error(Atom.invalid)
+		}
+
+		if (keysLength < valuesLength) {
+			return values.error(Atom.redundant)
+		}
+
+		if (keysLength > valuesLength) {
+			return values.error(Atom.missing)
 		}
 
 		this.#_bind(keys, values)
@@ -64,38 +76,20 @@ module.exports = class Environment {
 			return
 		}
 
-		if (keys.t() && values.null()) {
-			return keys.error(Atom.missing)
-		}
-
-		if (keys.null() && values.t()) {
-			return values.error(Atom.redundant)
-		}
-
 		this.set(keys.car(), values.car())
-		this.bind(keys.cdr(), values.cdr())
+		this.#_bind(keys.cdr(), values.cdr())
 	}
 
-	unbind(numPairs) {
-		if (this.#alist.getListLength() < numPairs) {
-			return this.#alist.error(Atom.invalid)
-		}
-
-		this.#_unbind(numPairs)
+	push() {
+		this.#alistStack = this.#alist.cons(this.#alistStack)
 	}
 
-	#_unbind(numPairs) {
-		for (let i = 0; i < numPairs; i++) {
-			this.#alist = this.#alist.cdr()	
-		}
+	pop() {
+		this.#alist = this.#alistStack.car()
+		this.#alistStack = this.#alistStack.cdr()
 	}
 
-	backup() {
-		this.#alistBackup = this.#alist
-	}
-
-	restore() {
-		this.#alist = this.#alistBackup
-		this.#alistBackup = Atom.nil
+	clearStack() {
+		this.#alistStack = Atom.nil
 	}
 }
