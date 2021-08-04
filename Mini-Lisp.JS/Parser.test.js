@@ -45,16 +45,16 @@ test('parse lists', () => {
 })
 
 test('parse nested list', () => {
-	const expected = list(list(a, b), list(c, list(d, e)))
-	parseEquals('((a b) (c (d e)))', expected)
+	parseEquals('((a b) (c (d e)))', list(list(a, b), list(c, list(d, e))))
 })
 
 test('parse pair', () => {
-	parseEquals('(a . b)', new Pair(a, b))
-	parseEquals('(a .b)', new Pair(a, b))
-	parseEquals('(a. b)', new Pair(a, b))
-	parseEquals('(a.b)', new Pair(a, b))
-	parseEquals('(a\t.\nb)', new Pair(a, b))
+	const pair = new Pair(a, b)
+	parseEquals('(a . b)', 		pair)
+	parseEquals('(a .b)', 		pair)
+	parseEquals('(a. b)', 		pair)
+	parseEquals('(a.b)', 		pair)
+	parseEquals('(a\t.\nb)', 	pair)
 })
 
 test('parse quote', () => {
