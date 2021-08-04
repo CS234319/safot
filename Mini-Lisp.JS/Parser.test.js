@@ -17,6 +17,7 @@ const q = Atom.quote
 
 const lc = new ListCreator()
 const list = function() { return lc.create(...arguments) }
+const parseEquals = (str, s) => utils.expectEquals(p.parse(str), s)
 
 test ('parse reject', () => {
 	const stringsArray = Array.from("()[].'")
@@ -28,39 +29,39 @@ test ('parse reject', () => {
 })
 
 test('parse atoms', () => {
-	utils.expectEquals(p.parse('z'), new Atom('Z'))
-	utils.expectEquals(p.parse('a'), a)
-	utils.expectEquals(p.parse('nil'), nil)
-	utils.expectEquals(p.parse('t'), t)
+	parseEquals('z', new Atom('Z'))
+	parseEquals('a', a)
+	parseEquals('nil', nil)
+	parseEquals('t', t)
 })
 
 test('parse lists', () => {
-	utils.expectEquals(p.parse('()'), nil)
-	utils.expectEquals(p.parse('(a)'), list(a))
-	utils.expectEquals(p.parse('(a b)'), list(a, b))
-	utils.expectEquals(p.parse('(a b c)'), list(a, b ,c))
-	utils.expectEquals(p.parse('(a b c d)'), list(a, b ,c, d))
+	parseEquals('()', nil)
+	parseEquals('(a)', list(a))
+	parseEquals('(a b)', list(a, b))
+	parseEquals('(a b c)', list(a, b ,c))
+	parseEquals('(a b c d)', list(a, b ,c, d))
 	
 })
 
 test('parse nested list', () => {
 	const expected = list(list(a, b), list(c, list(d, e)))
-	utils.expectEquals(p.parse('((a b) (c (d e)))'), expected)
+	parseEquals('((a b) (c (d e)))', expected)
 })
 
 test('parse pair', () => {
-	utils.expectEquals(p.parse('(a . b)'), new Pair(a, b))
-	utils.expectEquals(p.parse('(a .b)'), new Pair(a, b))
-	utils.expectEquals(p.parse('(a. b)'), new Pair(a, b))
-	utils.expectEquals(p.parse('(a.b)'), new Pair(a, b))
-	utils.expectEquals(p.parse('(a\t.\nb)'), new Pair(a, b))
+	parseEquals('(a . b)', new Pair(a, b))
+	parseEquals('(a .b)', new Pair(a, b))
+	parseEquals('(a. b)', new Pair(a, b))
+	parseEquals('(a.b)', new Pair(a, b))
+	parseEquals('(a\t.\nb)', new Pair(a, b))
 })
 
 test('parse quote', () => {
-	utils.expectEquals(p.parse("'a"), list(q, a))
-	utils.expectEquals(p.parse("'()"), list(q, nil))
-	utils.expectEquals(p.parse("'(a)"), list(q, list(a)))
-	utils.expectEquals(p.parse("'(a 'b)"), list(q, list(a, list(q, b))))
-	utils.expectEquals(p.parse("(a 'b c)"), list(a, list(q, b), c))
-	utils.expectEquals(p.parse("'(a 'b c 'd)"), list(q, list(a, list(q, b), c, list(q, d))))
+	parseEquals("'a", list(q, a))
+	parseEquals("'()", list(q, nil))
+	parseEquals("'(a)", list(q, list(a)))
+	parseEquals("'(a 'b)", list(q, list(a, list(q, b))))
+	parseEquals("(a 'b c)", list(a, list(q, b), c))
+	parseEquals("'(a 'b c 'd)", list(q, list(a, list(q, b), c, list(q, d))))
 })
