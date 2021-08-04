@@ -6,98 +6,109 @@ const p = require('./Parser')
 
 const utils = new TestUtils()
 
-const t = p.parse('t')
-const nil = p.parse('nil')
-const a = p.parse('a')
-const b = p.parse('b')
-const qa = p.parse("'a")
-
+const expectAList = (alistStr) => {
+	utils.expectEquals(env.getAList(), p.parse(alistStr))
+}
+const testSet = (keyStr, valStr) => {
+	const val = p.parse(valStr)
+	utils.expectEquals(env.set(p.parse(keyStr), val), val)
+}
 
 test('set', () => {	
 	env = new Environment()
-	utils.expectEquals(env.set(a, p.parse('(b . a)')), p.parse('(b . a)'))
-	expectedList = p.parse('((a . (b . a)))')
-	utils.expectEquals(env.getAList(), expectedList)
 
-	utils.expectEquals(env.set(a, p.parse('(b a x y z)')), p.parse('(b a x y z)'))
-	expectedList = p.parse('((a . (b a x y z)) (a . (b . a)))')
-	utils.expectEquals(env.getAList(), expectedList)
+	testSet('a', '(b . a)')
+	expectAList('((a . (b . a)))')
+
+	testSet('a', '(b a x y z)')
+	expectAList('((a . (b a x y z)) (a . (b . a)))')
 })
 
 test('defun', () => {
-	env = new Environment()
-	utils.expectEquals(env.defun(p.parse('foo'), nil, qa), p.parse("(lambda () 'a)"))
-	expectedList = p.parse("((foo lambda () 'a))")
+	const testDefun = (nameStr, formalsStr, bodyStr) => {
+		const name = p.parse(nameStr)
+		const formals = p.parse(formalsStr)
+		const body = p.parse(bodyStr)
+		const lambda = p.parse(`(lambda ${formalsStr} ${bodyStr})`)
+		utils.expectEquals(env.defun(name, formals, body), lambda)
+	}
 
-	body = p.parse('(cons (x (cdr xs)))')
-	utils.expectEquals(env.defun(p.parse('bar'), p.parse('(x xs)'), body), p.parse("(lambda (x xs) (cons (x (cdr xs))))"))
-	expectedList = p.parse("((bar lambda (x xs) (cons (x (cdr xs)))) " +
-							"(foo lambda () 'a))")
+	env = new Environment()
+
+	testDefun('foo', 'nil', "'a")
+	expectAList("((foo lambda () 'a))")
+
+	testDefun('bar', '(x xs)', '(cons (x (cdr xs)))')
+	expectAList("((bar lambda (x xs) (cons (x (cdr xs)))) (foo lambda () 'a))")	
 })
 
 test('ndefun', () => {
-	env = new Environment()
-	utils.expectEquals(env.ndefun(p.parse('foo'), nil, qa), p.parse("(nlambda () 'a)"))
-	expectedList = p.parse("((foo nlambda () 'a))")
-	utils.expectEquals(env.getAList(), expectedList)
+	const testNdefun = (nameStr, formalsStr, bodyStr) => {
+		const name = p.parse(nameStr)
+		const formals = p.parse(formalsStr)
+		const body = p.parse(bodyStr)
+		const lambda = p.parse(`(nlambda ${formalsStr} ${bodyStr})`)
+		utils.expectEquals(env.ndefun(name, formals, body), lambda)
+	}
 
-	body = p.parse('(cons (x (cdr xs)))')
-	utils.expectEquals(env.ndefun(p.parse('bar'), p.parse('(x xs)'), body), p.parse("(nlambda (x xs) (cons (x (cdr xs))))"))
-	expectedList = p.parse("((bar nlambda (x xs) (cons (x (cdr xs)))) " +
-							"(foo nlambda () 'a))")
-	utils.expectEquals(env.getAList(), expectedList)
+	env = new Environment()
+
+	testNdefun('foo', 'nil', "'a")
+	expectAList("((foo nlambda () 'a))")
+
+	testNdefun('bar', '(x xs)', '(cons (x (cdr xs)))')
+	expectAList("((bar nlambda (x xs) (cons (x (cdr xs)))) (foo nlambda () 'a))")	
 })
 
 test('lookup', () => {	
+	const testSetLookup = (keyStr, valueStr) => {
+		testSet(keyStr, valueStr)
+		utils.expectEquals(env.lookup(p.parse(keyStr)), p.parse(valueStr))
+	}
+	const testLookupException = (keyStr) => {
+		const key = p.parse(keyStr)
+		utils.expectException(() => env.lookup(key), key, Atom.undefined)
+	}
+
 	env = new Environment()
-	utils.expectException(() => env.lookup(t), t, Atom.undefined)
-	utils.expectException(() => env.lookup(nil), nil, Atom.undefined)
-	utils.expectException(() => env.lookup(a), a, Atom.undefined)
+	testLookupException('t')
+	testLookupException('nil')
+	testLookupException('a')
 	
-	env.set(a, p.parse('(b . a)'))
-	utils.expectEquals(env.lookup(a), p.parse('(b . a)'))
+	testSetLookup('a', '(b . a)')
+	testSetLookup('a', '(b a x y z)')
 	
-	env.set(a, p.parse('(b a x y z)'))
-	utils.expectEquals(env.lookup(a), p.parse('(b a x y z)'))
-	utils.expectException(() => env.lookup(b), b, Atom.undefined)
+	testLookupException('b')
 	
 	env = new Environment()
-	utils.expectException(() => env.lookup(a), a, Atom.undefined)
+	testLookupException('a')
 })
 
 test('bind', () => {
-	formals = p.parse('(a b c)')
-	actuals =  p.parse('(c (a . b) (b a x y z))')	
+	const bind = (formalsStr, actualsStr) => {
+		env.bind(p.parse(formalsStr), p.parse(actualsStr))
+	}
+	const testBindException = (formalsStr, actualsStr, culpritStr, kindStr) => {
+		const formals = p.parse(formalsStr)
+		const actuals = p.parse(actualsStr)
+		const culprit = p.parse(culpritStr)
+		const kind = p.parse(kindStr)
+		utils.expectException(() => env.bind(formals, actuals), culprit, kind)
+	}
 
 	env = new Environment()
-	env.bind(formals, actuals)
-	expectedList = p.parse('((c . (b a x y z)) (b . (a . b)) (a . c))')
-	utils.expectEquals(env.getAList(), expectedList)
+	bind('(a b c)', '(c (a . b) (b a x y z))')
+	expectAList('((c . (b a x y z)) (b . (a . b)) (a . c))')
 
-	utils.expectException(() => env.bind(a, nil), a, Atom.invalid)
-	utils.expectException(() => env.bind(a, p.parse('(a)')), a, Atom.invalid)
-	utils.expectException(() => env.bind(nil, a), a, Atom.invalid)
-	utils.expectException(() => env.bind(p.parse('(a)'), a), a, Atom.invalid)
-	utils.expectException(() => env.bind(p.parse('(a . b)'), p.parse('(a)')), 
-		p.parse('(a . b)'), Atom.invalid)
-	utils.expectException(() => env.bind(p.parse('(a a a)'), 
-		p.parse('(a a t nil)')), p.parse('(nil)'), Atom.redundant)
-	utils.expectException(() => env.bind(p.parse('(a a a)'), 
-		p.parse('(a b)')), p.parse('(a)'), Atom.missing)
-})
+	bind('(a)', '((t t))')
+	expectAList('((a . (t t)) (c . (b a x y z)) (b . (a . b)) (a . c))')
 
-test('unbind', () => {
-	env = new Environment()
-	utils.expectException(() => env.unbind(1), nil, Atom.invalid)
-
-	formals = p.parse('(a b c)')
-	actuals =  p.parse('(c (a . b) (b a x y z))')
-	
-	env.bind(formals, actuals)
-	env.unbind(3)
-	utils.expectEquals(env.getAList(), nil)
-	
-	env.bind(formals, actuals)
-	env.unbind(2)
-	utils.expectException(() => env.unbind(2), p.parse('((a . c))'), Atom.invalid)
+	testBindException('a', 'b', 'a', 'invalid')
+	testBindException('a', '()', 'a', 'invalid')
+	testBindException('a', '(a)', 'a', 'invalid')
+	testBindException('()', 'a', 'a', 'invalid')
+	testBindException('(a)', 'a', 'a', 'invalid')
+	testBindException('(a . b)', '(a)', '(a . b)', 'invalid')
+	testBindException('(a a a)', '(a a t nil)', '(a a t nil)', 'redundant')
+	testBindException('(a a a)', '(a b)', '(a b)', 'missing')
 })

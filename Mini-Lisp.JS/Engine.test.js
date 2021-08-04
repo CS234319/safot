@@ -17,7 +17,6 @@ const parseEvaluateEquals = (str1, str2) => {
 const parseEvaluateException = (str1, str2, kindStr) => {
 	utils.expectException(() => parseEvaluate(str1), p.parse(str2), p.parse(kindStr))
 }
-
 const parseEvaluateError = (errorStr, kindStr) => {
 	parseEvaluateException(errorStr, errorStr, kindStr)
 }

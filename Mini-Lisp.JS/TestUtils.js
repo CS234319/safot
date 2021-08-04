@@ -1,5 +1,6 @@
 const EvaluationError = require('./EvaluationError')
 const S = require('./S')
+const p = require('./Parser')
 
 module.exports = class TestUtils {
 	expectException(f, s, kind) {
@@ -12,6 +13,10 @@ module.exports = class TestUtils {
 		} else {
 			expect(s).toStrictEqual(t)
 		}
+	}
+
+	parseExpectEquals(str, s) {
+		this.expectEquals(p.parse(str), s)
 	}
 }
 

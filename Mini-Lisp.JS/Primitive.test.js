@@ -5,12 +5,8 @@ const p = require('./Parser')
 
 const utils = new TestUtils()
 
-const b = p.parse('b')
-const t = p.parse('t')
-const nil = p.parse('nil')
-
 const threeOfTheSame = new Primitive(p.parse('threeOfTheSame'), 3, (a, b ,c) => {	
-	return a.eq(b) && a.eq(c) ? t : nil
+	return a.eq(b) && a.eq(c) ? Atom.t : Atom.nil
 })
 
 const allOfTheSame = new Primitive(p.parse('allOfTheSame'), undefined, s => {
@@ -20,59 +16,54 @@ const allOfTheSame = new Primitive(p.parse('allOfTheSame'), undefined, s => {
 
 	}
 
-	return (s.null() || recurse(s.cdr(), s.car())) ? t : nil
+	return (s.null() || recurse(s.cdr(), s.car())) ? Atom.t : Atom.nil
 })
 
+const expectCallEquals = (primitive, methodStr, argsStr, resStr) => {
+	utils.expectEquals(
+		Reflect.get(primitive, methodStr).call(primitive, p.parse(argsStr)),
+		p.parse(resStr)
+	)
+}
+const expectException = (primitive, methodStr, callExpStr, kindStr) => {
+	const callExp = p.parse(callExpStr)
+
+	utils.expectException(
+		() => Reflect.get(primitive, methodStr).call(primitive, callExp.cdr()),
+		callExp,
+		p.parse(kindStr)
+	)
+}
+const expectNotThrow = (primitive, methodStr, argsStr) => {
+	expect(
+		() => Reflect.get(primitive, methodStr).call(primitive, p.parse(argsStr))
+	).not.toThrow()
+}
+
 test('checkNumberOfArgs', () => {
-	s = p.parse('(a a a)')
-	expect(() => threeOfTheSame.checkNumberOfArgs(s)).not.toThrow(s)
+	expectNotThrow(threeOfTheSame, 'checkNumberOfArgs', '(a a a)')
+	expectNotThrow(threeOfTheSame, 'checkNumberOfArgs', '(a b a)')
+	
+	expectException(threeOfTheSame, 'checkNumberOfArgs', 
+		'(threeOfTheSame a a)', 'missing')
+	expectException(threeOfTheSame, 'checkNumberOfArgs', 
+		'(threeOfTheSame a a a a)', 'redundant')
 
-	s = p.parse('(a b a)')
-	expect(() => threeOfTheSame.checkNumberOfArgs(s)).not.toThrow()
-
-	s = p.parse('(threeOfTheSame a a)')
-	utils.expectException(() => threeOfTheSame.checkNumberOfArgs(s.cdr()), s, Atom.missing)
-
-	s = p.parse('(threeOfTheSame a a a a)')
-	utils.expectException(() => threeOfTheSame.checkNumberOfArgs(s.cdr()), s, Atom.redundant)
-
-	s = p.parse("(a a a a a)")
-	expect(() => allOfTheSame.checkNumberOfArgs(s)).not.toThrow()
-
-	s = p.parse("(a a b a)")
-	expect(() => allOfTheSame.checkNumberOfArgs(s)).not.toThrow()
-
-	s = p.parse("()")
-	expect(() => allOfTheSame.checkNumberOfArgs(s)).not.toThrow()
-
-	s = p.parse("(allOfTheSame . a)")
-	utils.expectException(() => allOfTheSame.checkNumberOfArgs(s.cdr()), s, Atom.invalid)
+	expectNotThrow(allOfTheSame, 'checkNumberOfArgs', '(a a a a a)')
+	expectNotThrow(allOfTheSame, 'checkNumberOfArgs', '(a a b a)')
+	expectNotThrow(allOfTheSame, 'checkNumberOfArgs', '()')
 })
 
 test('run', () => {
-	s = p.parse('(a a a)')
-	utils.expectEquals(threeOfTheSame.run(s), t)
-
-	s = p.parse('(a b a)')
-	utils.expectEquals(threeOfTheSame.run(s), nil)
+	expectCallEquals(threeOfTheSame, 'run', '(a a a)', 't')
+	expectCallEquals(threeOfTheSame, 'run', '(a b a)', 'nil')
 	
-	s = p.parse('(threeOfTheSame a a)')
-	utils.expectException(() => threeOfTheSame.run(s.cdr()), s, Atom.bug)
+	expectException(threeOfTheSame, 'run', '(threeOfTheSame a a)', 'bug')
+	expectException(threeOfTheSame, 'run', '(threeOfTheSame a a a a)', 'bug')
 
-	s = p.parse('(threeOfTheSame a a a a)')
-	utils.expectException(() => threeOfTheSame.run(s.cdr()), s, Atom.bug)
-
-	s = p.parse("()")
-	utils.expectEquals(allOfTheSame.run(s), t)
-
-	s = p.parse("()")
-	utils.expectEquals(allOfTheSame.run(s), t)
-
-	s = p.parse("(a a a a a)")
-	utils.expectEquals(allOfTheSame.run(s), t)
-
-	s = p.parse("(a a b a)")
-	utils.expectEquals(allOfTheSame.run(s), nil)
+	expectCallEquals(allOfTheSame, 'run', '()', 't')
+	expectCallEquals(allOfTheSame, 'run', '(a a a a a)', 't')
+	expectCallEquals(allOfTheSame, 'run', '(a a b a)', 'nil')
 })
 
 test('isWithName', () => {
