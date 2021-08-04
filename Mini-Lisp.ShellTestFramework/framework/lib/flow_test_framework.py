@@ -48,6 +48,22 @@ class FlowTestFramework:
                 stream.write('\n')
         return out_file
 
+    def interactive(self):
+        """
+        Interactive shell mode:
+        communicate with the mini-lisp interpreter in real-time
+        """
+        logging.info("Interactive shell mode running ...")
+        while True:
+            try:
+                line = input("> ")
+                print(self.shell.feed(line))
+            except EOFError:
+                break
+            except KeyboardInterrupt:
+                break
+        logging.info("Interactive shell mode finished ...")
+
     @staticmethod
     def split_file(file: str) -> List[str]:
         return list(filter(None, Path(file).read_text().splitlines()))
