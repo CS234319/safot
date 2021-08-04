@@ -6,7 +6,6 @@ const TestUtils = require('./TestUtils')
 
 const utils = new TestUtils()
 
-const lc = new ListCreator()
 const a = new Atom('A')
 const b = new Atom('B')
 const c = new Atom('C')
@@ -15,6 +14,9 @@ const e = new Atom('E')
 const t = Atom.t
 const nil = Atom.nil
 const q = Atom.quote
+
+const lc = new ListCreator()
+const list = function() { return lc.create(...arguments) }
 
 test ('parse reject', () => {
 	const stringsArray = Array.from("()[].'")
@@ -34,15 +36,15 @@ test('parse atoms', () => {
 
 test('parse lists', () => {
 	utils.expectEquals(p.parse('()'), nil)
-	utils.expectEquals(p.parse('(a)'), lc.create(a))
-	utils.expectEquals(p.parse('(a b)'), lc.create(a, b))
-	utils.expectEquals(p.parse('(a b c)'), lc.create(a, b ,c))
-	utils.expectEquals(p.parse('(a b c d)'), lc.create(a, b ,c, d))
+	utils.expectEquals(p.parse('(a)'), list(a))
+	utils.expectEquals(p.parse('(a b)'), list(a, b))
+	utils.expectEquals(p.parse('(a b c)'), list(a, b ,c))
+	utils.expectEquals(p.parse('(a b c d)'), list(a, b ,c, d))
 	
 })
 
 test('parse nested list', () => {
-	const expected = lc.create(lc.create(a, b), lc.create(c, lc.create(d, e)))
+	const expected = list(list(a, b), list(c, list(d, e)))
 	utils.expectEquals(p.parse('((a b) (c (d e)))'), expected)
 })
 
@@ -55,11 +57,10 @@ test('parse pair', () => {
 })
 
 test('parse quote', () => {
-	utils.expectEquals(p.parse("'a"), lc.create(q, a))
-	utils.expectEquals(p.parse("'()"), lc.create(q, nil))
-	utils.expectEquals(p.parse("'(a)"), lc.create(q, lc.create(a)))
-	utils.expectEquals(p.parse("'(a 'b)"), lc.create(q, lc.create(a, lc.create(q, b))))
-	utils.expectEquals(p.parse("(a 'b c)"), lc.create(a, lc.create(q, b), c))
-	utils.expectEquals(p.parse("'(a 'b c 'd)"), lc.create(q, lc.create(a, lc.create(q, b), c, lc.create(q, d))))
-		
+	utils.expectEquals(p.parse("'a"), list(q, a))
+	utils.expectEquals(p.parse("'()"), list(q, nil))
+	utils.expectEquals(p.parse("'(a)"), list(q, list(a)))
+	utils.expectEquals(p.parse("'(a 'b)"), list(q, list(a, list(q, b))))
+	utils.expectEquals(p.parse("(a 'b c)"), list(a, list(q, b), c))
+	utils.expectEquals(p.parse("'(a 'b c 'd)"), list(q, list(a, list(q, b), c, list(q, d))))
 })
