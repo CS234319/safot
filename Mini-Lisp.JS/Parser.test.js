@@ -13,10 +13,10 @@ const d = new Atom('D')
 const e = new Atom('E')
 const t = Atom.t
 const nil = Atom.nil
-const q = Atom.quote
 
 const lc = new ListCreator()
 const list = function() { return lc.create(...arguments) }
+const listq = function() { return list(Atom.quote, ...arguments) }
 const parseEquals = (str, s) => utils.expectEquals(p.parse(str), s)
 
 test ('parse reject', () => {
@@ -58,10 +58,10 @@ test('parse pair', () => {
 })
 
 test('parse quote', () => {
-	parseEquals("'a", list(q, a))
-	parseEquals("'()", list(q, nil))
-	parseEquals("'(a)", list(q, list(a)))
-	parseEquals("'(a 'b)", list(q, list(a, list(q, b))))
-	parseEquals("(a 'b c)", list(a, list(q, b), c))
-	parseEquals("'(a 'b c 'd)", list(q, list(a, list(q, b), c, list(q, d))))
+	parseEquals("'a", listq(a))
+	parseEquals("'()", listq(nil))
+	parseEquals("'(a)", listq(list(a)))
+	parseEquals("'(a 'b)", listq(list(a, listq(b))))
+	parseEquals("(a 'b c)", list(a, listq(b), c))
+	parseEquals("'(a 'b c 'd)", listq(list(a, listq(b), c, listq(d))))
 })
