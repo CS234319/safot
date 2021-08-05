@@ -156,8 +156,8 @@ function peg$parse(input, options) {
       peg$c10 = function(car, cdr) { 
       		return new Pair(car, cdr)
       	},
-      peg$c11 = /^[^()'.;[\]\0- \x7F-\u10FFFF]/,
-      peg$c12 = peg$classExpectation(["(", ")", "'", ".", ";", "[", "]", ["\0", " "], ["\x7F", "\u10FF"], "F", "F"], true, false),
+      peg$c11 = /^[^()'.;[\]\0- \x7F-\uFFFF]/,
+      peg$c12 = peg$classExpectation(["(", ")", "'", ".", ";", "[", "]", ["\0", " "], ["\x7F", "\uFFFF"]], true, false),
       peg$c13 = function() { 
       		return text().toUpperCase()
       	},
@@ -170,8 +170,8 @@ function peg$parse(input, options) {
       peg$c18 = peg$literalExpectation(";", false),
       peg$c19 = /^[^\n\r]/,
       peg$c20 = peg$classExpectation(["\n", "\r"], true, false),
-      peg$c21 = /^[\0- \x7F-\u10FFFF]/,
-      peg$c22 = peg$classExpectation([["\0", " "], ["\x7F", "\u10FF"], "F", "F"], false, false),
+      peg$c21 = /^[\0- \x7F-\uFFFF]/,
+      peg$c22 = peg$classExpectation([["\0", " "], ["\x7F", "\uFFFF"]], false, false),
 
       peg$currPos          = 0,
       peg$savedPos         = 0,

@@ -24,7 +24,7 @@ Pair
 	}
 
 Symbol
-	= [^()'.;\[\]\x00-\x20\x7F-\u10FFFF]+ { 
+	= [^()'.;\[\]\x00-\x20\x7F-\uFFFF]+ { 
 		return text().toUpperCase()
 	}
 
@@ -37,4 +37,4 @@ Comment
 	= ";" [^\n\r]*
 
 _
-	= ([\x00-\x20\x7F-\u10FFFF] / Comment)*
+	= ([\x00-\x20\x7F-\uFFFF] / Comment)*
