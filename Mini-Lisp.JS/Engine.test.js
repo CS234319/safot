@@ -48,7 +48,6 @@ test('evaluate atoms', () => {
 
 test('evaluate car', () => {	
 	parseEvaluateEquals("(car '(a . b))", "a")
-	parseEvaluateEquals("(car '(a . b))", "a")
 	parseEvaluateEquals("(car '(b a x y z))", "b")
 	parseEvaluateException("(car 'a)", "a", "car")
 	primitiveArgsMissingException("(car)")
