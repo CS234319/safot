@@ -1,5 +1,6 @@
 import sys
 import logging
+import os
 from enum import Enum
 from pathlib import Path
 from typing import List, Dict
@@ -14,7 +15,7 @@ class FileType(Enum):
 class FlowRunner:
 
     @staticmethod
-    def run(files: List[str]) -> List[str]:
+    def run(files: List[str], golden_dir: str) -> bool:
         """
         Run the full flow:
             1. Init FlowTestFramework
@@ -24,8 +25,15 @@ class FlowRunner:
             5. Return output files for each run of s_expr file
 
         :param files: lisp files to run (can be functions or s_expr files)
-        :return: list of output files
+        :param golden_dir: dir with the golden outputs
+        :return: True if all output files are equal to golden files, else False
         """
+        # Check golden dir path:
+        golden_path = Path(golden_dir)
+        if not golden_path.exists():
+            logging.error(f"No such directory: {golden_dir}")
+            return False
+
         # Init interpreter:
         flow = FlowTestFramework("../../../Mini-Lisp.Chic/mini-lisp")
 
@@ -37,15 +45,29 @@ class FlowRunner:
             logging.info(f"Compiling file {file} ...")
             flow.load_function_file(file)
 
-        # Running s_expr files:
-        out_files = []
+        # Running s_expr files and compare:
         for file in categorized_files[FileType.S_EXPR]:
+            # Run:
             logging.info(f"Running {file} ...")
-            out_file = flow.run_s_expr_file(file)
+            out_file = Path(flow.run_s_expr_file(file))
             logging.info(f"Output file {out_file} ...")
-            out_files.append(out_file)
 
-        return out_files
+            # Get golden:
+            golden_file = golden_path / f"{out_file.name}"
+            if not golden_file.exists():
+                logging.error(f"Failed to find golden file in: {golden_file}")
+                continue
+
+            # Compare:
+            logging.info(f"Comparing file {out_file} with {golden_file} ...")
+            if Path(out_file).read_text() != golden_file.read_text():
+                logging.error(f"Output file and golden file are not equal")
+                logging.error(f"Diff:")
+                os.system(f"diff {out_file} {golden_file}")
+                return False
+
+        logging.info(f"Successfully run and compare all the files.")
+        return True
 
     @staticmethod
     def categorize_files_by_name(files: List[str]) -> Dict[FileType, List[str]]:
@@ -62,6 +84,14 @@ class FlowRunner:
 
 
 if __name__ == '__main__':
-    files = sys.argv[1:]
+    if len(sys.argv) == 1:
+        logging.error("Must provide golden dir and lisp files")
+        exit()
+    if len(sys.argv) == 2:
+        logging.error("Must provide lisp files")
+        exit()
+    golden_dir = sys.argv[1]
+    files = sys.argv[2:]
     logging.root.setLevel(logging.INFO)
-    FlowRunner.run(files)
+    res = 1 if FlowRunner.run(files, golden_dir) is True else 0
+    print(res)
