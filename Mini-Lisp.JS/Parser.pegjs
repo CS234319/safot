@@ -7,7 +7,7 @@
 }
 
 S
-	=   _ 
+	=   _
 		s:	(
 				"(" _ complex:(Pair / List) _ ")" { return complex } 	/
 				sym:Symbol { return new Atom(sym) } 					/
@@ -16,12 +16,12 @@ S
 		_ { return s }
 
 List
-	= listArray:(s:S _ { return s })* {
+	= listArray:(s:S { return s })* {
 		return lc.create(...listArray)
 	}
 
 Pair
-	= car:S _ "." _ cdr:S { 
+	= car:S "." cdr:S { 
 		return new Pair(car, cdr)
 	}
 
@@ -31,7 +31,7 @@ Symbol
 	}
 
 Quote
-	= "'" _ s:S { 
+	= "'" s:S { 
 		return lc.create(quote, s)
 	}
 
