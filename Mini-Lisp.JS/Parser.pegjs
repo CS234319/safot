@@ -7,11 +7,13 @@
 }
 
 S
-	=   _ s:(
-			"(" _ complex:(Pair / List) _ ")" { return complex } 	/
-			sym:Symbol { return new Atom(sym) } 					/
-			Quote
-		) _ { return s }
+	=   _ 
+		s:	(
+				"(" _ complex:(Pair / List) _ ")" { return complex } 	/
+				sym:Symbol { return new Atom(sym) } 					/
+				Quote
+			)
+		_ { return s }
 
 List
 	= listArray:(s:S _ { return s })* {
