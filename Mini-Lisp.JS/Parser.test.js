@@ -20,14 +20,24 @@ const q = s => list(Atom.quote, s)
 const parseEquals = (str, s) => {
 	Reflect.get(utils, 'parseExpectEquals').call(utils, str, s)
 }
+const parseReject = (str) => {
+	expect(() => p.parse(str)).toThrow(p.SyntaxError)
+}
+const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
+	for (var i = minCode; i <= maxCode; i++) {
+		const char = String.fromCharCode(i)
+		const expected = expect(char)
+		if (expected) {
+			parseEquals(recieve(char), expected)	
+		} else {
+			parseReject(char)
+		}
+	}
+}
 
 test ('parse reject', () => {
-	const stringsArray = Array.from("()[].';")
-		.concat(['', '(()'])
-	
-	for (const s of stringsArray) {
-		expect(() => p.parse(s)).toThrow(p.SyntaxError)
-	}
+	parseReject('')
+	parseReject('(()')
 })
 
 test('parse atoms', () => {
@@ -84,4 +94,22 @@ test('parse comment', () => {
 	parseEquals(";b\n(a.\n('b.(c.nil)));c;d\n;e", list(a, q(b), c))
 	parseEquals(";b\n(a . b);c;d\n;e", new Pair(a, b))
 	parseEquals(";b\n(a.\n('b.; some comment \n(c.nil)));c;d\n;e", list(a, q(b), c))
+})
+
+test('parse ASCII characters to ignore', () => {
+	const recieve = char => `${char}(a${char}${char}(b${char} c)${char})${char}`
+	const expected = list(a, list(b, c))
+	const expect = char => expected
+	checkCharactersRange(0, 32, recieve, expect)
+	checkCharactersRange(127, 255, recieve, expect)
+})
+
+test('parse symbol characters', () => {
+	const nonSymbolChars = Array.from("()[].';")
+	const recieve = char => char
+	const expect = char => {
+		return nonSymbolChars.includes(char) ? undefined : new Atom(char.toUpperCase())
+	}
+
+	checkCharactersRange(33, 126, recieve, expect)
 })
