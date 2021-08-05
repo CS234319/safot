@@ -50,34 +50,12 @@ module.exports = class Environment {
 	}
 
 	bind(keys, values) {
-		const keysLength = keys.getListLength()
-		if (keysLength === undefined) {
-			return keys.error(Atom.invalid)
-		}
-		
-		const valuesLength = values.getListLength()
-		if (valuesLength === undefined) {
-			return values.error(Atom.invalid)
-		}
-
-		if (keysLength < valuesLength) {
-			return values.error(Atom.redundant)
-		}
-
-		if (keysLength > valuesLength) {
-			return values.error(Atom.missing)
-		}
-
-		this.#_bind(keys, values)
-	}
-
-	#_bind(keys, values) {
 		if (keys.null() && values.null()) {
 			return
 		}
 
 		this.set(keys.car(), values.car())
-		this.#_bind(keys.cdr(), values.cdr())
+		this.bind(keys.cdr(), values.cdr())
 	}
 
 	push() {

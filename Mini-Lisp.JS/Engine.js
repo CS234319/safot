@@ -109,16 +109,20 @@ module.exports = class Engine {
 
 	#apply(lambda, args) {
 		if (lambda.getListLength() !== 3) {
-			return this.#throwInvalidLambdaError(lambda, args)
+			return this.#throwInvalidLambdaError(lambda)
 		}
 
 		const tag = lambda.car()
-		if (!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) {
-			return this.#throwInvalidLambdaError(lambda, args)
+		const formals = lambda.cdr().car()
+
+		if ((!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) ||
+			(!formals.isList())) {
+			return this.#throwInvalidLambdaError(lambda)
 		}
 
+		this.#checkArgsInLambdaCall(lambda, args)
+
 		const actuals = tag.eq(Atom.lambda) ? this.#evaluateList(args) : args
-		const formals = lambda.cdr().car()
 		const body = lambda.cdr().cdr().car()
 		
 		this.#env.push()
@@ -131,8 +135,26 @@ module.exports = class Engine {
 		}
 	}
 
-	#throwInvalidLambdaError(lambda, args) {
-		return lambda.cons(args).error(Atom.invalid)
+	#checkArgsInLambdaCall(lambda, args) {
+		const argsLength = args.getListLength()
+		
+		if (argsLength === undefined) {
+			return lambda.cons(args).error(Atom.invalid)
+		}
+
+		const formalsLength = lambda.cdr().car().getListLength()
+
+		if (argsLength < formalsLength) {
+			return lambda.cons(args).error(Atom.missing)
+		}
+
+		if (argsLength > formalsLength) {
+			return lambda.cons(args).error(Atom.redundant)
+		}
+	}
+
+	#throwInvalidLambdaError(lambda) {
+		return lambda.error(Atom.invalid)
 	}
 
 	static #boolToS(bool) {

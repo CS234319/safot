@@ -88,13 +88,6 @@ test('bind', () => {
 	const bind = (formalsStr, actualsStr) => {
 		env.bind(p.parse(formalsStr), p.parse(actualsStr))
 	}
-	const testBindException = (formalsStr, actualsStr, culpritStr, kindStr) => {
-		const formals = p.parse(formalsStr)
-		const actuals = p.parse(actualsStr)
-		const culprit = p.parse(culpritStr)
-		const kind = p.parse(kindStr)
-		utils.expectException(() => env.bind(formals, actuals), culprit, kind)
-	}
 
 	env = new Environment()
 	bind('(a b c)', '(c (a . b) (b a x y z))')
@@ -102,13 +95,4 @@ test('bind', () => {
 
 	bind('(a)', '((t t))')
 	expectAList('((a . (t t)) (c . (b a x y z)) (b . (a . b)) (a . c))')
-
-	testBindException('a', 'b', 'a', 'invalid')
-	testBindException('a', '()', 'a', 'invalid')
-	testBindException('a', '(a)', 'a', 'invalid')
-	testBindException('()', 'a', 'a', 'invalid')
-	testBindException('(a)', 'a', 'a', 'invalid')
-	testBindException('(a . b)', '(a)', '(a . b)', 'invalid')
-	testBindException('(a a a)', '(a a t nil)', '(a a t nil)', 'redundant')
-	testBindException('(a a a)', '(a b)', '(a b)', 'missing')
 })
