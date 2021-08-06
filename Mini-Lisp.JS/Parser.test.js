@@ -23,6 +23,21 @@ const parseEquals = (str, s) => {
 const parseReject = (str) => {
 	expect(() => p.parse(str)).toThrow(p.SyntaxError)
 }
+const parseRejectExpected = (str, foundExpected) => {
+	parseReject(str)
+
+	try {
+		p.parse(str)
+	} catch (e) {
+		expect(e.found).toStrictEqual(foundExpected)
+	}
+}
+const parseRejectInTheMiddle = (str) => {
+	parseRejectExpected(str, str.slice(-1))
+}
+const parseRejectInTheEnd = (str) => {
+	parseRejectExpected(str, null)
+}
 const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 	for (var i = minCode; i <= maxCode; i++) {
 		const char = String.fromCharCode(i)
@@ -36,8 +51,18 @@ const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 }
 
 test ('parse reject', () => {
-	parseReject('')
-	parseReject('(()')
+	parseRejectInTheEnd('')
+	parseRejectInTheEnd('((')
+	parseRejectInTheEnd('(()')
+	parseRejectInTheEnd('(a.')
+	parseRejectInTheEnd('(a.b')
+	parseRejectInTheMiddle(')')
+	parseRejectInTheMiddle('(a .)')
+	parseRejectInTheMiddle("(a b ')")
+	parseRejectInTheMiddle("())")
+	parseRejectInTheMiddle("a)")
+	parseRejectInTheMiddle("a(")
+	parseRejectInTheMiddle('(a.b(')
 })
 
 test('parse atoms', () => {
