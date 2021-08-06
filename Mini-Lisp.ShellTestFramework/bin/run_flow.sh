@@ -1,17 +1,32 @@
 #!/bin/bash
 ###########################################
-# Script to run all the given lisp files.
+# Script to run all the given lisp files,
+# and compare the results with golden.
+#
 # For functions files, no output file
 # will generate.
 #
 # Args:
-#     lisp files
+#     * golden dir
+#     * lisp files
+#
+# Returns:
+#     1 if all the output files are equal to
+#     golden files, else if not will print the diffs,
+#     and return 0.
 #
 # Usage:
-#     > run_flow.sh <file1> <file2> ...
+#     % run_flow.sh <golden_dir> <file1> <file2> ...
 #
 # Example:
-#     > ./bin/run_flow.sh ./test/inputs/examples/*
+#     % ./bin/run_flow.sh \
+#           ./test/golden/examples/ \
+#           ./test/inputs/examples/*
+#
+# Example with an error (diff):
+#     % ./bin/run_flow.sh \
+#           ./test/golden/examples_with_diff/ \
+#           ./test/inputs/examples/*
 #
 ###########################################
 
@@ -26,8 +41,8 @@ function check_configurations() {
 
 function flow_runner() {
   cd ${PROJECT_DIR}/framework/lib/
-  python3 ${PROJECT_DIR}/framework/lib//flow_runner.py "$@"
-  cd -
+  python3 ${PROJECT_DIR}/framework/lib//flow_runner.py $1 "${@:2}"
+  cd - &> /dev/null
 }
 
 check_configurations
@@ -40,4 +55,4 @@ FLOW_TESTS_DIR="${SCRIPT_DIR}/../test/flow"
 export PROJECT_DIR=`realpath "${SCRIPT_DIR}/../"`
 export PYTHONPATH="${PYTHONPATH}:${PROJECT_DIR}/"
 
-flow_runner `realpath "$@" | tr "\n" " "`
+flow_runner `realpath $1` `realpath "${@:2}" | tr "\n" " "`

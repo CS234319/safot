@@ -38,15 +38,18 @@ class FlowTestFramework:
         :param file: input file with the s_expression
         :return: tmp file path
         """
-        _, out_file = tempfile.mkstemp(suffix=f"__{Path(file).name}.out")
-        with open(out_file, mode='a') as stream:
+        out_path = Path(tempfile.gettempdir()) / f"{Path(file).name}.out"
+        if out_path.exists():
+            out_path.unlink()
+        out_path.touch()
+        with open(out_path, mode='a') as stream:
             for line in self.split_file(file):
                 out = self.shell.feed(line)
                 if out == "":
                     continue
                 stream.write(out)
                 stream.write('\n')
-        return out_file
+        return str(out_path)
 
     def interactive(self):
         """
