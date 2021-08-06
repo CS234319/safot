@@ -5,13 +5,11 @@ const readline = require('readline')
 module.exports = class REPLInstigator {
 	#engine
 	#buffer
-	#rl
-	#pw
+	#lineReader
 
 	constructor() {
 		this.#engine = new Engine()
-		this.#pw = new ParserStateWrapper()
-		this.#rl = readline.createInterface({
+		this.#lineReader = readline.createInterface({
 		 	input: process.stdin,
 		 	output: process.stdout
 		})
@@ -20,7 +18,7 @@ module.exports = class REPLInstigator {
 	}
 
 	#read(cursorStr) {
-		this.#rl.question(cursorStr, (lineStr) => {
+		this.#lineReader.question(cursorStr, (lineStr) => {
 			this.#feedLine(lineStr)
 		})
 	}
@@ -32,9 +30,9 @@ module.exports = class REPLInstigator {
 
 	#feedLine(lineStr) {
 		this.#buffer += lineStr
-		
-		const parseResult = this.#pw.parse(this.#buffer)
-		
+		const pw = new ParserStateWrapper()
+		const parseResult = pw.parse(this.#buffer)
+
 		switch (parseResult.type) {
 			case ParserStateWrapper.Accept:
 				this.#handleParsingResult(parseResult.output)
@@ -50,7 +48,7 @@ module.exports = class REPLInstigator {
 				break
 		}
 	}
-
+	
 	#handleParsingResult(s) {
 		try {
 			console.log(`${this.#engine.evaluate(s)}`)
