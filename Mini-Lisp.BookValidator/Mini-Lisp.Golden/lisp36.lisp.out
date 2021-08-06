@@ -1,0 +1,2 @@
+ 
+(LAMBDA (X) (CONS (CDR X) (CAR X)))
