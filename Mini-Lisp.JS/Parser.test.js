@@ -32,10 +32,10 @@ const parseRejectExpected = (str, foundExpected) => {
 		expect(e.found).toStrictEqual(foundExpected)
 	}
 }
-const parseRejectInTheMiddle = (str) => {
+const parseRejectDidNotReachEnd = (str) => {
 	parseRejectExpected(str, str.slice(-1))
 }
-const parseRejectInTheEnd = (str) => {
+const parseRejectReachedEnd = (str) => {
 	parseRejectExpected(str, null)
 }
 const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
@@ -51,18 +51,18 @@ const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 }
 
 test ('parse reject', () => {
-	parseRejectInTheEnd('')
-	parseRejectInTheEnd('((')
-	parseRejectInTheEnd('(()')
-	parseRejectInTheEnd('(a.')
-	parseRejectInTheEnd('(a.b')
-	parseRejectInTheMiddle(')')
-	parseRejectInTheMiddle('(a .)')
-	parseRejectInTheMiddle("(a b ')")
-	parseRejectInTheMiddle("())")
-	parseRejectInTheMiddle("a)")
-	parseRejectInTheMiddle("a(")
-	parseRejectInTheMiddle('(a.b(')
+	parseRejectReachedEnd('')
+	parseRejectReachedEnd('((')
+	parseRejectReachedEnd('(()')
+	parseRejectReachedEnd('(a.')
+	parseRejectReachedEnd('(a.b')
+	parseRejectDidNotReachEnd(')')
+	parseRejectDidNotReachEnd('(a .)')
+	parseRejectDidNotReachEnd("(a b ')")
+	parseRejectDidNotReachEnd("())")
+	parseRejectDidNotReachEnd("a)")
+	parseRejectDidNotReachEnd("a(")
+	parseRejectDidNotReachEnd('(a.b(')
 })
 
 test('parse atoms', () => {
