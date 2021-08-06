@@ -1,4 +1,5 @@
 const p = require('./Parser')
+const ParserStateWrapper = require('./ParserStateWrapper')
 const ListCreator = require('./ListCreator')
 const Atom = require('./Atom')
 const Pair = require('./Pair')
@@ -15,28 +16,24 @@ const t = Atom.t
 const nil = Atom.nil
 
 const lc = new ListCreator()
+const pw = new ParserStateWrapper()
+
 const list = function() { return lc.create(...arguments) }
 const q = s => list(Atom.quote, s)
 const parseEquals = (str, s) => {
 	Reflect.get(utils, 'parseExpectEquals').call(utils, str, s)
 }
-const parseReject = (str) => {
-	expect(() => p.parse(str)).toThrow(p.SyntaxError)
+const parseError = (str) => {
+	expect(pw.parse(str).type).not.toBe(ParserStateWrapper.Accept)
 }
-const parseRejectExpected = (str, foundExpected) => {
-	parseReject(str)
-
-	try {
-		p.parse(str)
-	} catch (e) {
-		expect(e.found).toStrictEqual(foundExpected)
-	}
+const parseErrorExpectType = (str, expectedType) => {
+	expect(pw.parse(str).type).toBe(expectedType)
 }
-const parseRejectDidNotReachEnd = (str) => {
-	parseRejectExpected(str, str.slice(-1))
+const parseErrorExpectMore = (str) => {
+	parseErrorExpectType(str, ParserStateWrapper.ExpectMore)
 }
-const parseRejectReachedEnd = (str) => {
-	parseRejectExpected(str, null)
+const parseErrorReject = (str) => {
+	parseErrorExpectType(str, ParserStateWrapper.Reject)
 }
 const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 	for (var i = minCode; i <= maxCode; i++) {
@@ -45,24 +42,27 @@ const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 		if (expected) {
 			parseEquals(recieve(char), expected)	
 		} else {
-			parseReject(char)
+			parseError(char)
 		}
 	}
 }
 
-test ('parse reject', () => {
-	parseRejectReachedEnd('')
-	parseRejectReachedEnd('((')
-	parseRejectReachedEnd('(()')
-	parseRejectReachedEnd('(a.')
-	parseRejectReachedEnd('(a.b')
-	parseRejectDidNotReachEnd(')')
-	parseRejectDidNotReachEnd('(a .)')
-	parseRejectDidNotReachEnd("(a b ')")
-	parseRejectDidNotReachEnd("())")
-	parseRejectDidNotReachEnd("a)")
-	parseRejectDidNotReachEnd("a(")
-	parseRejectDidNotReachEnd('(a.b(')
+test ('parse expect more', () => {
+	parseErrorExpectMore('')
+	parseErrorExpectMore('((')
+	parseErrorExpectMore('(()')
+	parseErrorExpectMore('(a.')
+	parseErrorExpectMore('(a.b')
+})
+
+test ('parse expect reject', () => {
+	parseErrorReject(')')
+	parseErrorReject('(a .)')
+	parseErrorReject("(a b ')")
+	parseErrorReject("())")
+	parseErrorReject("a)")
+	parseErrorReject("a(")
+	parseErrorReject('(a.b(')
 })
 
 test('parse atoms', () => {

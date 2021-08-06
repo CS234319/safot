@@ -1,4 +1,4 @@
-const p = require('./Parser')
+const ParserStateWrapper = require('./ParserStateWrapper')
 const Engine = require('./Engine')
 const readline = require('readline')
 
@@ -6,9 +6,11 @@ module.exports = class REPLInstigator {
 	#engine
 	#buffer
 	#rl
+	#pw
 
 	constructor() {
 		this.#engine = new Engine()
+		this.#pw = new ParserStateWrapper()
 		this.#rl = readline.createInterface({
 		 	input: process.stdin,
 		 	output: process.stdout
@@ -29,23 +31,29 @@ module.exports = class REPLInstigator {
 	}
 
 	#feedLine(lineStr) {
-		try {
-			this.#buffer += lineStr
-			this.#handleParsingResult(p.parse(this.#buffer))
-		} catch (e) {
-			if (e.found === null) {
-				this.#read((this.#buffer.length === 0) ? '> ' : '- ')
-				return
-			}
+		this.#buffer += lineStr
+		
+		const parseResult = this.#pw.parse(this.#buffer)
+		
+		switch (parseResult.type) {
+			case ParserStateWrapper.Accept:
+				this.#handleParsingResult(parseResult.output)
+				break
 
-			console.log('?')
-			this.#readNew()
+			case ParserStateWrapper.ExpectMore:
+				this.#read((this.#buffer.length === 0) ? '> ' : '- ')
+				break
+
+			case ParserStateWrapper.Reject:
+				console.log('?')
+				this.#readNew()
+				break
 		}
 	}
 
-	#handleParsingResult(parsingResult) {
+	#handleParsingResult(s) {
 		try {
-			console.log(`${this.#engine.evaluate(parsingResult)}`)
+			console.log(`${this.#engine.evaluate(s)}`)
 		} catch (e) {
 			console.log(`Error: ${e.s.car()} - ${e.s.cdr()}`)
 		}
