@@ -1,0 +1,1 @@
+(LAMBDA (X XS) (COND ((NULL XS) (X)) (T (CONS (CAR X) (APPEND X (CDR XS))))))
