@@ -10,11 +10,9 @@ module.exports = class Engine {
 
 	constructor() {
 		this.#env = new Environment()
-		this.#env.set(Atom.nil, Atom.nil)
-		this.#env.set(Atom.t, Atom.t)
 
 		this.#initPrimitives()
-		this.#initLibraryFunctions()
+		this.#initLibrary()
 	}
 
 	#initPrimitives() {
@@ -25,7 +23,7 @@ module.exports = class Engine {
 			[Atom.cdr,			1, s => s.cdr()],
 			[Atom.quote,		1, s => s],
 			[Atom.atom,			1, s => Engine.#boolToS(s.atom())],
-			[Atom.eval,			1, s => s],
+			[Atom.eval,			1, s => this.#_evaluate(s)],
 			[Atom.cons,			2, (s, t) => s.cons(t)],
 			[Atom.eq,			2, (s, t) => Engine.#boolToS(s.eq(t))],
 			[Atom.set,			2, (s, t) => this.#env.set(s, t)],
@@ -37,20 +35,20 @@ module.exports = class Engine {
 		].map(tup => new Primitive(tup[0], tup[1], tup[2]))
 	}
 
-	#initLibraryFunctions() {
+	#initLibrary() {
+		this.evaluate(p.parse("(set 'nil 'nil)"))
+		this.evaluate(p.parse("(set 't 't)"))
 		this.evaluate(p.parse("(defun null (x) (eq x nil))"))
 	}
 
 	evaluate(s) {
-		this.#env.push()
+		this.#env.backup()
 
 		try {
-			return this.#_evaluate(s)	
+			return this.#_evaluate(s)		
 		} catch (e) {
-			this.#env.pop()
+			this.#env.restore()
 			throw e
-		} finally {
-			this.#env.clearStack()
 		}
 	}
 
@@ -125,13 +123,12 @@ module.exports = class Engine {
 		const actuals = tag.eq(Atom.lambda) ? this.#evaluateList(args) : args
 		const body = lambda.cdr().cdr().car()
 		
-		this.#env.push()
 		this.#env.bind(formals, actuals)
 
 		try {
 			return this.#_evaluate(body)
 		} finally {
-			this.#env.pop()	
+			this.#env.unbind(formals.getListLength())	
 		}
 	}
 

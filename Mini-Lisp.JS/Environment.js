@@ -4,15 +4,21 @@ const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
 	#alist
-	#alistStack
+	#backupAList
+	#formalsAList
 
 	constructor() {
 		this.#alist = Atom.nil
-		this.#alistStack = Atom.nil
+		this.#backupAList = Atom.nil
+		this.#formalsAList = Atom.nil
 	}
 
 	getAList() {
 		return this.#alist
+	}
+
+	getFormalsAList() {
+		return this.#formalsAList
 	}
 
 	set(key, value) {
@@ -35,12 +41,19 @@ module.exports = class Environment {
 	}
 
 	lookup(s) {
-		return Environment.#lookup(s, this.#alist)
+		for (const list of [this.#formalsAList, this.#alist]) {
+			const result = Environment.#lookup(s, list)	
+			if (result !== null) {
+				return result
+			}
+		}
+	
+		return s.error(Atom.undefined)
 	}
 
 	static #lookup(s, list) {
 		if (list.null()) {
-			return s.error(Atom.undefined)
+			return null
 		}
 
 		const currPair = list.car()
@@ -49,25 +62,30 @@ module.exports = class Environment {
 			: Environment.#lookup(s, list.cdr()) 
 	}
 
-	bind(keys, values) {
-		if (keys.null() && values.null()) {
+	backup() {
+		this.#backupAList = this.#alist
+	}
+
+	restore() {
+		this.#alist = this.#backupAList
+		this.#backupAList = Atom.nil
+	}
+
+	bind(formals, actuals) {
+		if (formals.null() && actuals.null()) {
 			return
 		}
 
-		this.set(keys.car(), values.car())
-		this.bind(keys.cdr(), values.cdr())
+		this.#formalsAList = formals.car()
+									.cons(actuals.car())
+									.cons(this.#formalsAList)
+
+		this.bind(formals.cdr(), actuals.cdr())
 	}
 
-	push() {
-		this.#alistStack = this.#alist.cons(this.#alistStack)
-	}
-
-	pop() {
-		this.#alist = this.#alistStack.car()
-		this.#alistStack = this.#alistStack.cdr()
-	}
-
-	clearStack() {
-		this.#alistStack = Atom.nil
+	unbind(numFormals) {
+		for (var i = 0; i < numFormals; i++) {
+			this.#formalsAList = this.#formalsAList.cdr()
+		}
 	}
 }

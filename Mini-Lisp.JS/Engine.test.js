@@ -91,9 +91,9 @@ test('evaluate cond', () => {
 	parseEvaluateEquals("(cond (t 'a))", "a")
 	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((eq 'a 'a) '(a a a)))", "(a a a)")
 	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((set 'b 'c) '(a a a)))", "(a a a)")
-	parseEvaluateEquals("(eval b)", "c")
+	// parseEvaluateEquals("(eval b)", "c")
 	parseEvaluateEquals("(cond ((eq 'a 'a) '(a b c)) ((set 'a 'c) '(a a a)))", "(a b c)")
-	parseEvaluateException("(eval a)", "a", "undefined")
+	// parseEvaluateException("(eval a)", "a", "undefined")
 	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) a)", "a", "cond")
 	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "quote", "undefined")
 	clear()
@@ -130,12 +130,14 @@ test('evaluate set', () => {
 test('evaluate eval', () => {
 	parseEvaluate("(set 'a '(a . a))")
 	parseEvaluate("(set 'b 'c)")	
-	parseEvaluateEquals("(eval t)", "t")
-	parseEvaluateEquals("(eval nil)", "nil")
-	parseEvaluateEquals("(eval a)", '(a . a)')
-	parseEvaluateEquals("(eval b)", 'c')
-	parseEvaluateEquals("(eval (cond ((eq a 'a) 'c) ((eq a 'b) 'd)))", "nil")
-	parseEvaluateException("(eval c)", "c", "undefined")
+	parseEvaluate("(set 'c 'd)")	
+	parseEvaluateEquals("(eval 't)", "t")
+	parseEvaluateEquals("(eval 'nil)", "nil")
+	parseEvaluateEquals("(eval 'a)", '(a . a)')
+	parseEvaluateEquals("(eval 'b)", 'c')
+	parseEvaluateEquals("(eval b)", 'd')
+	parseEvaluateEquals("(eval '(cond ((eq a 'a) 'c) ((eq a 'b) 'd)))", "nil")
+	parseEvaluateException("(eval 'd)", "d", "undefined")
 	primitiveArgsMissingException("(eval)")
 	primitiveArgsRedundantException("(eval 'a 'b)")
 	clear()
@@ -297,7 +299,33 @@ test('evaluate defun', () => {
 
 	parseEvaluate("(defun foo a 'a)")
 	parseEvaluateException("(foo)", "(lambda a 'a)", "invalid")
+	
+	clear()
+	
+	parseEvaluate("(defun bind (xs ys) " +
+						"(cond 	((null xs) (cond ((null ys) nil) " +
+													"(t (error ys 'redundant)))) " +
+								"((null ys) (cond ((null xs) nil) " +
+													"(t (error ys 'missing)))) " +
+								"(t (cons " +
+									"(set (car xs) (car ys)) " +
+									"(bind (cdr xs) (cdr ys))))))")
+	
+	parseEvaluateEquals("(bind '(a b) '(c d))", "(c d)")
+	parseEvaluateEquals("(eval 'a)", "c")
+	parseEvaluateEquals("(eval 'b)", "d")
+	clear()
 
+	parseEvaluate("(set 'x 'a)")
+	parseEvaluate("(defun foo () (cons (set 'x 'b) (eval 'x)))")
+	parseEvaluateEquals("(foo)", "(b . b)")
+	parseEvaluateEquals("(eval 'x)", "b")
+	clear()
+
+	parseEvaluate("(set 'x 'a)")
+	parseEvaluate("(defun foo (x) (cons (set 'x 'c) (eval 'x)))")
+	parseEvaluateEquals("(foo 'y)", "(c . y)")
+	parseEvaluateEquals("(eval 'x)", "c")
 	clear()
 })
 

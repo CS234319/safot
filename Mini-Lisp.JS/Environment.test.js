@@ -6,8 +6,8 @@ const p = require('./Parser')
 
 const utils = new TestUtils()
 
-const expectAList = (alistStr) => {
-	utils.expectEquals(env.getAList(), p.parse(alistStr))
+const expectAList = (listStr) => {
+	utils.expectEquals(env.getAList(), p.parse(listStr))
 }
 const testSet = (keyStr, valStr) => {
 	const val = p.parse(valStr)
@@ -77,22 +77,9 @@ test('lookup', () => {
 	
 	testSetLookup('a', '(b . a)')
 	testSetLookup('a', '(b a x y z)')
-	
+
 	testLookupException('b')
 	
 	env = new Environment()
 	testLookupException('a')
-})
-
-test('bind', () => {
-	const bind = (formalsStr, actualsStr) => {
-		env.bind(p.parse(formalsStr), p.parse(actualsStr))
-	}
-
-	env = new Environment()
-	bind('(a b c)', '(c (a . b) (b a x y z))')
-	expectAList('((c . (b a x y z)) (b . (a . b)) (a . c))')
-
-	bind('(a)', '((t t))')
-	expectAList('((a . (t t)) (c . (b a x y z)) (b . (a . b)) (a . c))')
 })
