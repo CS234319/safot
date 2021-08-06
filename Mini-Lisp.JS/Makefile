@@ -1,4 +1,4 @@
-.PHONY: install, parser, test
+.PHONY: install, parser, test, repl
 
 parser: 
 	pegjs Parser.pegjs
@@ -6,6 +6,10 @@ parser:
 test:
 	make parser
 	npm test
+
+repl:
+	make parser
+	node repl.js
 
 install:
 	npm uninstall jest
