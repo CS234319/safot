@@ -1,4 +1,5 @@
-const p = require('./Parser')
+const parse = require('./Parser').parse
+const ParserSyntaxError = require('./Parser').SyntaxError
 
 module.exports = class ParserStateWrapper {
 	static Accept = "ACCEPT"
@@ -7,9 +8,9 @@ module.exports = class ParserStateWrapper {
 
 	parse(str) {
 		try {
-			return { output: p.parse(str), type: ParserStateWrapper.Accept }
+			return { output: parse(str), type: ParserStateWrapper.Accept }
 		} catch (e) {
-			if (!(e instanceof p.SyntaxError)) {
+			if (!(e instanceof ParserSyntaxError)) {
 				throw e
 			}
 

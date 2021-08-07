@@ -1,20 +1,20 @@
 const TestUtils = require('./TestUtils')
 const Pair = require('./Pair')
 const Atom = require('./Atom')
-const p = require('./Parser')
+const parse = require('./Parser').parse
 
 const utils = new TestUtils()
 
-const pair = p.parse('(B . A)')
-const list = p.parse('(B A X Y Z)')
+const pair = parse('(B . A)')
+const list = parse('(B A X Y Z)')
 const listAsArray = ['B', 'A', 'X', 'Y', 'Z'].map(val => new Atom(val))
-const listTail = p.parse('(A X Y Z)')
-const complexList = p.parse('((B A X Y Z) (A B C) (B . A))')
-const a = p.parse('A')
-const b = p.parse('B')
-const c = p.parse('C')
-const nil = p.parse('NIL')
-const t = p.parse('T')
+const listTail = parse('(A X Y Z)')
+const complexList = parse('((B A X Y Z) (A B C) (B . A))')
+const a = parse('A')
+const b = parse('B')
+const c = parse('C')
+const nil = parse('NIL')
+const t = parse('T')
 
 test('atom', () => {	
 	expect(a.atom()).toBeTruthy()
@@ -41,8 +41,8 @@ test('cdr', () => {
 })
 
 test('cons', () => {
-	utils.expectEquals(a.cons(p.parse('(b c)')), p.parse('(a b c)'))
-	utils.expectEquals(b.cons(nil), p.parse('(b)'))
+	utils.expectEquals(a.cons(parse('(b c)')), parse('(a b c)'))
+	utils.expectEquals(b.cons(nil), parse('(b)'))
 	utils.expectEquals(a.cons(b), new Pair(a, b))
 	utils.expectEquals(pair.cons(c), new Pair(pair, c))
 })
@@ -67,13 +67,13 @@ test('equals', () => {
 	expect(t.equals(t)).toBeTruthy()
 	expect(t.equals(nil)).toBeFalsy()
 	expect(nil.equals(t)).toBeFalsy()
-	expect(p.parse('(a . (b c))').equals(p.parse('(a b c)'))).toBeTruthy()
-	expect(p.parse('(a . (b . (c . d)))').equals(
-		   p.parse('(a . (b . (c . d)))'))).toBeTruthy()
-	expect(p.parse('(a . (b . (c . d)))').equals(
-		   p.parse('(a . (b . (c . nil)))'))).toBeFalsy()
-	expect(p.parse('(a b c)').equals(
-		   p.parse('(a . (b . (c . nil)))'))).toBeTruthy()
+	expect(parse('(a . (b c))').equals(parse('(a b c)'))).toBeTruthy()
+	expect(parse('(a . (b . (c . d)))').equals(
+		   parse('(a . (b . (c . d)))'))).toBeTruthy()
+	expect(parse('(a . (b . (c . d)))').equals(
+		   parse('(a . (b . (c . nil)))'))).toBeFalsy()
+	expect(parse('(a b c)').equals(
+		   parse('(a . (b . (c . nil)))'))).toBeTruthy()
 })
 
 test('null', () => {
@@ -123,11 +123,11 @@ test('getListLength', () => {
 })
 
 test('toString', () => {
-	utils.expectEquals(p.parse(nil.toString()), nil)
-	utils.expectEquals(p.parse(t.toString()), t)
-	utils.expectEquals(p.parse(a.toString()), a)
-	utils.expectEquals(p.parse(pair.toString()), pair)
-	utils.expectEquals(p.parse(list.toString()), list)
-	utils.expectEquals(p.parse(complexList.toString()), complexList)
+	utils.expectEquals(parse(nil.toString()), nil)
+	utils.expectEquals(parse(t.toString()), t)
+	utils.expectEquals(parse(a.toString()), a)
+	utils.expectEquals(parse(pair.toString()), pair)
+	utils.expectEquals(parse(list.toString()), list)
+	utils.expectEquals(parse(complexList.toString()), complexList)
 })
 

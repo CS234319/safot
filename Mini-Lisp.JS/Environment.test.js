@@ -2,22 +2,22 @@ const TestUtils = require('./TestUtils')
 const Environment = require('./Environment')
 const EvaluationError = require('./EvaluationError')
 const Atom = require('./Atom')
-const p = require('./Parser')
+const parse = require('./Parser').parse
 
 const utils = new TestUtils()
 
 const expectAList = (listStr) => {
-	utils.expectEquals(env.getAList(), p.parse(listStr))
+	utils.expectEquals(env.getAList(), parse(listStr))
 }
 const expectFormalsAList = (listStr) => {
-	utils.expectEquals(env.getFormalsAList(), p.parse(listStr))
+	utils.expectEquals(env.getFormalsAList(), parse(listStr))
 }
 const testSet = (keyStr, valStr) => {
-	const val = p.parse(valStr)
-	utils.expectEquals(env.set(p.parse(keyStr), val), val)
+	const val = parse(valStr)
+	utils.expectEquals(env.set(parse(keyStr), val), val)
 }
 const parseBind = (formalsStr, actualsStr) => {
-	utils.expectEquals(env.bind(p.parse(formalsStr), p.parse(actualsStr)), undefined)
+	utils.expectEquals(env.bind(parse(formalsStr), parse(actualsStr)), undefined)
 }
 const parseBindException = (formalsStr, actualsStr, s) => {
 	utils.parseExpectException(() => parseBind(formalsStr, actualsStr), s, 'car')
@@ -31,10 +31,10 @@ const expectUnbindException = (numFormals) => {
 }
 const testSetLookup = (keyStr, valueStr) => {
 	testSet(keyStr, valueStr)
-	utils.expectEquals(env.lookup(p.parse(keyStr)), p.parse(valueStr))
+	utils.expectEquals(env.lookup(parse(keyStr)), parse(valueStr))
 }
 const testLookupException = (keyStr) => {
-	const key = p.parse(keyStr)
+	const key = parse(keyStr)
 	utils.expectException(() => env.lookup(key), key, Atom.undefined)
 }
 
@@ -50,10 +50,10 @@ test('set', () => {
 
 test('defun', () => {
 	const testDefun = (nameStr, formalsStr, bodyStr) => {
-		const name = p.parse(nameStr)
-		const formals = p.parse(formalsStr)
-		const body = p.parse(bodyStr)
-		const lambda = p.parse(`(lambda ${formalsStr} ${bodyStr})`)
+		const name = parse(nameStr)
+		const formals = parse(formalsStr)
+		const body = parse(bodyStr)
+		const lambda = parse(`(lambda ${formalsStr} ${bodyStr})`)
 		utils.expectEquals(env.defun(name, formals, body), lambda)
 	}
 
@@ -68,10 +68,10 @@ test('defun', () => {
 
 test('ndefun', () => {
 	const testNdefun = (nameStr, formalsStr, bodyStr) => {
-		const name = p.parse(nameStr)
-		const formals = p.parse(formalsStr)
-		const body = p.parse(bodyStr)
-		const lambda = p.parse(`(nlambda ${formalsStr} ${bodyStr})`)
+		const name = parse(nameStr)
+		const formals = parse(formalsStr)
+		const body = parse(bodyStr)
+		const lambda = parse(`(nlambda ${formalsStr} ${bodyStr})`)
 		utils.expectEquals(env.ndefun(name, formals, body), lambda)
 	}
 

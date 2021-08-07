@@ -1,5 +1,5 @@
 const REPLInstigator = require('./REPLInstigator')
-	
-test('repl start', () => {
+
+test('repl', () => {
 	
 })

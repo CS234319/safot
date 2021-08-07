@@ -2,7 +2,7 @@ const Environment = require('./Environment')
 const Atom = require('./Atom')
 const Primitive = require('./Primitive')
 const ListCreator = require('./ListCreator')
-const p = require('./Parser')
+const parse = require('./Parser').parse
 
 module.exports = class Engine {
 	#env
@@ -37,8 +37,8 @@ module.exports = class Engine {
 	#initPredefinedFunctions() {
 		this.#env.set(Atom.nil, Atom.nil)
 		this.#env.set(Atom.t, Atom.t)
-		this.evaluate(p.parse("(ndefun quote (x) x)"))
-		this.evaluate(p.parse("(defun null (x) (eq x nil))"))
+		this.evaluate(parse("(ndefun quote (x) x)"))
+		this.evaluate(parse("(defun null (x) (eq x nil))"))
 	}
 
 	evaluate(s) {

@@ -1,4 +1,4 @@
-const p = require('./Parser')
+const parse = require('./Parser').parse
 const Engine = require('./Engine')
 const TestUtils = require('./TestUtils')
 const Atom = require('./Atom')
@@ -7,12 +7,12 @@ const utils = new TestUtils()
 
 var e = new Engine()
 
-const parseEvaluate = str => e.evaluate(p.parse(str))
+const parseEvaluate = str => e.evaluate(parse(str))
 const parseEvaluateEquals = (str1, str2) => {
-	utils.expectEquals(parseEvaluate(str1), p.parse(str2))
+	utils.expectEquals(parseEvaluate(str1), parse(str2))
 }
 const parseEvaluateException = (str1, str2, kindStr) => {
-	utils.expectException(() => parseEvaluate(str1), p.parse(str2), p.parse(kindStr))
+	utils.expectException(() => parseEvaluate(str1), parse(str2), parse(kindStr))
 }
 const parseEvaluateError = (errorStr, kindStr) => {
 	parseEvaluateException(errorStr, errorStr, kindStr)
@@ -27,7 +27,7 @@ const primitiveArgsRedundantException = (callStr) => {
 	primitiveArgsException(callStr, "redundant")
 }
 const lambdaArgsException = (callStr, kindStr, extractLambda) => {
-	const call = p.parse(callStr)
+	const call = parse(callStr)
 	const lambda = extractLambda(call.car())
 	const args = call.cdr()
 	parseEvaluateException(callStr, lambda.cons(args).toString(), kindStr) 

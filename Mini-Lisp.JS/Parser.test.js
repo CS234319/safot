@@ -1,4 +1,3 @@
-const p = require('./Parser')
 const ParserStateWrapper = require('./ParserStateWrapper')
 const ListCreator = require('./ListCreator')
 const Atom = require('./Atom')
