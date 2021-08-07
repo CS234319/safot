@@ -65,8 +65,8 @@ test('evaluate cdr', () => {
 
 test('evaluate quote', () => {
 	parseEvaluateEquals("(quote a)", "a")
-	primitiveArgsMissingException("(quote)")
-	primitiveArgsRedundantException("(quote a b)")
+	namedLambdaArgsException("(quote)", "missing")
+	namedLambdaArgsException("(quote a b)", "redundant")
 })
 
 test('evaluate atom', () => {
@@ -91,11 +91,11 @@ test('evaluate cond', () => {
 	parseEvaluateEquals("(cond (t 'a))", "a")
 	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((eq 'a 'a) '(a a a)))", "(a a a)")
 	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((set 'b 'c) '(a a a)))", "(a a a)")
-	// parseEvaluateEquals("(eval b)", "c")
+	parseEvaluateEquals("(eval 'b)", "c")
 	parseEvaluateEquals("(cond ((eq 'a 'a) '(a b c)) ((set 'a 'c) '(a a a)))", "(a b c)")
-	// parseEvaluateException("(eval a)", "a", "undefined")
+	parseEvaluateException("(eval 'a)", "a", "undefined")
 	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) a)", "a", "cond")
-	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "quote", "undefined")
+	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "a", "undefined")
 	clear()
 })
 
@@ -226,7 +226,7 @@ test('evaluate lambda', () => {
 })
 
 test('evaluate nested lambdas', () => {
-	parseEvaluate("(set 'foo (lambda (x xs) (cons x xs)))")
+	parseEvaluate("(set 'foo 	(lambda (x xs) (cons x xs)))")
 	parseEvaluate("(set 'bar (lambda (x xs) (foo (car xs) (cons x xs))))")
 	parseEvaluateEquals("(bar 'a '(b c d))", "(b a b c d)")
 	namedLambdaArgsException("(bar 'a)", "missing")

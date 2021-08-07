@@ -7,6 +7,10 @@ module.exports = class TestUtils {
 		expect(f).toThrow(new EvaluationError(kind ? s.cons(kind) : s))	
 	}	
 
+	parseExpectException(f, str, kindStr) {
+		this.expectException(f, p.parse(str), p.parse(kindStr))
+	}
+
 	expectEquals(s, t) {
 		if ((s instanceof S) && (t instanceof S)) {
 			expect(s.equals(t)).toBeTruthy()	

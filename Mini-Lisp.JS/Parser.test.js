@@ -133,7 +133,7 @@ test('parse symbol characters', () => {
 	const nonSymbolChars = Array.from("()[].';")
 	const recieve = char => char
 	const expect = char => {
-		return nonSymbolChars.includes(char) ? undefined : new Atom(char.toUpperCase())
+		return nonSymbolChars.includes(char) ? null : new Atom(char.toUpperCase())
 	}
 
 	checkCharactersRange(33, 126, recieve, expect)

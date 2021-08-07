@@ -9,9 +9,33 @@ const utils = new TestUtils()
 const expectAList = (listStr) => {
 	utils.expectEquals(env.getAList(), p.parse(listStr))
 }
+const expectFormalsAList = (listStr) => {
+	utils.expectEquals(env.getFormalsAList(), p.parse(listStr))
+}
 const testSet = (keyStr, valStr) => {
 	const val = p.parse(valStr)
 	utils.expectEquals(env.set(p.parse(keyStr), val), val)
+}
+const parseBind = (formalsStr, actualsStr) => {
+	utils.expectEquals(env.bind(p.parse(formalsStr), p.parse(actualsStr)), undefined)
+}
+const parseBindException = (formalsStr, actualsStr, s) => {
+	utils.parseExpectException(() => parseBind(formalsStr, actualsStr), s, 'car')
+}
+const testUnbind = (numFormals) => {
+	utils.expectEquals(env.unbind(numFormals), undefined)
+}
+const expectUnbindException = (numFormals) => {
+	utils.expectException(() => env.unbind(numFormals), Atom.nil, Atom.cdr)
+	
+}
+const testSetLookup = (keyStr, valueStr) => {
+	testSet(keyStr, valueStr)
+	utils.expectEquals(env.lookup(p.parse(keyStr)), p.parse(valueStr))
+}
+const testLookupException = (keyStr) => {
+	const key = p.parse(keyStr)
+	utils.expectException(() => env.lookup(key), key, Atom.undefined)
 }
 
 test('set', () => {	
@@ -61,15 +85,6 @@ test('ndefun', () => {
 })
 
 test('lookup', () => {	
-	const testSetLookup = (keyStr, valueStr) => {
-		testSet(keyStr, valueStr)
-		utils.expectEquals(env.lookup(p.parse(keyStr)), p.parse(valueStr))
-	}
-	const testLookupException = (keyStr) => {
-		const key = p.parse(keyStr)
-		utils.expectException(() => env.lookup(key), key, Atom.undefined)
-	}
-
 	env = new Environment()
 	testLookupException('t')
 	testLookupException('nil')
@@ -82,4 +97,61 @@ test('lookup', () => {
 	
 	env = new Environment()
 	testLookupException('a')
+})
+
+test('backup and restore', () => {	
+	env = new Environment()
+	expectAList("()")
+	env.backup()
+	expectAList("()")
+	testSet('a', 'b')
+	expectAList("((a . b))")
+	env.restore()
+	expectAList("()")
+	testSet('a', 'b')
+	testSet('c', 'd')
+	env.backup()
+	testSet('e', 'f')
+	env.restore()
+	expectAList("((c . d) (a . b))")
+})
+
+test('bind', () => {	
+	env = new Environment()
+	expectFormalsAList('()')
+	parseBind('()', '()')
+	expectFormalsAList('()')
+	parseBind('(a b)', '(c d)')
+	expectFormalsAList('((b . d) (a . c))')
+	parseBind('(a a)', '(b c)')
+	expectFormalsAList('((a . c) (a . b) (b . d) (a . c))')
+	testSetLookup('a', 'c')
+	testSetLookup('b', 'd')
+	testLookupException('c')
+	parseBindException('a', '(b)', 'a')
+	parseBindException('(b)', 'a', 'a')
+	parseBindException('(b)', 'a', 'a')
+	parseBindException('()', 'a', '()')
+	parseBindException('a', '()', 'a')
+	parseBindException('(a)', '(b c)', '()')
+	parseBindException('(a b)', '(c)', '()')
+	parseBindException('(a b c)', '(d)', '()')
+	parseBindException('(a b)', '(c d e)', '()')
+})
+
+test('unbind', () => {
+	env = new Environment()
+	expectFormalsAList('()')
+	expectUnbindException(1)
+	testUnbind(0)
+	parseBind('(a b)', '(c d)')
+	testUnbind(2)
+	expectFormalsAList('()')
+	parseBind('(a b)', '(c d)')
+	testUnbind(1)
+	expectFormalsAList('((a . c))')
+	testUnbind(1)
+	expectFormalsAList('()')
+	parseBind('(a b)', '(c d)')
+	expectUnbindException(3)
 })

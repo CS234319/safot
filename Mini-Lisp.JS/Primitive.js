@@ -54,8 +54,7 @@ module.exports = class Primitive {
 
 	isNormal() {
 		return 	[
-					Atom.cond, Atom.quote, Atom.lambda,
-					Atom.nlambda, Atom.defun, Atom.ndefun
+					Atom.cond, Atom.lambda, Atom.nlambda, Atom.defun, Atom.ndefun
 				].some(name => this.isWithName(name))
 	}
 }

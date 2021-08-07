@@ -72,6 +72,8 @@ test('equals', () => {
 		   p.parse('(a . (b . (c . d)))'))).toBeTruthy()
 	expect(p.parse('(a . (b . (c . d)))').equals(
 		   p.parse('(a . (b . (c . nil)))'))).toBeFalsy()
+	expect(p.parse('(a b c)').equals(
+		   p.parse('(a . (b . (c . nil)))'))).toBeTruthy()
 })
 
 test('null', () => {
@@ -107,9 +109,9 @@ test('isList', () => {
 test('getListAsArray', () => {
 	utils.expectEquals(nil.getListAsArray(), [])
 	utils.expectEquals(list.getListAsArray(), listAsArray)
-	utils.expectEquals(t.getListAsArray(), undefined)
-	utils.expectEquals(a.getListAsArray(), undefined)
-	utils.expectEquals(pair.getListAsArray(), undefined)
+	utils.expectEquals(t.getListAsArray(), null)
+	utils.expectEquals(a.getListAsArray(), null)
+	utils.expectEquals(pair.getListAsArray(), null)
 })
 
 test('getListLength', () => {

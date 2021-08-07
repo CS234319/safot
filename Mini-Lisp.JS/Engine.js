@@ -12,7 +12,7 @@ module.exports = class Engine {
 		this.#env = new Environment()
 
 		this.#initPrimitives()
-		this.#initLibrary()
+		this.#initPredefinedFunctions()
 	}
 
 	#initPrimitives() {
@@ -21,7 +21,6 @@ module.exports = class Engine {
 		this.#primitives = [
 			[Atom.car,			1, s => s.car()],
 			[Atom.cdr,			1, s => s.cdr()],
-			[Atom.quote,		1, s => s],
 			[Atom.atom,			1, s => Engine.#boolToS(s.atom())],
 			[Atom.eval,			1, s => this.#_evaluate(s)],
 			[Atom.cons,			2, (s, t) => s.cons(t)],
@@ -35,9 +34,10 @@ module.exports = class Engine {
 		].map(tup => new Primitive(tup[0], tup[1], tup[2]))
 	}
 
-	#initLibrary() {
-		this.evaluate(p.parse("(set 'nil 'nil)"))
-		this.evaluate(p.parse("(set 't 't)"))
+	#initPredefinedFunctions() {
+		this.#env.set(Atom.nil, Atom.nil)
+		this.#env.set(Atom.t, Atom.t)
+		this.evaluate(p.parse("(ndefun quote (x) x)"))
 		this.evaluate(p.parse("(defun null (x) (eq x nil))"))
 	}
 
