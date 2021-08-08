@@ -50,8 +50,8 @@ def test_error(shell):
     assert shell.feed("(cdr 'a)") == "Error [CDR] in A"
     assert shell.feed("(bla)") == "Error [UNDEFINED] in BLA"
     assert shell.feed("(error)") == "Error [NIL] in (ERROR)"
-    assert shell.feed("(error 'A)") == "Error [INVALID] in (A)"
-    assert shell.feed("(error 'message)") == "Error [INVALID] in (MESSAGE)"
+    assert shell.feed("(error 'A)") == "Error [A] in (ERROR (QUOTE A))"
+    assert shell.feed("(error 'message)") == "Error [MESSAGE] in (ERROR (QUOTE MESSAGE))"
 
 
 def test_multi_line(shell):

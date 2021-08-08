@@ -90,7 +90,7 @@ TEST(ParseEvalAtomic, eval) {
 // Test: error
 TEST(ParseEvalAtomic, error) {
     EXPECT_EXCEPTION(parse("(error)").eval()         , list(S("ERROR")) , NIL);
-    EXPECT_EXCEPTION(parse("(error 'my_err)").eval() , list(S("MY_ERR")), INVALID);
+    EXPECT_EXCEPTION(parse("(error 'my_err)").eval() , list(S("ERROR"), S("MY_ERR").q()), S("MY_ERR"));
 }
 
 // ----------------------------

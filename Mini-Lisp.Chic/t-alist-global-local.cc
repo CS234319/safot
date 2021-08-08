@@ -92,13 +92,13 @@ TEST(AlistGlobalLocal, SetWithError) {
                     x.q()
             ),
             list(
-                    list(NULL, list(ERROR, b_2.q(), x.q())),
+                    list(NULL, list(ERROR, b_2.q(), b_2)),
                     x.q()
             )
     );
 
     // Evaluate cond on the list:
-    EXPECT_EXCEPTION(s.eval(), list(b_2, x.q()), INVALID);
+    EXPECT_EXCEPTION(s.eval(), list(S("ERROR"), b_2.q(), b_2), b_2);
 
     // Check if b0, b1, b2 are defined:
     EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED);

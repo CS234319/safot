@@ -98,13 +98,13 @@ TEST(BookEvaluate, Bind) {
     EXPECT_EXCEPTION(parse("(bind)").eval(), list(S("NAMES"), S("VALUES"), S("a-list")), MISSING);
     EXPECT_EXCEPTION(
         parse("(bind '(a b) '(x y z) '())").eval(),
-        list(MISSING_NAMES),
-        INVALID
+        list(S("ERROR"), MISSING_NAMES.q()),
+        MISSING_NAMES
      );
     EXPECT_EXCEPTION(
         parse("(bind '(a b c) '(x y) '())").eval(),
-        list(MISSING_VALUES),
-        INVALID
+        list(S("ERROR"), MISSING_VALUES.q()),
+        MISSING_VALUES
     );
 }
 
@@ -132,8 +132,8 @@ TEST(BookEvaluate, ApplyTrivialAtomic) {
     EXPECT_EXCEPTION(parse("(apply-trivial-atomic)").eval(), list(S("ATOMIC"), S("FIRST"), S("SECOND")), MISSING);
     EXPECT_EXCEPTION(
         parse("(apply-trivial-atomic 'zzz 'a NIL)").eval(),
-        list(SOMETHING_WENT_WRONG),
-        INVALID
+        list(S("ERROR"), SOMETHING_WENT_WRONG.q()),
+        SOMETHING_WENT_WRONG
     );
 }
 
@@ -162,7 +162,7 @@ TEST(BookEvaluate, ApplyEagerAtomic) {
     EXPECT_EQ(parse("(apply-eager-atomic 'eq '(a b) '())").eval(), NIL);
     parse("(apply-eager-atomic 'set '(y a) '())").eval(); EXPECT_EQ(lookup(y), a);
     EXPECT_EXCEPTION(parse("(apply-eager-atomic)").eval(),  list(S("ATOMIC"), S("ACTUALS"), S("A-LIST")), MISSING);
-    EXPECT_EXCEPTION(parse("(apply-eager-atomic 'error 'a '())").eval(), list(a), INVALID);
+    EXPECT_EXCEPTION(parse("(apply-eager-atomic 'error 'a '())").eval(), list(S("ERROR"), S("ACTUALS")), a);
 }
 
 
