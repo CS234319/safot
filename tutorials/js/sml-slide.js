@@ -12,7 +12,7 @@ function thebe_init() {
                 "wsUrl": "ws://localhost:16789"
             }
         },
-        selector: "[data-thebe-executable-ocaml]",
+        selector: "[data-thebe-executable-sml]",
         mathjaxUrl: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
         mathjaxConfig: "TeX-AMS_CHTML-full,Safe",
         codeMirrorConfig: {

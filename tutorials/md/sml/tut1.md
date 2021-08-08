@@ -41,14 +41,14 @@ val it = 10 : int
     ```sml
     2 + 2;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * doing simple arithmetic
 
     ```sml
     3.2 - 2.3;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -61,7 +61,7 @@ naming constants
 ```sml
 val seconds = 60;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -74,7 +74,7 @@ val hours = 24;
 
 seconds * minutes * hours;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -87,7 +87,7 @@ it div 24;
 
 val secs_in_hour = it;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -131,7 +131,7 @@ h''3_H
 ```sml
 val +-+-+ = 1415;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -199,7 +199,7 @@ constants are written in double quotes
 ```sml
 "ML is the best";
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 special characters `\n`, `\t`, `\"`, `\\`
 
@@ -210,7 +210,7 @@ concatenation
 ```sml
 "Standard" ^ " ML";
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -221,7 +221,7 @@ comparison
 
 "zzz" > "aaa";
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -230,7 +230,7 @@ comparison
 ```sml
 size "SML";
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -245,7 +245,7 @@ chars are distinguished from strings of length 1 by `#`
 
 #"0";
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -256,7 +256,7 @@ str #"0";
 
 String.sub("hello", 0);
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -267,7 +267,7 @@ ord #"0";
 
 chr it;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -280,7 +280,7 @@ true;
 
 false;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -301,7 +301,7 @@ val a = (1.5, 6.8);
 
 ("str",1,true,(#"0",0.1));
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -312,7 +312,7 @@ val a = (1.5, 6.8);
     ```sml
     val me = { name="Ofir", age=30 };
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * type lists each field as `label : type`
 * enclosed in braces `{...}`
@@ -324,14 +324,14 @@ val a = (1.5, 6.8);
     ```sml
     #name me;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * tuples **can be seen as** records with numbers as implicit field labels
 
     ```sml
     #2 ("one", "two", "three");
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * note that the numbering starts with 1
 
@@ -346,14 +346,14 @@ val a = (1.5, 6.8);
     ["a", "list"];
     [];
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * elements may appear more than once
 
     ```sml
     [3,4,3];
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * elements may have any type but all elements must have the same type
 
@@ -361,7 +361,7 @@ val a = (1.5, 6.8);
     [(1, "one"), (2, "two")] : (int*string) list
     [[3.1], [], [5.7, ~0.6]] : (real list) list
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -370,7 +370,7 @@ val a = (1.5, 6.8);
 ```sml
 fun sq(x: int) = x*x;
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 * keyword `fun` starts the function declaration
 * `sq` is the function name
@@ -391,21 +391,21 @@ fun sq(x: int) = x*x;
     ```sml
     (sq 3);
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * when a function is called the parameter is evaluated and then passed to the function
 
     ```sml
     sq (sq 3);
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * the parentheses are optional
 
     ```sml
     sq 3;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -414,7 +414,7 @@ fun sq(x: int) = x*x;
     ```sml
     fun sq x:int = x*x;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -433,7 +433,7 @@ lengthvec a;
 
 lengthvec (5.0, 12.0);
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -446,7 +446,7 @@ lengthvec (5.0, 12.0);
 
     it 3;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * the following declarations are identical
 
@@ -454,7 +454,7 @@ lengthvec (5.0, 12.0);
     fun sq x:int = x*x;
     val sq = fn x:int => x*x;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -466,7 +466,7 @@ lengthvec (5.0, 12.0);
     fun inttwice(f: (int->int)) =
         fn x => f (f x);
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * the arrow is right associative so the type of `inttwice` is equivalent to:
 
@@ -481,7 +481,7 @@ lengthvec (5.0, 12.0);
 
     it 3;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -495,7 +495,7 @@ lengthvec (5.0, 12.0);
         if n=0 then p else facti (n-1, n*p);
     (*val facti = fn : int * int -> int*)
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
   * constants `0` and `1` have type `int`.</span>
   * therefore `n=0` and `n-1` involve integers so `n` has type `int`</span>
@@ -540,7 +540,7 @@ pairself 4.0;
 
 fun pair (x,y) = (y,x);
 ```
-<!-- .element: data-thebe-executable -->
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -558,14 +558,14 @@ fun pair (x,y) = (y,x);
     fun ident x = x;
     twice ident;
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 * you usually may ignore it. or use a workaround:
 
     ```sml
     fn x => (twice ident) (x);
     ```
-    <!-- .element: data-thebe-executable -->
+    <!-- .element: data-thebe-executable-sml -->
 
 ---
 
