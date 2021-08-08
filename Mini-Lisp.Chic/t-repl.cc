@@ -246,5 +246,5 @@ TEST(REPL, StderrError) {
     testing::internal::CaptureStderr(); close_stdout();
     REPL(expr.c_str());
     string output = testing::internal::GetCapturedStderr(); open_stdout();
-    EXPECT_EQ(output,"Error: kind = (MSG) Where = INVALID\n");
+    EXPECT_EQ(output,"Error: kind = (ERROR (QUOTE MSG)) Where = MSG\n");
 }

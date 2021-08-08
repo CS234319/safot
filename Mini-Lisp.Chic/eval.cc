@@ -47,15 +47,6 @@ FUN(S, evaluate_cond, S)  IS(
         $$(_.cdr()) ;
 )
 
-S only(S s) {
-    s.pair() || die(s);
-    s.cdr().cdr().t() && s.error(REDUNDANT).t();
-    S a = evaluate_list(s.cdr());
-    a.null() && s.error(MISSING).t();
-    a.atom() && s.error(INVALID).t();
-    return a.car();
-}
-
 void checkNumberOfArgs(S s) {
     S f = s.car();
     if (f.eq(QUOTE) || f.eq(CAR) || f.eq(CDR) || // 1 Args:
@@ -77,16 +68,16 @@ S evaluate_atomic_function(S s) { M(s);
   checkNumberOfArgs(s);
   const S f = s.car();
   // Atomic functions:
-  if (f.eq(CAR))     return only(s).car();
+  if (f.eq(CAR))     return s.$2$().eval().car();
   if (f.eq(CONS))    return s.$2$().eval().cons(s.$3$().eval());
   if (f.eq(SET))     return set(s.$2$().eval(),          s.$3$().eval());
   if (f.eq(EQ))      return s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
   if (f.eq(COND))    return evaluate_cond(s.cdr());
-  if (f.eq(CDR))     return only(s).cdr();
-  if (f.eq(ATOM))    return only(s).atom() ? T : NIL;
-  if (f.eq(EVAL))    return only(s).eval();
-  if (f.eq(ERROR))   return s.error(s.cdr().eval());
-  if (f.eq(NULL))    return only(s).null() ? T : NIL;
+  if (f.eq(CDR))     return s.$2$().eval().cdr();
+  if (f.eq(ATOM))    return s.$2$().eval().atom() ? T : NIL;
+  if (f.eq(EVAL))    return s.$2$().eval().eval();
+  if (f.eq(ERROR))   return s.less2() ? s.error(NIL) : s.error(s.$2$().eval());
+  if (f.eq(NULL))    return s.$2$().eval().null() ? T : NIL;
   if (f.eq(QUOTE))   return s.cdr().car();
   if (f.eq(NLAMBDA)) return list(NLAMBDA, s.$2$(),  s.$3$());
   if (f.eq(LAMBDA))  return list(LAMBDA, s.$2$(), s.$3$());

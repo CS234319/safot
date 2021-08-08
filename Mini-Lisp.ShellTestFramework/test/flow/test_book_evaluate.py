@@ -18,8 +18,12 @@ def flow():
         5. return flow
     """
     # Define inputs:
-    directory = "../../../Mini-Lisp.Inputs/"
+    directory = "../../../Mini-Lisp.BookValidator/Mini-Lisp.Inputs/"
     interpreter = "../../../Mini-Lisp.Chic/mini-lisp"
+
+    # Remove lisp files:
+    command = f"make clean -C {directory}"
+    os.system(command)
 
     # Generate lisp files:
     command = f"make all -C {directory}"

@@ -106,8 +106,8 @@ TEST(Book, AtomicFunctionsEq) {
 TEST(Book, AtomicFunctionsError) {
     S err = S("ERROR");
     EXPECT_EXCEPTION(parse("(error)").eval(), list(err), NIL);
-    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list(a), INVALID);
-    EXPECT_EXCEPTION(parse("(error 'message)").eval(), list(S("MESSAGE")), INVALID);
+    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list(S("ERROR"), a.q()), a);
+    EXPECT_EXCEPTION(parse("(error 'message)").eval(), list(S("ERROR"), S("MESSAGE").q()), S("MESSAGE"));
 }
 
 /*

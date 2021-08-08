@@ -6,4 +6,4 @@ T
 NIL
 A
 Error [MISSING] in (ATOMIC ACTUALS A-LIST)
-Error [INVALID] in (A)
+Error [A] in (ERROR ACTUALS)
