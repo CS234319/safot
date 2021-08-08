@@ -1,0 +1,18 @@
+.reveal pre {
+    width: 100%;
+}
+
+/* .reveal p {
+    text-align: left;
+} */
+
+.reveal .code-wrapper code {
+    font-size: 20px;
+}
+
+code:not(.hljs){
+    background-color: rgb(27,31,35,0.08);
+    font-size: 85%;
+    border-radius: 6px;
+    padding: .05em .1em;
+}

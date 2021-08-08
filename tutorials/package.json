@@ -1,0 +1,30 @@
+{
+  "name": "pl-slides",
+  "version": "0.1.0",
+  "description": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "gulp serve",
+    "notebook": "jupyter notebook --NotebookApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://localhost:16788/\"}}' --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.disable_check_xsrf=\"True\" --no-browser --NotebookApp.port=16789"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/twyair/programming-languages-slides.git"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "keywords": [
+    "slides",
+    "presentation"
+  ],
+  "devDependencies": {
+    "core-js": "^3.12.1",
+    "gulp": "^4.0.2",
+    "gulp-connect": "^5.7.0",
+    "handlebars": "^4.7.7",
+    "revealjs": "hakimel/reveal.js",
+    "thebe": "twyair/thebe"
+  },
+  "browserslist": "> 0.5%, IE 11, not dead"
+}
