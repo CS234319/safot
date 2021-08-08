@@ -33,9 +33,9 @@ jupyter kernelspec install [ --user ] --name ocaml-jupyter "$(opam var share)/ju
 ## install
 
 ```bash
-git clone https://github.com/twyair/programming-languages-slides
+git clone https://github.com/yossigil/safot.git
 
-cd programming-languages-slides
+cd safot/tutorials
 
 npm install
 ```
