@@ -12,6 +12,6 @@ repl:
 	node repl.js
 
 install:
-	npm uninstall jest
 	npm install --save-dev jest
 	npm install -g pegjs
+	npm install memory-streams --save

@@ -1,2 +1,3 @@
 const REPLInstigator = require('./REPLInstigator')
-const replInstigator = new REPLInstigator()
+
+const ri = new REPLInstigator(process.stdin, process.stdout, process.stdout)

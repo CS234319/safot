@@ -6,26 +6,32 @@ module.exports = class REPLInstigator {
 	#engine
 	#buffer
 	#lineReader
+	#outputStream
 
-	constructor() {
+	constructor(inputStream, outputStream, promptStream) {
 		this.#engine = new Engine()
+		this.#outputStream = outputStream
 		this.#lineReader = readline.createInterface({
-		 	input: process.stdin,
-		 	output: process.stdout
+	  		input: inputStream,
+	  		output: promptStream,
+	  		crlfDelay: Infinity
+		})	
+
+		this.#lineReader.on('line', (line) => {
+	  		this.#feedLine(line)
 		})
 
-		this.#readNew()
+		this.#promptNew()
 	}
 
-	#read(cursorStr) {
-		this.#lineReader.question(cursorStr, (lineStr) => {
-			this.#feedLine(lineStr)
-		})
+	#prompt(promptStr) {
+		this.#lineReader.setPrompt(promptStr)
+		this.#lineReader.prompt()
 	}
 
-	#readNew() {
+	#promptNew() {
 		this.#buffer = ''
-		this.#read('> ')
+		this.#prompt('> ')
 	}
 
 	#feedLine(lineStr) {
@@ -39,23 +45,27 @@ module.exports = class REPLInstigator {
 				break
 
 			case ParserStateWrapper.ExpectMore:
-				this.#read((this.#buffer.length === 0) ? '> ' : '- ')
+				this.#buffer.length === 0 ? this.#promptNew() : this.#prompt('- ')
 				break
 
 			case ParserStateWrapper.Reject:
-				console.log('?')
-				this.#readNew()
+				this.#println('?')
+				this.#promptNew()
 				break
 		}
 	}
 	
 	#handleParsingResult(s) {
 		try {
-			console.log(`${this.#engine.evaluate(s)}`)
+			this.#println(`${this.#engine.evaluate(s)}`)
 		} catch (e) {
-			console.log(`Error: ${e.s.car()} - ${e.s.cdr()}`)
+			this.#println(`Error: ${e.s.car()} - ${e.s.cdr()}`)
 		}
 
-		this.#readNew()
+		this.#promptNew()
+	}
+
+	#println(str) {
+		this.#outputStream.write(str + '\n')
 	}
 }

@@ -1,0 +1,11 @@
+(defun bind (xs ys)
+		(cond ((null xs) (cond ((null ys) nil)
+							   (t (error ys 'redundant))))
+			  ((null ys) (cond ((null xs) nil)
+							   (t (error ys 'missing))))
+			  (t (cons
+					(set (car xs) (car ys))
+					(bind (cdr xs) (cdr ys))))))
+(bind '(a b) '(c d))
+(eval 'a)
+(eval 'b)
