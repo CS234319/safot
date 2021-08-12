@@ -21,6 +21,7 @@ namespace Parser {
    L ::= E L    
    L ::= ''    
 
+Note: Observe that this grammar derives the dotted pair atom.atom, by E -> X T -> a T -> a . X -> a. a. 
    // AST: 
    E ::= X T   { $$ = NIL;                } // E1
    T ::= . X   { $-1 = cons($-1,$$);      } // T1 Tricky 
