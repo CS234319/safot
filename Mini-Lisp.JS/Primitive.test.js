@@ -84,7 +84,7 @@ test('isNormal', () => {
 	expect((new Primitive(Atom.error)).isNormal()).toBeFalsy()
 	expect((new Primitive(Atom.eval)).isNormal()).toBeFalsy()
 	expect((new Primitive(Atom.eq)).isNormal()).toBeFalsy()
-	expect((new Primitive(Atom.set)).isNormal()).toBeFalsy()
+	expect((new Primitive(Atom.SET)).isNormal()).toBeFalsy()
 
 	expect((new Primitive(Atom.cond)).isNormal()).toBeTruthy()
 	expect((new Primitive(Atom.lambda)).isNormal()).toBeTruthy()

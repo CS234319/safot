@@ -4,84 +4,81 @@ const Primitive = require('./Primitive')
 const ListCreator = require('./ListCreator')
 const parse = require('./Parser').parse
 
-module.exports = class Engine {
-	#env
-	#primitives
-
+module.exports = class Engine {		
 	constructor() {
-		this.#env = new Environment()
+		this._env = new Environment()
 
-		this.#initPrimitives()
-		this.#initPredefinedFunctions()
+		this._initPrimitives()
+		this._initPredefinedFunctions()
 	}
 
-	#initPrimitives() {
+	_initPrimitives() {
 		const lc = new ListCreator()
 		
-		this.#primitives = [
+		this._primitives = [
 			[Atom.car,			1, s => s.car()],
 			[Atom.cdr,			1, s => s.cdr()],
-			[Atom.atom,			1, s => Engine.#boolToS(s.atom())],
-			[Atom.eval,			1, s => this.#_evaluate(s)],
+			[Atom.atom,			1, s => Engine._boolToS(s.atom())],
+			[Atom.eval,			1, s => this._evaluate(s)],
 			[Atom.cons,			2, (s, t) => s.cons(t)],
-			[Atom.eq,			2, (s, t) => Engine.#boolToS(s.eq(t))],
-			[Atom.set,			2, (s, t) => this.#env.set(s, t)],
+			[Atom.eq,			2, (s, t) => Engine._boolToS(s.eq(t))],
+			[Atom.SET,			2, (s, t) => this._env.set(s, t)],
 			[Atom.lambda,		2, (s, t) => lc.create(Atom.lambda, s, t)],
 			[Atom.nlambda,		2, (s, t) => lc.create(Atom.nlambda, s, t)],
-			[Atom.defun,		3, (s, t, u) => this.#env.defun(s, t, u)],
-			[Atom.ndefun,		3, (s, t, u) => this.#env.ndefun(s, t, u)],
-			[Atom.cond,			undefined, s => this.#evaluateCond(s)],
+			[Atom.defun,		3, (s, t, u) => this._env.defun(s, t, u)],
+			[Atom.ndefun,		3, (s, t, u) => this._env.ndefun(s, t, u)],
+			[Atom.cond,			undefined, s => this._evaluateCond(s)],
 		].map(tup => new Primitive(tup[0], tup[1], tup[2]))
 	}
 
-	#initPredefinedFunctions() {
-		this.#env.set(Atom.nil, Atom.nil)
-		this.#env.set(Atom.t, Atom.t)
+	_initPredefinedFunctions() {
+		this._env.set(Atom.nil, Atom.nil)
+		this._env.set(Atom.t, Atom.t)
 		this.evaluate(parse("(ndefun quote (x) x)"))
 		this.evaluate(parse("(defun null (x) (eq x nil))"))
 	}
 
 	evaluate(s) {
-		this.#env.backup()
+		this._env.backup()
 
 		try {
-			return this.#_evaluate(s)		
+			return this._evaluate(s)		
 		} catch (e) {
-			this.#env.restore()
+			this._env.restore()
 			throw e
 		}
 	}
 
-	#_evaluate(s) {
+	_evaluate(s) {
 		if (s.atom()) {
-			return this.#env.lookup(s)
+			return this._env.lookup(s)
 		}
 
 		if (!s.isList()) {
 			return s.error(Atom.invalid)
 		}
 
-		const primitive = this.#primitives.find(p => p.isWithName(s.car()))
+		const primitive = this._primitives.find(p => p.isWithName(s.car()))
 		if (primitive) {
-			return this.#applyPrimitive(primitive, s.cdr())
+			return this._applyPrimitive(primitive, s.cdr())
 		}
 
 		if (s.car().eq(Atom.error)) {
-			return s.error(this.#evaluateList(s.cdr()))
+			return s.error(this._evaluateList(s.cdr()))
 		}
 
-		return this.#apply(this.#_evaluate(s.car()), s.cdr())
+		return this._apply(this._evaluate(s.car()), s.cdr())
 	}
 
-	#evaluateList(list) {
+	_evaluateList(list) {
 		if (list.null()) {
 			return Atom.nil
 		}
 
-		return this.#_evaluate(list.car()).cons(this.#evaluateList(list.cdr()))
+		return this._evaluate(list.car()).cons(this._evaluateList(list.cdr()))
 	}
 
-	#evaluateCond(testForms) {
+	_evaluateCond(testForms) {
 		if (testForms.null()) {
 			return Atom.nil
 		}
@@ -92,22 +89,22 @@ module.exports = class Engine {
 			return currPair.error(Atom.cond)
 		}
 
-		if (this.#_evaluate(currPair.car()).t()) {
-			return this.#_evaluate(currPair.cdr().car())
+		if (this._evaluate(currPair.car()).t()) {
+			return this._evaluate(currPair.cdr().car())
 		}
 
-		return this.#evaluateCond(testForms.cdr())
+		return this._evaluateCond(testForms.cdr())
 	}
 
-	#applyPrimitive(primitive, args) {
+	_applyPrimitive(primitive, args) {
 		primitive.checkNumberOfArgs(args)
-		const actuals = primitive.isNormal() ? args : this.#evaluateList(args)	
+		const actuals = primitive.isNormal() ? args : this._evaluateList(args)	
 		return primitive.run(actuals)
 	}
 
-	#apply(lambda, args) {
+	_apply(lambda, args) {
 		if (lambda.getListLength() !== 3) {
-			return this.#throwInvalidLambdaError(lambda)
+			return this._throwInvalidLambdaError(lambda)
 		}
 
 		const tag = lambda.car()
@@ -115,24 +112,24 @@ module.exports = class Engine {
 
 		if ((!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) ||
 			(!formals.isList())) {
-			return this.#throwInvalidLambdaError(lambda)
+			return this._throwInvalidLambdaError(lambda)
 		}
 
-		this.#checkArgsInLambdaCall(lambda, args)
+		this._checkArgsInLambdaCall(lambda, args)
 
-		const actuals = tag.eq(Atom.lambda) ? this.#evaluateList(args) : args
+		const actuals = tag.eq(Atom.lambda) ? this._evaluateList(args) : args
 		const body = lambda.cdr().cdr().car()
 		
-		this.#env.bind(formals, actuals)
+		this._env.bind(formals, actuals)
 
 		try {
-			return this.#_evaluate(body)
+			return this._evaluate(body)
 		} finally {
-			this.#env.unbind(formals.getListLength())	
+			this._env.unbind(formals.getListLength())	
 		}
 	}
 
-	#checkArgsInLambdaCall(lambda, args) {
+	_checkArgsInLambdaCall(lambda, args) {
 		const argsLength = args.getListLength()
 		
 		if (argsLength === undefined) {
@@ -150,11 +147,11 @@ module.exports = class Engine {
 		}
 	}
 
-	#throwInvalidLambdaError(lambda) {
+	_throwInvalidLambdaError(lambda) {
 		return lambda.error(Atom.invalid)
 	}
 
-	static #boolToS(bool) {
+	static _boolToS(bool) {
 		return bool ? Atom.t : Atom.nil
 	}
 }

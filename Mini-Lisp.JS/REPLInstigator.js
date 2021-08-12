@@ -3,69 +3,64 @@ const Engine = require('./Engine')
 const readline = require('readline')
 
 module.exports = class REPLInstigator {
-	#engine
-	#buffer
-	#lineReader
-	#outputStream
-
 	constructor(inputStream, outputStream, promptStream) {
-		this.#engine = new Engine()
-		this.#outputStream = outputStream
-		this.#lineReader = readline.createInterface({
+		this._engine = new Engine()
+		this._outputStream = outputStream
+		this._lineReader = readline.createInterface({
 	  		input: inputStream,
 	  		output: promptStream,
 	  		crlfDelay: Infinity
 		})	
 
-		this.#lineReader.on('line', (line) => {
-	  		this.#feedLine(line)
+		this._lineReader.on('line', (line) => {
+	  		this._feedLine(line)
 		})
 
-		this.#promptNew()
+		this._promptNew()
 	}
 
-	#prompt(promptStr) {
-		this.#lineReader.setPrompt(promptStr)
-		this.#lineReader.prompt()
+	_prompt(promptStr) {
+		this._lineReader.setPrompt(promptStr)
+		this._lineReader.prompt()
 	}
 
-	#promptNew() {
-		this.#buffer = ''
-		this.#prompt('> ')
+	_promptNew() {
+		this._buffer = ''
+		this._prompt('> ')
 	}
 
-	#feedLine(lineStr) {
-		this.#buffer += lineStr
+	_feedLine(lineStr) {
+		this._buffer += lineStr
 		const pw = new ParserStateWrapper()
-		const parseResult = pw.parse(this.#buffer)
+		const parseResult = pw.parse(this._buffer)
 
 		switch (parseResult.type) {
 			case ParserStateWrapper.Accept:
-				this.#handleParsingResult(parseResult.output)
+				this._handleParsingResult(parseResult.output)
 				break
 
 			case ParserStateWrapper.ExpectMore:
-				this.#buffer.length === 0 ? this.#promptNew() : this.#prompt('- ')
+				this._buffer.length === 0 ? this._promptNew() : this._prompt('- ')
 				break
 
 			case ParserStateWrapper.Reject:
-				this.#println('?')
-				this.#promptNew()
+				this._println('?')
+				this._promptNew()
 				break
 		}
 	}
 	
-	#handleParsingResult(s) {
+	_handleParsingResult(s) {
 		try {
-			this.#println(`${this.#engine.evaluate(s)}`)
+			this._println(this._engine.evaluate(s).toString())
 		} catch (e) {
-			this.#println(`Error: ${e.s.car()} - ${e.s.cdr()}`)
+			this._println(`Error: ${e.s.car()} - ${e.s.cdr()}`)
 		}
 
-		this.#promptNew()
+		this._promptNew()
 	}
 
-	#println(str) {
-		this.#outputStream.write(str + '\n')
+	_println(str) {
+		this._outputStream.write(str + '\n')
 	}
 }

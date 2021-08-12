@@ -1,11 +1,9 @@
 const S = require('./S')
 
 module.exports = class Atom extends S {
-	#value
-
 	constructor(value) {
 		super()
-		this.#value = value
+		this._value = value
 	}
 
 	atom() {
@@ -21,8 +19,7 @@ module.exports = class Atom extends S {
 	}	
 
 	eq(s) {
-		return s.atom() && this.#value === s.#value
-	}
+		return s.atom() && this._value === s._value}
 
 	equals(s) {
 		return this.eq(s)
@@ -37,7 +34,7 @@ module.exports = class Atom extends S {
 	}
 
 	toString() {
-		return this.#value.toString()
+		return this._value.toString()
 	}
 
 	static nil 			= new Atom('NIL')
@@ -45,7 +42,7 @@ module.exports = class Atom extends S {
 	static quote 		= new Atom('QUOTE')
 	static lambda 		= new Atom('LAMBDA')
 	static nlambda 		= new Atom('NLAMBDA')
-	static set 			= new Atom('SET')
+	static SET 			= new Atom('SET')
 	static defun 		= new Atom('DEFUN')
 	static ndefun 		= new Atom('NDEFUN')
 	static atom 		= new Atom('ATOM')

@@ -3,46 +3,42 @@ const ListCreator = require('./ListCreator')
 const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
-	#alist
-	#backupAList
-	#formalsAList
-
 	constructor() {
-		this.#alist = Atom.nil
-		this.#backupAList = Atom.nil
-		this.#formalsAList = Atom.nil
+		this._alist = Atom.nil
+		this._backupAList = Atom.nil
+		this._formalsAList = Atom.nil
 	}
 
 	getAList() {
-		return this.#alist
+		return this._alist
 	}
 
 	getFormalsAList() {
-		return this.#formalsAList
+		return this._formalsAList
 	}
 
 	set(key, value) {
-		this.#alist = key.cons(value).cons(this.#alist)
+		this._alist = key.cons(value).cons(this._alist)
 		return value
 	}
 
 	defun(name, formals, body) {
-		return this.#genericDefun(name, formals, body, Atom.lambda)
+		return this._genericDefun(name, formals, body, Atom.lambda)
 	}
 
 	ndefun(name, formals, body) {
-		return this.#genericDefun(name, formals, body, Atom.nlambda)
+		return this._genericDefun(name, formals, body, Atom.nlambda)
 	}
 
-	#genericDefun(name, formals, body, tag) {
+	_genericDefun(name, formals, body, tag) {
 		const lc = new ListCreator()
 		const lambda = lc.create(tag, formals, body)
 		return this.set(name, lambda)	
 	}
 
 	lookup(s) {
-		for (const list of [this.#formalsAList, this.#alist]) {
-			const result = Environment.#lookup(s, list)	
+		for (const list of [this._formalsAList, this._alist]) {
+			const result = Environment._lookup(s, list)
 			if (result !== null) {
 				return result
 			}
@@ -51,7 +47,7 @@ module.exports = class Environment {
 		return s.error(Atom.undefined)
 	}
 
-	static #lookup(s, list) {
+	static _lookup(s, list) {
 		if (list.null()) {
 			return null
 		}
@@ -59,16 +55,16 @@ module.exports = class Environment {
 		const currPair = list.car()
 		return s.eq(currPair.car())
 			? currPair.cdr()
-			: Environment.#lookup(s, list.cdr()) 
+			: Environment._lookup(s, list.cdr()) 
 	}
 
 	backup() {
-		this.#backupAList = this.#alist
+		this._backupAList = this._alist
 	}
 
 	restore() {
-		this.#alist = this.#backupAList
-		this.#backupAList = Atom.nil
+		this._alist = this._backupAList
+		this._backupAList = Atom.nil
 	}
 
 	bind(formals, actuals) {
@@ -76,16 +72,16 @@ module.exports = class Environment {
 			return
 		}
 
-		this.#formalsAList = formals.car()
+		this._formalsAList = formals.car()
 									.cons(actuals.car())
-									.cons(this.#formalsAList)
+									.cons(this._formalsAList)
 
 		this.bind(formals.cdr(), actuals.cdr())
 	}
 
 	unbind(numFormals) {
 		for (var i = 0; i < numFormals; i++) {
-			this.#formalsAList = this.#formalsAList.cdr()
+			this._formalsAList = this._formalsAList.cdr()
 		}
 	}
 }

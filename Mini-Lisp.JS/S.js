@@ -1,14 +1,14 @@
 module.exports = class S {
 	atom() {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	car() {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	cdr() {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	cons(s) {
@@ -17,11 +17,11 @@ module.exports = class S {
 	}
 
 	eq(s) {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	equals(s) {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	null() {
@@ -39,11 +39,11 @@ module.exports = class S {
 	}
 
 	isList() {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	getListAsArray() {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
 	getListLength() {
@@ -51,10 +51,10 @@ module.exports = class S {
 	}
 
 	toString() {
-		return this.#errorNotImplemented()
+		return this._errorNotImplemented()
 	}
 
-	#errorNotImplemented() {
+	_errorNotImplemented() {
 		return this.error(Atom.bug)		
 	}
 }

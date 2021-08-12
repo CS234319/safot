@@ -148,11 +148,11 @@ test('evaluate error', () => {
 	parseEvaluateError("(error 'a 'b)", "(a b)")
 	parseEvaluateError("(error (set 'a 'd) 'b)", "(d b)")
 	parseEvaluateException("(error a)", "a", "undefined")
-	parseEvaluateException("(cond ((null (set 'b_0 'x)) 'x) " +
-								 "((null (set 'b_1 'x)) 'x) " +
-								 "((null (error 'b_2 'x)) 'x))",
-								 "(error 'b_2 'x)",
-								 "(b_2 x)")
+	parseEvaluateException("(cond ((null (set 'b_0 'x)) 'x) \
+								 	((null (set 'b_1 'x)) 'x) \
+								 	((null (error 'b_2 'x)) 'x))",
+								 	"(error 'b_2 'x)",
+								 	"(b_2 x)")
 	
 	parseEvaluateException("(error b_0)", "b_0", "undefined")
 	parseEvaluateException("(error b_1)", "b_1", "undefined")
@@ -235,9 +235,9 @@ test('evaluate nested lambdas', () => {
 })
 
 test('evaluate recursive lambdas', () => {
-	parseEvaluate("(set 'append (lambda (x xs) " +
-					"(cond ((null xs) (cons x nil)) " +
-						  "(t (cons (car xs) (append x (cdr xs)))))))")
+	parseEvaluate("(set 'append (lambda (x xs) \
+					(cond ((null xs) (cons x nil)) \
+						  (t (cons (car xs) (append x (cdr xs)))))))")
 	parseEvaluateEquals("(append (car '(c d)) '(a b))", '(a b c)')
 	namedLambdaArgsException("(append 'a)", "missing")
 	namedLambdaArgsException("(append 'a 'b 'c)", "redundant")
@@ -292,9 +292,9 @@ test('evaluate defun', () => {
 	parseEvaluate("(defun bar (xs) (car (cdr xs)))")
 	parseEvaluateEquals("(bar (cdr '(c a b)))", "b")
 
-	parseEvaluate("(defun append (x xs) " + 
-					"(cond ((null xs) (cons x nil)) " + 
-						  "(t (cons (car xs) (append x (cdr xs))))))")
+	parseEvaluate("(defun append (x xs) \
+					(cond ((null xs) (cons x nil)) \
+						  (t (cons (car xs) (append x (cdr xs))))))")
 	parseEvaluateEquals("(append (car '(c d)) '(a b))", '(a b c)')
 
 	parseEvaluate("(defun foo a 'a)")
@@ -302,14 +302,14 @@ test('evaluate defun', () => {
 	
 	clear()
 	
-	parseEvaluate("(defun bind (xs ys) " +
-						"(cond 	((null xs) (cond ((null ys) nil) " +
-													"(t (error ys 'redundant)))) " +
-								"((null ys) (cond ((null xs) nil) " +
-													"(t (error ys 'missing)))) " +
-								"(t (cons " +
-									"(set (car xs) (car ys)) " +
-									"(bind (cdr xs) (cdr ys))))))")
+	parseEvaluate("(defun bind (xs ys) \
+						(cond 	((null xs) (cond ((null ys) nil) \
+													(t (error ys 'redundant)))) \
+								((null ys) (cond ((null xs) nil) \
+													(t (error ys 'missing)))) \
+								(t (cons \
+									(set (car xs) (car ys)) \
+									(bind (cdr xs) (cdr ys))))))")
 	
 	parseEvaluateEquals("(bind '(a b) '(c d))", "(c d)")
 	parseEvaluateEquals("(eval 'a)", "c")
