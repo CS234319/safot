@@ -4,21 +4,20 @@ const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
 	constructor() {
-		this._alist = Atom.nil
-		this._backupAList = Atom.nil
-		this._formalsAList = Atom.nil
+		this._separatorNode = Atom.nil.cons(Atom.nil)
+		this._alist = this._separatorNode
 	}
 
 	getAList() {
 		return this._alist
 	}
 
-	getFormalsAList() {
-		return this._formalsAList
+	setAList(alist) {
+		this._alist = alist
 	}
 
 	set(key, value) {
-		this._alist = key.cons(value).cons(this._alist)
+		this._separatorNode.insert(key.cons(value))
 		return value
 	}
 
@@ -37,19 +36,16 @@ module.exports = class Environment {
 	}
 
 	lookup(s) {
-		for (const list of [this._formalsAList, this._alist]) {
-			const result = Environment._lookup(s, list)
-			if (result !== null) {
-				return result
-			}
-		}
-	
-		return s.error(Atom.undefined)
+		return Environment._lookup(s, this._alist)
 	}
 
 	static _lookup(s, list) {
 		if (list.null()) {
-			return null
+			 return s.error(Atom.undefined)
+		}
+
+		if (Environment._isSeparator(list)) {
+			return Environment._lookup(s, list.cdr()) 
 		}
 
 		const currPair = list.car()
@@ -58,30 +54,21 @@ module.exports = class Environment {
 			: Environment._lookup(s, list.cdr()) 
 	}
 
-	backup() {
-		this._backupAList = this._alist
-	}
-
-	restore() {
-		this._alist = this._backupAList
-		this._backupAList = Atom.nil
+	static _isSeparator(node) {
+		return node.car().null()
 	}
 
 	bind(formals, actuals) {
-		if (formals.null() && actuals.null()) {
-			return
-		}
-
-		this._formalsAList = formals.car()
-									.cons(actuals.car())
-									.cons(this._formalsAList)
-
-		this.bind(formals.cdr(), actuals.cdr())
+		this._alist = Environment._bind(formals, actuals, this._alist)
+		return this._alist
 	}
 
-	unbind(numFormals) {
-		for (var i = 0; i < numFormals; i++) {
-			this._formalsAList = this._formalsAList.cdr()
+	static _bind(formals, actuals, list) {
+		if (formals.null() && actuals.null()) {
+			return list
 		}
+
+		return Environment._bind(formals.cdr(), actuals.cdr(), 
+						  		 formals.car().cons(actuals.car()).cons(list))
 	}
 }

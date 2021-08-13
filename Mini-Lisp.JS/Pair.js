@@ -2,7 +2,6 @@ const S = require('./S')
 const Atom = require('./Atom')
 
 module.exports = class Pair extends S {
-		
 	constructor(car, cdr) {
 		super() 
 		this._car = car
@@ -49,4 +48,9 @@ module.exports = class Pair extends S {
 
 		return '(' + [this._car, this._cdr].join(' . ') + ')'
 	}
+
+	insert(s) {
+		this._cdr = s.cons(this._cdr)
+	}
+
 }

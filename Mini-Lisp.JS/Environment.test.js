@@ -6,85 +6,66 @@ const parse = require('./Parser').parse
 
 const utils = new TestUtils()
 
-const expectAList = (listStr) => {
-	utils.expectEquals(env.getAList(), parse(listStr))
-}
-const expectFormalsAList = (listStr) => {
-	utils.expectEquals(env.getFormalsAList(), parse(listStr))
-}
-const testSet = (keyStr, valStr) => {
+const testSetLookup = (keyStr, valStr) => {
+	const key = parse(keyStr)
 	const val = parse(valStr)
-	utils.expectEquals(env.set(parse(keyStr), val), val)
+	utils.expectEquals(env.set(key, val), val)
+	utils.expectEquals(env.lookup(key), val)
 }
-const parseBind = (formalsStr, actualsStr) => {
-	utils.expectEquals(env.bind(parse(formalsStr), parse(actualsStr)), undefined)
+const parseSet = (keyStr, valStr) => {
+	env.set(parse(keyStr), parse(valStr))
 }
-const parseBindException = (formalsStr, actualsStr, s) => {
-	utils.parseExpectException(() => parseBind(formalsStr, actualsStr), s, 'car')
+const testDefunLookup = (nameStr, formalsStr, bodyStr) => {
+	testGenericDefunLookup('lambda', nameStr, formalsStr, bodyStr, (name, formals, body) => {
+		return env.defun(name, formals, body)
+	})
 }
-const testUnbind = (numFormals) => {
-	utils.expectEquals(env.unbind(numFormals), undefined)
+const testNdefunLookup = (nameStr, formalsStr, bodyStr) => {
+	testGenericDefunLookup('nlambda', nameStr, formalsStr, bodyStr, (name, formals, body) => {
+		return env.ndefun(name, formals, body)
+	})
 }
-const expectUnbindException = (numFormals) => {
-	utils.expectException(() => env.unbind(numFormals), Atom.nil, Atom.cdr)
-	
-}
-const testSetLookup = (keyStr, valueStr) => {
-	testSet(keyStr, valueStr)
-	utils.expectEquals(env.lookup(parse(keyStr)), parse(valueStr))
+const testGenericDefunLookup = (tagStr, nameStr, formalsStr, bodyStr, defunFunc) => {
+	const name = parse(nameStr)
+	const formals = parse(formalsStr)
+	const body = parse(bodyStr)
+	const lambda = parse(`(${tagStr} ${formalsStr} ${bodyStr})`)
+	utils.expectEquals(defunFunc(name, formals, body), lambda)
+	utils.expectEquals(env.lookup(name), lambda)
 }
 const testLookupException = (keyStr) => {
 	const key = parse(keyStr)
 	utils.expectException(() => env.lookup(key), key, Atom.undefined)
 }
+const testBind = (formalsStr, actualsStr, resultAListStr) => {
+	utils.expectEquals(env.bind(parse(formalsStr), parse(actualsStr)), parse(resultAListStr))
+}
+const parseBind = (formalsStr, actualsStr) => {
+	env.bind(parse(formalsStr), parse(actualsStr))
+}
+const parseBindException = (formalsStr, actualsStr, s) => {
+	utils.parseExpectException(() => parseBind(formalsStr, actualsStr), s, 'cdr')
+}
 
-test('set', () => {	
+test('set and lookup', () => {	
 	env = new Environment()
-
-	testSet('a', '(b . a)')
-	expectAList('((a . (b . a)))')
-
-	testSet('a', '(b a x y z)')
-	expectAList('((a . (b a x y z)) (a . (b . a)))')
+	testSetLookup('a', '(b . a)')
+	testSetLookup('a', '(b a x y z)')
 })
 
-test('defun', () => {
-	const testDefun = (nameStr, formalsStr, bodyStr) => {
-		const name = parse(nameStr)
-		const formals = parse(formalsStr)
-		const body = parse(bodyStr)
-		const lambda = parse(`(lambda ${formalsStr} ${bodyStr})`)
-		utils.expectEquals(env.defun(name, formals, body), lambda)
-	}
-
+test('defun and lookup', () => {
 	env = new Environment()
-
-	testDefun('foo', 'nil', "'a")
-	expectAList("((foo lambda () 'a))")
-
-	testDefun('bar', '(x xs)', '(cons (x (cdr xs)))')
-	expectAList("((bar lambda (x xs) (cons (x (cdr xs)))) (foo lambda () 'a))")	
+	testDefunLookup('foo', 'nil', "'a")
+	testDefunLookup('bar', '(x xs)', '(cons (x (cdr xs)))')
 })
 
-test('ndefun', () => {
-	const testNdefun = (nameStr, formalsStr, bodyStr) => {
-		const name = parse(nameStr)
-		const formals = parse(formalsStr)
-		const body = parse(bodyStr)
-		const lambda = parse(`(nlambda ${formalsStr} ${bodyStr})`)
-		utils.expectEquals(env.ndefun(name, formals, body), lambda)
-	}
-
+test('ndefun and lookup', () => {
 	env = new Environment()
-
-	testNdefun('foo', 'nil', "'a")
-	expectAList("((foo nlambda () 'a))")
-
-	testNdefun('bar', '(x xs)', '(cons (x (cdr xs)))')
-	expectAList("((bar nlambda (x xs) (cons (x (cdr xs)))) (foo nlambda () 'a))")	
+	testNdefunLookup('foo', 'nil', "'a")
+	testNdefunLookup('bar', '(x xs)', '(cons (x (cdr xs)))')
 })
 
-test('lookup', () => {	
+test('lookup exception', () => {	
 	env = new Environment()
 	testLookupException('t')
 	testLookupException('nil')
@@ -99,34 +80,13 @@ test('lookup', () => {
 	testLookupException('a')
 })
 
-test('backup and restore', () => {	
-	env = new Environment()
-	expectAList("()")
-	env.backup()
-	expectAList("()")
-	testSet('a', 'b')
-	expectAList("((a . b))")
-	env.restore()
-	expectAList("()")
-	testSet('a', 'b')
-	testSet('c', 'd')
-	env.backup()
-	testSet('e', 'f')
-	env.restore()
-	expectAList("((c . d) (a . b))")
-})
-
 test('bind', () => {	
+	// The nil appearing in the returned alist is the separator node.
 	env = new Environment()
-	expectFormalsAList('()')
-	parseBind('()', '()')
-	expectFormalsAList('()')
-	parseBind('(a b)', '(c d)')
-	expectFormalsAList('((b . d) (a . c))')
-	parseBind('(a a)', '(b c)')
-	expectFormalsAList('((a . c) (a . b) (b . d) (a . c))')
-	testSetLookup('a', 'c')
-	testSetLookup('b', 'd')
+	testBind('()', '()', '(nil)')
+	testBind('(a b)', '(c d)', '((b . d) (a . c) nil)')
+	parseSet('a', 'b')
+	testBind('(a a)', '(b c)', '((a . c) (a . b) (b . d) (a . c) nil (a . b))')
 	testLookupException('c')
 	parseBindException('a', '(b)', 'a')
 	parseBindException('(b)', 'a', 'a')
@@ -137,21 +97,4 @@ test('bind', () => {
 	parseBindException('(a b)', '(c)', '()')
 	parseBindException('(a b c)', '(d)', '()')
 	parseBindException('(a b)', '(c d e)', '()')
-})
-
-test('unbind', () => {
-	env = new Environment()
-	expectFormalsAList('()')
-	expectUnbindException(1)
-	testUnbind(0)
-	parseBind('(a b)', '(c d)')
-	testUnbind(2)
-	expectFormalsAList('()')
-	parseBind('(a b)', '(c d)')
-	testUnbind(1)
-	expectFormalsAList('((a . c))')
-	testUnbind(1)
-	expectFormalsAList('()')
-	parseBind('(a b)', '(c d)')
-	expectUnbindException(3)
 })

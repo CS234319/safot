@@ -147,15 +147,14 @@ test('evaluate error', () => {
 	parseEvaluateError("(error 'a)", "(a)")
 	parseEvaluateError("(error 'a 'b)", "(a b)")
 	parseEvaluateError("(error (set 'a 'd) 'b)", "(d b)")
-	parseEvaluateException("(error a)", "a", "undefined")
+	parseEvaluateError("(error a)", "(d)")
 	parseEvaluateException("(cond ((null (set 'b_0 'x)) 'x) \
 								 	((null (set 'b_1 'x)) 'x) \
 								 	((null (error 'b_2 'x)) 'x))",
 								 	"(error 'b_2 'x)",
 								 	"(b_2 x)")
 	
-	parseEvaluateException("(error b_0)", "b_0", "undefined")
-	parseEvaluateException("(error b_1)", "b_1", "undefined")
+	parseEvaluateError("(error b_0 b_1)", "(x x)")
 	parseEvaluateException("(error b_2)", "b_2", "undefined")
 })
 

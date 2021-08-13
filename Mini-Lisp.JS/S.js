@@ -54,6 +54,10 @@ module.exports = class S {
 		return this._errorNotImplemented()
 	}
 
+	insert(s) {
+		return this._errorNotImplemented()
+	}
+
 	_errorNotImplemented() {
 		return this.error(Atom.bug)		
 	}

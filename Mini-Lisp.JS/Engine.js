@@ -19,7 +19,7 @@ module.exports = class Engine {
 			[Atom.car,			1, s => s.car()],
 			[Atom.cdr,			1, s => s.cdr()],
 			[Atom.atom,			1, s => Engine._boolToS(s.atom())],
-			[Atom.eval,			1, s => this._evaluate(s)],
+			[Atom.eval,			1, s => this.evaluate(s)],
 			[Atom.cons,			2, (s, t) => s.cons(t)],
 			[Atom.eq,			2, (s, t) => Engine._boolToS(s.eq(t))],
 			[Atom.SET,			2, (s, t) => this._env.set(s, t)],
@@ -39,17 +39,6 @@ module.exports = class Engine {
 	}
 
 	evaluate(s) {
-		this._env.backup()
-
-		try {
-			return this._evaluate(s)		
-		} catch (e) {
-			this._env.restore()
-			throw e
-		}
-	}
-
-	_evaluate(s) {
 		if (s.atom()) {
 			return this._env.lookup(s)
 		}
@@ -67,7 +56,7 @@ module.exports = class Engine {
 			return s.error(this._evaluateList(s.cdr()))
 		}
 
-		return this._apply(this._evaluate(s.car()), s.cdr())
+		return this._apply(this.evaluate(s.car()), s.cdr())
 	}
 
 	_evaluateList(list) {
@@ -75,7 +64,7 @@ module.exports = class Engine {
 			return Atom.nil
 		}
 
-		return this._evaluate(list.car()).cons(this._evaluateList(list.cdr()))
+		return this.evaluate(list.car()).cons(this._evaluateList(list.cdr()))
 	}
 
 	_evaluateCond(testForms) {
@@ -89,8 +78,8 @@ module.exports = class Engine {
 			return currPair.error(Atom.cond)
 		}
 
-		if (this._evaluate(currPair.car()).t()) {
-			return this._evaluate(currPair.cdr().car())
+		if (this.evaluate(currPair.car()).t()) {
+			return this.evaluate(currPair.cdr().car())
 		}
 
 		return this._evaluateCond(testForms.cdr())
@@ -120,12 +109,13 @@ module.exports = class Engine {
 		const actuals = tag.eq(Atom.lambda) ? this._evaluateList(args) : args
 		const body = lambda.cdr().cdr().car()
 		
+		const alist = this._env.getAList()
 		this._env.bind(formals, actuals)
 
 		try {
-			return this._evaluate(body)
+			return this.evaluate(body)
 		} finally {
-			this._env.unbind(formals.getListLength())	
+			this._env.setAList(alist)
 		}
 	}
 
