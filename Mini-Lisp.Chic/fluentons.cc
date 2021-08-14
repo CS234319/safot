@@ -14,7 +14,7 @@ S    S::l()    const { return cons(NIL); };
 S    S::car()  const { return atom() ? error(CAR) : p().car; }
 S    S::cdr()  const { return atom() ? error(CDR) : p().cdr; }
 S    S::eval() const { return ::eval(*this); }
-S    S::error(S kind) const { restore_alist(); throw cons(kind).p(); }
+S    S::error(S kind) const { restore_alist(); stack_dump(); throw cons(kind).p(); }
 Pair S::p() const { return Pairs::get(handle); };
 S S::cons(S cdr) const { return S(*this, cdr); }
 

@@ -5,5 +5,3 @@
 (apply-eager-atomic 'eq '(a a) '())
 (apply-eager-atomic 'eq '(a b) '())
 (apply-eager-atomic 'set '(y a) '())
-(apply-eager-atomic)
-(apply-eager-atomic 'error 'a '())

@@ -1,6 +1,7 @@
 #include "eval.h"
 #include "a-list.h"
 #include "basics.h"
+#include "out.h"
 
 #define PRODUCTION
 #include "mode.h"
@@ -64,30 +65,148 @@ void checkNumberOfArgs(S s) {
     }
 }
 
+S eval_argument(S arg) {
+    // Eval 1 argument:
+    push(ARGUMENT, arg);
+    S res = arg.eval();
+    pop();
+    return res;
+}
+
+S eval_argument(S arg1, S arg2) {
+    // Eval 2 argument:
+    push(ARGUMENT, arg1);
+    push(ARGUMENT, arg2);
+    S res1 = arg1.eval();
+    S res2 = arg2.eval();
+    pop();
+    pop();
+    return res1.cons(res2);
+}
+
 S evaluate_atomic_function(S s) { M(s);
   checkNumberOfArgs(s);
   const S f = s.car();
+  S args_1 = NIL;
+  S args_2 = NIL;
+  S args_3 = NIL;
+  S res = NIL;
+
   // Atomic functions:
-  if (f.eq(CAR))     return s.$2$().eval().car();
-  if (f.eq(CONS))    return s.$2$().eval().cons(s.$3$().eval());
-  if (f.eq(SET))     return set(s.$2$().eval(),          s.$3$().eval());
-  if (f.eq(EQ))      return s.$2$().eval().eq(s.$3$().eval()) ? T : NIL;
-  if (f.eq(COND))    return evaluate_cond(s.cdr());
-  if (f.eq(CDR))     return s.$2$().eval().cdr();
-  if (f.eq(ATOM))    return s.$2$().eval().atom() ? T : NIL;
-  if (f.eq(EVAL))    return s.$2$().eval().eval();
-  if (f.eq(ERROR))   return s.less2() ? s.error(NIL) : s.error(s.$2$().eval());
-  if (f.eq(NULL))    return s.$2$().eval().null() ? T : NIL;
-  if (f.eq(QUOTE))   return s.cdr().car();
-  if (f.eq(NLAMBDA)) return list(NLAMBDA, s.$2$(),  s.$3$());
-  if (f.eq(LAMBDA))  return list(LAMBDA, s.$2$(), s.$3$());
-  if (f.eq(NDEFUN)) { 
-    ndefun(s.$2$(), s.$3$(), s.$4$());
-    return  s.$2$();
+  if (f.eq(CAR)) {
+      args_1 = eval_argument(s.$2$());
+      push(ARGUMENT, args_1);
+      res = args_1.car();
+      pop();
+      return res;
   }
-  if (f.eq(DEFUN)) { 
-    defun(s.$2$(), s.$3$(), s.$4$());
-    return  s.$2$();
+  if (f.eq(CONS)) {
+      S evaluated_args = eval_argument(s.$2$(), s.$3$());
+      args_1 = evaluated_args.car();
+      args_2 = evaluated_args.cdr();
+      push(ARGUMENT, args_1);
+      push(ARGUMENT, args_2);
+      res = args_1.cons(args_2);
+      pop();
+      pop();
+      return res;
+  }
+  if (f.eq(SET)) {
+      S evaluated_args = eval_argument(s.$2$(), s.$3$());
+      args_1 = evaluated_args.car();
+      args_2 = evaluated_args.cdr();
+      push(ARGUMENT, args_1);
+      push(ARGUMENT, args_2);
+      res = set(args_1, args_2);
+      pop();
+      pop();
+      return res;
+  }
+  if (f.eq(EQ)) {
+      S evaluated_args = eval_argument(s.$2$(), s.$3$());
+      args_1 = evaluated_args.car();
+      args_2 = evaluated_args.cdr();
+      push(ARGUMENT, args_1);
+      res = args_1.eq(args_2) ? T : NIL;
+      pop();
+      return res;
+  }
+  if (f.eq(COND)) {
+      args_1 = s.cdr();
+      push(ARGUMENT, args_1);
+      res = evaluate_cond(args_1);
+      pop();
+      return res;
+  }
+  if (f.eq(CDR)) {
+      args_1 = eval_argument(s.$2$());
+      push(ARGUMENT, args_1);
+      res = args_1.cdr();
+      pop();
+      return res;
+  }
+  if (f.eq(ATOM)) {
+      args_1 = eval_argument(s.$2$());
+      push(ARGUMENT, args_1);
+      res = args_1.atom() ? T : NIL;
+      pop();
+      return res;
+  }
+  if (f.eq(EVAL)) {
+      args_1 = eval_argument(s.$2$());
+      push(ARGUMENT, args_1);
+      res = args_1.eval();
+      pop();
+      return res;
+  }
+  if (f.eq(ERROR)) {
+      if (! s.less2()) {
+          args_1 = eval_argument(s.$2$());
+      }
+      push(ARGUMENT, args_1);
+      return s.error(args_1); // throw
+  }
+  if (f.eq(NULL)) {
+      args_1 = eval_argument(s.$2$());
+      push(ARGUMENT, args_1);
+      res = args_1.null() ? T : NIL;
+      pop();
+      return res;
+  }
+  if (f.eq(QUOTE)) {
+      args_1 = s.cdr();
+      push(ARGUMENT, args_1);
+      res = args_1.car();
+      pop();
+      return res;
+  }
+  if (f.eq(NLAMBDA) || f.eq(LAMBDA)) {
+      S f_type = f.eq(NLAMBDA) ? NLAMBDA : LAMBDA;
+      args_1 = s.$2$();
+      args_2 = s.$3$();
+      push(ARGUMENT, args_1);
+      push(ARGUMENT, args_2);
+      res = list(f_type, s.$2$(), s.$3$());
+      pop();
+      pop();
+      return res;
+  }
+  if (f.eq(NDEFUN) || f.eq(DEFUN)) {
+      args_1 = s.$2$();
+      args_2 = s.$3$();
+      args_3 = s.$4$();
+      push(ARGUMENT, args_1);
+      push(ARGUMENT, args_2);
+      push(ARGUMENT, args_3);
+      if (f.eq(NDEFUN)) {
+          ndefun(args_1, args_2, args_3);
+      } else {
+          defun(args_1, args_2, args_3);
+      }
+      pop();
+      pop();
+      pop();
+      return args_1;
   }
   return bug(s);
 }
@@ -96,10 +215,13 @@ S apply(S f, S args) {
   D(f,args);
   f.n3() || f.cons(args).error(INVALID).t();
   D(f.$1$(),f.$2$(),f.$3$(),args,f.$1$().eq(NLAMBDA));
+  push(ARGUMENT, args);
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
+  pop();
   alist() = bind(f.$2$(), actuals, alist());
-
+  push(ARGUMENT, actuals);
   const auto result = f.$3$().eval();
+  pop();
   return result;
 }
 
@@ -115,10 +237,16 @@ S eval(S s) {
       D(s, s.car(), s.cdr());
       if (atomic(s.car())) {
        D(s.car());
+       push(RESCUE, s.car());
        res = evaluate_atomic_function(s);
+       pop();
        D(s, res);
       } else {
-       res = apply_defined_function(eval(s.car()), s.cdr());
+       S f_name = s.car();
+       S f_body = eval(s.car());
+       push(RESCUE, f_name);
+       res = apply_defined_function(f_body, s.cdr());
+       pop();
        D(s, res);
       }
     }

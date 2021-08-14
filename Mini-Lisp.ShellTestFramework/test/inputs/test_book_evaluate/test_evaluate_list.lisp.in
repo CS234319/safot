@@ -1,4 +1,3 @@
 (evaluate-list NIL '())
 (evaluate-list '(a) '(a.T))
 (evaluate-list '(a b c) '(a.x b.y c.z))
-(evaluate-list NIL)

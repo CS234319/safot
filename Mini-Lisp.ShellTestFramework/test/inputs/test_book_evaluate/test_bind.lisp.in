@@ -1,6 +1,3 @@
 (bind '(a b) '(x y) '())
 (bind '(a b) '(x y) '())
 (bind '(a b) '(x y) '(c.T z.T))
-(bind)
-(bind '(a b) '(x y z) '())
-(bind '(a b c) '(x y) '())

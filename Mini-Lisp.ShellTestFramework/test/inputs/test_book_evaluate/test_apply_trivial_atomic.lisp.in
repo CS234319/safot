@@ -5,4 +5,3 @@
 (apply-trivial-atomic 'eq 'a 'a)
 (apply-trivial-atomic 'eq 'a 'b)
 (apply-trivial-atomic 'set 'a 'b)
-(apply-trivial-atomic 'zzz 'a NIL)

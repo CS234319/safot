@@ -1,6 +1,1 @@
 (evaluate-cond '() '())
-(evaluate-cond '((k b) (NIL NIL) ) '(k.T b.T))
-(evaluate-cond '((k b) (k b)) '(k.T b.T))
-(evaluate-cond '((k b) (b k)) '(k.NIL b.NIL))
-(evaluate-cond '((k (atom b)) (b k)) '(k.NIL b.NIL))
-(evaluate-cond '((k (error b)) (b k)) '(k.NIL b.NIL))

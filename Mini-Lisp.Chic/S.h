@@ -175,8 +175,12 @@ static const S BUG("bug");
 // the S expression named s.
 static const S MISSING("missing");  
 static const S REDUNDANT("redundant");  
-static const S EMPTY("empty");    
+static const S EMPTY("empty");
 static const S EXHAUSTED("exhausted");
+
+// Stack trace:
+static const S RESCUE("rescue");
+static const S ARGUMENT("argument");
 
 // Additional fluentons.
 inline bool die(S s) { throw BUG.cons(s); }
