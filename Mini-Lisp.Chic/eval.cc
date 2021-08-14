@@ -50,6 +50,7 @@ FUN(S, evaluate_cond, S)  IS(
 
 void checkNumberOfArgs(S s) {
     S f = s.car();
+    push(ARGUMENT, s.cdr());
     if (f.eq(QUOTE) || f.eq(CAR) || f.eq(CDR) || // 1 Args:
         f.eq(ATOM) || f.eq(NULL) || f.eq(EVAL)) {
         s.more2() && s.error(REDUNDANT).t();
@@ -63,6 +64,26 @@ void checkNumberOfArgs(S s) {
         s.more4() && s.error(REDUNDANT).t();
         s.less4() && s.error(MISSING).t();
     }
+    pop();
+}
+
+S eval_argument(S arg) {
+    // Eval 1 argument:
+    push(ARGUMENT, arg);
+    S res = arg.eval();
+    pop();
+    return res;
+}
+
+S eval_argument(S arg1, S arg2) {
+    // Eval 2 argument:
+    push(ARGUMENT, arg1);
+    push(ARGUMENT, arg2);
+    S res1 = arg1.eval();
+    S res2 = arg2.eval();
+    pop();
+    pop();
+    return res1.cons(res2);
 }
 
 S eval_argument(S arg) {
