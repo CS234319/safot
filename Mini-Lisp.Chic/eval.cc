@@ -75,26 +75,7 @@ S eval_argument(S arg) {
     return res;
 }
 
-S eval_argument(S arg1, S arg2) {
-    // Eval 2 argument:
-    push(ARGUMENT, arg1);
-    push(ARGUMENT, arg2);
-    S res1 = arg1.eval();
-    S res2 = arg2.eval();
-    pop();
-    pop();
-    return res1.cons(res2);
-}
-
-S eval_argument(S arg) {
-    // Eval 1 argument:
-    push(ARGUMENT, arg);
-    S res = arg.eval();
-    pop();
-    return res;
-}
-
-S eval_argument(S arg1, S arg2) {
+S eval_arguments(S arg1, S arg2) {
     // Eval 2 argument:
     push(ARGUMENT, arg1);
     push(ARGUMENT, arg2);
@@ -122,7 +103,7 @@ S evaluate_atomic_function(S s) { M(s);
       return res;
   }
   if (f.eq(CONS)) {
-      S evaluated_args = eval_argument(s.$2$(), s.$3$());
+      S evaluated_args = eval_arguments(s.$2$(), s.$3$());
       args_1 = evaluated_args.car();
       args_2 = evaluated_args.cdr();
       push(ARGUMENT, args_1);
@@ -133,7 +114,7 @@ S evaluate_atomic_function(S s) { M(s);
       return res;
   }
   if (f.eq(SET)) {
-      S evaluated_args = eval_argument(s.$2$(), s.$3$());
+      S evaluated_args = eval_arguments(s.$2$(), s.$3$());
       args_1 = evaluated_args.car();
       args_2 = evaluated_args.cdr();
       push(ARGUMENT, args_1);
@@ -144,7 +125,7 @@ S evaluate_atomic_function(S s) { M(s);
       return res;
   }
   if (f.eq(EQ)) {
-      S evaluated_args = eval_argument(s.$2$(), s.$3$());
+      S evaluated_args = eval_arguments(s.$2$(), s.$3$());
       args_1 = evaluated_args.car();
       args_2 = evaluated_args.cdr();
       push(ARGUMENT, args_1);
