@@ -1,1 +1,7 @@
+Traceback (most recent call last):
+	From function CONS:
+		Args: (CDR X)
+		Args: (CAR X)
+	From function CDR:
+		Args: X
 Error [UNDEFINED] in X

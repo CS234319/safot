@@ -1,1 +1,6 @@
+Traceback (most recent call last):
+	From function EVALUATE:
+		Args: ((CAR S-EXPRESSION) A-LIST)
+	From function CAR:
+		Args: S-EXPRESSION
 Error [UNDEFINED] in S-EXPRESSION

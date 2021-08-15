@@ -1,9 +1,12 @@
+import sys
+
 import pexpect
 import logging
 import os
 import re
+from time import sleep
 from pathlib import Path
-
+import tempfile
 
 class MiniLispShell:
     """
@@ -43,6 +46,9 @@ class MiniLispShell:
         self._check_if_executable_exists(mini_lisp)
         self.mini_lisp = mini_lisp
         self.shell = None
+        self.log_fd, self.log_path = tempfile.mkstemp()
+        self.log = Path(self.log_path)
+        self.log_idx = 0
 
     def __enter__(self):
         return self.start_mini_lisp()
@@ -54,12 +60,23 @@ class MiniLispShell:
 
     def __del__(self):
         self.close_mini_lisp()
+        os.close(self.log_fd)
+        self.log.unlink()
 
     def start_mini_lisp(self):
         """
         Start mini-lisp shell
         """
-        self.shell = pexpect.spawn(self.mini_lisp, encoding='utf-8', echo=False, timeout=2, maxread=1)
+        self.shell = pexpect.spawn(
+            self.mini_lisp,
+            encoding='utf-8',
+            echo=False,
+            timeout=2,
+            maxread=1)
+        if self.log.exists():
+            self.log.unlink()
+        self.log.touch()
+        self.shell.logfile_read = self.log.open('w')
         return self
 
     def close_mini_lisp(self):
@@ -84,7 +101,13 @@ class MiniLispShell:
 
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
-        return re.sub(r"\r|\n|- |\?|> ", "", self.shell.readline())
+        sleep(0.001)
+        self.shell.read_nonblocking(size=1000000, timeout=None)
+        raw = self.log.read_text().replace("\x00", "")
+        self.log.write_text("")
+        out = re.sub(r"\r|- |\?|> ", "", raw)
+        out = out[:-1]
+        return out
 
     @staticmethod
     def _check_if_executable_exists(path: str) -> None:
