@@ -1,9 +1,4 @@
-(apply-decomposed-lambda 'nlambda '(x) 'x '(a) '(a.T b.T c.T))
-(apply-decomposed-lambda 'nlambda '(x y) 'y '(a b) '(a.T b.T c.T))
-(apply-decomposed-lambda 'nlambda '(x y z) 'z '(a b c) '(a.T b.T c.T))
-(apply-decomposed-lambda 'lambda '(x) 'x '(a) '(a.T b.T c.T))
-(apply-decomposed-lambda 'lambda '(x y) 'y '(a b) '(a.T b.T c.T))
-(apply-decomposed-lambda 'lambda '(x y z) 'z '(a b c) '(a.T b.T c.T))
-(apply-decomposed-lambda 'lambda '(x) 'x '(a) '(a.NIL b.T c.T))
-(apply-decomposed-lambda 'lambda '(x y) 'y '(a b) '(a.T b.NIL c.T))
-(apply-decomposed-lambda 'lambda '(x y z) 'z '(a b c) '(a.T b.T c.NIL))
+; =================================================
+; apply:
+; =================================================
+; TODO

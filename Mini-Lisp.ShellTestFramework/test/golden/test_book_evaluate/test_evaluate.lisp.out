@@ -1,2 +1,16 @@
 T
 X
+T
+NIL
+X
+X
+(X.Y)
+NIL
+(Y Z)
+NIL
+(X.Y)
+(X.X)
+T
+NIL
+T
+Y

@@ -1,2 +1,42 @@
-(evaluate 'a '(a.T))
-(evaluate 'a '(a.x))
+; =================================================
+; Evaluate - lookup for atom value from the a-list:
+; =================================================
+(evaluate 'a '(a.T t.t nil.nil)) ; T
+(evaluate 'a '(a.x t.t nil.nil)) ; X
+
+; =================================================
+; Evaluate - evaluation of 1 arg atomic functions:
+; =================================================
+(evaluate '(atom a NIL) '(a.x t.t nil.nil))      ; T
+(evaluate '(atom a NIL) '(a.(x) t.t nil.nil))    ; NIL
+(evaluate '(car a NIL) '(a.(x) t.t nil.nil))     ; X
+(evaluate '(car a NIL) '(a.(x y z) t.t nil.nil)) ; X
+(evaluate '(car a NIL) '(a.(x.y) t.t nil.nil))   ; X.Y
+(evaluate '(cdr a NIL) '(a.(x) t.t nil.nil))     ; NIL
+(evaluate '(cdr a NIL) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(evaluate '(cdr a NIL) '(a.(x.y) t.t nil.nil))   ; NIL
+
+; =================================================
+; Evaluate - evaluation of 2 arg atomic functions:
+; =================================================
+(evaluate '(cons a b) '(a.x b.y t.t nil.nil))  ; (X.Y)
+(evaluate '(cons a b) '(a.x b.x t.t nil.nil))  ; (X.X)
+(evaluate '(eq a a) '(a.x t.t nil.nil))        ; T
+(evaluate '(eq a b) '(a.x b.y t.t nil.nil))    ; NIL
+(evaluate '(eq a b) '(a.x b.x t.t nil.nil))    ; T
+(evaluate '(set a b) '(a.x b.y t.t nil.nil))   ; Y
+
+; =================================================
+; Evaluate - cond:
+; =================================================
+; TODO
+
+; =================================================
+; Evaluate - apply:
+; =================================================
+; TODO
+
+; =================================================
+; Evaluate - error:
+; =================================================
+; TODO

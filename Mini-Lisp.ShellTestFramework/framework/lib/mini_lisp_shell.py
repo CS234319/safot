@@ -107,6 +107,8 @@ class MiniLispShell:
         self.log.write_text("")
         out = re.sub(r"\r|- |\?|> ", "", raw)
         out = out[:-1]
+        if out.isspace():
+            out = ""
         return out
 
     @staticmethod

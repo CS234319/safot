@@ -1,3 +1,15 @@
-(bind '(a b) '(x y) '())
-(bind '(a b) '(x y) '())
-(bind '(a b) '(x y) '(c.T z.T))
+; =================================================
+; bind - bind 2 lists and add them to a-list:
+; =================================================
+(bind '(a b) '(x y) '())         ; New a-list: ((A.X) (B.Y))
+(bind '(a b) '(x y) '(c.T z.T))  ; New a-list: ((A.X) (B.Y) (C.T) (Z.T))
+
+; =================================================
+; bind - missing formals Error:
+; =================================================
+(bind '(a) '(x y) '()) ; missing formals error
+
+; =================================================
+; bind - missing actuals Error:
+; =================================================
+(bind '(a b) '(x) '()) ; missing actuals error

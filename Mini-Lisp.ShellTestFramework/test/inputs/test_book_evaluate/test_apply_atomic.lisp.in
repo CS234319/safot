@@ -1,7 +1,31 @@
-(apply-atomic 'car '(a b) '(a.(x y) b.T))
-(apply-atomic 'cdr '(a b) '(a.(x y) b.T))
-(apply-atomic 'atom '(a b) '(a.x b.T))
-(apply-atomic 'atom '(a b) '(a.(x y) b.T))
-(apply-atomic 'eq '(a a) '(a.x b.T))
-(apply-atomic 'eq '(a b) '(a.x b.T))
-(apply-atomic 'eq '(a b) '(a.x b.x))
+; =================================================
+; apply-atomic - 1 argument functions:
+; =================================================
+(apply-atomic 'atom '(a NIL) '(a.x t.t nil.nil))      ; T
+(apply-atomic 'atom '(a NIL) '(a.(x) t.t nil.nil))    ; NIL
+(apply-atomic 'car '(a NIL) '(a.(x) t.t nil.nil))     ; X
+(apply-atomic 'car '(a NIL) '(a.(x y z) t.t nil.nil)) ; X
+(apply-atomic 'car '(a NIL) '(a.(x.y) t.t nil.nil))   ; X.Y
+(apply-atomic 'cdr '(a NIL) '(a.(x) t.t nil.nil))     ; NIL
+(apply-atomic 'cdr '(a NIL) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(apply-atomic 'cdr '(a NIL) '(a.(x.y) t.t nil.nil))   ; NIL
+
+; =================================================
+; apply-atomic - 2 argument functions:
+; =================================================
+(apply-atomic 'cons '(a b) '(a.x b.y t.t nil.nil))  ; (X.Y)
+(apply-atomic 'cons '(a b) '(a.x b.x t.t nil.nil))  ; (X.X)
+(apply-atomic 'eq '(a a) '(a.x t.t nil.nil))        ; T
+(apply-atomic 'eq '(a b) '(a.x b.y t.t nil.nil))    ; NIL
+(apply-atomic 'eq '(a b) '(a.x b.x t.t nil.nil))    ; T
+(apply-atomic 'set '(a b) '(a.x b.y t.t nil.nil))   ; Y
+
+; =================================================
+; apply-atomic - cond:
+; =================================================
+; TODO
+
+; =================================================
+; apply-atomic - Errors:
+; =================================================
+(apply-atomic 'bla '(a b) '(a.x b.y t.t nil.nil))   ; error

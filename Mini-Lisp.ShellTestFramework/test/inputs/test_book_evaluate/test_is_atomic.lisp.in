@@ -1,2 +1,18 @@
+; =================================================
+; is-atomic - T:
+; =================================================
+(is-atomic 'atom)
 (is-atomic 'car)
-(is-atomic 'ooo)
+(is-atomic 'cdr)
+(is-atomic 'cond)
+(is-atomic 'cons)
+(is-atomic 'eq)
+(is-atomic 'error)
+(is-atomic 'eval)
+(is-atomic 'set)
+
+; =================================================
+; is-atomic - NIL:
+; =================================================
+(is-atomic 'sett)
+(is-atomic 'bla)
