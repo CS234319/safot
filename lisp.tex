@@ -2667,7 +2667,7 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
 (defun evaluate-cond(test-forms a-list)
   (cond ((null test-forms) nil) ; if no more test-forms, return nil
         ((evaluate (car (car test-forms)) a-list) ; evaluate condition part of the first test-form
-        (evaluate (car (cdr (car test-forms)) a-list))) ; if true, evaluate value part (second part) of the first test-form
+        (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate value part (second part) of the first test-form
         (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on rest of test-forms
 \end{KERNEL}
 
