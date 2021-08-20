@@ -2682,10 +2682,10 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
   (cond
     ((eq atomic 'error) (error actuals))
     ((eq atomic 'eval) (evaluate (car actuals) a-list))
-    (t (apply-trivial-atomic
-        atomic ; one of ¢\tt atom¢, car, cdr, cons, eq, set
-        (car actuals); first actual parameter
-        (car (cdr actuals)))))) ; second actual parameter, could be nil
+    ((null (cdr actuals)) (apply-trivial-atomic atomic (car actuals) NIL)) ; 1 arguments atomic
+    (t (apply-trivial-atomic atomic (car actuals) (car (cdr actuals))))    ; 2 arguments atomic
+  )
+)
 \end{KERNEL}
 
 כעת הפונקציה apply-trivial-atomic משתמשת ב-cond כדי לטפל בששת הפונקציות האטומיות שנותרו:
