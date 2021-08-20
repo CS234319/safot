@@ -64,14 +64,14 @@ void checkNumberOfArgs(S s) {
         s.more4() && s.error(REDUNDANT).t();
         s.less4() && s.error(MISSING).t();
     }
-    pop();
+    remove_element(ARGUMENT);
 }
 
 S eval_argument(S arg) {
     // Eval 1 argument:
     push(ARGUMENT, arg);
     S res = arg.eval();
-    pop();
+    remove_element(ARGUMENT);
     return res;
 }
 
@@ -81,8 +81,8 @@ S eval_arguments(S arg1, S arg2) {
     push(ARGUMENT, arg2);
     S res1 = arg1.eval();
     S res2 = arg2.eval();
-    pop();
-    pop();
+    remove_element(ARGUMENT);
+    remove_element(ARGUMENT);
     return res1.cons(res2);
 }
 
@@ -99,7 +99,7 @@ S evaluate_atomic_function(S s) { M(s);
       args_1 = eval_argument(s.$2$());
       push(ARGUMENT, args_1);
       res = args_1.car();
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(CONS)) {
@@ -109,8 +109,8 @@ S evaluate_atomic_function(S s) { M(s);
       push(ARGUMENT, args_1);
       push(ARGUMENT, args_2);
       res = args_1.cons(args_2);
-      pop();
-      pop();
+      remove_element(ARGUMENT);
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(SET)) {
@@ -120,8 +120,8 @@ S evaluate_atomic_function(S s) { M(s);
       push(ARGUMENT, args_1);
       push(ARGUMENT, args_2);
       res = set(args_1, args_2);
-      pop();
-      pop();
+      remove_element(ARGUMENT);
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(EQ)) {
@@ -130,35 +130,35 @@ S evaluate_atomic_function(S s) { M(s);
       args_2 = evaluated_args.cdr();
       push(ARGUMENT, args_1);
       res = args_1.eq(args_2) ? T : NIL;
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(COND)) {
       args_1 = s.cdr();
       push(ARGUMENT, args_1);
       res = evaluate_cond(args_1);
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(CDR)) {
       args_1 = eval_argument(s.$2$());
       push(ARGUMENT, args_1);
       res = args_1.cdr();
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(ATOM)) {
       args_1 = eval_argument(s.$2$());
       push(ARGUMENT, args_1);
       res = args_1.atom() ? T : NIL;
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(EVAL)) {
       args_1 = eval_argument(s.$2$());
       push(ARGUMENT, args_1);
       res = args_1.eval();
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(ERROR)) {
@@ -172,14 +172,14 @@ S evaluate_atomic_function(S s) { M(s);
       args_1 = eval_argument(s.$2$());
       push(ARGUMENT, args_1);
       res = args_1.null() ? T : NIL;
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(QUOTE)) {
       args_1 = s.cdr();
       push(ARGUMENT, args_1);
       res = args_1.car();
-      pop();
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(NLAMBDA) || f.eq(LAMBDA)) {
@@ -189,8 +189,8 @@ S evaluate_atomic_function(S s) { M(s);
       push(ARGUMENT, args_1);
       push(ARGUMENT, args_2);
       res = list(f_type, s.$2$(), s.$3$());
-      pop();
-      pop();
+      remove_element(ARGUMENT);
+      remove_element(ARGUMENT);
       return res;
   }
   if (f.eq(NDEFUN) || f.eq(DEFUN)) {
@@ -205,9 +205,9 @@ S evaluate_atomic_function(S s) { M(s);
       } else {
           defun(args_1, args_2, args_3);
       }
-      pop();
-      pop();
-      pop();
+      remove_element(ARGUMENT);
+      remove_element(ARGUMENT);
+      remove_element(ARGUMENT);
       return args_1;
   }
   return bug(s);
@@ -219,11 +219,12 @@ S apply(S f, S args) {
   D(f.$1$(),f.$2$(),f.$3$(),args,f.$1$().eq(NLAMBDA));
   push(ARGUMENT, args);
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
-  pop();
+  remove_element(ARGUMENT);
   alist() = bind(f.$2$(), actuals, alist());
   push(ARGUMENT, actuals);
   const auto result = f.$3$().eval();
-  pop();
+  remove_element(ARGUMENT);
+  remove_local_binding(f.$2$());
   return result;
 }
 
@@ -241,14 +242,14 @@ S eval(S s) {
        D(s.car());
        push(RESCUE, s.car());
        res = evaluate_atomic_function(s);
-       pop();
+       remove_element(RESCUE);
        D(s, res);
       } else {
        S f_name = s.car();
-       S f_body = eval(s.car());
+       S f_body = s.car().eval();
        push(RESCUE, f_name);
        res = apply_defined_function(f_body, s.cdr());
-       pop();
+       remove_element(RESCUE);
        D(s, res);
       }
     }

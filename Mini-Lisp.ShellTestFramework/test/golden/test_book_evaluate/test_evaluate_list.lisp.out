@@ -17,16 +17,20 @@ Traceback (most recent call last):
 		Args: (EVALUATE (CAR S-EXPRESSIONS) A-LIST)
 		Args: (EVALUATE-LIST (CDR S-EXPRESSIONS) A-LIST)
 	From function EVALUATE-LIST:
-		Args: ((C) ((B.Y)))
+		Args: ((C) ((A.X) (B.Y)))
 	From function COND:
 		Args: (((NULL S-EXPRESSIONS) NIL) (T (CONS (EVALUATE (CAR S-EXPRESSIONS) A-LIST) (EVALUATE-LIST (CDR S-EXPRESSIONS) A-LIST))))
 	From function CONS:
 		Args: (EVALUATE (CAR S-EXPRESSIONS) A-LIST)
 		Args: (EVALUATE-LIST (CDR S-EXPRESSIONS) A-LIST)
 	From function EVALUATE:
-		Args: (C ((B.Y)))
+		Args: (C ((A.X) (B.Y)))
 	From function COND:
 		Args: (((ATOM S-EXPRESSION) (LOOKUP S-EXPRESSION A-LIST)) ((IS-ATOMIC (CAR S-EXPRESSION)) (EVALUATE-ATOMIC S-EXPRESSION A-LIST)) (T (APPLY (EVALUATE (CAR S-EXPRESSION) A-LIST) (CDR S-EXPRESSION) A-LIST)))
+	From function LOOKUP:
+		Args: (C ((A.X) (B.Y)))
+	From function COND:
+		Args: (((NULL A-LIST) (ERROR UNDEFINED ID)) ((EQ ID (CAR (CAR A-LIST))) (CDR (CAR A-LIST))) (T (LOOKUP ID (CDR A-LIST))))
 	From function LOOKUP:
 		Args: (C ((B.Y)))
 	From function COND:
