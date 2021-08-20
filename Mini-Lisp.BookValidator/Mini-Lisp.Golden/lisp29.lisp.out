@@ -1,4 +1,9 @@
 Traceback (most recent call last):
+	From function (CAR (QUOTE (F G))):
+	From function T:
+	From function T:
+	From function FOO:
+	From function FOO:
 	From function CONS:
 		Args: (CDR X)
 		Args: (CAR X)

@@ -93,3 +93,10 @@ class FlowTestFramework:
         if s_expr_file_pattern.search(file_name):
             return False
         return True
+
+    @staticmethod
+    def update_golden(gold_path: str, out_path: str) -> None:
+        """
+        Update golden file for a test
+        """
+        Path(gold_path).write_text(Path(out_path).read_text())
