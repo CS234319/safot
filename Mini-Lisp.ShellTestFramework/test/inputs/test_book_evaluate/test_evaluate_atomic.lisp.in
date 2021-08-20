@@ -23,7 +23,15 @@
 ; =================================================
 ; evaluate-atomic - cond:
 ; =================================================
-; TODO
+(evaluate-atomic '(cond (())) '(t.t nil.nil))                       ; NIL
+(evaluate-atomic '(cond (t nil)) '(t.t nil.nil))                 ; NIL
+(evaluate-atomic '(cond (a t)) '(a.t t.t nil.nil))               ; T
+(evaluate-atomic '(cond (a b)) '(a.t b.t t.t nil.nil))           ; T
+(evaluate-atomic '(cond (t a) (nil b)) '(a.a b.b t.t nil.nil))   ; A
+(evaluate-atomic '(cond (nil a) (t b)) '(a.a b.b t.t nil.nil))   ; B
+(evaluate-atomic '(cond (a b) (b a)) '(a.t b.t t.t nil.nil))     ; T
+(evaluate-atomic '(cond (a b) (b a)) '(a.nil b.t t.t nil.nil))   ; NIL
+(evaluate-atomic '(cond (a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
 
 ; =================================================
 ; evaluate-atomic - Errors:

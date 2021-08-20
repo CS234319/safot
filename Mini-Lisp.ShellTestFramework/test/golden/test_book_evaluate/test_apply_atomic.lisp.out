@@ -12,6 +12,15 @@ T
 NIL
 T
 Y
+NIL
+NIL
+T
+T
+A
+B
+T
+NIL
+NIL
 Traceback (most recent call last):
 	From function APPLY-ATOMIC:
 		Args: (BLA (A B) ((A.X) (B.Y) (T.T) (NIL)))
