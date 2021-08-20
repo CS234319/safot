@@ -34,6 +34,12 @@
 (apply-atomic 'cond '((a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
 
 ; =================================================
+; apply-atomic - the error function:
+; =================================================
+(apply-atomic 'error '(NIL) '(t.t nil.nil)) ; NIL
+(apply-atomic 'error '(a) '(a.my_err t.t nil.nil)) ; MY_ERR
+
+; =================================================
 ; apply-atomic - Errors:
 ; =================================================
 (apply-atomic 'bla '(a b) '(a.x b.y t.t nil.nil))   ; error

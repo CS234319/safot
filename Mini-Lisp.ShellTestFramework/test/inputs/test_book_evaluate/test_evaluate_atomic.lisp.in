@@ -34,6 +34,12 @@
 (evaluate-atomic '(cond (a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
 
 ; =================================================
+; evaluate-atomic - the error function:
+; =================================================
+(evaluate-atomic '(error NIL) '(t.t nil.nil)) ; NIL
+(evaluate-atomic '(error a) '(a.my_err t.t nil.nil)) ; MY_ERR
+
+; =================================================
 ; evaluate-atomic - Errors:
 ; =================================================
 (evaluate-atomic '(bla a b) '(a.x b.y t.t nil.nil))   ; error

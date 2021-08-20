@@ -12,7 +12,20 @@ T
 NIL
 T
 Y
-NIL
+Traceback (most recent call last):
+	From function APPLY-ATOMIC:
+		Args: (COND (NIL) ((T.T) (NIL)))
+	From function COND:
+		Args: (((EQ (QUOTE COND) ATOMIC) (EVALUATE-COND ACTUALS A-LIST)) (T (APPLY-EAGER-ATOMIC ATOMIC (EVALUATE-LIST ACTUALS A-LIST) A-LIST)))
+	From function EVALUATE-COND:
+		Args: ((NIL) ((T.T) (NIL)))
+	From function COND:
+		Args: (((NULL TEST-FORMS) NIL) ((EVALUATE (CAR (CAR TEST-FORMS)) A-LIST) (EVALUATE (CAR (CDR (CAR TEST-FORMS))) A-LIST)) (T (EVALUATE-COND (CDR TEST-FORMS) A-LIST)))
+	From function EVALUATE:
+		Args: ((CAR (CAR TEST-FORMS)) A-LIST)
+	From function CAR:
+		Args: NIL
+Error [CAR] in NIL
 NIL
 T
 T
@@ -21,6 +34,30 @@ B
 T
 NIL
 NIL
+Traceback (most recent call last):
+	From function APPLY-ATOMIC:
+		Args: (ERROR (NIL) ((T.T) (NIL)))
+	From function COND:
+		Args: (((EQ (QUOTE COND) ATOMIC) (EVALUATE-COND ACTUALS A-LIST)) (T (APPLY-EAGER-ATOMIC ATOMIC (EVALUATE-LIST ACTUALS A-LIST) A-LIST)))
+	From function APPLY-EAGER-ATOMIC:
+		Args: (ERROR (NIL) ((T.T) (NIL)))
+	From function COND:
+		Args: (((EQ ATOMIC (QUOTE ERROR)) (ERROR ACTUALS)) ((EQ ATOMIC (QUOTE EVAL)) (EVALUATE (CAR ACTUALS) A-LIST)) (T (APPLY-TRIVIAL-ATOMIC ATOMIC (CAR ACTUALS) (CAR (CDR ACTUALS)))))
+	From function ERROR:
+		Args: (NIL)
+Error [(NIL)] in (ERROR ACTUALS)
+Traceback (most recent call last):
+	From function APPLY-ATOMIC:
+		Args: (ERROR (A) ((A.MY_ERR) (T.T) (NIL)))
+	From function COND:
+		Args: (((EQ (QUOTE COND) ATOMIC) (EVALUATE-COND ACTUALS A-LIST)) (T (APPLY-EAGER-ATOMIC ATOMIC (EVALUATE-LIST ACTUALS A-LIST) A-LIST)))
+	From function APPLY-EAGER-ATOMIC:
+		Args: (ERROR (MY_ERR) ((A.MY_ERR) (T.T) (NIL)))
+	From function COND:
+		Args: (((EQ ATOMIC (QUOTE ERROR)) (ERROR ACTUALS)) ((EQ ATOMIC (QUOTE EVAL)) (EVALUATE (CAR ACTUALS) A-LIST)) (T (APPLY-TRIVIAL-ATOMIC ATOMIC (CAR ACTUALS) (CAR (CDR ACTUALS)))))
+	From function ERROR:
+		Args: (MY_ERR)
+Error [(MY_ERR)] in (ERROR ACTUALS)
 Traceback (most recent call last):
 	From function APPLY-ATOMIC:
 		Args: (BLA (A B) ((A.X) (B.Y) (T.T) (NIL)))

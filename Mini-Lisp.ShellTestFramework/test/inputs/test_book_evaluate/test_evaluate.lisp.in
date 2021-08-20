@@ -45,6 +45,12 @@
 ; TODO
 
 ; =================================================
-; Evaluate - error:
+; Evaluate - the error function:
+; =================================================
+(evaluate '(error NIL) '(t.t nil.nil)) ; NIL
+(evaluate '(error a) '(a.my_err t.t nil.nil)) ; MY_ERR
+
+; =================================================
+; Evaluate - Errors:
 ; =================================================
 ; TODO

@@ -15,6 +15,12 @@
 (apply-eager-atomic 'set '(a (b c)) '(t.t nil.nil))
 
 ; =================================================
+; apply-eager-atomic - the error function:
+; =================================================
+(apply-eager-atomic 'error NIL '(t.t nil.nil)) ; NIL
+(apply-eager-atomic 'error 'my_error '(t.t nil.nil)) ; MY_ERR
+
+; =================================================
 ; apply-eager-atomic - Errors:
 ; =================================================
 (apply-eager-atomic 'bla '(a b) '(t.t nil.nil))
