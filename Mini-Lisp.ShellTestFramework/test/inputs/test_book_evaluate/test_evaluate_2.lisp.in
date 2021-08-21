@@ -1,0 +1,53 @@
+; =================================================
+; Evaluate - apply: lambda/nlambda functions
+; =================================================
+; -------------------------------------------------------
+; ID:
+(evaluate '(id a) '(id.(lambda (x) x) a.t t.t nil.nil))     ; T     - arg evaluation
+(evaluate '(id a) '(id.(lambda (x) x) a.(a b) t.t nil.nil)) ; (A B) - arg evaluation
+
+; -------------------------------------------------------
+; QUOTE:
+(evaluate '(quote a) '(quote.(nlambda (x) x) a.t t.t nil.nil))  ; A
+(evaluate '(quote bla) '(quote.(nlambda (x) x) t.t nil.nil))    ; bla
+
+; -------------------------------------------------------
+; FIRST_3 function: (lambda/nlambda)
+(evaluate '(first a b c) '(first.(nlambda (x y z) x) t.t nil.nil)) ; a
+(evaluate '(first a b c) '(first.(lambda (x y z) x) a.a b.b c.c t.t nil.nil)) ; a
+
+; -------------------------------------------------------
+; LAST_3 function: (lambda/nlambda)
+(evaluate '(last a b c) '(last.(nlambda (x y z) z) t.t nil.nil)) ; c
+(evaluate '(last a b c) '(last.(lambda (x y z) z) a.a b.b c.c t.t nil.nil)) ; c
+
+; -------------------------------------------------------
+; Car function:
+(evaluate '(xcar a) '(xcar.(lambda (x) (car x)) a.(a b) t.t nil.nil)) ; a
+
+; Car function - normal eval:
+(evaluate '(xcar (a b)) '(xcar.(nlambda (x) (car x)) t.t nil.nil)) ; a
+
+; -------------------------------------------------------
+; Cdr function:
+(evaluate '(xcdr a) '(xcdr.(lambda (x) (cdr x)) a.(a b) t.t nil.nil)) ; b
+
+; Cdr function - normal eval:
+(evaluate '(xcdr (a b)) '(xcdr.(nlambda (x) (cdr x)) t.t nil.nil)) ; b
+
+; -------------------------------------------------------
+; MIRROR function:
+(evaluate '(mirror a) '(mirror.(lambda (x) (cons (cdr x) (car x))) a.(a b) t.t nil.nil)) ; (b a)
+
+; MIRROR function - normal eval:
+(evaluate '(mirror (a b)) '(mirror.(nlambda (x) (cons (cdr x) (car x))) t.t nil.nil)) ; (b a)
+
+; -------------------------------------------------------
+; ZCAR function:
+(evaluate '(zcar a) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) a.a t.t nil.nil))      ; a
+(evaluate '(zcar a) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) a.(a b) t.t nil.nil))  ; a
+
+; ZCAR function - normal eval:
+(evaluate '(zcar (a b)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil)) ; a
+(evaluate '(zcar (a)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil))   ; a
+

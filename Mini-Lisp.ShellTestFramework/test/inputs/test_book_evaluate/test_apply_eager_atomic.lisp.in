@@ -1,9 +1,10 @@
 ; =================================================
 ; apply-eager-atomic - 1 argument functions:
 ; =================================================
-(apply-eager-atomic 'atom '(a NIL) '(t.t nil.nil))
-(apply-eager-atomic 'car '((a b) NIL) '(t.t nil.nil))
-(apply-eager-atomic 'cdr '((a b) NIL) '(t.t nil.nil))
+(apply-eager-atomic 'atom '(a) '(t.t nil.nil))
+(apply-eager-atomic 'car '((a b)) '(t.t nil.nil))
+(apply-eager-atomic 'cdr '((a b)) '(t.t nil.nil))
+(apply-eager-atomic 'eval '(a) '(a.x t.t nil.nil))
 
 ; =================================================
 ; apply-eager-atomic - 2 argument functions:

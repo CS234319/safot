@@ -1,4 +1,62 @@
 ; =================================================
-; apply:
+; apply-decomposed-lambda:
 ; =================================================
-; TODO
+(apply-decomposed-lambda 'nlambda '(x) 'x '(a) '(a.a b.b c.c nil.nil t.t)) ; QUOTE function
+(apply-decomposed-lambda 'nlambda '(x y) 'y '(a b) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'nlambda '(x y z) 'z '(a b c) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x) 'x '(a) '(a.a b.b c.c nil.nil t.t)) ; ID function
+(apply-decomposed-lambda 'lambda '(x y) 'y '(a b) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x y z) 'z '(a b c) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x) 'x '(a) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x y) 'y '(a b) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x y z) 'z '(a b c) '(a.a b.b c.c nil.nil t.t))
+
+; =================================================
+; apply - functions which calls other functions:
+; =================================================
+; -------------------------------------------------------
+; Car function:
+(apply-decomposed-lambda 'lambda '(x) '(car x) '(a) '(a.(a b) t.t nil.nil)) ; A
+
+; Car function - normal eval:
+(apply-decomposed-lambda 'nlambda '(x) '(car x) '((a b)) '(t.t nil.nil)) ; A
+
+; -------------------------------------------------------
+; Cdr function:
+(apply-decomposed-lambda 'lambda '(x) '(cdr x) '(a) '(a.(a b) t.t nil.nil)) ; (B)
+
+; Cdr function - normal eval:
+(apply-decomposed-lambda 'nlambda '(x) '(cdr x) '((a b)) '(t.t nil.nil)) ; (B)
+
+; -------------------------------------------------------
+; MIRROR function:
+(apply-decomposed-lambda 'lambda '(x) '(cons (cdr x) (car x)) '(a) '(a.(a b) t.t nil.nil)) ; (b a)
+
+; MIRROR function - normal eval:
+(apply-decomposed-lambda 'nlambda '(x) '(cons (cdr x) (car x)) '((a b)) '(t.t nil.nil)) ; (b a)
+
+; -------------------------------------------------------
+; ZCAR function:
+(apply-decomposed-lambda 'nlambda '(x) '(cond ((atom x) x) (t (car x))) '(a) '(a.a t.t nil.nil))      ; a
+(apply-decomposed-lambda 'nlambda '(x) '(cond ((atom x) x) (t (car x))) '(a) '(a.(a b) t.t nil.nil))  ; a
+
+; ZCAR function - normal eval:
+(apply-decomposed-lambda 'nlambda '(x) '(cond ((atom x) x) (t (car x))) '((a b)) '(t.t nil.nil)) ; a
+(apply-decomposed-lambda 'nlambda '(x) '(cond ((atom x) x) (t (car x))) '((a)) '(t.t nil.nil)) ; a
+
+; =================================================
+; apply-decomposed-lambda - Missing actuals error:
+; =================================================
+(apply-decomposed-lambda 'lambda '(x y) 'y '(a) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x y z) 'y '(a) '(a.a b.b c.c nil.nil t.t))
+
+; =================================================
+; apply-decomposed-lambda - Missing formals error:
+; =================================================
+(apply-decomposed-lambda 'lambda '(x) 'y '(a b) '(a.a b.b c.c nil.nil t.t))
+(apply-decomposed-lambda 'lambda '(x y) 'y '(a b c) '(a.a b.b c.c nil.nil t.t))
+
+; =================================================
+; apply-decomposed-lambda - Unknown lambda name:
+; =================================================
+(apply-decomposed-lambda 'dlambda '(x y) 'y '(a) '(a.a b.b c.c nil.nil t.t)) ; UNKNOWN-LAMBDA

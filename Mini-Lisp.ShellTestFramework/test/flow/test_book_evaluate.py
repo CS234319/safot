@@ -133,15 +133,30 @@ def test_apply_eager_atomic(flow, input_dir, golden_dir):
     assert Path(out_file).read_text() == Path(golden_file).read_text()
 
 
-def test_evaluate(flow, input_dir, golden_dir):
+def test_evaluate_1(flow, input_dir, golden_dir):
     """
     Mini-lisp test for: evaluate
+    Part 1: evaluate atoms, atomic functions, cond, and errors.
 
     Using the evaluate.lisp file,
     auto generated from the Mini-lisp book
     """
-    in_file     = input_dir  / "test_evaluate.lisp.in"
-    golden_file = golden_dir / "test_evaluate.lisp.out"
+    in_file     = input_dir  / "test_evaluate_1.lisp.in"
+    golden_file = golden_dir / "test_evaluate_1.lisp.out"
+    out_file    = flow.run_s_expr_file(in_file)
+    assert Path(out_file).read_text() == Path(golden_file).read_text()
+
+
+def test_evaluate_2(flow, input_dir, golden_dir):
+    """
+    Mini-lisp test for: evaluate
+    Part 2: evaluate lambda/nlambda functions.
+
+    Using the evaluate.lisp file,
+    auto generated from the Mini-lisp book
+    """
+    in_file     = input_dir  / "test_evaluate_2.lisp.in"
+    golden_file = golden_dir / "test_evaluate_2.lisp.out"
     out_file    = flow.run_s_expr_file(in_file)
     assert Path(out_file).read_text() == Path(golden_file).read_text()
 

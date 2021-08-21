@@ -1,14 +1,14 @@
 ; =================================================
 ; apply-atomic - 1 argument functions:
 ; =================================================
-(apply-atomic 'atom '(a NIL) '(a.x t.t nil.nil))      ; T
-(apply-atomic 'atom '(a NIL) '(a.(x) t.t nil.nil))    ; NIL
-(apply-atomic 'car '(a NIL) '(a.(x) t.t nil.nil))     ; X
-(apply-atomic 'car '(a NIL) '(a.(x y z) t.t nil.nil)) ; X
-(apply-atomic 'car '(a NIL) '(a.(x.y) t.t nil.nil))   ; X.Y
-(apply-atomic 'cdr '(a NIL) '(a.(x) t.t nil.nil))     ; NIL
-(apply-atomic 'cdr '(a NIL) '(a.(x y z) t.t nil.nil)) ; (Y Z)
-(apply-atomic 'cdr '(a NIL) '(a.(x.y) t.t nil.nil))   ; NIL
+(apply-atomic 'atom '(a) '(a.x t.t nil.nil))      ; T
+(apply-atomic 'atom '(a) '(a.(x) t.t nil.nil))    ; NIL
+(apply-atomic 'car '(a) '(a.(x) t.t nil.nil))     ; X
+(apply-atomic 'car '(a) '(a.(x y z) t.t nil.nil)) ; X
+(apply-atomic 'car '(a) '(a.(x.y) t.t nil.nil))   ; X.Y
+(apply-atomic 'cdr '(a) '(a.(x) t.t nil.nil))     ; NIL
+(apply-atomic 'cdr '(a) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(apply-atomic 'cdr '(a) '(a.(x.y) t.t nil.nil))   ; NIL
 
 ; =================================================
 ; apply-atomic - 2 argument functions:
@@ -23,7 +23,7 @@
 ; =================================================
 ; apply-atomic - cond:
 ; =================================================
-(apply-atomic 'cond '(()) '(t.t nil.nil))                      ; NIL
+(apply-atomic 'cond '() '(t.t nil.nil))                        ; NIL
 (apply-atomic 'cond '((t nil)) '(t.t nil.nil))                 ; NIL
 (apply-atomic 'cond '((a t)) '(a.t t.t nil.nil))               ; T
 (apply-atomic 'cond '((a b)) '(a.t b.t t.t nil.nil))           ; T
