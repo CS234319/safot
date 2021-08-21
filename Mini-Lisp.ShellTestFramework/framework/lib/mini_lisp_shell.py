@@ -102,7 +102,7 @@ class MiniLispShell:
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
         sleep(0.001)
-        self.shell.read_nonblocking(size=1000000, timeout=None)
+        self.shell.read_nonblocking(size=1, timeout=None)
         raw = self.log.read_text().replace("\x00", "")
         self.log.write_text("")
         out = re.sub(r"\r|- |\?|> ", "", raw)
