@@ -7,14 +7,15 @@
 ; =================================================
 ; Evaluate - evaluation of 1 arg atomic functions:
 ; =================================================
-(evaluate '(atom a NIL) '(a.x t.t nil.nil))      ; T
-(evaluate '(atom a NIL) '(a.(x) t.t nil.nil))    ; NIL
-(evaluate '(car a NIL) '(a.(x) t.t nil.nil))     ; X
-(evaluate '(car a NIL) '(a.(x y z) t.t nil.nil)) ; X
-(evaluate '(car a NIL) '(a.(x.y) t.t nil.nil))   ; X.Y
-(evaluate '(cdr a NIL) '(a.(x) t.t nil.nil))     ; NIL
-(evaluate '(cdr a NIL) '(a.(x y z) t.t nil.nil)) ; (Y Z)
-(evaluate '(cdr a NIL) '(a.(x.y) t.t nil.nil))   ; NIL
+(evaluate '(atom a) '(a.x t.t nil.nil))      ; T
+(evaluate '(atom a) '(a.(x) t.t nil.nil))    ; NIL
+(evaluate '(car a) '(a.(x) t.t nil.nil))     ; X
+(evaluate '(car a) '(a.(x y z) t.t nil.nil)) ; X
+(evaluate '(car a) '(a.(x.y) t.t nil.nil))   ; X.Y
+(evaluate '(cdr a) '(a.(x) t.t nil.nil))     ; NIL
+(evaluate '(cdr a) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(evaluate '(cdr a) '(a.(x.y) t.t nil.nil))   ; NIL
+(evaluate '(eval a) '(a.x x.y t.t nil.nil))  ; Y
 
 ; =================================================
 ; Evaluate - evaluation of 2 arg atomic functions:
@@ -29,7 +30,7 @@
 ; =================================================
 ; Evaluate - cond:
 ; =================================================
-(evaluate '(cond (())) '(t.t nil.nil))                      ; NIL
+(evaluate '(cond (())) '(t.t nil.nil))                    ; NIL
 (evaluate '(cond (t nil)) '(t.t nil.nil))                 ; NIL
 (evaluate '(cond (a t)) '(a.t t.t nil.nil))               ; T
 (evaluate '(cond (a b)) '(a.t b.t t.t nil.nil))           ; T
@@ -40,17 +41,13 @@
 (evaluate '(cond (a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
 
 ; =================================================
-; Evaluate - apply:
-; =================================================
-; TODO
-
-; =================================================
 ; Evaluate - the error function:
 ; =================================================
-(evaluate '(error NIL) '(t.t nil.nil)) ; NIL
+(evaluate '(error) '(t.t nil.nil)) ; NIL
 (evaluate '(error a) '(a.my_err t.t nil.nil)) ; MY_ERR
 
 ; =================================================
 ; Evaluate - Errors:
 ; =================================================
-; TODO
+(evaluate '(bla) '(t.t nil.nil))
+(evaluate '(NIL NIL) '(t.t nil.nil))

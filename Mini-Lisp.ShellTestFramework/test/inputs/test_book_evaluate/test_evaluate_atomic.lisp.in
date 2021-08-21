@@ -1,14 +1,15 @@
 ; =================================================
 ; evaluate-atomic - 1 argument functions:
 ; =================================================
-(evaluate-atomic '(atom a NIL) '(a.x t.t nil.nil))      ; T
-(evaluate-atomic '(atom a NIL) '(a.(x) t.t nil.nil))    ; NIL
-(evaluate-atomic '(car a NIL) '(a.(x) t.t nil.nil))     ; X
-(evaluate-atomic '(car a NIL) '(a.(x y z) t.t nil.nil)) ; X
-(evaluate-atomic '(car a NIL) '(a.(x.y) t.t nil.nil))   ; X.Y
-(evaluate-atomic '(cdr a NIL) '(a.(x) t.t nil.nil))     ; NIL
-(evaluate-atomic '(cdr a NIL) '(a.(x y z) t.t nil.nil)) ; (Y Z)
-(evaluate-atomic '(cdr a NIL) '(a.(x.y) t.t nil.nil))   ; NIL
+(evaluate-atomic '(atom a) '(a.x t.t nil.nil))      ; T
+(evaluate-atomic '(atom a) '(a.(x) t.t nil.nil))    ; NIL
+(evaluate-atomic '(car a) '(a.(x) t.t nil.nil))     ; X
+(evaluate-atomic '(car a) '(a.(x y z) t.t nil.nil)) ; X
+(evaluate-atomic '(car a) '(a.(x.y) t.t nil.nil))   ; X.Y
+(evaluate-atomic '(cdr a) '(a.(x) t.t nil.nil))     ; NIL
+(evaluate-atomic '(cdr a) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(evaluate-atomic '(cdr a) '(a.(x.y) t.t nil.nil))   ; NIL
+(evaluate-atomic '(eval a) '(a.x x.y t.t nil.nil))  ; Y
 
 ; =================================================
 ; evaluate-atomic - 2 argument functions:
