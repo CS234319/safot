@@ -44,8 +44,8 @@
 
 ; -------------------------------------------------------
 ; ZCAR function:
-(evaluate '(zcar a) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) a.a t.t nil.nil))      ; a
-(evaluate '(zcar a) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) a.(a b) t.t nil.nil))  ; a
+(evaluate '(zcar a) '(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.a t.t nil.nil))      ; a
+(evaluate '(zcar a) '(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.(a b) t.t nil.nil))  ; a
 
 ; ZCAR function - normal eval:
 (evaluate '(zcar (a b)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil)) ; a
