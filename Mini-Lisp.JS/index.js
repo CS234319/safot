@@ -2,6 +2,7 @@ const ParserStateWrapper = require('./ParserStateWrapper')
 const Engine = require('./Engine')
 const ParenthesesMatcher = require('./ParenthesesMatcher')
 const Atom = require('./Atom')
+const GlobalsGatherer = require('./GlobalsGatherer')
 
 window.$ = require('jquery')
 const terminal = require('jquery.terminal')($)
@@ -22,23 +23,8 @@ const printE = str => document.getElementById('e').innerHTML = str
 
 $('body').append('<p id="repl"></p>')
 
-class GlobalAdder {
-	constructor() {
-		this._globals = []
-	}
-
-	getGlobals() {
-		return this._globals
-	}
-
-	/* Engine Observer */
-	globalAdded(globalAtom) {
-		this._globals.push(globalAtom.getValue())
-	}
-}
-
-const ga = new GlobalAdder()
-const e = new Engine(ga)
+const gg = new GlobalsGatherer()
+const e = new Engine(gg)
 const pw = new ParserStateWrapper()
 const pm = new ParenthesesMatcher()
 
@@ -276,7 +262,7 @@ $.terminal.defaults.formatters = [
 	},
 
 	str => {
-		return highlightSymbols(str, '#ff5261', ga.getGlobals())
+		return highlightSymbols(str, '#ff5261', gg.getGlobals())
 	},
 
 	str => {
