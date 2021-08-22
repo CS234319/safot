@@ -30,7 +30,7 @@ const pm = new ParenthesesMatcher()
 
 let keywords = [
 		'atom', 'car', 'cdr', 'cons', 'cond', 'defun', 'ndefun', 'eval',
-		'eq', 'lambda', 'nlambda', 'null', 'quote', 'set'
+		'eq', 'lambda', 'nlambda', 'quote', 'set'
 	]
 
 const highlightWithStyle = (str, style, color) => {
