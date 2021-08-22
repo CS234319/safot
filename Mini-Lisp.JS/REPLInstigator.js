@@ -30,7 +30,7 @@ module.exports = class REPLInstigator {
 	}
 
 	_feedLine(lineStr) {
-		this._buffer += lineStr
+		this._buffer += lineStr + '\n'
 		const pw = new ParserStateWrapper()
 		const parseResult = pw.parse(this._buffer)
 

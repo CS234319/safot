@@ -6,6 +6,10 @@ module.exports = class Atom extends S {
 		this._value = value
 	}
 
+	getValue() {
+		return this._value
+	}
+
 	atom() {
 		return true
 	}

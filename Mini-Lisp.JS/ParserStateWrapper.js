@@ -15,7 +15,8 @@ module.exports = class ParserStateWrapper {
 			}
 
 			return { 
-				output: e.found, 
+				found: e.found, 
+				offset: e.location.start.offset,
 				type: e.found ? ParserStateWrapper.Reject : ParserStateWrapper.ExpectMore
 			}
 		}

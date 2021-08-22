@@ -3,9 +3,10 @@ const ListCreator = require('./ListCreator')
 const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
-	constructor() {
+	constructor(observer) {
 		this._separatorNode = Atom.nil.cons(Atom.nil)
 		this._alist = this._separatorNode
+		this._observer = observer
 	}
 
 	getAList() {
@@ -18,6 +19,11 @@ module.exports = class Environment {
 
 	set(key, value) {
 		this._separatorNode.insert(key.cons(value))
+		
+		if (this._observer) {
+			this._observer.globalAdded(key)	
+		}
+		
 		return value
 	}
 

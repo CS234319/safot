@@ -311,6 +311,12 @@ test('evaluate defun', () => {
 									(bind (cdr xs) (cdr ys))))))")
 	
 	parseEvaluateEquals("(bind '(a b) '(c d))", "(c d)")
+	try {
+		parseEvaluate("(bind '(1 2 3) '(4 5 6 7))")
+	} catch {
+
+	}
+	
 	parseEvaluateEquals("(eval 'a)", "c")
 	parseEvaluateEquals("(eval 'b)", "d")
 	clear()

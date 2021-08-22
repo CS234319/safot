@@ -5,8 +5,9 @@ const ListCreator = require('./ListCreator')
 const parse = require('./Parser').parse
 
 module.exports = class Engine {		
-	constructor() {
-		this._env = new Environment()
+	constructor(observer) {
+		this._env = new Environment(this)
+		this._observer = observer
 
 		this._initPrimitives()
 		this._initPredefinedFunctions()
@@ -19,7 +20,7 @@ module.exports = class Engine {
 			[Atom.car,			1, s => s.car()],
 			[Atom.cdr,			1, s => s.cdr()],
 			[Atom.atom,			1, s => Engine._boolToS(s.atom())],
-			[Atom.eval,			1, s => this.evaluate(s)],
+			[Atom.eval,			1, s => this._evaluate(s)],
 			[Atom.cons,			2, (s, t) => s.cons(t)],
 			[Atom.eq,			2, (s, t) => Engine._boolToS(s.eq(t))],
 			[Atom.SET,			2, (s, t) => this._env.set(s, t)],
@@ -34,11 +35,15 @@ module.exports = class Engine {
 	_initPredefinedFunctions() {
 		this._env.set(Atom.nil, Atom.nil)
 		this._env.set(Atom.t, Atom.t)
-		this.evaluate(parse("(ndefun quote (x) x)"))
-		this.evaluate(parse("(defun null (x) (eq x nil))"))
+		this._evaluate(parse("(ndefun quote (x) x)"))
+		this._evaluate(parse("(defun null (x) (eq x nil))"))
 	}
 
 	evaluate(s) {
+		return this._evaluate(s)
+	}
+
+	_evaluate(s) {
 		if (s.atom()) {
 			return this._env.lookup(s)
 		}
@@ -56,7 +61,7 @@ module.exports = class Engine {
 			return s.error(this._evaluateList(s.cdr()))
 		}
 
-		return this._apply(this.evaluate(s.car()), s.cdr())
+		return this._apply(s.car(), this._evaluate(s.car()), s.cdr())
 	}
 
 	_evaluateList(list) {
@@ -64,7 +69,7 @@ module.exports = class Engine {
 			return Atom.nil
 		}
 
-		return this.evaluate(list.car()).cons(this._evaluateList(list.cdr()))
+		return this._evaluate(list.car()).cons(this._evaluateList(list.cdr()))
 	}
 
 	_evaluateCond(testForms) {
@@ -78,8 +83,8 @@ module.exports = class Engine {
 			return currPair.error(Atom.cond)
 		}
 
-		if (this.evaluate(currPair.car()).t()) {
-			return this.evaluate(currPair.cdr().car())
+		if (this._evaluate(currPair.car()).t()) {
+			return this._evaluate(currPair.cdr().car())
 		}
 
 		return this._evaluateCond(testForms.cdr())
@@ -91,7 +96,7 @@ module.exports = class Engine {
 		return primitive.run(actuals)
 	}
 
-	_apply(lambda, args) {
+	_apply(lambdaName, lambda, args) {
 		if (lambda.getListLength() !== 3) {
 			return this._throwInvalidLambdaError(lambda)
 		}
@@ -113,7 +118,8 @@ module.exports = class Engine {
 		this._env.bind(formals, actuals)
 
 		try {
-			return this.evaluate(body)
+			const result = this._evaluate(body)
+			return result
 		} finally {
 			this._env.setAList(alist)
 		}
@@ -143,5 +149,12 @@ module.exports = class Engine {
 
 	static _boolToS(bool) {
 		return bool ? Atom.t : Atom.nil
+	}
+
+	/* EnvironmentObserver */
+	globalAdded(globalAtom) {
+		if (this._observer) {
+			this._observer.globalAdded(globalAtom)	
+		}
 	}
 }
