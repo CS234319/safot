@@ -63,9 +63,21 @@ const highlightItalian = (str, color) => {
 	return highlightWithStyle(str, 'i', color)
 }
 
-const textInFormatRegex = /(?<=\])([^\]]*)(?=\])/
-const formatBeforeTextRegex = /\[\[[@!gbiuso]*(;[^;\]]*)*\]/
-const colorRegex = /(?<=;)([^;]*)(?=(;[^;\]]*)*\])/
+const textInFormatRegex = /(?<=\]).*?(?=\])/
+const formatBeforeTextRegex = /\[\[[@!gbiuso]*(;.*?)*\]/
+const formatColorRegex = /(?<=;)(.*?)(?=(;.*?)*\])/
+
+const lambdaFormalsArrayRegex = /(?<=\(n?lambda\s+\((\s*[^.'()\[\]\s]+\s*)*)[^.'()\[\]\s]+(?=(\s*[^.'()\[\]\s]+\s*)*\))/i
+
+const highlightSymbols = (str, color, symbolsArray) => {
+	const arrayLowerCased = symbolsArray.map(symbol => symbol.toLowerCase())
+	return str.replace(/[^.'()\[\]\s]+/g, match => {
+		return arrayLowerCased.includes(match.toLowerCase())
+			? highlight(match, color)
+			: match
+	})
+}
+
 const getFormatsData = str => {
 	let start = 0
 	return $.terminal.format_split(str).map(format => {
@@ -143,7 +155,7 @@ const highlightParentheses = (formatsData, openPos, closePos, isInner) => {
 			return format
 		}
 
-		const color = format.match(colorRegex)[0]
+		const color = format.match(formatColorRegex)[0]
 		const formatBeforeText = format.match(formatBeforeTextRegex)[0]
 		
 		const rawResult = positions.reduce((input, pos) => {
@@ -220,32 +232,55 @@ $.terminal.defaults.formatters = [
 
 	str => {
 		return str.replace(
-			/(?<=n?defun\s+)([^.'()\[\]\s]+)(\s*)((\([^.'()\[\]]*\)?)?)/gi, 
+			/(?<=\(n?defun\s+)([^.'()\[\]\s]+)(\s*)((\([^.'()\[\]]*\)?)?)/gi, 
 			highlight('$1', '#ff724c') + '$2' + highlight('$4', '#cf91c9')
 		)
 	},
 
 	str => {
-		return str.replace(
-			/(?<=n?lambda\s+)(\([^.'()\[\]]*\)?)/gi, 
-			highlight('$&', '#cf91c9')
-		)
+		// const reg = /(a)?b(?(\1)c|d)/
+		// const reg = /(a)?b(?<a>c|d)/
+		// printA(JSON.stringify('bc'.match(reg), null, 4))
+		// printB('abd'.match(reg))
+		// printC('abc'.match(reg))
+		// printD('bd'.match(reg))
+		
+
+		// // try {
+		
+		// return str.replace(
+		// /(?<=n?lambda\s+)(\([^.'()\[\]]*)(\)?)(?2)((\s+)?)((.+)?)/gi	
+		// 	(match, p1, p2, p3, p4, p5) => {
+		// 		const formalsArray = match.match(lambdaFormalsArrayRegex)
+		// 		printA(p1)
+		// 		printB(p2)
+		// 		printC(p3)
+		// 		printD(p4)
+		// 		printE(p5)
+		// 		// let result = highlight(formals, '#cf91c9')
+		// 		// if (formalsArray) {
+		// 		// 	result += whitespace + highlightSymbols(
+		// 		// 		body2, '#cf91c9', formalsArray
+		// 		// 	)
+		// 		// }
+
+		// 		// return result
+		// 		return m
+		// 	}
+		// )
+		// } catch (e) {
+		// 	printE(e)
+		// }
+
+		return str
 	},
 
 	str => {
-		return str.replace(/[^.'()\[\]\s]+/g, match => {
-			return keywords.includes(match.toLowerCase())
-				? highlight(match, '#39b6b5')
-				: match
-		})
+		return highlightSymbols(str, '#ff5261', ga.getGlobals())
 	},
 
 	str => {
-		return str.replace(/[^.'()\[\]\s]+/g, match => {
-			return ga.getGlobals().includes(match.toUpperCase())
-				? highlight(match, '#ff5261')
-				: match
-		})
+		return highlightSymbols(str, '#39b6b5', keywords)
 	},
 
 	str => {
@@ -285,9 +320,6 @@ $(function($, undefined) {
 		name: 'Mini-LISP',
 		height: 500,
 		width: 400,
-		prompt: '> ',
-		// onPositionChange: (a, b, terminal) => {
-			
-		// }
+		prompt: '> '
 	})
 })

@@ -1,4 +1,4 @@
-.PHONY: install, parser, test, repl
+.PHONY: install, parser, test, repl, website
 
 parser: 
 	pegjs Parser.pegjs

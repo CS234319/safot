@@ -44,9 +44,14 @@ module.exports = class ParenthesesMatcher {
 			return undefined	
 		} 
 
-		for (const [isForward, ch] of [[true, ')'], [false, '(']]) {
-			const startPos = this._iterate(
-				pos, text.length, isForward, (_, i) => [text[i] === ch, 0]
+		for (const [isForward, target, stopper] of 
+			[[true, ')', '('], [false, '(', ')']]) {
+			const startPos = this._iterate(pos, text.length, isForward, 
+				(_, i) => {
+					return text[i] === stopper 
+						? undefined
+						: [text[i] === target, 0]
+				}
 			)
 			
 			if (startPos !== undefined)	{
@@ -61,7 +66,12 @@ module.exports = class ParenthesesMatcher {
 		let [counter, step, end] = isForward ? [1, 1, textLength] : [-1, -1, -1]
 			
 		for (let i = pos + step; i != end; i += step) {
-			const [didFind, newCounter] = callback(counter, i)
+			const ret = callback(counter, i)
+			if (!ret) {
+				return undefined
+			}
+
+			const [didFind, newCounter] = ret
 			if (didFind) {
 				return i
 			}
