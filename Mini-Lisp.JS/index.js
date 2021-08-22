@@ -8,6 +8,7 @@ const pw = new ParserStateWrapper()
 
 $('head').append('<link rel="stylesheet" type="text/css" \
 		href="./node_modules/jquery.terminal/css/jquery.terminal.min.css"/>')
+
 $('body').append('<p id="repl"></p>')
 	
 $(function($, undefined) {
