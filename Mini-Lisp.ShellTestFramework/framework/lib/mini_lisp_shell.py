@@ -1,5 +1,3 @@
-import sys
-
 import pexpect
 import logging
 import os
@@ -7,6 +5,7 @@ import re
 from time import sleep
 from pathlib import Path
 import tempfile
+
 
 class MiniLispShell:
     """
@@ -48,7 +47,6 @@ class MiniLispShell:
         self.shell = None
         self.log_fd, self.log_path = tempfile.mkstemp()
         self.log = Path(self.log_path)
-        self.log_idx = 0
 
     def __enter__(self):
         return self.start_mini_lisp()
@@ -71,7 +69,7 @@ class MiniLispShell:
             self.mini_lisp,
             encoding='utf-8',
             echo=False,
-            timeout=2,
+            timeout=6,
             maxread=1)
         if self.log.exists():
             self.log.unlink()
@@ -87,11 +85,18 @@ class MiniLispShell:
             self.shell.stdin.close()
             self.shell.close()
 
-    def feed(self, input_str: str) -> str:
+    def feed(
+            self,
+            input_str: str,
+            timeout=0.001,
+            polling=False,
+            filter_pattern=r"\r|- |\?|> ",
+            max_buffer=100000,
+            filter_newline=True
+    ) -> str:
         """
-        Feed the shell and get the output
+        Feed the shell with 1 line, and get the output.
 
-        :param input_str: input for mini-lisp shell
         :return: stdout + stderr
         """
         if not self.shell:
@@ -101,14 +106,23 @@ class MiniLispShell:
 
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
-        sleep(0.001)
-        self.shell.read_nonblocking(size=10000000000, timeout=None)
+        sleep(timeout)
+        if polling:
+            try:
+                while True:
+                    self.shell.read_nonblocking(size=max_buffer)
+            except:
+                pass
+        else:
+            self.shell.read_nonblocking(size=max_buffer)
         raw = self.log.read_text().replace("\x00", "")
         self.log.write_text("")
-        out = re.sub(r"\r|- |\?|> ", "", raw)
+        out = re.sub(filter_pattern, "", raw)
         out = out[:-1]
         if out.isspace():
             out = ""
+        if filter_newline is False:
+            out = out.replace("\n", "")
         return out
 
     @staticmethod

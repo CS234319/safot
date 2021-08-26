@@ -12,10 +12,11 @@ class FlowTestFramework:
     using the interpreter, compile functions and evaluate s-expr,
     compare the results with golden output files.
     """
-
-    def __init__(self, mini_lisp: str):
+    def __init__(self, mini_lisp: str, polling=False, filter_newline=True):
         self.shell = MiniLispShell(mini_lisp)
         self.shell.start_mini_lisp()
+        self.polling = polling
+        self.filter_newline = filter_newline
 
     def __del__(self):
         if self.shell:
@@ -44,12 +45,20 @@ class FlowTestFramework:
         out_path.touch()
         with open(out_path, mode='a') as stream:
             for line in self.split_file(file):
-                out = self.shell.feed(line)
+                out = self.feed(line)
                 if out == "":
                     continue
                 stream.write(out)
                 stream.write('\n')
         return str(out_path)
+
+    def feed(self, line) -> str:
+        """
+        Wrapper to MiniLispShell feed.
+
+        :return: output string
+        """
+        return self.shell.feed(line, polling=self.polling, filter_newline=self.filter_newline)
 
     def interactive(self):
         """
