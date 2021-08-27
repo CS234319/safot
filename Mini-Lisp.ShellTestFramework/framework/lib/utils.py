@@ -9,14 +9,17 @@ from framework.lib.flow_runner import FlowRunner, FileType
 from framework.lib.flow_test_framework import FlowTestFramework
 
 
-def generate_book_files() -> None:
+def generate_book_files(verbose=True) -> None:
     """
     Auto-generated the files from the book (+ remove all the existing before)
     """
+    redirect = ""
+    if verbose:
+        redirect = " > /dev/null"
     directory = "../../../Mini-Lisp.BookValidator/Mini-Lisp.Inputs/"
-    command = f"make clean -C {directory}"  # delete old lisp files:
+    command = f"make clean -C {directory} {redirect}"  # delete old lisp files:
     os.system(command)
-    command = f"make all -C {directory}"  # generate new lisp files:
+    command = f"make all -C {directory} {redirect}"  # generate new lisp files:
     os.system(command)
 
 
@@ -105,10 +108,11 @@ def get_env() -> str:
     :return: alist string (without parantheses)
     """
     files = get_evaluate_files()
-    alist = "t.t nil.nil "
+    alist = "\n\n"
+    alist += "t.t nil.nil \n"
     for file in files:
-        alist += f"{get_lambda(file)} "
-    return f"{alist}"
+        alist += f"{get_lambda(file)} \n"
+    return alist
 
 
 def get_flow(compile_book=True, polling=False, filter_newline=True) -> FlowTestFramework:
