@@ -713,7 +713,7 @@ terminal .terminal-output > div {
     border-bottom-color: #ffab42;
     width: fit-content;
 }
-.terminal .cmd .parenHighlightIn {
+.terminal .cmd .parenHighlightInner {
     padding-bottom: 1.5px;
     border-bottom-style: solid;
     border-bottom-width: 1px;

@@ -14,10 +14,14 @@ module.exports = class ParserStateWrapper {
 				throw e
 			}
 
+			const type = e.found === null
+				? ParserStateWrapper.ExpectMore
+				: ParserStateWrapper.Reject
+
 			return { 
 				found: e.found, 
 				offset: e.location.start.offset,
-				type: e.found ? ParserStateWrapper.Reject : ParserStateWrapper.ExpectMore
+				type: type
 			}
 		}
 	}

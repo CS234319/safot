@@ -1,7 +1,10 @@
-.PHONY: install, parser, test, repl, website
+.PHONY: install, parser, formatter, test, repl, bundle, browser, website
 
 parser: 
 	pegjs Parser.pegjs
+
+formatter:
+	pegjs Formatter.pegjs
 
 test:
 	make parser
@@ -11,10 +14,17 @@ repl:
 	make parser
 	node repl.js
 
+bundle:
+	browserify index.js > bundle.js
+
+browser:
+	open -a "Google Chrome" index.html
+
 website:
 	make parser
-	browserify index.js -o bundle.js
-	open -a "Google Chrome" index.html 
+	make formatter
+	make bundle
+	make browser
 
 install:
 	npm install --save-dev jest
