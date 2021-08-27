@@ -29,6 +29,8 @@ def get_evaluate_files() -> List[str]:
     """
     directory = "../../../Mini-Lisp.BookValidator/Mini-Lisp.Inputs/"
     evaluate_functions = [
+        "quote",
+        "null",
         "exists",
         "is-atomic",
         "lookup",
@@ -42,9 +44,6 @@ def get_evaluate_files() -> List[str]:
         "evaluate-cond",
         "apply-decomposed-lambda",
         "apply",
-        # Includes quote + null:
-        "quote",
-        "null"
     ]
     return [f"{directory}/{f_name}.lisp" for f_name in evaluate_functions]
 
@@ -77,12 +76,12 @@ def get_lambda(file: str) -> str:
     :return: lambda/nlambda definition of the function
     """
     fun_str = Path(file).read_text()
-    if "defun" in fun_str:
-        fun_type = "defun"
-        lambda_type = "lambda"
-    elif "ndefun" in fun_str:
+    if "ndefun" in fun_str:
         fun_type = "ndefun"
         lambda_type = "nlambda"
+    elif "defun" in fun_str:
+        fun_type = "defun"
+        lambda_type = "lambda"
     else:
         logging.warning(f"File: {file} has no function definitions. Skip.")
         return ""
@@ -112,7 +111,7 @@ def get_env() -> str:
     return f"{alist}"
 
 
-def get_flow(polling=False, filter_newline=True) -> FlowTestFramework:
+def get_flow(compile_book=True, polling=False, filter_newline=True) -> FlowTestFramework:
     """
     Returns a new flow, loaded with all the book, by the following steps:
         1. Generate the latest lisp files from the book.
@@ -122,7 +121,8 @@ def get_flow(polling=False, filter_newline=True) -> FlowTestFramework:
 
     :return: flow loaded with all the book
     """
-    generate_book_files()
+    if compile_book is True:
+        generate_book_files()
     flow = FlowTestFramework(mini_lisp="../../../Mini-Lisp.Chic/mini-lisp", polling=polling, filter_newline=filter_newline)
     for file in get_functions_files():
         flow.load_function_file(file)

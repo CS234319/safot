@@ -91,7 +91,7 @@ class MiniLispShell:
             timeout=0.001,
             polling=False,
             filter_pattern=r"\r|- |\?|> ",
-            max_buffer=100000,
+            max_buffer=10000000,
             filter_newline=True
     ) -> str:
         """

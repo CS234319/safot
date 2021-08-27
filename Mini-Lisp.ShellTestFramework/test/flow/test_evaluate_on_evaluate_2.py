@@ -39,7 +39,7 @@ Environment:
 """
 import pytest
 from framework.lib.flow_test_framework import FlowTestFramework
-from framework.lib.utils import get_flow, get_env
+from framework.lib.utils import get_flow, get_env, generate_book_files
 
 
 @pytest.fixture
@@ -48,6 +48,7 @@ def flow() -> FlowTestFramework:
     Return a flow loaded with all the functions
     from the latest auto-generated files from the Mini-lisp book
     """
+    generate_book_files()
     return get_flow(polling=True, filter_newline=False)
 
 
@@ -66,7 +67,13 @@ def test_id(flow, env):
         * (evaluate '(id a) '(id.(lambda (x) x) a.t t.t nil.nil))     ; T
         * (evaluate '(id a) '(id.(lambda (x) x) a.(a b) t.t nil.nil)) ; (A B)
     """
-    raise NotImplementedError
+    alist = "(id.(lambda (x) x) a.t t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (id a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+
+    alist = "(id.(lambda (x) x) a.(a b) t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (id a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(A B)"
 
 
 def test_quote(flow, env):
@@ -75,7 +82,13 @@ def test_quote(flow, env):
         * (evaluate '(quote a) '(quote.(nlambda (x) x) a.t t.t nil.nil))  ; A
         * (evaluate '(quote bla) '(quote.(nlambda (x) x) t.t nil.nil))    ; bla
     """
-    raise NotImplementedError
+    alist = "(quote.(nlambda (x) x) a.t t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (quote a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+
+    alist = "(quote.(nlambda (x) x) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (quote bla)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "BLA"
 
 
 def test_first_3(flow, env):
@@ -84,8 +97,14 @@ def test_first_3(flow, env):
         * (evaluate '(first a b c) '(first.(nlambda (x y z) x) t.t nil.nil)) ; a (normal)
         * (evaluate '(first a b c) '(first.(lambda (x y z) x) a.a b.b c.c t.t nil.nil)) ; a
     """
-    raise NotImplementedError
+    alist = "(first.(nlambda (x y z) x) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (first a b c)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
 
+    alist = "(first.(lambda (x y z) x) a.a b.b c.c t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (first a b c))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+    
 
 def test_last_3(flow, env):
     """
@@ -93,4 +112,11 @@ def test_last_3(flow, env):
         * (evaluate '(last a b c) '(last.(nlambda (x y z) z) t.t nil.nil)) ; c (normal)
         * (evaluate '(last a b c) '(last.(lambda (x y z) z) a.a b.b c.c t.t nil.nil)) ; c
     """
-    raise NotImplementedError
+
+    alist = "(last.(nlambda (x y z) z) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (last a b c))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "C"
+
+    alist = "(last.(lambda (x y z) z) a.a b.b c.c t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (last a b c))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "C"

@@ -39,7 +39,7 @@ Environment:
 """
 import pytest
 from framework.lib.flow_test_framework import FlowTestFramework
-from framework.lib.utils import get_flow, get_env
+from framework.lib.utils import get_flow, get_env, generate_book_files
 
 
 @pytest.fixture
@@ -48,6 +48,7 @@ def flow() -> FlowTestFramework:
     Return a flow loaded with all the functions
     from the latest auto-generated files from the Mini-lisp book
     """
+    generate_book_files()
     return get_flow(polling=True, filter_newline=False)
 
 
@@ -66,7 +67,13 @@ def test_car(flow, env):
         * (evaluate '(xcar a) '(xcar.(lambda (x) (car x)) a.(a b) t.t nil.nil)) ; a
         * (evaluate '(xcar (a b)) '(xcar.(nlambda (x) (car x)) t.t nil.nil)) ; a (normal)
     """
-    raise NotImplementedError
+    alist = "(xcar.(lambda (x) (car x)) a.(a b) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (xcar a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+
+    alist = "(xcar.(nlambda (x) (car x)) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (xcar (a b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
 
 
 def test_cdr(flow, env):
@@ -75,7 +82,13 @@ def test_cdr(flow, env):
         * (evaluate '(xcdr a) '(xcdr.(lambda (x) (cdr x)) a.(a b) t.t nil.nil)) ; b
         * (evaluate '(xcdr (a b)) '(xcdr.(nlambda (x) (cdr x)) t.t nil.nil)) ; b (normal)
     """
-    raise NotImplementedError
+    alist = "(xcdr.(lambda (x) (cdr x)) a.(a b) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (xcdr a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(B)"
+
+    alist = "(xcdr.(nlambda (x) (cdr x)) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (xcdr (a b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(B)"
 
 
 def test_mirror(flow, env):
@@ -85,7 +98,13 @@ def test_mirror(flow, env):
         * (evaluate '(mirror (a b)) '(mirror.(nlambda (x) (cons (cdr x) (car x))) t.t nil.nil)) ; (b a) (normal)
 
     """
-    raise NotImplementedError
+    alist = "(mirror.(lambda (x) (cons (cdr x) (car x))) a.(a b) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (mirror a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "((B).A)"
+    
+    alist = "(mirror.(nlambda (x) (cons (cdr x) (car x))) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (mirror (a b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "((B).A)"
 
 
 def test_zcar(flow, env):
@@ -96,4 +115,18 @@ def test_zcar(flow, env):
         * (evaluate '(zcar (a b)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil)) ; a (normal)
         * (evaluate '(zcar (a)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil))   ; a (normal)
     """
-    raise NotImplementedError
+    alist = "(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.a t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (zcar a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+
+    alist = "(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.(a b) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (zcar a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+
+    alist = "(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (zcar (a b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+
+    alist = "(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (zcar (a))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"

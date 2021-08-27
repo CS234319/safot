@@ -39,7 +39,7 @@ Environment:
 """
 import pytest
 from framework.lib.flow_test_framework import FlowTestFramework
-from framework.lib.utils import get_flow, get_env
+from framework.lib.utils import get_flow, get_env, generate_book_files
 
 
 @pytest.fixture
@@ -48,6 +48,7 @@ def flow() -> FlowTestFramework:
     Return a flow loaded with all the functions
     from the latest auto-generated files from the Mini-lisp book
     """
+    generate_book_files()
     return get_flow(polling=True, filter_newline=False)
 
 
@@ -66,7 +67,13 @@ def test_lookup(flow, env):
         * (evaluate 'a '(a.T t.t nil.nil)) ; T
         * (evaluate 'a '(a.x t.t nil.nil)) ; X
     """
-    raise NotImplementedError
+    alist = "(a.T t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote a) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+
+    alist = "(a.X t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote a) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "X"
 
 
 def test_atomic_one_arguments(flow, env):
@@ -82,7 +89,41 @@ def test_atomic_one_arguments(flow, env):
         * (evaluate '(cdr a) '(a.(x.y) t.t nil.nil))   ; NIL
         * (evaluate '(eval a) '(a.x x.y t.t nil.nil))  ; Y
     """
-    raise NotImplementedError
+    alist = "(a.x t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (atom a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+
+    alist = "(a.(x) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (atom a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+
+    alist = "(a.(x) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (car a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "X"
+
+    alist = "(a.(x y z) t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (car a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "X"
+
+    alist = "(a.(x.y) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (car a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(X.Y)"
+
+    alist = "(a.(x) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cdr a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+
+    alist = "(a.(x y z) t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (cdr a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(Y Z)"
+
+    alist = "(a.(x.y) t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cdr a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+
+    alist = "(a.x x.y t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (eval a)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "Y"
 
 
 def test_atomic_two_arguments(flow, env):
@@ -95,7 +136,29 @@ def test_atomic_two_arguments(flow, env):
         * (evaluate '(eq a b) '(a.x b.x t.t nil.nil))    ; T
         * (evaluate '(set a b) '(a.x b.y t.t nil.nil))   ; Y
     """
-    raise NotImplementedError
+    alist = "(a.x b.y t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cons a b)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(X.Y)"
+    
+    alist = "(a.x b.x t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cons a b)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "(X.X)"
+    
+    alist = "(a.x t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (eq a b)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+    
+    alist = "(a.x b.y t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (eq a b)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+    
+    alist = "(a.x b.x t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (eq a b)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+    
+    alist = "(a.x b.y t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (set a b)) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "Y"
 
 
 def test_cond(flow, env):
@@ -111,22 +174,38 @@ def test_cond(flow, env):
         * (evaluate '(cond (a b) (b a)) '(a.nil b.t t.t nil.nil))   ; NIL
         * (evaluate '(cond (a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
     """
-    raise NotImplementedError
-
-
-def test_error(flow, env):
-    """
-    Original tests:
-        * (evaluate '(error) '(t.t nil.nil)) ; NIL
-        * (evaluate '(error a) '(a.my_err t.t nil.nil)) ; MY_ERR
-    """
-    raise NotImplementedError
-
-
-def test_evaluate_error(flow, env):
-    """
-    Original tests:
-        * (evaluate '(bla) '(t.t nil.nil))
-        * (evaluate '(NIL NIL) '(t.t nil.nil))
-    """
-    raise NotImplementedError
+    alist = "(t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (()))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+    
+    alist = "(t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (t nil))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+    
+    alist = "(a.t t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (a t))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+    
+    alist = "(a.t b.t t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (a b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+    
+    alist = "(a.a b.b t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (t a) (nil b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "A"
+    
+    alist = "(a.a b.b t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (nil a) (t b))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "B"
+    
+    alist = "(a.t b.t t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (a b) (b a))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "T"
+    
+    alist = "(a.nil b.t t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (a b) (b a))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
+    
+    alist = "(a.nil b.t t.t nil.nil))"
+    s_expr = f"(evaluate '(evaluate (quote (cond (a b) (a b) (b a))) (quote {alist})) '({env}))"
+    assert flow.feed(s_expr) == "NIL"
