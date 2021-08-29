@@ -707,7 +707,7 @@ terminal .terminal-output > div {
     position: relative;
 }
 .terminal .cmd .parenHighlight {
-    padding-bottom: 1.5px;
+    padding-bottom: 1.25px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: #ffab42;

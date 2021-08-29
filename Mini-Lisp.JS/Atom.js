@@ -34,7 +34,7 @@ module.exports = class Atom extends S {
 	}
 
 	getListAsArray() {
-		return this.null() ? [] : null
+		return this.null() ? [] : undefined
 	}
 
 	toString() {

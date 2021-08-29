@@ -14,4 +14,8 @@ module.exports = class TextHighlighter {
 	highlightWithClass(str, spanClass) {
 		return this._genericHighlight(str, '', '', spanClass)
 	}
+
+	removeHighlight(str) {
+		return str.replace(/\[\[([^;]*;)+\]([^\]]+)\]/g, '$2')
+	}
 }

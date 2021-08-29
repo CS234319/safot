@@ -5,10 +5,10 @@ const ListCreator = require('./ListCreator')
 const parse = require('./Parser').parse
 
 module.exports = class Engine {		
-	constructor(observer) {
+	constructor() {
+		this._observers = Array.from(arguments)
 		this._env = new Environment(this)
-		this._observer = observer
-
+		
 		this._initPrimitives()
 		this._initPredefinedFunctions()
 	}
@@ -153,8 +153,6 @@ module.exports = class Engine {
 
 	/* EnvironmentObserver */
 	globalAdded(globalAtom) {
-		if (this._observer) {
-			this._observer.globalAdded(globalAtom)	
-		}
+		this._observers.forEach(o => o.globalAdded(globalAtom))
 	}
 }

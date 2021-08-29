@@ -109,9 +109,9 @@ test('isList', () => {
 test('getListAsArray', () => {
 	utils.expectEquals(nil.getListAsArray(), [])
 	utils.expectEquals(list.getListAsArray(), listAsArray)
-	utils.expectEquals(t.getListAsArray(), null)
-	utils.expectEquals(a.getListAsArray(), null)
-	utils.expectEquals(pair.getListAsArray(), null)
+	utils.expectEquals(t.getListAsArray(), undefined)
+	utils.expectEquals(a.getListAsArray(), undefined)
+	utils.expectEquals(pair.getListAsArray(), undefined)
 })
 
 test('getListLength', () => {

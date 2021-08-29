@@ -1,5 +1,6 @@
 const S = require('./S')
 const Atom = require('./Atom')
+require('./ArrayExtension')
 
 module.exports = class Pair extends S {
 	constructor(car, cdr) {
@@ -35,9 +36,7 @@ module.exports = class Pair extends S {
 	}
 
 	getListAsArray() {
-		var list = this._cdr.getListAsArray()
-		list?.unshift(this._car)
-		return list
+		return this._cdr.getListAsArray()?.prepend(this._car)
 	}
 
 	toString() {

@@ -1,6 +1,7 @@
-const primitives = require('./PrimitiveKeywords')
 const TextHighlighter = require('./TextHighlighter')
-const replDelegate = require('./BrowserREPL')
+const replDelegate = require('./REPLDelegate')
+const primitives = require('./PrimitiveKeywords')
+require('./ArrayExtension')
 
 const th = new TextHighlighter()
 
@@ -12,13 +13,19 @@ class Element {
 	buildText() {
 		return this.value
 	}
+
+	predefineSymbolsColor(color, symbolValues) {
+		this.value.predefineSymbolsColor(color, symbolValues)
+	}
+
+	cancelSymbolsPredefinedColor() {
+		this.predefineSymbolsColor()
+	}
+
+	getSymbolsOfList() {}
 }
 
 class Format extends Element {
-	constructor(value) {
-		super(value)
-	}
-
 	buildText() {
 		return th.highlight(this.value.buildText(), Format.DefaultColor)
 	}
@@ -27,10 +34,6 @@ class Format extends Element {
 }
 
 class Comment extends Element {
-	constructor(value) {
-		super(value)
-	}
-
 	buildText() {
 		return th.highlightWithStyle(this.value, Comment.Style, Comment.Color)
 	}
@@ -40,31 +43,29 @@ class Comment extends Element {
 }
 
 class Padding extends Element {
-	constructor(array) {
-		super(array)
-	}
-
 	buildText() {
-		return this.value.map(o => {
-			return o instanceof Element ? o.buildText() : o
-		}).join('')
+		return this.value.map(o => o.buildText?.() ?? o).join('')
 	}
 }
 
 class SSymbol extends Element {
-	constructor(value) {
-		super(value)
-	}
-
 	buildText() {
 		const color = 
 			this.predefinedColor ? this.predefinedColor :
 			this._isGlobal() ? SSymbol.Colors.global :
-			this._isPrimitive(this.value) ? SSymbol.Colors.primitive :
+			this._isPrimitive() ? SSymbol.Colors.primitive :
 			undefined
 
 		return color ? th.highlight(this.value, color) : this.value
 	}
+
+	predefineSymbolsColor(color, symbolValues) {
+		if (symbolValues?.includes(this.value) ?? true) {
+			this.predefinedColor = color
+		}
+	}
+
+	cancelMatchedParentheses() {}
 
 	_isGlobal() {
 		return replDelegate.getGlobals().includes(this.value.toUpperCase())
@@ -74,37 +75,15 @@ class SSymbol extends Element {
 		return primitives.includes(this.value.toLowerCase())
 	}
 
-	static predefineColor(obj, color, symbolValues) {
-		if (obj instanceof SSymbol) {
-			if (symbolValues?.includes(obj.value) ?? true) {
-				obj.predefinedColor = color
-			}
-			return
-		}
-
-		if (obj instanceof Quote) {
-			return
-		}
-
-		if (obj instanceof Array) {
-			obj.forEach(e => {
-				SSymbol.predefineColor(e, color, symbolValues)
-			})
-			return
-		}
-
-		if (obj instanceof Element) {
-			SSymbol.predefineColor(obj.value, color, symbolValues)	
-		}
-	}
-
-	static cancelPredefinedColor(obj, symbolValues) {
-		SSymbol.predefineColor(obj, undefined, symbolValues)
-	}
-
 	static Colors = {
 		global: '#ff5261',
 		primitive: '#39b6b5'
+	}
+}
+
+class Nil extends SSymbol {
+	getSymbolsOfList() {
+		return []
 	}
 }
 
@@ -113,7 +92,11 @@ class Quote extends Element {
 		super(value)
 		this.mark = mark
 		this.didMatchParentheses = value?.didMatchParentheses
-		SSymbol.predefineColor(value, Quote.Color)
+		value?.predefineSymbolsColor(Quote.Color)
+	}
+
+	predefineSymbolsColor() {
+		return
 	}
 
 	buildText() {
@@ -121,84 +104,61 @@ class Quote extends Element {
 		return th.highlight(this.mark + text, Quote.Color)
 	}
 
+	cancelMatchedParentheses() {
+		this.value.cancelMatchedParentheses()
+	}
+
 	static Color = '#ffab42'
 }
 
-class Pair extends Element {
+class SArrayElement extends Element {
+	constructor(sArray) {
+		super(sArray)
+		this.didMatchParentheses = this.value.some(s => s.didMatchParentheses)
+		this.value.findSecondLast()?.cancelMatchedParentheses()
+	}
+
+	predefineSymbolsColor(color, symbolValues) {
+		this.value.forEach(s => s.predefineSymbolsColor(color, symbolValues))
+	}
+}
+
+class Pair extends SArrayElement {
 	constructor(car, dot, cdr) {
-		super([car].concat(cdr ? [cdr] : []))
+		super([car, cdr].filterNullish())
 		this.car = car
 		this.dot = dot
 		this.cdr = cdr
-		this.didMatchParentheses = 
-			this.car.didMatchParentheses ||
-			this.cdr?.didMatchParentheses
 	}
 
 	buildText() {
 		return this.car.buildText() + this.dot + (this.cdr?.buildText() ?? '')
 	}
 
-	getFirstLayerSymbols() {
-		let list = []
+	getSymbolsOfList() {
+		let list = this.cdr ? this.cdr.value.getSymbolsOfList() : []
 
-		const carValue = this.car.value
-
-		if (carValue instanceof SSymbol) {
-			list.push(carValue)
-		}	
-
-		if (!this.cdr) {
-			return list
+		if (this.car.value instanceof SSymbol) {
+			list?.unshift(this.car.value)
 		}
 
-		const cdrValue = this.cdr.value
-
-		if (cdrValue instanceof SSymbol) {
-			return 'NIL'.startsWith(cdrValue.value.toUpperCase())
-				? list
-				: undefined
-		}
-
-		if (cdrValue instanceof Complex) {
-			const cdrSymbols = cdrValue.value.getFirstLayerSymbols()
-			return cdrSymbols ? list.concat(cdrSymbols) : undefined
-		}
+		return list
 	}
 }
 
-class List extends Element {
-	constructor(array) {
-		super(array.flat())
-		this.didMatchParentheses = this.value.some(s => s.didMatchParentheses)
+class List extends SArrayElement {
+	constructor(sArray) {
+		super(sArray)
 	}
 
 	buildText() {
 		return this.value.map(s => s.buildText()).join('')
 	}
 
-	getFirstLayerSymbols() {
+	getSymbolsOfList() {
 		return this.value
 			.map(s => s.value)
 			.filter(v => v instanceof SSymbol)
-	}
-}
-
-class Lambda extends List {
-	constructor(tag, complex, s) {
-		const formals = new Formals(complex)
-		const symbolValues = formals.getSymbolValues()
-		const body = s ? new Body(s, symbolValues) : undefined 
-		super([tag, formals, body].filter(e => e))
-	}
-}
-
-class Defun extends List {
-	constructor(tag, name, complex, s) {
-		const formals = complex ? new Formals(complex) : undefined
-		const symbolValues = formals?.getSymbolValues() ?? []
-		const body = s ? new Body(s, symbolValues) : undefined 
-		super([tag, name, formals, body].filter(e => e))
 	}
 }
 
@@ -209,13 +169,26 @@ class Complex extends Element {
 		this.rparen = rparen
 		this.didMatchParentheses = value.didMatchParentheses
 
-		if (this.rparen && !this.didMatchParentheses) {
+		if (location && this.lparen && this.rparen && !this.didMatchParentheses) {
 			this._tryMatchParentheses(location)
 		}
 	}
 
 	buildText() {
-		return this.lparen + this.value.buildText() + (this.rparen ?? '')
+		return (this.lparen ?? '') + this.value.buildText() + (this.rparen ?? '')
+	}
+
+	getSymbolsOfList() {
+		return this.value.getSymbolsOfList()
+	}
+
+	cancelMatchedParentheses() {
+		if (!this.lparen || !this.rparen) {
+			return
+		}
+
+		this.lparen = th.removeHighlight(this.lparen)
+		this.rparen = th.removeHighlight(this.rparen)
 	}
 
 	_tryMatchParentheses(location) {
@@ -262,73 +235,57 @@ class S extends Element {
 				this.rPadding.buildText()
 	}
 
-	static createFromValue(value) {
-		return new S(new Element(''), value, new Element(''))
+	cancelMatchedParentheses() {
+		this.value.cancelMatchedParentheses()
 	}
 }
 
-class Tag extends S {
-	constructor(lPadding, text, rPadding) {
-		const symbol = new SSymbol(text)
-		super(lPadding, symbol, rPadding)
-	}
-}
-
-class LambdaName extends S {
+class DefunName extends S {
 	constructor(lPadding, symbol, rPadding) {
 		super(lPadding, symbol, rPadding)
-		symbol.predefinedColor = LambdaName.Color
+		symbol.predefinedColor = DefunName.Color
 	}
 
 	static Color = '#ff724c'
 }
 
 class Formals extends S {
-	constructor(complex) {
-		const s = S.createFromValue(complex)
-		super(s.lPadding, s.value, s.rPadding)
+	constructor(lPadding, complex, rPadding) {
+		super(lPadding, complex, rPadding)
 
-		SSymbol.cancelPredefinedColor(complex)
+		complex.cancelSymbolsPredefinedColor()
 		
-		complex.value.getFirstLayerSymbols()?.forEach(sym => {
+		complex.getSymbolsOfList()?.forEach(sym => {
 			sym.predefinedColor = Formals.Color
 		})
 	}
 
 	getSymbolValues() {
-		return this.value.value.getFirstLayerSymbols()
-			?.map(sym => sym.value) ?? []
-	}
-
-	static isLegal(complex) {
-		return complex?.value instanceof List
+		return this.value.getSymbolsOfList()?.map(sym => sym.value) ?? []
 	}
 
 	static Color = '#cf91c9'
 }
 
 class Body extends S {
-	constructor(s, formalSymbolValues) {
+	constructor(s, formals) {
 		super(s.lPadding, s.value, s.rPadding)
-		SSymbol.predefineColor(this.value, Formals.Color, formalSymbolValues)
+		s.predefineSymbolsColor(Formals.Color, formals.getSymbolValues())
 	}
 }
 
 module.exports = {
-	Element: 	Element,
-	Format: 	Format,
-	Comment: 	Comment,
-	Padding: 	Padding,
-	SSymbol: 	SSymbol,
-	Quote: 		Quote,
-	Pair: 		Pair,
-	List: 		List,
-	Lambda: 	Lambda,
-	Defun: 		Defun,
-	Complex: 	Complex,
-	S: 			S,
-	Tag: 		Tag,
-	LambdaName: LambdaName,
-	Formals: 	Formals,
-	Body:		Body
+	Format: 		 	Format,
+	Comment: 		 	Comment,
+	Padding: 		 	Padding,
+	SSymbol: 		 	SSymbol,
+	Quote: 			 	Quote,
+	Pair: 			 	Pair,
+	List: 			 	List,
+	Nil: 			 	Nil,
+	Complex: 			Complex,
+	S: 					S,
+	DefunName:  		DefunName,
+	Formals: 			Formals,
+	Body:		 		Body
 }
