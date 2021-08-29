@@ -98,3 +98,21 @@ Traceback (most recent call last):
 	From function CAR:
 		Args: NIL
 Error [CAR] in NIL
+T
+(A B)
+A
+BLA
+A
+A
+C
+C
+A
+A
+(B)
+(B)
+((B).A)
+((B).A)
+A
+A
+A
+A
