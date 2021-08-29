@@ -7,7 +7,7 @@
  * TODO: deal with memory exhausting */
 
 namespace Pairs {
-  define(M = (1 << 15) - 1)
+  define(M = (1 << 27))
   // Falls in the data segment;
   static Pair buffer[M];
   Pair *const pool = buffer - 1;

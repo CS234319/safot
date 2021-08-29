@@ -7,10 +7,10 @@
 // Representation of a dotted pair, i.e., an unlabeled internal node in the
 // binary tree behind compound S-expression.
 representation Pair { 
-  perspective(W cons: 32)
-  perspective(H car, cdr :16)
-  perspective(H data, next :16)
-  perspective(H value, errorCode :16)
+  perspective(W cons: 64)
+  perspective(H car, cdr :32)
+  perspective(H data, next :32)
+  perspective(H value, errorCode :32)
 };
 
 /** A pool of all pairs is managed by the pairs module (see pairs.cc). The pool
