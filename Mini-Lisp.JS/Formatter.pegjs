@@ -2,8 +2,8 @@
 	require('./ArrayExtension')
 
 	const {
-		Format, Comment, Padding, SSymbol, Quote, Pair, List, 
-		Nil, Complex, S, DefunName, Formals, Body
+		Format, Comment, Padding, SSymbol, Quote, Pair, 
+		List, Nil, Complex, S, DefunName, Formals, Body,
 	} = require('./FormatterElements')
 
 	const createComplex = (lparen, value, rparen) => {
@@ -47,12 +47,6 @@ List
 PartialList
 	= pl:(PartialLambda / PartialDefun / S* PartialS) { return new List(pl.flat()) }
 
-Nil
-	= n:'nil'i { return new Nil(n) }
-
-PartialNil
-	= pn:$('n'i 'i'i? !'l'i) { return new Nil(pn) }
-
 Pair
 	= p:(S '.' S) { return new Pair(...p) }
 
@@ -90,7 +84,7 @@ DefunTag
 	= dt:(_ DefunTagSymbol StrongPadding) { return new S(...dt) }
 
 DefunName
-	= dn:(_ Symbol _) { return new DefunName(...dn) }
+	= dn:(_ (Nil / PartialNil / Symbol) _) { return new DefunName(...dn) }
 
 Defun
 	= t:DefunTag n:DefunName 
@@ -110,7 +104,13 @@ PartialDefun
 		) { return pd }
 
 Symbol
-	= s:$(!PartialNil [^()'.;\[\]\x00-\x20\x7F-\uFFFF]+) { return new SSymbol(s) }
+	= s:$(!PartialNil SymbolItem+) { return new SSymbol(s) }
+
+Nil
+	= n:'nil'i { return new Nil(n) }
+
+PartialNil
+	= pn:$('n'i 'i'i? !SymbolItem) { return new Nil(pn) }
 
 Quote
 	= m:"'" s:S { return new Quote(m, s) }
@@ -127,6 +127,9 @@ StrongPadding
 	= sp:PaddingItem+ { 
 		return new Padding(sp)
 	}
+
+SymbolItem
+	= [^()'.;\[\]\x00-\x20\x7F-\uFFFF]
 
 PaddingItem
 	= $([\x00-\x20\x7F-\uFFFF]+) / Comment

@@ -1,1 +1,1 @@
-const repl = require('./BrowserREPL')
+const browserTerminal = require('./BrowserTerminalInitiator')

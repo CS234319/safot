@@ -1,4 +1,4 @@
-const REPLInstigator = require('./REPLInstigator')
+const StreamREPL = require('./StreamREPL')
 const fs = require('fs')
 const streams = require('memory-streams')
 const testsFolderPath = './repl_tests'
@@ -13,7 +13,7 @@ const testFile = async name => {
 
 	const outputStream = new streams.WritableStream()
 	
-	const ri = new REPLInstigator(
+	const streamREPL = new StreamREPL(
 		fs.createReadStream(inputPath),
 		outputStream,
 		null

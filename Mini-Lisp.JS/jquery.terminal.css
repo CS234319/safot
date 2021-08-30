@@ -714,7 +714,7 @@ terminal .terminal-output > div {
     width: fit-content;
 }
 .terminal .cmd .parenHighlightInner {
-    padding-bottom: 1.5px;
+    padding-bottom: 1.25px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: #39b6b5;

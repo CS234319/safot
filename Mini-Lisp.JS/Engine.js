@@ -92,7 +92,7 @@ module.exports = class Engine {
 
 	_applyPrimitive(primitive, args) {
 		primitive.checkNumberOfArgs(args)
-		const actuals = primitive.isNormal() ? args : this._evaluateList(args)	
+		const actuals = primitive.isNormal() ? args : this._evaluateList(args)
 		return primitive.run(actuals)
 	}
 

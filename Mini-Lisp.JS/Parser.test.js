@@ -23,16 +23,16 @@ const parseEquals = (str, s) => {
 	Reflect.get(utils, 'parseExpectEquals').call(utils, str, s)
 }
 const parseError = (str) => {
-	expect(pw.parse(str).type).not.toBe(ParserStateWrapper.Accept)
+	expect(pw.parse(str).type).not.toBe(ParserStateWrapper.Accepted)
 }
 const parseErrorExpectType = (str, expectedType) => {
 	expect(pw.parse(str).type).toBe(expectedType)
 }
 const parseErrorExpectMore = (str) => {
-	parseErrorExpectType(str, ParserStateWrapper.ExpectMore)
+	parseErrorExpectType(str, ParserStateWrapper.ExpectedMore)
 }
 const parseErrorReject = (str) => {
-	parseErrorExpectType(str, ParserStateWrapper.Reject)
+	parseErrorExpectType(str, ParserStateWrapper.Rejected)
 }
 const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 	for (var i = minCode; i <= maxCode; i++) {

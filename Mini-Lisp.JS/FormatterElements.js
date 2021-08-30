@@ -1,9 +1,10 @@
 const TextHighlighter = require('./TextHighlighter')
-const replDelegate = require('./REPLDelegate')
 const primitives = require('./PrimitiveKeywords')
+const config = require('./Configuration').format
+const delegate = require('./FormatterDelegate')
 require('./ArrayExtension')
 
-const th = new TextHighlighter()
+const highlighter = new TextHighlighter()
 
 class Element {
 	constructor(value) {
@@ -27,19 +28,19 @@ class Element {
 
 class Format extends Element {
 	buildText() {
-		return th.highlight(this.value.buildText(), Format.DefaultColor)
+		return highlighter.apply(this.value.buildText(), Format.DefaultColor)
 	}
 
-	static DefaultColor = '#d7deea'
+	static DefaultColor = config.color.default
 }
 
 class Comment extends Element {
 	buildText() {
-		return th.highlightWithStyle(this.value, Comment.Style, Comment.Color)
+		return highlighter.applyWithStyle(this.value, Comment.Style, Comment.Color)
 	}
 
-	static Style = 'i'
-	static Color = '#296d98'
+	static Style = config.style.comment
+	static Color = config.color.comment
 }
 
 class Padding extends Element {
@@ -56,7 +57,7 @@ class SSymbol extends Element {
 			this._isPrimitive() ? SSymbol.Colors.primitive :
 			undefined
 
-		return color ? th.highlight(this.value, color) : this.value
+		return color ? highlighter.apply(this.value, color) : this.value
 	}
 
 	predefineSymbolsColor(color, symbolValues) {
@@ -68,17 +69,14 @@ class SSymbol extends Element {
 	cancelMatchedParentheses() {}
 
 	_isGlobal() {
-		return replDelegate.getGlobals().includes(this.value.toUpperCase())
+		return delegate.getGlobals()?.includes(this.value.toUpperCase())
 	}
 
 	_isPrimitive() {
 		return primitives.includes(this.value.toLowerCase())
 	}
 
-	static Colors = {
-		global: '#ff5261',
-		primitive: '#39b6b5'
-	}
+	static Colors = config.color.symbol
 }
 
 class Nil extends SSymbol {
@@ -101,14 +99,14 @@ class Quote extends Element {
 
 	buildText() {
 		const text = this.value?.buildText() ?? ''
-		return th.highlight(this.mark + text, Quote.Color)
+		return highlighter.apply(this.mark + text, Quote.Color)
 	}
 
 	cancelMatchedParentheses() {
 		this.value.cancelMatchedParentheses()
 	}
 
-	static Color = '#ffab42'
+	static Color = config.color.quote
 }
 
 class SArrayElement extends Element {
@@ -169,13 +167,13 @@ class Complex extends Element {
 		this.rparen = rparen
 		this.didMatchParentheses = value.didMatchParentheses
 
-		if (location && this.lparen && this.rparen && !this.didMatchParentheses) {
+		if (this.rparen && !this.didMatchParentheses) {
 			this._tryMatchParentheses(location)
 		}
 	}
 
 	buildText() {
-		return (this.lparen ?? '') + this.value.buildText() + (this.rparen ?? '')
+		return this.lparen + this.value.buildText() + (this.rparen ?? '')
 	}
 
 	getSymbolsOfList() {
@@ -183,39 +181,37 @@ class Complex extends Element {
 	}
 
 	cancelMatchedParentheses() {
-		if (!this.lparen || !this.rparen) {
+		if (!this.rparen) {
 			return
 		}
 
-		this.lparen = th.removeHighlight(this.lparen)
-		this.rparen = th.removeHighlight(this.rparen)
+		this.lparen = highlighter.remove(this.lparen)
+		this.rparen = highlighter.remove(this.rparen)
 	}
 
 	_tryMatchParentheses(location) {
 		const lparenPos = location.start.offset
 		const rparenPos = location.end.offset
-		const cursorPos = replDelegate.getCursorPosition()
-
-		if (cursorPos < lparenPos || cursorPos > rparenPos) {
+		const result = delegate.matchParentheses(lparenPos, rparenPos)
+		
+		if (!result) {
 			return
 		}
-		
+
 		this.didMatchParentheses = true
-		this._highlightParentheses(lparenPos, rparenPos, cursorPos)
+		this._highlightParentheses(result.isInner)
 	}
 
-	_highlightParentheses(lparenPos, rparenPos, cursorPos) {
-		const spanClass =  [
-			lparenPos - 1, lparenPos, rparenPos, lparenPos + 1
-		].includes(cursorPos)
-			? Complex.parenClasses.highlighted
-			: Complex.parenClasses.highlightInner
+	_highlightParentheses(isInner) {
+		const spanClass = isInner
+			? Complex.ParenthesesClasses.highlightInner
+			: Complex.ParenthesesClasses.highlighted
 
-		this.lparen = th.highlightWithClass(this.lparen, spanClass)
-		this.rparen = th.highlightWithClass(this.rparen, spanClass)
+		this.lparen = highlighter.applyWithClass(this.lparen, spanClass)
+		this.rparen = highlighter.applyWithClass(this.rparen, spanClass)
 	}
 
-	static parenClasses = {
+	static ParenthesesClasses = {
 		highlighted: 'parenHighlight',
 		highlightInner: 'parenHighlightInner'
 	}
@@ -246,7 +242,7 @@ class DefunName extends S {
 		symbol.predefinedColor = DefunName.Color
 	}
 
-	static Color = '#ff724c'
+	static Color = config.color.defunName
 }
 
 class Formals extends S {
@@ -264,7 +260,7 @@ class Formals extends S {
 		return this.value.getSymbolsOfList()?.map(sym => sym.value) ?? []
 	}
 
-	static Color = '#cf91c9'
+	static Color = config.color.formals
 }
 
 class Body extends S {
