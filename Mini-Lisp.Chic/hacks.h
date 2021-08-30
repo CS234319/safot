@@ -23,8 +23,13 @@
 #define let static
 typedef const char *const String;
 
-typedef int32_t W; // A full word of  32 bits; two half words
-typedef int16_t H; // Half a word including 16 bits.
+#ifdef WORK_AROUND
+typedef int64_t W; // A full word of  32 bits; two half words
+typedef int32_t H; // Half a word including 16 bits.
+#else
+typedef int32_t W;
+typedef int16_t H;
+#endif
 typedef int8_t byte; // A byte 
 
 static inline H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }

@@ -7,7 +7,11 @@
  * TODO: deal with memory exhausting */
 
 namespace Pairs {
+#ifdef WORK_AROUND
+  define(M = (1 << 25))
+#else
   define(M = (1 << 15) - 1)
+#endif
   // Falls in the data segment;
   static Pair buffer[M];
   Pair *const pool = buffer - 1;

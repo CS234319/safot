@@ -7,13 +7,21 @@
 
 // Representation of a dotted pair, i.e., an unlabeled internal node in the
 // binary tree behind compound S-expression.
-representation Pair { 
-  perspective(W cons: 32)
-  perspective(H car, cdr :16)
-  perspective(H data, next :16)
-  perspective(H value, errorCode :16)
+#ifdef WORK_AROUND
+representation Pair {
+    perspective(W cons: 64)
+    perspective(H car, cdr :32)
+    perspective(H data, next :32)
+    perspective(H value, errorCode :32)
 };
-
+#else
+representation Pair {
+    perspective(W cons: 32)
+    perspective(H car, cdr :16)
+    perspective(H data, next :16)
+    perspective(H value, errorCode :16)
+};
+#endif
 /** A pool of all pairs is managed by the pairs module (see pairs.cc). The pool
  * is an array; an index into this array, also called a handle, is a half word
  * (type H), and can be thought of as a pointer. All indices are strictly

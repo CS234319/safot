@@ -85,6 +85,10 @@ list:
 	@echo "ENGINE         = " $(ENGINE)
 	@echo "TESTERS        = " $(TESTERS)
 
+ifdef WORK_AROUND
+CFLAGS += -DWORK_AROUND
+endif
+
 CFLAGS += -w -std=gnu2x -g
 
 %.o: %.cc                                      # Compiling individual C++ files into ob
