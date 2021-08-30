@@ -1,16 +1,17 @@
 // #include <iostream>
 #ifndef S_H
-#define S_H 
+#define S_H
 
+#include <cerrno>
 #include "hacks.h"
 
 // Representation of a dotted pair, i.e., an unlabeled internal node in the
 // binary tree behind compound S-expression.
 representation Pair { 
-  perspective(W cons: 64)
-  perspective(H car, cdr :32)
-  perspective(H data, next :32)
-  perspective(H value, errorCode :32)
+  perspective(W cons: 32)
+  perspective(H car, cdr :16)
+  perspective(H data, next :16)
+  perspective(H value, errorCode :16)
 };
 
 /** A pool of all pairs is managed by the pairs module (see pairs.cc). The pool
@@ -168,7 +169,9 @@ static const S NLAMBDA("nlambda");
 static const S LAMBDA("lambda");   
 static const S UNDEFINED("undefined");
 static const S INVALID("invalid");  
-static const S BUG("bug");      
+static const S BUG("bug");
+static const S NOT_ENOUGH_MEMORY("not_enough_memory");
+static const S OVERFLOW("overflow");
 
 // Named atoms for exceptions; for the idiom s.error(MISSING) to abort
 // execution in the case that an error of kind MISSING occurs in the context of
@@ -184,6 +187,14 @@ static const S ARGUMENT("argument");
 
 // Additional fluentons.
 inline bool die(S s) { throw BUG.cons(s); }
+
+// Memory errors:
+inline bool memory_error(S s) {
+    // Using this function instead of die(S s),
+    // because die allocate more memory via cons)
+    errno = ENOMEM;
+    throw s;
+}
 
 #undef construct
 #endif // S_H 

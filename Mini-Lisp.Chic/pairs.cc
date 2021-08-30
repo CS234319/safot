@@ -7,7 +7,7 @@
  * TODO: deal with memory exhausting */
 
 namespace Pairs {
-  define(M = (1 << 27))
+  define(M = (1 << 15) - 1)
   // Falls in the data segment;
   static Pair buffer[M];
   Pair *const pool = buffer - 1;
@@ -32,11 +32,10 @@ namespace Pairs {
     return inner;
   }
 
-
   H allocate() {
     D(next(), remaining);
-    remaining > 0 || die(EXHAUSTED);
-    next() != 0 || die(EXHAUSTED);;
+    remaining > 0 || memory_error(NOT_ENOUGH_MEMORY);
+    next() > 0 ||  memory_error(OVERFLOW);
     const H $ = next();
     remaining--, next() = pool[next()].next;
     D($, next(), remaining);

@@ -45,7 +45,17 @@ int REPL() {   int n = 0;
     } catch (...) { /* Ignore evaluation error */ }
     Loop:
       goto Start;
-  } catch (...) { return n; }
+  } catch (S s) {
+      if (s.eq(NOT_ENOUGH_MEMORY)) {
+          prompt("Error [NOT_ENOUGH_MEMORY]\n");
+      }
+      if (s.eq(OVERFLOW)) {
+          prompt("Error [OVERFLOW]\n");
+      }
+      return n;
+  } catch (...) {
+      return n;
+  }
 }
 
 #include <stdio.h> 
