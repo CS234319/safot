@@ -57,7 +57,7 @@ class FlowTestFramework:
 
         :return: output string
         """
-        return self.shell.feed(line, timeout=3, filter_newline=self.filter_newline)
+        return self.shell.feed(line, timeout=4, filter_newline=self.filter_newline)
 
     def interactive(self):
         """

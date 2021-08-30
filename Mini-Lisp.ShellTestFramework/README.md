@@ -179,7 +179,7 @@ Each of the flow tests, done by the following steps:
   * If the files are identical then the test passed, else failed and show diffs.
 * **Run**:
   * _./Mini-Lisp.ShellTestFramework/bin/run_all_tests.sh flow_<br>
-    (running all the tests may take around ~30 minutes)
+    (running all the flow tests may take around ~7 minutes)
 
 ### EvaluateOnEvaluate
 The flow tests of Lisp Evaluate On Lisp Evaluate are based on the test: ./test/input/test_evaluate.in.lisp.
@@ -212,7 +212,8 @@ that will be feeded from the book (step 4). It (almost) similar to the executabl
 be executed only when running the s-expression.
 3. `applied evaluate` alist - out alist for the applied evaluate function, can be very small (e.g: (t.t nil.nil))
 * **Run**:
-  * _./Mini-Lisp.ShellTestFramework/bin/run_all_tests.sh flow_
+  * _./Mini-Lisp.ShellTestFramework/bin/run_all_tests.sh flow_<br>
+  (running all the flow tests may take around ~5 minutes)
 
 ## Status
 Status of the tests:<br>

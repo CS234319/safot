@@ -108,10 +108,9 @@ def get_env() -> str:
     :return: alist string (without parantheses)
     """
     files = get_evaluate_files()
-    alist = "\n\n"
-    alist += "t.t nil.nil \n"
+    alist = "t.t nil.nil "
     for file in files:
-        alist += f"{get_lambda(file)} \n"
+        alist += f"{get_lambda(file)} "
     return alist
 
 

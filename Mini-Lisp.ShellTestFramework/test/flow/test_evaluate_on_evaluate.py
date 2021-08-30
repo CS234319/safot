@@ -2,6 +2,8 @@
 Mini-Lisp-evaluate on Mini-Lisp-evaluate
 """
 import pytest
+import tempfile
+from pathlib import Path
 from framework.lib.flow_test_framework import FlowTestFramework
 from framework.lib.utils import get_flow, get_env, generate_book_files
 
@@ -25,6 +27,13 @@ def env() -> str:
     return get_env()
 
 
+def run(flow, s_expr: str) -> str:
+    tmp_file = Path(tempfile.mkstemp()[1])
+    tmp_file.write_text(s_expr)
+    out_path = Path(flow.run_s_expr_file(str(tmp_file)))
+    return out_path.read_text().replace("\n", "")
+
+
 def test_evaluate_on_evaluate(flow, env):
     """
     evaluate atom
@@ -35,11 +44,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(a.T t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote a) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
 
     alist = "(a.X t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote a) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "X"
+    assert run(flow, s_expr) == "X"
 
     """
     atomic_one_arguments
@@ -57,39 +66,39 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(a.x t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (atom a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
 
     alist = "(a.(x) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (atom a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
 
     alist = "(a.(x) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (car a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "X"
+    assert run(flow, s_expr) == "X"
 
     alist = "(a.(x y z) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (car a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "X"
+    assert run(flow, s_expr) == "X"
 
     alist = "(a.(x.y) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (car a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(X.Y)"
+    assert run(flow, s_expr) == "(X.Y)"
 
     alist = "(a.(x) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cdr a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
 
     alist = "(a.(x y z) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cdr a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(Y Z)"
+    assert run(flow, s_expr) == "(Y Z)"
 
     alist = "(a.(x.y) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cdr a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
 
     alist = "(a.x x.y t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (eval a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "Y"
+    assert run(flow, s_expr) == "Y"
 
     """
     atomic_two_arguments
@@ -104,27 +113,27 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(a.x b.y t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cons a b)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(X.Y)"
+    assert run(flow, s_expr) == "(X.Y)"
     
     alist = "(a.x b.x t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cons a b)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(X.X)"
+    assert run(flow, s_expr) == "(X.X)"
     
     alist = "(a.x t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (eq a a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
     
     alist = "(a.x b.y t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (eq a b)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
     
     alist = "(a.x b.x t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (eq a b)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
     
     alist = "(a.x b.y t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (set a b)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "Y"
+    assert run(flow, s_expr) == "Y"
 
     """
     cond
@@ -142,39 +151,39 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (()))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
     
     alist = "(t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (t nil))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
     
     alist = "(a.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (a t))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
     
     alist = "(a.t b.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (a b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
     
     alist = "(a.a b.b t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (t a) (nil b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
     
     alist = "(a.a b.b t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (nil a) (t b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "B"
+    assert run(flow, s_expr) == "B"
     
     alist = "(a.t b.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (a b) (b a))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
     
     alist = "(a.nil b.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (a b) (b a))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
     
     alist = "(a.nil b.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (cond (a b) (a b) (b a))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "NIL"
+    assert run(flow, s_expr) == "NIL"
 
     """
     id
@@ -185,11 +194,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(id.(lambda (x) x) a.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (id a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "T"
+    assert run(flow, s_expr) == "T"
 
     alist = "(id.(lambda (x) x) a.(a b) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (id a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(A B)"
+    assert run(flow, s_expr) == "(A B)"
 
     """
     quote
@@ -200,11 +209,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(quote.(nlambda (x) x) a.t t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (quote a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     alist = "(quote.(nlambda (x) x) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (quote bla)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "BLA"
+    assert run(flow, s_expr) == "BLA"
 
     """
     first_3
@@ -215,11 +224,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(first.(nlambda (x y z) x) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (first a b c)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     alist = "(first.(lambda (x y z) x) a.a b.b c.c t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (first a b c)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     """
     last_3
@@ -230,11 +239,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(last.(nlambda (x y z) z) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (last a b c)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "C"
+    assert run(flow, s_expr) == "C"
 
     alist = "(last.(lambda (x y z) z) a.a b.b c.c t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (last a b c)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "C"
+    assert run(flow, s_expr) == "C"
 
     """
     car
@@ -245,11 +254,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(xcar.(lambda (x) (car x)) a.(a b) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (xcar a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     alist = "(xcar.(nlambda (x) (car x)) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (xcar (a b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     """
     cdr
@@ -260,11 +269,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(xcdr.(lambda (x) (cdr x)) a.(a b) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (xcdr a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(B)"
+    assert run(flow, s_expr) == "(B)"
 
     alist = "(xcdr.(nlambda (x) (cdr x)) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (xcdr (a b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "(B)"
+    assert run(flow, s_expr) == "(B)"
 
     """
     mirror
@@ -276,11 +285,11 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(mirror.(lambda (x) (cons (cdr x) (car x))) a.(a b) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (mirror a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "((B).A)"
+    assert run(flow, s_expr) == "((B).A)"
 
     alist = "(mirror.(nlambda (x) (cons (cdr x) (car x))) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (mirror (a b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "((B).A)"
+    assert run(flow, s_expr) == "((B).A)"
 
     """
     zcar
@@ -293,16 +302,16 @@ def test_evaluate_on_evaluate(flow, env):
     """
     alist = "(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.a t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (zcar a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     alist = "(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.(a b) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (zcar a)) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     alist = "(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (zcar (a b))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
 
     alist = "(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote (zcar (a))) (quote {alist})) '({env}))"
-    assert flow.feed(s_expr) == "A"
+    assert run(flow, s_expr) == "A"
