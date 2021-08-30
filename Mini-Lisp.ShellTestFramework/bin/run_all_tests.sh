@@ -25,13 +25,13 @@ function check_configurations() {
 
 function run_unit_tests() {
     cd $1
-    python3 -m pytest -rA
+    python3 -m pytest -rA --exitfirst
     cd - &> /dev/null
 }
 
 function run_flow_tests() {
     cd $1
-    python3 -m pytest -rA
+    python3 -m pytest -rA --exitfirst
     cd - &> /dev/null
 }
 

@@ -88,11 +88,9 @@ class MiniLispShell:
     def feed(
             self,
             input_str: str,
-            timeout=0.001,
-            polling=False,
             filter_pattern=r"\r|- |\?|> ",
-            max_buffer=10000000,
-            filter_newline=True
+            filter_newline=True,
+            timeout=0.1
     ) -> str:
         """
         Feed the shell with 1 line, and get the output.
@@ -107,14 +105,11 @@ class MiniLispShell:
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
         sleep(timeout)
-        if polling:
+        while True:
             try:
-                while True:
-                    self.shell.read_nonblocking(size=max_buffer)
+                self.shell.expect("\n", timeout=0.5)
             except:
-                pass
-        else:
-            self.shell.read_nonblocking(size=max_buffer)
+                break
         raw = self.log.read_text().replace("\x00", "")
         self.log.write_text("")
         out = re.sub(filter_pattern, "", raw)

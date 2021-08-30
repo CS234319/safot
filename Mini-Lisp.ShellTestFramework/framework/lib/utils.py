@@ -115,7 +115,7 @@ def get_env() -> str:
     return alist
 
 
-def get_flow(compile_book=True, polling=False, filter_newline=True) -> FlowTestFramework:
+def get_flow(compile_book=True, filter_newline=True) -> FlowTestFramework:
     """
     Returns a new flow, loaded with all the book, by the following steps:
         1. Generate the latest lisp files from the book.
@@ -127,7 +127,7 @@ def get_flow(compile_book=True, polling=False, filter_newline=True) -> FlowTestF
     """
     if compile_book is True:
         generate_book_files()
-    flow = FlowTestFramework(mini_lisp="../../../Mini-Lisp.Chic/mini-lisp", polling=polling, filter_newline=filter_newline)
+    flow = FlowTestFramework(mini_lisp="../../../Mini-Lisp.Chic/mini-lisp", filter_newline=filter_newline)
     for file in get_functions_files():
         flow.load_function_file(file)
     return flow
