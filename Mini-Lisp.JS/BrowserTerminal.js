@@ -97,21 +97,9 @@ module.exports = class BrowserTerminal {
 	handleSpecialCharacters(str) {
 		const { left, right } = highlightingBrackets
 		
-		const re = new RegExp(`\[\\[\\]${left}${right}\\\\]`, 'g')
-		return str.replace(re, char => {
-			switch (char) {
-				case '[':
-					return '&#91;'
-				case '\\':
-					return '&#92;'
-				case ']':
-					return '&#93;'
-				case left:
-					return '['
-				case right:
-					return ']'
-			}
-		})
+		return $.terminal.escape_brackets(str)
+			.replace(new RegExp(`${left}`, 'g'), '[')
+			.replace(new RegExp(`${right}`, 'g'), ']')
 	}
 
 	applyDefaultColor(str) {
