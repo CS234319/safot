@@ -64,7 +64,7 @@ TEST(Lookup, TeaAndCofee) {
 
 
 TEST(Lookup, Remove1) {
-    S restored_alist = alist();
+    S restored_alist = *alist();
     // Add 1 element to alist:
     push("A", "X");
     EXPECT_EQ(lookup("A"), S("X"));
@@ -73,11 +73,11 @@ TEST(Lookup, Remove1) {
     remove_element("A");
     EXPECT_EXCEPTION(lookup("A"),S("A"), UNDEFINED);
 
-    alist() = restored_alist;
+    *alist() = restored_alist;
 }
 
 TEST(Lookup, Remove2) {
-    S restored_alist = alist();
+    S restored_alist = *alist();
 
     // Add 2 elements to alist:
     push("A", "X");
@@ -90,11 +90,11 @@ TEST(Lookup, Remove2) {
     EXPECT_EXCEPTION(lookup("A"),S("A"), UNDEFINED);
     EXPECT_EQ(lookup("B"), S("Y"));
 
-    alist() = restored_alist;
+    *alist() = restored_alist;
 }
 
 TEST(Lookup, RemoveElements) {
-    S restored_alist = alist();
+    S restored_alist = *alist();
 
     // Add 2 elements to alist:
     push("A", "X");
@@ -111,5 +111,5 @@ TEST(Lookup, RemoveElements) {
     EXPECT_EXCEPTION(lookup("B"),S("B"), UNDEFINED);
     EXPECT_EQ(lookup("C"), S("Z"));
 
-    alist() = restored_alist;
+    *alist() = restored_alist;
 }

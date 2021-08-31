@@ -3,7 +3,7 @@
 #include "S.h"
 
 /* Get the alist */
-extern S& alist();
+extern S* alist();
 
 /* Basic operations */
 extern void remove_element(S name);

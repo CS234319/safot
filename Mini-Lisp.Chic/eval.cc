@@ -220,7 +220,7 @@ S apply(S f, S args) {
   push(ARGUMENT, args);
   const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
   remove_element(ARGUMENT);
-  alist() = bind(f.$2$(), actuals, alist());
+  *alist() = bind(f.$2$(), actuals, *alist());
   push(ARGUMENT, actuals);
   const auto result = f.$3$().eval();
   remove_element(ARGUMENT);
