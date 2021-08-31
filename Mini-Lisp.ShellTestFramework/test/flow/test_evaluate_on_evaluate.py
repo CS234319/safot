@@ -164,6 +164,24 @@ def test_evaluate_on_evaluate(flow, env):
     assert run(flow, s_expr) == "NIL"
     print("Passed.")
 
+    print("Running: EvaluateOnEvaluate - evaluate errors")
+    alist = "(t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (error)) (quote {alist})) '({env}))"
+    assert run(flow, s_expr) == "Error [(NIL)] in (ERROR ACTUALS)"
+
+    alist = "(a.my_err t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (error a)) (quote {alist})) '({env}))"
+    assert run(flow, s_expr) == "Error [((MY_ERR))] in (ERROR ACTUALS)"
+
+    alist = "(t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (bla)) (quote {alist})) '({env}))"
+    assert run(flow, s_expr) == "Error [UNDEFINED] in UNDEFINED"
+
+    alist = "(t.t nil.nil)"
+    s_expr = f"(evaluate '(evaluate (quote (NIL NIL)) (quote {alist})) '({env}))"
+    assert run(flow, s_expr) == "Error [CAR] in NIL"
+    print("Passed.")
+
     print("Running: EvaluateOnEvaluate - evaluate lambda/nlambda functions")
     # id
     alist = "(id.(lambda (x) x) a.t t.t nil.nil)"

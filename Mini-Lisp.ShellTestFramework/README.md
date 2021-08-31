@@ -53,7 +53,7 @@ Add the Python package to PYTHONPATH:
 * **Automatically**:<br>
   ```bash
   source ./Mini-Lisp.ShellTestFramework/build/env.sh
-  ```  
+  ```
 
 ## Usage
 ShellTestFramework has 2 main scripts:<br>
@@ -74,7 +74,7 @@ For example:
 ## API
 In order to use the Python package, you must define the PYTHONPATH as described in the installation part.<br>
 After you did that, run python3 and the following command must not raise ModuleNotFoundError: 
-```
+```python
 import framework.lib
 ```
 ShellTestFramework Python package has 2 main API:
@@ -227,6 +227,7 @@ that will be fed from the book (step 4) and contains all the definitions for the
 ## Status
 Status of the tests:<br>
 **Lisp Evaluate**:<br>️
+All the flow tests of Lisp Evaluate passed.<br>
 ✔ apply_atomic<br>
 ✔ apply_decomposed_lambda<br>
 ✔ apply_eager_atomic<br>
@@ -241,8 +242,14 @@ Status of the tests:<br>
 ✔ is_atomic<br>
 ✔ lookup<br>
 
-**Lisp Evaluate on Evaluate**:<br>
-✔ All the flow tests of Evaluate on Evaluate passed.
+**Lisp Evaluate on Lisp Evaluate**:<br>
+All the flow tests of Lisp Evaluate on Lisp Evaluate passed.<br>
+✔ Evaluate atoms<br>
+✔ Evaluate atomic functions with one arguments<br>
+✔ Evaluate atomic functions with two arguments<br>
+✔ Evaluate errors<br>
+✔ Evaluate cond<br>
+✔ Evaluate lambda/nlambda functions<br>
 
 **Update:**<br>
 All the tests will pass **only if** you compile the mini-lisp
@@ -251,11 +258,14 @@ with the workaround environment variable:
 export WORK_AROUND=1
 make all -C ./Mini-Lisp.Chic/
 ```
-Because the current memory infrastructure of the C implementation of Mini-Lisp,
-has no Garbage Collector yet, there is a temporary workaround that increase the memory,
-by setting the basic word integer from int32 to int64.<br>
+(this is done automatically in _./bin/run_all_tests.sh_)<br> 
+Because the current memory infrastructure of the C implementation of Mini-Lisp
+has no Garbage Collector yet, there are not enough memory when running these flow tests,
+so there is a temporary workaround that increase the memory, by setting the basic word integer
+from int32 to int64.<br>
 According to Yossi Gil, this workaround must not (!) be part of the Mini-Lisp
 implementation (and of course not part of the production) and thus can only be use 
-temporary with this environment variable.<br>
+temporary with this environment variable, in order to successfully run the flow tests without 
+out of memory errors.<br>
 It must be deleted after the garbage collector will be implemented in the
-memory infrastructure in the future.
+memory infrastructure in the future.<br>
