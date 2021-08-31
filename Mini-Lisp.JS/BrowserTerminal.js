@@ -58,7 +58,7 @@ module.exports = class BrowserTerminal {
 		const formatters = $.terminal.defaults.formatters
 
 		// Adding highlight formatter before the nesting formatter
-		const format = str => this.switchBrackets(this.format(str))
+		const format = str => this.handleSpecialCharacters(this.format(str))
 		formatters.unshift(format)	
 
 		const formatPartition = str => {
@@ -78,6 +78,7 @@ module.exports = class BrowserTerminal {
 
 	format(str) {
 		str = $.terminal.unescape_brackets(str)
+		
 		const formatResult = this.formatterWrapper.apply(str)
 		switch (formatResult.type) {
 			case PEGParserStateWrapper.Accepted:
@@ -93,14 +94,16 @@ module.exports = class BrowserTerminal {
 		}
 	}
 
-	switchBrackets(str) {
+	handleSpecialCharacters(str) {
 		const { left, right } = highlightingBrackets
 		
-		const re = new RegExp(`\[\\[\\]${left}${right}\]`, 'g')
+		const re = new RegExp(`\[\\[\\]${left}${right}\\\\]`, 'g')
 		return str.replace(re, char => {
 			switch (char) {
 				case '[':
 					return '&#91;'
+				case '\\':
+					return '&#92;'
 				case ']':
 					return '&#93;'
 				case left:
