@@ -18,10 +18,6 @@ Array.prototype.findLastIndex = function(fn) {
 }
 
 Array.prototype.findSecondLast = function(fn) {
-	const lastIndex = this.findLastIndex(s => s.didMatchParentheses)
+	const lastIndex = this.findLastIndex(s => s.didMatchEnclosures)
 	return lastIndex > 0 ? this[lastIndex - 1] : undefined
-}
-
-Array.prototype.filterNullish = function() {
-	return this.filter(e => ![undefined, null].includes(e))
 }

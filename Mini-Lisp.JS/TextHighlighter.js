@@ -1,5 +1,6 @@
 module.exports = class TextHighlighter {
 	_genericHighlight(str, style, color, spanClass) {	
+		// return `««${style};${color};;${spanClass};»${str}»`
 		return `[[${style};${color};;${spanClass};]${str}]`
 	}
 
@@ -16,6 +17,7 @@ module.exports = class TextHighlighter {
 	}
 
 	remove(str) {
+		// return str.replace(/««([^;]*;)+»([^»]+)»/g, '$2')
 		return str.replace(/\[\[([^;]*;)+\]([^\]]+)\]/g, '$2')
 	}
 }

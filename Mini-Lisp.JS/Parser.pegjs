@@ -6,20 +6,15 @@
 }
 
 S
-	=   _ s:(Complex / Symbol / Quote) _ { return s }
-
-Complex
-	= '(' complex:(Pair / List) ')' { 
-		return complex
-	}
+	=   _ s:(Pair / List / Symbol / Quote) _ { return s }
 
 List
-	= listArray:S* {
+	= '(' listArray:S* ')' {
 		return lc.create(...listArray)
 	}
 
 Pair
-	= car:S '.' cdr:S { 
+	= '[' car:S '.' cdr:S ']' { 
 		return new Pair(car, cdr)
 	}
 

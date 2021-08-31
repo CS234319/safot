@@ -14,7 +14,7 @@ module.exports = class REPLInstigator {
 
 	feedLine(line) {
 		this._commandString += line + '\n'
-		const parseResult = this._parserWrapper.parse(this._commandString)
+		const parseResult = this._parserWrapper.apply(this._commandString)
 
 		switch (parseResult.type) {
 			case PEGParserStateWrapper.Accepted:

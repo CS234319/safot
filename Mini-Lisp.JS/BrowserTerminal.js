@@ -14,10 +14,12 @@ $('body').append('<p id="a"></p>')
 $('body').append('<p id="b"></p>')
 $('body').append('<p id="c"></p>')
 $('body').append('<p id="d"></p>')
+$('body').append('<p id="e"></p>')
 const printA = str => document.getElementById('a').innerHTML = 'a ' + str
 const printB = str => document.getElementById('b').innerHTML = 'b ' + str
 const printC = str => document.getElementById('c').innerHTML = 'c ' + str
 const printD = str => document.getElementById('d').innerHTML = 'd ' + str
+const printE = str => document.getElementById('e').innerHTML = 'e ' + str
 
 //TODO: remove
 
@@ -26,7 +28,6 @@ module.exports = class BrowserTerminal {
 	static ParagraphId = 'repl_terminal'
 
 	constructor() {
-		try {
 		this.globals = []
 		this.initCompletions()
 		
@@ -36,10 +37,6 @@ module.exports = class BrowserTerminal {
 
 		this.initFormatters()
 		this.initTerminal()
-		
-		} catch (e) {
-			printA(e.stack)
-		}
 	}
 
 	initTerminal() {
@@ -57,9 +54,9 @@ module.exports = class BrowserTerminal {
 	}
 
 	initFormatters() {
-		$.terminal.defaults.formatters.unshift(str => {
-			try {
-			const formatResult = this.formatterWrapper.parse(str)
+		$.terminal.new_formatter(str => {
+			// str = $.terminal.unescape_brackets(str)
+			const formatResult = this.formatterWrapper.apply(str)
 			switch (formatResult.type) {
 				case PEGParserStateWrapper.Accepted:
 					return formatResult.output
@@ -72,9 +69,6 @@ module.exports = class BrowserTerminal {
 					return 	formatter.parse(str.slice(0, offset)) +
 							this.applyDefaultColor(str.slice(offset))
 			}
-		}catch (e) {
-			printA(e.stack)
-		}
 		})	
 	}
 
@@ -108,17 +102,17 @@ module.exports = class BrowserTerminal {
 	}
 
 	/* Formatter Delegate */
-	matchParentheses(lparenPos, rparenPos) {
+	matchEnclosures(lEncPos, rEncPos) {
 		const cursorPos = this.getCursorPosition()
 
 		if (isNaN(cursorPos) 		||
-			cursorPos < lparenPos 	|| 
-			cursorPos > rparenPos) {
+			cursorPos < lEncPos 	|| 
+			cursorPos > rEncPos) {
 			return null
 		}
 		
 		const isInner = ![
-			lparenPos - 1, lparenPos, rparenPos, lparenPos + 1
+			lEncPos - 1, lEncPos, rEncPos, lEncPos + 1
 		].includes(cursorPos)
 
 		return { isInner: isInner }

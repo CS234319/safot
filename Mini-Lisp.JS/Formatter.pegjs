@@ -6,13 +6,13 @@
 		List, Nil, Complex, S, DefunName, Formals, Body,
 	} = require('./FormatterElements')
 
-	const createComplex = (lparen, value, rparen) => {
-		return new Complex(location(), lparen, value, rparen)
+	const createComplex = (lEnc, value, rEnc) => {
+		return new Complex(location(), lEnc, value, rEnc)
 	}
 
 	const createLambdaArray = (t, f, b, n) => {
 		const body = (b ? new Body(b, f) : undefined)
-		return [t, n, f, body].filterNullish()
+		return [t, n, f, body].filter(Boolean)
 	}
 }
 
@@ -32,14 +32,26 @@ PartialS
 		_) { return new S(...ps) }
 
 Complex
-	= c:('(' (Pair / List) ')') { 
-		return createComplex(...c) 	
+	= c:(ComplexList / ComplexPair) { 
+		return createComplex(...c)
 	}
 
 PartialComplex
-	= pc:('(' (PartialPair / PartialList / Pair / List) !')') { 
-		return createComplex(...pc) 
+	= pc:(PartialComplexList / PartialComplexPair) { 
+		return createComplex(...pc)
 	}
+
+ComplexList
+	= '(' List ')'
+
+PartialComplexList
+	= '(' (PartialList / List) !')'
+
+ComplexPair
+	= '[' Pair ']'
+
+PartialComplexPair
+	= '[' (PartialPair / Pair) !']'
 
 List
 	= l:(Lambda / Defun / S*) { return new List(l) }
@@ -51,7 +63,9 @@ Pair
 	= p:(S '.' S) { return new Pair(...p) }
 
 PartialPair
-	= car:S dot:'.' !S cdr:PartialS? { return new Pair(car, dot, cdr) }
+	= pp:(S '.' !S PartialS? / (PartialS / S)? !'.') { 
+		return new Pair(...pp.filter(Boolean)) 
+	}
 
 Formals
 	= f:(_ Complex _) { return new Formals(...f) }
@@ -100,7 +114,7 @@ PartialDefun
 				return createLambdaArray(t, pf, b, n) 
 			} / 
 			f:Formals !S b:PartialS? { return createLambdaArray(t, f, b, n) } /
-			s1:S !S s2:PartialS? { return [t, n, s1, s2].filterNullish() }
+			s1:S !S s2:PartialS? { return [t, n, s1, s2].filter(Boolean) }
 		) { return pd }
 
 Symbol

@@ -1,11 +1,11 @@
 const browserTerminal = require('./BrowserTerminalInitiator')
 
 const getGlobals = () => browserTerminal.getGlobals?.()
-const matchParentheses = (lparenPos, rparenPos) => {
-	return browserTerminal.matchParentheses?.(lparenPos, rparenPos)
+const matchEnclosures = (lEncPos, rEncPos) => {
+	return browserTerminal.matchEnclosures?.(lEncPos, rEncPos)
 }
 
 module.exports = {
 	getGlobals: getGlobals,
-	matchParentheses: matchParentheses
+	matchEnclosures: matchEnclosures
 }

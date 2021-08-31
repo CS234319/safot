@@ -1,8 +1,9 @@
-const ParserStateWrapper = require('./ParserStateWrapper')
+const PEGParserStateWrapper = require('./PEGParserStateWrapper')
 const ListCreator = require('./ListCreator')
 const Atom = require('./Atom')
 const Pair = require('./Pair')
 const TestUtils = require('./TestUtils')
+const parser = require('./Parser')
 
 const utils = new TestUtils()
 
@@ -15,7 +16,7 @@ const t = Atom.t
 const nil = Atom.nil
 
 const lc = new ListCreator()
-const pw = new ParserStateWrapper()
+const pw = new PEGParserStateWrapper(parser)
 
 const list = function() { return lc.create(...arguments) }
 const q = s => list(Atom.quote, s)
@@ -23,16 +24,16 @@ const parseEquals = (str, s) => {
 	Reflect.get(utils, 'parseExpectEquals').call(utils, str, s)
 }
 const parseError = (str) => {
-	expect(pw.parse(str).type).not.toBe(ParserStateWrapper.Accepted)
+	expect(pw.parse(str).type).not.toBe(PEGParserStateWrapper.Accepted)
 }
 const parseErrorExpectType = (str, expectedType) => {
 	expect(pw.parse(str).type).toBe(expectedType)
 }
 const parseErrorExpectMore = (str) => {
-	parseErrorExpectType(str, ParserStateWrapper.ExpectedMore)
+	parseErrorExpectType(str, PEGParserStateWrapper.ExpectedMore)
 }
 const parseErrorReject = (str) => {
-	parseErrorExpectType(str, ParserStateWrapper.Rejected)
+	parseErrorExpectType(str, PEGParserStateWrapper.Rejected)
 }
 const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 	for (var i = minCode; i <= maxCode; i++) {

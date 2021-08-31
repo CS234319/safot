@@ -706,14 +706,14 @@ terminal .terminal-output > div {
     margin-bottom: 10px;
     position: relative;
 }
-.terminal .cmd .parenHighlight {
+.terminal .cmd .enclosureHighlight {
     padding-bottom: 1.25px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: #ffab42;
     width: fit-content;
 }
-.terminal .cmd .parenHighlightInner {
+.terminal .cmd .enclosureHighlightInner {
     padding-bottom: 1.25px;
     border-bottom-style: solid;
     border-bottom-width: 1px;

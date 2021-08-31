@@ -45,7 +45,7 @@ module.exports = class Pair extends S {
 			return '(' + list.join(' ') + ')'
 		}
 
-		return '(' + [this._car, this._cdr].join(' . ') + ')'
+		return '[' + [this._car, this._cdr].join(' . ') + ']'
 	}
 
 	insert(s) {

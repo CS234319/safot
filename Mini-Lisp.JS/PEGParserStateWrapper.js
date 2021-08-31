@@ -7,7 +7,7 @@ module.exports = class PEGParserStateWrapper {
 		this.parser = parser
 	}
 
-	parse(str) {
+	apply(str) {
 		try {
 			return { output: this.parser.parse(str), type: PEGParserStateWrapper.Accepted }
 		} catch (e) {
@@ -22,6 +22,7 @@ module.exports = class PEGParserStateWrapper {
 			return { 
 				found: e.found, 
 				offset: e.location.start.offset,
+				stack: e.stack,
 				type: type
 			}
 		}

@@ -66,7 +66,7 @@ class SSymbol extends Element {
 		}
 	}
 
-	cancelMatchedParentheses() {}
+	cancelMatchedEnclosures() {}
 
 	_isGlobal() {
 		return delegate.getGlobals()?.includes(this.value.toUpperCase())
@@ -89,7 +89,7 @@ class Quote extends Element {
 	constructor(mark, value) {
 		super(value)
 		this.mark = mark
-		this.didMatchParentheses = value?.didMatchParentheses
+		this.didMatchEnclosures = value?.didMatchEnclosures
 		value?.predefineSymbolsColor(Quote.Color)
 	}
 
@@ -102,8 +102,8 @@ class Quote extends Element {
 		return highlighter.apply(this.mark + text, Quote.Color)
 	}
 
-	cancelMatchedParentheses() {
-		this.value.cancelMatchedParentheses()
+	cancelMatchedEnclosures() {
+		this.value.cancelMatchedEnclosures()
 	}
 
 	static Color = config.color.quote
@@ -112,8 +112,8 @@ class Quote extends Element {
 class SArrayElement extends Element {
 	constructor(sArray) {
 		super(sArray)
-		this.didMatchParentheses = this.value.some(s => s.didMatchParentheses)
-		this.value.findSecondLast()?.cancelMatchedParentheses()
+		this.didMatchEnclosures = this.value.some(s => s.didMatchEnclosures)
+		this.value.findSecondLast()?.cancelMatchedEnclosures()
 	}
 
 	predefineSymbolsColor(color, symbolValues) {
@@ -123,20 +123,20 @@ class SArrayElement extends Element {
 
 class Pair extends SArrayElement {
 	constructor(car, dot, cdr) {
-		super([car, cdr].filterNullish())
+		super([car, cdr].filter(Boolean))
 		this.car = car
 		this.dot = dot
 		this.cdr = cdr
 	}
 
 	buildText() {
-		return this.car.buildText() + this.dot + (this.cdr?.buildText() ?? '')
+		return [this.car?.buildText(), this.dot, this.cdr?.buildText()].join('')
 	}
 
 	getSymbolsOfList() {
 		let list = this.cdr ? this.cdr.value.getSymbolsOfList() : []
 
-		if (this.car.value instanceof SSymbol) {
+		if (this.car?.value instanceof SSymbol) {
 			list?.unshift(this.car.value)
 		}
 
@@ -161,59 +161,59 @@ class List extends SArrayElement {
 }
 
 class Complex extends Element {
-	constructor(location, lparen, value, rparen) {
+	constructor(location, lEnc, value, rEnc) {
 		super(value)
-		this.lparen = lparen
-		this.rparen = rparen
-		this.didMatchParentheses = value.didMatchParentheses
+		this.lEnc = lEnc
+		this.rEnc = rEnc
+		this.didMatchEnclosures = value.didMatchEnclosures
 
-		if (this.rparen && !this.didMatchParentheses) {
-			this._tryMatchParentheses(location)
+		if (this.rEnc && !this.didMatchEnclosures) {
+			this._tryMatchEnclosures(location)
 		}
 	}
 
 	buildText() {
-		return this.lparen + this.value.buildText() + (this.rparen ?? '')
+		return this.lEnc + this.value.buildText() + (this.rEnc ?? '')
 	}
 
 	getSymbolsOfList() {
 		return this.value.getSymbolsOfList()
 	}
 
-	cancelMatchedParentheses() {
-		if (!this.rparen) {
+	cancelMatchedEnclosures() {
+		if (!this.rEnc) {
 			return
 		}
 
-		this.lparen = highlighter.remove(this.lparen)
-		this.rparen = highlighter.remove(this.rparen)
+		this.lEnc = highlighter.remove(this.lEnc)
+		this.rEnc = highlighter.remove(this.rEnc)
 	}
 
-	_tryMatchParentheses(location) {
-		const lparenPos = location.start.offset
-		const rparenPos = location.end.offset
-		const result = delegate.matchParentheses(lparenPos, rparenPos)
+	_tryMatchEnclosures(location) {
+		const lEncPos = location.start.offset
+		const rEncPos = location.end.offset
+		const result = delegate.matchEnclosures(lEncPos, rEncPos)
 		
 		if (!result) {
 			return
 		}
 
-		this.didMatchParentheses = true
-		this._highlightParentheses(result.isInner)
+		this.didMatchEnclosures = true
+		this._highlightEnclosures(result.isInner)
 	}
 
-	_highlightParentheses(isInner) {
+	_highlightEnclosures(isInner) {
 		const spanClass = isInner
-			? Complex.ParenthesesClasses.highlightInner
-			: Complex.ParenthesesClasses.highlighted
+			? Complex.EnclosuresClasses.highlightInner
+			: Complex.EnclosuresClasses.highlighted
 
-		this.lparen = highlighter.applyWithClass(this.lparen, spanClass)
-		this.rparen = highlighter.applyWithClass(this.rparen, spanClass)
+		this.lEnc = highlighter.applyWithClass(this.lEnc, spanClass)
+		this.rEnc = highlighter.applyWithClass(this.rEnc, spanClass)
 	}
 
-	static ParenthesesClasses = {
-		highlighted: 'parenHighlight',
-		highlightInner: 'parenHighlightInner'
+	static EnclosuresClasses = {
+		highlighted: 'enclosureHighlight',
+		highlightInner: 'enclosureHighlightInner'
 	}
 }
 
@@ -222,7 +222,7 @@ class S extends Element {
 		super(value)
 		this.lPadding = lPadding
 		this.rPadding = rPadding
-		this.didMatchParentheses = value.didMatchParentheses
+		this.didMatchEnclosures = value.didMatchEnclosures
 	}
 
 	buildText() {
@@ -231,8 +231,8 @@ class S extends Element {
 				this.rPadding.buildText()
 	}
 
-	cancelMatchedParentheses() {
-		this.value.cancelMatchedParentheses()
+	cancelMatchedEnclosures() {
+		this.value.cancelMatchedEnclosures()
 	}
 }
 
