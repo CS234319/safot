@@ -34,4 +34,9 @@ module.exports = {
 		prompt: '> ',
 		caseSensitiveAutocomplete : false,
 	},
+
+	highlightingBrackets: {
+		left: 	'\x00',
+		right: 	'\x01',
+	},
 }

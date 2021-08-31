@@ -4,6 +4,7 @@ const TextHighlighter = require('./TextHighlighter')
 const primitiveKeywords = require('./PrimitiveKeywords')
 const config = require('./Configuration').browserTerminal
 const defaultColor = require('./Configuration').format.color.default
+const highlightingBrackets = require('./Configuration').highlightingBrackets
 const formatter = require('./Formatter')
 require('./ArrayExtension')
 
@@ -54,28 +55,59 @@ module.exports = class BrowserTerminal {
 	}
 
 	initFormatters() {
-		$.terminal.new_formatter(str => {
-			// str = $.terminal.unescape_brackets(str)
+		const formatters = $.terminal.defaults.formatters
+
+		// Adding highlight formatter before the nesting formatter
+		formatters.unshift(str => {
+			str = $.terminal.unescape_brackets(str)
 			const formatResult = this.formatterWrapper.apply(str)
 			switch (formatResult.type) {
 				case PEGParserStateWrapper.Accepted:
-					return formatResult.output
+					return this.switchBrackets(formatResult.output)
 
 				case PEGParserStateWrapper.ExpectedMore:
 					return this.applyDefaultColor(str)
 
 				case PEGParserStateWrapper.Rejected:
 					const offset = formatResult.offset
-					return 	formatter.parse(str.slice(0, offset)) +
-							this.applyDefaultColor(str.slice(offset))
+					return this.switchBrackets(
+						formatter.parse(str.slice(0, offset)) +
+						this.applyDefaultColor(str.slice(offset))
+					)
 			}
 		})	
+
+		const formatPartition = str => {
+			return $.terminal.partition(str).join('')
+		}
+		formatPartition.__meta__ = true
+
+		// Adding format partitioning after the nesting formatter
+		formatters.push(formatPartition)
 	}
 
 	initCompletions() {
 		$.terminal.defaults.completion = []
 		this.completions = $.terminal.defaults.completion
 		primitiveKeywords.forEach(w => this.addCompletion(w))
+	}
+
+	switchBrackets(str) {
+		const { left, right } = highlightingBrackets
+
+		const re = new RegExp(`\[\\[\\]${left}${right}\]`, 'g')
+		return str.replace(re, char => {
+			switch (char) {
+				case '[':
+					return '&#91;'
+				case ']':
+					return '&#93;'
+				case left:
+					return '['
+				case right:
+					return ']'
+			}
+		})
 	}
 
 	applyDefaultColor(str) {
