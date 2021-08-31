@@ -58,24 +58,8 @@ module.exports = class BrowserTerminal {
 		const formatters = $.terminal.defaults.formatters
 
 		// Adding highlight formatter before the nesting formatter
-		formatters.unshift(str => {
-			str = $.terminal.unescape_brackets(str)
-			const formatResult = this.formatterWrapper.apply(str)
-			switch (formatResult.type) {
-				case PEGParserStateWrapper.Accepted:
-					return this.switchBrackets(formatResult.output)
-
-				case PEGParserStateWrapper.ExpectedMore:
-					return this.applyDefaultColor(str)
-
-				case PEGParserStateWrapper.Rejected:
-					const offset = formatResult.offset
-					return this.switchBrackets(
-						formatter.parse(str.slice(0, offset)) +
-						this.applyDefaultColor(str.slice(offset))
-					)
-			}
-		})	
+		const format = str => this.switchBrackets(this.format(str))
+		formatters.unshift(format)	
 
 		const formatPartition = str => {
 			return $.terminal.partition(str).join('')
@@ -92,9 +76,26 @@ module.exports = class BrowserTerminal {
 		primitiveKeywords.forEach(w => this.addCompletion(w))
 	}
 
+	format(str) {
+		str = $.terminal.unescape_brackets(str)
+		const formatResult = this.formatterWrapper.apply(str)
+		switch (formatResult.type) {
+			case PEGParserStateWrapper.Accepted:
+				return formatResult.output
+
+			case PEGParserStateWrapper.ExpectedMore:
+				return this.applyDefaultColor(str)
+
+			case PEGParserStateWrapper.Rejected:
+				const offset = formatResult.offset
+				return 	formatter.parse(str.slice(0, offset)) +
+						this.applyDefaultColor(str.slice(offset))
+		}
+	}
+
 	switchBrackets(str) {
 		const { left, right } = highlightingBrackets
-
+		
 		const re = new RegExp(`\[\\[\\]${left}${right}\]`, 'g')
 		return str.replace(re, char => {
 			switch (char) {

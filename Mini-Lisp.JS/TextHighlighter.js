@@ -2,7 +2,9 @@ const { left, right } = require('./Configuration').highlightingBrackets
 
 module.exports = class TextHighlighter {
 	_genericHighlight(str, style, color, spanClass) {
-		return `${left}${left}${style};${color};;${spanClass};${right}${str}${right}`
+		const l = left
+		const r = right
+		return `${l}${l}${style};${color};;${spanClass};${r}${str}${r}`
 	}
 
 	apply(str, color) {
@@ -19,8 +21,7 @@ module.exports = class TextHighlighter {
 
 	remove(str) {
 		const re = new RegExp(
-			`${left}${left}\(\[^;\]*;\)+${right}\(\[^${right}\]+\)${right}`, 
-			'g'
+			`${l}${l}\(\[^;\]*;\)+${r}\(\[^${r}\]+\)${r}`, 'g'
 		)
 
 		return str.replace(re, '$2')
