@@ -1,5 +1,1 @@
-Traceback (most recent call last):
-	From function FOO:
-	From function MIRROR:
-		Args: (LAMBDA (X) (CONS (CDR X) (CAR X)))
 Error [UNDEFINED] in X

@@ -7,37 +7,5 @@ B
 T
 NIL
 NIL
-Traceback (most recent call last):
-	From function EVALUATE-COND:
-		Args: ((T T) ((T.T) (NIL)))
-	From function COND:
-		Args: (((NULL TEST-FORMS) NIL) ((EVALUATE (CAR (CAR TEST-FORMS)) A-LIST) (EVALUATE (CAR (CDR (CAR TEST-FORMS))) A-LIST)) (T (EVALUATE-COND (CDR TEST-FORMS) A-LIST)))
-	From function EVALUATE:
-		Args: ((CAR (CAR TEST-FORMS)) A-LIST)
-	From function CAR:
-		Args: T
 Error [CAR] in T
-Traceback (most recent call last):
-	From function EVALUATE-COND:
-		Args: (((T A)) ((T.T) (NIL)))
-	From function COND:
-		Args: (((NULL TEST-FORMS) NIL) ((EVALUATE (CAR (CAR TEST-FORMS)) A-LIST) (EVALUATE (CAR (CDR (CAR TEST-FORMS))) A-LIST)) (T (EVALUATE-COND (CDR TEST-FORMS) A-LIST)))
-	From function EVALUATE:
-		Args: (A ((T.T) (NIL)))
-	From function COND:
-		Args: (((ATOM S-EXPRESSION) (LOOKUP S-EXPRESSION A-LIST)) ((IS-ATOMIC (CAR S-EXPRESSION)) (EVALUATE-ATOMIC S-EXPRESSION A-LIST)) (T (APPLY (EVALUATE (CAR S-EXPRESSION) A-LIST) (CDR S-EXPRESSION) A-LIST)))
-	From function LOOKUP:
-		Args: (A ((T.T) (NIL)))
-	From function COND:
-		Args: (((NULL A-LIST) (ERROR UNDEFINED ID)) ((EQ ID (CAR (CAR A-LIST))) (CDR (CAR A-LIST))) (T (LOOKUP ID (CDR A-LIST))))
-	From function LOOKUP:
-		Args: (A ((NIL)))
-	From function COND:
-		Args: (((NULL A-LIST) (ERROR UNDEFINED ID)) ((EQ ID (CAR (CAR A-LIST))) (CDR (CAR A-LIST))) (T (LOOKUP ID (CDR A-LIST))))
-	From function LOOKUP:
-		Args: (A NIL)
-	From function COND:
-		Args: (((NULL A-LIST) (ERROR UNDEFINED ID)) ((EQ ID (CAR (CAR A-LIST))) (CDR (CAR A-LIST))) (T (LOOKUP ID (CDR A-LIST))))
-	From function ERROR:
-		Args: UNDEFINED
 Error [UNDEFINED] in UNDEFINED

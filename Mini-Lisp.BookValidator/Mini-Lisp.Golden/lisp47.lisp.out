@@ -1,4 +1,1 @@
-Traceback (most recent call last):
-	From function ATOM:
-		Args: (CAR CDR COND CONS EQ ERROR EVAL SET)
 Error [REDUNDANT] in (ATOM CAR CDR COND CONS EQ ERROR EVAL SET)

@@ -45,6 +45,12 @@ FLOW_TESTS_DIR="${SCRIPT_DIR}/../test/flow"
 PROJECT_DIR=`realpath "${SCRIPT_DIR}/../"`
 export PYTHONPATH="${PYTHONPATH}:${PROJECT_DIR}/"
 
+echo "Running run_all_tests.sh ..."
+
+# Compile mini-lisp:
+export WORK_AROUND=1
+make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.Chic/ &> /dev/null
+
 if [ "$1" == "unit" ]; then
   run_unit_tests ${UNIT_TESTS_DIR}
 fi

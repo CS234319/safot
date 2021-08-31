@@ -36,6 +36,12 @@ def test_book_evaluate(flow, input_dir, golden_dir):
     """
     All the tests for all the Lisp evaluate functions,
     which auto generated from the Mini-lisp book.
+
+    `flow` already loaded with all the functions from the books
+    (mini-lisp process is running).
+
+    Read more about this flow here:
+        https://github.com/yossigil/safot/tree/master/Mini-Lisp.ShellTestFramework#evaluate
     """
     input_files = sorted(glob.glob(f"{input_dir}/*.lisp.in"))
     golden_files = sorted(glob.glob(f"{golden_dir}/*.lisp.out"))

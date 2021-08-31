@@ -50,6 +50,10 @@ Add the Python package to PYTHONPATH:
   SHELL_TEST_FRAMEWORK_PATH=`realpath ./Mini-Lisp.ShellTestFramework/`
   export PYTHONPATH="${PYTHONPATH}:${SHELL_TEST_FRAMEWORK_PATH}"
   ```
+* **Automatically**:<br>
+  ```bash
+  source ./Mini-Lisp.ShellTestFramework/build/env.sh
+  ```  
 
 ## Usage
 ShellTestFramework has 2 main scripts:<br>
@@ -152,7 +156,7 @@ ShellTestFramework has 2 kinds of tests:<br>
   * _./test/unit/test_shell_test_framework.py_<br>
 
 **Run**:<br>
-  * _./Mini-Lisp.ShellTestFramework/bin/run_all_tests.sh unit_
+  * _./bin/run_all_tests.sh unit_
 
 ### Flows
 The main goal of the flow tests is to validate the C implementation of Mini-Lisp and 
@@ -168,7 +172,8 @@ to add more tests. This will save much time and effort. The down side is that ti
 The flow tests of Lisp Evaluate done for each of the Mini-lisp's evaluate functions.<br>
 * **Inputs files**: ./test/inputs/test_book_evaluate/<br>
 * **Golden files**: ./test/golden/test_book_evaluate/<br>
-* **Flow details**:<br>
+* **Test**: ./test/flow/test_book_evaluate.py
+* **Flow steps**:<br>
 Each of the flow tests, done by the following steps:
   * Generate the latest lisp files from the book.
   * Open communication with the mini-lisp executable in Mini-Lisp.Chic .
@@ -178,41 +183,45 @@ Each of the flow tests, done by the following steps:
   * Compare out file with golden file.
   * If the files are identical then the test passed, else failed and show diffs.
 * **Run**:
-  * _./Mini-Lisp.ShellTestFramework/bin/run_all_tests.sh flow_<br>
-    (running all the flow tests may take around ~7 minutes)
+  * _./bin/run_all_tests.sh flow_<br>
+    (running all the flow tests may take around ~5 minutes)
 
 ### EvaluateOnEvaluate
 The flow tests of Lisp Evaluate On Lisp Evaluate are based on the test: ./test/input/test_evaluate.in.lisp.
 The idea here is to run each s-expression from this test, but in a different way:
-using evaluate function using the evaluate function.<br>
- 
+applied the Lisp evaluate function using the Lisp evaluate function.<br>
+
 **For example**:
 * Original test: `(evaluate 'a '(a.x t.t nil.nil))`<br>
 * New test: `(evaluate '(evaluate (quote a) (quote (a.x t.t nil.nil))) '(environment))`<br>
-Where `environment` includes all the definitions used by evaluate, meaining the alist:<br>
+Where `environment` includes all the definitions used by the inner evaluate, means the alist:<br>
 (t.t nil.nil apply.(lambda ...) evaluate.(lambda ...) quote.(nlambda ...) ...)<br>
 
-**Steps**:
+In summary, the inner evaluate defined (includes all the Lisp evaluate functions) in `env`,
+the outer evaluate defined in the C alist, and the inner use its own alist to evaluate it's s-expression.
+
+**Test**: ./test/flow/test_evaluate_on_evaluate.py<br>
+
+**Flow steps**:
 1. Generate the latest lisp files from the Mini-lisp book.
 2. Open communication with the mini-lisp executable in Mini-Lisp.Chic.
 3. Feed the shell with all the files from the book. (create our `executable alist`)
 4. Generate environment (string) which will be used by the evaluate function,
-   using all the files from the book, similar to step 2. (create our `evaluate alist` string)
-5. Create our s-expression as a string (with our third alist: `applied evaluate alist`)
+   using all the files from the book, similar to step 2. (create our `outer alist` string)
+5. Create our s-expression as a string (with our third alist: `inner alist`)
 6. Feed the shell with the input s-expression.
 7. Communicate with the mini-lisp process.
 8. Compare our output with expected.
 9. If the strings are identical then the test passed, else failed and show diffs.
 
 **Environments**:<br>
-1. `executable alist` - our real alist from the C code, includes all functions
-that will be feeded from the book (step 3)
-2. `evaluate alist` - our alist for the top evlauate function, includes all functions 
-that will be feeded from the book (step 4). It (almost) similar to the executable alist, but will
-be executed only when running the s-expression.
-3. `applied evaluate` alist - out alist for the applied evaluate function, can be very small (e.g: (t.t nil.nil))
+1. `executable alist` - our "real" alist from the C code, includes all the functions
+that will be fed from the book (step 3) and contains all the definitions for the outer evaluate.
+2. `outer alist` - our alist for the inner evaluate function, includes all the functions
+that will be fed from the book (step 4) and contains all the definitions for the inner evaluate.
+3. `inner alist` - used by the inner evaluate, to evaluate its own s-expression, can be very small (e.g: (t.t nil.nil))
 * **Run**:
-  * _./Mini-Lisp.ShellTestFramework/bin/run_all_tests.sh flow_<br>
+  * _./bin/run_all_tests.sh flow_<br>
   (running all the flow tests may take around ~5 minutes)
 
 ## Status
@@ -243,7 +252,10 @@ export WORK_AROUND=1
 make all -C ./Mini-Lisp.Chic/
 ```
 Because the current memory infrastructure of the C implementation of Mini-Lisp,
-has no Garbage Collector yet, there is a workaround that increase the memory,
+has no Garbage Collector yet, there is a temporary workaround that increase the memory,
 by setting the basic word integer from int32 to int64.<br>
 According to Yossi Gil, this workaround must not (!) be part of the Mini-Lisp
-implementation (and of course not part of the production) and must be deleted later.
+implementation (and of course not part of the production) and thus can only be use 
+temporary with this environment variable.<br>
+It must be deleted after the garbage collector will be implemented in the
+memory infrastructure in the future.

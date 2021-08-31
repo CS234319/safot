@@ -1,14 +1,4 @@
 NIL
 NIL
 T
-Traceback (most recent call last):
-	From function EXISTS:
-		Args: (A A)
-	From function COND:
-		Args: (((NULL XS) XS) ((EQ X (CAR XS)) T) (T (EXISTS X (CDR XS))))
-	From function EQ:
-		Args: X
-		Args: (CAR XS)
-	From function CAR:
-		Args: A
 Error [CAR] in A

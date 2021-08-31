@@ -1,11 +1,4 @@
 X
 X
 X
-Traceback (most recent call last):
-	From function LOOKUP:
-		Args: (A NIL)
-	From function COND:
-		Args: (((NULL A-LIST) (ERROR UNDEFINED ID)) ((EQ ID (CAR (CAR A-LIST))) (CDR (CAR A-LIST))) (T (LOOKUP ID (CDR A-LIST))))
-	From function ERROR:
-		Args: UNDEFINED
 Error [UNDEFINED] in UNDEFINED

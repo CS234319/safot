@@ -90,7 +90,8 @@ class MiniLispShell:
             input_str: str,
             filter_pattern=r"\r|- |\?|> ",
             filter_newline=True,
-            timeout=2
+            timeout=2,
+            traceback=False
     ) -> str:
         """
         Feed the shell with 1 line, and get the output.
@@ -115,6 +116,8 @@ class MiniLispShell:
         self.log.write_text("")
         out = re.sub(filter_pattern, "", raw)
         out = out[:-1]
+        if "Traceback" in out and traceback is False:
+            out = list(out.split("\n"))[-1]
         if out.isspace():
             out = ""
         if filter_newline is False:
