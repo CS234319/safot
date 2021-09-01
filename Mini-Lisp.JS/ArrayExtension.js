@@ -21,3 +21,9 @@ Array.prototype.findSecondLast = function(fn) {
 	const lastIndex = this.findLastIndex(s => s.didMatchEnclosures)
 	return lastIndex > 0 ? this[lastIndex - 1] : undefined
 }
+
+Array.prototype.distinct = function() {
+	return this.reduce((input, c) => {
+		return input.includes(c) ? input : input.append(c)
+	}, [])
+}

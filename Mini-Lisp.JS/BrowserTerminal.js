@@ -71,11 +71,33 @@ module.exports = class BrowserTerminal {
 		$.terminal.defaults.completion = []
 		this.completions = $.terminal.defaults.completion
 		primitiveKeywords.forEach(w => this.addCompletion(w))
+
+		$.terminal.defaults.doubleTab = (_, rawCompletions) => {
+			this.showPossibleCompletions(rawCompletions)
+		}
+	}
+
+	showPossibleCompletions(rawCompletions) {
+		const prefixes = BrowserTerminal.CompletionPrefixes.filter(p => p !== '')
+		const words = rawCompletions.map(c => {
+			if (prefixes.some(p => c.startsWith(p))) {
+				return c.slice(1)
+			}
+
+			if (prefixes.some(p => c.startsWith('\\' + p))) {
+				return c.slice(2)
+			}
+
+			return c
+		}).distinct()
+
+		const wordsListStr = `(${words.join(' ')})`
+		this.echo(wordsListStr)
 	}
 
 	format(str) {
 		str = $.terminal.unescape_brackets(str)
-		try {
+
 		const formatResult = this.formatterWrapper.apply(str)
 		switch (formatResult.type) {
 			case PEGParserStateWrapper.Accepted:
@@ -89,10 +111,6 @@ module.exports = class BrowserTerminal {
 				const acceptedStr = str.slice(0, offset)
 				const theRest = str.slice(offset)
 				return formatter.parse(acceptedStr) + theRest 
-		}
-
-		} catch (e) {
-			printA(e.stack)
 		}
 	}
 

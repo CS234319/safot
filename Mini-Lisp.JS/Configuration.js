@@ -31,11 +31,11 @@ module.exports = {
 		height: 750,
 		width: 600,
 		prompt: '> ',
-		caseSensitiveAutocomplete : false,
+		caseSensitiveAutocomplete: false,
 	},
 
 	highlightingBrackets: {
-		left: 	'\x00',
-		right: 	'\x01',
+		left: 	'\x01',
+		right: 	'\x02',
 	},
 }
