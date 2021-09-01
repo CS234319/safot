@@ -9,7 +9,7 @@
 static S x("x"); 
 extern S evaluate_cond(S s);
 extern S lookup(S id);
-extern S *alist();
+extern S alist();
 
 
 TEST(AlistGlobalLocal, SetWithNoError) {

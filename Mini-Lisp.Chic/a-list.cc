@@ -6,15 +6,16 @@
 static S nil() { static const S inner = S("NIL"); return inner; }
 static S t()   { static const S inner = S("T"); return inner; }
 
+
 /* Basic operations */
 S set(S name, S value, S list) { return name.cons(value).cons(list); }
 S push(S name, S value, S list) {
     return set(name, value, list);
 }
-S pop(S* list) {
-    if (! list->n0()) {
-        S top = list->car();
-        *list = list->cdr();
+S pop(S& list) {
+    if (! list.n0()) {
+        S top = list.car();
+        list = list.cdr();
         return top;
     }
     return NIL;
@@ -31,14 +32,12 @@ bool in_alist(S id, S list) {
 }
 
 /* alist */
-S* alist() {
-    static S init = set(t(), t(), set(nil(), nil(), nil()));
-    static S* inner = &init;
+S& alist() {
+    static S inner = set(t(), t(), set(nil(), nil(), nil()));
     return inner;
 }
-S* tmp_alist() {
-    static S tmp_init = list();
-    static S* tmp_inner = &tmp_init;
+S& tmp_alist() {
+    static S tmp_inner = list();
     return tmp_inner;
 }
 static int count_sets = 0;
@@ -47,17 +46,17 @@ static int count_eval = 0;
 /* alist operatorions */
 S set(S name, S value) {
     count_sets++;
-    return (*alist() = set(name,value, *alist())), value;
+    return (alist() = set(name,value, alist())), value;
 }
 void push(S name, S value) {
     // prompt("DEBUG: Pushing - "); print(name); print("."); println(value);
-    *alist() = push(name, value, *alist());
+    alist() = push(name, value, alist());
 }
 S pop() {
     return pop(alist());
 }
 bool in_alist(S id) {
-    return in_alist(id, *alist());
+    return in_alist(id, alist());
 }
 void remove_element(S name) {
     /*
@@ -75,16 +74,16 @@ void remove_element(S name) {
      */
     // prompt("DEBUG: Removing - "); println(name);
     if (! in_alist(name)) return;
-    while (! alist()->n0()) {
+    while (! alist().n0()) {
         S top = pop();
         if (top.car().eq(name)) {
-            while (! tmp_alist()->n0()) {
+            while (! tmp_alist().n0()) {
                 S restored_top = pop(tmp_alist());
                 push(restored_top.car(), restored_top.cdr());
             }
             break;
         } else {
-            *tmp_alist() = push(top.car(), top.cdr(), *tmp_alist());
+            tmp_alist() = push(top.car(), top.cdr(), tmp_alist());
         }
     }
 }
@@ -104,7 +103,7 @@ void remove_elements(S names) {
 }
 
 /* Complex Lisp operations */
-S bind(S formals, S actuals, S list) {
+S bind(S formals, S actuals, S list) { 
   if (!formals.null() && actuals.null()) return formals.error(MISSING);
   if (formals.null() && !actuals.null()) return actuals.error(REDUNDANT);
   if (formals.null()) return list;
@@ -123,7 +122,7 @@ S lookup(S id, S list) {
     list.car().car().eq(id) ?  list.car().cdr(): 
     lookup(id, list.cdr()); 
 }
-S lookup(S s) { return lookup(s, *alist()); }
+S lookup(S s) { return lookup(s, alist()); }
 
 
 /* Error handling using counters */
@@ -152,9 +151,8 @@ void restore_alist() {
 
 S reverse(S alist) {
     S s = NIL;
-    S* tmp_alist = &alist;
     while (! alist.n0()) {
-        S top = pop(tmp_alist);
+        S top = pop(alist);
         s = s.cons(top);
     }
     return s;
@@ -164,10 +162,10 @@ void stack_dump() {
     /*
      * In case of error, dump the a-list with trace back:
      */
-    if (alist()->n0() || ! in_alist(RESCUE) || ! in_alist(ARGUMENT)) return;
+    if (alist().n0() || ! in_alist(RESCUE) || ! in_alist(ARGUMENT)) return;
 
     // Reverse the alist, to print the most recent call last:
-    S s = reverse(*alist());
+    S s = reverse(alist());
 
     // Print stack trace:
     prompt("Traceback (most recent call last):\n");
