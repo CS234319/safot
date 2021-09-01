@@ -78,9 +78,9 @@ module.exports = class BrowserTerminal {
 	}
 
 	showPossibleCompletions(rawCompletions) {
-		const rawPrefixes = 
-			BrowserTerminal.CompletionPrefixes.filter(p => p !== '')
-		const prefixes = rawPrefixes.concat(rawPrefixes.map(p => '\\' + p))
+		const prefixes = BrowserTerminal.CompletionPrefixes
+			.filter(p => p !== '')
+			.append('\\')
 		const words = rawCompletions.filter(c => !prefixes.some(p => c.startsWith(p)))
 		const wordsListStr = `(${words.join(' ')})`
 		this.echo(wordsListStr)
