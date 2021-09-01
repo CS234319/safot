@@ -1,7 +1,6 @@
 module.exports = {
 	format: {
 		color: {
-			default: 		'#d7deea',
 			comment: 		'#296d98',
 			symbol: {
 				global: 	'#ff5261',
@@ -29,8 +28,8 @@ module.exports = {
 	browserTerminal: {
 		greetings: 'Mini-LISP REPL',
 		name: 'Mini-LISP',
-		height: 500,
-		width: 400,
+		height: 750,
+		width: 600,
 		prompt: '> ',
 		caseSensitiveAutocomplete : false,
 	},

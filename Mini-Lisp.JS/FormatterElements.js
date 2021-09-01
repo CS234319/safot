@@ -26,14 +26,6 @@ class Element {
 	getSymbolsOfList() {}
 }
 
-class Format extends Element {
-	buildText() {
-		return highlighter.apply(this.value.buildText(), Format.DefaultColor)
-	}
-
-	static DefaultColor = config.color.default
-}
-
 class Comment extends Element {
 	buildText() {
 		return highlighter.applyWithStyle(this.value, Comment.Style, Comment.Color)
@@ -271,7 +263,6 @@ class Body extends S {
 }
 
 module.exports = {
-	Format: 		 	Format,
 	Comment: 		 	Comment,
 	Padding: 		 	Padding,
 	SSymbol: 		 	SSymbol,

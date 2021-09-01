@@ -1,9 +1,7 @@
 const REPLInstigator = require('./REPLInstigator')
 const PEGParserStateWrapper = require('./PEGParserStateWrapper')
-const TextHighlighter = require('./TextHighlighter')
 const primitiveKeywords = require('./PrimitiveKeywords')
 const config = require('./Configuration').browserTerminal
-const defaultColor = require('./Configuration').format.color.default
 const highlightingBrackets = require('./Configuration').highlightingBrackets
 const formatter = require('./Formatter')
 require('./ArrayExtension')
@@ -33,7 +31,6 @@ module.exports = class BrowserTerminal {
 		this.initCompletions()
 		
 		this.repl = new REPLInstigator(this, this)	
-		this.highlighter = new TextHighlighter()
 		this.formatterWrapper = new PEGParserStateWrapper(formatter)
 
 		this.initFormatters()
@@ -42,9 +39,9 @@ module.exports = class BrowserTerminal {
 
 	initTerminal() {
 		const id = BrowserTerminal.ParagraphId
+		$('body').append(`<p id="${id}"></p>`)	
 		$('head').append('<link rel="stylesheet" type="text/css"\
 							href="jquery.terminal.css"/>')
-		$('body').append(`<p id="${id}"></p>`)	
 
 		const self = this
 		$(function($, undefined) {
@@ -85,13 +82,14 @@ module.exports = class BrowserTerminal {
 				return formatResult.output
 
 			case PEGParserStateWrapper.ExpectedMore:
-				return this.applyDefaultColor(str)
+				return str
 
 			case PEGParserStateWrapper.Rejected:
 				const offset = formatResult.offset
-				return 	formatter.parse(str.slice(0, offset)) +
-						this.applyDefaultColor(str.slice(offset))
-		}
+				const acceptedStr = str.slice(0, offset)
+				const theRest = str.slice(offset)
+				return formatter.parse(acceptedStr) + theRest 
+t		}
 	}
 
 	handleSpecialCharacters(str) {
@@ -100,10 +98,6 @@ module.exports = class BrowserTerminal {
 		return $.terminal.escape_brackets(str)
 			.replace(new RegExp(`${left}`, 'g'), '[')
 			.replace(new RegExp(`${right}`, 'g'), ']')
-	}
-
-	applyDefaultColor(str) {
-		return this.highlighter.apply(str, defaultColor)
 	}
 
 	addCompletion(word) {

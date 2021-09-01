@@ -2,8 +2,8 @@
 	require('./ArrayExtension')
 
 	const {
-		Format, Comment, Padding, SSymbol, Quote, Pair, 
-		List, Nil, Complex, S, DefunName, Formals, Body,
+		Comment, Padding, SSymbol, Quote, Pair, List, 
+		Nil, Complex, S, DefunName, Formals, Body
 	} = require('./FormatterElements')
 
 	const createComplex = (lEnc, value, rEnc) => {
@@ -18,7 +18,7 @@
 
 Format
 	= v:(PartialS / S / _) {
-		return (new Format(v)).buildText()
+		return v.buildText()
 	}
 
 S
