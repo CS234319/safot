@@ -78,10 +78,13 @@ module.exports = class BrowserTerminal {
 	}
 
 	showPossibleCompletions(rawCompletions) {
-		const prefixes = BrowserTerminal.CompletionPrefixes
-			.filter(p => p !== '')
-			.append('\\')
-		const words = rawCompletions.filter(c => !prefixes.some(p => c.startsWith(p)))
+		const rawPrefixes = BrowserTerminal.CompletionPrefixes.filter(p => p !== '')
+		const prefixes = rawPrefixes.concat(rawPrefixes.map(p => '\\' + p))
+		const words = rawCompletions.map(c => {
+			const prefix = prefixes.find(p => c.startsWith(p))
+			return prefix ? c.slice(prefix.length) : c
+		}).distinct()
+
 		const wordsListStr = `(${words.join(' ')})`
 		this.echo(wordsListStr)
 	}
