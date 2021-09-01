@@ -8,6 +8,7 @@ require('./ArrayExtension')
 
 window.$ = require('jquery')
 require('jquery.terminal')($)
+// require('jquery.terminal/js/echo_newline')($)
 
 $('body').append('<p id="a"></p>')
 $('body').append('<p id="b"></p>')
@@ -25,6 +26,7 @@ const printE = str => document.getElementById('e').innerHTML = 'e ' + str
 module.exports = class BrowserTerminal {
 	static CompletionPrefixes = "()[]".split('').append('')
 	static ParagraphId = 'repl_terminal'
+	static NumSpacesInTabAlternative = 4
 
 	constructor() {
 		this.globals = []
@@ -35,6 +37,7 @@ module.exports = class BrowserTerminal {
 
 		this.initFormatters()
 		this.initTerminal()
+		this.initKeyboardEvents()
 	}
 
 	initTerminal() {
@@ -46,7 +49,7 @@ module.exports = class BrowserTerminal {
 		const self = this
 		$(function($, undefined) {
 			self.terminal = $(`#${id}`).terminal(function(line) { 
-				self.repl.feedLine(line) 
+				self.repl.feedLine(line)
 			}, config)
 		})
 	}
@@ -68,13 +71,42 @@ module.exports = class BrowserTerminal {
 	}
 
 	initCompletions() {
-		$.terminal.defaults.completion = []
-		this.completions = $.terminal.defaults.completion
+		this.completions = []
 		primitiveKeywords.forEach(w => this.addCompletion(w))
+	}
+
+	initKeyboardEvents() {
+		$.terminal.defaults.completion = (_, complete) => {
+			this.handleTab(complete)
+		}
 
 		$.terminal.defaults.doubleTab = (_, rawCompletions) => {
 			this.showPossibleCompletions(rawCompletions)
 		}
+
+		$.terminal.defaults.keydown = event => {
+			if (event.code === 'Backspace') {
+				this.handleBackspace()
+			}
+		}
+	}
+
+	getTabAlternative() {
+		let tabAlternative = ''
+
+		const numSpaces = BrowserTerminal.NumSpacesInTabAlternative
+		for (let i = 0; i < numSpaces; i++) {
+			tabAlternative += ' '
+		}
+
+		return tabAlternative
+	}
+
+	handleTab(complete) {
+		const beforeCursor = this.terminal.before_cursor()
+		beforeCursor === '' || beforeCursor.endsWith(' ')
+			? this.terminal.insert(this.getTabAlternative())
+			: complete(this.completions)
 	}
 
 	showPossibleCompletions(rawCompletions) {
@@ -87,6 +119,24 @@ module.exports = class BrowserTerminal {
 
 		const wordsListStr = `(${words.join(' ')})`
 		this.echo(wordsListStr)
+	}
+
+	handleBackspace() {
+		const beforeCursor = this.terminal.before_cursor()
+		const tabAlternative = this.getTabAlternative()
+		if (!beforeCursor.endsWith(tabAlternative)) {
+			return
+		}
+
+		const command = this.terminal.get_command()
+		const finalCursorPosition = beforeCursor.length - tabAlternative.length + 1
+		
+		this.terminal.set_command(
+			beforeCursor.slice(0, finalCursorPosition) +
+			command.slice(beforeCursor.length)
+		)
+
+		this.terminal.set_position(finalCursorPosition)
 	}
 
 	format(str) {
@@ -131,8 +181,8 @@ module.exports = class BrowserTerminal {
 		this.terminal?.set_prompt(promptStr)
 	}
 
-	echo(str) {
-		this.terminal?.echo(str)
+	echo(str, options) {
+		this.terminal?.echo(str, options)
 	}
 
 	/* Formatter Delegate */
