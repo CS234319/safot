@@ -9,19 +9,6 @@ require('./ArrayExtension')
 window.$ = require('jquery')
 require('jquery.terminal')($)
 
-$('body').append('<p id="a"></p>')
-$('body').append('<p id="b"></p>')
-$('body').append('<p id="c"></p>')
-$('body').append('<p id="d"></p>')
-$('body').append('<p id="e"></p>')
-const printA = str => document.getElementById('a').innerHTML = 'a ' + str
-const printB = str => document.getElementById('b').innerHTML = 'b ' + str
-const printC = str => document.getElementById('c').innerHTML = 'c ' + str
-const printD = str => document.getElementById('d').innerHTML = 'd ' + str
-const printE = str => document.getElementById('e').innerHTML = 'e ' + str
-
-//TODO: remove
-
 module.exports = class BrowserTerminal {
 	static CompletionPrefixes = "()[]".split('').append('')
 	static ParagraphId = 'repl_terminal'
