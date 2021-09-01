@@ -1,9 +1,9 @@
 const { left, right } = require('./Configuration').highlightingBrackets
+const l = left
+const r = right
 
 module.exports = class TextHighlighter {
 	_genericHighlight(str, style, color, spanClass) {
-		const l = left
-		const r = right
 		return `${l}${l}${style};${color};;${spanClass};${r}${str}${r}`
 	}
 
