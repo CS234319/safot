@@ -166,23 +166,26 @@ Not all S-expressions can be fully written with the list notatios
 2. `[a.[[b.c].nil]]` is written as `(A [B.C])`
 ## Manipulating S-Expressions
 ### Operations on S-Expressions (reminiscent of plus/minus on integers)
-1. CAR: obtain the left sub-tree, e.g., CAR of `[[a.b].c]` is `[a.b]` 
+1. CAR: 
+  - obtain the left sub-tree, e.g., CAR of `[[a.b].c]` is `[a.b]` 
   - obtain the first item of a given list, e.g.,  CAR of the two item list `((A) (B C))` is `(A)` 
-3. CDR: obtain the right sub-tree, e.g., CDR of `[a.[b.[c.a]]]` is `[b.[c.a]]`
+3. CDR: 
+  - obtain the right sub-tree, e.g., CDR of `[a.[b.[c.a]]]` is `[b.[c.a]]`
   - obtain the rest of a given list, i.e., the list without its first element, e.g., CDR of the a three item list `((A) D (B C))` is a two item list `(D (B C))`
-5. CONS: construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
+5. CONS: 
+  - construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
   - prepend a given item to a given list,  e.g., CONS of `A` and `(B C)` is `(A B C)`
 CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on 
 ### Predicates on S-Expressions (reminiscent of numerical comparison)
-1. NULL: check wheher an S-expression is the special atom `NIL`
+1. NULL: 
+  - check wheher an S-expression is the special atom `NIL`
   - check whether a list is empty
 3. ATOM: check whether an S-Expression is an atom
 4. EQ: check if two given symbols are equal
 ### Failures of computation (reminiscent of division by zero)
 - CAR and CDR will fail on atomic S-expressions
-- CONS never fails
-- ATOM never fails
-- EQ never fails; it returns "false" if any of the compared expressions is not an atom
+- CONS, ATOM and NULL never fail
+- EQ also never fails; but note that it returns "false" if any of the compared expressions is not an atom
 ## "Boolean" atoms
 - CAR, CDR, and CONS are (partial) functions from S-expressions to S-expressions
 - Let's make EQ and ATOM such functions as well
@@ -204,6 +207,8 @@ The cycle of programming in compiled languages, e.g., Pascal:
 1. EDIT: Write or modify a program in a file
 2. COMPILE: Ask the translate the file to an executable
 3. EXECUTE: Execute this executable
+4. REPEAT: Until program is perfected
+
 Interpreted languages, including LISP, rely on REPL=
 1. READ: Read an expression from the input
 2. EVAL: Evaluate this expression
@@ -230,11 +235,11 @@ Feeding meaningless input `!+a`
 ```
 > !+a
 ```
-The interpreter reads the token `!+a` (it could have been also `x`, `foo` or whatever), interpretes it as an _atom_, tries _evaluate_ this atom, fails and then prints an error message, and loops Feeding meaningless `!+a`
+The interpreter reads the token `!+a` (it could have been also `x`, `foo` or whatever), interpretes it as an _atom_, tries _evaluate_ this atom, fails and then prints an error message, and loops
 ```
 > !+a
+Error UNDEFINED on [!+A]
 ```
-
 ## Tokens and Lexical Analysis
 ### Line Comments
 Begin at `;`, continue until end of line. 
@@ -267,9 +272,9 @@ A non-empty string of characters drawn from the Mini-LISP alphabet
 - Mini-LISP supports ASCII; it does not support Unicode
 - An atom does not have to begin with a letter
 - Atom may *not* include any of the 7 special punctuation characters
-  ``` 
+- ``` 
  ( ) [ ] . ' ; 
-  ```
+ ```
 - The sequence of characgters in an atom is broken by
   1. space, new line, tab, etc., or any other any other control ASCII characters, such as `^X` or `DEL`
     - these characters are always ignored
