@@ -136,20 +136,22 @@ But not Smalltalk, C++, Java, ML, Scala, Python, and most mainstream programming
 LISP represents lists as S-expressions:
 - Every list is an S-expression
 - Not every S-expression is a l-list
-### First/Rest Representation:
-- The empty list, `()`, is represented by the special atom `NIL`
-- To represent a non-empty list L:
-  1. write it as:
+### First/Rest Recursive Representation:
+#### Recursion base
+  The empty list, `()`, is represented by the special atom `NIL`
+#### Recursive step
+To represent a non-empty list L:
+1. Write L as:
    ```
    (F x1 ... xn)
    ```
    where `F` is the first item in the list, and `x1 ... xn` is the, possibly empty, sequence of the remaining items in the list.
-  2. Let S1 be the S-expressions repesentation of F
+2. Let `S1` be the S-expression repesentation of `F`
     - If `F` is an atom, then `S1` is `F`
     - Otherwise, `F` is a list, and `S1` is computed recursively
-  4. Let R be the possibly empty list `(x1 ... xn)`
-  5. Let S2 be the the S-expression representation of `R` (computed recursively)
-  6. The S-expression representation of `L` is the dotted pair ```
+3. Let `R` be the possibly empty list `(x1 ... xn)`
+4. Let `S2` be the the S-expression representation of `R` (computed recursively)
+5. The S-expression representation of `L` is the dotted pair ```
   ```
   [S1.S2]
   ```
@@ -161,6 +163,8 @@ It is customary to write S-expressions as lists
 4. `[a.[b.nil]]` is written as `(A B)`
 5. `[a.[b.[c.nil]]]` is written as `(A B C)`
 6. `[[a.nil].[b.nil]]` is written as `((A) B)`
+
+
 Not all S-expressions can be fully written with the list notatios 
 1. `[a.b]` is written as `[a.b]`
 2. `[a.[[b.c].nil]]` is written as `(A [B.C])`
@@ -175,7 +179,7 @@ Not all S-expressions can be fully written with the list notatios
 5. CONS: 
   - construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
   - prepend a given item to a given list,  e.g., CONS of `A` and `(B C)` is `(A B C)`
-CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on 
+CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented.
 ### Predicates on S-Expressions (reminiscent of numerical comparison)
 1. NULL: 
   - check wheher an S-expression is the special atom `NIL`
@@ -194,13 +198,49 @@ CAR and CDR are historical names; acronyms of registers in an ancient IBM machin
   - Atom `t` represents truth
 Given a (finite or f alpahet/aka set of symbols, also called, 'atoms'
 
+## The "Semantics" S-Expressions
+The "semantics" of an S-expression, is the result of its "evaluation"; evaluating an S-expression gives another S-expression, unless the evaluation "fails" 
+### Semantics of atoms
+1. The semantics of atom `nil` is itself, i.e., atom `NIL`
+2. The semantics of atom `t` is itself, i.e., atom `T`
+3. The semantics of several designated atoms is a function
+ 1. 8 + 1 atoms designate the primitive functions of Mini-LISP
+   - `CAR`, `CDR`, `CONS`, `EQ`, `ATOM`: operators and predicates on S-expressions
+   - `SET`, `COND`, `ERROR`: to be explained later
+   - `EVAL`: a primitive function that takes an S-expression and returns its semantics, or fails. 
+ 2. 5 predefined functions:
+  - `NULL`: check whether an atom is `NIL`
+  - `DEFUN`, `DEFUN'`, `LAMBDA`, `NLAMBDA`: make it posssible to define new functions
+  - `QUOTE`: a function that prevents an S-expression from being evaluated  
+4. The semantics of any other atom is (initially) undefined; therefore, the evaluation of any other atom fails
+### Semantics of dotted-pairs
+The semantics of dotted pair `[x.y]`, is the application of function `x` to S-expression `Y`
+1. `X` must be a name of a function that takes a certain number of arguments
+2. `Y` must be a list of this many arguments
+3. Semnatics of `[x.y]` is the invocation of function named `X` on the list of arguments in `Y`
+4. Error if the expected number of arguments is different than the actual number of arguments
+### Semantics of lists
+Semantics of `(f x y)` is the semantics of `[F.(X Y)]`, i.e., the application of function named `F` to the two arguments `X` and `Y`.
+-  `(cons t nil)` evaluates to `(T)`
+-  `(car (cons t nil))` evaluates to `(CAR (T))` and then to atom `T`
+-  `(cdr (cons t nil))` evaluates to `(CDR (T))` and then to the empty list `()` (which is also the atom `NIL`)
+-  `(cons nil (cons t nil))` evaluates to `(CONS NIL (T))` and then to the two item list `(NIL T)`
+### Two semantics of function application:
+1. Eager semantics: arguments are evaluated first, and then passed to function
+2. Normal semantics: arguments are passed to the function as is
+3. Most functions are eager; exceptions are
+  - `ERROR`
+  - `COND`
+  - `QUOTE`
+  - Functions defined with `NDEFUN`
+
 ## DETOUR: Compiled vs. Interpreted (and P-Code)
 - Compiled languages: translate the program, then execute it
   - Prime examples: Fortran, COBOL, C++, Pascal 
   - (Virtual Machine/P-Code languages are similar; they  translate the program into code in intermediate langauge, then execute, e.g., Java and C#)
 - Interpreted languages: 
   - read, and then inerpreted (executed immediately);
-  - bash, AWK, LISP, Prolog, Smalltalk
+  - bash, LISP, Prolog, Smalltalk,...
   - REPL!
 ## REPL
 The cycle of programming in compiled languages, e.g., Pascal:
@@ -209,7 +249,7 @@ The cycle of programming in compiled languages, e.g., Pascal:
 3. EXECUTE: Execute this executable
 4. REPEAT: Until program is perfected
 
-Interpreted languages, including LISP, rely on REPL=
+Interpreted languages, including LISP, rely on REPL
 1. READ: Read an expression from the input
 2. EVAL: Evaluate this expression
 3. PRINT: Print the result of the evaluation
