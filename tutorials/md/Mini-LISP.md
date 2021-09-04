@@ -122,6 +122,10 @@ Very few examples:
 - Mathematica (Wolfram's langauge for symbolic mathematical computatio)
 - All assembly languages
 - R, Tcl, SNOBOL, Julia, XSLT, Rexx, ... (more or less famous languages)
+- Turing machine
+
+But not Smalltalk, C++, Java, ML, Scala, Python, and most mainstream programming languages
+
 ### Homoiconicity in LISP
 - A LISP *program* is just an S-expression
 - A LISP *function*
@@ -161,7 +165,7 @@ Not all S-expressions can be fully written with the list notatios
 1. `[a.b]` is written as `[a.b]`
 2. `[a.[[b.c].nil]]` is written as `(A [B.C])`
 ## Manipulating S-Expressions
-ֱ### Operations on S-Expressions (reminiscent of plus/minus on integers)
+### Operations on S-Expressions (reminiscent of plus/minus on integers)
 1. CAR: obtain the left sub-tree, e.g., CAR of `[[a.b].c]` is `[a.b]` 
   - obtain the first item of a given list, e.g.,  CAR of the two item list `((A) (B C))` is `(A)` 
 3. CDR: obtain the right sub-tree, e.g., CDR of `[a.[b.[c.a]]]` is `[b.[c.a]]`
@@ -183,7 +187,7 @@ CAR and CDR are historical names; acronyms of registers in an ancient IBM machin
 - CAR, CDR, and CONS are (partial) functions from S-expressions to S-expressions
 - Let's make EQ and ATOM such functions as well
 - Provide: meaning to two special symbols:
-  - Atom `nil` represents falsefullness
+  - Atom `nil` represents falsehood
   - Atom `t` represents truth
 Given a (finite or f alpahet/aka set of symbols, also called, 'atoms'
 
@@ -237,22 +241,45 @@ Begin at `;`, continue until end of line.
 1. Round parenthesis: `(` and `)` 
 2. Square parenthesis: `[` and `]`
 3. Dot: `.`
-4. Backquote: `` ` ``
+4. Quote: `` ' ``
 ### Literals
 None! Mini-LISP offers no support for integers, reals, strings, boolean, etc.
-### Atoms (reminiescent of identifiers in other languages)
-Examples: 
+## Atoms of Mini-LISP
+(reminiescent of identifiers in other languages) 
 ```
 !?!? #@+ a1 1b , && 3.2.7f ++<<>* " $!%
 ```
-A non-empty sequence of printable ASCII characters, i.e., characters in the range 32-126.
-1. Lower case letters
-2. Upper case letters
-3. All punctuation characters, except for the six puntuation tokens `(`, ')'), '[', ']', '.`
-4. not any one of the 6 punctuation tokens
-Regular expression 
+A non-empty string of characters drawn from the Mini-LISP alphabet 
+### Alphabet 
+60 printable (i.e., in the range 33-126) ASCII characters:
+1. 26 lower case letters (isomoprhic to upper case letters), `a` ... `z`
+2. 26 upper case letters, `A` ... `Z`
+3. 10 digits, `0` ... `Z`
+3. 25 punctuation characters
 ```
-[-0-9A-Za-z!"#$'*+,/:;M<>=?@\^_`]+
+! " # $ % & 
+* + , - / :
+< = > ? @ \ 
+^ _ ` { | } ~
+```
+## Notes
+- Mini-LISP supports ASCII; it does not support Unicode
+- An atom does not have to begin with a letter
+- Atom may *not* include any of the 7 special punctuation characters
+  ``` 
+ ( ) [ ] . ' ; 
+  ```
+- The sequence of characgters in an atom is broken by
+  1. space, new line, tab, etc., or any other any other control ASCII characters, such as `^X` or `DEL`
+    - these characters are always ignored
+  2. the six *token* characters
+    ``` ( ) [ ] . ' ```
+    - these characters are part of the LISP syntax, and are *not* ignored
+  3. comments, which are sequences of characters that begin at `;` and end in either a `CR` or `LF` character
+    - *all* characters in a comments are always ignored, even if they are one of the special token chacracters 
+### Regular expression 
+```
+[a-zA-Z0-9!"#$%&*+,-/:<=>?@\\\^ _`{|}~]*
 ```
 ### Separator characters
 Space, newlines, and, tabulation characters cannot appear within atoms, but are otherwise ignored. 
