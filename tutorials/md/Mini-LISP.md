@@ -1,6 +1,6 @@
-ֱ# Mini-LISP
-## What?
-LISP is very important:
+# Mini-LISP
+## Cherry picking of LISP
+If all you know is Pyhon, C, C++, Java, Bash, then the LISP programming language will change the way you think about programming languages
 - The first example of functional programming
 - Conisdered a classic of programming and computer science
 - Implemntation is by a (huge) standard: common Lisp.
@@ -132,14 +132,14 @@ Very few examples:
 LISP represents lists as S-expressions:
 - Every list is an S-expression
 - Not every S-expression is a l-list
-First/Rest Representation:
+### First/Rest Representation:
 - The empty list, `()`, is represented by the special atom `NIL`
 - To represent a non-empty list L:
   1. write it as:
    ```
-   (F x1 x2 ... xn)
+   (F x1 ... xn)
    ```
-   where h is the first item in the list, and `x1 ... xn` is the, possibly empty, sequence of the remaining items in the list.
+   where `F` is the first item in the list, and `x1 ... xn` is the, possibly empty, sequence of the remaining items in the list.
   2. Let S1 be the S-expressions repesentation of F
     - If `F` is an atom, then `S1` is `F`
     - Otherwise, `F` is a list, and `S1` is computed recursively
@@ -149,15 +149,31 @@ First/Rest Representation:
   ```
   [S1.S2]
   ```
+### The list notation
+It is customary to write S-expressions as lists
+1. Atom `nil` is written as `()`
+2. Atom `a` is written as `A`
+3. `[a.nil]` is written as `(A)`
+4. `[a.[b.nil]]` is written as `(A B)`
+5. `[a.[b.[c.nil]]]` is written as `(A B C)`
+6. `[[a.nil].[b.nil]]` is written as `((A) B)`
+Not all S-expressions can be fully written with the list notatios 
+1. `[a.b]` is written as `[a.b]`
+2. `[a.[[b.c].nil]]` is written as `(A [B.C])`
 ## Manipulating S-Expressions
 ֱ### Operations on S-Expressions (reminiscent of plus/minus on integers)
-1. CAR: obtain the left sub-tree, e.g., car([[a.b].c]) = [a.b] 
-2. CDR: obtain the right sub-tree, e.g., cdr([a.[b.[c.a]]]) = [b.[c.a]] |
-3. CONS: construct a tree out of a given left and rigt sub-tree
-CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented. 
+1. CAR: obtain the left sub-tree, e.g., CAR of `[[a.b].c]` is `[a.b]` 
+  - obtain the first item of a given list, e.g.,  CAR of the two item list `((A) (B C))` is `(A)` 
+3. CDR: obtain the right sub-tree, e.g., CDR of `[a.[b.[c.a]]]` is `[b.[c.a]]`
+  - obtain the rest of a given list, i.e., the list without its first element, e.g., CDR of the a three item list `((A) D (B C))` is a two item list `(D (B C))`
+5. CONS: construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
+  - prepend a given item to a given list,  e.g., CONS of `A` and `(B C)` is `(A B C)`
+CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on 
 ### Predicates on S-Expressions (reminiscent of numerical comparison)
-1. ATOM: check whether an S-Expression is an atom
-2. EQ: check if two given symbols are equal
+1. NULL: check wheher an S-expression is the special atom `NIL`
+  - check whether a list is empty
+3. ATOM: check whether an S-Expression is an atom
+4. EQ: check if two given symbols are equal
 ### Failures of computation (reminiscent of division by zero)
 - CAR and CDR will fail on atomic S-expressions
 - CONS never fails
