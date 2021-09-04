@@ -312,9 +312,9 @@ A non-empty string of characters drawn from the Mini-LISP alphabet
 - Mini-LISP supports ASCII; it does not support Unicode
 - An atom does not have to begin with a letter
 - Atom may *not* include any of the 7 special punctuation characters
-- ``` 
+``` 
  ( ) [ ] . ' ; 
- ```
+```
 - The sequence of characgters in an atom is broken by
   1. space, new line, tab, etc., or any other any other control ASCII characters, such as `^X` or `DEL`
     - these characters are always ignored
