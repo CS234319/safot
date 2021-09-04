@@ -13,8 +13,8 @@ module.exports = class REPLInstigator {
 	}
 
 	feedLine(line) {
-		this._commandString += line + '\n'
-		const parseResult = this._parserWrapper.apply(this._commandString)
+		this._command += line + '\n'
+		const parseResult = this._parserWrapper.apply(this._command)
 
 		switch (parseResult.type) {
 			case PEGParserStateWrapper.Accepted:
@@ -22,9 +22,9 @@ module.exports = class REPLInstigator {
 				break
 
 			case PEGParserStateWrapper.ExpectedMore:
-				this._commandString === ''
-					? this._prepareForNewCommand() 
-					: this._prompt(config.prompt.duringCommand)
+				this._duringCommand()
+					? this._prompt(config.prompt.duringCommand) 
+					: this._prepareForNewCommand()
 				break
 
 			case PEGParserStateWrapper.Rejected:
@@ -34,8 +34,16 @@ module.exports = class REPLInstigator {
 		}
 	}
 
+	getCommand() {
+		return this._command !== '' ? this._command : undefined
+	}
+
+	_duringCommand() {
+		return this._command !== ''
+	}
+
 	_prepareForNewCommand() {
-		this._commandString = ''
+		this._command = ''
 		this._prompt(config.prompt.newCommand)	
 	}
 

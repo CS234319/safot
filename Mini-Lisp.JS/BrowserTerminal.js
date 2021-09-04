@@ -2,6 +2,7 @@ const REPLInstigator = require('./REPLInstigator')
 const PEGParserStateWrapper = require('./PEGParserStateWrapper')
 const primitiveKeywords = require('./PrimitiveKeywords')
 const config = require('./Configuration').browserTerminal
+const promptConfig = require('./Configuration').repl.prompt
 const highlightingBrackets = require('./Configuration').highlightingBrackets
 const formatter = require('./Formatter')
 require('./ArrayExtension')
@@ -30,116 +31,75 @@ module.exports = class BrowserTerminal {
 
 	constructor() {
 		this.globals = []
-		this.initCompletions()
-		
-		this.repl = new REPLInstigator(this, this)	
-		this.formatterWrapper = new PEGParserStateWrapper(formatter)
 
-		this.initFormatters()
+		this.initCompletions()
+		this.initFormatting()
 		this.initTerminal()
 		this.initKeyboardEvents()
 	}
 
+	/* Terminal */
 	initTerminal() {
 		const id = BrowserTerminal.ParagraphId
 		$('body').append(`<p id="${id}"></p>`)	
 		$('head').append('<link rel="stylesheet" type="text/css"\
 							href="jquery.terminal.css"/>')
 
+		this.repl = new REPLInstigator(this, this)
+
 		const self = this
 		$(function($, undefined) {
-			self.terminal = $(`#${id}`).terminal(function(line) { 
+			self.terminal = $(`#${id}`).terminal(function(line) {
 				self.repl.feedLine(line)
 			}, config)
 		})
 	}
 
-	initFormatters() {
-		const formatters = $.terminal.defaults.formatters
-
-		// Adding highlight formatter before the nesting formatter
-		const format = str => this.handleSpecialCharacters(this.format(str))
-		formatters.unshift(format)	
-
-		const formatPartition = str => {
-			return $.terminal.partition(str).join('')
-		}
-		formatPartition.__meta__ = true
-
-		// Adding format partitioning after the nesting formatter
-		formatters.push(formatPartition)
+	getCommand() {
+		return this.shouldIgnoreCommand ? undefined : this.repl.getCommand()
 	}
 
-	initCompletions() {
-		this.completions = []
-		primitiveKeywords.forEach(w => this.addCompletion(w))
-	}
+	/* Formatting */
+	initFormatting() {
+		this.formatterWrapper = new PEGParserStateWrapper(formatter)
 
-	initKeyboardEvents() {
-		$.terminal.defaults.completion = (_, complete) => {
-			this.handleTab(complete)
-		}
-
-		$.terminal.defaults.doubleTab = (_, rawCompletions) => {
-			this.showPossibleCompletions(rawCompletions)
-		}
-
-		$.terminal.defaults.keydown = event => {
-			if (event.code === 'Backspace') {
-				this.handleBackspace()
+		$.terminal.defaults.formatters = [str => {
+			const command = this.getCommand()
+			if (!command || !this.terminal) {
+				return this.format(str)
 			}
-		}
+
+			return this.updateCommandFormat(str, command)
+		}]
 	}
 
-	getTabAlternative() {
-		let tabAlternative = ''
+	updateCommandFormat(str, command) {
+			const fullCommand = command + str
+			const numLines = fullCommand.split('\n').length
+			const firstIndex = this.terminal.last_index() - numLines + 2
+			const formatted = this.format(fullCommand).split(/\[\[[^\]]*\]\n\]/)
+			const formattedCommandLines = formatted.slice(0, numLines - 1)
+			const formattedStr = formatted[numLines - 1]
+			
+			formattedCommandLines.forEach((line, i) => {
+				const lineIndex = firstIndex + i
+				const prompt = i
+					? promptConfig.duringCommand 
+					: promptConfig.newCommand
+				this.terminal.update(lineIndex, prompt + line, { formatters: false })
+			})
 
-		const numSpaces = BrowserTerminal.NumSpacesInTabAlternative
-		for (let i = 0; i < numSpaces; i++) {
-			tabAlternative += ' '
-		}
-
-		return tabAlternative
-	}
-
-	handleTab(complete) {
-		const beforeCursor = this.terminal.before_cursor()
-		beforeCursor === '' || beforeCursor.endsWith(' ')
-			? this.terminal.insert(this.getTabAlternative())
-			: complete(this.completions)
-	}
-
-	showPossibleCompletions(rawCompletions) {
-		const rawPrefixes = BrowserTerminal.CompletionPrefixes.filter(p => p !== '')
-		const prefixes = rawPrefixes.concat(rawPrefixes.map(p => '\\' + p))
-		const words = rawCompletions.map(c => {
-			const prefix = prefixes.find(p => c.startsWith(p))
-			return prefix ? c.slice(prefix.length) : c
-		}).distinct()
-
-		const wordsListStr = `(${words.join(' ')})`
-		this.echo(wordsListStr)
-	}
-
-	handleBackspace() {
-		const beforeCursor = this.terminal.before_cursor()
-		const tabAlternative = this.getTabAlternative()
-		if (!beforeCursor.endsWith(tabAlternative)) {
-			return
-		}
-
-		const command = this.terminal.get_command()
-		const finalCursorPosition = beforeCursor.length - tabAlternative.length + 1
-		
-		this.terminal.set_command(
-			beforeCursor.slice(0, finalCursorPosition) +
-			command.slice(beforeCursor.length)
-		)
-
-		this.terminal.set_position(finalCursorPosition)
+			return formattedStr
 	}
 
 	format(str) {
+		return [
+			this.highlight, this.handleSpecialCharacters,
+			this.applyNesting, this.partition
+		].reduce((input, func) => func.call(this, input), str)
+	}
+
+	highlight(str) {
 		str = $.terminal.unescape_brackets(str)
 
 		const formatResult = this.formatterWrapper.apply(str)
@@ -166,37 +126,117 @@ module.exports = class BrowserTerminal {
 			.replace(new RegExp(`${right}`, 'g'), ']')
 	}
 
+	applyNesting(str) {
+		return $.terminal.nested_formatting(str)	
+	} 
+
+	partition(str) {
+		return $.terminal.partition(str).join('')
+	}
+
+	/* Keyboard Events */
+	initKeyboardEvents() {
+		$.terminal.defaults.completion = (_, complete) => {
+			this.handleTab(complete)
+		}
+
+		$.terminal.defaults.doubleTab = (_, rawCompletions) => {
+			this.showPossibleCompletions(rawCompletions)
+		}
+
+		$.terminal.defaults.keydown = event => {
+			if (event.code === 'Backspace') {
+				this.handleBackspace()
+			}
+		}
+	}
+
+	getTabAlternative() {
+		return Array
+			.range(BrowserTerminal.NumSpacesInTabAlternative)
+			.reduce(input => input + ' ', '')
+	}
+
+	handleTab(complete) {
+		const beforeCursor = this.terminal.before_cursor()
+		beforeCursor === '' || beforeCursor.endsWith(' ')
+			? this.terminal.insert(this.getTabAlternative())
+			: complete(this.completions)
+	}
+
+	showPossibleCompletions(rawCompletions) {
+		const rawPrefixes = BrowserTerminal.CompletionPrefixes.filter(p => p !== '')
+		const prefixes = rawPrefixes.concat(rawPrefixes.map(p => '\\' + p))
+		const words = rawCompletions.map(c => {
+			const prefix = prefixes.find(p => c.startsWith(p))
+			return prefix ? c.slice(prefix.length) : c
+		}).distinct()
+
+		const wordsListStr = `(${words.join(' ')})`
+		this.echo(wordsListStr)
+	}
+
+	handleBackspace() {
+		const beforeCursor = this.terminal.before_cursor()
+		const tabAlternative = this.getTabAlternative()
+		
+		if (!beforeCursor.endsWith(tabAlternative)) {
+			return
+		}
+
+		const command = this.terminal.get_command()
+		const finalCursorPosition = beforeCursor.length - tabAlternative.length + 1
+		
+		this.terminal.set_command(
+			beforeCursor.slice(0, finalCursorPosition) +
+			command.slice(beforeCursor.length)
+		)
+
+		this.terminal.set_position(finalCursorPosition)
+	}
+
+	/* Completions */
+	initCompletions() {
+		this.completions = []
+		primitiveKeywords.forEach(w => this.addCompletion(w))
+	}
+
 	addCompletion(word) {
 		BrowserTerminal.CompletionPrefixes.forEach(p => {
 			this.completions.push(p + word)	
 		})
 	}
 
-	getCursorPosition()  {
-		return this.terminal?.cmd()?.position()
-	}
-
-	/* REPLInstigator delegate */
+	/* REPLInstigator Delegate */
 	prompt(promptStr) {
+		this.shouldIgnoreCommand = true
 		this.terminal?.set_prompt(promptStr)
+		this.shouldIgnoreCommand = false
 	}
 
-	echo(str, options) {
-		this.terminal?.echo(str, options)
+	echo(str) {
+		this.shouldIgnoreCommand = true
+		this.terminal?.echo(str)
+		this.shouldIgnoreCommand = false
+	}
+
+	/* Formatter Delegate Auxiliary */
+	getCursorPositionInCommand()  {
+		return 	(this.getCommand()?.length ?? 0) + 
+				(this.terminal.cmd().position())
+				
 	}
 
 	/* Formatter Delegate */
 	matchEnclosures(lEncPos, rEncPos) {
-		const cursorPos = this.getCursorPosition()
-
-		if (isNaN(cursorPos) 		||
-			cursorPos < lEncPos 	|| 
+		const cursorPos = this.getCursorPositionInCommand()
+		if (cursorPos < lEncPos || 
 			cursorPos > rEncPos) {
 			return null
 		}
 		
 		const isInner = ![
-			lEncPos - 1, lEncPos, rEncPos, lEncPos + 1
+			lEncPos, lEncPos + 1, rEncPos - 1, rEncPos
 		].includes(cursorPos)
 
 		return { isInner: isInner }

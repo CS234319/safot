@@ -27,3 +27,7 @@ Array.prototype.distinct = function() {
 		return input.includes(c) ? input : input.append(c)
 	}, [])
 }
+
+Array.range = function(n) {
+	return [...Array(n).keys()]
+}
