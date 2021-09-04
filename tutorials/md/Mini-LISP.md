@@ -60,22 +60,96 @@ More generally, symbolic computation is also about data structrues containg symb
 - Trees of any degree whose leaves/nodes/both are symbols
 - Graphs whose nodes/edges/both are either symbols or similar graphs
 - ...
+
+## Lists in LISP
+Empty list:
+```
+()
+```
+Singleton list containing the empty list:
+```
+( () )
+```
+List containing two empty lists:
+```
+( () () )
+```
+More lists:
+```
+( (()) ())
+((() ()) ())
+( () ( (()) ()) ((() ()) ()))
+```
+## Atoms in LISP
+Examples:
+```
+A B1 FOO 12 +
+```
+Lists may contain atoms or lists:
+```LISP
+(A) ; a list containing one atom
+(+ 12); a list containing two atoms
+(A (B1 () ) ); a list with an atom and a list with an atom and the empty list.
+```
+- Atoms are case insensitive; `a` is the same as `A`
+- Internal representation is always upper case
+- The atom `NIL` is synoymous to the empty list `()`
 ## The S-Expression Data Structure
 S-Expression is short for *symbolic expression* 
 - Can represent symbols, lists of symbols, lists of lists, etc.
-- Easy to manipulate: three basic operations
+- Easy to manipulate: three elementary operations
 ### Intuition
 Binary tree in which all leaves are symbols
 ### Definition
 - **Given**: An alphabet, finite or infinite, of symbols. 
-- **Define**: Set of *S-Expression* over the alphabet
-  1. Atomic S-Expressions (Atoms): Every symbol in the alphabet is an S-expression
-  2. Compound S-Expression (concstructed S-expressions): If 'S1' and 'S2' are S-expressions then, the *dottet pair* of 'S1' and 'S2', written '[S1.S2]' is also an S-Epxression
+- **Define**: Set of *S-Expression* over the alphabet has two kinds of elements
+  1. *Atomic S-Expressions (Atoms)*: Every symbol in the alphabet is an S-expression
+  2. *Compound S-Expressions (concstructed S-expressions)*: If 'S1' and 'S2' are S-expressions then, the *dottet pair* of 'S1' and 'S2', written '[S1.S2]' is also an S-Epxression
   3. (Just be sure: Nothing else is an S-Expression)
 ### Examples over finite alphabet '{a,b,c}'
 a, b, [a.b], [a.[b.c]], [[a.b].c], [c.[[a.b].[b.a]]]
-### S-Expression in LISP
+## S-Epxressions in LISP
+### Homoiconicity
+Etymology
+- homo="the same" 
+- icon="representation"
+- Homoiconicity = "the same represenetation". 
+A programming langauge P is homoiconic if a program p1 in P, can be manipulated as data by another program p2 in L, or even by p1 iteslf.
 
+Very few examples:
+- LISP
+- Prolog
+- Mathematica (Wolfram's langauge for symbolic mathematical computatio)
+- All assembly languages
+- R, Tcl, SNOBOL, Julia, XSLT, Rexx, ... (more or less famous languages)
+### Homoiconicity in LISP
+- A LISP *program* is just an S-expression
+- A LISP *function*
+ - takes one parameter, which is an S-expression
+ - returns a value, which is an S-expression
+ - is itself an S-expression 
+## Lists vs. S-Expressions
+LISP represents lists as S-expressions:
+- Every list is an S-expression
+- Not every S-expression is a l-list
+First/Rest Representation:
+- The empty list, `()`, is represented by the special atom `NIL`
+- To represent a non-empty list L:
+  1. write it as:
+   ```
+   (F x1 x2 ... xn)
+   ```
+   where h is the first item in the list, and `x1 ... xn` is the, possibly empty, sequence of the remaining items in the list.
+  2. Let S1 be the S-expressions repesentation of F
+    - If `F` is an atom, then `S1` is `F`
+    - Otherwise, `F` is a list, and `S1` is computed recursively
+  4. Let R be the possibly empty list `(x1 ... xn)`
+  5. Let S2 be the the S-expression representation of `R` (computed recursively)
+  6. The S-expression representation of `L` is the dotted pair ```
+  ```
+  [S1.S2]
+  ```
+## Manipulating S-Expressions
 ֱ### Operations on S-Expressions (reminiscent of plus/minus on integers)
 1. CAR: obtain the left sub-tree, e.g., car([[a.b].c]) = [a.b] 
 2. CDR: obtain the right sub-tree, e.g., cdr([a.[b.[c.a]]]) = [b.[c.a]] |
@@ -89,12 +163,12 @@ CAR and CDR are historical names; acronyms of registers in an ancient IBM machin
 - CONS never fails
 - ATOM never fails
 - EQ never fails; it returns "false" if any of the compared expressions is not an atom
-### "Boolean" atoms
+## "Boolean" atoms
 - CAR, CDR, and CONS are (partial) functions from S-expressions to S-expressions
 - Let's make EQ and ATOM such functions as well
-- Let's give meaning to two special symbols:
-  - Let Atom `nil` represents falsefullness
-  
+- Provide: meaning to two special symbols:
+  - Atom `nil` represents falsefullness
+  - Atom `t` represents truth
 Given a (finite or f alpahet/aka set of symbols, also called, 'atoms'
 
 ## DETOUR: Compiled vs. Interpreted (and P-Code)
