@@ -325,7 +325,7 @@ A non-empty string of characters drawn from the Mini-LISP alphabet
     - *all* characters in a comments are always ignored, even if they are one of the special token chacracters 
 ### Regular expression 
 ```
-[a-zA-Z0-9!"#$%&*+,-/:<=>?@\\\^ _`{|}~]*
+[a-zA-Z0-9!"#$%&*+,\-/:<=>?@\\\^ _`{|}~]*
 ```
 ### Separator characters
 Space, newlines, and, tabulation characters cannot appear within atoms, but are otherwise ignored. 
