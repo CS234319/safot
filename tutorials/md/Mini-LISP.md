@@ -229,11 +229,12 @@ The above expression evaluates to
 Feeding meaningless input `!+a`
 ```
 > !+a
-``
+```
 The interpreter reads the token `!+a` (it could have been also `x`, `foo` or whatever), interpretes it as an _atom_, tries _evaluate_ this atom, fails and then prints an error message, and loops Feeding meaningless `!+a`
 ```
 > !+a
 ```
+
 ## Tokens and Lexical Analysis
 ### Line Comments
 Begin at `;`, continue until end of line. 
@@ -250,7 +251,7 @@ None! Mini-LISP offers no support for integers, reals, strings, boolean, etc.
 !?!? #@+ a1 1b , && 3.2.7f ++<<>* " $!%
 ```
 A non-empty string of characters drawn from the Mini-LISP alphabet 
-### Alphabet 
+### The Mini-LISP Alphabet 
 60 printable (i.e., in the range 33-126) ASCII characters:
 1. 26 lower case letters (isomoprhic to upper case letters), `a` ... `z`
 2. 26 upper case letters, `A` ... `Z`
