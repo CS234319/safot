@@ -23,15 +23,8 @@ def generate_book_files(verbose=True) -> None:
     os.system(command)
 
 
-def get_evaluate_files() -> List[str]:
-    """
-    Get the list of the files for evaluate functions (including quote, null),
-    which auto-generated from the book.
-
-    :return: list of paths
-    """
-    directory = "../../../Mini-Lisp.BookValidator/Mini-Lisp.Inputs/"
-    evaluate_functions = [
+def get_evaluate_functions_names() -> List[str]:
+    return [
         "quote",
         "null",
         "exists",
@@ -48,7 +41,6 @@ def get_evaluate_files() -> List[str]:
         "apply-decomposed-lambda",
         "apply",
     ]
-    return [f"{directory}/{f_name}.lisp" for f_name in evaluate_functions]
 
 
 def get_functions_files() -> List[str]:
@@ -62,55 +54,17 @@ def get_functions_files() -> List[str]:
     return FlowRunner.categorize_files_by_name(files)[FileType.FUNCTION]
 
 
-def get_lambda(file: str) -> str:
+def get_env(flow) -> str:
     """
-    Given an input file which auto-generated from the book,
-    which includes a function definitions, this function convert
-    the function to lambda/nlambda definitions, used by the alist.
+    Build an alist string, using the loaded flow
 
-    For example:
-        The following expression:
-            "(defun my_fun (args ...) (body ...))"
-
-        Will be converted by this function to:
-            "my_fun.(lambda (args ...) (body ...))"
-
-    :param file: lisp file
-    :return: lambda/nlambda definition of the function
+    :return: alist string
     """
-    fun_str = Path(file).read_text()
-    if "ndefun" in fun_str:
-        fun_type = "ndefun"
-        lambda_type = "nlambda"
-    elif "defun" in fun_str:
-        fun_type = "defun"
-        lambda_type = "lambda"
-    else:
-        logging.warning(f"File: {file} has no function definitions. Skip.")
-        return ""
-
-    regex = rf"(\()(\s*)({fun_type})(\s+)(.*?)(\s*)(\()"
-    subst = f"\\5.({lambda_type} \\6\\7"
-    res = re.search(regex, fun_str, re.MULTILINE)
-    if res:
-        pair = re.sub(regex, subst, fun_str, 0, re.MULTILINE)
-        return f"{pair} \n"
-
-    # Pattern didn't match:
-    logging.warning(f"Failed to parse: {file}")
-    return ""
-
-
-def get_env() -> str:
-    """
-    Build an alist string, using the functions from the book.
-
-    :return: alist string (without parantheses)
-    """
-    files = get_evaluate_files()
+    names = get_evaluate_functions_names()
     alist = "t.t nil.nil "
-    for file in files:
-        alist += f"{get_lambda(file)} "
+    for name in names:
+        lambda_expr = flow.feed(f"(eval '{name})")
+        alist += f"{name}.{lambda_expr} "
     return alist
 
 

@@ -18,15 +18,6 @@ def flow() -> FlowTestFramework:
     return get_flow(filter_newline=False)
 
 
-@pytest.fixture
-def env() -> str:
-    """
-    Return an a-list string.
-    Calculated once before the tests.
-    """
-    return get_env()
-
-
 def run(flow, s_expr: str) -> str:
     tmp_file = Path(tempfile.mkstemp()[1])
     tmp_file.write_text(s_expr)
@@ -34,7 +25,7 @@ def run(flow, s_expr: str) -> str:
     return out_path.read_text().replace("\n", "")
 
 
-def test_evaluate_on_evaluate(flow, env):
+def test_evaluate_on_evaluate(flow):
     """
     All the tests for all the Lisp evaluate on Lisp evaluate,
     which auto generated from the Mini-lisp book.
@@ -52,6 +43,8 @@ def test_evaluate_on_evaluate(flow, env):
     Read more about this flow here:
         https://github.com/yossigil/safot/tree/master/Mini-Lisp.ShellTestFramework#evaluateonevaluate
     """
+    env = get_env(flow)
+
     print("Running: EvaluateOnEvaluate - evaluate atoms")
     alist = "(a.T t.t nil.nil)"
     s_expr = f"(evaluate '(evaluate (quote a) (quote {alist})) '({env}))"
