@@ -12,26 +12,30 @@ If all you know is Pyhon, C, C++, Java, Bash, then Lisp will change the way you 
  - 
 
 Influential and used to this very day:
-- Used for zillion AI/other applications: the first psychatrist, the first symbolic math, Grammarly, Google's flight search 
-- Used for quick programming of complex algorithms
+- Used for zillion AI/other applications: the first psychatrist, the first symbolic math, Grammarly (contemporary grammar checking in all browsers), Google's flight search, OpusModus (editor for music composition) 
+- Used for quick programming of complex algorithms, e.g., alrgorithmic trading
 - Influenced many other languages such as
-  - Functional Paradigm: ML, Haskell, Scheme, 
-  - Famous: JavaScript, R, Perl, Swift, Logo, Ruby, Python, Scala, Julia,  Lua
-  - Scheme
+  - Functional Paradigm: ML, Haskell, Scheme, Clojure, Racket, ...
+  - Famous, but not functional: JavaScript, R, Perl, Swift, Logo, Ruby, Python, Scala, Julia,  Lua
   - Less famous: Forth, Nim, Dylan, Rebol, Tcl, Io,  ...
-### Educational Purpose
+ 
+### Min-Lisp = Cherry Picking of Lisp
+*Design Objective*: maximize value/price ratio
+
 Mini-LISP is a programming language designed for students of programming languages: 
 - Quick to learn and master. Inappropriate for any serious programming.
 - Captures the essence of LISP
 - Meticiuluously, purges, eliminates, and/or ignores, anything else!
+
 Don't be mistaken; the language is small; its capabilities are huge:
-- Capable of carrying out any possible computation
-- Can do meta programming:
-  - profiling
-  - debugging
+- As capable as any other langauge (Turing comlete)
+- Capable of meta programming; it should be easy to write in Mini-Lisp tools for
+  - profiling Mini-Lisp
+  - debugging Mini-Lisp
   - program transformation
-  - language can be interpreted 
-## Why?
+  - executing programs in Mini-Lisp
+ 
+## Value = Expected Lessons
 Expose students to important concepts: 
 1. Taste of functional programming paradigm
 2. Symbolic computation
@@ -44,14 +48,20 @@ Expose students to important concepts:
 10. The Church Rosser property
 11. Turing completeness
 12. ...
-## How?
+
+## Price: Learning and Programming
+
 Miniscule language learning effort
 1. Syntaxt: trivial
 2. Design: slim! only one simple structure
 3. Featrues: very few
 4. IDE: basic, but can run locally on your browser
 5. Tiny library: 8 functions
-6. Minimal builtins: 8 in total 
+6. Minimal builtins: 8 in total
+
+Programming in the Small:
+1. Useless for large programs
+2. No debugger, profiler, etc. 
 ## Symbolic Computation
 - Numeric computation is computation with numbers
 - Numbers are manipulated with the four basic arithmeitcal operations, comparison, etc.
