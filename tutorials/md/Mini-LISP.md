@@ -3,19 +3,22 @@
 If all you know is Pyhon, C, C++, Java, Bash, then Lisp will change the way you think about programming:
 - Designed on 1958 (!) but remains influential and in use
 - The second programming language ever (preceded only by by FORTRAN)
-- The first example of the *functional programming paradigm*
+- The first example of the *functional programming paradigm*:
+  - No variables, no assigment
+  - No statements nor sequential computation
+  - No loops
 - Conisdered a classic of programming and computer science; every one should know 
+   - What is an S-expression and how to implement one
    - What are CAR, CDR, and CONS, and how they appear in their favorite language
    - What is LAMBDA, and whether and how it appears in their favorite programming language 
 - Standarized implementation: The Huge Common Lisp (CL) Standard
  - Gnu Lisp manual spans over 1,200 pages
- - 
 
 Influential and used to this very day:
 - Used for zillion AI/other applications: the first psychatrist, the first symbolic math, Grammarly (contemporary grammar checking in all browsers), Google's flight search, OpusModus (editor for music composition) 
 - Used for quick programming of complex algorithms, e.g., alrgorithmic trading
 - Influenced many other languages such as
-  - Functional Paradigm: ML, Haskell, Scheme, Clojure, Racket, ...
+  - Functional Paradigm: Standard ML, Haskell, Scheme, Clojure, Racket, ...
   - Famous, but not functional: JavaScript, R, Perl, Swift, Logo, Ruby, Python, Scala, Julia,  Lua
   - Less famous: Forth, Nim, Dylan, Rebol, Tcl, Io,  ...
  
@@ -24,7 +27,7 @@ Influential and used to this very day:
 
 Mini-LISP is a programming language designed for students of programming languages: 
 - Quick to learn and master. Inappropriate for any serious programming.
-- Captures the essence of LISP
+- Captures the essence of Lisp
 - Meticiuluously, purges, eliminates, and/or ignores, anything else!
 
 Don't be mistaken; the language is small; its capabilities are huge:
@@ -64,9 +67,9 @@ Programming in the Small:
 2. No debugger, profiler, etc.
 3. No support of integers, reals, strings, files, graphics, ...
 4. Not very fast (it is an interpreted language)
-5. Reference implementation (in C/C++/Chic) will crash on large programs
+5. Reference implementation (in C/C++/Chic) will crash on (not too) large programs
 
-## Symbolic Computation
+## Lession 1: Symbolic Computation
 - Numeric computation is computation with numbers
 - Numbers are manipulated with the four basic arithmeitcal operations, comparison, etc.
 - Symbolic computation is about symbols:
@@ -92,7 +95,7 @@ More generally, symbolic computation is also about data structrues containg symb
 - Graphs whose nodes/edges/both are either symbols or similar graphs
 - ...
 
-## Lists in LISP
+## Lists in Lisp
 Empty list:
 ```
 ()
@@ -111,11 +114,14 @@ More lists:
 ((() ()) ())
 ( () ( (()) ()) ((() ()) ()))
 ```
-## Atoms in LISP
+## Atoms in Mini-Lisp
 Examples:
 ```
 November/2nd <^V>v ? 2x B4 && FOO ! 12 + 
 ```
+Other Lisp dialects are not as permissive
+
+Upper/Lower case:
 - Atoms are case insensitive; `a` is the same as `A`
 - Internal representation is always upper case
 - Convention: 
@@ -131,7 +137,7 @@ Lists may contain atoms or lists:
 (+ 12); a list containing two atoms
 (A (B1 () ) ); a list with an atom and a list with an atom and the empty list.
 ```
-- The atom `NIL` is synoymous to the empty list `()`
+- The atom `nil`/`NIL` is synoymous to the empty list `()`
 
 
 ## The S-Expression Data Structure
@@ -153,7 +159,7 @@ S-Expression is short for *symbolic expression*
 ### Examples over finite alphabet '{a,b,c}'
 a, b, [a.b], [a.[b.c]], [[a.b].c], [c.[[a.b].[b.a]]]
 
-## Homoiconicity
+## Lession 2: Homoiconicity
 ### Etymology
 - homo="the same" 
 - icon="representation"
@@ -181,8 +187,10 @@ But not Smalltalk, C++, Java, ML, Scala, Python, and most mainstream programming
 ## Lists vs. S-Expressions
 LISP represents lists as S-expressions:
 - Every list is an S-expression
-- Not every S-expression is a l-list
-### First/Rest Recursive Representation of Lists:
+- Not every S-expression is a list
+### First/Rest Recursive Representation of Lists
+Essentially, the general embedding of a general tree in a binary tree: each node contains a pointer to eldest child and a pointer to the next sibling
+
 #### Recursion base
   The empty list, `()`, is represented by the special atom `NIL`
 #### Recursive step
@@ -229,26 +237,48 @@ Not all S-expressions can be fully written with the list notatios
 ### CONS
   - construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
   - prepend a given item to a given list,  e.g., CONS of `A` and `(B C)` is `(A B C)`
+  - never fails
+  - in other langauges/libraries: `prepend` / `push` / `::` (e.g., `A::B::C`) in Standard ML
 
-CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented; `CONS` is short of 'construct' or 'constructor'
+- CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented; `CONS` is short of 'construct' or 'constructor'
+- Most Lisp dialects offer short hand functions such as `CAAR` (CAR of CAR), `CDAR` (CDR of CAR), `CADAR`, etc. In the interest of minimalizm, Mini-Lisp abstains.
 
 ## Predicates on S-Expressions (reminiscent of numerical comparison)
-1. NULL
+### NULL
   - check wheher an S-expression is the special atom `NIL`
-  - check whether a list is empty
-2. ATOM: check whether an S-Expression is an atom
-3. EQ: check if two given symbols are equal
-### Failures of computation (reminiscent of division by zero)
-- CAR and CDR will fail on atomic S-expressions
-- CONS, ATOM and NULL never fail
-- EQ also never fails; but note that it returns "false" if any of the compared expressions is not an atom
-## "Boolean" atoms
+  - used, e.g., to determine whether a list is exhausted in traversal
+  - never fails
+### ATOM 
+ - check whether an S-Expression is an atom
+ - used, e.g., to determine whether recursion on nested list structure ends
+ - never fails
+ ### EQ 
+  - check if two given atoms are equal
+  - returns "false" if any of the arguments is not an atom
+  - used, e.g., to recursively compare two S-expressions
+  - never fails
+
+## Lesson 3: Binding and "Boolean" atoms
+### Essential Atoms
 - CAR, CDR, and CONS are (partial) functions from S-expressions to S-expressions
 - Let's make EQ and ATOM such functions as well
 - Provide: meaning to two special symbols:
   - Atom `nil` represents falsehood
   - Atom `t` represents truth
-Given a (finite or f alpahet/aka set of symbols, also called, 'atoms'
+
+### Other Atoms
+- Most atoms have no meaning
+- Other atoms are luxury; 
+
+
+ 
+## Failures of computation (reminiscent of division by zero)
+- CONS, ATOM, EQ, and NULL never fail
+- CAR and CDR may fail (when applied to atoms)
+- Any function that calls CAR or CDR may fail
+- A function invoked with more (less) arguments than it expects, will fail 
+- More generally, evaluation may fail
+- Further, evaluation may not terminate (stack overflow due to infinite recursion)
 
 ## The "Semantics" S-Expressions
 The "semantics" of an S-expression, is the result of its "evaluation"; evaluating an S-expression gives another S-expression, unless the evaluation "fails" 
@@ -360,6 +390,7 @@ A non-empty string of characters drawn from the Mini-LISP alphabet
 < = > ? @ \ 
 ^ _ ` { | } ~
 ```
+
 ## Notes
 - Mini-LISP supports ASCII; it does not support Unicode
 - An atom does not have to begin with a letter
@@ -382,5 +413,4 @@ A non-empty string of characters drawn from the Mini-LISP alphabet
 ### Separator characters
 Space, newlines, and, tabulation characters cannot appear within atoms, but are otherwise ignored. 
 ### Upper casing
-For historical reasons, 
-All other characters are considered space
+For historical reasons, just as in Fortran, all letters are upper case. 
