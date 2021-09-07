@@ -37,19 +37,50 @@ const testLookupException = (keyStr) => {
 	const key = parse(keyStr)
 	utils.expectException(() => env.lookup(key), key, Atom.undefined)
 }
-const testBind = (formalsStr, actualsStr, resultAListStr) => {
-	utils.expectEquals(env.bind(parse(formalsStr), parse(actualsStr)), parse(resultAListStr))
+
+class EngineStub {
+	evaluate(s) {
+		return Atom.nil
+	}
 }
-const parseBind = (formalsStr, actualsStr) => {
-	env.bind(parse(formalsStr), parse(actualsStr))
+
+const engineStub = new EngineStub()
+
+const testBindLambdaRecord = (nameStr, lambdaStr, argsStr) => {
+	const lambdaName = parse(nameStr)
+	const lambda = parse(lambdaStr)
+	const args = parse(argsStr)
+
+	env.bindLambdaRecords(lambdaName, lambda, args, engineStub)
+	testCurrentLambdaRecord(lambdaStr, argsStr)
 }
-const parseBindException = (formalsStr, actualsStr, s) => {
-	utils.parseExpectException(() => parseBind(formalsStr, actualsStr), s, 'cdr')
+const testLookup = (key, value) => {
+	utils.expectEquals(env.lookup(key), value)
+}
+const testRecurse = lambda => {
+	testLookup(Atom.recurse, lambda)
+}
+const testFormals = (lambda, args) => {
+	const tag = lambda.car()
+	const shouldEvaluate = tag.eq(Atom.lambda)
+	const formalsArray = lambda.cdr().car().getListAsArray()
+	const argsArray = args.getListAsArray()
+
+	Array.zip(formalsArray, argsArray).forEach(([formal, arg]) => {
+		const actual = shouldEvaluate ? engineStub.evaluate(arg) : arg
+		testLookup(formal, actual)
+	})
+}
+const testCurrentLambdaRecord = (lambdaStr, argsStr) => {
+	const lambda = parse(lambdaStr)
+	const args = parse(argsStr)
+	testRecurse(lambda)
+	testFormals(lambda, args)
 }
 
 test('set and lookup', () => {	
 	env = new Environment()
-	testSetLookup('a', '(b . a)')
+	testSetLookup('a', '[b . a]')
 	testSetLookup('a', '(b a x y z)')
 })
 
@@ -71,7 +102,7 @@ test('lookup exception', () => {
 	testLookupException('nil')
 	testLookupException('a')
 	
-	testSetLookup('a', '(b . a)')
+	testSetLookup('a', '[b . a]')
 	testSetLookup('a', '(b a x y z)')
 
 	testLookupException('b')
@@ -80,21 +111,15 @@ test('lookup exception', () => {
 	testLookupException('a')
 })
 
-test('bind', () => {	
-	// The nil appearing in the returned alist is the separator node.
+test('lambda records', () => {
 	env = new Environment()
-	testBind('()', '()', '(nil)')
-	testBind('(a b)', '(c d)', '((b . d) (a . c) nil)')
-	parseSet('a', 'b')
-	testBind('(a a)', '(b c)', '((a . c) (a . b) (b . d) (a . c) nil (a . b))')
-	testLookupException('c')
-	parseBindException('a', '(b)', 'a')
-	parseBindException('(b)', 'a', 'a')
-	parseBindException('(b)', 'a', 'a')
-	parseBindException('()', 'a', '()')
-	parseBindException('a', '()', 'a')
-	parseBindException('(a)', '(b c)', '()')
-	parseBindException('(a b)', '(c)', '()')
-	parseBindException('(a b c)', '(d)', '()')
-	parseBindException('(a b)', '(c d e)', '()')
+	const prevAList = env._alist
+	testBindLambdaRecord('foo', '(lambda nil nil)', 'nil')
+	testBindLambdaRecord('bar', '(nlambda (x y z) nil)', '(a b c)')
+	testBindLambdaRecord('baz', '(lambda (x y z) nil)', '(d e f)')
+	env.popLambdaRecords()
+	testCurrentLambdaRecord('(nlambda (x y z) nil)', '(a b c)')
+	env.popLambdaRecords()
+	env.popLambdaRecords()
+	utils.expectEquals(env._alist, prevAList)
 })

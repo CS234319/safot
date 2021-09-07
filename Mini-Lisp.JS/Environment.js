@@ -4,17 +4,10 @@ const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
 	constructor() {
-		this._separatorNode = Atom.nil.cons(Atom.nil)
-		this._alist = this._separatorNode
+		this._alist = Atom.nil
+		this._deepBind(Atom.nil, Atom.nil)
+		this._separatorNode = this._alist
 		this._observers = Array.from(arguments)
-	}
-
-	getAList() {
-		return this._alist
-	}
-
-	setAList(alist) {
-		this._alist = alist
 	}
 
 	set(key, value) {
@@ -46,31 +39,82 @@ module.exports = class Environment {
 			 return s.error(Atom.undefined)
 		}
 
-		if (Environment._isSeparator(list)) {
-			return Environment._lookup(s, list.cdr()) 
-		}
-
 		const currPair = list.car()
 		return s.eq(currPair.car())
 			? currPair.cdr()
 			: Environment._lookup(s, list.cdr()) 
 	}
 
-	static _isSeparator(node) {
-		return node.car().null()
+	bindLambdaRecords(lambdaName, lambda, args, evaluator) {
+		const tag = lambda.car()
+		const formals = lambda.cdr().car()
+		
+		const lc = new ListCreator()
+		this._deepBind(Atom.invocation, lc.create(lambdaName, formals, args))
+		this._bindFormals(formals, args, tag.eq(Atom.lambda) ? evaluator : null)
+		this._bind(Atom.recurse, lambda)
 	}
 
-	bind(formals, actuals) {
-		this._alist = Environment._bind(formals, actuals, this._alist)
-		return this._alist
+	popLambdaRecords() {
+		this._alist = this._getNodeByDeepKey(Atom.invocation).cdr()
 	}
 
-	static _bind(formals, actuals, list) {
-		if (formals.null() && actuals.null()) {
+	_bindFormals(formals, args, evaluator) {
+		const bindedFormalsList = this._bindFormalsOnList(
+			Atom.nil, formals, args, evaluator
+		)
+		
+		this._alist = this._alist.prependList(bindedFormalsList)
+	}
+
+	_bindFormalsOnList(list, formals, args, evaluator) {
+		if (formals.null() && args.null()) {
 			return list
 		}
 
-		return Environment._bind(formals.cdr(), actuals.cdr(), 
-						  		 formals.car().cons(actuals.car()).cons(list))
+		const arg = args.car()
+		this._deepBind(Atom.argument, arg)
+		const actual = evaluator ? evaluator.evaluate(arg) : arg
+		list = list.prependPair(formals.car(), actual)
+
+		return this._bindFormalsOnList(list, formals.cdr(), args.cdr(), evaluator)
 	}
+
+	_bind(key, value) {
+		this._alist = this._alist.prependPair(key, value)
+	}
+
+	_deepBind(key, value) {
+		this._bind(key.cons(value), Atom.nil)
+	}
+
+	_getNodeByDeepKey(key) {
+		return Environment._getNodeByDeepKey(this._alist, key)
+	}
+
+	static _getNodeByDeepKey(list, key) {
+		if (list.null()) {
+			return key.error(Atom.bug)
+		}
+
+		if (!list.car().car().atom() && 
+			(list.car().car().car().eq(key))) {
+			return list
+		}
+		
+	 	return Environment._getNodeByDeepKey(list.cdr(), key)
+	}
+
+	static _getInvocationRecordNode(list) {
+		if (list.null()) {
+			return list.error(Atom.bug)
+		}
+
+		if (!list.car().car().atom() && 
+			(list.car().car().car().eq(Atom.invocation))) {
+			return list
+		}
+		
+	 	return Environment._getInvocationRecordNode(list.cdr())
+	}	
 }

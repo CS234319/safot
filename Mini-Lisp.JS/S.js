@@ -1,27 +1,7 @@
 module.exports = class S {
-	atom() {
-		return this._errorNotImplemented()
-	}
-
-	car() {
-		return this._errorNotImplemented()
-	}
-
-	cdr() {
-		return this._errorNotImplemented()
-	}
-
 	cons(s) {
 		const Pair = require('./Pair')
 		return new Pair(this, s)
-	}
-
-	eq(s) {
-		return this._errorNotImplemented()
-	}
-
-	equals(s) {
-		return this._errorNotImplemented()
 	}
 
 	null() {
@@ -38,27 +18,27 @@ module.exports = class S {
 		throw new EvaluationError(kind ? this.cons(kind) : this)
 	}
 
-	isList() {
-		return this._errorNotImplemented()
-	}
-
-	getListAsArray() {
-		return this._errorNotImplemented()
-	}
-
 	getListLength() {
 		return this.getListAsArray()?.length
 	}
 
-	toString() {
-		return this._errorNotImplemented()
+	prepend(s) {
+		return s.cons(this)
 	}
 
-	insert(s) {
-		return this._errorNotImplemented()
+	prependPair(car, cdr) {
+		return this.prepend(car.cons(cdr))
 	}
 
-	_errorNotImplemented() {
-		return this.error(Atom.bug)		
+	prependList(list) {
+		if (list.null()) {
+			return this
+		}
+
+		const cdr = list.cdr().null()
+			? this
+			: this.prependList(list.cdr())
+
+		return list.car().cons(cdr)
 	}
 }

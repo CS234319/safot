@@ -47,7 +47,7 @@ test('evaluate atoms', () => {
 })
 
 test('evaluate car', () => {	
-	parseEvaluateEquals("(car '(a . b))", "a")
+	parseEvaluateEquals("(car '[a . b])", "a")
 	parseEvaluateEquals("(car '(b a x y z))", "b")
 	parseEvaluateException("(car 'a)", "a", "car")
 	primitiveArgsMissingException("(car)")
@@ -56,7 +56,7 @@ test('evaluate car', () => {
 })
 
 test('evaluate cdr', () => {
-	parseEvaluateEquals("(cdr '(a . b))", "b")
+	parseEvaluateEquals("(cdr '[a . b])", "b")
 	parseEvaluateEquals("(cdr '(b a x y z))", '(a x y z)')
 	parseEvaluateException("(cdr 'a)", "a", "cdr")
 	primitiveArgsMissingException("(cdr)")
@@ -71,7 +71,7 @@ test('evaluate quote', () => {
 
 test('evaluate atom', () => {
 	parseEvaluateEquals("(atom 'a)", "t")
-	parseEvaluateEquals("(atom '(a . b))", "nil")
+	parseEvaluateEquals("(atom '[a . b])", "nil")
 	parseEvaluateEquals("(atom '(a b c))", "nil")
 	primitiveArgsMissingException("(atom)")
 	primitiveArgsRedundantException("(atom 'a 'b)")
@@ -87,31 +87,31 @@ test('evaluate null', () => {
 })
 
 test('evaluate cond', () => {
-	parseEvaluateEquals("(cond)", "nil")
-	parseEvaluateEquals("(cond (t 'a))", "a")
-	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((eq 'a 'a) '(a a a)))", "(a a a)")
-	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((set 'b 'c) '(a a a)))", "(a a a)")
-	parseEvaluateEquals("(eval 'b)", "c")
-	parseEvaluateEquals("(cond ((eq 'a 'a) '(a b c)) ((set 'a 'c) '(a a a)))", "(a b c)")
-	parseEvaluateException("(eval 'a)", "a", "undefined")
-	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) a)", "a", "cond")
-	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "a", "undefined")
+	// parseEvaluateEquals("(cond)", "nil")
+	// parseEvaluateEquals("(cond (t 'a))", "a")
+	// parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((eq 'a 'a) '(a a a)))", "(a a a)")
+	// parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((set 'b 'c) '(a a a)))", "(a a a)")
+	// parseEvaluateEquals("(eval 'b)", "c")
+	// parseEvaluateEquals("(cond ((eq 'a 'a) '(a b c)) ((set 'a 'c) '(a a a)))", "(a b c)")
+	// parseEvaluateException("(eval 'a)", "a", "undefined")
+	// parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) a)", "a", "cond")
+	// parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "a", "undefined")
 	clear()
 })
 
 test('evaluate eq', () => {
 	parseEvaluateEquals("(eq 'a 'a)", "t")
 	parseEvaluateEquals("(eq 'a 'b)", "nil")
-	parseEvaluateEquals("(eq 'a '(a . b))", "nil")
-	parseEvaluateEquals("(eq '(a . b) '(a . b))", "nil")
+	parseEvaluateEquals("(eq 'a '[a . b])", "nil")
+	parseEvaluateEquals("(eq '[a . b] '[a . b])", "nil")
 	primitiveArgsMissingException("(eq 'a)")
 	primitiveArgsRedundantException("(eq 'a 'b 'c)")
 })
 
 test('evaluate set', () => {
-	parseEvaluateException("(set a '(a . a))", "a", "undefined")
-	parseEvaluateEquals("(set 'a '(a . a))", "(a . a)")
-	parseEvaluateEquals("(set a '(a . b))", "(a . b)")
+	parseEvaluateException("(set a '[a . a])", "a", "undefined")
+	parseEvaluateEquals("(set 'a '[a . a])", "[a . a]")
+	parseEvaluateEquals("(set a '[a . b])", "[a . b]")
 	primitiveArgsMissingException("(set 'a)")
 	primitiveArgsMissingException("(set (error 'c))")
 	
@@ -128,12 +128,12 @@ test('evaluate set', () => {
 })	
 
 test('evaluate eval', () => {
-	parseEvaluate("(set 'a '(a . a))")
+	parseEvaluate("(set 'a '[a . a])")
 	parseEvaluate("(set 'b 'c)")	
 	parseEvaluate("(set 'c 'd)")	
 	parseEvaluateEquals("(eval 't)", "t")
 	parseEvaluateEquals("(eval 'nil)", "nil")
-	parseEvaluateEquals("(eval 'a)", '(a . a)')
+	parseEvaluateEquals("(eval 'a)", '[a . a]')
 	parseEvaluateEquals("(eval 'b)", 'c')
 	parseEvaluateEquals("(eval b)", 'd')
 	parseEvaluateEquals("(eval '(cond ((eq a 'a) 'c) ((eq a 'b) 'd)))", "nil")
@@ -160,13 +160,13 @@ test('evaluate error', () => {
 
 test('evaluate error and restore', () => {
 	/* 
-	 * Bind A with (A.B), call error with A and repeat one more time
+	 * Bind A with [A.B], call error with A and repeat one more time
 	 * to make sure the first call to error didn't undo the binding.
 	 */
 
-	parseEvaluate("(set 'a '(a.b))")
+	parseEvaluate("(set 'a '[a.b])")
 	for (var i = 0; i < 2; i++) {
-		parseEvaluateError("(error a)", "((a . b))")
+		parseEvaluateError("(error a)", "([a . b])")
 	}
 
 	clear()
@@ -207,25 +207,21 @@ test('evaluate lambda', () => {
 	parseEvaluateException("(foo)", "a", "undefined")
 
 	parseEvaluate("(set 'foo '(lambda ()))")
-	parseEvaluateException("(foo)", "(lambda ())", "invalid")
-	parseEvaluateException("(foo 'a)", "(lambda ())", "invalid")
-
-	parseEvaluate("(set 'foo '(lambda () 'a 'b))")
-	parseEvaluateException("(foo)", "(lambda () 'a 'b)", "invalid")
-	parseEvaluateException("(foo 'a)", "(lambda () 'a 'b)", "invalid")
+	parseEvaluateException("(foo)", "[(lambda ()) . ()]", "invalid")
+	parseEvaluateException("(foo 'a)", "[(lambda ()) . ('a)]", "invalid")
 
 	parseEvaluate("(set 'foo '(not_lambda () 'a))")
-	parseEvaluateException("(foo)", "(not_lambda () 'a)", "invalid")
-	parseEvaluateException("(foo 'a)", "(not_lambda () 'a)", "invalid")
+	parseEvaluateException("(foo)", "[(not_lambda () 'a) . ()]", "invalid")
+	parseEvaluateException("(foo 'a)", "[(not_lambda () 'a) . ('a)]", "invalid")
 
 	parseEvaluate("(set 'foo (lambda a 'a))")
-	parseEvaluateException("(foo)", "(lambda a 'a)", "invalid")
+	parseEvaluateException("(foo)", "nil", "car")
 
 	clear()
 })
 
 test('evaluate nested lambdas', () => {
-	parseEvaluate("(set 'foo 	(lambda (x xs) (cons x xs)))")
+	parseEvaluate("(set 'foo (lambda (x xs) (cons x xs)))")
 	parseEvaluate("(set 'bar (lambda (x xs) (foo (car xs) (cons x xs))))")
 	parseEvaluateEquals("(bar 'a '(b c d))", "(b a b c d)")
 	namedLambdaArgsException("(bar 'a)", "missing")
@@ -237,6 +233,14 @@ test('evaluate recursive lambdas', () => {
 	parseEvaluate("(set 'append (lambda (x xs) \
 					(cond ((null xs) (cons x nil)) \
 						  (t (cons (car xs) (append x (cdr xs)))))))")
+	parseEvaluateEquals("(append (car '(c d)) '(a b))", '(a b c)')
+	namedLambdaArgsException("(append 'a)", "missing")
+	namedLambdaArgsException("(append 'a 'b 'c)", "redundant")
+	clear()
+
+	parseEvaluate("(set 'append (lambda (x xs) \
+					(cond ((null xs) (cons x nil)) \
+						  (t (cons (car xs) (recurse x (cdr xs)))))))")
 	parseEvaluateEquals("(append (car '(c d)) '(a b))", '(a b c)')
 	namedLambdaArgsException("(append 'a)", "missing")
 	namedLambdaArgsException("(append 'a 'b 'c)", "redundant")
@@ -264,19 +268,15 @@ test('evaluate nlambda', () => {
 	anonymousLambdaArgsException("((nlambda (x xs) (cons x xs)) a (b c) d)", "redundant")
 
 	parseEvaluate("(set 'foo '(nlambda ()))")
-	parseEvaluateException("(foo)", "(nlambda ())", "invalid")
-	parseEvaluateException("(foo 'a)", "(nlambda ())", "invalid")
-
-	parseEvaluate("(set 'foo '(nlambda () 'a 'b))")
-	parseEvaluateException("(foo)", "(nlambda () 'a 'b)", "invalid")
-	parseEvaluateException("(foo a)", "(nlambda () 'a 'b)", "invalid")
+	parseEvaluateException("(foo)", "[(nlambda ()) . ()]", "invalid")
+	parseEvaluateException("(foo 'a)", "[(nlambda ()) . ('a)]", "invalid")
 
 	parseEvaluate("(set 'foo '(not_nlambda () 'a))")
-	parseEvaluateException("(foo)", "(not_nlambda () 'a)", "invalid")
-	parseEvaluateException("(foo a)", "(not_nlambda () 'a)", "invalid")
+	parseEvaluateException("(foo)", "[(not_nlambda () 'a) . ()]", "invalid")
+	parseEvaluateException("(foo a)", "[(not_nlambda () 'a) . (a)]", "invalid")
 
 	parseEvaluate("(set 'foo (nlambda a 'a))")
-	parseEvaluateException("(foo)", "(nlambda a 'a)", "invalid")
+	parseEvaluateException("(foo)", "nil", "car")
 	
 	clear()
 })
@@ -297,7 +297,7 @@ test('evaluate defun', () => {
 	parseEvaluateEquals("(append (car '(c d)) '(a b))", '(a b c)')
 
 	parseEvaluate("(defun foo a 'a)")
-	parseEvaluateException("(foo)", "(lambda a 'a)", "invalid")
+	parseEvaluateException("(foo)", "nil", "car")
 	
 	clear()
 	
@@ -323,13 +323,13 @@ test('evaluate defun', () => {
 
 	parseEvaluate("(set 'x 'a)")
 	parseEvaluate("(defun foo () (cons (set 'x 'b) (eval 'x)))")
-	parseEvaluateEquals("(foo)", "(b . b)")
+	parseEvaluateEquals("(foo)", "[b . b]")
 	parseEvaluateEquals("(eval 'x)", "b")
 	clear()
 
 	parseEvaluate("(set 'x 'a)")
 	parseEvaluate("(defun foo (x) (cons (set 'x 'c) (eval 'x)))")
-	parseEvaluateEquals("(foo 'y)", "(c . y)")
+	parseEvaluateEquals("(foo 'y)", "[c . y]")
 	parseEvaluateEquals("(eval 'x)", "c")
 	clear()
 })
@@ -344,7 +344,7 @@ test('evaluate ndefun', () => {
 	parseEvaluateEquals("(bar (a b))", "b")
 
 	parseEvaluate("(ndefun foo a 'a)")
-	parseEvaluateException("(foo)", "(nlambda a 'a)", "invalid")
+	parseEvaluateException("(foo)", "nil", "car")
 
 	clear()
 })

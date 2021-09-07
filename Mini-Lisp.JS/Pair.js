@@ -48,8 +48,8 @@ module.exports = class Pair extends S {
 		return '[' + [this._car, this._cdr].join(' . ') + ']'
 	}
 
+	/* Exclusive Pair Methods */
 	insert(s) {
 		this._cdr = s.cons(this._cdr)
 	}
-
 }

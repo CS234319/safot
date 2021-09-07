@@ -22,7 +22,7 @@ module.exports = class REPLInstigator {
 				break
 
 			case PEGParserStateWrapper.ExpectedMore:
-				this._duringCommand()
+				this._isDuringCommand()
 					? this._prompt(config.prompt.duringCommand) 
 					: this._prepareForNewCommand()
 				break
@@ -38,8 +38,8 @@ module.exports = class REPLInstigator {
 		return this._command !== '' ? this._command : undefined
 	}
 
-	_duringCommand() {
-		return this._command !== ''
+	_isDuringCommand() {
+		return this._command.match(/[^\s]/)
 	}
 
 	_prepareForNewCommand() {

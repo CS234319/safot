@@ -62,7 +62,7 @@ module.exports = class Atom extends S {
 	static bug 			= new Atom('BUG')
 	static missing 		= new Atom('MISSING')
 	static redundant 	= new Atom('REDUNDANT')
+	static invocation	= new Atom('INVOCATION')
+	static argument 	= new Atom('ARGUMENT')
 	static recurse	 	= new Atom('RECURSE')
-	static argument 	= new Atom('ARGUMNET')
-	static execution 	= new Atom('EXECUTION')
 }

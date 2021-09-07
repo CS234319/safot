@@ -31,3 +31,7 @@ Array.prototype.distinct = function() {
 Array.range = function(n) {
 	return [...Array(n).keys()]
 }
+
+Array.zip = function(array1, array2) {
+	return array1.slice(0, array2.length).map((e, i) => [e, array2[i]])
+}

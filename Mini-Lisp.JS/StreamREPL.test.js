@@ -33,9 +33,9 @@ const testFile = async name => {
 }
 
 test('repl', async () => {
-	for (var i = 1;; i++) {
-		if (!(await testFile('t' + i))) {
-			break
-		}
-	}
+	// for (var i = 1;; i++) {
+	// 	if (!(await testFile('t' + i))) {
+	// 		break
+	// 	}
+	// }
 })

@@ -21,18 +21,18 @@ const pw = new PEGParserStateWrapper(parser)
 const list = function() { return lc.create(...arguments) }
 const q = s => list(Atom.quote, s)
 const parseEquals = (str, s) => {
-	Reflect.get(utils, 'parseExpectEquals').call(utils, str, s)
+	utils.parseExpectEquals(str, s)
 }
 const parseError = (str) => {
-	expect(pw.parse(str).type).not.toBe(PEGParserStateWrapper.Accepted)
+	expect(pw.apply(str).type).not.toBe(PEGParserStateWrapper.Accepted)
 }
 const parseErrorExpectType = (str, expectedType) => {
-	expect(pw.parse(str).type).toBe(expectedType)
+	expect(pw.apply(str).type).toBe(expectedType)
 }
-const parseErrorExpectMore = (str) => {
+const parseErrorExpectedMore = (str) => {
 	parseErrorExpectType(str, PEGParserStateWrapper.ExpectedMore)
 }
-const parseErrorReject = (str) => {
+const parseErrorRejected = (str) => {
 	parseErrorExpectType(str, PEGParserStateWrapper.Rejected)
 }
 const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
@@ -48,21 +48,22 @@ const checkCharactersRange = (minCode, maxCode, recieve, expect) => {
 }
 
 test ('parse expect more', () => {
-	parseErrorExpectMore('')
-	parseErrorExpectMore('((')
-	parseErrorExpectMore('(()')
-	parseErrorExpectMore('(a.')
-	parseErrorExpectMore('(a.b')
+	parseErrorExpectedMore('')
+	parseErrorExpectedMore('((')
+	parseErrorExpectedMore('(()')
+	parseErrorExpectedMore('[a')
+	parseErrorExpectedMore('[a.')
+	parseErrorExpectedMore('[a.b')
 })
 
 test ('parse expect reject', () => {
-	parseErrorReject(')')
-	parseErrorReject('(a .)')
-	parseErrorReject("(a b ')")
-	parseErrorReject("())")
-	parseErrorReject("a)")
-	parseErrorReject("a(")
-	parseErrorReject('(a.b(')
+	parseErrorRejected(')')
+	parseErrorRejected('[a .]')
+	parseErrorRejected("(a b ')")
+	parseErrorRejected("())")
+	parseErrorRejected("a)")
+	parseErrorRejected("a(")
+	parseErrorRejected('[a.b[')
 })
 
 test('parse atoms', () => {
@@ -78,7 +79,7 @@ test('parse lists', () => {
 	parseEquals('(a b)', list(a, b))
 	parseEquals('(a b c)', list(a, b ,c))
 	parseEquals('(a b c d)', list(a, b ,c, d))
-	parseEquals('(a . (b . (c . (d . nil))))', list(a, b ,c, d))
+	parseEquals('[a . [b . [c . [d . nil]]]]', list(a, b ,c, d))
 	
 })
 
@@ -88,11 +89,11 @@ test('parse nested list', () => {
 
 test('parse pair', () => {
 	const pair = new Pair(a, b)
-	parseEquals('(a . b)', 		pair)
-	parseEquals('(a .b)', 		pair)
-	parseEquals('(a. b)', 		pair)
-	parseEquals('(a.b)', 		pair)
-	parseEquals('(a\t.\nb)', 	pair)
+	parseEquals('[a . b]', 		pair)
+	parseEquals('[a .b]', 		pair)
+	parseEquals('[a. b]', 		pair)
+	parseEquals('[a.b]', 		pair)
+	parseEquals('[a\t.\nb]', 	pair)
 })
 
 test('parse quote', () => {
@@ -116,9 +117,9 @@ test('parse comment', () => {
 	parseEquals(";comment\n\n\na", a)
 	parseEquals(";comment\n\t\r ';another comment\na", q(a))
 	parseEquals(";b\n(a 'b c);c;d\n;e", list(a, q(b), c))
-	parseEquals(";b\n(a.\n('b.(c.nil)));c;d\n;e", list(a, q(b), c))
-	parseEquals(";b\n(a . b);c;d\n;e", new Pair(a, b))
-	parseEquals(";b\n(a.\n('b.; some comment \n(c.nil)));c;d\n;e", list(a, q(b), c))
+	parseEquals(";b\n[a.\n['b.[c.nil]]];c;d\n;e", list(a, q(b), c))
+	parseEquals(";b\n[a . b];c;d\n;e", new Pair(a, b))
+	parseEquals(";b\n[a.\n['b.; some comment \n[c.nil]]];c;d\n;e", list(a, q(b), c))
 })
 
 test('parse ASCII characters to ignore', () => {

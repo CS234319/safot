@@ -29,7 +29,7 @@ module.exports = class Engine {
 			[Atom.defun,		3, (s, t, u) => this._env.defun(s, t, u)],
 			[Atom.ndefun,		3, (s, t, u) => this._env.ndefun(s, t, u)],
 			[Atom.cond,			undefined, s => this._evaluateCond(s)],
-		].map(tup => new Primitive(tup[0], tup[1], tup[2]))
+		].map(params => new Primitive(...params))
 	}
 
 	_initPredefinedFunctions() {
@@ -97,39 +97,33 @@ module.exports = class Engine {
 	}
 
 	_apply(lambdaName, lambda, args) {
-		if (lambda.getListLength() !== 3) {
-			return this._throwInvalidLambdaError(lambda)
-		}
-
-		const tag = lambda.car()
-		const formals = lambda.cdr().car()
-
-		if ((!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) ||
-			(!formals.isList())) {
-			return this._throwInvalidLambdaError(lambda)
-		}
-
-		this._checkArgsInLambdaCall(lambda, args)
-
-		const actuals = tag.eq(Atom.lambda) ? this._evaluateList(args) : args
-		const body = lambda.cdr().cdr().car()
-		
-		const alist = this._env.getAList()
-		this._env.bind(formals, actuals)
+		Engine._checkLambda(lambda, args)
 
 		try {
-			const result = this._evaluate(body)
-			return result
+			this._env.bindLambdaRecords(lambdaName, lambda, args, this)
+			const body = lambda.cdr().cdr().car()
+			return this._evaluate(body)
+		} catch(e) {
+			throw e
 		} finally {
-			this._env.setAList(alist)
+			this._env.popLambdaRecords()	
 		}
 	}
 
-	_checkArgsInLambdaCall(lambda, args) {
-		const argsLength = args.getListLength()
-		
-		if (argsLength === undefined) {
+	static _checkLambda(lambda, args) {
+		const lambdaLength = lambda.getListLength()
+		if (!lambdaLength || lambdaLength < 3) {
 			return lambda.cons(args).error(Atom.invalid)
+		}
+		
+		const tag = lambda.car()
+		if (!tag.eq(Atom.lambda) && !tag.eq(Atom.nlambda)) {
+			return Engine._throwInvalidLambdaError(lambda, args)
+		}
+
+		const argsLength = args.getListLength()
+		if (argsLength === undefined) {
+			return Engine._throwInvalidLambdaError(lambda, args)
 		}
 
 		const formalsLength = lambda.cdr().car().getListLength()
@@ -143,8 +137,8 @@ module.exports = class Engine {
 		}
 	}
 
-	_throwInvalidLambdaError(lambda) {
-		return lambda.error(Atom.invalid)
+	static _throwInvalidLambdaError(lambda, args) {
+		return lambda.cons(args).error(Atom.invalid)
 	}
 
 	static _boolToS(bool) {
