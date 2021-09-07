@@ -61,7 +61,11 @@ Miniscule language learning effort
 
 Programming in the Small:
 1. Useless for large programs
-2. No debugger, profiler, etc. 
+2. No debugger, profiler, etc.
+3. No support of integers, reals, strings, files, graphics, ...
+4. Not very fast (it is an interpreted language)
+5. Reference implementation (in C/C++/Chic) will crash on large programs
+
 ## Symbolic Computation
 - Numeric computation is computation with numbers
 - Numbers are manipulated with the four basic arithmeitcal operations, comparison, etc.
@@ -74,12 +78,14 @@ Programming in the Small:
   - Assigning meeaning/binding/setting
   - Finding meaning/dereferencing/interpreting
 - But, symbols can be organized in data structures...
+
 ## Data Structrues of Symbols
 LISP == LISt Processing, is all about lists:
 - lists of symbols 
 - lists of lists of symbols
 - lists of mixed kind: symbols and lists of symbols
 - Lists of items, each being either a list, or a list of items.
+
 More generally, symbolic computation is also about data structrues containg symbols, e.g., 
 - Binary trees whose leaves/nodes/both are symbols
 - Trees of any degree whose leaves/nodes/both are symbols
@@ -108,7 +114,7 @@ More lists:
 ## Atoms in LISP
 Examples:
 ```
-A B1 FOO 12 +
+9.0.1..! 2x B4 && FOO ! 12 + 
 ```
 Lists may contain atoms or lists:
 ```LISP
