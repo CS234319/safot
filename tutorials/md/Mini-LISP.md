@@ -1,9 +1,24 @@
 # Mini-LISP
-## Cherry picking of LISP
-If all you know is Pyhon, C, C++, Java, Bash, then the LISP programming language will change the way you think about programming languages
-- The first example of functional programming
-- Conisdered a classic of programming and computer science
-- Implemntation is by a (huge) standard: common Lisp.
+## Lisp: The Mother of All Functional Languages (and Many Others)
+If all you know is Pyhon, C, C++, Java, Bash, then Lisp will change the way you think about programming:
+- Designed on 1958 (!) but remains influential and in use
+- The second programming language ever (preceded only by by FORTRAN)
+- The first example of the *functional programming paradigm*
+- Conisdered a classic of programming and computer science; every one should know 
+   - What are CAR, CDR, and CONS, and how they appear in their favorite language
+   - What is LAMBDA, and whether and how it appears in their favorite programming language 
+- Standarized implementation: The Huge Common Lisp (CL) Standard
+ - Gnu Lisp manual spans over 1,200 pages
+ - 
+
+Influential and used to this very day:
+- Used for zillion AI/other applications: the first psychatrist, the first symbolic math, Grammarly, Google's flight search 
+- Used for quick programming of complex algorithms
+- Influenced many other languages such as
+  - Functional Paradigm: ML, Haskell, Scheme, 
+  - Famous: JavaScript, R, Perl, Swift, Logo, Ruby, Python, Scala, Julia,  Lua
+  - Scheme
+  - Less famous: Forth, Nim, Dylan, Rebol, Tcl, Io,  ...
 ### Educational Purpose
 Mini-LISP is a programming language designed for students of programming languages: 
 - Quick to learn and master. Inappropriate for any serious programming.
