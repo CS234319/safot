@@ -114,7 +114,16 @@ More lists:
 ## Atoms in LISP
 Examples:
 ```
-9.0.1..! 2x B4 && FOO ! 12 + 
+November/2nd <^V>v ? 2x B4 && FOO ! 12 + 
+```
+- Atoms are case insensitive; `a` is the same as `A`
+- Internal representation is always upper case
+- Convention: 
+   - Input in lower case
+   - Output/Internal representation: UPPER CASE
+```LISP
+> t
+T
 ```
 Lists may contain atoms or lists:
 ```LISP
@@ -122,15 +131,19 @@ Lists may contain atoms or lists:
 (+ 12); a list containing two atoms
 (A (B1 () ) ); a list with an atom and a list with an atom and the empty list.
 ```
-- Atoms are case insensitive; `a` is the same as `A`
-- Internal representation is always upper case
 - The atom `NIL` is synoymous to the empty list `()`
+
+
 ## The S-Expression Data Structure
+
+### Intution
 S-Expression is short for *symbolic expression* 
 - Can represent symbols, lists of symbols, lists of lists, etc.
 - Easy to manipulate: three elementary operations
-### Intuition
-Binary tree in which all leaves are symbols
+- Essentially, a binary tree in which all leaves are symbols
+
+(other languages for symbolic compuations rely on other data structures, e.g., general trees or strings)
+
 ### Definition
 - **Given**: An alphabet, finite or infinite, of symbols. 
 - **Define**: Set of *S-Expression* over the alphabet has two kinds of elements
@@ -139,9 +152,9 @@ Binary tree in which all leaves are symbols
   3. (Just be sure: Nothing else is an S-Expression)
 ### Examples over finite alphabet '{a,b,c}'
 a, b, [a.b], [a.[b.c]], [[a.b].c], [c.[[a.b].[b.a]]]
-## S-Epxressions in LISP
-### Homoiconicity
-Etymology
+
+## Homoiconicity
+### Etymology
 - homo="the same" 
 - icon="representation"
 - Homoiconicity = "the same represenetation". 
@@ -162,12 +175,14 @@ But not Smalltalk, C++, Java, ML, Scala, Python, and most mainstream programming
 - A LISP *function*
  - takes one parameter, which is an S-expression
  - returns a value, which is an S-expression
- - is itself an S-expression 
+ - is itself an S-expression
+
+
 ## Lists vs. S-Expressions
 LISP represents lists as S-expressions:
 - Every list is an S-expression
 - Not every S-expression is a l-list
-### First/Rest Recursive Representation:
+### First/Rest Recursive Representation of Lists:
 #### Recursion base
   The empty list, `()`, is represented by the special atom `NIL`
 #### Recursive step
@@ -186,7 +201,7 @@ To represent a non-empty list L:
   ```
   [S1.S2]
   ```
-### The list notation
+## The list notation
 It is customary to write S-expressions as lists
 1. Atom `nil` is written as `()`
 2. Atom `a` is written as `A`
@@ -199,24 +214,30 @@ It is customary to write S-expressions as lists
 Not all S-expressions can be fully written with the list notatios 
 1. `[a.b]` is written as `[a.b]`
 2. `[a.[[b.c].nil]]` is written as `(A [B.C])`
-## Manipulating S-Expressions
-### Operations on S-Expressions (reminiscent of plus/minus on integers)
-1. CAR: 
+
+## Operations on S-Expressions (reminiscent of plus/minus on integers)
+### CAR
   - obtain the left sub-tree, e.g., CAR of `[[a.b].c]` is `[a.b]` 
   - obtain the first item of a given list, e.g.,  CAR of the two item list `((A) (B C))` is `(A)` 
-3. CDR: 
+  - fails on atoms (an empty list is an atom)
+  - in other languages/libraries: `head` / `first` / `top` / ...
+### CDR
   - obtain the right sub-tree, e.g., CDR of `[a.[b.[c.a]]]` is `[b.[c.a]]`
   - obtain the rest of a given list, i.e., the list without its first element, e.g., CDR of the a three item list `((A) D (B C))` is a two item list `(D (B C))`
-5. CONS: 
+  - fails on atoms (an empty list is an atom)
+  - in other languages/libraries: `tail` / `rest` / `remainder` / ...
+### CONS
   - construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
   - prepend a given item to a given list,  e.g., CONS of `A` and `(B C)` is `(A B C)`
-CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented.
-### Predicates on S-Expressions (reminiscent of numerical comparison)
-1. NULL: 
+
+CAR and CDR are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented; `CONS` is short of 'construct' or 'constructor'
+
+## Predicates on S-Expressions (reminiscent of numerical comparison)
+1. NULL
   - check wheher an S-expression is the special atom `NIL`
   - check whether a list is empty
-3. ATOM: check whether an S-Expression is an atom
-4. EQ: check if two given symbols are equal
+2. ATOM: check whether an S-Expression is an atom
+3. EQ: check if two given symbols are equal
 ### Failures of computation (reminiscent of division by zero)
 - CAR and CDR will fail on atomic S-expressions
 - CONS, ATOM and NULL never fail
