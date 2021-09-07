@@ -258,14 +258,67 @@ Not all S-expressions can be fully written with the list notatios
   - used, e.g., to recursively compare two S-expressions
   - never fails
 
-## Lesson 3: Binding and "Boolean" atoms
-### Essential Atoms
-- CAR, CDR, and CONS are (partial) functions from S-expressions to S-expressions
-- Let's make EQ and ATOM such functions as well
+## Lists of Lists and Expression Trees
+A list in Lisp is interpreted as function application; the list
+   ```
+   (F x1 ... xn)
+   ```
+means: 'apply function F to arguments 'x1' through 'xn'. The nested list
+``` (f (g 2 a) c)``` is the Lisp equivalent of `f(g(2,a),c`. The C expression
+```C
+sqrt(b*b - 4 * a * c)/(2*a)
+```
+is written in Lisp as 
+```
+(/ (sqrt  (- (* b b) (* 4 a c))) (* 2 a))
+```
+Evaluation of expressions in C (almost always) and in Lisp (typically) is done bottom up: Evaluate the arguments, and then apply the function to these.
+
+## Meaning of atoms
+- Most Lisp dialects, assign 'meaning' to atoms such as `2`, `/`, `*`, `sqrt`, etc. Mini-Lisp doesn't!
+- But, **all** Lisp dialects, recognize the elementary functions: CAR, CDR, CONS, NULL, ATOM, EQ, ... (very few others)
+- For example, the meaning of atom `CONS` is the CONS function, e.g.,
+```LISP
+> (cons () (() ()))
+( NIL NIL NIL) 
+```
+or, in some impelmentations
+```LISP
+> (cons () (() ()))
+( () () ()) 
+```
+
+## Boolean values in Lisp
+- CAR, CDR, and CONS are (partial) functions that map S-expressions to S-expressions
+- EQ, ATOM, NULL, and other "Boolean" functions, also map S-epxression to S-expressions
+- Covention:
+   - 'false; is marked by atom `NIL`
+   - any other S-expression means 'true'
+   - With the absence of a compelling reason, atom `T` is used to denote Boolean true
+```LISP
+> (eq () ())
+T
+> (eq T NIL)
+NIL
+> (eq (T NIL) (T NIL))
+NIL
+```
+- The "Boolean" atoms are 't' and 'nil'; these atoms denote themselves
+- Other atoms can, technically, be used  possible as (kind of variables), by letting them denote other S-expressions. 
+- 
+- Good Lisp programs do not do that! Functional programs do not use variables.
+-  
+Atoms with predefined meaning:
+ - The meaning of atom `nil` is atom `NIL`
+ - The meaning of atom `t` is atom `T`
+ - The meaning of atoms `CAR`, `CDR`
+
+
+
 - Provide: meaning to two special symbols:
   - Atom `nil` represents falsehood
   - Atom `t` represents truth
-
+- EQ, ATOM and NULL, return atom `T` to signatl , `
 ### Other Atoms
 - Most atoms have no meaning
 - Other atoms are luxury; 
