@@ -63,7 +63,7 @@ module.exports = class Environment {
 		const bindedFormalsList = this._bindFormalsOnList(
 			Atom.nil, formals, args, evaluator
 		)
-		
+
 		this._alist = this._alist.prependList(bindedFormalsList)
 	}
 
@@ -103,18 +103,5 @@ module.exports = class Environment {
 		}
 		
 	 	return Environment._getNodeByDeepKey(list.cdr(), key)
-	}
-
-	static _getInvocationRecordNode(list) {
-		if (list.null()) {
-			return list.error(Atom.bug)
-		}
-
-		if (!list.car().car().atom() && 
-			(list.car().car().car().eq(Atom.invocation))) {
-			return list
-		}
-		
-	 	return Environment._getInvocationRecordNode(list.cdr())
 	}	
 }
