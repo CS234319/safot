@@ -55,7 +55,7 @@ module.exports = class REPLInstigator {
 		try {
 			this._echo(this._engine.evaluate(s).toString())
 		} catch (e) {
-			this._echo(`Error: ${e.s.car()} - ${e.s.cdr()}`)
+			this._echo(e.getStack())
 		}
 
 		this._prepareForNewCommand()

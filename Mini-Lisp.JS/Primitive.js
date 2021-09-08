@@ -12,7 +12,7 @@ module.exports = class Primitive {
 		const argsArray = args.getListAsArray()
 
 		if (argsArray === undefined) {
-			return s.error(Atom.invalid)
+			s.error(Atom.invalid)
 		}		
 
 		if (this._expectedNumArgs === undefined) {
@@ -22,11 +22,11 @@ module.exports = class Primitive {
 		const recievedNumArgs = argsArray.length
 
 		if (recievedNumArgs < this._expectedNumArgs) {
-			return s.error(Atom.missing)
+			s.error(Atom.missing)
 		}
 
 		if (recievedNumArgs > this._expectedNumArgs) {
-			return s.error(Atom.redundant)
+			s.error(Atom.redundant)
 		}
 	}
 
@@ -44,6 +44,10 @@ module.exports = class Primitive {
 		return this._closure(actuals)
 	}
 
+	getName() {
+		return this._name
+	}
+
 	isWithName(name) {
 		return this._name.eq(name)
 	}
@@ -52,5 +56,9 @@ module.exports = class Primitive {
 		return 	[
 					Atom.cond, Atom.lambda, Atom.nlambda, Atom.defun, Atom.ndefun
 				].some(name => this.isWithName(name))
+	}
+
+	isEager() {
+		return !this.isNormal()
 	}
 }

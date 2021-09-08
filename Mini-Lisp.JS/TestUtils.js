@@ -4,7 +4,7 @@ const parse = require('./Parser').parse
 
 module.exports = class TestUtils {
 	expectException(f, s, kind) {
-		expect(f).toThrow(new EvaluationError(kind ? s.cons(kind) : s))	
+		expect(f).toThrow(new EvaluationError(s.cons(kind)))
 	}	
 
 	parseExpectException(f, str, kindStr) {

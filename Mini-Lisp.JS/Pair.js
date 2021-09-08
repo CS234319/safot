@@ -31,6 +31,14 @@ module.exports = class Pair extends S {
 				this._cdr.equals(s._cdr)
 	}
 
+	reverseList() {
+		const reversed = this.reversedList()
+		if (reversed) {
+			this._car = reversed._car
+			this._cdr = reversed._cdr	
+		}
+	}
+
 	isList() {
 		return this._cdr.isList()
 	}
@@ -40,12 +48,10 @@ module.exports = class Pair extends S {
 	}
 
 	toString() {
-		const list = this.getListAsArray()
-		if (list) {
-			return '(' + list.join(' ') + ')'
-		}
-
-		return '[' + [this._car, this._cdr].join(' . ') + ']'
+		const array = this.getListAsArray()
+		return array
+			? `(${array.join(' ')})`
+			: `[${[this._car, this._cdr].join(' . ') }]`
 	}
 
 	/* Exclusive Pair Methods */

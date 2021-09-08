@@ -16,6 +16,11 @@ module.exports = {
 		},
 	},
 
+	evaluationError: {
+		opening: 'Traceback (most recent call last):',
+		pattern: '** Error {cdr} in {car}',
+	},
+
 	repl: {
 		prompt: {
 			newCommand: 	'> ',

@@ -87,15 +87,15 @@ test('evaluate null', () => {
 })
 
 test('evaluate cond', () => {
-	// parseEvaluateEquals("(cond)", "nil")
-	// parseEvaluateEquals("(cond (t 'a))", "a")
-	// parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((eq 'a 'a) '(a a a)))", "(a a a)")
-	// parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((set 'b 'c) '(a a a)))", "(a a a)")
-	// parseEvaluateEquals("(eval 'b)", "c")
-	// parseEvaluateEquals("(cond ((eq 'a 'a) '(a b c)) ((set 'a 'c) '(a a a)))", "(a b c)")
-	// parseEvaluateException("(eval 'a)", "a", "undefined")
-	// parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) a)", "a", "cond")
-	// parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "a", "undefined")
+	parseEvaluateEquals("(cond)", "nil")
+	parseEvaluateEquals("(cond (t 'a))", "a")
+	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((eq 'a 'a) '(a a a)))", "(a a a)")
+	parseEvaluateEquals("(cond ((eq 'a 'b) '(a b c)) ((set 'b 'c) '(a a a)))", "(a a a)")
+	parseEvaluateEquals("(eval 'b)", "c")
+	parseEvaluateEquals("(cond ((eq 'a 'a) '(a b c)) ((set 'a 'c) '(a a a)))", "(a b c)")
+	parseEvaluateException("(eval 'a)", "a", "undefined")
+	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) a)", "a", "cond")
+	parseEvaluateException("(cond ((eq 'a 'b) '(a b c)) 'a)", "a", "undefined")
 	clear()
 })
 
@@ -171,7 +171,7 @@ test('evaluate error and restore', () => {
 
 	clear()
 })
-	
+
 test('evaluate lambda', () => {
 	const lambdaStr = "(lambda (x) x)"
 	parseEvaluateEquals(lambdaStr, lambdaStr)
@@ -215,7 +215,7 @@ test('evaluate lambda', () => {
 	parseEvaluateException("(foo 'a)", "[(not_lambda () 'a) . ('a)]", "invalid")
 
 	parseEvaluate("(set 'foo (lambda a 'a))")
-	parseEvaluateException("(foo)", "nil", "car")
+	parseEvaluateException("(foo)", "[(lambda a 'a) . ()]", "invalid")
 
 	clear()
 })
@@ -276,7 +276,7 @@ test('evaluate nlambda', () => {
 	parseEvaluateException("(foo a)", "[(not_nlambda () 'a) . (a)]", "invalid")
 
 	parseEvaluate("(set 'foo (nlambda a 'a))")
-	parseEvaluateException("(foo)", "nil", "car")
+	parseEvaluateException("(foo)", "[(nlambda a 'a) . ()]", "invalid")
 	
 	clear()
 })
@@ -297,7 +297,7 @@ test('evaluate defun', () => {
 	parseEvaluateEquals("(append (car '(c d)) '(a b))", '(a b c)')
 
 	parseEvaluate("(defun foo a 'a)")
-	parseEvaluateException("(foo)", "nil", "car")
+	parseEvaluateException("(foo)", "[(lambda a 'a) . ()]", "invalid")
 	
 	clear()
 	
@@ -344,7 +344,7 @@ test('evaluate ndefun', () => {
 	parseEvaluateEquals("(bar (a b))", "b")
 
 	parseEvaluate("(ndefun foo a 'a)")
-	parseEvaluateException("(foo)", "nil", "car")
+	parseEvaluateException("(foo)", "[(nlambda a 'a) . ()]", "invalid")
 
 	clear()
 })

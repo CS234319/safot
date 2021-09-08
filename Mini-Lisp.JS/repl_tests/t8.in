@@ -1,0 +1,9 @@
+(defun reduce (xs f init)
+	(cond 	((null xs) init)
+			(t (f (car xs) (reduce (cdr xs) f init)))))
+
+(defun map (xs f) (reduce xs (lambda (x y) (cons (f x) y)) nil))
+
+(defun zeroes (xs) (map xs (lambda (x) '0)))
+
+(zeroes '(a b c))

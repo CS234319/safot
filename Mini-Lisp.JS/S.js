@@ -1,3 +1,5 @@
+require('./ArrayExtension')
+
 module.exports = class S {
 	cons(s) {
 		const Pair = require('./Pair')
@@ -22,23 +24,20 @@ module.exports = class S {
 		return this.getListAsArray()?.length
 	}
 
+	reversedList() {
+		const ListCreator = require('./ListCreator')
+		const lc = new ListCreator()
+		const array = this.getListAsArray()
+		return array === undefined
+			? undefined
+			: lc.create(...array.reversed())
+	}
+
 	prepend(s) {
 		return s.cons(this)
 	}
 
 	prependPair(car, cdr) {
 		return this.prepend(car.cons(cdr))
-	}
-
-	prependList(list) {
-		if (list.null()) {
-			return this
-		}
-
-		const cdr = list.cdr().null()
-			? this
-			: this.prependList(list.cdr())
-
-		return list.car().cons(cdr)
 	}
 }

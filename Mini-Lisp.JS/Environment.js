@@ -1,11 +1,11 @@
 const Atom = require('./Atom')
+const Lambda = require('./Lambda')
 const ListCreator = require('./ListCreator')
-const EvaluationError = require('./EvaluationError')
 
 module.exports = class Environment {
 	constructor() {
 		this._alist = Atom.nil
-		this._deepBind(Atom.nil, Atom.nil)
+		this._push(Atom.separator, Atom.nil)
 		this._separatorNode = this._alist
 		this._observers = Array.from(arguments)
 	}
@@ -30,78 +30,183 @@ module.exports = class Environment {
 		return this.set(name, lambda)	
 	}
 
-	lookup(s) {
-		return Environment._lookup(s, this._alist)
+	lookup(key) {
+		return this._getNodeByKey(key).car().cdr()
 	}
 
-	static _lookup(s, list) {
+	_getNodeByKey(key) {
+		return Environment._getNodeByKey(key, this._alist)
+	}
+
+	static _getNodeByKey(key, list) {
 		if (list.null()) {
-			 return s.error(Atom.undefined)
+			key.error(Atom.undefined)
 		}
 
-		const currPair = list.car()
-		return s.eq(currPair.car())
-			? currPair.cdr()
-			: Environment._lookup(s, list.cdr()) 
+		return list.car().car().eq(key)
+			? list
+			: Environment._getNodeByKey(key, list.cdr())
 	}
 
-	bindLambdaRecords(lambdaName, lambda, args, evaluator) {
-		const tag = lambda.car()
-		const formals = lambda.cdr().car()
-		
-		const lc = new ListCreator()
-		this._deepBind(Atom.invocation, lc.create(lambdaName, formals, args))
-		this._bindFormals(formals, args, tag.eq(Atom.lambda) ? evaluator : null)
-		this._bind(Atom.recurse, lambda)
+	applyPrimitive(primitive, args, evaluator) {
+		const savedAList = this._alist
+		this._pushInvocation(primitive.getName(), args)
+
+		try {
+			primitive.checkNumberOfArgs(args)
+			const actuals = this._pushPrimitiveRecords(primitive, args, evaluator)
+			return this._applyAndPopInvocation(() => primitive.run(actuals))
+		} catch (e) {
+			this._dump(e)
+		}
 	}
 
-	popLambdaRecords() {
-		this._alist = this._getNodeByDeepKey(Atom.invocation).cdr()
+	applyLambda(name, lambdaS, args, evaluator) {
+		this._pushInvocation(name, args)
+
+		try {
+			const lambda = new Lambda(lambdaS, args)
+			this._pushLambdaRecords(lambda, args, evaluator)
+			return this._applyAndPopInvocation(() => evaluator.evaluate(lambda.body))
+		} catch (e) {
+			this._dump(e)
+		}
 	}
 
-	_bindFormals(formals, args, evaluator) {
-		const bindedFormalsList = this._bindFormalsOnList(
-			Atom.nil, formals, args, evaluator
+	_getActuals(args, shouldEvaluateArgs, evaluator) {
+		return this._pushArgsAndGetActuals(
+			args, Atom.nil, shouldEvaluateArgs, evaluator
 		)
-
-		this._alist = this._alist.prependList(bindedFormalsList)
 	}
 
-	_bindFormalsOnList(list, formals, args, evaluator) {
-		if (formals.null() && args.null()) {
-			return list
-		}
-
-		const arg = args.car()
-		this._deepBind(Atom.argument, arg)
-		const actual = evaluator ? evaluator.evaluate(arg) : arg
-		list = list.prependPair(formals.car(), actual)
-
-		return this._bindFormalsOnList(list, formals.cdr(), args.cdr(), evaluator)
-	}
-
-	_bind(key, value) {
+	_push(key, value) {
 		this._alist = this._alist.prependPair(key, value)
 	}
 
-	_deepBind(key, value) {
-		this._bind(key.cons(value), Atom.nil)
+	_pushPrimitiveRecords(primitive, args, evaluator) {
+		return this._getActuals(args, primitive.isEager(), evaluator)
 	}
 
-	_getNodeByDeepKey(key) {
-		return Environment._getNodeByDeepKey(this._alist, key)
+	_pushLambdaRecords(lambda, args, evaluator) {
+		const actuals = this._getActuals(args, lambda.tag.eq(Atom.lambda), evaluator)
+		this._push(Atom.recurse, lambda.s)
+		this._pushLists(lambda.formals, actuals)
 	}
 
-	static _getNodeByDeepKey(list, key) {
-		if (list.null()) {
-			return key.error(Atom.bug)
+	_pushArgsAndGetActuals(args, actuals, shouldEvaluateArgs, evaluator) {
+		if (args.null()) {
+			actuals.reverseList()
+			this._pushArgs(args, actuals)
+			return actuals
 		}
 
-		if (!list.car().car().atom() && 
-			(list.car().car().car().eq(key))) {
-			return list
+		const arg = args.car()
+		try {
+			const actual = shouldEvaluateArgs ? evaluator.evaluate(arg) : arg
+			actuals = actual.cons(actuals)
+		} catch (e) {
+			this._pushArgs(args, actuals.reversedList())
+			throw e
 		}
 		
-	 	return Environment._getNodeByDeepKey(list.cdr(), key)
-	}	
+		return this._pushArgsAndGetActuals(
+			args.cdr(), actuals, shouldEvaluateArgs, evaluator
+		)
+	}
+
+	_pushLists(keys, values) {
+		if (keys.null() || values.null()) {
+			return
+		}
+
+		this._push(keys.car(), values.car())
+		this._pushLists(keys.cdr(), values.cdr())
+	}
+
+	_pushInvocation(name, args) {
+		this._push(Atom.invocation, name.cons(args))
+	}
+
+	_pushArgs(args, actuals) {
+		this._push(Atom.arguments, args.cons(actuals))
+	}
+
+	_pop() {
+		this._alist = this._alist.cdr()
+	}
+
+	_popInvocation() {
+		this._alist = this._getNodeByKey(Atom.invocation).cdr()
+	}
+
+	_popUntilReachingRecord() {
+		const recordKeys = [Atom.invocation, Atom.arguments]
+		for (; !recordKeys.includes(this._getCurrentKey()); this._pop());
+	}
+
+	_applyAndPopInvocation(apply) {
+		const result = apply()
+		this._popInvocation()
+		return result		
+	}
+
+	_dump(error) {
+		error.prependDump(this._popDump())
+		throw error
+	}
+
+	_popDump() {
+		const { name, args, actuals } = this._popDumpData()
+		
+		const argsStr = this._getDumpArgsArray(args, actuals).join(', ')
+		return `\t${name}[${argsStr}]\n`
+	}
+
+	_getDumpArgsArray(args, actuals) {
+		const actualsArray = actuals.getListAsArray()
+		const argsArray = args.getListAsArray()
+		if (argsArray === undefined || argsArray.length === 0) {
+			return actualsArray
+		}
+
+		argsArray[0] = '^' + argsArray[0].toString()
+		return actualsArray.concat(argsArray)
+	}
+
+	_popDumpData() {
+		this._popUntilReachingRecord()
+		const currentKey = this._getCurrentKey()
+		if (currentKey.eq(Atom.invocation)) {
+			const nameAndArgs = this._getCurrentValue()
+			this._pop()
+			return { 
+				name: nameAndArgs.car(),
+				args: nameAndArgs.cdr(),
+				actuals: Atom.nil
+			 }
+		}
+
+		const argsAndActuals = this._getCurrentValue()
+		this._alist = this._getNodeByKey(Atom.invocation)
+		const name = this._getCurrentValue().car()
+		this._pop()
+
+		return {
+			name: name,
+			args: argsAndActuals.car(),
+			actuals: argsAndActuals.cdr()
+		}
+	}
+
+	_getCurrentPair() {
+		return this._alist.car()
+	}
+
+	_getCurrentKey() {
+		return this._getCurrentPair().car()
+	}
+
+	_getCurrentValue() {
+		return this._getCurrentPair().cdr()
+	}
 }

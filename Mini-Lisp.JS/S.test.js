@@ -91,9 +91,6 @@ test('t', () => {
 })
 
 test('error', () => {
-	utils.expectException(() => a.error(), a)
-	utils.expectException(() => pair.error(), pair)
-	utils.expectException(() => list.error(), list)
 	utils.expectException(() => a.error(b), a, b)
 	utils.expectException(() => a.error(Atom.invalid), a, Atom.invalid)
 })
@@ -118,18 +115,38 @@ test('prependPair', () => {
 	applyTest('([a.b] [c.d])', 'e', 'f', '([e.f] [a.b] [c.d])')
 })
 
-test('prependList', () => {
-	const applyTest = (str1, str2, str3) => {
-		utils.expectEquals(parse(str1).prependList(parse(str2)), parse(str3))
+test('reversedList', () => {
+	const applyTest = (str1, str2) => {
+		utils.expectEquals(parse(str1).reversedList(), parse(str2))
 	}
 
-	applyTest('()', '()', '()')
-	applyTest('(a)', '()', '(a)')
-	applyTest('()', '(a)', '(a)')
-	applyTest('(a)', '(b)', '(b a)')
-	applyTest('(a b)', '(c)', '(c a b)')
-	applyTest('(a)', '(b c)', '(b c a)')
-	applyTest('(a b)', '(c d)', '(c d a b)')
+	const testUndefined = str => {
+		utils.expectEquals(parse(str).reversedList(), undefined)
+	}
+
+	applyTest('nil', 'nil')
+	applyTest('()', '()')
+	applyTest('(a)', '(a)')
+	applyTest('(a b)', '(b a)')
+	applyTest('(a b c)', '(c b a)')
+	testUndefined('a')
+	testUndefined('[a . b]')
+})
+
+test('reverseList', () => {
+	const applyTest = (str1, str2) => {
+		const list = parse(str1)
+		list.reverseList()
+		utils.expectEquals(list, parse(str2))
+	}
+
+	applyTest('nil', 'nil')
+	applyTest('()', '()')
+	applyTest('(a)', '(a)')
+	applyTest('(a b)', '(b a)')
+	applyTest('(a b c)', '(c b a)')
+	applyTest('a', 'a')
+	applyTest('[a . b]', '[a . b]')
 })
 
 test('isList', () => {
