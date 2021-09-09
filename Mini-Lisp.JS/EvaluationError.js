@@ -13,12 +13,9 @@ module.exports = class EvaluationError extends Error {
 	}
 
 	getStack() {
-		const errorMessage = config.pattern
-				.replace('{car}', this._s.car())
-				.replace('{cdr}', this._s.cdr())
-
-		return [
-			config.opening, '\n', this._dump, '\t', errorMessage
-		].join('')
+		return config.pattern
+			.replace('{dump}', this._dump)
+			.replace('{car}', this._s.car())
+			.replace('{cdr}', this._s.cdr())
 	}
 }

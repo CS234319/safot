@@ -17,8 +17,16 @@ module.exports = {
 	},
 
 	evaluationError: {
-		opening: 'Traceback (most recent call last):',
-		pattern: '** Error {cdr} in {car}',
+		pattern: 'Traceback (most recent call last):\n{dump}\t** Error {cdr} in {car}',
+	},
+
+	dump: {
+		args: {
+			failedPrefix: 	'^',
+			delim: 			', ',
+		},
+
+		pattern: `\t{name}[{args}]\n`,
 	},
 
 	repl: {
