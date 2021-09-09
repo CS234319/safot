@@ -123,11 +123,11 @@
   ∫₀⁴ e^{√{ay}}dy=-2
 \] עבור~$a>0$, בעזרת ההחלפה~$y=z²/a$:
 ראשית נודיע ל-\E|Macsyma| שהערך של a חיובי,
-\begin{code}
+\begin{verbatim}
 (%i1) assume(a > 0)$
-\end{code}
+\end{verbatim}
 ואחר כך, נבקש מ-\E|Macsyma| לחשב את האינטגרל הלא מסויים:
-\begin{code}
+\begin{verbatim}
 (%i2) 'integrate (%e**sqrt(a*y), y, 0, 4);
  4
  /
@@ -135,9 +135,9 @@
  ]
  /
  0
-\end{code}
+\end{verbatim}
 ורק אחר נבצע את ההחלפה:
-\begin{code}
+\begin{verbatim}
 (%i3) changevar (%, y-z²/a, z, y);
  0
  /
@@ -148,7 +148,7 @@
 - 2 sqrt(a)
 (%o3)-----------------------------
  a
-\end{code}
+\end{verbatim}
 
 שפת ליספ שימשה גם לפיתוחה של \E|ELIZA|, תכנית המחשב הראשונה שהייתה מסוגלת לנהל
 שיח עם משתמש בדומה לבוט. ELIZA ניסתה לדמות בשיחה את תפקיד הפסיכיאטר או
