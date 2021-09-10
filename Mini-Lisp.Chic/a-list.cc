@@ -163,16 +163,16 @@ void stack_dump() {
     S s = reverse(alist());
 
     // Print stack trace:
-    prompt("Traceback (most recent call last):\n");
+    prompt("Traceback (most recent call last):");
     while (! s.n0()) {
         S top = s.cdr();
         s = s.car();
         if (top.car().eq(RESCUE)) {
-            prompt("\tFrom function "), print(top.cdr()), print("");
+            prompt("\n\t -> "), print(top.cdr());
             remove_element(RESCUE);
         }
         if (top.car().eq(ARGUMENT)) {
-            prompt("["), print(top.cdr()), print("]\n");
+            prompt("["), print(top.cdr()), print("]");
             remove_element(ARGUMENT);
         }
     }

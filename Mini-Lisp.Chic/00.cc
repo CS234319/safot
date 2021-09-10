@@ -10,8 +10,8 @@ after the parser finished successfully */
 static S eval() { 
   try {
     return Parser::result().eval();
-  } catch (Pair x) { 
-    err("Error "), err(x.cdr), err(" on "), err(x.car), err("\n"),out();
+  } catch (Pair x) {
+      print("Error "), print(S(x.cdr)), print(" on "), print(S(x.car)), print("\n"),out();
     throw;
   }
 }

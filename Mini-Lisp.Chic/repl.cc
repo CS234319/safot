@@ -8,7 +8,7 @@ S eval() { /** Should only be called after the parser finished successfully */
 //        prompt("Eval   : "); println(Parser::result().eval());
         return Parser::result().eval();
     } catch (Pair x) {
-        err(),err("Error: kind = "), err(x.car), err(" Where = "), err(x.cdr), err("\n"),out();
+        err(), print("Error: kind = "), print(S(x.car)), print(" Where = "), print(S(x.cdr)), print("\n"),out();
         throw;
     }
 }

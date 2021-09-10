@@ -52,8 +52,6 @@ int put(String s)  {
 }  
 
 int print(S);             // Forward declaration
-int err(String   s)    { return put(s);  }
-int err(H h)           { return print(S(h));  }
 int print(String   line) { return put(line);       }
 int prompt(String  s)    { return print(s);  }
 int print(H h)           { return print(S(h)); }
@@ -62,15 +60,13 @@ int println(S s)           { return print(s), print("\n"); }
 
 /** Recursively print an S expression */
 int print(S s) {
-  // TODO pinpoint and fix the full cycle bug; hint dotted pairs.
   if (s.null()) return print("NIL");
   if (s.atom()) return print(s.asAtom());
-  if (!islist(s)) return print("("), print(s.car()), print("."), print(s.cdr()), print(")");
+  if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
   print("(") ;
   for (;;) {
     print(S(s.car())); // First recursive call
-    if ((s = s.cdr()).null()) break;
+    if ((s = s.cdr()).null()) return print(")");
     print(" ");
   }
-  return print(")");
 }
