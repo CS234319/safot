@@ -8,7 +8,7 @@
 static FILE *file = stdout;
 
 int err() { return file = stderr, 0;  }
-int out()   { return file = stdout, 0; }
+int out() { return file = stdout, 0; }
 
 bool grunt(int result)  {
   if (result >= 0) return false;

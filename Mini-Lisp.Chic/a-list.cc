@@ -169,11 +169,11 @@ void stack_dump() {
         S top = s.cdr();
         s = s.car();
         if (top.car().eq(RESCUE)) {
-            prompt("\tFrom function "), print(top.cdr()), print(":\n");
+            prompt("\tFrom function "), print(top.cdr()), print("");
             remove_element(RESCUE);
         }
         if (top.car().eq(ARGUMENT)) {
-            prompt("\t\tArgs: "), print(top.cdr()), print("\n");
+            prompt("["), print(top.cdr()), print("]\n");
             remove_element(ARGUMENT);
         }
     }
