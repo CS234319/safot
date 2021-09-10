@@ -22,12 +22,8 @@ S pop(S& list) {
 }
 bool in_alist(S id, S list) {
     // Same as look up, but return a boolean value
-    if (list.null()) {
-        return false;
-    }
-    if (list.car().car().eq(id)) {
-        return true;
-    }
+    if (list.null()) return false;
+    if (list.car().car().eq(id)) return true;
     return in_alist(id, list.cdr());
 }
 
