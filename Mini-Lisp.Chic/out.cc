@@ -63,10 +63,8 @@ int print(S s) {
   if (s.null()) return print("NIL");
   if (s.atom()) return print(s.asAtom());
   if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
-  print("(") ;
-  for (;;) {
+  for ( print("(") ;; print(" ")) {
     print(S(s.car())); // First recursive call
     if ((s = s.cdr()).null()) return print(")");
-    print(" ");
   }
 }
