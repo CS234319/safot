@@ -136,9 +136,8 @@ void restore_alist() {
      *
      */
     // Clean alist from all the local sets:
-    for (int i=0; i < count_sets; i++) {
+    for (int i=0; i < count_sets; i++)
         pop();
-    }
 
     // Reset count_sets:
     reset_set_counter();
