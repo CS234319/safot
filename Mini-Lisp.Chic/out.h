@@ -1,8 +1,10 @@
 #ifndef OUT_H
 #define OUT_H
 #include "S.h" 
+/** Print a String */ extern int print(String);
 /** Print an S expression */ extern int print(S);
 /** Print an S expression with newline */ extern int println(S s);
+/** Print an S expression with newline */ extern int println();
 /** Print the prompt */ extern int prompt(String);
 
 /** Call before printing error messages */ extern int err();

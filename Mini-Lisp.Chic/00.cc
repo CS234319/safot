@@ -11,7 +11,7 @@ static S eval() {
   try {
     return Parser::result().eval();
   } catch (Pair x) {
-      print("Error "), print(S(x.cdr)), print(" on "), print(S(x.car)), print("\n"),out();
+      err(), prompt("Errorxxx "), print(S(x.cdr)), print(" on "), print(S(x.car)), print("\n"),out;
     throw;
   }
 }

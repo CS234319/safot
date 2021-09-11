@@ -4,11 +4,9 @@ using namespace Parser;
 
 S eval() { /** Should only be called after the parser finished successfully */
     try {
-//        prompt("Parser : "); println(Parser::result());
-//        prompt("Eval   : "); println(Parser::result().eval());
         return Parser::result().eval();
     } catch (Pair x) {
-        err(), print("Error: kind = "), print(S(x.car)), print(" Where = "), print(S(x.cdr)), print("\n"),out();
+        err(), prompt("Error: kind = "), print(S(x.car)), prompt(" Where = "), print(S(x.cdr)), print("\n"),out();
         throw;
     }
 }
