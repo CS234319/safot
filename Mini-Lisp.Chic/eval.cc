@@ -212,17 +212,25 @@ S evaluate_atomic_function(S s) { M(s);
   return bug(s);
 }
 
-S apply(S anonymous, S args) {
-  anonymous.n3() || anonymous.cons(args).error(INVALID).t();
-  push(ARGUMENT, args);
-  const auto actuals = anonymous.$1$().eq(NLAMBDA)? args : anonymous.$1$().eq(LAMBDA) ? evaluate_list(args) : anonymous.cons(args).error(INVALID);
+S apply(S lambda, S body, S formals, S arguments) {
+  push(ARGUMENT, arguments);
+  const auto actuals = 
+    lambda.eq(NLAMBDA) ? arguments : 
+    lambda.eq(LAMBDA)  ? evaluate_list(arguments) : 
+       lambda.cons(arguments).error(INVALID)
+  ;
   remove_element(ARGUMENT);
-  alist() = bind(f.$2$(), actuals, alist());
+  alist() = bind(formals, actuals, alist());
   push(ARGUMENT, actuals);
-  const auto result = f.$3$().eval();
+  const auto result = body.eval();
   remove_element(ARGUMENT);
-  remove_local_binding(f.$2$());
+  remove_local_binding(formals);
   return result;
+}
+
+S apply(S lambda, S actuals) {
+  lambda.n3() || lambda.cons(actuals).error(INVALID).t();
+  return apply(lambda.$1$(), lambda.$3$(), lambda.$2$(), actuals);
 }
 
 S eval(S s) {
