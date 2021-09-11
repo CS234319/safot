@@ -55,11 +55,9 @@ int print(String   line) { return put(line); }
 int prompt(String  s)    { return print(s);  }
 int print(H h)           { return print(S(h)); }
 int print(Pair p)        { return print("["), print(p.car), print("."), print(p.cdr), print("]"); }
-int println(S s)         { return print(s), print("\n"); }
 
 /** Recursively print an S expression */
 int print(S s) {
-  if (s.null()) return print("NIL");
   if (s.atom()) return print(s.asAtom());
   if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
   for ( print("(") ;; print(" ")) {

@@ -1,7 +1,7 @@
 #ifndef READ_H
 #define READ_H
 #include "S.h"
-extern String read();     // Only function in production mode
+extern String readln();     // Only function in production mode
 
 #ifndef PRODUCTION             // Testing adds overhead, which should not be part of production
   namespace Reading {          // For readability; Read::from("(car x)") is better than reader_set_source

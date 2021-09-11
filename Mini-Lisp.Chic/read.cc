@@ -5,7 +5,7 @@
 
 extern int grunt(int);
 
-String read() {
+String readln() {
   static char   *buffer = 0;
   static size_t  length = 72;
   if (buffer == (char *)0) buffer = reinterpret_cast<char *>(malloc(length));

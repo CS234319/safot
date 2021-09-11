@@ -163,19 +163,21 @@ void stack_dump() {
     S s = reverse(alist());
 
     // Print stack trace:
-    println("Traceback (most recent call last):");
-    for (bool comma = false, open = false; s.pair(); s = s.car()) { 
-        auto top = s.car();
+    println("Traceback:");
+    bool open = false;
+    for (bool comma = false; s.pair(); s = s.car()) { 
+        auto top = s.cdr();
         if (top.car().eq(RESCUE)) {
-            if (open) println("]]"); 
-            print("\n\t -> "), print(top.cdr()), print("[[");
+            open ? println("\t ]]") : open = true;
+            print("\t -> "), print(top.cdr()), println(" [[");
             comma = false; 
             remove_element(RESCUE);
         }
         if (top.car().eq(ARGUMENT)) {
-            comma ? print(", ") : comma = true;
-            print(top.cdr()), 
+            comma ? print(",") : comma = true;
+            print("\t\t"),println(top.cdr()), 
             remove_element(ARGUMENT);
         }
     }
+    open ? println("\t ]]") : open = false;
 }

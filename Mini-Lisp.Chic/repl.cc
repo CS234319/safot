@@ -21,7 +21,7 @@ int REPL(const char* input) {
     Start:
         reset(), prompt("> ");
     Read:
-        const String line = (input != ((char *)0)) ? input : read();
+        const String line = (input != ((char *)0)) ? input : readln();
         supply(line);
         switch (status()) {
             case ready:      // More input must be waiting
