@@ -36,7 +36,7 @@ S bug(S s) { return s.error(BUG); }
   } 
 
 
-FUN(S, evaluate_list, S) IS(
+FUN(S, materialize, S) IS(
  _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
 ) 
 
@@ -212,15 +212,15 @@ S evaluate_atomic_function(S s) { M(s);
   return bug(s);
 }
 
-S apply(S lambda, S body, S formals, S arguments) {
-  push(ARGUMENT, arguments);
-  const auto actuals = 
-    lambda.eq(NLAMBDA) ? arguments : 
-    lambda.eq(LAMBDA)  ? evaluate_list(arguments) : 
-       lambda.cons(arguments).error(INVALID)
+S apply(S lambda, S body, S formals, S actuals) {
+  push(ARGUMENT, actuals);
+  const auto arguments =
+    lambda.eq(NLAMBDA) ? actuals :
+    lambda.eq(LAMBDA) ? materialize(actuals) :
+    lambda.cons(actuals).error(INVALID)
   ;
   remove_element(ARGUMENT);
-  alist() = bind(formals, actuals, alist());
+  alist() = bind(formals, arguments, alist());
   push(ARGUMENT, actuals);
   const auto result = body.eval();
   remove_element(ARGUMENT);

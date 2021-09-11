@@ -54,13 +54,12 @@ int put(String s)  {
 int print(String   line) { return put(line); }
 int prompt(String  s)    { return print(s);  }
 int print(H h)           { return print(S(h)); }
-int print(Pair p)        { return print("["), print(p.car), print("."), print(p.cdr), print("]"); }
 
 /** Recursively print an S expression */
 int print(S s) {
   if (s.atom()) return print(s.asAtom());
   if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
-  for ( print("(") ;; print(" ")) {
+  for (print("(") ;; print(" ")) {
     print(S(s.car())); // First recursive call
     if ((s = s.cdr()).null()) return print(")");
   }
