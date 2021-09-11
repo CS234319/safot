@@ -14,7 +14,6 @@ const auto ATOMIC_FUNCTIONS = list(
     ERROR, SET,  EVAL, QUOTE,
     DEFUN, NDEFUN, NLAMBDA, LAMBDA);
 
-
 bool atomic(S name) { return exists(name, ATOMIC_FUNCTIONS); }
 S defun(S name, S parameters, S body) { return set(name, list(LAMBDA, parameters, body)); }
 S ndefun(S name, S parameters, S body) { return set(name, list(NLAMBDA, parameters, body)); }
@@ -43,9 +42,9 @@ FUN(S, evaluate_list, S) IS(
 
 FUN(S, evaluate_cond, S)  IS( 
     _.null() ?  NIL:
-    _.car().atom() ? _.car().error(COND):
-      _.car().car().eval().t() ? _.car().cdr().car().eval():
-        $$(_.cdr()) ;
+      _.car().atom() ? _.car().error(COND):
+       _.car().car().eval().t() ? _.car().cdr().car().eval():
+         $$(_.cdr()) ;
 )
 
 void checkNumberOfArgs(S s) {
@@ -213,12 +212,10 @@ S evaluate_atomic_function(S s) { M(s);
   return bug(s);
 }
 
-S apply(S f, S args) {
-  D(f,args);
-  f.n3() || f.cons(args).error(INVALID).t();
-  D(f.$1$(),f.$2$(),f.$3$(),args,f.$1$().eq(NLAMBDA));
+S apply(S anonymous, S args) {
+  anonymous.n3() || anonymous.cons(args).error(INVALID).t();
   push(ARGUMENT, args);
-  const auto actuals = f.$1$().eq(NLAMBDA)? args : f.$1$().eq(LAMBDA) ? evaluate_list(args) : f.cons(args).error(INVALID);
+  const auto actuals = anonymous.$1$().eq(NLAMBDA)? args : anonymous.$1$().eq(LAMBDA) ? evaluate_list(args) : anonymous.cons(args).error(INVALID);
   remove_element(ARGUMENT);
   alist() = bind(f.$2$(), actuals, alist());
   push(ARGUMENT, actuals);

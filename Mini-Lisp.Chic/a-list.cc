@@ -6,7 +6,6 @@
 static S nil() { static const S inner = S("NIL"); return inner; }
 static S t()   { static const S inner = S("T"); return inner; }
 
-
 /* Basic operations */
 S set(S name, S value, S list) { return name.cons(value).cons(list); }
 S push(S name, S value, S list) {
@@ -153,10 +152,8 @@ S reverse(S alist) {
     return s;
 }
 
+/** In case of error, dump the a-list with trace back: */
 void stack_dump() {
-    /*
-     * In case of error, dump the a-list with trace back:
-     */
     if (alist().n0() || ! in_alist(RESCUE) || ! in_alist(ARGUMENT)) return;
 
     // Reverse the alist, to print the most recent call last:
