@@ -1,25 +1,33 @@
-const REPLInstigator = require('./REPLInstigator')
+const StreamREPL = require('./StreamREPL')
 const fs = require('fs')
 const streams = require('memory-streams')
 const testsFolderPath = './repl_tests'
 
 const testFile = async name => {
-	const inputPath = `${testsFolderPath}/${name}.in`
-	const expectedPath = `${testsFolderPath}/${name}.e`
+	const filePathNoExt = `${testsFolderPath}/${name}`
+	const inputPath = `${filePathNoExt}.in`
+	const expectedPath = `${filePathNoExt}.r`
+	const outputPath = `${filePathNoExt}.out`
 
-	if (!fs.existsSync(inputPath) || !fs.existsSync(expectedPath)) {
+	if (!fs.existsSync(inputPath)) {
 		return false
 	}	
-
+ 
 	const outputStream = new streams.WritableStream()
 	
-	const ri = new REPLInstigator(
+	const streamREPL = new StreamREPL(
 		fs.createReadStream(inputPath),
 		outputStream,
 		null
 	)
 		
 	await new Promise(resolve => setTimeout(resolve, 100))
+
+	fs.writeFileSync(outputPath, outputStream.toString())
+
+	if (!fs.existsSync(expectedPath)) {
+		return false
+	}
 
 	const expectedPromise = new Promise((resolve) => {
 		const expectedStream = fs.createReadStream(expectedPath)

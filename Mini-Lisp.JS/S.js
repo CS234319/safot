@@ -1,27 +1,9 @@
+require('./ArrayExtension')
+
 module.exports = class S {
-	atom() {
-		return this._errorNotImplemented()
-	}
-
-	car() {
-		return this._errorNotImplemented()
-	}
-
-	cdr() {
-		return this._errorNotImplemented()
-	}
-
 	cons(s) {
 		const Pair = require('./Pair')
 		return new Pair(this, s)
-	}
-
-	eq(s) {
-		return this._errorNotImplemented()
-	}
-
-	equals(s) {
-		return this._errorNotImplemented()
 	}
 
 	null() {
@@ -38,27 +20,24 @@ module.exports = class S {
 		throw new EvaluationError(kind ? this.cons(kind) : this)
 	}
 
-	isList() {
-		return this._errorNotImplemented()
-	}
-
-	getListAsArray() {
-		return this._errorNotImplemented()
-	}
-
 	getListLength() {
 		return this.getListAsArray()?.length
 	}
 
-	toString() {
-		return this._errorNotImplemented()
+	reversedList() {
+		const ListCreator = require('./ListCreator')
+		const lc = new ListCreator()
+		const array = this.getListAsArray()
+		return array === undefined
+			? undefined
+			: lc.create(...array.reversed())
 	}
 
-	insert(s) {
-		return this._errorNotImplemented()
+	prepend(s) {
+		return s.cons(this)
 	}
 
-	_errorNotImplemented() {
-		return this.error(Atom.bug)		
+	prependPair(car, cdr) {
+		return this.prepend(car.cons(cdr))
 	}
 }

@@ -6,6 +6,10 @@ module.exports = class Atom extends S {
 		this._value = value
 	}
 
+	getValue() {
+		return this._value
+	}
+
 	atom() {
 		return true
 	}
@@ -25,12 +29,14 @@ module.exports = class Atom extends S {
 		return this.eq(s)
 	}
 
+	reverseList() {}
+
 	isList() {
 		return this.null()
 	}
 
 	getListAsArray() {
-		return this.null() ? [] : null
+		return this.isList() ? [] : undefined
 	}
 
 	toString() {
@@ -58,4 +64,10 @@ module.exports = class Atom extends S {
 	static bug 			= new Atom('BUG')
 	static missing 		= new Atom('MISSING')
 	static redundant 	= new Atom('REDUNDANT')
+	static recurse	 	= new Atom('RECURSE')
+
+	/* User-unreachable Atoms */
+	static separator	= new Atom('separator')
+	static invocation	= new Atom('invocation')
+	static arguments 	= new Atom('arguments')
 }

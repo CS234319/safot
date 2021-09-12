@@ -1,5 +1,6 @@
 const S = require('./S')
 const Atom = require('./Atom')
+require('./ArrayExtension')
 
 module.exports = class Pair extends S {
 	constructor(car, cdr) {
@@ -30,27 +31,31 @@ module.exports = class Pair extends S {
 				this._cdr.equals(s._cdr)
 	}
 
+	reverseList() {
+		const reversed = this.reversedList()
+		if (reversed) {
+			this._car = reversed._car
+			this._cdr = reversed._cdr	
+		}
+	}
+
 	isList() {
 		return this._cdr.isList()
 	}
 
 	getListAsArray() {
-		var list = this._cdr.getListAsArray()
-		list?.unshift(this._car)
-		return list
+		return this._cdr.getListAsArray()?.prepend(this._car)
 	}
 
 	toString() {
-		const list = this.getListAsArray()
-		if (list) {
-			return '(' + list.join(' ') + ')'
-		}
-
-		return '(' + [this._car, this._cdr].join(' . ') + ')'
+		const array = this.getListAsArray()
+		return array
+			? `(${array.join(' ')})`
+			: `[${[this._car, this._cdr].join(' . ') }]`
 	}
 
+	/* Exclusive Pair Methods */
 	insert(s) {
 		this._cdr = s.cons(this._cdr)
 	}
-
 }

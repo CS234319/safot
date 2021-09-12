@@ -1,23 +1,24 @@
 const Atom = require('./Atom')
+const Lambda = require('./Lambda')
 const ListCreator = require('./ListCreator')
-const EvaluationError = require('./EvaluationError')
+const StackDumper = require('./StackDumper')
 
 module.exports = class Environment {
 	constructor() {
-		this._separatorNode = Atom.nil.cons(Atom.nil)
-		this._alist = this._separatorNode
+		this._alist = Atom.nil
+		this._push(Atom.separator, Atom.nil)
+		this._separatorNode = this._alist
+		this._observers = Array.from(arguments)
+		this._stackDumper = new StackDumper(this)
 	}
 
-	getAList() {
-		return this._alist
-	}
-
-	setAList(alist) {
-		this._alist = alist
+	_push(key, value) {
+		this._alist = this._alist.prependPair(key, value)
 	}
 
 	set(key, value) {
 		this._separatorNode.insert(key.cons(value))
+		this._observers.forEach(o => o.globalAdded(key))
 		return value
 	}
 
@@ -35,40 +36,145 @@ module.exports = class Environment {
 		return this.set(name, lambda)	
 	}
 
-	lookup(s) {
-		return Environment._lookup(s, this._alist)
+	lookup(key) {
+		return this._getNodeByKey(key).car().cdr()
 	}
 
-	static _lookup(s, list) {
+	_getNodeByKey(key) {
+		return Environment._getNodeByKey(key, this._alist)
+	}
+
+	static _getNodeByKey(key, list) {
 		if (list.null()) {
-			 return s.error(Atom.undefined)
+			key.error(Atom.undefined)
 		}
 
-		if (Environment._isSeparator(list)) {
-			return Environment._lookup(s, list.cdr()) 
+		return list.car().car().eq(key)
+			? list
+			: Environment._getNodeByKey(key, list.cdr())
+	}
+
+	applyPrimitive(primitive, args, evaluator) {
+		const savedAList = this._alist
+		this._pushInvocation(primitive.getName(), args)
+
+		try {
+			primitive.checkNumberOfArgs(args)
+			const actuals = this._pushPrimitiveRecords(primitive, args, evaluator)
+			return this._applyAndPopInvocation(() => primitive.run(actuals))
+		} catch (e) {
+			this._stackDumper.apply(e)
+		}
+	}
+
+	applyLambda(name, lambdaS, args, evaluator) {
+		this._pushInvocation(name, args)
+
+		try {
+			const lambda = new Lambda(lambdaS, args)
+			this._pushLambdaRecords(lambda, args, evaluator)
+			return this._applyAndPopInvocation(() => evaluator.evaluate(lambda.body))
+		} catch (e) {
+			this._stackDumper.apply(e)
+		}
+	}
+
+	_applyAndPopInvocation(apply) {
+		const result = apply()
+		this._popInvocation()
+		return result		
+	}
+
+	_getActuals(args, shouldEvaluateArgs, evaluator) {
+		return this._pushArgsAndGetActuals(
+			args, Atom.nil, shouldEvaluateArgs, evaluator
+		)
+	}
+
+	_pushPrimitiveRecords(primitive, args, evaluator) {
+		return this._getActuals(args, primitive.isEager(), evaluator)
+	}
+
+	_pushLambdaRecords(lambda, args, evaluator) {
+		const actuals = this._getActuals(args, lambda.tag.eq(Atom.lambda), evaluator)
+		this._push(Atom.recurse, lambda.s)
+		this._pushLists(lambda.formals, actuals)
+	}
+
+	_pushArgsAndGetActuals(args, actuals, shouldEvaluateArgs, evaluator) {
+		if (args.null()) {
+			actuals.reverseList()
+			this._pushArgs(args, actuals)
+			return actuals
 		}
 
-		const currPair = list.car()
-		return s.eq(currPair.car())
-			? currPair.cdr()
-			: Environment._lookup(s, list.cdr()) 
+		const arg = args.car()
+		try {
+			const actual = shouldEvaluateArgs ? evaluator.evaluate(arg) : arg
+			actuals = actual.cons(actuals)
+		} catch (e) {
+			this._pushArgs(args, actuals.reversedList())
+			throw e
+		}
+		
+		return this._pushArgsAndGetActuals(
+			args.cdr(), actuals, shouldEvaluateArgs, evaluator
+		)
 	}
 
-	static _isSeparator(node) {
-		return node.car().null()
-	}
-
-	bind(formals, actuals) {
-		this._alist = Environment._bind(formals, actuals, this._alist)
-		return this._alist
-	}
-
-	static _bind(formals, actuals, list) {
-		if (formals.null() && actuals.null()) {
-			return list
+	_pushLists(keys, values) {
+		if (keys.null() || values.null()) {
+			return
 		}
 
-		return Environment._bind(formals.cdr(), actuals.cdr(), 
-						  		 formals.car().cons(actuals.car()).cons(list))
+		this._push(keys.car(), values.car())
+		this._pushLists(keys.cdr(), values.cdr())
+	}
+
+	_pushInvocation(name, args) {
+		this._push(Atom.invocation, name.cons(args))
+	}
+
+	_pushArgs(args, actuals) {
+		this._push(Atom.arguments, args.cons(actuals))
+	}
+
+	_popInvocation() {
+		this.popUntilReachingInvocation()
+		this.pop()
+	}
+
+	/* Stack Dumper Delegate */
+	pop() {
+		this._alist = this._alist.cdr()
+	}
+
+	popUntilReachingRecord() {
+		const recordKeys = [Atom.invocation, Atom.arguments]
+		for (; !recordKeys.includes(this._topKey()); this.pop());
+	}
+
+	popUntilReachingInvocation() {
+		this._alist = this._getNodeByKey(Atom.invocation)
+	}
+
+	top() {
+		return this._topValue()
+	}
+
+	checkTop(key) {
+		return this._topKey().eq(key)
+	}
+
+	_topPair() {
+		return this._alist.car()
+	}
+
+	_topKey() {
+		return this._topPair().car()
+	}
+
+	_topValue() {
+		return this._topPair().cdr()
 	}
 }

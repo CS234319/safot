@@ -3,40 +3,33 @@
 	const Atom = require("./Atom")
 	const ListCreator = require("./ListCreator")
 	const lc = new ListCreator()
-	const quote = Atom.quote
 }
 
 S
-	=   _
-		s:	(
-				"(" _ complex:(Pair / List) _ ")" { return complex } 	/
-				sym:Symbol { return new Atom(sym) } 					/
-				Quote
-			)
-		_ { return s }
+	=   _ s:(Pair / List / Symbol / Quote) _ { return s }
 
 List
-	= listArray:(s:S { return s })* {
+	= '(' listArray:S* ')' {
 		return lc.create(...listArray)
 	}
 
 Pair
-	= car:S "." cdr:S { 
+	= '[' car:S '.' cdr:S ']' { 
 		return new Pair(car, cdr)
 	}
 
 Symbol
 	= [^()'.;\[\]\x00-\x20\x7F-\uFFFF]+ { 
-		return text().toUpperCase()
+		return new Atom(text().toUpperCase())
 	}
 
 Quote
 	= "'" s:S { 
-		return lc.create(quote, s)
+		return lc.create(Atom.quote, s)
 	}
 
 Comment
-	= ";" [^\n\r]*
+	= ';' [^\n\r]*
 
 _
 	= ([\x00-\x20\x7F-\uFFFF] / Comment)*

@@ -5,11 +5,11 @@ const parse = require('./Parser').parse
 
 const utils = new TestUtils()
 
-const pair = parse('(B . A)')
+const pair = parse('[B . A]')
 const list = parse('(B A X Y Z)')
 const listAsArray = ['B', 'A', 'X', 'Y', 'Z'].map(val => new Atom(val))
 const listTail = parse('(A X Y Z)')
-const complexList = parse('((B A X Y Z) (A B C) (B . A))')
+const complexList = parse('((B A X Y Z) (A B C) [B . A])')
 const a = parse('A')
 const b = parse('B')
 const c = parse('C')
@@ -67,13 +67,13 @@ test('equals', () => {
 	expect(t.equals(t)).toBeTruthy()
 	expect(t.equals(nil)).toBeFalsy()
 	expect(nil.equals(t)).toBeFalsy()
-	expect(parse('(a . (b c))').equals(parse('(a b c)'))).toBeTruthy()
-	expect(parse('(a . (b . (c . d)))').equals(
-		   parse('(a . (b . (c . d)))'))).toBeTruthy()
-	expect(parse('(a . (b . (c . d)))').equals(
-		   parse('(a . (b . (c . nil)))'))).toBeFalsy()
+	expect(parse('[a . (b c)]').equals(parse('(a b c)'))).toBeTruthy()
+	expect(parse('[a . [b . [c . d]]]').equals(
+		   parse('[a . [b . [c . d]]]'))).toBeTruthy()
+	expect(parse('[a . [b . [c . d]]]').equals(
+		   parse('[a . [b . [c . nil]]]'))).toBeFalsy()
 	expect(parse('(a b c)').equals(
-		   parse('(a . (b . (c . nil)))'))).toBeTruthy()
+		   parse('[a . [b . [c . nil]]]'))).toBeTruthy()
 })
 
 test('null', () => {
@@ -91,11 +91,62 @@ test('t', () => {
 })
 
 test('error', () => {
-	utils.expectException(() => a.error(), a)
-	utils.expectException(() => pair.error(), pair)
-	utils.expectException(() => list.error(), list)
 	utils.expectException(() => a.error(b), a, b)
 	utils.expectException(() => a.error(Atom.invalid), a, Atom.invalid)
+})
+
+test('prepend', () => {
+	const applyTest = (str1, str2, str3) => {
+		utils.expectEquals(parse(str1).prepend(parse(str2)), parse(str3))
+	}
+
+	applyTest('[a.b]', 'c', '[c.[a.b]]')
+	applyTest('(a b)', 'c', '(c a b)')
+	applyTest('([a.b] [c.d])', '[e.f]', '([e.f] [a.b] [c.d])')
+})
+
+test('prependPair', () => {
+	const applyTest = (str1, str2, str3, str4) => {
+		utils.expectEquals(parse(str1).prependPair(parse(str2), parse(str3)), parse(str4))
+	}
+
+	applyTest('[a.b]', 'c', 'd', '[[c.d].[a.b]]')
+	applyTest('(a b)', 'c', 'd', '([c.d] a b)')
+	applyTest('([a.b] [c.d])', 'e', 'f', '([e.f] [a.b] [c.d])')
+})
+
+test('reversedList', () => {
+	const applyTest = (str1, str2) => {
+		utils.expectEquals(parse(str1).reversedList(), parse(str2))
+	}
+
+	const testUndefined = str => {
+		utils.expectEquals(parse(str).reversedList(), undefined)
+	}
+
+	applyTest('nil', 'nil')
+	applyTest('()', '()')
+	applyTest('(a)', '(a)')
+	applyTest('(a b)', '(b a)')
+	applyTest('(a b c)', '(c b a)')
+	testUndefined('a')
+	testUndefined('[a . b]')
+})
+
+test('reverseList', () => {
+	const applyTest = (str1, str2) => {
+		const list = parse(str1)
+		list.reverseList()
+		utils.expectEquals(list, parse(str2))
+	}
+
+	applyTest('nil', 'nil')
+	applyTest('()', '()')
+	applyTest('(a)', '(a)')
+	applyTest('(a b)', '(b a)')
+	applyTest('(a b c)', '(c b a)')
+	applyTest('a', 'a')
+	applyTest('[a . b]', '[a . b]')
 })
 
 test('isList', () => {
@@ -109,9 +160,9 @@ test('isList', () => {
 test('getListAsArray', () => {
 	utils.expectEquals(nil.getListAsArray(), [])
 	utils.expectEquals(list.getListAsArray(), listAsArray)
-	utils.expectEquals(t.getListAsArray(), null)
-	utils.expectEquals(a.getListAsArray(), null)
-	utils.expectEquals(pair.getListAsArray(), null)
+	utils.expectEquals(t.getListAsArray(), undefined)
+	utils.expectEquals(a.getListAsArray(), undefined)
+	utils.expectEquals(pair.getListAsArray(), undefined)
 })
 
 test('getListLength', () => {
@@ -130,4 +181,3 @@ test('toString', () => {
 	utils.expectEquals(parse(list.toString()), list)
 	utils.expectEquals(parse(complexList.toString()), complexList)
 })
-
