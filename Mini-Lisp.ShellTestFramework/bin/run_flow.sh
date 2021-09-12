@@ -55,4 +55,10 @@ FLOW_TESTS_DIR="${SCRIPT_DIR}/../test/flow"
 export PROJECT_DIR=`realpath "${SCRIPT_DIR}/../"`
 export PYTHONPATH="${PYTHONPATH}:${PROJECT_DIR}/"
 
+echo "Running run_flow.sh ..."
+
+# Compile mini-lisp:
+export WORK_AROUND=1
+make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.Chic/ &> /dev/null
+
 flow_runner `realpath $1` `realpath "${@:2}" | tr "\n" " "`

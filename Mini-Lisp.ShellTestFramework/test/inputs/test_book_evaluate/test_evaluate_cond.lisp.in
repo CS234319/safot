@@ -1,6 +1,26 @@
-(evaluate-cond '() '())
-(evaluate-cond '((k b) (NIL NIL) ) '(k.T b.T))
-(evaluate-cond '((k b) (k b)) '(k.T b.T))
-(evaluate-cond '((k b) (b k)) '(k.NIL b.NIL))
-(evaluate-cond '((k (atom b)) (b k)) '(k.NIL b.NIL))
-(evaluate-cond '((k (error b)) (b k)) '(k.NIL b.NIL))
+; =================================================
+; evaluate-cond - 1 arg
+; =================================================
+(evaluate-cond '() '(t.t nil.nil))              ; NIL
+(evaluate-cond '((t nil)) '(t.t nil.nil))       ; NIL
+(evaluate-cond '((a t)) '(a.t t.t nil.nil))     ; T
+(evaluate-cond '((a b)) '(a.t b.t t.t nil.nil)) ; T
+
+; =================================================
+; evaluate-cond - 2 arg
+; =================================================
+(evaluate-cond '((t a) (nil b)) '(a.a b.b t.t nil.nil)) ; A
+(evaluate-cond '((nil a) (t b)) '(a.a b.b t.t nil.nil)) ; B
+(evaluate-cond '((a b) (b a)) '(a.t b.t t.t nil.nil))   ; T
+(evaluate-cond '((a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
+
+; =================================================
+; evaluate-cond - more args
+; =================================================
+(evaluate-cond '((a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
+
+; =================================================
+; evaluate-cond - errors
+; =================================================
+(evaluate-cond '(t t) '(t.t nil.nil))   ; argument car error
+(evaluate-cond '((t a)) '(t.t nil.nil)) ; undefined

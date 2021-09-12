@@ -48,10 +48,50 @@ def test_error(shell):
     """
     assert shell.feed("(car 'a)") == "Error [CAR] in A"
     assert shell.feed("(cdr 'a)") == "Error [CDR] in A"
+    assert shell.feed("(cdr (car 'a))") == "Error [CAR] in A"
     assert shell.feed("(bla)") == "Error [UNDEFINED] in BLA"
     assert shell.feed("(error)") == "Error [NIL] in (ERROR)"
     assert shell.feed("(error 'A)") == "Error [A] in (ERROR (QUOTE A))"
     assert shell.feed("(error 'message)") == "Error [MESSAGE] in (ERROR (QUOTE MESSAGE))"
+
+
+def test_error_traceback(shell):
+    """
+    Check errors outputs with traceback
+    """
+    assert shell.feed("(car 'a)", traceback=True) == """\
+Traceback (most recent call last):
+\tFrom function CAR:
+\t\tArgs: A
+Error [CAR] in A"""
+    assert shell.feed("(cdr 'a)", traceback=True) == """\
+Traceback (most recent call last):
+\tFrom function CDR:
+\t\tArgs: A
+Error [CDR] in A"""
+    assert shell.feed("(cdr (car 'a))", traceback=True) == """\
+Traceback (most recent call last):
+\tFrom function CDR:
+\t\tArgs: (CAR (QUOTE A))
+\tFrom function CAR:
+\t\tArgs: A
+Error [CAR] in A"""
+    assert shell.feed("(bla)", traceback=True) == "Error [UNDEFINED] in BLA"
+    assert shell.feed("(error)", traceback=True) == """\
+Traceback (most recent call last):
+\tFrom function ERROR:
+\t\tArgs: NIL
+Error [NIL] in (ERROR)"""
+    assert shell.feed("(error 'A)", traceback=True) == """\
+Traceback (most recent call last):
+\tFrom function ERROR:
+\t\tArgs: A
+Error [A] in (ERROR (QUOTE A))"""
+    assert shell.feed("(error 'message)", traceback=True) == """\
+Traceback (most recent call last):
+\tFrom function ERROR:
+\t\tArgs: MESSAGE
+Error [MESSAGE] in (ERROR (QUOTE MESSAGE))"""
 
 
 def test_multi_line(shell):

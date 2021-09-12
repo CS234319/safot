@@ -7,7 +7,11 @@
  * TODO: deal with memory exhausting */
 
 namespace Pairs {
+#ifdef WORK_AROUND
+  define(M = (1 << 25))
+#else
   define(M = (1 << 15) - 1)
+#endif
   // Falls in the data segment;
   static Pair buffer[M];
   Pair *const pool = buffer - 1;
@@ -32,11 +36,10 @@ namespace Pairs {
     return inner;
   }
 
-
   H allocate() {
     D(next(), remaining);
-    remaining > 0 || die(EXHAUSTED);
-    next() != 0 || die(EXHAUSTED);;
+    remaining > 0 || memory_error(NOT_ENOUGH_MEMORY);
+    next() > 0 ||  memory_error(OVERFLOW);
     const H $ = next();
     remaining--, next() = pool[next()].next;
     D($, next(), remaining);

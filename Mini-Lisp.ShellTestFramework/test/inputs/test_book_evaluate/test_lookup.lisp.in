@@ -1,5 +1,11 @@
-(lookup 'a '(a.x b.NIL c.NIL))
-(lookup 'a '(b.NIL a.x c.NIL))
-(lookup 'a '(b.NIL c.NIL a.x))
-(lookup 'a '())
-(lookup)
+; =================================================
+; lookup - lookup for atom value from the a-list:
+; =================================================
+(lookup 'a '(a.x b.NIL c.NIL)) ; X
+(lookup 'a '(b.NIL a.x c.NIL)) ; X
+(lookup 'a '(b.NIL c.NIL a.x)) ; X
+
+; =================================================
+; lookup - Undefined error:
+; =================================================
+(lookup 'a '()) ; undefined error

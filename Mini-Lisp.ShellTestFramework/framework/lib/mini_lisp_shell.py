@@ -2,7 +2,9 @@ import pexpect
 import logging
 import os
 import re
+from time import sleep
 from pathlib import Path
+import tempfile
 
 
 class MiniLispShell:
@@ -43,6 +45,8 @@ class MiniLispShell:
         self._check_if_executable_exists(mini_lisp)
         self.mini_lisp = mini_lisp
         self.shell = None
+        self.log_fd, self.log_path = tempfile.mkstemp()
+        self.log = Path(self.log_path)
 
     def __enter__(self):
         return self.start_mini_lisp()
@@ -54,12 +58,23 @@ class MiniLispShell:
 
     def __del__(self):
         self.close_mini_lisp()
+        os.close(self.log_fd)
+        self.log.unlink()
 
     def start_mini_lisp(self):
         """
         Start mini-lisp shell
         """
-        self.shell = pexpect.spawn(self.mini_lisp, encoding='utf-8', echo=False, timeout=2, maxread=1)
+        self.shell = pexpect.spawn(
+            self.mini_lisp,
+            encoding='utf-8',
+            echo=False,
+            timeout=6,
+            maxread=1)
+        if self.log.exists():
+            self.log.unlink()
+        self.log.touch()
+        self.shell.logfile_read = self.log.open('w')
         return self
 
     def close_mini_lisp(self):
@@ -70,11 +85,17 @@ class MiniLispShell:
             self.shell.stdin.close()
             self.shell.close()
 
-    def feed(self, input_str: str) -> str:
+    def feed(
+            self,
+            input_str: str,
+            filter_pattern=r"\r|- |\?|> ",
+            filter_newline=True,
+            timeout=2,
+            traceback=False
+    ) -> str:
         """
-        Feed the shell and get the output
+        Feed the shell with 1 line, and get the output.
 
-        :param input_str: input for mini-lisp shell
         :return: stdout + stderr
         """
         if not self.shell:
@@ -84,7 +105,24 @@ class MiniLispShell:
 
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
-        return re.sub(r"\r|\n|- |\?|> ", "", self.shell.readline())
+        self.shell.expect("\n", timeout=timeout)
+        if "Traceback" in self.log.read_text():
+            while True:
+                try:
+                    self.shell.expect("\n", timeout=timeout)
+                except:
+                    break
+        raw = self.log.read_text().replace("\x00", "")
+        self.log.write_text("")
+        out = re.sub(filter_pattern, "", raw)
+        out = out[:-1]
+        if "Traceback" in out and traceback is False:
+            out = list(out.split("\n"))[-1]
+        if out.isspace():
+            out = ""
+        if filter_newline is False:
+            out = out.replace("\n", "")
+        return out
 
     @staticmethod
     def _check_if_executable_exists(path: str) -> None:

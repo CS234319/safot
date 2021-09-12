@@ -1,4 +1,11 @@
-(evaluate-list NIL '())
-(evaluate-list '(a) '(a.T))
-(evaluate-list '(a b c) '(a.x b.y c.z))
-(evaluate-list NIL)
+; =================================================
+; evaluate-list using the a-list:
+; =================================================
+(evaluate-list NIL '(nil.nil))          ; NIL
+(evaluate-list '(a) '(a.T))             ; (T)
+(evaluate-list '(a b c) '(a.x b.y c.z)) ; (X Y Z)
+
+; =================================================
+; evaluate-list - Undefined error:
+; =================================================
+(evaluate-list '(a b c) '(a.x b.y)) ; undefined error

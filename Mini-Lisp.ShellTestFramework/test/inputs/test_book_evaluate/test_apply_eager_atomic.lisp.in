@@ -1,9 +1,27 @@
-(apply-eager-atomic 'atom '(a NIL) '())
-(apply-eager-atomic 'car '((a b) (NIL)) '())
-(apply-eager-atomic 'cdr '((a b) (NIL)) '())
-(apply-eager-atomic 'cons '(a b) '())
-(apply-eager-atomic 'eq '(a a) '())
-(apply-eager-atomic 'eq '(a b) '())
-(apply-eager-atomic 'set '(y a) '())
-(apply-eager-atomic)
-(apply-eager-atomic 'error 'a '())
+; =================================================
+; apply-eager-atomic - 1 argument functions:
+; =================================================
+(apply-eager-atomic 'atom '(a) '(t.t nil.nil))
+(apply-eager-atomic 'car '((a b)) '(t.t nil.nil))
+(apply-eager-atomic 'cdr '((a b)) '(t.t nil.nil))
+(apply-eager-atomic 'eval '(a) '(a.x t.t nil.nil))
+
+; =================================================
+; apply-eager-atomic - 2 argument functions:
+; =================================================
+(apply-eager-atomic 'cons '(a b) '(t.t nil.nil))
+(apply-eager-atomic 'eq '(a a) '(t.t nil.nil))
+(apply-eager-atomic 'eq '(a b) '(t.t nil.nil))
+(apply-eager-atomic 'set '(a b) '(t.t nil.nil))
+(apply-eager-atomic 'set '(a (b c)) '(t.t nil.nil))
+
+; =================================================
+; apply-eager-atomic - the error function:
+; =================================================
+(apply-eager-atomic 'error NIL '(t.t nil.nil)) ; NIL
+(apply-eager-atomic 'error 'my_error '(t.t nil.nil)) ; MY_ERR
+
+; =================================================
+; apply-eager-atomic - Errors:
+; =================================================
+(apply-eager-atomic 'bla '(a b) '(t.t nil.nil))

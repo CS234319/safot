@@ -12,10 +12,10 @@ class FlowTestFramework:
     using the interpreter, compile functions and evaluate s-expr,
     compare the results with golden output files.
     """
-
-    def __init__(self, mini_lisp: str):
+    def __init__(self, mini_lisp: str, filter_newline=True):
         self.shell = MiniLispShell(mini_lisp)
         self.shell.start_mini_lisp()
+        self.filter_newline = filter_newline
 
     def __del__(self):
         if self.shell:
@@ -28,7 +28,7 @@ class FlowTestFramework:
         :param file: input file with the functions declarations
         """
         for line in self.split_file(file):
-            self.shell.feed(line)
+            self.shell.feed(line, timeout=0.1)
 
     def run_s_expr_file(self, file: str) -> str:
         """
@@ -44,12 +44,20 @@ class FlowTestFramework:
         out_path.touch()
         with open(out_path, mode='a') as stream:
             for line in self.split_file(file):
-                out = self.shell.feed(line)
+                out = self.feed(line)
                 if out == "":
                     continue
                 stream.write(out)
                 stream.write('\n')
         return str(out_path)
+
+    def feed(self, line) -> str:
+        """
+        Wrapper to MiniLispShell feed.
+
+        :return: output string
+        """
+        return self.shell.feed(line, timeout=4, filter_newline=self.filter_newline)
 
     def interactive(self):
         """
@@ -93,3 +101,10 @@ class FlowTestFramework:
         if s_expr_file_pattern.search(file_name):
             return False
         return True
+
+    @staticmethod
+    def update_golden(gold_path: str, out_path: str) -> None:
+        """
+        Update golden file for a test
+        """
+        Path(gold_path).write_text(Path(out_path).read_text())

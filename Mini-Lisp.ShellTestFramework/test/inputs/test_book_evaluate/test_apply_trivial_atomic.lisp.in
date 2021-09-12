@@ -1,8 +1,20 @@
+; =================================================
+; apply-trivial-atomic - 1 argument functions:
+; =================================================
 (apply-trivial-atomic 'atom 'a NIL)
 (apply-trivial-atomic 'car '(a b) NIL)
 (apply-trivial-atomic 'cdr '(a b) NIL)
+
+; =================================================
+; apply-trivial-atomic - 2 argument functions:
+; =================================================
 (apply-trivial-atomic 'cons 'a 'b)
 (apply-trivial-atomic 'eq 'a 'a)
 (apply-trivial-atomic 'eq 'a 'b)
 (apply-trivial-atomic 'set 'a 'b)
-(apply-trivial-atomic 'zzz 'a NIL)
+(apply-trivial-atomic 'set 'a '(b c))
+
+; =================================================
+; apply-trivial-atomic - Errors:
+; =================================================
+(apply-trivial-atomic 'bla 'a 'b)

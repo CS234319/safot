@@ -4,7 +4,7 @@ import os
 from enum import Enum
 from pathlib import Path
 from typing import List, Dict
-from flow_test_framework import FlowTestFramework
+from framework.lib.flow_test_framework import FlowTestFramework
 
 
 class FileType(Enum):

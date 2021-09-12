@@ -1,7 +1,46 @@
-(evaluate-atomic '(car a b) '(a.(x y) b.T))
-(evaluate-atomic '(cdr a b) '(a.(x y) b.T))
-(evaluate-atomic '(atom a b) '(a.x b.T))
-(evaluate-atomic '(atom a b) '(a.(x y) b.T))
-(evaluate-atomic '(eq a a) '(a.x b.T))
-(evaluate-atomic '(eq a b) '(a.x b.T))
-(evaluate-atomic '(eq a b) '(a.x b.x))
+; =================================================
+; evaluate-atomic - 1 argument functions:
+; =================================================
+(evaluate-atomic '(atom a) '(a.x t.t nil.nil))      ; T
+(evaluate-atomic '(atom a) '(a.(x) t.t nil.nil))    ; NIL
+(evaluate-atomic '(car a) '(a.(x) t.t nil.nil))     ; X
+(evaluate-atomic '(car a) '(a.(x y z) t.t nil.nil)) ; X
+(evaluate-atomic '(car a) '(a.(x.y) t.t nil.nil))   ; X.Y
+(evaluate-atomic '(cdr a) '(a.(x) t.t nil.nil))     ; NIL
+(evaluate-atomic '(cdr a) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(evaluate-atomic '(cdr a) '(a.(x.y) t.t nil.nil))   ; NIL
+(evaluate-atomic '(eval a) '(a.x x.y t.t nil.nil))  ; Y
+
+; =================================================
+; evaluate-atomic - 2 argument functions:
+; =================================================
+(evaluate-atomic '(cons a b) '(a.x b.y t.t nil.nil))  ; (X.Y)
+(evaluate-atomic '(cons a b) '(a.x b.x t.t nil.nil))  ; (X.X)
+(evaluate-atomic '(eq a a) '(a.x t.t nil.nil))        ; T
+(evaluate-atomic '(eq a b) '(a.x b.y t.t nil.nil))    ; NIL
+(evaluate-atomic '(eq a b) '(a.x b.x t.t nil.nil))    ; T
+(evaluate-atomic '(set a b) '(a.x b.y t.t nil.nil))   ; Y
+
+; =================================================
+; evaluate-atomic - cond:
+; =================================================
+(evaluate-atomic '(cond (())) '(t.t nil.nil))                       ; NIL
+(evaluate-atomic '(cond (t nil)) '(t.t nil.nil))                 ; NIL
+(evaluate-atomic '(cond (a t)) '(a.t t.t nil.nil))               ; T
+(evaluate-atomic '(cond (a b)) '(a.t b.t t.t nil.nil))           ; T
+(evaluate-atomic '(cond (t a) (nil b)) '(a.a b.b t.t nil.nil))   ; A
+(evaluate-atomic '(cond (nil a) (t b)) '(a.a b.b t.t nil.nil))   ; B
+(evaluate-atomic '(cond (a b) (b a)) '(a.t b.t t.t nil.nil))     ; T
+(evaluate-atomic '(cond (a b) (b a)) '(a.nil b.t t.t nil.nil))   ; NIL
+(evaluate-atomic '(cond (a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
+
+; =================================================
+; evaluate-atomic - the error function:
+; =================================================
+(evaluate-atomic '(error NIL) '(t.t nil.nil)) ; NIL
+(evaluate-atomic '(error a) '(a.my_err t.t nil.nil)) ; MY_ERR
+
+; =================================================
+; evaluate-atomic - Errors:
+; =================================================
+(evaluate-atomic '(bla a b) '(a.x b.y t.t nil.nil))   ; error

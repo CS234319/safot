@@ -1,10 +1,109 @@
-(evaluate 'a '(a.T))
-(evaluate 'a '(a.x))
-(evaluate 'a '())
-(evaluate '(car a b) '(a.(x y) b.T))
-(evaluate '(cdr a b) '(a.(x y) b.T))
-(evaluate '(atom a b) '(a.x b.T))
-(evaluate '(atom a b) '(a.(x y) b.T))
-(evaluate '(eq a a) '(a.x b.T))
-(evaluate '(eq a b) '(a.x b.T))
-(evaluate '(eq a b) '(a.x b.x))
+; =================================================
+; Evaluate - lookup for atom value from the a-list:
+; =================================================
+(evaluate 'a '(a.T t.t nil.nil)) ; T
+(evaluate 'a '(a.x t.t nil.nil)) ; X
+
+; =================================================
+; Evaluate - evaluation of 1 arg atomic functions:
+; =================================================
+(evaluate '(atom a) '(a.x t.t nil.nil))      ; T
+(evaluate '(atom a) '(a.(x) t.t nil.nil))    ; NIL
+(evaluate '(car a) '(a.(x) t.t nil.nil))     ; X
+(evaluate '(car a) '(a.(x y z) t.t nil.nil)) ; X
+(evaluate '(car a) '(a.(x.y) t.t nil.nil))   ; X.Y
+(evaluate '(cdr a) '(a.(x) t.t nil.nil))     ; NIL
+(evaluate '(cdr a) '(a.(x y z) t.t nil.nil)) ; (Y Z)
+(evaluate '(cdr a) '(a.(x.y) t.t nil.nil))   ; NIL
+(evaluate '(eval a) '(a.x x.y t.t nil.nil))  ; Y
+
+; =================================================
+; Evaluate - evaluation of 2 arg atomic functions:
+; =================================================
+(evaluate '(cons a b) '(a.x b.y t.t nil.nil))  ; (X.Y)
+(evaluate '(cons a b) '(a.x b.x t.t nil.nil))  ; (X.X)
+(evaluate '(eq a a) '(a.x t.t nil.nil))        ; T
+(evaluate '(eq a b) '(a.x b.y t.t nil.nil))    ; NIL
+(evaluate '(eq a b) '(a.x b.x t.t nil.nil))    ; T
+(evaluate '(set a b) '(a.x b.y t.t nil.nil))   ; Y
+
+; =================================================
+; Evaluate - cond:
+; =================================================
+(evaluate '(cond (())) '(t.t nil.nil))                    ; NIL
+(evaluate '(cond (t nil)) '(t.t nil.nil))                 ; NIL
+(evaluate '(cond (a t)) '(a.t t.t nil.nil))               ; T
+(evaluate '(cond (a b)) '(a.t b.t t.t nil.nil))           ; T
+(evaluate '(cond (t a) (nil b)) '(a.a b.b t.t nil.nil))   ; A
+(evaluate '(cond (nil a) (t b)) '(a.a b.b t.t nil.nil))   ; B
+(evaluate '(cond (a b) (b a)) '(a.t b.t t.t nil.nil))     ; T
+(evaluate '(cond (a b) (b a)) '(a.nil b.t t.t nil.nil))   ; NIL
+(evaluate '(cond (a b) (a b) (b a)) '(a.nil b.t t.t nil.nil)) ; NIL
+
+; =================================================
+; Evaluate - the error function:
+; =================================================
+(evaluate '(error) '(t.t nil.nil)) ; NIL
+(evaluate '(error a) '(a.my_err t.t nil.nil)) ; MY_ERR
+
+; =================================================
+; Evaluate - Errors:
+; =================================================
+(evaluate '(bla) '(t.t nil.nil))
+(evaluate '(NIL NIL) '(t.t nil.nil))
+
+; =================================================
+; Evaluate - apply: lambda/nlambda functions - Part 1
+; =================================================
+; -------------------------------------------------------
+; ID:
+(evaluate '(id a) '(id.(lambda (x) x) a.t t.t nil.nil))     ; T     - arg evaluation
+(evaluate '(id a) '(id.(lambda (x) x) a.(a b) t.t nil.nil)) ; (A B) - arg evaluation
+
+; -------------------------------------------------------
+; QUOTE:
+(evaluate '(quote a) '(quote.(nlambda (x) x) a.t t.t nil.nil))  ; A
+(evaluate '(quote bla) '(quote.(nlambda (x) x) t.t nil.nil))    ; bla
+
+; -------------------------------------------------------
+; FIRST_3 function: (lambda/nlambda)
+(evaluate '(first a b c) '(first.(nlambda (x y z) x) t.t nil.nil)) ; a
+(evaluate '(first a b c) '(first.(lambda (x y z) x) a.a b.b c.c t.t nil.nil)) ; a
+
+; -------------------------------------------------------
+; LAST_3 function: (lambda/nlambda)
+(evaluate '(last a b c) '(last.(nlambda (x y z) z) t.t nil.nil)) ; c
+(evaluate '(last a b c) '(last.(lambda (x y z) z) a.a b.b c.c t.t nil.nil)) ; c
+
+; =================================================
+; Evaluate - apply: lambda/nlambda functions - Part 2
+; =================================================
+; -------------------------------------------------------
+; Car function:
+(evaluate '(xcar a) '(xcar.(lambda (x) (car x)) a.(a b) t.t nil.nil)) ; a
+
+; Car function - normal eval:
+(evaluate '(xcar (a b)) '(xcar.(nlambda (x) (car x)) t.t nil.nil)) ; a
+
+; -------------------------------------------------------
+; Cdr function:
+(evaluate '(xcdr a) '(xcdr.(lambda (x) (cdr x)) a.(a b) t.t nil.nil)) ; b
+
+; Cdr function - normal eval:
+(evaluate '(xcdr (a b)) '(xcdr.(nlambda (x) (cdr x)) t.t nil.nil)) ; b
+
+; -------------------------------------------------------
+; MIRROR function:
+(evaluate '(mirror a) '(mirror.(lambda (x) (cons (cdr x) (car x))) a.(a b) t.t nil.nil)) ; (b a)
+
+; MIRROR function - normal eval:
+(evaluate '(mirror (a b)) '(mirror.(nlambda (x) (cons (cdr x) (car x))) t.t nil.nil)) ; (b a)
+
+; -------------------------------------------------------
+; ZCAR function:
+(evaluate '(zcar a) '(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.a t.t nil.nil))      ; a
+(evaluate '(zcar a) '(zcar.(lambda (x) (cond ((atom x) x) (t (car x)))) a.(a b) t.t nil.nil))  ; a
+
+; ZCAR function - normal eval:
+(evaluate '(zcar (a b)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil)) ; a
+(evaluate '(zcar (a)) '(zcar.(nlambda (x) (cond ((atom x) x) (t (car x)))) t.t nil.nil))   ; a

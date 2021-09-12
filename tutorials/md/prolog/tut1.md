@@ -1,5 +1,59 @@
 # Prolog
+- Prolog = PROgramming in LOgic
+## The Declarative Paradigm
+Prolog is the _prime_ member of the declarative paradigm
+-  *Declarative* paradigm: what, not how
+    1. *Imperative paradigm*: program specifyies sequential computation; execution engine is not free to choose how to  follow instructions (except for co-lateral constructs)
+    2. *Distributed paradigm*: program specifies several comptutations; execution engine is free  to schedule
+    3. *Functional paradigm*: program specifies expression; (with Church-Rosser) execution engine is free to evaluate it any way it chooses, e.g., Haskell and Mini-LISP
+    4. *Declarative paradigm*: program species result, but not how to compute it; the engine uses the specification to compute the result. 
+Weird... How can the machine derive a result just from the specification? Indeed, this is not always possible, and the engine may fail. 
+## Declarative programming in Prolog
+### Program
+A Prolog program has three parts
+1. Facts: list of fudamental truths
+3. Rules: for deriving more facts.
+4. Query: predicate in logic
 
+### The Engine
+Tries to produce, the set of facts that answer the query
+Objective: find the set of facts that answer the query
+    1. satisfy the predicate
+    1. are basic facts, or facts deduced the rules
+The set of answers: 
+    1. May be empty
+    2. May be infinite
+    3. May contain any number of facts
+## Computation
+- The engine generates a stream of results
+- One fundamental operations: `next()`, which returns the next fact, or reports no more facts can be produced.
+
+
+1. Test: are there more results?
+2. Next: p
+The engine is works like an iterator, that supports two operations:
+the engine has two operations:
+- 
+1. The stream may
+3. If the engine reports that 
+4. Otherwise, *Best effort policy*:  
+
+
+- The engine sometimes fails; it infers
+## Symbolic Computation and Prolog
+Prolog, just like LISP focusses on *symbolic* comptuation:
+- Symbolic = values are symbols that have no intrinsic meaning. 
+- Non Symbolic = values are e.g., integers, reals, complex, booleans, pointers, arrays, etc.
+## Pure Prolog
+In this course, we use *pure prolog*, which does not include
+- Non symbolic values
+- Mathematical operators
+- Input and output functionality 
+- Syntactic sugar
+- Any convenience hacks or additions to the language
+To make the language useful, Prolog implementations add these and much more to pure Prolog
+## Symbolic Computation in LISP vs. Prolog
+LISP: only one data structure, called S-expression, 
 ## introduction
 
 ---
