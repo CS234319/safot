@@ -85,9 +85,7 @@ class Quote extends Element {
 		value?.predefineSymbolsColor(Quote.Color)
 	}
 
-	predefineSymbolsColor() {
-		return
-	}
+	predefineSymbolsColor() {}
 
 	buildText() {
 		const text = this.value?.buildText() ?? ''
