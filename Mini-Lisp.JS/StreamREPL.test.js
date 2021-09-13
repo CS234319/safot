@@ -9,7 +9,7 @@ const testFile = async name => {
 	const expectedPath = `${filePathNoExt}.expected.lisp`
 	const outputPath = `${filePathNoExt}.out.lisp`
 
-	if (!fs.existsSync(inputPath)) {
+	if (!fs.existsSync(inputPath) || !fs.existsSync(expectedPath)) {
 		return false
 	}	
  
@@ -24,10 +24,6 @@ const testFile = async name => {
 	await new Promise(resolve => setTimeout(resolve, 100))
 
 	fs.writeFileSync(outputPath, outputStream.toString())
-
-	if (!fs.existsSync(inputPath) || !fs.existsSync(expectedPath)) {
-		return false
-	}
 
 	const expectedPromise = new Promise(resolve => {
 		const expectedStream = fs.createReadStream(expectedPath)
