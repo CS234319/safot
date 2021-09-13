@@ -25,7 +25,7 @@ const testFile = async name => {
 
 	fs.writeFileSync(outputPath, outputStream.toString())
 
-	if (!fs.existsSync(expectedPath)) {
+	if (!fs.existsSync(inputPath) || !fs.existsSync(expectedPath)) {
 		return false
 	}
 
