@@ -4,4 +4,4 @@
 
 (defun map (xs f) (reduce xs (lambda (x y) (cons (f x) y)) nil))
 
-(map '([a.b] [c.d]) (lambda (x) (car x)))
+(map '(c . d) (lambda (x) (car x)))

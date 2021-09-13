@@ -5,9 +5,9 @@ const testsFolderPath = './repl_tests'
 
 const testFile = async name => {
 	const filePathNoExt = `${testsFolderPath}/${name}`
-	const inputPath = `${filePathNoExt}.in`
-	const expectedPath = `${filePathNoExt}.r`
-	const outputPath = `${filePathNoExt}.out`
+	const inputPath = `${filePathNoExt}.in.lisp`
+	const expectedPath = `${filePathNoExt}.expected.lisp`
+	const outputPath = `${filePathNoExt}.out.lisp`
 
 	if (!fs.existsSync(inputPath)) {
 		return false
@@ -29,10 +29,10 @@ const testFile = async name => {
 		return false
 	}
 
-	const expectedPromise = new Promise((resolve) => {
+	const expectedPromise = new Promise(resolve => {
 		const expectedStream = fs.createReadStream(expectedPath)
 		let chunks = []
-	    expectedStream.on('data', (chunk) => chunks.push(Buffer.from(chunk)))
+	    expectedStream.on('data', chunk => chunks.push(Buffer.from(chunk)))
 	    expectedStream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
   	})
 
