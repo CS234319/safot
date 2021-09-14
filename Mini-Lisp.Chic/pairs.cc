@@ -1,5 +1,6 @@
 #include "S.h"
-#include "stack-trace.h"
+#include "except.h"
+
 #define PRODUCTION
 #include "mode.h"
 
@@ -38,8 +39,7 @@ namespace Pairs {
 
   H allocate() {
     D(next(), remaining);
-    remaining > 0 || memory_error(NOT_ENOUGH_MEMORY);
-    next() > 0 ||  memory_error(OVERFLOW);
+    (remaining > 0 &&  next() > 0) ||  die(MEMORY_CONS);
     const H $ = next();
     remaining--, next() = pool[next()].next;
     D($, next(), remaining);

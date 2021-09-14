@@ -2,18 +2,14 @@
 #include "gtest/gtest.h"
 #include "test.h"
 
-extern bool atomic(S);
+auto atom(S s) { return s.atom(); }
 
 TEST(AtomicFunctionsList, AfterSet) {
-  EXPECT_TRUE(atomic("car"));
-  EXPECT_TRUE(atomic("cdr"));
-  EXPECT_TRUE(atomic("cons"));
-  EXPECT_TRUE(atomic("NULL"));
-
-  EXPECT_FALSE(atomic("NIL"));
-  EXPECT_FALSE(atomic("T"));
-  EXPECT_FALSE(atomic("X"));
-  EXPECT_FALSE(atomic(""));
+  EXPECT_TRUE(atom("car"));
+  EXPECT_TRUE(atom("cdr"));
+  EXPECT_TRUE(atom("cons"));
+  EXPECT_TRUE(atom("NULL"));
+  EXPECT_TRUE(atom("NIL"));
+  EXPECT_TRUE(atom("X"));
+  EXPECT_TRUE(atom(""));
 }
-
-

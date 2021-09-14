@@ -7,7 +7,7 @@
 
 static FILE *file = stdout;
 
-int err() { return file = stderr, 0;  }
+int err() { return file = stdout, 0;  }
 int out() { return file = stdout, 0; }
 
 bool grunt(int result)  {
@@ -59,6 +59,7 @@ int print(H h)           { return print(S(h)); }
 int print(S s) {
   if (s.atom()) return print(s.asAtom());
   if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
+  if (s.car().eq(QUOTE) && s.cdr().pair() && s.cdr().cdr().null())  return print("'"), print(s.cdr().car());
   for (print("(") ;; print(" ")) {
     print(S(s.car())); // First recursive call
     if ((s = s.cdr()).null()) return print(")");

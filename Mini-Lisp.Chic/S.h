@@ -93,14 +93,14 @@ With the fluentons of type S, this function is written as
 S lookup(S id, S a_list) { 
   return 
     a_list.null() ?  
-      id.error(UNDEFINED) : 
+      id.error(UNDEFINED_ATOM) : 
     a_list.car().car().eq(id) ?  
       a_list.car().cdr() : 
     lookup(id, a_list.cdr()); 
 }
 
 A fluenton is a method designed to be used in expressions such as the above, in
-which instead of writing '(cdr (car a)}' in 'cdr(car(a))', we write
+which instead of writing '(cdr (car a))' in 'cdr(car(a))', we write
 a.car().cdr(). Most fluentons return an S, that can be fluently continued by a
 another fluenton. Some fluentons are sinks: they return a boolean that can be
 used in a conditional expression. 
@@ -108,7 +108,7 @@ used in a conditional expression.
 Fluentons which do not implement an atomic function of mini-Lisp are called
 auxiliary fluentons.
 */
-
+// Fluenton sources of Names of atoms that represent atomic functions 
   // Unary atomic functions are parameterless fluentons 
   bool atom() const; /// sink: Atomic function of Mini-Lisp 
   bool pair() const; /// auxiliary sink: complements atom 
@@ -156,45 +156,22 @@ auxiliary fluentons.
   S $3$() const;  /// Auxiliary pipe: third element in a list
   S $4$() const;  /// Auxiliary pipe: forth element in a list
 };
+
 #undef NULL
-// Fluenton sources of Names of atoms that represent atomic functions 
-static const S NIL("nil");      
-static const S T("t");        
-static const S SET("set");      
-static const S NDEFUN("ndefun");   
-static const S DEFUN("defun");    
-static const S QUOTE("quote");    
-static const S ATOM("atom");     
-static const S CAR("car");      
-static const S CDR("cdr");      
-static const S COND("cond");     
-static const S CONS("cons");     
-static const S ERROR("error");    
-static const S EVAL("eval");     
-static const S EQ("eq");       
-static const S NULL("null");     
-static const S NLAMBDA("nlambda");   
-static const S LAMBDA("lambda");   
-static const S UNDEFINED("undefined");
-static const S INVALID("invalid");  
-static const S BUG("bug");
-static const S NOT_ENOUGH_MEMORY("not_enough_memory");
-static const S OVERFLOW("overflow");
+extern const S 
+/* Primitives */
+/*   Unary   */ ATOM, CAR, CDR, COND, 
+/*   Binary  */ CONS, EQ, 
+/* Add-ons */   EVAL, ERROR, SET, 
+/* Library */
+/*   Variables */ NIL, T, 
+/*   Unary:    */ NULL, QUOTE,
+/*   Ternary:  */ DEFUN, NDEFUN, LAMBDA, NLAMBDA
+;
 
-// Named atoms for exceptions; for the idiom s.error(MISSING) to abort
-// execution in the case that an error of kind MISSING occurs in the context of
+// Named atoms for exceptions; for the idiom s.error(MISSING_ARGUMENT) to abort
+// execution in the case that an error of kind MISSING_ARGUMENT occurs in the context of
 // the S expression named s.
-static const S MISSING("missing");  
-static const S REDUNDANT("redundant");  
-static const S EMPTY("empty");
-static const S EXHAUSTED("exhausted");
-
-// Stack trace:
-static const S RESCUE("rescue");
-static const S ARGUMENT("argument");
-
-// Additional fluentons.
-inline bool die(S s) { throw BUG.cons(s); }
 
 // Memory errors:
 inline bool memory_error(S s) {
@@ -203,6 +180,5 @@ inline bool memory_error(S s) {
     errno = ENOMEM;
     throw s;
 }
-
 #undef construct
 #endif // S_H 

@@ -13,6 +13,10 @@ static S s1(t,n);
 static S s2(s1,s1);
 static S s3(s2,s1);
 
+TEST(Fluenton, Quote) {
+  CAREFULLY_EXPECT(EQ,S("A").l().q().eval().car(),"A"); 
+}
+
 TEST(Fluenton,n0) {
     EXPECT_TRUE(list().n0());
     EXPECT_FALSE(list(t).n0());
@@ -45,7 +49,7 @@ TEST(Fluenton,n3) {
     EXPECT_FALSE(list(t, NIL, t, NIL).n3());
 }
 
-TEST(Fluentons, more) {
+TEST(Fluenton, more) {
     EXPECT_FALSE(list().more0());
     EXPECT_TRUE(list(t).more0());
     EXPECT_TRUE(list(t, NIL).more0());
@@ -167,22 +171,20 @@ TEST(Fluenton,NE) {
   EXPECT_FALSE(T.ne(S("T")));
 }
 
-TEST(FluentWhichIsAtomic,cons) {
+TEST(Native,cons) {
   EXPECT_TRUE(a3.cons(s2).car().eq(a3));
   EXPECT_TRUE(s3.cons(a2).cdr().eq(a2));
 }
 
-
-TEST(FluentWhichIsAtomic,Throw) {
+TEST(Native,Throw) {
   EXPECT_EXCEPTION(throw a3.cons(a4).p(), a3, a4);
 }
 
-TEST(FluentWhichIsAtomic,Error) {
+TEST(Native,Error) {
   EXPECT_EXCEPTION(a4.error(a3), a4, a3);
 }
 
-
-TEST(FluentWhichIsAtomic,EQ) {
+TEST(Native,EQ) {
   EXPECT_FALSE(a0.eq(T));
   EXPECT_FALSE(a0.eq(NIL));
   EXPECT_FALSE(NIL.eq(T));
@@ -199,7 +201,7 @@ TEST(FluentWhichIsAtomic,EQ) {
   EXPECT_TRUE(T.eq(S("T")));
 }
 
-TEST(FluentWhichIsAtomic,car) {
+TEST(Native,car) {
   EXPECT_EQ(s1.car(), T);
   EXPECT_EQ(s2.car(), s1);
   EXPECT_EQ(s3.car(), s2);
@@ -209,7 +211,7 @@ TEST(FluentWhichIsAtomic,car) {
   EXPECT_EXCEPTION(a3.car(),a3,CAR);
 }
 
-TEST(FluentWhichIsAtomic,cdr) {
+TEST(Native, cdr) {
   EXPECT_EQ(s1.cdr(), n);
   EXPECT_EQ(s2.cdr(), s1);
   EXPECT_EQ(s3.cdr(), s1);
@@ -219,7 +221,7 @@ TEST(FluentWhichIsAtomic,cdr) {
   EXPECT_EXCEPTION(a3.cdr(),a3,CDR);
 }
 
-TEST(FluentWhichIsAtomic,atom) {
+TEST(Native,atom) {
   EXPECT_TRUE(a0.atom());
   EXPECT_TRUE(a1.atom());
   EXPECT_TRUE(a2.atom());
@@ -229,7 +231,7 @@ TEST(FluentWhichIsAtomic,atom) {
   EXPECT_FALSE(s3.atom());
 }
 
-TEST(FluentWhichIsAtomic,null) {
+TEST(Native,null) {
   EXPECT_FALSE(T.null());
   EXPECT_TRUE(n.null());
   EXPECT_FALSE(a0.null());
@@ -241,77 +243,131 @@ TEST(FluentWhichIsAtomic,null) {
   EXPECT_FALSE(s3.null());
 }
 
-TEST(FluentWhichIsAtomic,EvalLiterals) {
+TEST(Eval,LiteralT) {
+  CAREFULLY(EXPECT_EQ(T.eval(),T));
+}
+
+TEST(Eval,LiteralN) {
+  CAREFULLY(EXPECT_EQ(NIL.eval(),NIL));
+}
+
+TEST(Eval,Literal_n) {
+  CAREFULLY(EXPECT_EQ(n.eval(),NIL));
+}
+
+TEST(Native, Literals) {
   CAREFULLY(EXPECT_EQ(T.eval(),T));
   CAREFULLY(EXPECT_EQ(n.eval(),n));
 }
 
-TEST(FluentWhichIsAtomic,EvalUndefined0) {
-  EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),UNDEFINED);
+TEST(Native, Undefined0) {
+  EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),UNDEFINED_ATOM);
 }
 
-TEST(FluentWhichIsAtomic,EvalUndefined) {
-  EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED);
+TEST(Apply, MissingVariable) {
+  EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(FluentWhichIsAtomic,EvalSanityT) {
-  EXPECT_EXCEPTION(list(T, T).eval(), list(T,T), INVALID);
+TEST(Apply, MissingFunction0) {
+  EXPECT_EXCEPTION(list(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(FluentWhichIsAtomic,EvalSanity1) {
-  EXPECT_EXCEPTION(list(NIL).eval(), list(NIL), INVALID);
-  EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
-  EXPECT_EXCEPTION(list(NIL, list(NIL, NIL)).eval(), 
-                   list(NIL, list(NIL, NIL)), INVALID);
+TEST(Apply, MissingFunction1) {
+  EXPECT_EXCEPTION(list(UNIQUE, T).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(FluentWhichIsAtomic,EvalSanity2) {
-  EXPECT_EXCEPTION(list(NIL, NIL).eval(), list(NIL, NIL), INVALID);
+TEST(Apply, MissingFunction2) {
+  EXPECT_EXCEPTION(list(UNIQUE, T, T).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(FluentWhichIsAtomic,EvalNil) {
+TEST(Apply, BadFunction) {
+  EXPECT_EXCEPTION(list(T, T).eval(), T, BAD_FUNCTION);
+}
+
+TEST(Apply, Sanity1) {
+  EXPECT_EXCEPTION(list(NIL).eval(), NIL, BAD_FUNCTION);
+}
+
+TEST(Apply, Sanity2) {
+  EXPECT_EXCEPTION(list(NIL, NIL).eval(), NIL, BAD_FUNCTION);
+}
+
+TEST(Apply, Sanity3) {
+  EXPECT_EXCEPTION(list(NIL, list(NIL, NIL)).eval(), NIL, BAD_FUNCTION);
+}
+
+TEST(Apply, Sanity4) {
+  EXPECT_EXCEPTION(list(NIL, NIL).eval(), NIL, BAD_FUNCTION);
+}
+
+TEST(Native, Nil) {
   CAREFULLY_EXPECT(EQ,NIL.eval(), NIL);
-  EXPECT_EXCEPTION(list(NIL, T).eval(),list(NIL, T),INVALID);
 }
 
-TEST(FluentWhichIsAtomic,EvalT) {
+TEST(Native, T) {
   CAREFULLY_EXPECT(EQ,T.eval(), T);
-  EXPECT_EXCEPTION(list(T, NIL).eval(),list(T, NIL), INVALID);
 }
 
-TEST(FluentWhichIsAtomic,EvalNullTrue) {
+TEST(Native, Null1) {
   EXPECT_T(list(NULL, NIL).eval());
+}
+
+TEST(Native, Null2) {
   EXPECT_T(list(NULL, list()).eval());
 }
 
-TEST(FluentWhichIsAtomic,EvalNullFalseQuote) {
+TEST(Native, Null3) {
+  CAREFULLY_EXPECT_T(list(NULL, list(QUOTE, NIL)).eval());
+}
+
+TEST(Native, Null4) {
+  S x = list(CONS,T,list(QUOTE, NIL));
+  CAREFULLY_EXPECT_NIL(list(NULL, x).eval(), << x << x.eval() << x.eval().null());
+}
+
+TEST(Native, Null5) {
+  CAREFULLY_EXPECT_NIL(list(NULL, T).eval());
+}
+
+TEST(Native, Null6) {
   CAREFULLY_EXPECT_NIL(list(NULL, a3.q()).eval());
 } 
 
-TEST(FluentWhichIsAtomic,EvalNullMore) {
-  EXPECT_EXCEPTION(list(NULL, list(T, T)).eval(), list(T,T), INVALID);
+TEST(Native, Null7) {
   CAREFULLY_EXPECT_T(list(NULL, NIL).eval());
 }
 
-TEST(FluentWhichIsAtomic,EvalAndQuote) {
+TEST(Native, Null8) {
+  EXPECT_EXCEPTION(list(NULL, list(T, T)).eval(), T, BAD_FUNCTION);
+}
+
+
+TEST(Native, Quote0) {
   EXPECT_EQ(list(EVAL, list(QUOTE, T)).eval(), T);
 }
 
-TEST(FluentWhichIsAtomic,EvaluatingQuote) {
+TEST(Native, Quote1) {
   EXPECT_EQ(list(QUOTE, s3).eval(), s3);
 }
 
-TEST(FluentWhichIsAtomic,EvalAtomNil) {
+TEST(Native, Atom0) {
   CAREFULLY_EXPECT(EQ,list("atom", "nil").eval(), T); 
+}
+
+TEST(Native, Atom1) {
   CAREFULLY_EXPECT(EQ,list(ATOM,NIL).eval(), T); 
 }
 
-TEST(FluentWhichIsAtomic,EvalAtomT) {
+TEST(Native, Atom2) {
   CAREFULLY_EXPECT(EQ,list("atom", "T").eval(), T, ); 
   CAREFULLY_EXPECT(EQ, list(ATOM,T).eval(), T, ); 
 }
 
-TEST(FluentWhichIsAtomic,EvalAtomS) {
+TEST(Native, Atom3) {
+  CAREFULLY_EXPECT(EQ, list(ATOM,a2.q()).eval(), T); 
+}
+
+TEST(Native, Atom4) {
   CAREFULLY_EXPECT(EQ, list(ATOM,a0.q()).eval(), T); 
   CAREFULLY_EXPECT(EQ, list(ATOM,a1.q()).eval(), T); 
   CAREFULLY_EXPECT(EQ, list(ATOM,a2.q()).eval(), T); 
@@ -321,58 +377,107 @@ TEST(FluentWhichIsAtomic,EvalAtomS) {
   CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
 }
 
-TEST(FluentWhichIsAtomic,EvalAtomNasty) {
+TEST(Native, Atom5) {
   CAREFULLY_EXPECT(EQ, list(ATOM,s3.q()).eval(), NIL); 
 }
 
+TEST(Native, Atom6) {
+  S i = list(ATOM, list(QUOTE, pair("X","Y")), NDEFUN);
+  EXPECT_EXCEPTION(i.eval() , list(NDEFUN),REDUNDANT_ARGUMENT);
+}
 
-TEST(FluentWhichIsAtomic,EvalCDR) {
+TEST(Native, Atom7) {
+  EXPECT_EXCEPTION(ATOM.l().eval() , list(" X"),MISSING_ARGUMENT);
+}
+
+TEST(Native, Cdr1) {
   S i = list(CDR, list(QUOTE, S("X").cons(S("Y"))));
   S o = S("Y");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
 }
 
-TEST(FluentWhichIsAtomic,EvalCDRList) {
+TEST(Native, Cdr2) {
   S i = list(CDR, list("A", "B", "C").q());
   CAREFULLY(EXPECT_EQ(i.eval(),list("B", "C")) << i); 
 }
 
+TEST(Native, Cdr3) {
+  EXPECT_EXCEPTION(list(CDR, T, T).eval() , list(T), REDUNDANT_ARGUMENT);
+}
 
-TEST(FluentWhichIsAtomic,EvalCAR) {
+TEST(Native, Cdr4) {
+  EXPECT_EXCEPTION(list(CDR).eval() , list(" X"), MISSING_ARGUMENT);
+}
+
+TEST(Native, Cdr5) {
+  EXPECT_EXCEPTION(list(CDR,T).eval() , T, CDR);
+}
+
+TEST(Native, Car1) {
   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
   S o = S("X");
   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
 }
 
-TEST(FluentWhichIsAtomic,EvalCAR_EXTRA) {
-  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))), NIL);
-  EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
+TEST(Native, Car2) {
+  EXPECT_EXCEPTION(list(CAR, S("A"), S("B")).eval() , S("B").l(), REDUNDANT_ARGUMENT);
 }
 
-TEST(FluentWhichIsAtomic,EvalCAR_MISSING) {
+TEST(Native, Car3) {
+  EXPECT_EXCEPTION(list(CAR).eval() , list(" X"), MISSING_ARGUMENT);
+}
+
+TEST(Native, Car4) {
+  EXPECT_EXCEPTION(list(CDR,T).eval() , T, CDR);
+}
+
+TEST(Native, Car5) {
+  EXPECT_EXCEPTION(list(CAR, T, LAMBDA).eval() , list(LAMBDA), REDUNDANT_ARGUMENT);
+}
+
+TEST(Native, Car6) {
   S i = CAR.l(); 
   EXPECT_EQ(i, list(CAR));
-  EXPECT_EXCEPTION(i.eval(), i, MISSING);
+  EXPECT_EXCEPTION(i.eval(), list(" X"), MISSING_ARGUMENT);
 }
 
-TEST(FluentWhichIsAtomic,EvalAtom_EXTRA) {
-  S i = list(ATOM, list(QUOTE, S("X").cons(S("Y"))), NIL);
-  EXPECT_EXCEPTION(i.eval() , i,REDUNDANT);
-}
-
-TEST(FluentWhichIsAtomic,EvalAtom_MISSING) {
-  S i = ATOM.l(); 
-  EXPECT_EXCEPTION(i.eval() , i,MISSING);
-}
-
-TEST(FluentWhichIsAtomic,EvalCAR_Missing) {
+TEST(Native, Car7) {
   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
   S o = S("X");
   CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
 }
 
-TEST(FluentWhichIsAtomic,EvalCARList) {
+TEST(Native, Car8) {
+  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))), CDR);
+  EXPECT_EXCEPTION(i.eval() , list(CDR), REDUNDANT_ARGUMENT);
+}
+
+TEST(Native, Car9) {
+  S i = CAR.l(); 
+  EXPECT_EQ(i, list(CAR));
+  EXPECT_EXCEPTION(i.eval(), list(" X"), MISSING_ARGUMENT);
+}
+
+TEST(Native, Car10) {
+  S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
+  S o = S("X");
+  CAREFULLY_EXPECT(EQ,i.eval(),o, << i); 
+}
+
+TEST(Native, Car11) {
   S i =  list(CAR, list("A", "B", "C").q());
   S o = S("A");
   CAREFULLY(EXPECT_EQ(i.eval(),o) << i); 
+}
+
+TEST(Native, Cons0) {
+  EXPECT_EXCEPTION(list(CONS).eval() , list(" X"," Y"), MISSING_ARGUMENT);
+}
+
+TEST(Native, Cons1) {
+  EXPECT_EXCEPTION(list(CONS,T).eval() , list(" Y"), MISSING_ARGUMENT);
+}
+
+TEST(Native, Cons2) {
+  EXPECT_EQ(list(CONS, T, T).eval() , T.cons(T));
 }

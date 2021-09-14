@@ -7,7 +7,6 @@
 #include "basics.h"
 #include "parser.h"
 #include "stack.h"
-#include "stack-trace.h"
 
 std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
   return os << o.str();
@@ -29,7 +28,7 @@ std::ostream& operator<<(std::ostream &os, S s) {
   if (s.atom())
     return os << s.asAtom();
   if (!islist(s))
-    return os << "" << s.car() << "." << s.cdr() << "";
+    return os << "[" << s.car() << "." << s.cdr() << "]";
   os << "(";
   for (;;) {
     os << S(s.car());

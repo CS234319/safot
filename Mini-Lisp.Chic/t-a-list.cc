@@ -30,86 +30,42 @@ TEST(Lookup, NIL) {
   EXPECT_TRUE(lookup("NIL").null());
 }
 
-TEST(Lookup, FailurBarBaz) {
-  EXPECT_EXCEPTION(lookup("bar baz"),S("bar baz"), UNDEFINED);
+TEST(Lookup, Failuer1) {
+  EXPECT_EXCEPTION(lookup("bar baz"),S("bar baz"), UNDEFINED_ATOM);
 }
 
-TEST(Lookup, FailureFooBarBaz) {
-  EXPECT_EXCEPTION(lookup("foo" "bar" "baz"), S("foo" "bar" "baz"), UNDEFINED);
-  EXPECT_EXCEPTION(lookup("Y"), S("Y"), UNDEFINED);
+TEST(Lookup, Failure2) {
+  EXPECT_EXCEPTION(lookup("foo" "bar" "baz"), S("foo" "bar" "baz"), UNDEFINED_ATOM);
 }
 
-TEST(Lookup, Failure) {
-  EXPECT_EXCEPTION(lookup(UNIQUE), S(UNIQUE), UNDEFINED);
-  EXPECT_EXCEPTION(lookup("Y"), S("Y"), UNDEFINED);
+TEST(Lookup, Failure3) {
+  EXPECT_EXCEPTION(lookup(" Y "), S(" Y "), UNDEFINED_ATOM);
 }
+
+TEST(Lookup, Failure4) {
+  EXPECT_EXCEPTION(lookup(UNIQUE), S(UNIQUE), UNDEFINED_ATOM);
+}
+
+TEST(Lookup, Failure5) {
+  S y("Y a b c");
+  EXPECT_EXCEPTION(lookup(y), y, UNDEFINED_ATOM);
+}
+
 
 TEST(Lookup, SetGoodLookup) {
   set("X","Y");
-  reset_set_counter();
   EXPECT_STRUE(lookup("X"));
 }
 
 TEST(Lookup, TeaAndCofee) {
   set("coffee","tea");
-  reset_set_counter();
   EXPECT_EQ(lookup("coffee"), S("tea"));
-  EXPECT_EXCEPTION(lookup("tea"),S("tea"), UNDEFINED);
+  EXPECT_EXCEPTION(lookup("tea"),S("tea"), UNDEFINED_ATOM);
   set("tea","coffee");
-  reset_set_counter();
   EXPECT_STRUE(lookup("tea"));
   EXPECT_STRUE(lookup("coffee"));
   EXPECT_EQ(lookup("tea"), S("coffee"));
 }
 
 
-TEST(Lookup, Remove1) {
-    S restored_alist = alist();
-    // Add 1 element to alist:
-    push("A", "X");
-    EXPECT_EQ(lookup("A"), S("X"));
 
-    // Remove element from alist:
-    remove_element("A");
-    EXPECT_EXCEPTION(lookup("A"),S("A"), UNDEFINED);
-
-    alist() = restored_alist;
-}
-
-TEST(Lookup, Remove2) {
-    S restored_alist = alist();
-
-    // Add 2 elements to alist:
-    push("A", "X");
-    push("B", "Y");
-    EXPECT_EQ(lookup("A"), S("X"));
-    EXPECT_EQ(lookup("B"), S("Y"));
-
-    // Remove element from alist:
-    remove_element("A");
-    EXPECT_EXCEPTION(lookup("A"),S("A"), UNDEFINED);
-    EXPECT_EQ(lookup("B"), S("Y"));
-
-    alist() = restored_alist;
-}
-
-TEST(Lookup, RemoveElements) {
-    S restored_alist = alist();
-
-    // Add 2 elements to alist:
-    push("A", "X");
-    push("B", "Y");
-    push("C", "Z");
-    EXPECT_EQ(lookup("A"), S("X"));
-    EXPECT_EQ(lookup("B"), S("Y"));
-    EXPECT_EQ(lookup("C"), S("Z"));
-
-    // Remove element from alist:
-    S names = list(S("A"), S("B"));
-    remove_elements(names);
-    EXPECT_EXCEPTION(lookup("A"),S("A"), UNDEFINED);
-    EXPECT_EXCEPTION(lookup("B"),S("B"), UNDEFINED);
-    EXPECT_EQ(lookup("C"), S("Z"));
-
-    alist() = restored_alist;
-}

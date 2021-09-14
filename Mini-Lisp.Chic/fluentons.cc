@@ -3,6 +3,7 @@
 #include "basics.h"
 #include "eval.h"
 #include "a-list.h"
+#include "except.h"
 
 /* Parameterless fluentons */
 bool S::atom() const { return handle <= 0; }
@@ -14,9 +15,9 @@ S    S::l()    const { return cons(NIL); };
 S    S::car()  const { return atom() ? error(CAR) : p().car; }
 S    S::cdr()  const { return atom() ? error(CDR) : p().cdr; }
 S    S::eval() const { return ::eval(*this); }
-S    S::error(S kind) const { stack_dump(); restore_alist(); throw cons(kind).p(); }
 Pair S::p() const { return Pairs::get(handle); };
 S S::cons(S cdr) const { return S(*this, cdr); }
+S S::error(S kind) const { return die(cons(kind).p()), NIL;} 
 
 S S::rac() const {
     if (n0()) return error(CAR);
@@ -60,5 +61,3 @@ S S::$4$() const { return cdr().$3$(); }
 
 /* Complete the definition of struct S */
 extern S eval(S s); 
-
-

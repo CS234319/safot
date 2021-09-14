@@ -2,6 +2,13 @@
 #include "gtest/gtest.h"
 #include "test.h"
 
+#include "a-list.h"
+
+extern S defun(S name, S parameters, S body);
+extern S ndefun(S name, S parameters, S body);
+extern S align(S formals, S actuals);
+
+S nothing(S s) { return s; }
 /**
  * Tests of all types of error in Mini-Lisp
  *
@@ -28,62 +35,124 @@ static S s1(t,n);
 static S s2(s1,s1);
 static S s3(s2,s1);
 
-
-extern S bind(S s1, S s2, S alist);
 extern S apply(S f, S args);
 
-TEST(Error, CarOfAtom) {
+TEST(Except, MISSING_ARGUMENT) {
+    S x("x");
+    EXPECT_EXCEPTION(list(CONS, x).eval(), list(S(" y")), MISSING_ARGUMENT);
+}
+
+TEST(Except, REDUNDANT_ARGUMENT) {
+    S x("x");
+    S y("y");
+    S z("z");
+    EXPECT_EXCEPTION(list(CONS, x, y, z).eval(), list(z), REDUNDANT_ARGUMENT);
+}
+
+TEST(Except, CarOfAtom) {
     EXPECT_EXCEPTION(ATOM.car(), ATOM, CAR)
     EXPECT_EXCEPTION(a4.car(), a4, CAR)
 }
 
-TEST(Error, CarOfNil) {
+TEST(Except, CarOfNil) {
     EXPECT_EXCEPTION(list().car(), n, CAR)
     EXPECT_EXCEPTION(n.car(), n, CAR)
 }
 
-TEST(Error, CdrOfAtom) {
+TEST(Except, CdrOfAtom) {
     EXPECT_EXCEPTION(ATOM.cdr(), ATOM, CDR)
     EXPECT_EXCEPTION(a4.cdr(), a4, CDR)
 }
 
-TEST(Error, CdrOfNil) {
+TEST(Except, CdrOfNil) {
     EXPECT_EXCEPTION(list().cdr(), n, CDR)
     EXPECT_EXCEPTION(n.cdr(), n, CDR)
 }
 
-TEST(Error, UnboundVariable) {
-    EXPECT_EXCEPTION(apply(S("null"), S("e")), S("null").cons(S("e")), INVALID)
+
+TEST(Except, BAD_PARAMETERS) {
+  S f("my function"), x("x"), y("y"), z("z");
+  defun(f, x, y); 
+  EXPECT_EXCEPTION(list(f, x, y).eval(), x, BAD_PARAMETERS);
+}
+
+TEST(Except, BAD_FUNCTION1) {
+  S f("my function"), x("x"), y("y"), z("z");
+  push(f, list(LAMBDA)); 
+  EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
+}
+
+TEST(Except, BAD_FUNCTION2) {
+  S f("my function"), x("x"), y("y"), z("z");
+  push(f, list()); 
+  EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
+}
+
+TEST(Except, BAD_FUNCTION3) {
+  S f("my function"), x("x"), y("y"), z("z");
+  push(f, list(LAMBDA,x)); 
+  EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
+}
+
+TEST(Except, BAD_FUNCTION4) {
+  S f("my function"), x("x"), y("y"), z("z");
+  push(f, list(LAMBDA,x,y,z)); 
+  EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
+}
+
+TEST(Except, BadFunction3) {
+    EXPECT_EXCEPTION(apply(NIL.eval(), S("e")), NIL, BAD_FUNCTION)
 }
 
 TEST(Error, InvalidNames1) {
-    EXPECT_EXCEPTION(bind(id, list(), list()), id, MISSING)
+    EXPECT_EXCEPTION(align(id, list()), id, MISSING_ARGUMENT)
 }
 
 TEST(Error, InvalidNames2) {
-    EXPECT_EXCEPTION(bind(id, list(id), list()), id, CAR)
+    EXPECT_EXCEPTION(align(id, list(id)), id, BAD_PARAMETERS)
 }
 
+
 TEST(Error, InvalidValues1) {
-    EXPECT_EXCEPTION(bind(list(), id, list()), id, REDUNDANT)
+    EXPECT_EXCEPTION(align(list(), id), id, REDUNDANT_ARGUMENT)
 }
 
 TEST(Error, InvalidValues2) {
-    EXPECT_EXCEPTION(bind(list(id), id, list()), id, CAR)
+    EXPECT_EXCEPTION(align(list(id), id), id, BAD_ARGUMENTS)
 }
 
 TEST(Error, RedundantValues) {
-  EXPECT_EXCEPTION(bind(list(id,id,id), list(id, id, t, n), list()), list(n), REDUNDANT)
+  EXPECT_EXCEPTION(align(list(id,id,id), list(id, id, t, n)), list(n), REDUNDANT_ARGUMENT)
 }
 
 TEST(Error, MissingValues) {
-  EXPECT_EXCEPTION(bind(list(id,a1), list(id), list()), list(a1), MISSING)
+  EXPECT_EXCEPTION(align(list(id,a1), list(id)), list(a1), MISSING_ARGUMENT)
 }
 
 TEST(Error, UnknownLambda) {
-    EXPECT_EXCEPTION(apply(S("e"), t), S("e").cons(t), INVALID)
+    EXPECT_EXCEPTION(apply(S("e"), t), S("e").cons(t), BAD_FUNCTION)
 }
 
 TEST(Error, OtherError) {
     EXPECT_EXCEPTION(t.error(S("OTHER")), t, S("OTHER"))
 }
+
+TEST(Except, Deep) {
+    S x("x");
+    S y("y");
+    S z("z");
+     S a ("a");
+     S b ("b");
+    S f("function");
+    ndefun(f,list(a,b), list(a, b, list(CAR,a)));
+
+    S l1 = list(CONS, x, list(f, T));
+    l1 = list(CONS, l1, l1); 
+    l1 = list(CONS, l1, l1); 
+
+    S what = list(CONS, list(CONS,T,list(CONS,T,list(CONS,NIL,list(f,a,b)))));
+    EXPECT_EQ(what,t);
+    EXPECT_EXCEPTION(what.eval(), list(z), REDUNDANT_ARGUMENT);
+}
+
+

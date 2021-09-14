@@ -1,7 +1,7 @@
 #include "S.h"
-#include "stack-trace.h"
 #define PRODUCTION
 #include "mode.h"
+#include "except.h"
 
 
 #ifndef PRODUCTION 
@@ -37,11 +37,11 @@ namespace Strings { // Atoms are never freed in mini-lisp
     return false;
   }
 
-  /* Allocation of a input string is by moving the pool pointer down and then
-   * copying the input there. A bit of optimization saves some space by refraining
-   * from allocating the same string twice; moreover, there is also a minimal attempt
-   * to allow one string to be realizes the suffix of a previously allocated string  
-   */ 
+  /** Allocation of a input string is by moving the pool pointer down and then
+   * copying the input there. A bit of optimization saves some space by
+   * refraining from allocating the same string twice; moreover, there is also
+   * a minimal attempt to allow one string to be realizes the suffix of a
+   * previously allocated string  */ 
   H allocate(String s) {
     M("Search:", s, size(s), dump());
     for (H $ = 0; $ >= current; --$) 
@@ -51,13 +51,10 @@ namespace Strings { // Atoms are never freed in mini-lisp
     current -= n;
     M("Allocate:", s, pool+current,  nil-pool);
     current < 0 || die(ATOM);
-    pool + current >= buffer || die(EXHAUSTED);
+    pool + current >= buffer || die(MEMORY_ATOM);
     for (H h = 0; h < n; ++h) // Only case in code to change the pool 
       const_cast<char&>(pool[current + h]) = upper(s[h]);
     M("Return", s, pool + current, current,dump());
     return current;
   }
 }
-
-
-

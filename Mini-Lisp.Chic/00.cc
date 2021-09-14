@@ -11,7 +11,7 @@ static S eval(S s) {
   try {
     return s.eval();
   } catch (Pair x) {
-     err(), print("Error "), print(S(x.cdr)), print(" on "), println(S(x.car)),out();
+     return s;
   }
 }
 
@@ -39,8 +39,6 @@ int REPL() {   int n = 0;
     Print: println(result); 
     Loop:  ++n;  goto Read;
   } catch (S s) {
-      if (s.eq(NOT_ENOUGH_MEMORY)) println("Error NOT_ENOUGH_MEMORY on ?");
-      if (s.eq(OVERFLOW)) println("Error OVERFLOW on ?\n");
       return n;
   } catch (...) {
       return n;

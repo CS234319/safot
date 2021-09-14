@@ -62,7 +62,7 @@ TEST(AlistGlobalLocal, SetWithNoError) {
 TEST(AlistGlobalLocal, SetWithError) {
     /*
      * Same as before, but we call error in the third condition.
-     * Thus, all the lookup MUST throw UNDEFINED error for all the
+     * Thus, all the lookup MUST throw UNDEFINED_ATOM error for all the
      * variables defined by set in the cond function.
      *
      */
@@ -101,6 +101,6 @@ TEST(AlistGlobalLocal, SetWithError) {
     EXPECT_EXCEPTION(s.eval(), list(S("ERROR"), b_2.q(), b_2), b_2);
 
     // Check if b0, b1, b2 are defined:
-    EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED);
-    EXPECT_EXCEPTION(lookup(b_1), b_1, UNDEFINED);
+    EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED_ATOM);
+    EXPECT_EXCEPTION(lookup(b_1), b_1, UNDEFINED_ATOM);
 }

@@ -4,6 +4,7 @@
 #include "parser.h"
 #include <string.h>
 #include "debugging.h"
+#include "except.h"
 
 inline auto operator == (const S s1,const S s2) { 
   if (s1.handle == s2.handle)
@@ -82,17 +83,18 @@ inline S parse(const std::string& s) {
 #define CAREFULLY(...) try { __VA_ARGS__; } catch (Pair p) { \
   ADD_FAILURE() << p << " exception on " << #__VA_ARGS__; }  
 
-#define EXPECT_EXCEPTION(x, value, code)  \
-{ \
+#define EXPECT_EXCEPTION(x, content, error) { \
   bool caught = true; \
   try{\
     x;\
     caught = false; \
   } catch (Pair p) { \
     fflush(stdout); \
-    EXPECT_EQ(S(p.cdr), code)  << "Actual error code is: " << S(p.cdr);  \
-    EXPECT_EQ(S(p.car), value) << "Error body is: " << S(p.car);  \
+    S code = S(p.cdr); \
+    S details = S(p.car); \
+    EXPECT_EQ(code, error)  << "Error code is: " << code;  \
+    EXPECT_EQ(details, content) << "Error body is: " << details;  \
   } \
   if (!caught) \
-    ADD_FAILURE() << "Evaluating " << #x << " should have thrown " << S(value,code); \
+    ADD_FAILURE() << "Evaluating " << #x << " should have thrown " << S(content,error); \
 }

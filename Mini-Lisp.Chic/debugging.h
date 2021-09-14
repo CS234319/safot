@@ -6,7 +6,6 @@
 #include "parser.h"
 #include "S.h"
 #include "stack.h"
-#include "stack-trace.h"
 
 
 #include <cstring>

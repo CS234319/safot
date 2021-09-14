@@ -48,11 +48,19 @@ TEST(ParseEvalAtomic, cdr) {
 
 // ----------------------------
 // Test: cons
-TEST(ParseEvalAtomic, cons) {
+TEST(ParseEvalAtomic, cons1) {
     EXPECT_EQ(parse("(cons 'a '(b c))").eval() , list(a, b, c));
+}
+
+TEST(ParseEvalAtomic, cons2) {
     EXPECT_EQ(parse("(cons 'b nil)").eval()    , b.cons(NIL));
+}
+
+
+TEST(ParseEvalAtomic, cons3) {
     EXPECT_EQ(parse("(cons 'a 'b)").eval()     , a.cons(b));
 }
+
 
 // ----------------------------
 // Test: eq
@@ -87,11 +95,23 @@ TEST(ParseEvalAtomic, eval) {
 }
 
 // ----------------------------
-// Test: error
-TEST(ParseEvalAtomic, error) {
-    EXPECT_EXCEPTION(parse("(error)").eval()         , list(S("ERROR")) , NIL);
-    EXPECT_EXCEPTION(parse("(error 'my_err)").eval() , list(S("ERROR"), S("MY_ERR").q()), S("MY_ERR"));
+
+TEST(Native, error0) {
+    EXPECT_EXCEPTION(parse("(error)").eval(), list(" X"," Y") , MISSING_ARGUMENT);
 }
+
+TEST(Native, error1) {
+    EXPECT_EXCEPTION(parse("(error 'my_err)").eval() , list(" Y"), MISSING_ARGUMENT);
+}
+
+TEST(Native, error2) {
+    EXPECT_EXCEPTION(parse("(error a b)").eval() , S("a"), S("b")); 
+}
+
+TEST(Native, error3) {
+    EXPECT_EXCEPTION(parse("(error 'my_err 'y '(z))").eval() , list("z").q().l(), REDUNDANT_ARGUMENT); 
+}
+
 
 // ----------------------------
 // Test: errors cases

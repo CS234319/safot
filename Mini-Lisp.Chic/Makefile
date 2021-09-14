@@ -1,7 +1,8 @@
-all: tester mini-lisp services test
+default: tester mini-lisp services test Makefile
+
 services: tags depend 
 
-.PHONY: all services clean depend wc gvim
+.PHONY: default services clean depend wc gvim
 
 HEADERS := $(sort $(filter %.h,$(shell cat .depend)))
 MODULES         := $(IMPLEMENTATION) $(TESTERS) $(REPL)
@@ -14,10 +15,13 @@ REPL += out
 REPL += read
 REPL += basics
 REPL += repl
+REPL += dump
 
 ENGINE += eval
 ENGINE += a-list
 ENGINE += fluentons
+ENGINE += S
+ENGINE += except
 
 READ += tokenizer
 READ += stack
@@ -65,12 +69,11 @@ SOURCES         := $(addsuffix .cc,$(MODULES))
 
 tester: $(addsuffix .o,$(TEST)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
-
 mini-lisp: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: tester
-	./$^ 
+	./$^ --gtest_filter="*e*" 
 
 list:
 	@echo "HEADERS        = " $(HEADERS)
