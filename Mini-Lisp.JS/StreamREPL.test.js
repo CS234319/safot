@@ -7,12 +7,14 @@ const testFile = async name => {
 	const filePathNoExt = `${testsFolderPath}/${name}`
 	const inputPath = `${filePathNoExt}.in.lisp`
 	const expectedPath = `${filePathNoExt}.expected.lisp`
-	const outputPath = `${filePathNoExt}.out.lisp`
+	const outputPath = `${filePathNoExt}.out`
 
 	if (!fs.existsSync(inputPath) || !fs.existsSync(expectedPath)) {
 		return false
-	}	
- 
+	}
+
+	fs.unlinkSync(outputPath)
+
 	const outputStream = new streams.WritableStream()
 	
 	const streamREPL = new StreamREPL(

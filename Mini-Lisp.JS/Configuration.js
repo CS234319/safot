@@ -26,7 +26,7 @@ module.exports = {
 			delim: 			', ',
 		},
 
-		pattern: `\t{name}[{args}]\n`,
+		pattern: '\t{name}[{args}]\n',
 	},
 
 	repl: {

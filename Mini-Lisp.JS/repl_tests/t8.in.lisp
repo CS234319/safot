@@ -2,6 +2,6 @@
 	(cond 	((null xs) init)
 			(t (f (car xs) (reduce (cdr xs) f init)))))
 
-(defun map (xs f) (reduce xs (lambda (x y) (cons (f x) y)) nil))
+(defun map (xs g) (reduce xs (lambda (x y) (cons (g x) y)) nil))
 
-(map '(c . d) (lambda (x) (car x)))
+(map '([a . b] [c . d]) (lambda (x) (car x)))
