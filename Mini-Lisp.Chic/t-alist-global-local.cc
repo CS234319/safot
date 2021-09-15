@@ -98,7 +98,7 @@ TEST(AlistGlobalLocal, SetWithError) {
     );
 
     // Evaluate cond on the list:
-    EXPECT_EXCEPTION(s.eval(), list(S("ERROR"), b_2.q(), b_2), b_2);
+    EXPECT_EXCEPTION(s.eval(), list(S("ERROR"), b_2.q(), b_2), REDUNDANT_ARGUMENT);
 
     // Check if b0, b1, b2 are defined:
     EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED_ATOM);

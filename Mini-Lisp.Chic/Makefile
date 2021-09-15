@@ -11,7 +11,8 @@ IMPLEMENTATION  := $(READ) $(ENGINE) $(MACHINE)
 SOURCES         := $(addsuffix .cc,$(MODULES)) 
 
 REPL += 00
-REPL += out
+REPL += repl
+REPL += print
 REPL += read
 REPL += basics
 REPL += repl
@@ -73,7 +74,7 @@ mini-lisp: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: tester
-	./$^ --gtest_filter="*e*" 
+	./$^ --gtest_filter="*" 
 
 list:
 	@echo "HEADERS        = " $(HEADERS)

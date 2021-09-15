@@ -21,6 +21,7 @@ inline std::ostream& operator<<(std::ostream &os, S s) {
   if (s.null()) return os << "nil";
   if (s.atom()) return os << s.asAtom();
   if (!islist(s)) return os << "" << s.car() << "." << s.cdr() << "";
+  if (s.car().eq(QUOTE) && s.cdr().pair() && s.cdr().cdr().null()) return  os << "'" << s.cdr().car();
   os << "(";
   for (;;) {
     os << S(s.car());

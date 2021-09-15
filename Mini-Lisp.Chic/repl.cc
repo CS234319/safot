@@ -1,55 +1,45 @@
 #include "repl.h"
+#include "print.h"
+#include "read.h"
 
-using namespace Parser;
+#include "mode.h"
 
-S eval() { /** Should only be called after the parser finished successfully */
-    try {
-        return Parser::result().eval();
-    } catch (Pair x) {
-        err(), prompt("Error: kind = "), print(S(x.car)), prompt(" Where = "), print(S(x.cdr)), print("\n"),out();
-        throw;
+/** Internal function to evaluate of the parsed input; Should only be called
+after the parser finished successfully */
+static S eval(S s) { 
+  try {
+    return s.eval();
+  } catch (Pair x) {
+     return s;
+  }
+}
+
+S read() {
+  for (;;) 
+    for (Parser::reset(), prompt("> ");; ) {
+      String line = readln(); 
+      if (line == (String)0) throw;
+      Parser::supply(line);
+      switch (Parser::status()) {
+        case Parser::ready: prompt("- "); continue;     // More input must be waiting 
+        case Parser::accept: return Parser::result();   // Return the parsed S expression
+        case Parser::reject: prompt("?\n"); break;      // Admonish the client; continue
+      }
     }
 }
 
-/** Realizes the famous "Read, Evaluate, Print, Loop" of all
-interpreters; Returns the number of expressions successfully read
-and evaluated. */
-
-int REPL(const char* input) {
-    int n = 0;
-    try {
-    Start:
-        reset(), prompt("> ");
-    Read:
-        const String line = (input != ((char *)0)) ? input : readln();
-        supply(line);
-        switch (status()) {
-            case ready:      // More input must be waiting
-                prompt("- ");  // Prompt the user for more
-                goto Read;     // Loop again
-            case accept:     // Proceed to evaluation
-                break;
-            case reject:     // Parsing error
-                prompt("?");   // Admonish the client; continue
-                goto Start;
-        }
-   Eval:
-        try {
-            const S result = eval();
-        Print:
-            println(result);
-            ++n;
-        } catch (...) {
-        }
-   Loop:
-        if(input != (char *)0) return n;
-        goto Start;
-    } catch (...) {
-        return n;
-    }
+/** Realizes the famous "Read, Evaluate, Print, Loop" of all 
+interpreters; Returns the number of expressions successfully read and
+evaluated. */
+int REPL() {   int n = 0;
+  try {
+    Read: const S expression = read();
+    Eval: const S result = eval(expression); 
+    Print: println(result); 
+    Loop:  ++n;  goto Read;
+  } catch (S s) {
+      return n;
+  } catch (...) {
+      return n;
+  }
 }
-
-
-
-
-

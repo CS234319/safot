@@ -180,8 +180,29 @@ TEST(Native,Throw) {
   EXPECT_EXCEPTION(throw a3.cons(a4).p(), a3, a4);
 }
 
-TEST(Native,Error) {
+
+/*
+    (error) ⇒ ✗
+    (error 'A) ⇒ ✗
+    (error 'message) ⇒ ✗
+*/
+
+TEST(Native, Error) {
   EXPECT_EXCEPTION(a4.error(a3), a4, a3);
+}
+
+TEST(Native, Error1) {
+    EXPECT_EXCEPTION(parse("(error)").eval(), list(" x", " y"), MISSING_ARGUMENT);
+}
+
+TEST(Native, Error2) {
+    S a(UNIQUE);
+    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list(S(" y")), MISSING_ARGUMENT);
+}
+
+TEST(Native, Error3) {
+    S a(UNIQUE);
+    EXPECT_EXCEPTION(parse("(error 'message)").eval(), list(" y"), MISSING_ARGUMENT);
 }
 
 TEST(Native,EQ) {
@@ -199,6 +220,8 @@ TEST(Native,EQ) {
   EXPECT_TRUE(T.eq(T));
   EXPECT_TRUE(T.eq("T"));
   EXPECT_TRUE(T.eq(S("T")));
+  EXPECT_FALSE(T.eq(list(a0,a1)));
+  EXPECT_FALSE(list(a0,a1).eq(list(a0,a1)));
 }
 
 TEST(Native,car) {

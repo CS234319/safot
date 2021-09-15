@@ -1,4 +1,4 @@
-#include "out.h"
+#include "print.h"
 
 #include "basics.h"
 #include <stdio.h>
@@ -7,7 +7,7 @@
 
 static FILE *file = stdout;
 
-int err() { return file = stdout, 0;  }
+int err() { return file = stderr, 0;  }
 int out() { return file = stdout, 0; }
 
 bool grunt(int result)  {

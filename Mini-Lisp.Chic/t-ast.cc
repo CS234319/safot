@@ -156,25 +156,39 @@ TEST(AST, PairX) {
 
 TEST(AST, QNestedList) {
   feed("((a b) '(c (d e)))");
-  EXPECT_STREQ("((A B) (QUOTE (C (D E))))", ~Parser::result());
+  EXPECT_STREQ("((A B) '(C (D E)))", ~Parser::result());
   reset();
 }
 
+TEST(AST, PairIsList) {
+  feed("(c d).(a b)");
+  EXPECT_STREQ("((C D) A B)", ~Parser::result());
+  reset();
+}
+
+
 TEST(AST, ListQuotePair) {
   feed("(c d).'(a b)");
-  EXPECT_STREQ("((C D) QUOTE (A B))", ~Parser::result());
+  EXPECT_STRCASEEQ("((C D) quote (A B))", ~Parser::result());
   reset();
 }
 
 TEST(AST, QuoteInList) {
   feed("(a 'b 'c)");
-  EXPECT_STREQ("(A (QUOTE B) (QUOTE C))", ~Parser::result());
+  EXPECT_STREQ("(A 'B 'C)", ~Parser::result());
   reset();
 }
 
+TEST(AST, QuoteExtra) {
+  feed("(quote a b c)");
+  EXPECT_STREQ("(QUOTE A B C)", ~Parser::result());
+  reset();
+}
+
+
 TEST(AST, QuoteListInList) {
   feed("(a '(foo bar)  'c)");
-  EXPECT_STREQ("(A (QUOTE (FOO BAR)) (QUOTE C))", ~Parser::result());
+  EXPECT_STREQ("(A '(FOO BAR) 'C)", ~Parser::result());
   reset();
 }
 
@@ -194,28 +208,28 @@ TEST(AST, EmptyListNiL) {
 TEST(AST, LibT) {
   feed("(set (quote t) (quote t))");
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("(SET (QUOTE T) (QUOTE T))", ~Parser::result());
+  EXPECT_STREQ("(SET 'T 'T)", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibNil) {
   feed("(set (quote nil) (quote nil))");
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("(SET (QUOTE nil) (QUOTE nil))", ~Parser::result());
+  EXPECT_STRCASEEQ("(SET 'nil 'nil)", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibLambda) {
   feed("(set 'quote '(lambda (x) x)) ");
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("(SET (QUOTE QUOTE) (QUOTE (LAMBDA (X) X)))", ~Parser::result());
+  EXPECT_STREQ("(SET 'QUOTE '(LAMBDA (X) X))", ~Parser::result());
   reset();
 }
 
 TEST(AST, LibNLambda) {
   feed("(set 'quote '(nlambda (x) x)) ");
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("(SET (QUOTE QUOTE) (QUOTE (NLAMBDA (X) X)))", ~Parser::result());
+  EXPECT_STREQ("(SET 'QUOTE '(NLAMBDA (X) X))", ~Parser::result());
   reset();
 }
 
@@ -230,12 +244,8 @@ TEST(AST, LibDefun) {
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ(""
-"(SET (QUOTE DEFUN) " 
-  "(QUOTE (NLAMBDA (NAME PARAMETERS BODY) " 
-  "(SET NAME (LAMBDA PARAMETERS BODY)))))" 
-"",
-  ~Parser::result());
+  auto expected = "(SET 'DEFUN '(NLAMBDA (NAME PARAMETERS BODY) (SET NAME (LAMBDA PARAMETERS BODY))))";
+  EXPECT_STREQ(expected, ~Parser::result());
   reset();
 }
 
@@ -249,11 +259,12 @@ TEST(AST, LibNDefun) {
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ(""
-      "(SET (QUOTE NDEFUN) " //
-      "(QUOTE (NLAMBDA (NAME PARAMETERS BODY) " //
-      "(SET NAME (NLAMBDA PARAMETERS BODY)))))" //
-  "",~Parser::result());
+  auto expected = ""
+      "(SET 'NDEFUN " //
+      "'(NLAMBDA (NAME PARAMETERS BODY) " //
+      "(SET NAME (NLAMBDA PARAMETERS BODY))))" //
+  "";
+  EXPECT_STREQ(expected,~Parser::result());
   reset();
 }
 

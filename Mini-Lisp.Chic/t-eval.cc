@@ -368,11 +368,20 @@ TEST(Eval, LambdaRac3QuoteEval) {
     EXPECT_EQ(expr.eval(), a);
     expr = f.cons(list(list(x.q()).q(), list(y.q()).q(), list(a.q()).q()));
     EXPECT_EQ(expr.eval(), list(a.q()));
+}
 
+TEST(Eval, ArgumentEvaluationOrder) {
+    // Define the function: "(defun f (x y z) z)"
+  S a(UNIQUE);
+  S b(UNIQUE);
+  S c(UNIQUE);
+
+  defun(f, list(x, y, z), z);
     // Check evaluation errors:
-    expr = f.cons(list(a,b,c));
+    expr = list(f, a,b,c);
     EXPECT_EXCEPTION(expr.eval(), a, UNDEFINED_ATOM);
 }
+
 
 TEST(Eval, DefunMissing) {
     defun(f, list(x, y, z), z);

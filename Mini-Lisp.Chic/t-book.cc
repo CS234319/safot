@@ -98,17 +98,8 @@ TEST(Book, AtomicFunctionsEq) {
     EXPECT_EQ(parse("(eq '(a a) '(a a))").eval(), NIL);
 }
 
-/*
-    (error) ⇒ ✗
-    (error 'A) ⇒ ✗
-    (error 'message) ⇒ ✗
-*/
-TEST(Book, AtomicFunctionsError) {
-    S err = S("ERROR");
-    EXPECT_EXCEPTION(parse("(error)").eval(), list(err), NIL);
-    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list(S("ERROR"), a.q()), a);
-    EXPECT_EXCEPTION(parse("(error 'message)").eval(), list(S("ERROR"), S("MESSAGE").q()), S("MESSAGE"));
-}
+
+
 
 /*
     (set 'a '(b c)) ⇒ (b c)
@@ -207,14 +198,14 @@ TEST(Book, Zcar3) {
 
 TEST(Book, Zcar4) {
   parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
-  EXPECT_EXCEPTION(parse("(zcar 'a 'b)").eval(), list(b), REDUNDANT_ARGUMENT);
+  EXPECT_EXCEPTION(parse("(zcar 'a 'b)").eval(), list(b.q()), REDUNDANT_ARGUMENT);
 }
 
 /* Mirror */
 TEST(Book, Mirror1) {
   parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
   EXPECT_EQ(parse("(mirror '(a b))").eval(), list(b).cons(a));
-    EXPECT_EXCEPTION(parse("(zcar)").eval(), list(x), MISSING_ARGUMENT);
+  EXPECT_EXCEPTION(parse("(zcar)").eval(), list(x), MISSING_ARGUMENT);
 }
 
 /* Mirror */
@@ -237,12 +228,17 @@ TEST(Book, Mirror3) {
 
 TEST(Book, Mirror4) {
   parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
-  EXPECT_EXCEPTION(parse("(mirror 'a 'b 'c)").eval(), list(b, c), REDUNDANT_ARGUMENT);
+  EXPECT_EXCEPTION(parse("(mirror 'a 'b 'c)").eval(), list(b.q(), c.q()), REDUNDANT_ARGUMENT);
 }
 
 TEST(Book, Mirror5) {
   parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
-  EXPECT_EXCEPTION(parse("(mirror 'a 'b)").eval(), list(b), REDUNDANT_ARGUMENT);
+  EXPECT_EXCEPTION(parse("(mirror 'a 'b)").eval(), list(b.q()), REDUNDANT_ARGUMENT);
+}
+
+TEST(Book, Mirror6) {
+  parse("(defun mirror (x) (cons (cdr x) (car x)))").eval();
+  EXPECT_EXCEPTION(parse("(mirror 'a b)").eval(), list(b), REDUNDANT_ARGUMENT);
 }
 
 
@@ -255,8 +251,14 @@ TEST(Book, EvalOnEval) {
     EXPECT_EQ(parse("(eval (atom (eval (car '(b a)))))").eval(), T);
     EXPECT_EQ(parse("(eval (eval (eval (eval T))))").eval(), T);
     EXPECT_EQ(parse("(eval (eval (eval (eval NIL))))").eval(), NIL);
+}
+
+TEST(Book, EvalOnEvalError1) {
     EXPECT_EXCEPTION(parse("(eval (atom (eval (car 'a))))").eval(), a, CAR);
+}
+
+TEST(Book, EvalOnEvalError2) {
     EXPECT_EXCEPTION(parse("(eval atom (atom (eval (car 'a))))").eval(),
-                     list(S("EVAL"), S("ATOM"), list(S("ATOM"), list(S("EVAL"), list(S("CAR"), list(S("QUOTE"), a))))),
+       list(list(S("ATOM"), list(S("EVAL"), list(S("CAR"), list(S("QUOTE"), a))))),
                      REDUNDANT_ARGUMENT);
 }

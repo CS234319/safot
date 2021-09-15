@@ -130,29 +130,11 @@ TEST(Error, MissingValues) {
 }
 
 TEST(Error, UnknownLambda) {
-    EXPECT_EXCEPTION(apply(S("e"), t), S("e").cons(t), BAD_FUNCTION)
+    EXPECT_EXCEPTION(apply(S("e"), t), S("e"), UNDEFINED_ATOM)
 }
 
 TEST(Error, OtherError) {
     EXPECT_EXCEPTION(t.error(S("OTHER")), t, S("OTHER"))
-}
-
-TEST(Except, Deep) {
-    S x("x");
-    S y("y");
-    S z("z");
-     S a ("a");
-     S b ("b");
-    S f("function");
-    ndefun(f,list(a,b), list(a, b, list(CAR,a)));
-
-    S l1 = list(CONS, x, list(f, T));
-    l1 = list(CONS, l1, l1); 
-    l1 = list(CONS, l1, l1); 
-
-    S what = list(CONS, list(CONS,T,list(CONS,T,list(CONS,NIL,list(f,a,b)))));
-    EXPECT_EQ(what,t);
-    EXPECT_EXCEPTION(what.eval(), list(z), REDUNDANT_ARGUMENT);
 }
 
 
