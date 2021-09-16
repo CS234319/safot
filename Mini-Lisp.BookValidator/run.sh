@@ -55,7 +55,7 @@ echo "INFO: Clean old lisp files ... "
 make clean -C ${MINI_LISP_INPUTS_DIR}
 
 echo "INFO: Generate new lisp files from the book ... "
-make all -C ${MINI_LISP_EXPECTED_DIR}
+make all -C ${MINI_LISP_INPUTS_DIR}
 
 echo "========================================================="
 echo "INFO: Input directory  : ${MINI_LISP_INPUTS_DIR}"
