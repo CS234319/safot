@@ -7,7 +7,6 @@
 #include "gtest/gtest.h"
 #include "recorder.h"
 
-
 struct RecorderTest: ::testing::Test {
   Recorder recorder;
 };
