@@ -6,10 +6,12 @@
  */
 
 
-static S x("x"); 
+static S x("x");
+static S y("y");
 extern S evaluate_cond(S s);
 extern S lookup(S id);
 extern S alist();
+extern S defun(S name, S parameters, S body);
 
 
 TEST(AlistGlobalLocal, SetWithNoError) {
@@ -103,4 +105,26 @@ TEST(AlistGlobalLocal, SetWithError) {
     // Check if b0, b1, b2 are defined:
     EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED);
     EXPECT_EXCEPTION(lookup(b_1), b_1, UNDEFINED);
+}
+
+TEST(AlistGlobalLocal, SetArgumentsBeforeFunction) {
+    /*
+     * Check if set is properly done before calling a function
+     */
+    // Define variables:
+    S f("F"), a("A"), b("B"), p("P"), v("V");
+
+    // Define simple function:
+    defun(f, list(x, y), a);
+
+    // Define s-expression that will set a and b during the evaluation:
+    S s = list(f,
+               list(SET, a.q(), p.q()),
+               list(SET, b.q(), v.q())
+    );
+    EXPECT_EQ(s.eval(), p);
+
+    // Check if a and b still defined:
+    s = list(f, a, b);
+    EXPECT_EQ(s.eval(), p);
 }
