@@ -70,7 +70,8 @@ class MiniLispShell:
             encoding='utf-8',
             echo=False,
             timeout=6,
-            maxread=1)
+            maxread=1
+        )
         if self.log.exists():
             self.log.unlink()
         self.log.touch()
@@ -90,7 +91,6 @@ class MiniLispShell:
             input_str: str,
             filter_pattern=r"\r|- |\?|> ",
             filter_newline=True,
-            timeout=2,
             traceback=False
     ) -> str:
         """
@@ -105,13 +105,9 @@ class MiniLispShell:
 
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
-        self.shell.expect("\n", timeout=timeout)
+        self.shell.expect("\n", timeout=None)
         if "Traceback" in self.log.read_text():
-            while True:
-                try:
-                    self.shell.expect("\n", timeout=timeout)
-                except:
-                    break
+            self._get_all_lines()
         raw = self.log.read_text().replace("\x00", "")
         self.log.write_text("")
         out = re.sub(filter_pattern, "", raw)
@@ -123,6 +119,13 @@ class MiniLispShell:
         if filter_newline is False:
             out = out.replace("\n", "")
         return out
+
+    def _get_all_lines(self):
+        while True:
+            try:
+                self.shell.expect("\n")
+            except:
+                break
 
     @staticmethod
     def _check_if_executable_exists(path: str) -> None:

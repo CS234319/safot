@@ -28,7 +28,7 @@ class FlowTestFramework:
         :param file: input file with the functions declarations
         """
         for line in self.split_file(file):
-            self.shell.feed(line, timeout=0.1)
+            self.shell.feed(line)
 
     def run_s_expr_file(self, file: str) -> str:
         """
@@ -57,7 +57,7 @@ class FlowTestFramework:
 
         :return: output string
         """
-        return self.shell.feed(line, timeout=4, filter_newline=self.filter_newline)
+        return self.shell.feed(line, filter_newline=self.filter_newline)
 
     def interactive(self):
         """
