@@ -3,13 +3,12 @@
 #include "hacks.h"
 struct Recorder {
   void reset();
-  String playback();
   void record(String s); 
+  String playback();
+  static struct Recorder stdout, stderr;
   private:
     char *head();
     void *tape = (void *) 0; 
     int length = 0;
  };
-extern struct Recorder rout, rerr;
 #endif
-

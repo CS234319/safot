@@ -32,51 +32,17 @@ int print(S s) {
     if ((s = s.cdr()).null()) return print(")");
   }
 }
-#ifdef PRODUCTION
-#undef PRODUCTION
-#endif 
 
 #ifndef PRODUCTION
-static void record(String s); 
-#endif
+#define TESTING(...) __VA_ARGS__ 
+#endif 
+TESTING( static void record(String s); )
 
 static int put(String s)  { 
-#ifndef PRODUCTION
-  record(s);
-#endif
+  TESTING(  record(s);  )
   return grunt(fputs(s, file)); 
 }  
 
-#ifndef PRODUCTION
-struct Recorder {
-  void *tape; 
-  int length;
-  String playback() { return reinterpret_cast<char *>(tape); }
-  char *head() { length + reinterpret_cast<char *>(tape); }
-  void start() { if (tape == 0) tape = malloc(1); length = 0; }
-  void record(String s) {
-    if (tape == 0) return;
-    H n = size(s);
-    tape = realloc(tape, length += n);
-    for (int i = 0; i <= n; ++i)
-      *head() = s[i];
-  }
-} rout, rerr;
+#import "recorder.h"
 
-static void record(String s) {
-  if (file == stdout) 
-    rout.record(s);
-  else
-    rerr.record(s);
-}
-
-namespace Printing { 
-  void record() { rout.start(); } 
-  String playback() { return rout.playback(); }
-};
-
-namespace Erroring { 
-  void record() { rerr.start(); } 
-  String playback() { return rerr.playback(); }
-};
-#endif
+TESTING( static void record(String s) { (file == stdout ? Recorder::stdout : Recorder::stderr).record(s); } )

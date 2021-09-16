@@ -1,96 +1,59 @@
-default: tester mini-lisp services test Makefile
+default: m t list services test Makefile
+
+00.o: $(MAKEFILE_LIST)
+t-main.o: $(MAKEFILE_LIST)
 
 services: tags depend 
 
 .PHONY: default services clean depend wc gvim
 
-HEADERS := $(sort $(filter %.h,$(shell cat .depend)))
-MODULES         := $(IMPLEMENTATION) $(TESTERS) $(REPL)
-TEST            := $(IMPLEMENTATION) $(TESTERS)
-IMPLEMENTATION  := $(READ) $(ENGINE) $(MACHINE) 
-SOURCES         := $(addsuffix .cc,$(MODULES)) 
+MODULES   := $(sort $(MINI-LISP) $(TEST))
+SOURCES   := $(addsuffix .cc,$(MODULES)) 
+HEADERS 	:= $(sort $(filter %.h,$(shell cat .depend)))
 
-REPL += 00
-REPL += repl
-REPL += print
-REPL += basics
-REPL += dump
 
-ENGINE += eval
-ENGINE += builtin
-ENGINE += a-list
-ENGINE += fluentons
-ENGINE += S
-ENGINE += except
+MINI-LISP = 00 dump $(REPL)  
+TESTER    = t-main dump $(TESTS) $(REPL)
+REPL      = repl $(READ) $(EVALUATE) $(PRINT)
+EVALUATE  = $(ENGINE) $(MACHINE) 
 
-REPL += read
-READ += tokenizer
-READ += stack
-READ += parser
+MACHINE  	=  fluentons S pairs strings
+ENGINE    =  eval builtin a-list except
+PRINT    	=  print recorder
+READ      =  parser read stack tokenizer
 
-MACHINE += strings
-MACHINE += pairs
+TESTS = dump t-a-list t-alist-global-local t-apply t-ast t-basics t-book t-book-evaluate t-defun 
+TESTS += t-error t-eval t-eval-atomic t-eval-cond t-evaluate-primitive t-fluentons t-pairs 
+TESTS += t-parser t-repl t-stack t-strings t-tokenizer
 
-TESTERS += read
-TESTERS += print
-TESTERS += repl
-TESTERS += dump
 
-TESTERS += recorder
-TESTERS += t-fluentons
-TESTERS += t-a-list
-TESTERS += t-apply
-TESTERS += t-ast
-TESTERS += t-basics
-TESTERS += t-eval-cond
-TESTERS += t-evaluate-primitive
-TESTERS += t-eval-atomic
-TESTERS += t-main
-TESTERS += t-pairs
-TESTERS += t-parser
-TESTERS += t-stack
-TESTERS += t-strings
-TESTERS += t-tokenizer
-TESTERS += t-error
-TESTERS += t-defun
-TESTERS += t-apply
-TESTERS += t-eval
-TESTERS += t-book
-TESTERS += t-alist-global-local
-TESTERS += t-repl
-TESTERS += t-book-evaluate
-
-ml: $(addsuffix .o,$(MINI-LISP))
-
-IMPLEMENTATION  := $(READ) $(ENGINE) $(MACHINE) 
-MINI-LISP       := $(IMPLEMENTATION) $(REPL) 
-TEST            := $(IMPLEMENTATION) $(TESTERS)
-MODULES         := $(IMPLEMENTATION) $(TESTERS) $(REPL)  
-SOURCES         := $(addsuffix .cc,$(MODULES)) 
-
-tester: $(addsuffix .o,$(TEST)) 
+t: $(addsuffix .o,$(TESTER)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
-mini-lisp: $(addsuffix .o,$(MINI-LISP))
+
+m: $(addsuffix .o,$(MINI-LISP)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
-test: tester
+test: t
 	./$^ --gtest_filter="*Error*" 
 
 list:
-	@echo "HEADERS        = " $(HEADERS)
-	@echo "SOURCES        = " $(SOURCES)
-	@echo "MODULES        = " $(MODULES)
-	@echo "MINI-LISP      = " $(MINI-LISP)
-	@echo "IMPLEMENTATION = " $(IMPLEMENTATION)
+	@echo "ENGINE        = " $(ENGINE)
+	@echo "MACHINE        = " $(ENGINE)
+	@echo "EVALUATE       = " $(EVALUATE)
 	@echo "READ           = " $(READ)
+	@echo "PRINT          = " $(READ)
 	@echo "REPL           = " $(REPL)
-	@echo "TEST           = " $(TEST)
-	@echo "TESTERS        = " $(TESTERS)
-	@echo "ENGINE         = " $(ENGINE)
-	@echo "TESTERS        = " $(TESTERS)
+	@echo "TESTS          = " $(TEST)
+
+#	@echo "TESTER         = " $(TESTERS)
+#	@echo "MODULES        = " $(MODULES)
+#	@echo "HEADERS        = " $(HEADERS)
+#	@echo "SOURCES        = " $(SOURCES)
+
 
 ifdef WORK_AROUND
 CFLAGS += -DWORK_AROUND
+
 endif
 
 CFLAGS += -w -std=gnu2x -g
@@ -117,6 +80,3 @@ gvim:
 
 clean:
 		rm -fr $(OBJS) ml tester *.o *~ .depend
-
-
-

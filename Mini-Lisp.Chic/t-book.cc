@@ -272,7 +272,6 @@ TEST(Book, Mirror6) {
   EXPECT_EXCEPTION(parse("(mirror 'a b)").eval(), list(b), REDUNDANT_ARGUMENT);
 }
 
-
 /* Eval on eval */
 TEST(Book, EvalOnEval) {
     EXPECT_EQ(parse("(eval (eval T))").eval(), T);

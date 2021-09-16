@@ -5,7 +5,7 @@
 #include "print.h"
 #include "except.h"
 
-#define xPRODUCTION
+#define PRODUCTION
 #include "mode.h"
 
 
@@ -70,13 +70,8 @@ S apply(S f, S actuals) {
 }
 
 S eval(S s) {
-    struct {
-      S eval(S s) {
-        M3(">> Evaluating [", s, "]");
-        return s.atom() ? lookup(s) : apply(s.car(), s.cdr()); 
-      }
-    } inner; 
-    const S result = inner.eval(s);
-    M4("<< [", s, "] evaluated to " , result);
+    M3(">> Evaluating [", s, "]");
+    const S result = s.atom() ? lookup(s) : apply(s.car(), s.cdr()); 
+    M5("<< [", s, "] evaluated to [" , result, "]");
     return result;
 }

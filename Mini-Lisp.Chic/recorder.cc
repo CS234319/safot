@@ -1,28 +1,17 @@
 #include "recorder.h"
-
+#include <stdlib.h>
+Recorder Recorder::stdout, Recorder::stderr; 
 String Recorder::playback() { return (char *)(tape); }
 char *Recorder::head() { return length+(char *)(tape); }
-
-void Recorder::start() { 
-  if (tape == 0) 
-    tape = malloc(1); 
-  length = 0; 
-  *head() = '\0';
+void Recorder::reset() { 
+  if (tape != 0) free(tape), tape = 0;
+  tape = malloc(1),  length = 0, *head() = '\0';
 }
-
-static void record(String s) {
-  if (file == stdout) 
-    rout.record(s);
-  else
-    rerr.record(s);
+void Recorder::record(String s) {
+  if (tape == 0) return;
+  const H n = size(s);
+  tape = realloc(tape, length + n);
+  for (H i = 0; i < n; ++i, ++length) 
+    *head() = s[i];
+  --length;
 }
-
-namespace Printing { 
-  void record() { rout.start(); } 
-  String playback() { return rout.playback(); }
-};
-
-namespace Erroring { 
-  void record() { rerr.start(); } 
-  String playback() { return rerr.playback(); }
-};

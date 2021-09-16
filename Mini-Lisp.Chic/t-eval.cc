@@ -373,7 +373,6 @@ TEST(Eval, Variadic) {
   CAREFULLY_EXPECT(EQ, list(f, x, y).eval(), list(x, y));
 }
 
-
 TEST(Eval, BAD_ARGUMENTS1) { 
     ndefun(f, list(x, y), list());
     EXPECT_EXCEPTION(f.cons(argument).eval(), argument, BAD_ARGUMENTS);
