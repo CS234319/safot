@@ -87,4 +87,4 @@ def flow():
 
 @pytest.fixture
 def input_dir():
-    return "../inputs/examples"
+    return "./examples"

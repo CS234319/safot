@@ -2,9 +2,9 @@
 ###########################################
 # Script to generate lisp files from
 # the Mini-lisp book, compile them,
-# run, and validate them with the golden.
+# run, and validate them with the expected.
 #
-# In case of diffs between out and golden,
+# In case of diffs between out and expected,
 # the diffs will be print and the flow will stop
 # and return 0.
 #
@@ -18,19 +18,19 @@
 #   3. Compile all the functions files.
 #
 #   4. Run each s-expression file, and
-#      compare the results with the golden
+#      compare the results with the expected
 #      file.
 #      (stop the flow if there are any diffs).
 #
 #   5. Finish.
-#      (meaning all the outputs equal to golden)
+#      (meaning all the outputs equal to expected)
 #
 # Usage:
 #    %  run.sh
 #
 # Returns:
 #    1 if all the output files are equal to
-#    golden files, else 0.
+#    expected files, else 0.
 #
 # Notes:
 #    The script is using the script:
@@ -45,7 +45,7 @@
 SCRIPT_PATH=`realpath $0`
 SCRIPT_DIR=`dirname ${SCRIPT_PATH}`
 MINI_LISP_INPUTS_DIR=${SCRIPT_DIR}/Mini-Lisp.Inputs/
-MINI_LISP_GOLDEN_DIR=${SCRIPT_DIR}/Mini-Lisp.Golden/
+MINI_LISP_EXPECTED_DIR=${SCRIPT_DIR}/Mini-Lisp.Expected/
 RUN_FLOW_SCRIPT=${SCRIPT_DIR}/../Mini-Lisp.ShellTestFramework/bin/run_flow.sh
 
 echo "========================================================="
@@ -55,11 +55,11 @@ echo "INFO: Clean old lisp files ... "
 make clean -C ${MINI_LISP_INPUTS_DIR}
 
 echo "INFO: Generate new lisp files from the book ... "
-make all -C ${MINI_LISP_INPUTS_DIR}
+make all -C ${MINI_LISP_EXPECTED_DIR}
 
 echo "========================================================="
-echo "INFO: Input directory  : ${MINI_LISP_GOLDEN_DIR}"
-echo "INFO: Golden directory : ${MINI_LISP_GOLDEN_DIR}"
+echo "INFO: Input directory  : ${MINI_LISP_INPUTS_DIR}"
+echo "INFO: Expected directory : ${MINI_LISP_EXPECTED_DIR}"
 echo "INFO: Start the flow ... "
 
-${RUN_FLOW_SCRIPT} ${MINI_LISP_GOLDEN_DIR} ${MINI_LISP_INPUTS_DIR}/*.lisp
+${RUN_FLOW_SCRIPT} ${MINI_LISP_EXPECTED_DIR} ${MINI_LISP_INPUTS_DIR}/*.lisp

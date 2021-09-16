@@ -63,13 +63,12 @@ ShellTestFramework has 2 main scripts:<br>
   - _flow_ - Run all the flow-tests - tests of Evaluate validation and Evaluate on Evaluate.<br>
   - _all_ - Run both all the unit and flow tests.<br>
 
-- **./bin/run_flow.sh \[golden dir\] \[lisp files\]**<br>
-Run all the given lisp files, and compare the results with the golden.<br>
-Returns 1 if all the output files are equal to golden files,<br>
+- **./bin/run_flow.sh \[expected dir\] \[lisp files\]**<br>
+Run all the given lisp files, and compare the results with the expected.<br>
+Returns 1 if all the output files are equal to expected files,<br>
 else will print the diffs and return 0.<br>
 For example:
-  - _./bin/run_flow.sh ./test/golden/examples/ ./test/inputs/examples/*_
-  - _./bin/run_flow.sh ./test/golden/examples_with_diff/ ./test/inputs/examples/*_
+  - _./bin/run_flow.sh ./expected_files/ ./test/inputs/examples/*_
   
 ## API
 In order to use the Python package, you must define the PYTHONPATH as described in the installation part.<br>
@@ -163,15 +162,14 @@ The main goal of the flow tests is to validate the C implementation of Mini-Lisp
 the Mini-Lisp book.<br>
 **Note**:<br>
 The tests **are not** unit-tests for the C implementation, but more like:<br> 
-`./mini-lisp < input.lisp > output.lisp && diff output.lisp golden.lisp`<br>
+`./mini-lisp < input.lisp > output.lisp && diff output.lisp expected.lisp`<br>
 There are cons and pros to run the flow tests with this framework, as described in issue-436 by Yossi Gil:<br>
 The nice thing about the framework is that you do not have to compile anything 
 to add more tests. This will save much time and effort. The down side is that time and effort should be invested to implement this.<br> 
 
 ### Evaluate
 The flow tests of Lisp Evaluate done for each of the Mini-lisp's evaluate functions.<br>
-* **Inputs files**: ./test/inputs/test_book_evaluate/<br>
-* **Golden files**: ./test/golden/test_book_evaluate/<br>
+* **Inputs + Expected files**: ./test/flow/book_evaluate/<br>
 * **Test**: ./test/flow/test_book_evaluate.py
 * **Flow steps**:<br>
 Each of the flow tests, done by the following steps:
@@ -180,7 +178,7 @@ Each of the flow tests, done by the following steps:
   * Feed the shell with all the files from the book.
   * Feed the shell with the input file.
   * Communicate with the mini-lisp process and write all the outputs from the shell to out file.
-  * Compare out file with golden file.
+  * Compare out file with expected file.
   * If the files are identical then the test passed, else failed and show diffs.
 * **Run**:
   * _./bin/run_all_tests.sh flow_<br>

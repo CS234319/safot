@@ -1,3 +1,4 @@
+import logging
 import pytest
 import glob
 from pathlib import Path
@@ -15,24 +16,15 @@ def flow() -> FlowTestFramework:
 
 
 @pytest.fixture
-def input_dir():
+def files_dir():
     """
-    return the input directory
+    return the directory with the input & expected files.
     """
-    directory = "../inputs/test_book_evaluate/"
+    directory = "./book_evaluate/"
     return Path(directory)
 
 
-@pytest.fixture
-def golden_dir():
-    """
-    return the golden directory
-    """
-    directory = "../golden/test_book_evaluate/"
-    return Path(directory)
-
-
-def test_book_evaluate(flow, input_dir, golden_dir):
+def test_book_evaluate(flow, files_dir):
     """
     All the tests for all the Lisp evaluate functions,
     which auto generated from the Mini-lisp book.
@@ -43,10 +35,16 @@ def test_book_evaluate(flow, input_dir, golden_dir):
     Read more about this flow here:
         https://github.com/yossigil/safot/tree/master/Mini-Lisp.ShellTestFramework#evaluate
     """
-    input_files = sorted(glob.glob(f"{input_dir}/*.lisp.in"))
-    golden_files = sorted(glob.glob(f"{golden_dir}/*.lisp.out"))
-    for in_file, golden_file in zip(input_files, golden_files):
+    input_files = sorted(glob.glob(f"{files_dir}/*.lisp.in"))
+    for in_file in input_files:
+        # Check if this input file has expected file with the same name:
+        out_file = f'{in_file.split(".")[0]}.lisp.out'
+        if not Path(out_file).exists():
+            print(f"Failed to find expected output file for: {in_file}")
+            continue
+
+        # Run the input file and compare output with expected:
         print(f"Running: {in_file}")
         out_file = flow.run_s_expr_file(in_file)
-        assert Path(out_file).read_text() == Path(golden_file).read_text()
+        assert Path(out_file).read_text() == Path(out_file).read_text()
         print(f"Passed.")
