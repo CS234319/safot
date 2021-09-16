@@ -82,7 +82,7 @@ def test_is_function_file(flow):
 
 @pytest.fixture
 def flow():
-    return FlowTestFramework("../../../Mini-Lisp.Chic/mini-lisp")
+    return FlowTestFramework("../../../Mini-Lisp.ChicDor/mini-lisp")
 
 
 @pytest.fixture

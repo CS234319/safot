@@ -35,7 +35,7 @@ class FlowRunner:
             return False
 
         # Init interpreter:
-        flow = FlowTestFramework("../../../Mini-Lisp.Chic/mini-lisp")
+        flow = FlowTestFramework("../../../Mini-Lisp.ChicDor/mini-lisp")
 
         # Categorize files:
         categorized_files = FlowRunner.categorize_files_by_name(files)

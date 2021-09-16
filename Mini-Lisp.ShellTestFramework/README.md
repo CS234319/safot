@@ -90,7 +90,7 @@ The class supports the `with` statement for convenience.<br>
   ```python
   from framework.lib.mini_lisp_shell import MiniLispShell
   
-  with MiniLispShell("./Mini-Lisp.Chic/mini-lisp") as shell:
+  with MiniLispShell("./Mini-Lisp.ChicDor/mini-lisp") as shell:
       out1 = shell.feed("(defun zcar(x) (cond ((atom x) x) (t (car x))))")
       out2 = shell.feed("(zcar '(a b))")
       out3 = shell.feed("(zcar '(a b c))")
@@ -123,7 +123,7 @@ each time creating 1 input file with everything and compiling all again.<br>
   from framework.lib.flow_test_framework import FlowTestFramework
   
   # Define paths:
-  executable     = "./Mini-Lisp.Chic/mini-lisp"
+  executable     = "./Mini-Lisp.ChicDor/mini-lisp"
   input_dir      = "./Mini-Lisp.ShellTestFramework/test/inputs/examples"
   functions_file = f"{input_dir}/fun.lisp"       # file with 2 functions definitions: exists, defun
   input_file     = f"{input_dir}/lisp01.lisp"    # file with 3 s-expression, using these 2 functions
@@ -174,7 +174,7 @@ The flow tests of Lisp Evaluate done for each of the Mini-lisp's evaluate functi
 * **Flow steps**:<br>
 Each of the flow tests, done by the following steps:
   * Generate the latest lisp files from the book.
-  * Open communication with the mini-lisp executable in Mini-Lisp.Chic .
+  * Open communication with the mini-lisp executable in Mini-Lisp.ChicDor .
   * Feed the shell with all the files from the book.
   * Feed the shell with the input file.
   * Communicate with the mini-lisp process and write all the outputs from the shell to out file.
@@ -202,7 +202,7 @@ the outer evaluate defined in the C alist, and the inner use its own alist to ev
 
 **Flow steps**:
 1. Generate the latest lisp files from the Mini-lisp book.
-2. Open communication with the mini-lisp executable in Mini-Lisp.Chic.
+2. Open communication with the mini-lisp executable in Mini-Lisp.ChicDor.
 3. Feed the shell with all the files from the book. (create our `executable alist`)
 4. Generate environment (string) which will be used by the evaluate function,
    using all the files from the book, similar to step 2. (create our `outer alist` string)
@@ -254,7 +254,7 @@ All the tests will pass **only if** you compile the mini-lisp
 with the workaround environment variable:
 ```bash
 export WORK_AROUND=1
-make all -C ./Mini-Lisp.Chic/
+make all -C ./Mini-Lisp.ChicDor/
 ```
 (this is done automatically in _./bin/run_all_tests.sh_)<br> 
 Because the current memory infrastructure of the C implementation of Mini-Lisp

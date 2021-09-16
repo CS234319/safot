@@ -80,7 +80,7 @@ def get_flow(compile_book=True, filter_newline=True) -> FlowTestFramework:
     """
     if compile_book is True:
         generate_book_files()
-    flow = FlowTestFramework(mini_lisp="../../../Mini-Lisp.Chic/mini-lisp", filter_newline=filter_newline)
+    flow = FlowTestFramework(mini_lisp="../../../Mini-Lisp.ChicDor/mini-lisp", filter_newline=filter_newline)
     for file in get_functions_files():
         flow.load_function_file(file)
     return flow

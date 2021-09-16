@@ -121,6 +121,6 @@ def test_multi_line(shell):
 
 @pytest.fixture
 def shell():
-    shell = MiniLispShell("../../../Mini-Lisp.Chic/mini-lisp")
+    shell = MiniLispShell("../../../Mini-Lisp.ChicDor/mini-lisp")
     shell.start_mini_lisp()
     return shell

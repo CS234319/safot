@@ -1,0 +1,9 @@
+*.d
+test
+mini-lisp
+store
+*.back
+log
+diff
+delme*
+tester

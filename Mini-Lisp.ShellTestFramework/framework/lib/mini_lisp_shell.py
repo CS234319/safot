@@ -21,7 +21,7 @@ class MiniLispShell:
     For example:
         >> from framework.lib.mini_lisp_shell import MiniLispShell
         >>
-        >> with MiniLispShell("../../Mini-Lisp.Chic/mini-lisp") as shell:
+        >> with MiniLispShell("../../Mini-Lisp.ChicDor/mini-lisp") as shell:
         >>     out1 = shell.feed("()")
         >>     out2 = shell.feed("(car '(a b))")
         >>     print(out1)
@@ -112,7 +112,7 @@ class MiniLispShell:
         self.log.write_text("")
         out = re.sub(filter_pattern, "", raw)
         out = out[:-1]
-        if "Traceback" in out and traceback is False:
+        if "Traceback" in out or "... While applying" in out and traceback is False:
             out = list(out.split("\n"))[-1]
         if out.isspace():
             out = ""

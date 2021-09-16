@@ -59,6 +59,6 @@ echo "Running run_flow.sh ..."
 
 # Compile mini-lisp:
 export WORK_AROUND=1
-make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.Chic/ &> /dev/null
+make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.ChicDor/ &> /dev/null
 
 flow_runner `realpath $1` `realpath "${@:2}" | tr "\n" " "`

@@ -49,7 +49,7 @@ echo "Running run_all_tests.sh ..."
 
 # Compile mini-lisp:
 export WORK_AROUND=1
-make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.Chic/ &> /dev/null
+make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.ChicDor/ &> /dev/null
 
 if [ "$1" == "unit" ]; then
   run_unit_tests ${UNIT_TESTS_DIR}
