@@ -6,175 +6,40 @@
 #include <stdio.h>
 #include "gtest/gtest.h"
 #include "repl.h"
-#include "read.h"
 #include "builtin.h"
+#include "recorder.h"
+#include "read.h"
 
 static int REPL(const char *s) { inject(s); REPL(); }
 
 TEST(REPL, Sanity0) { REPL("(cons 'x 'y)"); }
 TEST(REPL, Sanity1) { EXPECT_TRUE(REPL("(cons 'x 'y)")); }
-
+String output() { return Recorder::stdout.playback(); }
+String error() { return Recorder::stderr.playback(); }
 /**
  * Tests of REPL
  */
 
-using namespace std;
+#define EXPECT_STDOUT(send,expected) { Recorder::stdout.reset(); REPL(send); EXPECT_STRCASEEQ(output(), expected); }
+#define EXPECT_STDERR(send,expected) { Recorder::stderr.reset(); REPL(send); EXPECT_STRCASEEQ(error(), expected); }
 
-string output() {
-    return testing::internal::GetCapturedStdout();
-}
+TEST(test_REPL, EmptyList)   EXPECT_STDOUT("()", ">NIL\n>")
+TEST(test_REPL, Nil0)        EXPECT_STDOUT("NIL" , ">NIL\n>")
+TEST(test_REPL, Nil1)        EXPECT_STDOUT("T" , ">NIL\n>")
+TEST(test_REPL, StdoutCar)   EXPECT_STDOUT("(CAR '(A B))", ">A\n");
+TEST(test_REPL, StdoutCdr)   EXPECT_STDOUT("(CDR '(A B))", "(B)\n");
+TEST(test_REPL, StdoutAtom)  EXPECT_STDOUT("(atom 'T)",  "T\n");
+TEST(test_REPL, StdoutDefun) EXPECT_STDOUT("(defun f (xxx) (car 'x))","(LAMBDA (xxx) (CAR 'X))\n")
+TEST(test_REPL, ZCar0)       EXPECT_STDOUT("(defun zcar(xxx) (cond ((atom x) x) (t (car x))))", "(LAMBDA (xxx) (CAR 'X))\n") 
 
-TEST(REPL, quick) {
-    string expr = "()";
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    EXPECT_EQ(output(), "> NIL\n> ");
-}
-
-// ****************************
-// Tests: STDOUT
-
-TEST(REPL, StdoutNil) {
-    string expr = "()";
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    EXPECT_EQ( output(), "> NIL\n> ");
-}
-
-TEST(REPL, StdoutCar) {
-    string expr = "(CAR '(A B))";
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    EXPECT_EQ(output(),"> A\n> ");
-}
-
-TEST(REPL, StdoutCdr) {
-    string expr = "(CDR '(A B))";
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    EXPECT_EQ(output(), "> (B)\n> ");
-}
-
-TEST(REPL, StdoutAtom) {
-    string expr = "(atom 'T)";
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    EXPECT_EQ( output(), "> T\n> ");
-}
-
-TEST(REPL, StdoutDefun) {
-    string expr = "(defun f (recorder) (car 'x))";
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    auto out = output(); 
-    auto expected = "> (LAMBDA (RECORDER) (CAR 'X))\n> ";
-    EXPECT_STRCASEEQ(expected,out.c_str());
-}
-
-TEST(REPL, ZCar0) {
-    testing::internal::CaptureStdout();
-    REPL(string("(defun zcar(recorder) (cond ((atom x) x) (t (car x))))").c_str());
-    EXPECT_STRCASEEQ(output().c_str(), "> (lambda (recorder) (cond ((atom x) x) (t (car x))))\n> ");
-}
-
-
-TEST(REPL, ZCar1) {
-    string expr = ("(defun zcar(recorder) (cond ((atom x) x) (t (car x))))");
-    testing::internal::CaptureStdout();
-    REPL(expr.c_str());
-    EXPECT_STRCASEEQ(output().c_str(), "> (lambda (recorder) (cond ((atom x) x) (t (car x))))\n> ");
-}
-
-TEST(REPL, StdoutZcar) {
-    testing::internal::CaptureStdout();
-    string expr = "(defun zcar(recorder) (cond ((atom x) x) (t (car x))))";
-    REPL(expr.c_str());
-    const char *expected = "> (LAMBDA (RECORDER) (cond ((atom x) x) (t (car x))))\n> ";
-    EXPECT_STRCASEEQ(output().c_str(), expected);
-}
-
-
-// ****************************
-// Helper functions for stderr:
-static int stdout_copy;
-static int dev_null;
-
-void close_stdout() {
-    dev_null = open("/dev/null", O_WRONLY);
-    stdout_copy = dup(STDOUT_FILENO);
-    dup2(dev_null, STDOUT_FILENO);
-}
-
-void open_stdout() {
-    dup2(stdout_copy, STDOUT_FILENO);
-    close(stdout_copy);
-    close(dev_null);
-}
-
-// ****************************
-// Tests: STDERR
-
-TEST(REPL, StderrCar) {
-    string expr = "(car 'a)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-    string output = testing::internal::GetCapturedStderr(); open_stdout();
-    EXPECT_EQ(output,"Error CAR on A\n");
-}
-
-TEST(REPL, StderrCdr) {
-    string expr = "(cdr 'a)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-    string output = testing::internal::GetCapturedStderr(); open_stdout();
-    EXPECT_EQ(output,"Error CDR on A\n");
-}
-
-TEST(REPL, StderrDefun) {
-    string expr = "(defun fun x y z)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-    string output = testing::internal::GetCapturedStderr(); open_stdout();
-    EXPECT_EQ(output, "Error REDUNDANT ARGUMENT(S) on (Z)\n");
-}
-
-TEST(REPL, StderrCons) {
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL("(cons 'x 'y 'z)");
-    string output = testing::internal::GetCapturedStderr(); open_stdout();
-    EXPECT_EQ(output, "Error REDUNDANT ARGUMENT(S) on ('Z)\n");
-}
-
-TEST(REPL, StderrCons1) {
-  return;
-    string expr = "x(cons 'x 'y 'z)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-//   string temp(testing::internal::GetCapturedStderr());
-//    EXPECT_STREQ(temp.c_str(),"Error: REDUNDANT ARGUMENT(S) on ('Z)\n");
-}
-
-TEST(REPL, StderrEval) {
-    string expr = "(eval 'a 'a)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-    string output = testing::internal::GetCapturedStderr().c_str(); open_stdout();
-     EXPECT_STRCASEEQ(output.c_str(),"Error REDUNDANT ARGUMENT(S) on ('A)\n");
-}
-
-TEST(REPL, StderrError) {
-    string expr = "(eval 'a 'a)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-    string output = testing::internal::GetCapturedStderr().c_str(); open_stdout();
-     EXPECT_STRCASEEQ(output.c_str(),"Error REDUNDANT ARGUMENT(S) on ('A)\n");
-
-    expr = "(error 'msg)";
-    testing::internal::CaptureStderr(); close_stdout();
-    REPL(expr.c_str());
-    output = testing::internal::GetCapturedStderr().c_str(); open_stdout();
-    EXPECT_STRCASEEQ    (output.c_str(),"Error MISSING ARGUMENTS(S) on (..2)\n");
-}
+TEST(test_REPL, StderrCar)   EXPECT_STDERR("(car 'a)", "Error CAR on A\n")
+TEST(test_REPL, StderrCdr)   EXPECT_STDERR("(cdr 'a)", "Error CDR on A\n")
+TEST(test_REPL, StderrDefun) EXPECT_STDERR("(defun fun x y z)", "Error REDUNDANT ARGUMENT(S) on (Z)\n")
+TEST(test_REPL, StderrCons)  EXPECT_STDERR("(defun fun x y z)", "Error REDUNDANT ARGUMENT(S) on ('Z)\n")
+TEST(test_REPL, StderrCons1) EXPECT_STDERR("x(cons 'x 'y 'z)", "Error: REDUNDANT ARGUMENT(S) on ('Z)\n")
+TEST(test_REPL, StderrEval)  EXPECT_STDERR("(eval 'a 'a)", "Error REDUNDANT ARGUMENT(S) on ('A)\n")
+TEST(test_REPL, StderrErr1)  EXPECT_STDERR("(eval 'a 'a)", "Error REDUNDANT ARGUMENT(S) on ('A)\n")
+TEST(test_REPL, StderrErr2)  EXPECT_STDERR("(error 'msg)", "Error MISSING ARGUMENTS(S) on (..2)\n")
 
 TEST(REPL, Deep) {
     S x("x");
@@ -193,4 +58,3 @@ TEST(REPL, Deep) {
     S what = list(CONS, list(CONS,T,list(CONS,T,list(CONS,NIL,list(f,a,b)))));
     EXPECT_EXCEPTION(what.eval(), list(__2), MISSING_ARGUMENT);
 }
-
