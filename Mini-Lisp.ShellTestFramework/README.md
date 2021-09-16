@@ -208,20 +208,21 @@ the outer evaluate defined in the C alist, and the inner use its own alist to ev
 1. Generate the latest lisp files from the Mini-lisp book.
 2. Open communication with the mini-lisp executable in Mini-Lisp.ChicDor.
 3. Feed the shell with all the files from the book. (create our `executable alist`)
-4. Generate environment (string) which will be used by the evaluate function,
-   using all the files from the book, similar to step 2. (create our `outer alist` string)
-5. Create our s-expression as a string (with our third alist: `inner alist`)
-6. Feed the shell with the input s-expression.
-7. Communicate with the mini-lisp process.
-8. Compare our output with expected.
-9. If the strings are identical then the test passed, else failed and show diffs.
+4. Feed the shell with the lisp function `generate_alist` which will generate an alist with all the evaluate functions (plus nil, t, qoute, etc.)
+5. Set the identifier `env`, with the value of the alist. 
+6. Set the identifier `inner`,  with the value of `env` **plus** the relevant pairs for the specific s-expression. 
+7. Set the identifier `outer`,  with the value of `env` **plus** the pair `inner` and it's value, so the outer evaluate can evaluate `inner`. 
+8. Feed the shell with the input file with all the s-expressions (each of them have different inner and outer alists).
+9. Communicate with the mini-lisp process.
+10. Compare our output with expected.
+11. If the strings are identical then the test passed, else failed and show diffs.
 
 **Environments**:<br>
 1. `executable alist` - our "real" alist from the C code, includes all the functions
 that will be fed from the book (step 3) and contains all the definitions for the outer evaluate.
 2. `outer alist` - our alist for the inner evaluate function, includes all the functions
 that will be fed from the book (step 4) and contains all the definitions for the inner evaluate.
-3. `inner alist` - used by the inner evaluate, to evaluate its own s-expression, can be very small (e.g: (t.t nil.nil))
+3. `inner alist` - used by the inner evaluate, to evaluate its own s-expression, equal to the outer alist.
 * **Run**:
   * _./bin/run_all_tests.sh flow_<br>
   (running all the flow tests may take around ~5 minutes)

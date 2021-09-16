@@ -23,26 +23,6 @@ def generate_book_files(verbose=True) -> None:
     os.system(command)
 
 
-def get_evaluate_functions_names() -> List[str]:
-    return [
-        "quote",
-        "null",
-        "exists",
-        "is-atomic",
-        "lookup",
-        "bind",
-        "apply-trivial-atomic",
-        "apply-eager-atomic",
-        "evaluate",
-        "evaluate-list",
-        "apply-atomic",
-        "evaluate-atomic",
-        "evaluate-cond",
-        "apply-decomposed-lambda",
-        "apply",
-    ]
-
-
 def get_functions_files() -> List[str]:
     """
     Get all the files from the book, which are represents function definitions
@@ -52,20 +32,6 @@ def get_functions_files() -> List[str]:
     directory = "../../../Mini-Lisp.BookValidator/Mini-Lisp.Inputs/"
     files = [f for f in glob.glob(f"{directory}/*.lisp")]
     return FlowRunner.categorize_files_by_name(files)[FileType.FUNCTION]
-
-
-def get_env(flow) -> str:
-    """
-    Build an alist string, using the loaded flow
-
-    :return: alist string
-    """
-    names = get_evaluate_functions_names()
-    alist = "t.t nil.nil "
-    for name in names:
-        lambda_expr = flow.feed(f"(eval '{name})")
-        alist += f"{name}.{lambda_expr} "
-    return alist
 
 
 def get_flow(compile_book=True, filter_newline=True) -> FlowTestFramework:

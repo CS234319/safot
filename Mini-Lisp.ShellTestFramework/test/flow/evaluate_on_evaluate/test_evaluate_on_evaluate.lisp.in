@@ -1,0 +1,272 @@
+; Input file for: Evaluate on Evaluate test.
+;
+; This file will be loaded after the shell feeded with
+; all the lisp evaluate functions from the book.
+;
+; To read more about it:
+;   https://github.com/yossigil/safot/tree/master/Mini-Lisp.ShellTestFramework#evaluateonevaluate
+;
+; =================================================
+; Generate environment:
+; =================================================
+
+; Define an alist generator function:
+(defun generate_alist (names)
+        (cond
+            ((null names) NIL)
+            (t
+                (cons
+                  (cons (car names) (eval (car names)))
+                  (generate_alist (cdr names))
+                )
+            )
+        )
+)
+
+; Define env identifier with all the evaluate functions from
+; the book, that already defined in our interpreter alist:
+(set 'env  (generate_alist '(
+        nil
+        t
+        quote
+        null
+        exists
+        is-atomic
+        lookup
+        bind
+        apply-trivial-atomic
+        apply-eager-atomic
+        evaluate
+        evaluate-list
+        apply-atomic
+        evaluate-atomic
+        evaluate-cond
+        apply-decomposed-lambda
+        apply
+        )
+    )
+)
+
+; =================================================
+; Evaluate on Evaluate - evaluate atoms:
+; =================================================
+(set 'inner (cons (cons 'a 't) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote a) inner) outer) ; s-expression (expect: T)
+
+(set 'inner (cons (cons 'a 'x) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote a) inner) outer) ; s-expression (expect: X)
+
+; =================================================
+; Evaluate on Evaluate - evaluate atomic functions with one arguments:
+; =================================================
+(set 'inner (cons (cons 'a 'x) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (atom a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (atom a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (car a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x y z)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (car a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x.y)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (car a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cdr a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x y z)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cdr a)) inner) outer)
+
+(set 'inner (cons (cons 'a '(x.y)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cdr a)) inner) outer)
+
+(set 'inner (cons (cons 'a 'x) (cons (cons 'x 'y) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (eval a)) inner) outer)
+
+; =================================================
+; Evaluate on Evaluate - evaluate atomic functions with two arguments:
+; =================================================
+
+(set 'inner (cons (cons 'a 'x) (cons (cons 'b 'y) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cons a b)) inner) outer)
+
+(set 'inner (cons (cons 'a 'x) (cons (cons 'b 'x) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cons a b)) inner) outer)
+
+(set 'inner (cons (cons 'a 'x) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (eq a a)) inner) outer)
+
+(set 'inner (cons (cons 'a 'x) (cons (cons 'b 'y) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (eq a b)) inner) outer)
+
+(set 'inner (cons (cons 'a 'x) (cons (cons 'b 'x) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (eq a b)) inner) outer)
+
+(set 'inner (cons (cons 'a 'x) (cons (cons 'b 'y) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (set a b)) inner) outer)
+
+; =================================================
+; Evaluate on Evaluate - evaluate cond expressions:
+; =================================================
+
+(set 'inner env)    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (()))) inner) outer)
+
+(set 'inner env)    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (t nil))) inner) outer)
+
+(set 'inner (cons (cons 'a 't) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (a t))) inner) outer)
+
+(set 'inner (cons (cons 'a 't) (cons (cons 'b 't) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (a b))) inner) outer)
+
+(set 'inner (cons (cons 'a 'a) (cons (cons 'b 'b) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (t a) (nil b))) inner) outer)
+
+(set 'inner (cons (cons 'a 'a) (cons (cons 'b 'b) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (nil a) (t b))) inner) outer)
+
+(set 'inner (cons (cons 'a 't) (cons (cons 'b 't) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (a b) (b a))) inner) outer)
+
+(set 'inner (cons (cons 'a 'nil) (cons (cons 'b 't) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (a b) (b a))) inner) outer)
+
+(set 'inner (cons (cons 'a 'nil) (cons (cons 'b 't) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (cond (a b) (a b) (b a))) inner) outer)
+
+; =================================================
+; Evaluate on Evaluate - evaluate lambda/nlambda functions:
+; =================================================
+
+; id
+(set 'inner (cons (cons 'id '(lambda (x) x)) (cons (cons 'a 't) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (id a)) inner) outer) ; T
+
+(set 'inner (cons (cons 'id '(lambda (x) x)) (cons (cons 'a '(a b)) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (id a)) inner) outer) ; (A B)
+
+; quote
+(set 'inner (cons (cons 'quote '(nlambda (x) x)) (cons (cons 'a 't) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (quote a)) inner) outer) ; A
+
+(set 'inner (cons (cons 'quote '(nlambda (x) x)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (quote bla)) inner) outer) ; BLA
+
+# first_3 (nlambda)
+(set 'inner (cons (cons 'first '(nlambda (x y z) x)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (first a b c)) inner) outer) ; A
+
+# first_3 (lambda)
+(set 'inner (cons (cons 'c 'c)
+              (cons (cons 'b 'b)
+                 (cons (cons 'a 'a)
+                     (cons (cons 'first '(lambda (x y z) x)) env)
+                 )
+              )
+            )
+)    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (first a b c)) inner) outer) ; A
+
+# last_3 (nlambda)
+(set 'inner (cons (cons 'last '(nlambda (x y z) z)) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (last a b c)) inner) outer) ; C
+
+# last_3 (lambda)
+(set 'inner (cons (cons 'c 'c)
+              (cons (cons 'b 'b)
+                 (cons (cons 'a 'a)
+                     (cons (cons 'last '(lambda (x y z) z)) env)
+                 )
+              )
+            )
+)    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (last a b c)) inner) outer) ; C
+
+# car (xcar)  (lambda)
+(set 'inner (cons (cons 'a '(a b)) (cons (cons 'xcar '(lambda (x) (car x))) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (xcar a)) inner) outer) ; A
+
+# car (xcar)  (nlambda)
+(set 'inner (cons (cons 'xcar '(nlambda (x) (car x))) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (xcar (a b))) inner) outer) ; A
+
+# cdr (xcdr)  (lambda)
+(set 'inner (cons (cons 'a '(a b)) (cons (cons 'xcdr '(lambda (x) (cdr x))) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (xcdr a)) inner) outer) ; (B)
+
+# cdr (xcdr)  (nlambda)
+(set 'inner (cons (cons 'xcdr '(nlambda (x) (cdr x))) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (xcdr (a b))) inner) outer) ; (B)
+
+# mirror (lambda)
+(set 'inner (cons (cons 'a '(a b)) (cons (cons 'mirror '(lambda (x) (cons (cdr x) (car x)))) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (mirror a)) inner) outer) ; ((B).A)
+
+# mirror (nlambda)
+(set 'inner (cons (cons 'mirror '(nlambda (x) (cons (cdr x) (car x)))) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (mirror (a b))) inner) outer) ; ((B).A)
+
+# zcar (lambda)
+(set 'inner (cons (cons 'a 'a) (cons (cons 'zcar '(lambda (x) (cond ((atom x) x) (t (car x))))) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (zcar a)) inner) outer) ; A
+
+# zcar (lambda)
+(set 'inner (cons (cons 'a '(a b)) (cons (cons 'zcar '(lambda (x) (cond ((atom x) x) (t (car x))))) env)))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (zcar a)) inner) outer) ; A
+
+# zcar (nlambda)
+(set 'inner (cons (cons 'zcar '(nlambda (x) (cond ((atom x) x) (t (car x))))) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (zcar (a b))) inner) outer) ; A
+
+# zcar (nlambda)
+(set 'inner (cons (cons 'zcar '(nlambda (x) (cond ((atom x) x) (t (car x))))) env))    ; Inner alist
+(set 'outer (cons (cons 'inner inner) env))    ; Outer alist
+(evaluate '(evaluate (quote (zcar (a))) inner) outer) ; A
