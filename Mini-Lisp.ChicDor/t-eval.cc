@@ -330,3 +330,18 @@ TEST(Eval, Mirror) {
     expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
+
+TEST(Eval, OrderOfEvaluationArguments) {
+    /*
+    * Check the order of evaluation arguments:
+    */
+    // Define variables:
+    S arg_1("ARG1"), arg_2("ARG2"), arg_3("ARG3");
+
+    // Define function with 2 arguments:
+    defun(f, list(x, y, z), z);
+
+    // Expect an error in the first undefined argument:
+    EXPECT_EXCEPTION(list(f, arg_1, arg_2, arg_3).eval(), arg_1, UNDEFINED);
+}
+

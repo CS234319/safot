@@ -36,10 +36,11 @@ S bug(S s) { return s.error(BUG); }
     return __; \
   } 
 
-
-FUN(S, evaluate_list, S) IS(
- _.null() ? NIL : _.car().eval().cons($$(_.cdr()))
-) 
+S evaluate_list(S list) {
+    if (list.null()) return NIL;
+    S res = list.car().eval();
+    return res.cons(evaluate_list(list.cdr()));
+}
 
 FUN(S, evaluate_cond, S)  IS( 
     _.null() ?  NIL:
