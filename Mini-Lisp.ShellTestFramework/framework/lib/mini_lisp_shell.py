@@ -106,7 +106,7 @@ class MiniLispShell:
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
         self.shell.expect("\n", timeout=None)
-        if "Traceback" in self.log.read_text():
+        if "Traceback" in self.log.read_text() or "... While applying" in self.log.read_text():
             self._get_all_lines()
         raw = self.log.read_text().replace("\x00", "")
         self.log.write_text("")

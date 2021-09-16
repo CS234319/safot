@@ -38,13 +38,13 @@ def test_book_evaluate(flow, files_dir):
     input_files = sorted(glob.glob(f"{files_dir}/*.lisp.in"))
     for in_file in input_files:
         # Check if this input file has expected file with the same name:
-        out_file = f'{in_file.split(".")[0]}.lisp.out'
-        if not Path(out_file).exists():
+        expected = f'{in_file.split(".")[0]}.lisp.out'
+        if not Path(expected).exists():
             print(f"Failed to find expected output file for: {in_file}")
             continue
 
         # Run the input file and compare output with expected:
         print(f"Running: {in_file}")
         out_file = flow.run_s_expr_file(in_file)
-        assert Path(out_file).read_text() == Path(out_file).read_text()
+        assert Path(out_file).read_text() == Path(expected).read_text()
         print(f"Passed.")
