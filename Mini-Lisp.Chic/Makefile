@@ -22,10 +22,9 @@ ENGINE    =  eval builtin a-list except
 PRINT    	=  print recorder
 READ      =  parser read stack tokenizer
 
-TESTS = dump t-a-list t-alist-global-local t-apply t-ast t-basics t-book t-book-evaluate t-defun 
-TESTS += t-error t-eval t-eval-atomic t-eval-cond t-evaluate-primitive t-fluentons t-pairs 
+TESTS = dump t-a-list t-alist-global-local t-apply t-ast t-basics t-book t-defun 
+TESTS += t-error t-kernel t-eval t-eval-atomic t-eval-cond t-evaluate-primitive t-fluentons t-pairs 
 TESTS += t-parser t-repl t-stack t-strings t-tokenizer
-
 
 t: $(addsuffix .o,$(TESTER)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects
@@ -34,7 +33,7 @@ m: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: t
-	./$^ --gtest_filter="*Error*" 
+	./$^ --gtest_filter="*" 
 
 list:
 	@echo "ENGINE        = " $(ENGINE)

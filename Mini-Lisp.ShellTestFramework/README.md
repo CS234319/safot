@@ -36,13 +36,13 @@ The operating system must be any Linux distribution, there is no support for Win
 ## Installation
 You can install all the prerequisites manually:
 * **Python3 + pip3**:<br>
-`sudo apt-get install python3.8 python3-pip`
+`sudo apt-get install python python3-pip`
 * **pytest**:<br>
 `pip3 install pytest`
 
 Install everything automatically via Makefile:
 * **Makefile**:<br>
-`make install -C ./Mini-Lisp.ShellTestFramework/build`
+`make install -C ./build`
 
 Add the Python package to PYTHONPATH:
 * **PYTHONPATH**:<br>
@@ -73,7 +73,11 @@ For example:
 ## API
 In order to use the Python package, you must define the PYTHONPATH as described in the installation part.<br>
 After you did that, run python3 and the following command must not raise ModuleNotFoundError: 
-```python
+```pytho
+
+
+
+n
 import framework.lib
 ```
 ShellTestFramework Python package has 2 main API:
