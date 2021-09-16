@@ -11,6 +11,7 @@ extern S push(S key, S value);
 extern S set(S key, S value);
 extern S lookup(S key, S alist);
 extern S lookup(S);
+extern void reset();
 
 /* Stack trace */
 extern void stack_dump();

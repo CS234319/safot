@@ -31,6 +31,8 @@ extern bool dumping;
 #define M3(X,Y,Z,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z)     dITERATE(__VA_ARGS__) AFTER
 #define M4(X,Y,Z,W,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W)    dITERATE(__VA_ARGS__) AFTER
 #define M5(X,Y,Z,W,U, ...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W) __VALUE(U)    dITERATE(__VA_ARGS__) AFTER
+#define M6(X,Y,Z,W,U,A,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W) __VALUE(U) __VALUE(A) dITERATE(__VA_ARGS__) AFTER
+#define M7(X,Y,Z,W,U,A,B,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W) __VALUE(U)    __VALUE(A) __VALUE(B)   dITERATE(__VA_ARGS__) AFTER
 
 #define __(X,...)     (std::cerr << std::endl), M(X, __VA_ARGS__) 
 #define LOCATE  std::cerr\

@@ -1,5 +1,5 @@
-#ifndef OUT_H
-#define OUT_H
+#ifndef PRINT_H
+#define PRINT_H
 #include "S.h"
 
 /** Print a String */ extern int print(String);

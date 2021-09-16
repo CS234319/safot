@@ -12,8 +12,8 @@ extern bool die(Pair p);
 /** Thrown if an atom is undefined */ extern const S UNDEFINED_ATOM; 
 /** Thrown if an argument is missing in function application */ extern const S MISSING_ARGUMENT; 
 /** Thrown in case of redundant argument in function application */ extern const S REDUNDANT_ARGUMENT; 
-/** Thrown if arguments are not a list */ extern const S BAD_PARAMETERS; 
-/** Thrown if parameters are not a list */ extern const S BAD_ARGUMENTS; 
+/** Thrown if parameters are not a list nor an atom */ extern const S BAD_PARAMETERS; 
+/** Thrown if arguments are not a list */ extern const S BAD_ARGUMENTS; 
 /** Thrown if the function is not a lambda */ extern const S BAD_FUNCTION; 
 
 // Exceptions raised in response to resource failures

@@ -39,14 +39,14 @@ extern S apply(S f, S args);
 
 TEST(Except, MISSING_ARGUMENT) {
     S x("x");
-    EXPECT_EXCEPTION(list(CONS, x).eval(), list(S(" y")), MISSING_ARGUMENT);
+    EXPECT_EXCEPTION(list(CONS, x).eval(), list(S(__2)), MISSING_ARGUMENT);
 }
 
 TEST(Except, REDUNDANT_ARGUMENT) {
     S x("x");
     S y("y");
     S z("z");
-    EXPECT_EXCEPTION(list(CONS, x, y, z).eval(), list(z), REDUNDANT_ARGUMENT);
+    EXPECT_EXCEPTION(list(CONS, x.q(), y.q(), z.q()).eval(), list(z.q()), REDUNDANT_ARGUMENT);
 }
 
 TEST(Except, CarOfAtom) {
@@ -67,13 +67,6 @@ TEST(Except, CdrOfAtom) {
 TEST(Except, CdrOfNil) {
     EXPECT_EXCEPTION(list().cdr(), n, CDR)
     EXPECT_EXCEPTION(n.cdr(), n, CDR)
-}
-
-
-TEST(Except, BAD_PARAMETERS) {
-  S f("my function"), x("x"), y("y"), z("z");
-  defun(f, x, y); 
-  EXPECT_EXCEPTION(list(f, x, y).eval(), x, BAD_PARAMETERS);
 }
 
 TEST(Except, BAD_FUNCTION1) {
@@ -104,37 +97,30 @@ TEST(Except, BadFunction3) {
     EXPECT_EXCEPTION(apply(NIL.eval(), S("e")), NIL, BAD_FUNCTION)
 }
 
-TEST(Error, InvalidNames1) {
+TEST(Error, Align1) {
     EXPECT_EXCEPTION(align(id, list()), id, MISSING_ARGUMENT)
 }
 
-TEST(Error, InvalidNames2) {
-    EXPECT_EXCEPTION(align(id, list(id)), id, BAD_PARAMETERS)
-}
-
-
-TEST(Error, InvalidValues1) {
+TEST(Error, Align2) {
     EXPECT_EXCEPTION(align(list(), id), id, REDUNDANT_ARGUMENT)
 }
 
-TEST(Error, InvalidValues2) {
+TEST(Error, Align3) {
     EXPECT_EXCEPTION(align(list(id), id), id, BAD_ARGUMENTS)
 }
 
-TEST(Error, RedundantValues) {
+TEST(Error, Align4) {
   EXPECT_EXCEPTION(align(list(id,id,id), list(id, id, t, n)), list(n), REDUNDANT_ARGUMENT)
 }
 
-TEST(Error, MissingValues) {
+TEST(Error, Align5) {
   EXPECT_EXCEPTION(align(list(id,a1), list(id)), list(a1), MISSING_ARGUMENT)
 }
 
-TEST(Error, UnknownLambda) {
+TEST(Error, MissingFunction) {
     EXPECT_EXCEPTION(apply(S("e"), t), S("e"), UNDEFINED_ATOM)
 }
 
 TEST(Error, OtherError) {
     EXPECT_EXCEPTION(t.error(S("OTHER")), t, S("OTHER"))
 }
-
-

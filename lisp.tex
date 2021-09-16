@@ -1722,8 +1722,11 @@ mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור 
 נשתמש ב-cond כדי להגדיר פונקציה zcar המחזירה את ה-car של הפרמטר אם
 הוא ביטוי מורכב, ואת הפרמטר עצמו אם הוא אטום
 \begin{LISP}
-(defun zcar(x)
-  (cond ((atom x) x) (t (car x)))
+(defun zcar(x) 
+  (cond             ; check a number of options  
+    ( (atom x)  x      ) ; if parameter x is an atom, return it  
+    ( t        (car x) ) ; else, if 'T' (all other cases), return its car 
+  )
 )
 \end{LISP}
 גוף הפונקציה zcar הוא הביטוי

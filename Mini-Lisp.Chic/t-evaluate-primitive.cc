@@ -96,22 +96,6 @@ TEST(ParseEvalAtomic, eval) {
 
 // ----------------------------
 
-TEST(Native, error0) {
-    EXPECT_EXCEPTION(parse("(error)").eval(), list(" X"," Y") , MISSING_ARGUMENT);
-}
-
-TEST(Native, error1) {
-    EXPECT_EXCEPTION(parse("(error 'my_err)").eval() , list(" Y"), MISSING_ARGUMENT);
-}
-
-TEST(Native, error2) {
-    EXPECT_EXCEPTION(parse("(error a b)").eval() , S("a"), S("b")); 
-}
-
-TEST(Native, error3) {
-    EXPECT_EXCEPTION(parse("(error 'my_err 'y '(z))").eval() , list("z").q().l(), REDUNDANT_ARGUMENT); 
-}
-
 
 // ----------------------------
 // Test: errors cases

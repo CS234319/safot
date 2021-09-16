@@ -17,7 +17,7 @@ const S MISSING_ARGUMENT_NAMES("MISSING_ARGUMENT_NAMES");
 const S MISSING_ARGUMENT_VALUES("MISSING_ARGUMENT_VALUES");
 const S SOMETHING_WENT_WRONG("SOMETHING_WENT_WRONG");
 
-TEST(BookEvaluate, Exists) {
+TEST(Kernel, Exists) {
     parse("(defun exists (x xs)  "
           "         (cond  "
           "             ((null xs) xs) "
@@ -28,25 +28,25 @@ TEST(BookEvaluate, Exists) {
           "").eval();
 
     // Test:
-    EXPECT_EQ(parse("(exists 'a '(a b))").eval(), T);
-    EXPECT_EQ(parse("(exists 'a '(x y))").eval(), NIL);
-    EXPECT_EQ(parse("(exists 'a '())").eval(), NIL);
+    CAREFULLY_EXPECT(EQ,parse("(exists 'a '(a b))").eval(), T);
+    CAREFULLY_EXPECT(EQ,parse("(exists 'a '(x y))").eval(), NIL);
+    CAREFULLY_EXPECT(EQ,parse("(exists 'a '())").eval(), NIL);
     EXPECT_EXCEPTION(parse("(exists)").eval(), list(S("X"),S("XS")), MISSING_ARGUMENT);
 }
 
 
-TEST(BookEvaluate, IsAtomic) {
+TEST(Kernel, IsAtomic) {
     parse("(defun is-atomic(name) "
           "     (exists name '(atom car cdr cond cons eq error eval set)))").eval();
 
     // Test:
-    EXPECT_EQ(parse("(is-atomic 'car)").eval(), T);
-    EXPECT_EQ(parse("(is-atomic 'kkk)").eval(), NIL);
+    CAREFULLY_EXPECT(EQ,parse("(is-atomic 'car)").eval(), T);
+    CAREFULLY_EXPECT(EQ,parse("(is-atomic 'kkk)").eval(), NIL);
     EXPECT_EXCEPTION(parse("(is-atomic)").eval(), list(S("NAME")), MISSING_ARGUMENT);
 }
 
 
-TEST(BookEvaluate, Lookup) {
+TEST(Kernel, Lookup) {
     parse("(defun lookup (id a-list) "
           "         (cond "
           "             ((null a-list) (error 'unbound_variable id)) "
@@ -57,14 +57,14 @@ TEST(BookEvaluate, Lookup) {
           "").eval();
 
     // Test:
-    EXPECT_EQ(parse("(lookup 'a '(a.x b.NIL c.NIL))").eval(), x);
-    EXPECT_EQ(parse("(lookup 'a '(b.NIL a.x c.NIL))").eval(), x);
-    EXPECT_EQ(parse("(lookup 'a '(b.NIL c.NIL a.x))").eval(), x);
+    CAREFULLY_EXPECT(EQ,parse("(lookup 'a '(a.x b.NIL c.NIL))").eval(), x);
+    CAREFULLY_EXPECT(EQ,parse("(lookup 'a '(b.NIL a.x c.NIL))").eval(), x);
+    CAREFULLY_EXPECT(EQ,parse("(lookup 'a '(b.NIL c.NIL a.x))").eval(), x);
     EXPECT_EXCEPTION(parse("(lookup)").eval(), list(S("ID"), S("a-list")) , MISSING_ARGUMENT);
 }
 
 
-TEST(BookEvaluate, Bind) {
+TEST(Kernel, Bind) {
     parse("(defun bind (names values a-list) "
             "       (cond ((null names) "
             "           (cond ((null values) a-list)"
@@ -83,15 +83,15 @@ TEST(BookEvaluate, Bind) {
             "").eval();
 
     // Test:
-    EXPECT_EQ(
+    CAREFULLY_EXPECT(EQ,
     parse("(bind '(a b) '(x y) '())").eval(),
     list(a.cons(x), b.cons(y))
     );
-    EXPECT_EQ(
+    CAREFULLY_EXPECT(EQ,
     parse("(bind '(a b) '(x y) '())").eval(),
     list(a.cons(x), b.cons(y))
     );
-    EXPECT_EQ(
+    CAREFULLY_EXPECT(EQ,
     parse("(bind '(a b) '(x y) '(c.T z.T))").eval(),
     list(a.cons(x), b.cons(y), c.cons(T), z.cons(T))
     );
@@ -109,7 +109,7 @@ TEST(BookEvaluate, Bind) {
 }
 
 
-TEST(BookEvaluate, ApplyTrivialAtomic) {
+TEST(Kernel, ApplyTrivialAtomic) {
     parse("(defun apply-trivial-atomic (atomic first second)"
                 "(cond ((eq atomic 'atom) (atom first))"
                         "((eq atomic 'car) (car first))"
@@ -122,13 +122,13 @@ TEST(BookEvaluate, ApplyTrivialAtomic) {
             ")").eval();
 
     // Test:
-    EXPECT_EQ(parse("(apply-trivial-atomic 'atom 'a NIL)").eval(), T);
-    EXPECT_EQ(parse("(apply-trivial-atomic 'car '(a b) NIL)").eval(), a);
-    EXPECT_EQ(parse("(apply-trivial-atomic 'cdr '(a b) NIL)").eval(), list(b));
-    EXPECT_EQ(parse("(apply-trivial-atomic 'cons 'a 'b)").eval(), a.cons(b));
-    EXPECT_EQ(parse("(apply-trivial-atomic 'eq 'a 'a)").eval(), T);
-    EXPECT_EQ(parse("(apply-trivial-atomic 'eq 'a 'b)").eval(), NIL);
-    parse("(apply-trivial-atomic 'set 'a 'b)").eval(); EXPECT_EQ(lookup(a), b);
+    CAREFULLY_EXPECT(EQ,parse("(apply-trivial-atomic 'atom 'a NIL)").eval(), T);
+    CAREFULLY_EXPECT(EQ,parse("(apply-trivial-atomic 'car '(a b) NIL)").eval(), a);
+    CAREFULLY_EXPECT(EQ,parse("(apply-trivial-atomic 'cdr '(a b) NIL)").eval(), list(b));
+    CAREFULLY_EXPECT(EQ,parse("(apply-trivial-atomic 'cons 'a 'b)").eval(), a.cons(b));
+    CAREFULLY_EXPECT(EQ,parse("(apply-trivial-atomic 'eq 'a 'a)").eval(), T);
+    CAREFULLY_EXPECT(EQ,parse("(apply-trivial-atomic 'eq 'a 'b)").eval(), NIL);
+    parse("(apply-trivial-atomic 'set 'a 'b)").eval(); CAREFULLY_EXPECT(EQ,lookup(a), b);
     EXPECT_EXCEPTION(parse("(apply-trivial-atomic)").eval(), list(S("ATOMIC"), S("FIRST"), S("SECOND")), MISSING_ARGUMENT);
     EXPECT_EXCEPTION(
         parse("(apply-trivial-atomic 'zzz 'a NIL)").eval(),
@@ -138,7 +138,7 @@ TEST(BookEvaluate, ApplyTrivialAtomic) {
 }
 
 
-TEST(BookEvaluate, ApplyEagerAtomic) {
+TEST(Kernel, ApplyEagerAtomic) {
     parse("(defun apply-eager-atomic (atomic actuals a-list)"
                 "(cond"
                     "((eq atomic 'error) (error actuals))"
@@ -154,16 +154,13 @@ TEST(BookEvaluate, ApplyEagerAtomic) {
         "").eval();
 
     // Test:
-    EXPECT_EQ(parse("(apply-eager-atomic 'atom '(a NIL) '())").eval(), T);
-    EXPECT_EQ(parse("(apply-eager-atomic 'car '((a b) (NIL)) '())").eval(), a);
-    EXPECT_EQ(parse("(apply-eager-atomic 'cdr '((a b) (NIL)) '())").eval(), list(b));
-    EXPECT_EQ(parse("(apply-eager-atomic 'cons '(a b) '())").eval(), a.cons(b));
-    EXPECT_EQ(parse("(apply-eager-atomic 'eq '(a a) '())").eval(), T);
-    EXPECT_EQ(parse("(apply-eager-atomic 'eq '(a b) '())").eval(), NIL);
-    parse("(apply-eager-atomic 'set '(y a) '())").eval(); EXPECT_EQ(lookup(y), a);
+    CAREFULLY_EXPECT(EQ,parse("(apply-eager-atomic 'atom '(a NIL) '())").eval(), T);
+    CAREFULLY_EXPECT(EQ,parse("(apply-eager-atomic 'car '((a b) (NIL)) '())").eval(), a);
+    CAREFULLY_EXPECT(EQ,parse("(apply-eager-atomic 'cdr '((a b) (NIL)) '())").eval(), list(b));
+    CAREFULLY_EXPECT(EQ,parse("(apply-eager-atomic 'cons '(a b) '())").eval(), a.cons(b));
+    CAREFULLY_EXPECT(EQ,parse("(apply-eager-atomic 'eq '(a a) '())").eval(), T);
+    CAREFULLY_EXPECT(EQ,parse("(apply-eager-atomic 'eq '(a b) '())").eval(), NIL);
+    parse("(apply-eager-atomic 'set '(y a) '())").eval(); CAREFULLY_EXPECT(EQ,lookup(y), a);
     EXPECT_EXCEPTION(parse("(apply-eager-atomic)").eval(),  list(S("ATOMIC"), S("ACTUALS"), S("A-LIST")), MISSING_ARGUMENT);
     EXPECT_EXCEPTION(parse("(apply-eager-atomic 'error 'a '())").eval(), list(S("ERROR"), S("ACTUALS")), a);
 }
-
-
-

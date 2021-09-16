@@ -1,6 +1,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "test.h"
+#include "builtin.h"
 
 /**
  * Tests of defun/ndefun
@@ -18,8 +19,6 @@ static S x("x");
 static S y("y");
 static S z("z");
 
-extern S defun(S name, S parameters, S body);
-extern S ndefun(S name, S parameters, S body);
 extern S apply(S f, S args);
 
 static S ndefun(S parameters, S body) { return ndefun(S("thingy"), parameters, body); }

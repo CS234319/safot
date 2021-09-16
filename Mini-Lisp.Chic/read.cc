@@ -2,12 +2,28 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "mode.h"
 
-extern int grunt(int);
+static char *injection = (char *)0;
 
-String readln() {
-  static char   *buffer = 0;
+char *readln() {
   static size_t  length = 72;
-  if (buffer == (char *)0) buffer = reinterpret_cast<char *>(malloc(length));
-  return grunt(getline(&buffer, &length, stdin)) ? (String) 0: buffer;
+  static char   *buffer = reinterpret_cast<char *>(malloc(length));
+#ifndef PRODUCTION
+  if (injection == buffer) return (char *)0; 
+  if (injection != (char *)0) {
+    auto result = injection;
+    injection = buffer;
+    return result;
+  }
+#endif
+  extern int grunt(int);
+  return grunt(getline(&buffer, &length, stdin)) ? (char *) 0: buffer;
 }
+
+#ifndef PRODUCTION
+#include <string.h>
+extern char *inject(String injection) {
+  return ::injection = strdup(injection);
+}
+#endif

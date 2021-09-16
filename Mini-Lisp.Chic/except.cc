@@ -20,11 +20,11 @@ extern bool die(S s) {
 
 /** List of all exceptions that may be thrown during evaluation */
 const S UNDEFINED_ATOM("Undefined atom"); 
-const S MISSING_ARGUMENT("Missing arguments(s)"); 
+const S MISSING_ARGUMENT("Too many arguments"); 
 const S REDUNDANT_ARGUMENT("Redundant argument(s)"); 
 const S BAD_FUNCTION("Bad function structure"); 
-const S BAD_ARGUMENTS("Bad arguments list"); 
-const S BAD_PARAMETERS("Bad parameters list"); 
+const S BAD_ARGUMENTS("Arguments are not a list"); 
+const S BAD_PARAMETERS("Parameters are not a list");
 
 /** Exceptions raised in response to resource failures */
 const S MEMORY_CONS("Computation exhausted the pool of CONS records");

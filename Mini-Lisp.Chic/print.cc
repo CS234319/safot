@@ -16,6 +16,37 @@ bool grunt(int result)  {
   throw errno; 
 }
 
+static int put(String);
+int print(String   line) { return put(line); }
+int prompt(String  s)    { return print(s);  }
+int print(H h)           { return print(S(h)); }
+
+
+/** Recursively print an S expression */
+int print(S s) {
+  if (s.atom()) return print(s.asAtom());
+  if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
+  if (s.car().eq(QUOTE) && s.cdr().pair() && s.cdr().cdr().null())  return print("'"), print(s.cdr().car());
+  for (print("(") ;; print(" ")) {
+    print(S(s.car())); // First recursive call
+    if ((s = s.cdr()).null()) return print(")");
+  }
+}
+#ifdef PRODUCTION
+#undef PRODUCTION
+#endif 
+
+#ifndef PRODUCTION
+static void record(String s); 
+#endif
+
+static int put(String s)  { 
+#ifndef PRODUCTION
+  record(s);
+#endif
+  return grunt(fputs(s, file)); 
+}  
+
 #ifndef PRODUCTION
 struct Recorder {
   void *tape; 
@@ -32,6 +63,13 @@ struct Recorder {
   }
 } rout, rerr;
 
+static void record(String s) {
+  if (file == stdout) 
+    rout.record(s);
+  else
+    rerr.record(s);
+}
+
 namespace Printing { 
   void record() { rout.start(); } 
   String playback() { return rout.playback(); }
@@ -42,26 +80,3 @@ namespace Erroring {
   String playback() { return rerr.playback(); }
 };
 #endif
-
-int put(String s)  { 
-  if (file == stdout) 
-    rout.record(s);
-  else
-    rerr.record(s);
-  return grunt(fputs(s, file)); 
-}  
-
-int print(String   line) { return put(line); }
-int prompt(String  s)    { return print(s);  }
-int print(H h)           { return print(S(h)); }
-
-/** Recursively print an S expression */
-int print(S s) {
-  if (s.atom()) return print(s.asAtom());
-  if (!islist(s)) return print("["), print(s.car()), print("."), print(s.cdr()), print("]");
-  if (s.car().eq(QUOTE) && s.cdr().pair() && s.cdr().cdr().null())  return print("'"), print(s.cdr().car());
-  for (print("(") ;; print(" ")) {
-    print(S(s.car())); // First recursive call
-    if ((s = s.cdr()).null()) return print(")");
-  }
-}

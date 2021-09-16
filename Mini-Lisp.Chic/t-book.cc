@@ -32,13 +32,32 @@ TEST(Book, AtomicFunctionsAtom) {
     (car 'a) ⇒ ✗
     (car ()) ⇒ ✗
 */
-TEST(Book, AtomicFunctionsCar) {
+TEST(Book, Car1) {
     EXPECT_EQ(parse("(car '(b.a))").eval(), b.cons(a));
+}
+
+TEST(Book, Car2) {
     EXPECT_EQ(parse("(car '(b a))").eval(), b);
+}
+
+TEST(Book, Car3) {
     EXPECT_EQ(parse("(car '(a))").eval(), a);
+}
+
+
+TEST(Book, Car4) {
     EXPECT_EXCEPTION(parse("(car 'a)").eval(), a, CAR);
+}
+
+TEST(Book, Car5) {
+    EXPECT_EXCEPTION(parse("(car NIL)").eval(), NIL, CAR);
+}
+
+
+TEST(Book, Car6) {
     EXPECT_EXCEPTION(parse("(car ())").eval(), NIL, CAR);
 }
+
 
 /*
     (cdr '(a.b)) ⇒ NIL
@@ -64,12 +83,24 @@ TEST(Book, AtomicFunctionsCdr) {
     (cond (nil 'A) (nil 'B) (nil 'C)) ⇒ nil
     (cond) ⇒ nil
 */
-TEST(Book, AtomicFunctionsCond) {
-    EXPECT_EQ(parse("(cond (t 'A))").eval(), a);
-    EXPECT_EQ(parse("(cond (nil 'A) (t 'B))").eval(), b);
-    EXPECT_EQ(parse("(cond (nil 'A) (t 'B) (t 'C))").eval(), b);
-    EXPECT_EQ(parse("(cond (nil 'A) (nil 'B) (nil 'C))").eval(), NIL);
-    EXPECT_EQ(parse("(cond)").eval(), NIL);
+TEST(Book, Cond1) {
+    CAREFULLY_EXPECT(EQ,parse("(cond (t 'A))").eval(), a);
+}
+
+TEST(Book, Cond2) {
+    CAREFULLY_EXPECT(EQ,parse("(cond (nil 'A) (t 'B))").eval(), b);
+}
+
+TEST(Book, Cond3) {
+    CAREFULLY_EXPECT(EQ,parse("(cond (nil 'A) (t 'B) (t 'C))").eval(), b);
+}
+
+TEST(Book, Cond4) {
+    CAREFULLY_EXPECT(EQ,parse("(cond (nil 'A) (nil 'B) (nil 'C))").eval(), NIL);
+}
+
+TEST(Book, Cond5) {
+    CAREFULLY_EXPECT(EQ,parse("(cond)").eval(), NIL);
 }
 
 /*
@@ -183,12 +214,12 @@ TEST(Book, Zcar0) {
 }
 TEST(Book, Zcar1) {
     parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
-    EXPECT_EQ(parse("(zcar 'a)").eval(), a);
+    CAREFULLY_EXPECT(EQ, parse("(zcar 'a)").eval(), a);
 }
 
 TEST(Book, Zcar2) {
     parse("(defun zcar(x) (cond ((atom x) x) (t (car x))))").eval();
-    EXPECT_EQ(parse("(zcar '(a b))").eval(), a);
+    CAREFULLY_EXPECT(EQ,parse("(zcar '(a b))").eval(), a);
 }
 
 TEST(Book, Zcar3) {

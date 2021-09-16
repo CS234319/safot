@@ -168,6 +168,8 @@ extern const S
 /*   Unary:    */ NULL, QUOTE,
 /*   Ternary:  */ DEFUN, NDEFUN, LAMBDA, NLAMBDA
 ;
+// Stack trace:
+extern const S RECURSE;
 
 // Named atoms for exceptions; for the idiom s.error(MISSING_ARGUMENT) to abort
 // execution in the case that an error of kind MISSING_ARGUMENT occurs in the context of

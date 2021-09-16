@@ -12,7 +12,7 @@ extern S lookup(S id);
 extern S alist();
 
 
-TEST(AlistGlobalLocal, SetWithNoError) {
+TEST(DISABLED_AlistGlobalLocal, SetWithNoError) {
     /*
      * Set 3 variables inside cond, locally,
      * and after the function return, all of them should
@@ -59,7 +59,7 @@ TEST(AlistGlobalLocal, SetWithNoError) {
 }
 
 
-TEST(AlistGlobalLocal, SetWithError) {
+TEST(DISABLED_AlistGlobalLocal, SetWithError) {
     /*
      * Same as before, but we call error in the third condition.
      * Thus, all the lookup MUST throw UNDEFINED_ATOM error for all the

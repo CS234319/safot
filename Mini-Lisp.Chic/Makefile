@@ -13,17 +13,17 @@ SOURCES         := $(addsuffix .cc,$(MODULES))
 REPL += 00
 REPL += repl
 REPL += print
-REPL += read
 REPL += basics
-REPL += repl
 REPL += dump
 
 ENGINE += eval
+ENGINE += builtin
 ENGINE += a-list
 ENGINE += fluentons
 ENGINE += S
 ENGINE += except
 
+REPL += read
 READ += tokenizer
 READ += stack
 READ += parser
@@ -31,8 +31,8 @@ READ += parser
 MACHINE += strings
 MACHINE += pairs
 
-TESTERS += out
 TESTERS += read
+TESTERS += print
 TESTERS += repl
 TESTERS += dump
 
@@ -60,7 +60,7 @@ TESTERS += t-alist-global-local
 TESTERS += t-repl
 TESTERS += t-book-evaluate
 
-mini-lisp: $(addsuffix .o,$(MINI-LISP))
+ml: $(addsuffix .o,$(MINI-LISP))
 
 IMPLEMENTATION  := $(READ) $(ENGINE) $(MACHINE) 
 MINI-LISP       := $(IMPLEMENTATION) $(REPL) 
@@ -74,7 +74,7 @@ mini-lisp: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: tester
-	./$^ --gtest_filter="*" 
+	./$^ --gtest_filter="*Error*" 
 
 list:
 	@echo "HEADERS        = " $(HEADERS)
@@ -116,7 +116,7 @@ gvim:
 	@gvim $(HEADERS) $(SOURCES) Makefile -c make
 
 clean:
-		rm -fr $(OBJS) mini-lisp tester *.o *~ .depend
+		rm -fr $(OBJS) ml tester *.o *~ .depend
 
 
 

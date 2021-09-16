@@ -1,10 +1,15 @@
-#include "io.h"
 #include "basics.h"
 #include "print.h"
 #include "parser.h"
 #include <string.h>
 #include "debugging.h"
 #include "except.h"
+
+inline S xunique() {
+  static char buffer[100]; static int n = 0;
+  sprintf(buffer," Q%d", ++n);
+  return S(buffer);
+}
 
 inline auto operator == (const S s1,const S s2) { 
   if (s1.handle == s2.handle)
@@ -35,6 +40,8 @@ inline S parse(const std::string& s) {
 #define STRINGIZE2(x) #x
 
 #define UNIQUE "UNIQUE" LINE_STRING
+
+
 
 #define EXPECT_NIL(v) EXPECT_EQ(v,NIL)
 #define EXPECT_T(v) EXPECT_EQ(v,T)

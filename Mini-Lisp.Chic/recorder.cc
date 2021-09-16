@@ -10,11 +10,19 @@ void Recorder::start() {
   *head() = '\0';
 }
 
-void Recorder::record(String s) {
-  if (tape == (void *) 0) return;
-  const H n = size(s);
-  tape = realloc(tape, length + n);
-  for (H i = 0; i < n; ++i, ++length) 
-    *head() = s[i];
-  --length;
+static void record(String s) {
+  if (file == stdout) 
+    rout.record(s);
+  else
+    rerr.record(s);
 }
+
+namespace Printing { 
+  void record() { rout.start(); } 
+  String playback() { return rout.playback(); }
+};
+
+namespace Erroring { 
+  void record() { rerr.start(); } 
+  String playback() { return rerr.playback(); }
+};

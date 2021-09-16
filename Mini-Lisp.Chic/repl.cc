@@ -18,7 +18,7 @@ S read() {
   for (;;) 
     for (Parser::reset(), prompt("> ");; ) {
       String line = readln(); 
-      if (line == (String)0) throw;
+      if (line == (String)0) { throw 0; }
       Parser::supply(line);
       switch (Parser::status()) {
         case Parser::ready: prompt("- "); continue;     // More input must be waiting 
