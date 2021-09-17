@@ -1,8 +1,8 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "a-list.h"
-#include "builtin.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "a-list.h"
+#import  "builtin.h"
+#import  "test.h"
 
 /**
  * Tests of eval function
@@ -13,6 +13,7 @@ S expr("");
 S f("my-function");
 S argument("argument");
 
+using Engine::set;
 
 TEST(Eval, Empty) {
     // Define the function: "(ndefun f (x y) ())"
@@ -369,24 +370,24 @@ TEST(Eval, Mirror) {
 
 TEST(Eval, Variadic) { 
   S f("my function"); 
-  ndefun(f, x, list(x)); 
-  CAREFULLY_EXPECT(EQ, list(f, x, y).eval(), list(x, y));
+  ndefun(f, x, list(CONS, y.q(), x)); 
+  CAREFULLY_EXPECT(EQ, list(f, a, b, c).eval(), list(y, a, b, c));
 }
 
 TEST(Eval, BAD_ARGUMENTS1) { 
     ndefun(f, list(x, y), list());
-    EXPECT_EXCEPTION(f.cons(argument).eval(), argument, BAD_ARGUMENTS);
+    EXPECT_EXCEPTION(list(f, argument).eval(), argument, BAD_ARGUMENTS);
 }
 
 TEST(Eval, BAD_ARGUMENTS2) { 
     ndefun(f, list(x, y, z), z);
-  S  expr = f.cons(f);
+    S  expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
 TEST(Eval, BAD_ARGUMENTS3) { 
     ndefun(f, list(x, y), z.q());
-  S  expr = f.cons(f);
+    S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
@@ -398,13 +399,13 @@ TEST(Eval, BAD_ARGUMENTS4) {
 
 TEST(Eval, BAD_ARGUMENTS5) { 
     ndefun(f, list(x, y), list(CAR, x));
-  S  expr = f.cons(f);
+    S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
 TEST(Eval, BAD_ARGUMENTS6) { 
     ndefun(f, list(x, y), list(CAR, y));
-  S  expr = f.cons(f);
+    S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
@@ -418,13 +419,13 @@ TEST(Eval, BAD_ARGUMENTS7) {
 TEST(Eval, BAD_ARGUMENTS8) {  
     // Define the function: "(ndefun f (x y) (set x y))"
     ndefun(f, list(x, y), list(SET, x, y));
-  S  expr = f.cons(f);
+    S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
 TEST(Eval, BAD_ARGUMENTS9) { 
     // Define the function: "(ndefun f (x y) (set 'x (car y)))"
     ndefun(f, list(x, y), list(SET, x.q(), list(CAR, y)));
-  S  expr = f.cons(f);
+    S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }

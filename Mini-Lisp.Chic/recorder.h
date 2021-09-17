@@ -1,6 +1,4 @@
-#ifndef RECORDER_H
-#define RECORDER_H
-#include "hacks.h"
+#import "hacks.h"
 #ifndef PRODUCTION
 struct Recorder {
   void reset();
@@ -12,5 +10,4 @@ struct Recorder {
     void *tape = (void *) 0; 
     int length = 0;
 };
-#endif
 #endif

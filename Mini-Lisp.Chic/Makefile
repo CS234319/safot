@@ -1,16 +1,13 @@
-default: m t list services test Makefile
-
-00.o: $(MAKEFILE_LIST)
-t-main.o: $(MAKEFILE_LIST)
-
+default: m t services test Makefile
 services: tags depend 
+
+00.o t-main.o: $(MAKEFILE_LIST)
 
 .PHONY: default services clean depend wc gvim
 
-MODULES   := $(sort $(MINI-LISP) $(TEST))
-SOURCES   := $(addsuffix .cc,$(MODULES)) 
-HEADERS 	:= $(sort $(filter %.h,$(shell cat .depend)))
-
+MODULES   = $(sort $(MINI-LISP) $(TESTS))
+SOURCES   = $(addsuffix .cc,$(MODULES)) 
+HEADERS 	= $(sort $(filter %.h,$(shell cat .depend)))
 
 MINI-LISP = 00 dump $(REPL)  
 TESTER    = t-main dump $(TESTS) $(REPL)
@@ -18,11 +15,11 @@ REPL      = repl $(READ) $(EVALUATE) $(PRINT)
 EVALUATE  = $(ENGINE) $(MACHINE) 
 
 MACHINE  	=  fluentons S pairs strings
-ENGINE    =  eval builtin a-list except
+ENGINE    =  atoms except builtin a-list eval 
 PRINT    	=  print recorder
 READ      =  parser read stack tokenizer
 
-TESTS = dump t-a-list t-alist-global-local t-apply t-ast t-basics t-book t-defun 
+TESTS += dump test t-a-list t-alist-global-local t-apply t-ast t-basics t-book t-defun 
 TESTS += t-error t-kernel t-eval t-eval-atomic t-eval-cond t-evaluate-primitive t-fluentons t-pairs 
 TESTS += t-parser t-repl t-stack t-strings t-tokenizer
 
@@ -40,19 +37,16 @@ list:
 	@echo "MACHINE        = " $(ENGINE)
 	@echo "EVALUATE       = " $(EVALUATE)
 	@echo "READ           = " $(READ)
-	@echo "PRINT          = " $(READ)
+	@echo "PRINT          = " $(PRINT)
 	@echo "REPL           = " $(REPL)
-	@echo "TESTS          = " $(TEST)
-
-#	@echo "TESTER         = " $(TESTERS)
-#	@echo "MODULES        = " $(MODULES)
-#	@echo "HEADERS        = " $(HEADERS)
-#	@echo "SOURCES        = " $(SOURCES)
+	@echo "TESTS          = " $(TESTS)
+	@echo "MODULES        = " $(MODULES)
+	@echo "SOURCES        = " $(SOURCES)
+	@echo "HEADERS        = " $(HEADERS)
 
 
 ifdef WORK_AROUND
 CFLAGS += -DWORK_AROUND
-
 endif
 
 CFLAGS += -w -std=gnu2x -g

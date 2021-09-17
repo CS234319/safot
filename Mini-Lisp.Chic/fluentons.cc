@@ -1,9 +1,10 @@
 // Many more utility functions, including those used for fluent API 
 
-#include "basics.h"
-#include "eval.h"
-#include "a-list.h"
-#include "except.h"
+#import  "basics.h"
+#import  "eval.h"
+#import  "a-list.h"
+#import  "except.h"
+#import "atoms.h"
 
 /* Parameterless fluentons */
 bool S::atom() const { return handle <= 0; }
@@ -14,7 +15,7 @@ S    S::q()    const { return l().snoc(QUOTE); }
 S    S::l()    const { return cons(NIL); };
 S    S::car()  const { return atom() ? error(CAR) : p().car; }
 S    S::cdr()  const { return atom() ? error(CDR) : p().cdr; }
-S    S::eval() const { return ::eval(*this); }
+S    S::eval() const { return Engine::eval(*this); }
 Pair S::p() const { return Pairs::get(handle); };
 S S::cons(S cdr) const { return S(*this, cdr); }
 S S::error(S kind) const { return die(cons(kind).p()), NIL;} 

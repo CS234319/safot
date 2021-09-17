@@ -1,7 +1,7 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "S.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "S.h"
+#import  "test.h"
 
 namespace Pairs {
 extern H allocate(); 

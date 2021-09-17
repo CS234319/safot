@@ -29,13 +29,16 @@
  *
  */
 
-#include <string.h>
-#include <gtest/gtest.h>
-#include "eval.h"
-#include "test.h"
-#include "a-list.h"
+#import  <string.h>
+#import  <gtest/gtest.h>
+#import  "eval.h"
+#import  "test.h"
+#import  "a-list.h"
 
-extern S evaluate_cond(S s);
+namespace Engine { namespace Inner { S evaluate_cond(S); }}
+
+using Engine::lookup, Engine::alist;
+using Engine::Inner::evaluate_cond;
 
 static S x("x");
 

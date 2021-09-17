@@ -1,42 +1,51 @@
-#include "test.h"
+#import  "test.h"
 /** An auxiliary file with lots of heavy weight C++ code and huge overhead.
  * This should not be in the production version. It is OK for testing and for
  * debugging.
  */
-#include <string.h>
-#include "basics.h"
-#include "parser.h"
-#include "stack.h"
+#import  <string.h>
+#import  "basics.h"
+#import  "parser.h"
+#import  "stack.h"
 
-std::ostream& operator<<(std::ostream &os, std::ostringstream o) {
-  return os << o.str();
+extern bool operator == (const S s1, const S s2) { 
+  if (s1.handle == s2.handle)
+    return true;
+  if (s1.atom() || s2.atom()) return s1.eq(s2); 
+  return s1.car() == s2.car() && s1.cdr() == s2.cdr();
 }
 
-std::ostream& operator<<(std::ostream &os, Pair p) {
-  return os << "[" << S(p.car) << "." << S(p.cdr)  << "]";
+
+namespace Tested {
+  extern S parse(const char *s) {
+      Parser::reset();
+      Parser::supply(strdup(s));
+      if (Parser::status() != Parser::Status::accept) {
+          Parser::reset();
+          ADD_FAILURE() << "Parser crashed on " << s; 
+      }
+      return Parser::result();
+  }
+
+static auto feed(String s) {
+  Parser::reset();
+  return Parser::supply(strdup(s));
+}
+void reset() {
+  Parser::reset();
+  Engine::reset();
+  Stack::reset();
 }
 
+}
+
+// extern auto operator != (const S s1,const S s2) { return s1.handle == s2.handle; }
+
+#if 0
 String operator ~(S s) {
  std::ostringstream o;
  o << s;
  return strdup(o.str().c_str());
-}
-
-std::ostream& operator<<(std::ostream &os, S s) {
-  if (s.null())
-    return os << "nil";
-  if (s.atom())
-    return os << s.asAtom();
-  if (!islist(s))
-    return os << "[" << s.car() << "." << s.cdr() << "]";
-  os << "(";
-  for (;;) {
-    os << S(s.car());
-    if ((s = s.cdr()).null())
-      break;
-    os << " ";
-  }
-  return os << ")";
 }
 
 bool isRule(int i) {
@@ -101,3 +110,4 @@ String stack() {
 }
 
 //  String h2s(H h) { return ~*reinterpret_cast<Symbol*>(&h); }
+#endif

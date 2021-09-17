@@ -1,6 +1,4 @@
-#ifndef PRINT_H
-#define PRINT_H
-#include "S.h"
+#import "S.h"
 /** Print a String */ extern int print(String);
 /** Print an S expression */ extern int print(S);
 /** Print a newline */ inline int println() { print("\n"); }
@@ -9,4 +7,5 @@
 /** Print a prompt */ extern int prompt(String);
 /** Call before printing error messages */ extern int err();
 /** Call before printing normal output */ extern int out();
-#endif
+extern void chatty();
+extern void silent();

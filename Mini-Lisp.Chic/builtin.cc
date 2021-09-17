@@ -1,36 +1,24 @@
-#include "builtin.h"
-#include "a-list.h"
-#include "basics.h"
+#import  "builtin.h"
+#import  "a-list.h"
+#import  "basics.h"
 #define PRODUCTION
-#include "mode.h"
+#import  "mode.h"
 
-S defun(S name, S parameters, S body) { return set(name, list(LAMBDA, parameters, body)); }
-S ndefun(S name, S parameters, S body) { return set(name, list(NLAMBDA, parameters, body)); }
+#import "atoms.h"
 
-S evaluate_cond(S s) {  
-  D(s);
-  return s.null() ?  s :
-      s.car().atom() ? s.car().error(COND):
-       s.car().car().eval().t() ? s.car().cdr().car().eval():
-         evaluate_cond(s.cdr()) ;
+const S __00(list(__0)), __12(list(__1,__2)), __123(list(__1,__2,__3));
+
+namespace Engine {
+  namespace Inner {
+    S evaluate_cond(S s) {  
+    D(s);
+    return s.null() ?  s :
+        s.car().atom() ? s.car().error(COND):
+         s.car().car().eval().t() ? s.car().cdr().car().eval():
+           evaluate_cond(s.cdr()) ;
+  }
 }
-
-
-
-#undef NULL
-#define _(T) T(#T)
-/* Primitives */
-const S _(NIL), _(T); 
-const S _(ATOM), _(CAR), _(CDR), _(COND);
-const S _(CONS), _(EQ);   
-/* Auxiliary */ 
-const S  _(ERROR), _(EVAL), _(SET);
-/* Library */
-const S _(NDEFUN), _(DEFUN), _(NLAMBDA), _(LAMBDA), _(QUOTE), _(NULL);
-// Stack trace:
-const S _(RECURSE);
-
-const S __0(".."), __1("..1"), __2("..2"), __3("..3"), __00(list(__0)), __12(list(__1,__2)), __123(list(__1,__2,__3));
+using namespace Inner;
 
 /** An anonymous static singleton encapsulates initialization */
 namespace {
@@ -47,6 +35,7 @@ namespace {
    return entry(NDEFUN, name, formals);
   }
 }
+
 
 extern S builtin() {
   static S inner = list(
@@ -71,7 +60,6 @@ extern S builtin() {
   return inner;
 } 
 
-extern S alist;
 extern S t(S s) { return s.t() ? T : NIL; }  
 namespace {
   inline S v1() { return alist.car().cdr(); } 
@@ -89,17 +77,18 @@ namespace {
   inline S error() { 
     return 
         v1().atom() ? v1().error(ERROR) : /* Empty list, or not a list at all */  
+        v1().cdr().null() ? v1().car().error(ERROR) : /* Empty list, or not a list at all */  
         v1().cdr().error(v1().car()); 
   }
-  inline S set() { return ::set(v2(), v1()); }
+  inline S set() { return Engine::set(v2(), v1()); }
   // Library I: 
   inline S null() { return t(v1().null()); } 
   inline S quote() {  return v1(); } 
   // Library II: 
   inline S lambda() { return list(LAMBDA, v2(), v1()); }
   inline S nlambda() {  return list(NLAMBDA, v2(), v1()); }
-  inline S defun() { return ::defun(v3(), v2(), v1()); }
-  inline S ndefun() { return ::ndefun(v3(), v2(), v1()); }
+  inline S defun() { return Engine::set(v3(), lambda()); }
+  inline S ndefun() { return Engine::set(v3(), nlambda()); }
 }
 
 extern S exec(S key) {
@@ -133,4 +122,5 @@ extern S exec(S key) {
       if (key.handle == builtins[i].key.handle) 
         return (*(builtins[i].f))();  
     return key.error(list(v1(),v2(),v3()));
+  }
 }

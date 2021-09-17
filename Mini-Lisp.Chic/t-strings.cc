@@ -1,7 +1,7 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "strings.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "strings.h"
+#import  "test.h"
 
 namespace Strings {
   extern char *buffer; 

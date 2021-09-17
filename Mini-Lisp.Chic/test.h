@@ -1,50 +1,50 @@
-#include "basics.h"
-#include "print.h"
-#include "parser.h"
-#include <string.h>
-#include "debugging.h"
-#include "except.h"
+#import "basics.h"
+#import "print.h"
+#import "parser.h"
+#import <string.h>
+#import "debugging.h"
+#import "except.h"
+#undef PRODUCTION
+#import "mode.h"
+#import "a-list.h"
 
-inline S xunique() {
-  static char buffer[100]; static int n = 0;
-  sprintf(buffer," Q%d", ++n);
-  return S(buffer);
-}
+#import "atoms.h"
 
-inline auto operator == (const S s1,const S s2) { 
-  if (s1.handle == s2.handle)
-    return true;
-  if (s1.atom() || s2.atom())
-    return false;
-  return s1.car() == s2.car() && s1.cdr() == s2.cdr();
-}
+extern bool operator == (const S s1, const S s2); 
+inline bool operator != (const S s1, const S s2)  { return ! (s1 == s2); }
 
-inline auto operator != (const S s1,const S s2) { 
- return !(s1.handle == s2.handle); }
+extern std::ostream& operator<<(std::ostream &os, S s);
+namespace Tested {
+  inline S defun(S name, S parameters, S body) { return Engine::set(name, list(LAMBDA, parameters, body)); }
+  inline S ndefun(S name, S parameters, S body) { return Engine::set(name, list(NLAMBDA, parameters, body)); }
 
-inline S parse(const char *s) {
-    Parser::reset();
-    Parser::supply(strdup(s));
-    if (Parser::status() != Parser::Status::accept) {
-        throw std::runtime_error("Unexpected parser error"); // should not be here - we assume all unittest inputs are valid
-    }
-    return Parser::result();
-}
+  extern S parse(const char *s)                      ; 
+  inline S prepare(S s)                              { return s; } 
+  inline S prepare(String s)                         { return parse(s); } 
+  inline S eval(String s)                            { return prepare(s).eval(); }
+  inline S eval(S s)                                 { return s.eval(); }
 
-inline S parse(const std::string& s) {
-    return parse(s.c_str());
-}
+  inline auto operator == (const S s1, String s2)    { return prepare(s1) == prepare(s2); } 
+  inline auto operator == (String s1, S s2)          { return prepare(s1) == prepare(s2); } 
+  void reset();
+};
 
+#undef function
+#import <gtest/gtest.h>
+  struct Test: ::testing::Test { ~Test() { Tested::reset(); } };
+using namespace Tested;
 #define LINE_STRING STRINGIZE(__LINE__)
 #define STRINGIZE(x) STRINGIZE2(x)
 #define STRINGIZE2(x) #x
 
 #define UNIQUE "UNIQUE" LINE_STRING
 
-
+#define EVAL_EQ(x,y)    CAREFULLY_EXPECT(EQ, eval(x), prepare(y));
+#define EVAL_XX(x,y,z)  EXPECT_EXCEPTION(eval(x), prepare(y), prepare(z)); 
 
 #define EXPECT_NIL(v) EXPECT_EQ(v,NIL)
 #define EXPECT_T(v) EXPECT_EQ(v,T)
+#define EXPECT_NOT_NIL(v) EXPECT_NE(v,NIL)
 
 #define CAREFULLY_EXPECT_NIL(v,...) \
   try { \
@@ -61,7 +61,6 @@ inline S parse(const std::string& s) {
     ADD_FAILURE() << p << " exception in EXPECT_FALSE" \
       << #v "] \t" __VA_ARGS__ ; \
   }  
-
 
 #define CAREFULLY_EXPECT_TRUE(v,...) \
   try { \

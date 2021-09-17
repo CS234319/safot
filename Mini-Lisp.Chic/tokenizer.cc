@@ -1,6 +1,6 @@
-#include "S.h"
-#include "tokenizer.h"
-#include "mode.h"
+#import  "S.h"
+#import  "tokenizer.h"
+#import  "mode.h"
 
 namespace Tokenizer {
 static char *head;

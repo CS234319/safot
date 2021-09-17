@@ -1,15 +1,16 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "test.h"
+
+#include "eval.h"
 
 /**
  * Tests of apply
  */
 
+using Engine::apply;
 static S a("A"), b("B"), c("C");
 static S x("X"), y("Y"), z("Z");
-
-extern S apply(S f, S args);
 
 TEST(Apply, Empty) {
     S f = list(LAMBDA, NIL, NIL);

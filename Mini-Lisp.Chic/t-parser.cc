@@ -1,9 +1,9 @@
-#include <string.h>
-#include <gtest/gtest.h>
-#include "parser.h"
-#include "test.h"
+#import  <string.h>
+#import  <gtest/gtest.h>
+#import  "parser.h"
+#import  "test.h"
 
-#include "mode.h"
+#import  "mode.h"
 
 static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));
@@ -21,7 +21,7 @@ TEST(Symbol, isRule) {
 }
 
 TEST(Parser, Initially) {
-  reset();
+  Parser::reset();
   ASSERT_NE(Status::reject, status());
   ASSERT_NE(Status::accept, status());
   EXPECT_EQ(Status::ready, status());
@@ -35,6 +35,7 @@ TEST(Parser, AtomCharTokenizer) {
 }
 
 TEST(Parser, AtomChar) {
+  Parser::reset();
   feed("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
@@ -263,7 +264,7 @@ TEST(Parser, EmptyNilPair) {
   EXPECT_EQ(Status::accept, status());
 }
 TEST(Parser, NestedList) {
-  reset();
+  Parser::reset();
   feed("((a b) (c (d e)))");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
@@ -278,6 +279,7 @@ TEST(Parser, QuoteAtom) {
 }
 
 TEST(Parser, QuotedListEmpty) {
+  Parser::reset();
   feed("'()");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());

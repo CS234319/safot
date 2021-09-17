@@ -1,7 +1,7 @@
-#include <string.h>
-#include <gtest/gtest.h>
-#include "stack.h"
-#include "test.h"
+#import  <string.h>
+#import  <gtest/gtest.h>
+#import  "stack.h"
+#import  "test.h"
 
 using namespace Stack;
 TEST(Stack, Empty) {
@@ -52,13 +52,13 @@ TEST(Stack, Push4) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Clear) {
+TEST(Stack, reset) {
   EXPECT_TRUE(empty());
-  push(1,2,3,4);
+  Stack::push(1,2,3,4);
   EXPECT_FALSE(empty());
-  clear(); 
+  Stack::reset(); 
   EXPECT_TRUE(empty());
-  clear(); 
+  Stack::reset(); 
   EXPECT_TRUE(empty());
 }
 
@@ -67,7 +67,7 @@ TEST(Stack, TopZero) {
   EXPECT_TRUE(top == 0);
   push(3);
   EXPECT_FALSE(top == 0);
-  clear(); 
+  Stack::reset(); 
   EXPECT_TRUE(top == 0);
 } 
 

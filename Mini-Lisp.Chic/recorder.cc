@@ -1,5 +1,5 @@
-#include "recorder.h"
-#include <stdlib.h>
+#import  "recorder.h"
+#import  <stdlib.h>
 Recorder Recorder::stdout, Recorder::stderr; 
 String Recorder::playback() { return (char *)(tape); }
 char *Recorder::head() { return length+(char *)(tape); }

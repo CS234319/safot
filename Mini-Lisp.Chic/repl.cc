@@ -1,7 +1,7 @@
-#include "repl.h"
-#include "read.h"
-#include "print.h"
-#include "parser.h"
+#import  "repl.h"
+#import  "read.h"
+#import  "print.h"
+#import  "parser.h"
 
 static S eval(S s) { try { return s.eval(); } catch (Pair x) { throw s; } }
 

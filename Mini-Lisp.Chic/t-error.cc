@@ -1,12 +1,9 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "test.h"
+#import  "a-list.h"
+#import  "eval.h"
 
-#include "a-list.h"
-
-extern S defun(S name, S parameters, S body);
-extern S ndefun(S name, S parameters, S body);
-extern S align(S formals, S actuals);
 
 S nothing(S s) { return s; }
 /**
@@ -23,6 +20,15 @@ S nothing(S s) { return s; }
  * OtherError        e.g:  S("(error 'a)").eval()
  *
  */
+namespace Engine {
+  namespace Inner {
+      extern S align(S s1, S s2, S e1, S e2);
+      extern S check(S l, S e);
+  }
+}
+using Engine::Inner::check;
+using Engine::Inner::align;
+static inline auto align(S s1, S s2) { return align(s1, s2, MISSING_ARGUMENT, REDUNDANT_ARGUMENT); }
 
 static S t("t");
 static S n("NIL");
@@ -35,11 +41,12 @@ static S s1(t,n);
 static S s2(s1,s1);
 static S s3(s2,s1);
 
-extern S apply(S f, S args);
+using Engine::apply, Engine::push; 
 
-TEST(Except, MISSING_ARGUMENT) {
+TEST(Except, UNDEFINED_ATOM) {
+  reset();
     S x("x");
-    EXPECT_EXCEPTION(list(CONS, x).eval(), list(S(__2)), MISSING_ARGUMENT);
+    EXPECT_EXCEPTION(list(CONS, x).eval(), x, UNDEFINED_ATOM);
 }
 
 TEST(Except, REDUNDANT_ARGUMENT) {
@@ -105,15 +112,12 @@ TEST(Error, Align2) {
     EXPECT_EXCEPTION(align(list(), id), id, REDUNDANT_ARGUMENT)
 }
 
-TEST(Error, Align3) {
-    EXPECT_EXCEPTION(align(list(id), id), id, BAD_ARGUMENTS)
-}
 
-TEST(Error, Align4) {
+TEST(Error, Align3) {
   EXPECT_EXCEPTION(align(list(id,id,id), list(id, id, t, n)), list(n), REDUNDANT_ARGUMENT)
 }
 
-TEST(Error, Align5) {
+TEST(Error, Align4) {
   EXPECT_EXCEPTION(align(list(id,a1), list(id)), list(a1), MISSING_ARGUMENT)
 }
 
@@ -123,4 +127,12 @@ TEST(Error, MissingFunction) {
 
 TEST(Error, OtherError) {
     EXPECT_EXCEPTION(t.error(S("OTHER")), t, S("OTHER"))
+}
+
+TEST(Error, InternalCheck1) {
+    EXPECT_EXCEPTION(check(id, BAD_ARGUMENTS), id, BAD_ARGUMENTS)
+}
+
+TEST(Error, InternalCheck2) {
+    EXPECT_EXCEPTION(check(id.cons(a3), BAD_ARGUMENTS), a3, BAD_ARGUMENTS)
 }

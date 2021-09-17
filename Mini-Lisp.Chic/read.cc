@@ -1,8 +1,8 @@
-#include "read.h"
+#import  "read.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "mode.h"
+#import  <stdio.h>
+#import  <stdlib.h>
+#import  "mode.h"
 
 static char *injection = (char *)0;
 
@@ -22,7 +22,7 @@ char *readln() {
 }
 
 #ifndef PRODUCTION
-#include <string.h>
+#import  <string.h>
 extern char *inject(String injection) {
   return ::injection = strdup(injection);
 }

@@ -20,10 +20,10 @@
  *
  */
 
-#include <string.h>
-#include <gtest/gtest.h>
-#include "test.h"
-#include "mode.h"
+#import  <string.h>
+#import  <gtest/gtest.h>
+#import  "test.h"
+#import  "mode.h"
 
 static S a("a");
 static S b("b");

@@ -1,45 +1,42 @@
-#include <string.h>
-#include <gtest/gtest.h>
-#include "test.h"
-#include "basics.h"
+#import  <string.h>
+#import  <gtest/gtest.h>
+#import  "test.h"
+#import  "basics.h"
 
 
 static auto t(const char *s) {
   return Tokenizer::initialize(strdup(s));
 }
 
-static auto feed(String s) {
-  Parser::reset();
-  return Parser::supply(strdup(s));
-}
+
 using namespace Parser;
 
 
 extern std::ostream& operator<<(std::ostream &os, S s); 
 
 TEST(AST, AtomChar) {
-  feed("z");
+  parse("z");
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("Z", S(result()).asAtom());   
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, AtomLong) {
-  feed("Atom");
+  parse("Atom");
   EXPECT_STREQ("ATOM", S(result()).asAtom());   
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, List0) {
-  feed("()");
+  parse("()");
   EXPECT_EQ(NIL, result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, List1) {
-  feed("(HELLO)");
+  parse("(HELLO)");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -47,11 +44,11 @@ TEST(AST, List1) {
   ASSERT_TRUE(islist(s));
   EXPECT_STREQ("HELLO",s.car().asAtom());
   EXPECT_EQ(NIL,s.cdr());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, List2) {
-  feed("(1 2)");
+  parse("(1 2)");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -61,11 +58,11 @@ TEST(AST, List2) {
   s = s.cdr();
   EXPECT_STREQ("2",s.car().asAtom());
   EXPECT_EQ(NIL,s.cdr());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, List3) {
-  feed("(A B C)");
+  parse("(A B C)");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -77,11 +74,11 @@ TEST(AST, List3) {
   s = s.cdr();
   EXPECT_STREQ("C",s.car().asAtom());
   EXPECT_EQ(NIL,s.cdr());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, QuoteA) {
-  feed("'Z");
+  parse("'Z");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -91,11 +88,11 @@ TEST(AST, QuoteA) {
   s = s.cdr();
   EXPECT_STREQ("Z",s.car().asAtom());
   EXPECT_EQ(NIL,s.cdr());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, QuoteAA) {
-  feed("''Z");
+  parse("''Z");
   auto s = Parser::result();
   ASSERT_NE(NIL,s);
   ASSERT_FALSE(s.null());
@@ -111,130 +108,130 @@ TEST(AST, QuoteAA) {
   s = s.cdr();
   EXPECT_STREQ("Z",s.car().asAtom());
   EXPECT_EQ(NIL,s.cdr());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, Pair) {
-  feed("hello.world");
+  parse("hello.world");
   S s = Parser::result();
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_FALSE(islist(s));
   EXPECT_STREQ("HELLO",s.car().asAtom());
   EXPECT_STREQ("WORLD",s.cdr().asAtom());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, PairYZ) {
-  feed("Y.Z");
+  parse("Y.Z");
   S s = Parser::result();
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_FALSE(islist(s));
   EXPECT_STREQ("Y",s.car().asAtom());
   EXPECT_STREQ("Z",s.cdr().asAtom());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, AtomOutput) {
-  feed("Y");
+  parse("Y");
   EXPECT_STREQ("Y", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, PairInList) {
-  feed("(Y.Z)");
+  parse("(Y.Z)");
   EXPECT_STREQ("(Y.Z)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, PairX) {
-  feed("Y.Z");
+  parse("Y.Z");
   EXPECT_STREQ("Y.Z", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, QNestedList) {
-  feed("((a b) '(c (d e)))");
+  parse("((a b) '(c (d e)))");
   EXPECT_STREQ("((A B) '(C (D E)))", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, PairIsList) {
-  feed("(c d).(a b)");
+  parse("(c d).(a b)");
   EXPECT_STREQ("((C D) A B)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 
 TEST(AST, ListQuotePair) {
-  feed("(c d).'(a b)");
+  parse("(c d).'(a b)");
   EXPECT_STRCASEEQ("((C D) quote (A B))", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, QuoteInList) {
-  feed("(a 'b 'c)");
+  parse("(a 'b 'c)");
   EXPECT_STREQ("(A 'B 'C)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, QuoteExtra) {
-  feed("(quote a b c)");
+  parse("(quote a b c)");
   EXPECT_STREQ("(QUOTE A B C)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 
 TEST(AST, QuoteListInList) {
-  feed("(a '(foo bar)  'c)");
+  parse("(a '(foo bar)  'c)");
   EXPECT_STREQ("(A '(FOO BAR) 'C)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, NIL) {
-  feed("NIL");
+  parse("NIL");
   EXPECT_EQ(NIL, Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, EmptyListNiL) {
-  feed("()");
+  parse("()");
   EXPECT_EQ(Status::accept, status());
   EXPECT_EQ(NIL, Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, LibT) {
-  feed("(set (quote t) (quote t))");
+  parse("(set (quote t) (quote t))");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET 'T 'T)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, LibNil) {
-  feed("(set (quote nil) (quote nil))");
+  parse("(set (quote nil) (quote nil))");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STRCASEEQ("(SET 'nil 'nil)", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, LibLambda) {
-  feed("(set 'quote '(lambda (x) x)) ");
+  parse("(set 'quote '(lambda (x) x)) ");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET 'QUOTE '(LAMBDA (X) X))", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, LibNLambda) {
-  feed("(set 'quote '(nlambda (x) x)) ");
+  parse("(set 'quote '(nlambda (x) x)) ");
   EXPECT_EQ(Status::accept, status());
   EXPECT_STREQ("(SET 'QUOTE '(NLAMBDA (X) X))", ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, LibDefun) {
-  feed(""
+  parse(""
 "(set 'defun\n"
   "'(nlambda (name parameters body)\n"
     "(set name (lambda parameters body))))"
@@ -246,11 +243,11 @@ TEST(AST, LibDefun) {
   EXPECT_EQ(Status::accept, status());
   auto expected = "(SET 'DEFUN '(NLAMBDA (NAME PARAMETERS BODY) (SET NAME (LAMBDA PARAMETERS BODY))))";
   EXPECT_STREQ(expected, ~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(AST, LibNDefun) {
-  feed(""
+  parse(""
     "(set 'ndefun\n"
       "'(nlambda (name parameters body)\n"
     "(set name (nlambda parameters body))))\n"
@@ -265,11 +262,11 @@ TEST(AST, LibNDefun) {
       "(SET NAME (NLAMBDA PARAMETERS BODY))))" //
   "";
   EXPECT_STREQ(expected,~Parser::result());
-  reset();
+  Parser::reset();
 }
 
 TEST(DISABLED_AST, SquareBrackets) {
-  feed(""
+  parse(""
     "(set 'ndefun\n"
       "'(nlambda (name parameters body)\n"
     "(set name (nlambda parameters body]\n"
@@ -282,5 +279,5 @@ TEST(DISABLED_AST, SquareBrackets) {
       "(SET (QUOTE NDEFUN) " "(QUOTE (NLAMBDA (NAME PARAMETERS BODY) " //
       "(SET NAME (NLAMBDA PARAMETERS BODY)))))"
   "",~Parser::result());
-  reset();
+  Parser::reset();
 }

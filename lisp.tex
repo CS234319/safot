@@ -1921,9 +1921,9 @@ bind מחזירה רשימת קישורים חדשה, המכילה רשימה ש
 (defun bind (formals actuals a-list) ; Bind parameters to arguments, and prepend to a-list
   (cond ((null formals) ; no more formals left
         (cond ((null actuals) a-list) ; no more actuals left, binding done-> return a-list
-              (t (error 'missing-formals)))) ; more actuals than formals
+              (t (error missing-formals)))) ; more actuals than formals
         ((null actuals) ; formals is not nil but actuals is, i.e., more formals than actuals
-          (error 'missing-actuals))
+          (error missing-actuals))
         (t ; both formals and actuals are not empty
           (cons ; create new binding and prepend it to result of recursive call
             (cons (car formals) (car actuals)) ; new dotted-pair defines single binding
@@ -2501,7 +2501,7 @@ apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
   (evaluate body
     (cond ((eq tag 'nlambda) (bind formals actuals a-list))
           ((eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list))
-          (t (error 'unknown-lambda tag))
+          (t (error unknown-lambda tag))
 )))
 \end{KERNEL}
 
@@ -2621,7 +2621,7 @@ apply-decomposed-lambda
     הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
     \lisp{(error)}~$⇒$ ✗ \newline
     \lisp{(error A)}~$⇒$ ✗ \newline
-    \lisp{(error 'my-error 'message)}~$⇒$ ✗ ⏎
+    \lisp{(error my-error message)}~$⇒$ ✗ ⏎
 
     \rownumber                                        &
     set/2                                             &
@@ -2709,7 +2709,7 @@ eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו ר�
         ((eq atomic 'cons) (cons first second))
         ((eq atomic 'eq) (eq first second))
         ((eq atomic 'set) (set first second))
-        (t (error 'something-went-wrong atomic))))
+        (t (error something-went-wrong atomic))))
 \end{KERNEL}
 
 §§ הקוד המלא של evaluate ופונקציות העזר שלה

@@ -1,18 +1,21 @@
-#include "a-list.h"
-#include "basics.h"
-#include "print.h"
+#import  "a-list.h"
+#import  "basics.h"
+#import  "print.h"
 #define PRODUCTION
-#include "mode.h"
-#include "except.h"
-#include "builtin.h"
+#import  "mode.h"
+#import  "except.h"
+#import  "builtin.h"
 
-extern S alist = NIL;
-extern S globals = builtin(); 
-void reset() { alist = NIL; globals = builtin(); }
-extern S push(S k, S v) { return alist = k.cons(v).cons(alist), v; }
-extern S set(S k, S v) { return globals = k.cons(v).cons(globals), v;  }
+  extern const S UNDEFINED_ATOM;
+namespace Engine {
+  extern S alist = NIL0;
+  extern S globals = builtin(); 
+  void reset() { alist = NIL0; globals = builtin(); }
+  void clear() { alist = NIL0; }
+  extern S push(S k, S v) { return alist = k.cons(v).cons(alist), v; }
+  extern S set(S k, S v) { return globals = k.cons(v).cons(globals), v;  }
 
-extern S lookup(S id, S list) { 
+extern S lookup(S id, S list) {
   return 
     list.null() ?  id.error(UNDEFINED_ATOM): 
     list.car().car().eq(id) ? list.car().cdr() : 
@@ -25,6 +28,25 @@ extern S lookup(S id) {
         return s.car().cdr(); 
   return lookup(id, globals); 
 }
+
+int pr() {
+  for (S s = alist; !s.null(); s = s.cdr()) {
+    const S binding = s.car();
+    const S key = binding.car();
+    const S value = binding.cdr();
+    print(key), print(" -> "), println(value);
+  }
+}
+
+int pr(S from, S to) {
+  for (S s = from; s.handle != to.handle; s = s.cdr()) {
+    const S binding = s.car();
+    const S key = binding.car();
+    const S value = binding.cdr();
+    print(key), print(" -> "), println(value);
+  }
+}
+
 
 static S begin(S s) {
   D(s);
@@ -41,7 +63,7 @@ static void argument(S s) {
   const S binding = s.car();
   const S key = binding.car();
   const S value = binding.cdr();
-  print("           "), print(key), print(" = "), println(value);
+  print("       . "), print(key), print(" = "), println(value);
 }
 
 static void arguments(S s, S until) {
@@ -66,23 +88,26 @@ static S frame(S s) {
     const S binding = until.cdr().car();
     const S key = binding.car();
     const S value = binding.cdr();
-    print("... While applying "), print(value.car()), print(" to list "), println(value.cdr());
+    print("  /"), print(value.car()), print("  :  "), println(value.cdr());
   }
   {
     const S binding = until.car();
     const S key = binding.car();
     const S value = binding.cdr();
-    print("      i.e., applying "), print(value), println(" with these bindings:");
+    print("   + "), println(value);
   }
   arguments(s, until);
   return until.cdr();
 }
 /** In case of error, dump the association-list with trace back: */
-void stack_dump() {
+void traceback() {
   int n = 0;
+  D(n);
+  M("ALIST"), D(alist, NIL0);
+  M("FRAME"), D(alist, begin(alist));
   for (S s = alist; !s.null() && n < 5; ++n, s = frame(s)) {
-    ; 
+     ; 
   }
-  alist = NIL;
+}
 }
 

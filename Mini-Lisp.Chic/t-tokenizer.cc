@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-#include "tokenizer.h"
-#include "test.h"
+#import  <gtest/gtest.h>
+#import  "tokenizer.h"
+#import  "test.h"
 
-#include <string.h>
+#import  <string.h>
 
 static void t(const char *s) {
   Tokenizer::initialize(strdup(s));

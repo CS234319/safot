@@ -1,7 +1,7 @@
-#include "S.h"
+#import  "S.h"
 #define PRODUCTION
-#include "mode.h"
-#include "except.h"
+#import  "mode.h"
+#import  "except.h"
 
 
 #ifndef PRODUCTION 
@@ -20,7 +20,7 @@ namespace Strings {
 
 
 namespace Strings { // Atoms are never freed in mini-lisp
-  define(M = 1024); // We use a total of M + sizeof("NIL") (typically 4) bytes
+  define(M = 4444); // We use a total of M + sizeof("NIL") (typically 4) bytes
   static struct { // Falls in the data segment; should be just before Pairs::buffer
     char buffer[M] = "BOTTOM";
     char nil[sizeof("NIL")] = "NIL";
@@ -31,6 +31,7 @@ namespace Strings { // Atoms are never freed in mini-lisp
   H current = 0;
   char upper(char c) { return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; }
   bool eq(const char *s1, const char *s2) {
+    if (s1 == s2) return true;
     for (; upper(*s1) == upper(*s2); ++s1, ++s2)
       if (*s1 == '\0')
         return true;
@@ -50,7 +51,7 @@ namespace Strings { // Atoms are never freed in mini-lisp
     const H n = size(s);
     current -= n;
     M("Allocate:", s, pool+current,  nil-pool);
-    current < 0 || die(ATOM);
+    current < 0 || die(MEMORY_ATOM);
     pool + current >= buffer || die(MEMORY_ATOM);
     for (H h = 0; h < n; ++h) // Only case in code to change the pool 
       const_cast<char&>(pool[current + h]) = upper(s[h]);

@@ -1,7 +1,7 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "a-list.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "a-list.h"
+#import  "test.h"
 
 // Mark here every exceptions that was tested;
 // Add test that all exceptions were checked.
@@ -13,6 +13,7 @@
 
 #define EXPECT_STRUE(e) EXPECT_TRUE(e.t())
 #define EXPECT_SFALSE(e) EXPECT_TRUE(e.null())
+using Engine::lookup, Engine::set;
 
 TEST(Lookup, T0) {
   CAREFULLY_EXPECT(EQ,lookup("T"),"T", << 2); 
@@ -43,7 +44,7 @@ TEST(Lookup, Failure3) {
 }
 
 TEST(Lookup, Failure4) {
-  EXPECT_EXCEPTION(lookup(UNIQUE), S(UNIQUE), UNDEFINED_ATOM);
+  EXPECT_EXCEPTION(lookup("foo"), S("foo"), UNDEFINED_ATOM);
 }
 
 TEST(Lookup, Failure5) {
@@ -53,19 +54,16 @@ TEST(Lookup, Failure5) {
 
 
 TEST(Lookup, SetGoodLookup) {
-  set("X","Y");
+  Engine::set("X","Y");
   EXPECT_STRUE(lookup("X"));
 }
 
 TEST(Lookup, TeaAndCofee) {
-  set("coffee","tea");
+  Engine::set("coffee","tea");
   EXPECT_EQ(lookup("coffee"), S("tea"));
   EXPECT_EXCEPTION(lookup("tea"),S("tea"), UNDEFINED_ATOM);
-  set("tea","coffee");
+  Engine::set("tea","coffee");
   EXPECT_STRUE(lookup("tea"));
   EXPECT_STRUE(lookup("coffee"));
   EXPECT_EQ(lookup("tea"), S("coffee"));
 }
-
-
-

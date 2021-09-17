@@ -1,8 +1,8 @@
-#include "S.h"
-#include "except.h"
+#import  "S.h"
+#import  "except.h"
 
 #define PRODUCTION
-#include "mode.h"
+#import  "mode.h"
 
 /* Global memory layout; we use no dynamic allocation of the host language.
  * TODO: deal with memory exhausting */

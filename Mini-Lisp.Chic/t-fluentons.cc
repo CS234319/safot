@@ -1,6 +1,6 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "test.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "test.h"
 
 static S t("t");
 static S n("nil");
@@ -200,7 +200,7 @@ TEST(Native, ErrorC) {
 }
 
 TEST(Native, Error1) {
-    EXPECT_EXCEPTION(parse("(error 'A)").eval(), S("a"), BAD_ARGUMENTS);
+    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list("a"), ERROR);
 }
 
 TEST(Native, Error2) {

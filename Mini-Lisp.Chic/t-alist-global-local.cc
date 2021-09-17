@@ -1,15 +1,16 @@
-#include <string.h>
-#include <gtest/gtest.h>
-#include "test.h"
+#import  <string.h>
+#import  <gtest/gtest.h>
+#import  "test.h"
 /**
  *  Test global and local a-list
  */
 
 
 static S x("x"); 
-extern S evaluate_cond(S s);
-extern S lookup(S id);
-extern S alist();
+namespace Engine { namespace Inner {
+  extern S evaluate_cond(S s);
+}}
+using Engine::lookup;
 
 
 TEST(DISABLED_AlistGlobalLocal, SetWithNoError) {

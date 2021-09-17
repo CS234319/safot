@@ -1,7 +1,5 @@
-#ifndef PARSER_H
-#define PARSER_H
-#include "S.h"
-#include "tokenizer.h"
+#import "S.h"
+#import "tokenizer.h"
 
 /** An implementation of a simple, single instance hand tailored LL(1) parser.
  * Here is pseudo code describing its services.
@@ -45,4 +43,3 @@ namespace Parser {
     return s <= 0;
   }
 }
-#endif

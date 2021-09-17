@@ -1,10 +1,10 @@
-#ifndef __EXPRESSION_H_
-#define __EXPRESSION_H_
-#include <iostream>
+#import "S.h"
+#import <iostream>
 /* Quick hacks for dumping; DALUT SOREFET; we do a lot of dumps for debugging,
  * no debugger in this project */
 
 extern bool dumping;
+extern std::ostream& operator<<(std::ostream &os, S s); 
 
 #define FE_1(W,_1)                          
 #define FE_2(W,_1,_2)                      W(_2)
@@ -52,5 +52,3 @@ extern bool dumping;
                   ),                 \
                   dumping = false)  \
                 )
-
-#endif /* __EXPRESSION_H_ */

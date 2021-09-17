@@ -1,37 +1,17 @@
-#ifndef DEBUGGING_H
-#define DEBUGGING_H
+#import "basics.h"
+#import "dump.h"
+#import "parser.h"
+#import "S.h"
+#import "stack.h"
 
-#include "basics.h"
-#include "dump.h"
-#include "parser.h"
-#include "S.h"
-#include "stack.h"
-
-
-#include <cstring>
-#include <iostream>
-#include <sstream>
-#include <string.h>
+#import <cstring>
+#import <iostream>
+#import <sstream>
+#import <string.h>
 
 /** Auxiliary file that should not be used by production code, only 
  * for debugging. 
  */
-
-inline std::ostream& operator<<(std::ostream &os, S s) {
-  if (s.null()) return os << "nil";
-  if (s.atom()) return os << s.asAtom();
-  if (!islist(s)) return os << "" << s.car() << "." << s.cdr() << "";
-  if (s.car().eq(QUOTE) && s.cdr().pair() && s.cdr().cdr().null()) return  os << "'" << s.cdr().car();
-  os << "(";
-  for (;;) {
-    os << S(s.car());
-    if ((s = s.cdr()).null())
-      break;
-    os << " ";
-  }
-  return os << ")";
-}
-
 
 /** An auxiliary file with lots of heavy weight C++ code and huge overhead.
  * This should not be in the production version. It is OK for testing and for
@@ -111,4 +91,3 @@ inline String stack() {
   o << "]";
   return strdup(o.str().c_str());
 }
-#endif

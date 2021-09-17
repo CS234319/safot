@@ -1,10 +1,11 @@
-#include "parser.h"
-#include "stack.h"
-#include "tokenizer.h"
+#import  "parser.h"
+#import  "stack.h"
+#import  "tokenizer.h"
 #define PRODUCTION
-#include "mode.h"
+#import  "mode.h"
+#import  "atoms.h"
 
-#include <string.h>
+#import  <string.h>
 
 namespace Parser {
   /* Formal grammar of S expression
@@ -97,7 +98,7 @@ Note: Observe that this grammar derives the dotted pair atom.atom, by E -> X T -
     Stack::push(h);
   }
   void reset() {
-    Stack::clear();
+    Stack::reset();
     current_status = ready;
     shift(s);
   }

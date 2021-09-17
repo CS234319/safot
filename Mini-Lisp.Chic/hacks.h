@@ -1,7 +1,4 @@
-#ifndef HACKS_H
-#define HACKS_H
-
-#include <cstdint>
+#import <cstdint>
 /**
  * Some hacks to make the code look like pseudo code to be included in a book
  * describing the project 
@@ -33,4 +30,4 @@ typedef int16_t H;
 typedef int8_t byte; // A byte 
 
 static inline H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
-#endif
+template<typename T> T Return(T x, ...) { return x; }

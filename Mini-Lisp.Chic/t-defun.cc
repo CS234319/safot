@@ -1,7 +1,8 @@
-#include <iostream>
-#include "gtest/gtest.h"
-#include "test.h"
-#include "builtin.h"
+#import  <iostream>
+#import  "gtest/gtest.h"
+#import  "test.h"
+#import  "builtin.h"
+#import  "eval.h"
 
 /**
  * Tests of defun/ndefun
@@ -19,7 +20,7 @@ static S x("x");
 static S y("y");
 static S z("z");
 
-extern S apply(S f, S args);
+using Engine::apply;
 
 static S ndefun(S parameters, S body) { return ndefun(S("thingy"), parameters, body); }
 static S defun(S parameters, S body) { return defun(S("thingy"), parameters, body); }

@@ -1,9 +1,10 @@
-#ifndef EXCEPT_H
-#define EXCEPT_H
-#include "S.h"
+#import "S.h"
 
 extern bool die(S s);
 extern bool die(Pair p);
+// Named atoms for exceptions; for the idiom s.error(MISSING_ARGUMENT) to abort
+// execution in the case that an error of kind MISSING_ARGUMENT occurs in the context of
+// the S expression named s.
 
 // Exceptions that may be thrown during evaluation as a result of errors of the
 // client: Use idiom s.error(MISSING_ARGUMENT) to abort execution in the case
@@ -25,4 +26,3 @@ extern const S STACK_UNDERFLOW;
 
 
 extern const S RECURSE;
-#endif // EXCEPT_H

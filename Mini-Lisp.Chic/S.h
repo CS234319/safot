@@ -1,9 +1,5 @@
-// #include <iostream>
-#ifndef S_H
-#define S_H
-
-#include <cerrno>
-#include "hacks.h"
+#import <cerrno>
+#import "hacks.h"
 
 // Representation of a dotted pair, i.e., an unlabeled internal node in the
 // binary tree behind compound S-expression.
@@ -63,13 +59,12 @@ namespace Strings {
 union S; 
 
 /* An S expression is identified by a 16 bits handle (the type H).
- * It is an atom is the handle is non-positive (the index zero is 
- * reserved for the special NIL atom). It is an internal node */
+ * If it is an atom then the handle is non-positive (the index zero is reserved
+ * for the special NIL atom). It the handle is positive it an internal node */
 representation S { // Representation of an S expression
  /// Perspective I: a simple handle in an H data type 
   perspective(H handle)
   construct S(H h) by (handle(h));
-  property String asAtom() returns  (Strings::pool + handle)
   construct S(S car, S cdr) by(handle(Pairs::allocate(car.handle,cdr.handle)))
   construct S(String s) by(handle(Strings::allocate(s)))
 
@@ -90,25 +85,21 @@ representation S { // Representation of an S expression
 
 With the fluentons of type S, this function is written as 
 
-S lookup(S id, S a_list) { 
-  return 
-    a_list.null() ?  
-      id.error(UNDEFINED_ATOM) : 
-    a_list.car().car().eq(id) ?  
-      a_list.car().cdr() : 
-    lookup(id, a_list.cdr()); 
-}
+S lookup(S id, S a_list) { return 
+  a_list.null() ?  id.error(UNDEFINED_ATOM) : 
+     a_list.car().car().eq(id) ?  a_list.car().cdr() : 
+        lookup(id, a_list.cdr()); }
 
 A fluenton is a method designed to be used in expressions such as the above, in
 which instead of writing '(cdr (car a))' in 'cdr(car(a))', we write
 a.car().cdr(). Most fluentons return an S, that can be fluently continued by a
 another fluenton. Some fluentons are sinks: they return a boolean that can be
-used in a conditional expression. 
+used in a conditional expression,but  
 
 Fluentons which do not implement an atomic function of mini-Lisp are called
 auxiliary fluentons.
 */
-// Fluenton sources of Names of atoms that represent atomic functions 
+// Fluenton sources of: 
   // Unary atomic functions are parameterless fluentons 
   bool atom() const; /// sink: Atomic function of Mini-Lisp 
   bool pair() const; /// auxiliary sink: complements atom 
@@ -124,6 +115,7 @@ auxiliary fluentons.
 
   // Another kind of fluentons, are those that convert their implicit
   // argument into some other type.
+  property String asAtom() returns  (Strings::pool + handle)
   Pair p() const;        /// Converts to type Pair 
   String a() const;        /// Converts to type Atom 
   // Binary atomic functions are fluentons that take one parameter */
@@ -156,31 +148,5 @@ auxiliary fluentons.
   S $3$() const;  /// Auxiliary pipe: third element in a list
   S $4$() const;  /// Auxiliary pipe: forth element in a list
 };
-
-#undef NULL
-extern const S 
-/* Primitives */
-/*   Unary   */ ATOM, CAR, CDR, COND, 
-/*   Binary  */ CONS, EQ, 
-/* Add-ons */   EVAL, ERROR, SET, 
-/* Library */
-/*   Variables */ NIL, T, 
-/*   Unary:    */ NULL, QUOTE,
-/*   Ternary:  */ DEFUN, NDEFUN, LAMBDA, NLAMBDA
-;
-// Stack trace:
-extern const S RECURSE;
-
-// Named atoms for exceptions; for the idiom s.error(MISSING_ARGUMENT) to abort
-// execution in the case that an error of kind MISSING_ARGUMENT occurs in the context of
-// the S expression named s.
-
-// Memory errors:
-inline bool memory_error(S s) {
-    // Using this function instead of die(S s),
-    // because die allocate more memory via cons)
-    errno = ENOMEM;
-    throw s;
-}
+#define NIL0 S(H(0))
 #undef construct
-#endif // S_H 

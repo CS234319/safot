@@ -1,5 +1,5 @@
-#include "stack.h"
-#include "except.h"
+#import  "stack.h"
+#import  "except.h"
 
 namespace Stack {
   H top = 0;
@@ -20,7 +20,7 @@ namespace Stack {
     return $;
   }
 
-  void clear() {
+  void reset() {
     while (!Stack::empty())
       Stack::pop();
   }
