@@ -13,6 +13,7 @@
 #define construct
 #define destruct ~
 #define by(...) :__VA_ARGS__{}
+#define Var
 
 #define array(name,type,min,max) \
     static type buffer##__LINE__[(max)-(min)+1]; \
@@ -28,6 +29,7 @@ typedef int32_t W;
 typedef int16_t H;
 #endif
 typedef int8_t byte; // A byte 
+typedef long long int Integer; // A byte 
 
 static inline H size(String s) { for (H $ = 0;; ++$) if (s[$] == '\0') return $ + 1; }
 template<typename T> T Return(T x, ...) { return x; }

@@ -7,8 +7,9 @@
 \RequirePackage{amstext}
 \RequirePackage{times}
 \RequirePackage{listings}
+\RequirePackage{xcolor}
 
-\RequirePackage{yogi-lines}
+% \RequirePackage{yogi-lines}
 
 \providecommand\kk[1]{\textcolor{RoyalBlue}{\text{\textup{\textbf{\texttt{#1}}}}}}
 \providecommand\cc[1]{\textcolor{Sepia}{\text{\textup{\textbf{\texttt{#1}}}}}}
@@ -78,7 +79,8 @@
     stringstyle={\listingsfont\itshape\color{stringColor}\codesize},
     commentstyle={\commentsfont\slshape\color{commentColor}\codesize},
     keywordstyle={\listingsfont\bfseries\color{keywordColor}\codesize},
-    keywordstyle={[2]\listingsfont\bfseries\color{darkblue}\codesize},
+    keywordstyle={[2]\listingsfont\bfseries\color{red!80!black}\codesize},
+    keywordstyle={[3]\listingsfont\bfseries\color{blue!80!black}\codesize},
     showstringspaces=false,
     backgroundcolor=\color{yellow!20},
     frame=lines,
@@ -128,6 +130,14 @@
   keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
   keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
 }
+
+\lstdefinelanguage{Chic}{
+  language=C++,
+  keywords=[3]{Integer},
+  keywords=[2]{Var, Let},
+  keywords=[1]{goto,try,catch,return}
+}
+
 
 \lstdefinelanguage{Go}{
   % Keywords as defined in the BNF

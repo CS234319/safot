@@ -1,1 +1,1 @@
-% javap Hello
+% echo ">"

@@ -1,1 +1,2 @@
-extern int REPL();
+#import "hacks.h"
+extern Integer REPL();
