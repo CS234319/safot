@@ -1,0 +1,73 @@
+\documentclass{article}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{fontspec}
+\RequirePackage[table,dvipsnames]{xcolor}
+\usepackage{listings}
+\begin{document}
+\newcommand\codesize\scriptsize
+\newfontfamily \listingsfont[
+            Extension=.otf,
+						UprightFont=*-Regular,
+						BoldFont=*-Bold,
+						ItalicFont=*-Italic,
+						BoldItalicFont=*-BoldItalic,
+]{UMTypewriter}
+
+\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
+{%
+    \makeatletter
+    \catcode13=13\relax% Make ASCII 13 active to define it later
+    \gdef\newlinewillbreakandindent{%
+        \def^^M{\space}%
+    }%
+}
+
+\lstdefinelanguage{Chic}{
+  language=Pascal,
+  keywords=[3]{Integer},
+  keywords=[2]{Var, Let},
+  keywords=[1]{goto,try,catch,return}
+}
+
+\lstdefinestyle{code}{
+  basicstyle={\listingsfont\codesize},
+  stringstyle={\listingsfont\itshape\codesize},
+  commentstyle={\commentsfont\slshape},
+  keywordstyle={\listingsfont\bfseries},
+  keywordstyle={[2]\listingsfont\bfseries\codesize},
+  keywordstyle={[3]\listingsfont\bfseries\codesize},
+  showstringspaces=false,
+  backgroundcolor=\color{yellow!20},
+  frame=lines,
+  escapechar=¢,
+}
+
+\lstdefinestyle{display}{
+  style=code,
+  columns={[c]fullflexible},
+  xleftmargin=1ex,
+  aboveskip=2pt,
+  belowskip=2pt,
+}
+
+\lstset{%
+  rangeprefix=\{,rangesuffix=\},
+  language=Chic,
+  style=display,
+  backgroundcolor=\color{RoyalBlue!10},
+  includerangemarker=false,
+}
+
+\lstdefinelanguage{Chic}{
+  language=C++,
+  keywords=[3]{Integer},
+  keywords=[2]{Var, Let},
+  keywords=[1]{goto,try,catch,return},
+  escapeinside={/**}{*/},
+  escapebegin={\bgroup\newlinewillbreakandindent},
+  escapeend={\egroup}
+}
+
+\lstinputlisting[linerange=REPL-END]{Mini-Lisp.Chic/repl.cc}
+\lstinputlisting{Mini-Lisp.Chic/repl.cc}
+\end{document}
