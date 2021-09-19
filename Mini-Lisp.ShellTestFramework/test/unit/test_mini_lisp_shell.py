@@ -1,4 +1,5 @@
 import pytest
+import os
 from framework.lib.mini_lisp_shell import MiniLispShell
 
 
@@ -121,6 +122,8 @@ def test_multi_line(shell):
 
 @pytest.fixture
 def shell():
-    shell = MiniLispShell("../../../Mini-Lisp.ChicDor/mini-lisp")
+    if "MINI_LISP_SHELL" not in os.environ:
+        raise EnvironmentError
+    shell = MiniLispShell(os.getenv('MINI_LISP_SHELL'))
     shell.start_mini_lisp()
     return shell

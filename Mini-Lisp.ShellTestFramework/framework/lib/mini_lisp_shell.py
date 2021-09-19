@@ -107,13 +107,13 @@ class MiniLispShell:
         logging.debug(f"Feed: {input_str}")
         self.shell.sendline(input_str)
         self.shell.expect("\n", timeout=None)
-        if stack_trace_message in self.log.read_text():
+        if stack_trace_message in self.log.read_text() or "... While applying" in self.log.read_text():
             self._get_all_lines()
         raw = self.log.read_text().replace("\x00", "")
         self.log.write_text("")
         out = re.sub(filter_pattern, "", raw)
         out = out[:-1]
-        if stack_trace_message in out and traceback is False:
+        if (stack_trace_message in out or "... While applying" in out) and traceback is False:
             out = list(out.split("\n"))[-1]
         if out.isspace():
             out = ""

@@ -68,16 +68,16 @@ Run all the given lisp files, and compare the results with the expected.<br>
 Returns 1 if all the output files are equal to expected files,<br>
 else will print the diffs and return 0.<br>
 For example:
-  - _./bin/run_flow.sh ./expected_files/ ./test/inputs/examples/*_
-  
+  - _./bin/run_flow.sh ./expected_files/ ./test/inputs/examples/*_<br>
+
+**Note:**<br>
+The executable path of mini-lisp should be defined in the environment variable: `MINI_LISP_SHELL`.<br>
+**Currently**, the default value of `MINI_LISP_SHELL` is: _\`realpath safot/Mini-Lisp.ChicDor/mini-lisp`_
+
 ## API
 In order to use the Python package, you must define the PYTHONPATH as described in the installation part.<br>
 After you did that, run python3 and the following command must not raise ModuleNotFoundError: 
-```pytho
-
-
-
-n
+```python
 import framework.lib
 ```
 ShellTestFramework Python package has 2 main API:

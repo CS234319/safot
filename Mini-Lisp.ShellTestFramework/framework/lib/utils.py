@@ -46,7 +46,9 @@ def get_flow(compile_book=True, filter_newline=True) -> FlowTestFramework:
     """
     if compile_book is True:
         generate_book_files()
-    flow = FlowTestFramework(mini_lisp="../../../Mini-Lisp.ChicDor/mini-lisp", filter_newline=filter_newline)
+    if "MINI_LISP_SHELL" not in os.environ:
+        raise EnvironmentError("Error: environment variable MINI_LISP_SHELL undefined")
+    flow = FlowTestFramework(mini_lisp=os.getenv('MINI_LISP_SHELL'), filter_newline=filter_newline)
     for file in get_functions_files():
         flow.load_function_file(file)
     return flow

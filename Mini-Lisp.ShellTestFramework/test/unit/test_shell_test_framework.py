@@ -1,4 +1,5 @@
 import pytest
+import os
 from pathlib import Path
 from framework.lib.flow_test_framework import FlowTestFramework
 
@@ -82,7 +83,9 @@ def test_is_function_file(flow):
 
 @pytest.fixture
 def flow():
-    return FlowTestFramework("../../../Mini-Lisp.ChicDor/mini-lisp")
+    if "MINI_LISP_SHELL" not in os.environ:
+        raise EnvironmentError
+    return FlowTestFramework(os.getenv('MINI_LISP_SHELL'))
 
 
 @pytest.fixture

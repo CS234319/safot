@@ -35,7 +35,9 @@ class FlowRunner:
             return False
 
         # Init interpreter:
-        flow = FlowTestFramework("../../../Mini-Lisp.ChicDor/mini-lisp")
+        if "MINI_LISP_SHELL" not in os.environ:
+            raise EnvironmentError("Error: environment variable MINI_LISP_SHELL undefined")
+        flow = FlowTestFramework(os.getenv('MINI_LISP_SHELL'))
 
         # Categorize files:
         categorized_files = FlowRunner.categorize_files_by_name(files)

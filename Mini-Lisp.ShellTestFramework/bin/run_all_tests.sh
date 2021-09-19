@@ -25,13 +25,13 @@ function check_configurations() {
 
 function run_unit_tests() {
     cd $1
-    python3 -m pytest -rA --exitfirst
+    python3 -m pytest -rA -vv --exitfirst
     cd - &> /dev/null
 }
 
 function run_flow_tests() {
     cd $1
-    python3 -m pytest -rA --exitfirst
+    python3 -m pytest -rA -vv --exitfirst
     cd - &> /dev/null
 }
 
@@ -49,7 +49,10 @@ echo "Running run_all_tests.sh ..."
 
 # Compile mini-lisp:
 export WORK_AROUND=1
-make clean all -C ${SCRIPT_DIR}/../../Mini-Lisp.ChicDor/ &> /dev/null
+if [[ -z "${MINI_LISP_SHELL}" ]]; then
+    export MINI_LISP_SHELL=`realpath ${SCRIPT_DIR}/../../Mini-Lisp.ChicDor/mini-lisp`
+fi
+make clean all -C `dirname ${MINI_LISP_SHELL}` &> /dev/null
 
 if [ "$1" == "unit" ]; then
   run_unit_tests ${UNIT_TESTS_DIR}
