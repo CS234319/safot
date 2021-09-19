@@ -1,498 +1,470 @@
-diff --git a/Mini-LISP/Revised/Clicker.cc b/Mini-LISP/Revised/Clicker.cc
-index 8b13789..b447648 100644
---- a/Mini-LISP/Revised/Clicker.cc
-+++ b/Mini-LISP/Revised/Clicker.cc
-@@ -1 +1 @@
--
-+#include "Clicker."
-diff --git a/Mini-LISP/Revised/Item.cc b/Mini-LISP/Revised/Item.cc
-index e09548b..8e74c0a 100644
---- a/Mini-LISP/Revised/Item.cc
-+++ b/Mini-LISP/Revised/Item.cc
-@@ -6,4 +6,4 @@ Item Item::head(Short s) { s1(s);       return *this; }
- Item Item::rest(Short s) { s2(flip(s)); return *this; }
- Property(Item Item::rest) Is(Item(flip(s2())))
- Property(Short Item::head) Is(s1())
--Property(Boolean Item::ok) Is(x() || white(s1())  && black(s2()))
-+Property(Boolean Item::ok) Is(null() || white(s1())  && black(s2()))
-diff --git a/Mini-LISP/Revised/Item.h b/Mini-LISP/Revised/Item.h
-index 277d3d0..bb64523 100644
---- a/Mini-LISP/Revised/Item.h
-+++ b/Mini-LISP/Revised/Item.h
-@@ -2,7 +2,7 @@
- #define ITEM_H
- #include "Knob.h"
- Type Item: private Knob {
--  using Knob::x, Knob::handle;
-+  using Knob::null, Knob::handle;
-   Item();
-   Item(Short);
- 
-diff --git a/Mini-LISP/Revised/Knob.cc b/Mini-LISP/Revised/Knob.cc
-index ea1ab21..fa8db01 100644
---- a/Mini-LISP/Revised/Knob.cc
-+++ b/Mini-LISP/Revised/Knob.cc
-@@ -8,8 +8,8 @@
- #include "Pristine.h"
- #include "Short.h"
- 
--Property(Boolean Knob::ok)       Is(x() || handle() >= $P_f$ && handle() <= $P_t$)
--Property(Boolean Knob::x)        Is(handle() == $P_x$)
-+Property(Boolean Knob::ok)       Is(null() || handle() >= $P_f$ && handle() <= $P_t$)
-+Property(Boolean Knob::null)     Is(handle() == $P_x$)
- Property(Short   Knob::s1)       Is(P[handle()].s1)  
- Property(Short   Knob::s2)       Is(P[handle()].s2)  
- Property(Boolean Knob::pair)     Is(white(s1()) && white(s2()))
-diff --git a/Mini-LISP/Revised/Knob.h b/Mini-LISP/Revised/Knob.h
-index 5c105a8..3778aaf 100644
---- a/Mini-LISP/Revised/Knob.h
-+++ b/Mini-LISP/Revised/Knob.h
-@@ -18,7 +18,7 @@ Type Knob: private Pair { // An S-expression represented by its Knob
-   Property(Boolean item);
-   Property(Boolean pristine);
-   Property(Boolean weirdo);
--  Property(Boolean x);
-+  Property(Boolean null);
- 
-   // Converters:
-   Type Pair     Pair()       const;
-diff --git a/Mini-LISP/Revised/Pair.h b/Mini-LISP/Revised/Pair.h
-index 4493c21..21ec0d2 100644
---- a/Mini-LISP/Revised/Pair.h
-+++ b/Mini-LISP/Revised/Pair.h
-@@ -12,7 +12,7 @@ Type Pair: Sx {
-   Property(Sx car);
-   Property(Sx cdr);
- 
--  Property(Boolean x); // Change someday to nil
-+  Property(Boolean null); 
-   Property(Boolean ok); // Consolidate variadic macro
- 
-   Property(Boolean foreign);
-diff --git a/Mini-LISP/Revised/Pristine.cc b/Mini-LISP/Revised/Pristine.cc
-index 2b069c3..ee7289c 100644
---- a/Mini-LISP/Revised/Pristine.cc
-+++ b/Mini-LISP/Revised/Pristine.cc
-@@ -6,19 +6,19 @@ Pristine::Pristine(): Pristine($P_x$) {}
- Pristine::Pristine(Short s): Knob(s) {}
- 
- Property(Pristine Pristine::prev) { 
--  Expect(!x());
-+  Expect(!null());
-   Expect(black(s1()));
-   Is(flip(s1())); 
- }
- 
- Property(Pristine Pristine::next) { 
--  Expect(!x());
-+  Expect(!null());
-   Expect(black(s2()));
-   Is(flip(s2())); 
- }
- 
- Property(Boolean Pristine::ok) { 
--  if (x()) return true;
-+  if (null()) return true;
-   if (white(s1()) || white(s2())) return false;
-   let p = prev().handle(), n = next().handle();
-   if (p != $P_x$) {
-@@ -37,7 +37,7 @@ Property(Boolean Pristine::ok) {
- }
- 
- Pristine& Pristine::prev(Pristine p) { 
--  Expect(!x());
-+  Expect(!null());
-   let s = p.handle();
-   Expect(white(s));
-   s1(flip(s)); 
-@@ -45,7 +45,7 @@ Pristine& Pristine::prev(Pristine p) {
- }
- 
- Pristine& Pristine::next(Pristine p) { 
--  Expect(!x());
-+  Expect(!null());
-   let s = p.handle();
-   Expect(white(s));
-   s2(flip(s)); 
-diff --git a/Mini-LISP/Revised/Pristine.h b/Mini-LISP/Revised/Pristine.h
-index 409bece..b6a55e4 100644
---- a/Mini-LISP/Revised/Pristine.h
-+++ b/Mini-LISP/Revised/Pristine.h
-@@ -4,7 +4,7 @@
- Type Pristine: private Knob {
-   // Decomposition
-   using Knob::handle;
--  using Knob::x;
-+  using Knob::null;
-   using Knob::Item, Knob::Pair;
-   Constructor(Pristine());
-   Constructor(Pristine(Short));
-@@ -16,7 +16,7 @@ Type Pristine: private Knob {
-   Pristine& next(Pristine); 
- };
- inline std::ostream& operator<<(std::ostream &os, Pristine p) {
--  if (p.x())
-+  if (p.null())
-     return  os << "Px";
-   return os << "Pristine[" << p.prev().handle() << "." << p.next().handle()  << "]";
- }
-diff --git a/Mini-LISP/Revised/Pushdown.cc b/Mini-LISP/Revised/Pushdown.cc
-index 09ba835..4a34ea0 100644
---- a/Mini-LISP/Revised/Pushdown.cc
-+++ b/Mini-LISP/Revised/Pushdown.cc
-@@ -5,7 +5,7 @@ Pushdown::~Pushdown() { clear(); }
- 
- Property(Boolean Pushdown::empty) { 
-   Keep(top.ok());
--  return top.x(); 
-+  return top.null(); 
- } 
- 
- Short Pushdown::pop() {
-@@ -22,7 +22,7 @@ Short Pushdown::pop() {
- Pushdown& Pushdown::push(Short s) { 
-   Expect(white(s));
-   Keep(top.ok());
--  Promise(!top.x());
-+  Promise(!top.null());
-   Promise(top.head() == s);
-   ++size | do(top = fresh(s, top.handle())); 
-   return *this; 
-@@ -48,10 +48,10 @@ Short Pushdown::peep(Short depth) const {
-   Expect(!empty());
-   Expect(depth <= size);
-   Expect(depth >= 0);
--  Expect(!top.x());
-+  Expect(!top.null());
-   for (auto i = top; ; i = i.rest(), --depth) {
-     Expect(i.ok());
--    Expect(!i.x());
-+    Expect(!i.null());
-     if (depth == 0)
-       return i.head();
-   }
-@@ -63,7 +63,7 @@ void Pushdown::poke(Short depth, Short value) {
-   Expect(depth >= 0);
-   for (auto i = top; ; i = i.rest(), --depth) {
-     Expect(i.ok());
--    Expect(!i.x());
-+    Expect(!i.null());
-     if (depth == 0) {
-       i.head(value);
-       return;
-diff --git a/Mini-LISP/Revised/corrupted.h b/Mini-LISP/Revised/corrupted.h
-index 9404b53..52d3a55 100644
---- a/Mini-LISP/Revised/corrupted.h
-+++ b/Mini-LISP/Revised/corrupted.h
-@@ -8,7 +8,7 @@
- 
- inline Short length() {
-   Short result = 0;
--  for (auto h = heap; !h.x();  h = h.next()) 
-+  for (auto h = heap; !h.null();  h = h.next()) 
-       ++result;
-   return result;
- }
-@@ -18,12 +18,12 @@ static struct {
-   Boolean uncounted() Is(length() > accounting.unused); 
-   Boolean excess()   Is(length() < accounting.unused); 
-   Boolean cyclic() {
--    if (!heap.x())
--      for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
-+    if (!heap.null())
-+      for (auto h = heap, h2 = heap.next(); !h2.null(); h = h.next()) { 
-         if (h.handle() == h2.handle()) 
-           return true;
--        if (!h2.x()) h2 = h2.next();
--        if (!h2.x()) h2 = h2.next();
-+        if (!h2.null()) h2 = h2.next();
-+        if (!h2.null()) h2 = h2.next();
-       }
-     return false;
-   }
-@@ -34,10 +34,10 @@ static struct {
-     return false;
-   }  
-   Boolean asymmetric() {
--    for (auto p = heap; !p.x(); p = p.next()) { 
--      if (!p.prev().x() && p.prev().next().handle() != p.handle()) 
-+    for (auto p = heap; !p.null(); p = p.next()) { 
-+      if (!p.prev().null() && p.prev().next().handle() != p.handle()) 
-         return true;
--      if (!p.next().x() && p.next().prev().handle() != p.handle()) 
-+      if (!p.next().null() && p.next().prev().handle() != p.handle()) 
-         return true;
-     }
-     return false;
-@@ -75,11 +75,11 @@ static struct {
-           continue;
-         ++n;
-         Expect(n <= accounting.unused);
--        Expect (Pristine(p.next()).x() || Pristine(p.next()).ok());
--        Expect (Pristine(p.prev()).x() || Pristine(p.prev()).ok());
--        if (!Pristine(p.next()).x())  
-+        Expect (Pristine(p.next()).null() || Pristine(p.next()).ok());
-+        Expect (Pristine(p.prev()).null() || Pristine(p.prev()).ok());
-+        if (!Pristine(p.next()).null())  
-           Expect(Pristine(p.next()).ok());
--        if (!Pristine(p.prev()).x())  
-+        if (!Pristine(p.prev()).null())  
-           Expect(Pristine(p.prev()).ok());
-       }
-       Expect(n == accounting.unused, n, accounting.unused);
-@@ -96,9 +96,9 @@ static struct {
-         if (!i.ok()) 
-           continue;
-         ++n;
--        Expect(Item(i.rest()).x() || Item(i.rest()).ok());
-+        Expect(Item(i.rest()).null() || Item(i.rest()).ok());
-         Expect(n <= accounting.items);
--        if (!Item(i.rest()).x())  
-+        if (!Item(i.rest()).null())  
-           Expect(Item(i.rest()).ok());
-       }
-       return false;;
-diff --git a/Mini-LISP/Revised/heap.cc b/Mini-LISP/Revised/heap.cc
-index d559bfb..0675dd0 100644
---- a/Mini-LISP/Revised/heap.cc
-+++ b/Mini-LISP/Revised/heap.cc
-@@ -9,29 +9,29 @@
- #include "accounting.h"
- 
- Service {
--  auto empty() { return first.x(); } 
-+  auto empty() { return first.null(); } 
-   Knob pop() {
--    not first.x() or panic();  
--    Surely(first.prev().x());
-+    not first.null() or panic();  
-+    Surely(first.prev().null());
-     accounting.pop();
-     let old = first;
-     first = first.next();
--    if (!first.x()) first.prev($P_x$);
-+    first.null() or do(first.prev($P_x$));
-     return old.handle(); 
-   }
-   Unit push(Pristine p) {
-     accounting.push();
-     p.prev($P_x$).next(first); 
--    if (!first.x()) first.prev(p);
-+    first.null() or do(first.prev(p));
-     first = p;
-   }
-   Unit pick(Pristine p) {
-     Surely(p.ok());
-     accounting.pick();
-     auto prev = p.prev(), next = p.next();
--    if (!prev.x()) prev.next(next); 
--    if (!next.x()) next.prev(prev); 
--    if (first.handle() == p.handle()) first = next ;
-+    prev.null() or do(prev.next(next)); 
-+    next.null() or do(next.prev(prev)); 
-+    first.handle() == p.handle() or do(first = next);
-   }
-   Unit init() {
-     for (Short s = $P_f$ + 1; s <= $P_t$ - 1; ++s) 
-diff --git a/Mini-LISP/Revised/t-Pushdown.cc b/Mini-LISP/Revised/t-Pushdown.cc
-index eb52678..90524c6 100644
---- a/Mini-LISP/Revised/t-Pushdown.cc
-+++ b/Mini-LISP/Revised/t-Pushdown.cc
-@@ -56,7 +56,7 @@ TEST(Pushdown, correctPop2) {
- TEST(Item, 1Count) {
-   heapify();
-   Pushdown p;
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_TT(p.empty());
-   int before = accounting.items;
-   EXPECT_GE(before,0);
-@@ -152,11 +152,11 @@ TEST(Pushdown, TopZero) {
-   heapify();
-   Pushdown p;
-   EXPECT_TT(p.empty());
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   p.push(3);
--  EXPECT_FF(p.top.x());
-+  EXPECT_FF(p.top.null());
-   p.clear(); 
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
- } 
- 
- TEST(Pushdown, Size) {
-diff --git a/Mini-LISP/Revised/t-heap.cc b/Mini-LISP/Revised/t-heap.cc
-index dd8b85a..2ac2974 100644
---- a/Mini-LISP/Revised/t-heap.cc
-+++ b/Mini-LISP/Revised/t-heap.cc
-@@ -21,7 +21,7 @@ TEST(Heapify, exists) {
- 
- TEST(Heapify, head) { 
-   heapify();
--  EXPECT_FF(heap.x());
-+  EXPECT_FF(heap.null());
- }
- 
- TEST(Heapify, allPristine) { 
-@@ -32,22 +32,22 @@ TEST(Heapify, allPristine) {
- 
- TEST(Heapify, entryFirst) { 
-   heapify();
--  EXPECT_TT(Pristine($P_f$).prev().x()); 
--  EXPECT_FF(Pristine($P_f$).next().x()); 
-+  EXPECT_TT(Pristine($P_f$).prev().null()); 
-+  EXPECT_FF(Pristine($P_f$).next().null()); 
-   EXPECT_EQ(Pristine($P_f$).next().handle(), $P_f$+1); 
- }
- 
- TEST(Heapify, entryLast) { 
-   heapify();
--  EXPECT_TT(Pristine($P_t$).next().x()); 
--  EXPECT_FF(Pristine($P_t$).prev().x()); 
-+  EXPECT_TT(Pristine($P_t$).next().null()); 
-+  EXPECT_FF(Pristine($P_t$).prev().null()); 
-   EXPECT_EQ(Pristine($P_t$).prev().handle(), $P_t$-1); 
- }
- 
- TEST(Heapify, entry5) { 
-   const Short s = 5;
-   auto p = Pristine(s);
--  EXPECT_FF(p.x());
-+  EXPECT_FF(p.null());
-   Pristine(s).prev(Pristine(s-1)).next(Pristine(s+1));
-   auto k = Knob(s);
-   EXPECT_TT(black(k.s1()));
-@@ -199,7 +199,7 @@ TEST(Accounting, request) {
- TEST(Item, 3Count) {
-   Pushdown p;
-   p.clear();
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_TT(p.empty());
-   EXPECT_GE(accounting.items,0);
-   int before = accounting.items;
-@@ -212,7 +212,7 @@ TEST(Item, 3Count) {
-   EXPECT_EQ(3,p.pop());
-   EXPECT_EQ(accounting.items, before);
-   EXPECT_TT(p.empty());
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
- }
- 
- TEST(Corruption, makeCyclic) { 
-@@ -323,14 +323,14 @@ TEST(Pair, request) {
- #define XE0()                  NE0()                
- 
- 
--#define NE5(x,y1,y2,y3,y4,y5) NE(x,y1)NE4(x,y2,y3,y4,y5); 
--#define NE4(x,y1,y2,y3,y4)    NE(x,y1)NE3(x,y2,y3,y4) 
--#define NE3(x,y1,y2,y3)       NE(x,y1)NE2(x,y2,y3)
--#define NE2(x,y1,y2)          NE(x,y1)NE1(x,y2)
--#define NE1(x,y1)             NE(x,y1)NE0(x)
--#define NE0(x)
-+#define NE5(null,y1,y2,y3,y4,y5) NE(null,y1)NE4(null,y2,y3,y4,y5); 
-+#define NE4(null,y1,y2,y3,y4)    NE(null,y1)NE3(null,y2,y3,y4) 
-+#define NE3(null,y1,y2,y3)       NE(null,y1)NE2(null,y2,y3)
-+#define NE2(null,y1,y2)          NE(null,y1)NE1(null,y2)
-+#define NE1(null,y1)             NE(null,y1)NE0(null)
-+#define NE0(null)
- 
--#define NE(x,y)               EXPECT_NE(x,y);
-+#define NE(null,y)               EXPECT_NE(null,y);
- 
-   XE5(d1,d2,d3,d4,d5);
-   XE5(l1,l2,l3,l4,l5);
-@@ -622,7 +622,7 @@ TEST(Exhaust, Almost) {
-   EXPECT_EQ(accounting.unused, $P_n$); 
-   for (auto s = 1 ; s < $P_n$; ++s)
-     Item i = fresh(s, $P_x$);
--  EXPECT_FF(heap.x());
-+  EXPECT_FF(heap.null());
-   EXPECT_EQ(accounting.unused, 1);
-   EXPECT_EQ(accounting.items, $P_n$ - 1);
-   EXPECT_FF(corrupted.pristines());
-@@ -661,7 +661,7 @@ TEST(Exhaust, items) {
-     EXPECT_EQ(accounting.unused, $P_n$ - s); 
-     EXPECT_EQ(accounting.items, s); 
-   }
--  EXPECT_TT(heap.x());
-+  EXPECT_TT(heap.null());
-   EXPECT_ZZ(accounting.unused);
-   EXPECT_FF(corrupted.items());
-   EXPECT_FF(corrupted.pristines());
-@@ -729,9 +729,9 @@ TEST(Churn, Both) {
-   for (int i = 0, n = 0;  ; i++) { 
-     Pushdown p[10];
-     for (int j = 0; j <= i; ++j, ++n) {
--      if (heap.x()) goto done;
-+      if (heap.null()) goto done;
-       auto const c = request(i,j);
--      if (heap.x()) goto done;
-+      if (heap.null()) goto done;
-       int d = P[c.handle()].hash() % 10;
-       mess(p[d]);
-     }
-@@ -743,7 +743,7 @@ TEST(Churn, Both) {
- 
- TEST(Counting, items) {
-   Pushdown p;
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_TT(p.empty());
-   int before = accounting.items;
-   EXPECT_GE(before,0);
-@@ -768,7 +768,7 @@ TEST(Counting, pairs) {
- TEST(Counting, itemsPristines2) {
-   heapify();
-   Pushdown p;
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_TT(p.empty());
-   EXPECT_GE(accounting.unused,10L);
-   int before = accounting.unused;
-@@ -808,7 +808,7 @@ TEST(Pristine, itemsPristines4) {
-   EXPECT_EQ(1,p.pop());
-   EXPECT_EQ(accounting.unused, before - 1);
-   EXPECT_ZZ(p.size);
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_FF(corrupted.something());
- }
- 
-@@ -829,7 +829,7 @@ TEST(Pristine, requestConsN) {
-   EXPECT_EQ(1,p.pop());
-   EXPECT_EQ(accounting.unused, before - 25);
-   EXPECT_ZZ(p.size);
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_FF(corrupted.something());
- }
- 
-@@ -854,7 +854,7 @@ TEST(Exercise, PushrequestPoprequest) {
-       p.pop();
-       request(i, j);
-     }
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_FF(corrupted.something());
-   EXPECT_EQ(accounting.used, 2*N*N);
-   EXPECT_EQ(accounting.unused, $P_n$ - 2 * N *N); 
-@@ -889,7 +889,7 @@ TEST(Pristine, requestBoth) {
-   EXPECT_FF(corrupted.something());
-   heapify();
-   Pushdown p;
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_TT(p.empty());
-   int before = accounting.unused;
-   EXPECT_GE(before,2);
-@@ -914,7 +914,7 @@ TEST(Pristine, requestBoth) {
-   EXPECT_EQ(3,p.pop());
-   EXPECT_EQ(accounting.unused, before -1);
-   EXPECT_TT(p.empty());
--  EXPECT_TT(p.top.x());
-+  EXPECT_TT(p.top.null());
-   EXPECT_FF(corrupted.something());
- }
- 
+[==========] Running 178 tests from 35 test suites.
+[----------] Global test environment set-up.
+[----------] 16 tests from Heapify
+[ RUN      ] Heapify.exists
+[       OK ] Heapify.exists (30 ms)
+[ RUN      ] Heapify.head
+[       OK ] Heapify.head (28 ms)
+[ RUN      ] Heapify.allPristine
+[       OK ] Heapify.allPristine (43 ms)
+[ RUN      ] Heapify.entryFirst
+[       OK ] Heapify.entryFirst (11 ms)
+[ RUN      ] Heapify.entryLast
+[       OK ] Heapify.entryLast (12 ms)
+[ RUN      ] Heapify.entry5
+[       OK ] Heapify.entry5 (0 ms)
+[ RUN      ] Heapify.entryBetween
+[       OK ] Heapify.entryBetween (26 ms)
+[ RUN      ] Heapify.prefix
+[       OK ] Heapify.prefix (11 ms)
+[ RUN      ] Heapify.counters
+[       OK ] Heapify.counters (12 ms)
+[ RUN      ] Heapify.pristines
+[       OK ] Heapify.pristines (218 ms)
+[ RUN      ] Heapify.items
+[       OK ] Heapify.items (13 ms)
+[ RUN      ] Heapify.pairs
+[       OK ] Heapify.pairs (12 ms)
+[ RUN      ] Heapify.symmetric
+[       OK ] Heapify.symmetric (52 ms)
+[ RUN      ] Heapify.acyclic
+[       OK ] Heapify.acyclic (20 ms)
+[ RUN      ] Heapify.weirdos
+[       OK ] Heapify.weirdos (13 ms)
+[ RUN      ] Heapify.valid
+[       OK ] Heapify.valid (280 ms)
+[----------] 16 tests from Heapify (781 ms total)
+
+[----------] 4 tests from Accounting
+[ RUN      ] Accounting.heapify
+[       OK ] Accounting.heapify (12 ms)
+[ RUN      ] Accounting.Nesting
+[       OK ] Accounting.Nesting (12 ms)
+[ RUN      ] Accounting.push
+[       OK ] Accounting.push (12 ms)
+[ RUN      ] Accounting.request
+[       OK ] Accounting.request (11 ms)
+[----------] 4 tests from Accounting (47 ms total)
+
+[----------] 2 tests from Item
+[ RUN      ] Item.3Count
+[       OK ] Item.3Count (0 ms)
+[ RUN      ] Item.1Count
+[       OK ] Item.1Count (12 ms)
+[----------] 2 tests from Item (12 ms total)
+
+[----------] 4 tests from Corruption
+[ RUN      ] Corruption.makeCyclic
+[       OK ] Corruption.makeCyclic (38 ms)
+[ RUN      ] Corruption.ofPrev
+[       OK ] Corruption.ofPrev (52 ms)
+[ RUN      ] Corruption.ofNext
+[       OK ] Corruption.ofNext (32 ms)
+[ RUN      ] Corruption.selfLoop
+[       OK ] Corruption.selfLoop (20 ms)
+[----------] 4 tests from Corruption (142 ms total)
+
+[----------] 5 tests from Fresh
+[ RUN      ] Fresh.exists
+[       OK ] Fresh.exists (12 ms)
+[ RUN      ] Fresh.uncorrupting
+[       OK ] Fresh.uncorrupting (280 ms)
+[ RUN      ] Fresh.correct
+[       OK ] Fresh.correct (11 ms)
+[ RUN      ] Fresh.3
+[       OK ] Fresh.3 (0 ms)
+[ RUN      ] Fresh.Length
+[       OK ] Fresh.Length (92 ms)
+[----------] 5 tests from Fresh (396 ms total)
+
+[----------] 5 tests from Pair
+[ RUN      ] Pair.Hash13
+[       OK ] Pair.Hash13 (0 ms)
+[ RUN      ] Pair.request
+[       OK ] Pair.request (12 ms)
+[ RUN      ] Pair.Hash13a
+[       OK ] Pair.Hash13a (11 ms)
+[ RUN      ] Pair.reuse
+[       OK ] Pair.reuse (12 ms)
+[ RUN      ] Pair.Miss
+[       OK ] Pair.Miss (46 ms)
+[----------] 5 tests from Pair (81 ms total)
+
+[----------] 1 test from Counters
+[ RUN      ] Counters.freshFree
+[       OK ] Counters.freshFree (12 ms)
+[----------] 1 test from Counters (12 ms total)
+
+[----------] 6 tests from request
+[ RUN      ] request.exists
+[       OK ] request.exists (11 ms)
+[ RUN      ] request.pair
+[       OK ] request.pair (12 ms)
+[ RUN      ] request.correct
+[       OK ] request.correct (12 ms)
+[ RUN      ] request.3
+[       OK ] request.3 (12 ms)
+[ RUN      ] request.correct3
+[       OK ] request.correct3 (155 ms)
+[ RUN      ] request.Scenario
+[       OK ] request.Scenario (206 ms)
+[----------] 6 tests from request (408 ms total)
+
+[----------] 1 test from Words
+[ RUN      ] Words.reuse
+[       OK ] Words.reuse (580 ms)
+[----------] 1 test from Words (580 ms total)
+
+[----------] 5 tests from Exhaust
+[ RUN      ] Exhaust.Almost
+[       OK ] Exhaust.Almost (76 ms)
+[ RUN      ] Exhaust.LateItemCorrect
+[       OK ] Exhaust.LateItemCorrect (67 ms)
+[ RUN      ] Exhaust.LastItem
+[       OK ] Exhaust.LastItem (84 ms)
+[ RUN      ] Exhaust.items
+[       OK ] Exhaust.items (348 ms)
+[ RUN      ] Exhaust.andRestore
+[       OK ] Exhaust.andRestore (648 ms)
+[----------] 5 tests from Exhaust (1224 ms total)
+
+[----------] 3 tests from Churn
+[ RUN      ] Churn.Pushdown
+[       OK ] Churn.Pushdown (417 ms)
+[ RUN      ] Churn.request
+[       OK ] Churn.request (134 ms)
+[ RUN      ] Churn.Both
+[       OK ] Churn.Both (176 ms)
+[----------] 3 tests from Churn (727 ms total)
+
+[----------] 3 tests from Counting
+[ RUN      ] Counting.items
+[       OK ] Counting.items (0 ms)
+[ RUN      ] Counting.pairs
+[       OK ] Counting.pairs (279 ms)
+[ RUN      ] Counting.itemsPristines2
+[       OK ] Counting.itemsPristines2 (278 ms)
+[----------] 3 tests from Counting (557 ms total)
+
+[----------] 6 tests from Pristine
+[ RUN      ] Pristine.itemsPristines3
+[       OK ] Pristine.itemsPristines3 (211 ms)
+[ RUN      ] Pristine.itemsPristines4
+[       OK ] Pristine.itemsPristines4 (544 ms)
+[ RUN      ] Pristine.requestConsN
+[       OK ] Pristine.requestConsN (546 ms)
+[ RUN      ] Pristine.requestAtom
+[       OK ] Pristine.requestAtom (12 ms)
+[ RUN      ] Pristine.1requestAtom
+[       OK ] Pristine.1requestAtom (266 ms)
+[ RUN      ] Pristine.requestBoth
+[       OK ] Pristine.requestBoth (544 ms)
+[----------] 6 tests from Pristine (2123 ms total)
+
+[----------] 1 test from Exercise
+[ RUN      ] Exercise.PushrequestPoprequest
+[       OK ] Exercise.PushrequestPoprequest (807 ms)
+[----------] 1 test from Exercise (807 ms total)
+
+[----------] 1 test from Memory
+[ RUN      ] Memory.TotalSize
+Atoms space = 4096
+Pairs space = 28674
+Pairs records = 28674
+Total = 32770
+[       OK ] Memory.TotalSize (0 ms)
+[----------] 1 test from Memory (0 ms total)
+
+[----------] 2 tests from Text
+[ RUN      ] Text.reusing
+[       OK ] Text.reusing (0 ms)
+[ RUN      ] Text.overlap
+[       OK ] Text.overlap (0 ms)
+[----------] 2 tests from Text (0 ms total)
+
+[----------] 1 test from SExpression
+[ RUN      ] SExpression.size
+[       OK ] SExpression.size (0 ms)
+[----------] 1 test from SExpression (0 ms total)
+
+[----------] 2 tests from ByteOrdering
+[ RUN      ] ByteOrdering.Long
+[       OK ] ByteOrdering.Long (0 ms)
+[ RUN      ] ByteOrdering.Short
+[       OK ] ByteOrdering.Short (0 ms)
+[----------] 2 tests from ByteOrdering (0 ms total)
+
+[----------] 1 test from Store
+[ RUN      ] Store.PrimitiveSizs
+[       OK ] Store.PrimitiveSizs (0 ms)
+[----------] 1 test from Store (0 ms total)
+
+[----------] 3 tests from Handle
+[ RUN      ] Handle.Construct
+[       OK ] Handle.Construct (0 ms)
+[ RUN      ] Handle.Inspect
+[       OK ] Handle.Inspect (0 ms)
+[ RUN      ] Handle.ok
+[       OK ] Handle.ok (0 ms)
+[----------] 3 tests from Handle (0 ms total)
+
+[----------] 7 tests from Account
+[ RUN      ] Account.exists
+[       OK ] Account.exists (0 ms)
+[ RUN      ] Account.zero
+[       OK ] Account.zero (0 ms)
+[ RUN      ] Account.increment
+[       OK ] Account.increment (0 ms)
+[ RUN      ] Account.clear
+[       OK ] Account.clear (0 ms)
+[ RUN      ] Account.decrement
+[       OK ] Account.decrement (0 ms)
+[ RUN      ] Account.priority
+[       OK ] Account.priority (0 ms)
+[ RUN      ] Account.kind
+[       OK ] Account.kind (0 ms)
+[----------] 7 tests from Account (0 ms total)
+
+[----------] 6 tests from Clicker
+[ RUN      ] Clicker.exists
+[       OK ] Clicker.exists (0 ms)
+[ RUN      ] Clicker.zero
+[       OK ] Clicker.zero (0 ms)
+[ RUN      ] Clicker.increment
+[       OK ] Clicker.increment (0 ms)
+[ RUN      ] Clicker.clear
+[       OK ] Clicker.clear (0 ms)
+[ RUN      ] Clicker.priority
+[       OK ] Clicker.priority (0 ms)
+[ RUN      ] Clicker.kind
+[       OK ] Clicker.kind (0 ms)
+[----------] 6 tests from Clicker (0 ms total)
+
+[----------] 1 test from Atoms
+[ RUN      ] Atoms.$A_t$
+[       OK ] Atoms.$A_t$ (0 ms)
+[----------] 1 test from Atoms (0 ms total)
+
+[----------] 1 test from A
+[ RUN      ] A.$X$
+[       OK ] A.$X$ (0 ms)
+[----------] 1 test from A (0 ms total)
+
+[----------] 3 tests from P
+[ RUN      ] P.$P_f$
+[       OK ] P.$P_f$ (0 ms)
+[ RUN      ] P.$P_t$
+[       OK ] P.$P_t$ (0 ms)
+[ RUN      ] P.$P_n$
+[       OK ] P.$P_n$ (0 ms)
+[----------] 3 tests from P (0 ms total)
+
+[----------] 1 test from Array
+[ RUN      ] Array.Properties
+[       OK ] Array.Properties (0 ms)
+[----------] 1 test from Array (0 ms total)
+
+[----------] 2 tests from Word
+[ RUN      ] Word.hash
+[       OK ] Word.hash (0 ms)
+[ RUN      ] Word.churnHash
+[       OK ] Word.churnHash (5 ms)
+[----------] 2 tests from Word (5 ms total)
+
+[----------] 5 tests from Flip
+[ RUN      ] Flip.distinct
+[       OK ] Flip.distinct (2 ms)
+[ RUN      ] Flip.reversible
+[       OK ] Flip.reversible (1 ms)
+[ RUN      ] Flip.Pairs
+[       OK ] Flip.Pairs (0 ms)
+[ RUN      ] Flip.P
+[       OK ] Flip.P (0 ms)
+[ RUN      ] Flip.A
+[       OK ] Flip.A (0 ms)
+[----------] 5 tests from Flip (3 ms total)
+
+[----------] 3 tests from Layout
+[ RUN      ] Layout.LIMBO
+[       OK ] Layout.LIMBO (0 ms)
+[ RUN      ] Layout.$A_f$
+[       OK ] Layout.$A_f$ (0 ms)
+[ RUN      ] Layout.overlap
+[       OK ] Layout.overlap (0 ms)
+[----------] 3 tests from Layout (0 ms total)
+
+[----------] 2 tests from Sx
+[ RUN      ] Sx.Pair
+[       OK ] Sx.Pair (12 ms)
+[ RUN      ] Sx.Pair1
+[       OK ] Sx.Pair1 (0 ms)
+[----------] 2 tests from Sx (12 ms total)
+
+[----------] 5 tests from Collect
+[ RUN      ] Collect.Singleton
+[       OK ] Collect.Singleton (12 ms)
+[ RUN      ] Collect.ParentaToSingleton
+[       OK ] Collect.ParentaToSingleton (13 ms)
+[ RUN      ] Collect.ParentaToLeftSingleton
+[       OK ] Collect.ParentaToLeftSingleton (12 ms)
+[ RUN      ] Collect.ParentaToRightSingleton
+[       OK ] Collect.ParentaToRightSingleton (13 ms)
+[ RUN      ] Collect.ParentaToBoth
+[       OK ] Collect.ParentaToBoth (14 ms)
+[----------] 5 tests from Collect (64 ms total)
+
+[----------] 10 tests from Visit
+[ RUN      ] Visit.exists
+[       OK ] Visit.exists (11 ms)
+[ RUN      ] Visit.repertoire
+[       OK ] Visit.repertoire (12 ms)
+[ RUN      ] Visit.exists2
+[       OK ] Visit.exists2 (12 ms)
+[ RUN      ] Visit.seen
+[       OK ] Visit.seen (12 ms)
+[ RUN      ] Visit.distinct
+[       OK ] Visit.distinct (11 ms)
+[ RUN      ] Visit.unseen
+[       OK ] Visit.unseen (0 ms)
+[ RUN      ] Visit.reversible
+[       OK ] Visit.reversible (12 ms)
+[ RUN      ] Visit.flip
+[       OK ] Visit.flip (12 ms)
+[ RUN      ] Visit.ok
+[       OK ] Visit.ok (12 ms)
+[ RUN      ] Visit.special
+[       OK ] Visit.special (0 ms)
+[----------] 10 tests from Visit (94 ms total)
+
+[----------] 40 tests from Purge
+[ RUN      ] Purge.exists
+[       OK ] Purge.exists (277 ms)
+[ RUN      ] Purge.mess
+[       OK ] Purge.mess (11 ms)
+[ RUN      ] Purge.singleton
+[       OK ] Purge.singleton (284 ms)
+[ RUN      ] Purge.singletonKill
+[       OK ] Purge.singletonKill (13 ms)
+[ RUN      ] Purge.singletonPristine
+[       OK ] Purge.singletonPristine (12 ms)
+[ RUN      ] Purge.singletonPrepended
+[       OK ] Purge.singletonPrepended (13 ms)
+[ RUN      ] Purge.singletonCount
+[       OK ] Purge.singletonCount (12 ms)
+[ RUN      ] Purge.pairCount
+[       OK ] Purge.pairCount (281 ms)
+[ RUN      ] Purge.tripleCount
+[       OK ] Purge.tripleCount (12 ms)
+[ RUN      ] Purge.live2a
+[       OK ] Purge.live2a (280 ms)
+[ RUN      ] Purge.live2b
+[       OK ] Purge.live2b (277 ms)
+[ RUN      ] Purge.live5
+[       OK ] Purge.live5 (279 ms)
+[ RUN      ] Purge.sanity_t2a
+[       OK ] Purge.sanity_t2a (280 ms)
+[ RUN      ] Purge.t2b
+[       OK ] Purge.t2b (281 ms)
+[ RUN      ] Purge.t5
+[       OK ] Purge.t5 (281 ms)
+[ RUN      ] Purge.complete3
+[       OK ] Purge.complete3 (12 ms)
+[ RUN      ] Purge.complete7
+[       OK ] Purge.complete7 (13 ms)
+[ RUN      ] Purge.complete15
+[       OK ] Purge.complete15 (546 ms)
+[ RUN      ] Purge.live31
+[       OK ] Purge.live31 (278 ms)
+[ RUN      ] Purge.DAG
+[       OK ] Purge.DAG (12 ms)
+[ RUN      ] Purge.trailLeft1
+[       OK ] Purge.trailLeft1 (13 ms)
+[ RUN      ] Purge.trailLeft2
+[       OK ] Purge.trailLeft2 (12 ms)
+[ RUN      ] Purge.trailLeft3
+[       OK ] Purge.trailLeft3 (12 ms)
+[ RUN      ] Purge.trailLeft4
+[       OK ] Purge.trailLeft4 (13 ms)
+[ RUN      ] Purge.trailLeft5
+[       OK ] Purge.trailLeft5 (12 ms)
+[ RUN      ] Purge.trailLeft6
+[       OK ] Purge.trailLeft6 (12 ms)
+[ RUN      ] Purge.trailLeft7
+[       OK ] Purge.trailLeft7 (13 ms)
+[ RUN      ] Purge.traiRight1
+[       OK ] Purge.traiRight1 (12 ms)
+[ RUN      ] Purge.traiRight2
+[       OK ] Purge.traiRight2 (12 ms)
+[ RUN      ] Purge.traiRight3
+[       OK ] Purge.traiRight3 (13 ms)
+[ RUN      ] Purge.traiRight4
+[       OK ] Purge.traiRight4 (12 ms)
+[ RUN      ] Purge.traiRight5
+[       OK ] Purge.traiRight5 (13 ms)
+[ RUN      ] Purge.traiRight6
+[       OK ] Purge.traiRight6 (12 ms)
+[ RUN      ] Purge.traiRight7
+[       OK ] Purge.traiRight7 (12 ms)
+[ RUN      ] Purge.Fibonnaci1
+[       OK ] Purge.Fibonnaci1 (12 ms)
+[ RUN      ] Purge.Fibonnaci2
+[       OK ] Purge.Fibonnaci2 (13 ms)
+[ RUN      ] Purge.Fibonnaci3
+[       OK ] Purge.Fibonnaci3 (12 ms)
+[ RUN      ] Purge.Fibonnaci4
+[       OK ] Purge.Fibonnaci4 (12 ms)
+[ RUN      ] Purge.Fibonnaci5
+[       OK ] Purge.Fibonnaci5 (13 ms)
+[ RUN      ] Purge.Fibonnaci6
+[       OK ] Purge.Fibonnaci6 (12 ms)
+[----------] 40 tests from Purge (3701 ms total)
+
+[----------] 19 tests from Pushdown
+[ RUN      ] Pushdown.empty
+[       OK ] Pushdown.empty (0 ms)
+[ RUN      ] Pushdown.push
+[       OK ] Pushdown.push (12 ms)
+[ RUN      ] Pushdown.clear
+[       OK ] Pushdown.clear (11 ms)
+[ RUN      ] Pushdown.pushPopEmpty
+[       OK ] Pushdown.pushPopEmpty (12 ms)
+[ RUN      ] Pushdown.correctPop1
+[       OK ] Pushdown.correctPop1 (12 ms)
+[ RUN      ] Pushdown.correctPop2
+[       OK ] Pushdown.correctPop2 (12 ms)
+[ RUN      ] Pushdown.2Push0
+[       OK ] Pushdown.2Push0 (12 ms)
+[ RUN      ] Pushdown.2Push2
+[       OK ] Pushdown.2Push2 (11 ms)
+[ RUN      ] Pushdown.Push3
+[       OK ] Pushdown.Push3 (0 ms)
+[ RUN      ] Pushdown.Peep0
+[       OK ] Pushdown.Peep0 (12 ms)
+[ RUN      ] Pushdown.0Peep0
+[       OK ] Pushdown.0Peep0 (12 ms)
+[ RUN      ] Pushdown.size
+[       OK ] Pushdown.size (11 ms)
+[ RUN      ] Pushdown.3Peep
+[       OK ] Pushdown.3Peep (0 ms)
+[ RUN      ] Pushdown.Push4
+[       OK ] Pushdown.Push4 (12 ms)
+[ RUN      ] Pushdown.Clear
+[       OK ] Pushdown.Clear (12 ms)
+[ RUN      ] Pushdown.TopZero
+[       OK ] Pushdown.TopZero (12 ms)
+[ RUN      ] Pushdown.Size
+[       OK ] Pushdown.Size (12 ms)
+[ RUN      ] Pushdown.PushPush
+[       OK ] Pushdown.PushPush (11 ms)
+[ RUN      ] Pushdown.Destructor
+[       OK ] Pushdown.Destructor (12 ms)
+[----------] 19 tests from Pushdown (188 ms total)
+
+[----------] 1 test from accounting
+[ RUN      ] accounting.init
+[       OK ] accounting.init (0 ms)
+[----------] 1 test from accounting (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 178 tests from 35 test suites ran. (11964 ms total)
+[  PASSED  ] 178 tests.

@@ -1,5 +1,5 @@
-#include "Tokenizer.h"
-#include "text.h"
+#import "Tokenizer.h"
+#import "text.h"
 
 #define SILENT 1
 #if SILENT

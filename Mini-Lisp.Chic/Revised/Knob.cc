@@ -1,12 +1,12 @@
-#include "Knob.h"
+#import "Knob.h"
 
-#include "Word.h"
-#include "layout.h"
+#import "Word.h"
+#import "layout.h"
 
-#include "Pair.h"
-#include "Item.h"
-#include "Pristine.h"
-#include "Short.h"
+#import "Pair.h"
+#import "Item.h"
+#import "Pristine.h"
+#import "Short.h"
 
 Property(Boolean Knob::ok)       Is(x() || handle() >= $P_f$ && handle() <= $P_t$)
 Property(Boolean Knob::x)        Is(handle() == $P_x$)

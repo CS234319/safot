@@ -1,6 +1,4 @@
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
-#include "chic.h"
+#import "chic.h"
 namespace Tokenizer {
   enum { undefined = 128, $};
   extern void initialize(char *buffer);
@@ -12,5 +10,3 @@ namespace Tokenizer {
   extern Short unget(); 
   extern Short peep();
 }
-#endif
-

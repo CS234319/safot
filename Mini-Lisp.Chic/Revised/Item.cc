@@ -1,5 +1,5 @@
-#include "Item.h"
-#include "Short.h"
+#import "Item.h"
+#import "Short.h"
 Item::Item(): Knob() {}
 Item::Item(Short s): Knob(s) {}
 Item Item::head(Short s) { s1(s);       return *this; }

@@ -1,20 +1,28 @@
-#include "chic.h"
-#include "Short.h"
-#include "layout.h"
-#include "Word.h"
-#include "Knob.h"
-#include "Pristine.h"
-#include "Account.h"
-#include "Handle.h"
-#include "text.h"
-#include "Test.h"
-#include "Clicker.h"
+#import "chic.h"
+#import "Short.h"
+#import "layout.h"
+#import "Word.h"
+#import "Knob.h"
+#import "Pristine.h"
+#import "Account.h"
+#import "Handle.h"
+#import "layout.h"
+#import "text.h"
+#import "Test.h"
+#import "Clicker.h"
 
-#include "Test.h"
+#import "Test.h"
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
+}
+
+TEST(Memory, TotalSize) {
+  using namespace std;
+  EXPECT_EQ($A_n$, 4093);
+  EXPECT_EQ($P_n$, 28674);
+  EXPECT_EQ($P_n$ *sizeof(Word) + $A_n$ * sizeof(char), 118789);
 }
 
 TEST(Text, reusing) {

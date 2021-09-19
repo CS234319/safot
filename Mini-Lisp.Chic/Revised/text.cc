@@ -1,5 +1,5 @@
-#include "text.h"
-#include "layout.h"
+#import "text.h"
+#import "layout.h"
 
 extern Boolean exists(char c, Text s) {
   for (auto i = 0; s[i] != '\0'; ++i)
@@ -53,7 +53,7 @@ static char upper(char c) {
 #undef function
 #undef Type
 
-#include "gtest/gtest.h"
+#import "gtest/gtest.h"
 
 inline auto operator == (const Id s1, const Id s2) { 
   return s1.handle() == s2.handle();

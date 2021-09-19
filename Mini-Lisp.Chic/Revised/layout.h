@@ -1,7 +1,5 @@
-#ifndef LAYOUT_H
-#define LAYOUT_H
-#include "chic.h"
-#include "Word.h"
+#import "chic.h"
+#import "Word.h"
 Provides array(char) A;
 Provides array(Word) P;
 Let Short $M_a$ = 1<<12; 
@@ -12,4 +10,3 @@ Let Short $P_f$ = 1, $P_t$ = $M_p$, $P_n$ = $M_p$, $P_x$ = 0;
 Let Short $X_f$ = min($A_f$, $P_f$), $X_t$ = max($A_t$, $P_t$); 
 Let Long $X_n$ = range($X_f$, $X_t$);
 Let Short $X_x$ = $X_t$ + 1; 
-#endif

@@ -1,8 +1,6 @@
-#ifndef PARSER_H
-#define PARSER_H
-#include "Pushdown.h"
-#include "Tokenizer.h"
-#include "Sx.h"
+#import "Pushdown.h"
+#import "Tokenizer.h"
+#import "Sx.h"
 
 /** An implementation of a simple, single instance hand tailored LL(1) parser.
  * Here is pseudo code describing its services.
@@ -46,4 +44,3 @@ namespace Parser {
     return s <= 0;
   }
 }
-#endif

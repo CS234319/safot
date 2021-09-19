@@ -44,4 +44,4 @@ wc:
 	@wc -l $(SOURCES) $(HEADERS) Makefile | sort -n 
 
 clean:
-		rm -rf $(TARGETS) $(OBJECTS) *.o *.d *~ *.backup memory *.back *.aux *.log delme* diff .depend
+		rm -rf $(TARGETS) $(OBJECTS) *.o *.d *~ *.backup memory *.back *.aux *.log delme* diff .depend test

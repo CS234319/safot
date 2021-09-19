@@ -1,6 +1,4 @@
-#ifndef SX_H
-#define SX_H
-#include "Handle.h"
+#import "Handle.h"
 Type Sx: private Handle { // An S-expression represented by its handle
   using Handle::handle;
   typedef Sx Self;
@@ -33,4 +31,3 @@ extern const Sx MISSING, REDUNDANT, UNDEFINED, INVALID, BUG, EMPTY, EXHAUSTED;
   property Pair $_p$(); /// Interpreted as handle of Pair, retrieves the Pair behind (mutable)  
   property Atom $_a$(); /// Interpreted as handle of atom, retrieves its text representation 
 */
-#endif

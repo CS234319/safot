@@ -1,7 +1,7 @@
-#include "Pair.h"
-#include "Short.h"
-#include "layout.h" // Do we need all this; Just P and A!
-#include "accounting.h"
+#import "Pair.h"
+#import "Short.h"
+#import "layout.h" // Do we need all this; Just P and A!
+#import "accounting.h"
 
 // Properties:
 Property(Word& Pair::p) Is(P[handle()])

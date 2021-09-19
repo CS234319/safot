@@ -1,10 +1,11 @@
-#include "purge.h"
-#include "heap.h"
-#include "corrupted.h"
-#include "accounting.h"
-#include "Short.h"
+#import "purge.h"
+#import "heap.h"
+#import "corrupted.h"
+#import "accounting.h"
+#import "Short.h"
 
-#include "Test.h"
+#import "Test.h"
+
 
 TEST(Sx, Pair) {
   heapify();

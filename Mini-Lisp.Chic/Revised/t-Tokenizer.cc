@@ -1,5 +1,5 @@
-#include "Tokenizer.h"
-#include "Test.h"
+#import "Tokenizer.h"
+#import "Test.h"
 
 static void t(const char *s) { Tokenizer::initialize(strdup(s)); }
 

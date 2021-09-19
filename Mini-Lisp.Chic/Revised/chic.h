@@ -1,9 +1,7 @@
-#ifndef CHIC_H 
-#define CHIC_H
 // Poor man's edition of a bit cleaner C/C++
 
-#include <functional>
-#include <iostream>
+#import <functional>
+#import <iostream>
 
 typedef std::function<bool()> Predicate;
 typedef std::function<int()> Action;
@@ -121,7 +119,7 @@ typedef std::function<long long()> Provider;
     return __; \
   } 
 
-#include <cstdint>         // Standard header providing integer types with widths 
+#import <cstdint>         // Standard header providing integer types with widths 
 #define As(t) operator t() const
 #define Provides extern
 #define Let constexpr 
@@ -188,30 +186,3 @@ halves. No particular byte or halves ordering is assumed. */
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | Knob of an S-expression 
 typedef int32_t Long; /// Machine Long/JVM's int  | 32 bits signed integer | an dotted Pair S-expression   
-#endif // CHIC_H
-
-
-#ifdef UNCHIC
-#undef CHIC_H
-#undef  Provides          
-#undef  Let               
-#undef  let                       
-#undef  Allocate
-#undef  function
-#undef  property          
-#undef  procedure         
-#undef  array
-#undef  variable
-#undef  constant
-#undef  action            
-#undef  Type
-#undef  modifier
-#undef  perspective
-#undef  Representation    
-#undef  asdfasdType              
-#undef  returns
-#undef  by
-#undef begin
-#undef end
-#undef Unit
-#endif

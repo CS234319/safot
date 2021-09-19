@@ -1,9 +1,9 @@
-#include "Pushdown.h"
-#include "Pristine.h"
-#include "heap.h"
-#include "accounting.h"
+#import "Pushdown.h"
+#import "Pristine.h"
+#import "heap.h"
+#import "accounting.h"
 
-#include "Test.h"
+#import "Test.h"
 
 TEST(Pushdown, empty) {
   Pushdown p;

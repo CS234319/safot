@@ -1,5 +1,5 @@
-#include "layout.h"
-#include "Word.h"
+#import "layout.h"
+#import "Word.h"
 
 Let Long $m$ = $M_a$ + $M_p$ * sizeof (Word);
 

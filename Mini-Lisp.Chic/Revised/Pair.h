@@ -1,8 +1,6 @@
-#ifndef PAIR_H
-#define PAIR_H
-#include "chic.h"
-#include "Sx.h"
-#include "Word.h"
+#import "chic.h"
+#import "Sx.h"
+#import "Word.h"
 Type Pair: Sx {
   typedef Pair Self;
   Pair(Short);
@@ -29,4 +27,3 @@ Type Pair: Sx {
     Property(Short& s1) Is(p().s1)
     Property(Short& s2) Is(p().s2)
 };
-#endif

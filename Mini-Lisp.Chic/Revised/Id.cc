@@ -1,2 +1,2 @@
-#include "Id.h"
+#import "Id.h"
 Id::Id(Short s): Inner(s) {}

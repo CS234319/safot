@@ -1,6 +1,4 @@
-#ifndef ITEM_H
-#define ITEM_H
-#include "Knob.h"
+#import "Knob.h"
 Type Item: private Knob {
   using Knob::x, Knob::handle;
   Item();
@@ -12,4 +10,3 @@ Type Item: private Knob {
   Item head(Short s);
   Item rest(Short s);
 }; 
-#endif

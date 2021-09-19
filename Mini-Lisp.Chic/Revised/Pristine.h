@@ -1,6 +1,4 @@
-#ifndef PRISTINE_H
-#define PRISTINE_H 
-#include "Knob.h"
+#import "Knob.h"
 Type Pristine: private Knob {
   // Decomposition
   using Knob::handle;
@@ -20,4 +18,3 @@ inline std::ostream& operator<<(std::ostream &os, Pristine p) {
     return  os << "Px";
   return os << "Pristine[" << p.prev().handle() << "." << p.next().handle()  << "]";
 }
-#endif

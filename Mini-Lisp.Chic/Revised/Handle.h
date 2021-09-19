@@ -1,7 +1,5 @@
-#ifndef HANDLE_H
-#define HANDLE_H
-#include "chic.h"
-#include "Word.h"
+#import "chic.h"
+#import "Word.h"
 Type Handle { // A handle of an S-Expression
   Constructor(Handle(Short));
   Property(Boolean ok); 
@@ -10,4 +8,3 @@ Type Handle { // A handle of an S-Expression
   Property(Text a); 
   private: struct { Short capsule; }; 
 };
-#endif

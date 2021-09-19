@@ -1,6 +1,4 @@
-#ifndef WORD_H
-#define WORD_H
-#include "chic.h"
+#import "chic.h"
 Type Word { // The different perspectives of a word.
   Representation {
     perspective(Long l)        
@@ -10,4 +8,3 @@ Type Word { // The different perspectives of a word.
   Word();
   Property(Short hash);
 };
-#endif

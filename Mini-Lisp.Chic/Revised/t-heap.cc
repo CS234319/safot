@@ -1,18 +1,18 @@
-#include "heap.h"
+#import "heap.h"
 
-#include "text.h"
-#include "Pushdown.h"
-#include "Pristine.h"
-#include "Short.h"
-#include "Pair.h"
-#include "Sx.h"
+#import "text.h"
+#import "Pushdown.h"
+#import "Pristine.h"
+#import "Short.h"
+#import "Pair.h"
+#import "Sx.h"
 
-#include "corrupted.h"
+#import "corrupted.h"
 
-#include "stdio.h"
+#import "stdio.h"
 
-#include "Test.h"
-#include "mark.h"
+#import "Test.h"
+#import "mark.h"
 
 
 TEST(Heapify, exists) { 
@@ -917,4 +917,3 @@ TEST(Pristine, requestBoth) {
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
 }
-

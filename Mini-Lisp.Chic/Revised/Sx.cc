@@ -1,8 +1,8 @@
-#include "Sx.h"
+#import "Sx.h"
 
-#include "text.h"
-#include "heap.h"
-#include "Pair.h"
+#import "text.h"
+#import "heap.h"
+#import "Pair.h"
 
 // Property(Pair Sx::pair(Sx cdr)) Is(Sx(*this, cdr));
 Sx::Sx(Short s)      : Handle(s) {}

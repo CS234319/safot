@@ -1,7 +1,5 @@
-#ifndef ACCOUNTER_H
-#define ACCOUNTER_H
-#include "chic.h"
-#include "Clicker.h"
+#import "chic.h"
+#import "Clicker.h"
 Type Account {
   Capsule(Clicker  p, m)
   Capsule(Clicker& plus = p, minus = m)
@@ -23,4 +21,3 @@ Type Account {
   Account kind() { return Account(0,*this); } 
   private: Account(int, Account& c): parent(&c) {}
 };
-#endif

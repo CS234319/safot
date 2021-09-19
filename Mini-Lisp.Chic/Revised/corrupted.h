@@ -1,10 +1,7 @@
-#ifndef CORRUPTED_H
-#define CORRUPTED_H
+#import "layout.h"
 
-#include "layout.h"
-#include "heap.h"
-
-#include "accounting.h"
+#import "heap.h"
+#import "accounting.h"
 
 inline Short length() {
   Short result = 0;
@@ -93,8 +90,7 @@ static struct {
       Short  n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
         let i = Item(h);
-        if (!i.ok()) 
-          continue;
+        if (!i.ok()) continue;
         ++n;
         Expect(Item(i.rest()).x() || Item(i.rest()).ok());
         Expect(n <= accounting.items);
@@ -108,6 +104,3 @@ static struct {
   }
   private:
 } corrupted;
-#endif
-
-

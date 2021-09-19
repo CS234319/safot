@@ -1,6 +1,3 @@
-#ifndef SX_H
-#define SX_H
-
 /*@ S-Expressions@ S-Expressions come in two varieties: (1) Dotted
  pairs (pairs for short) are compound S-expressions defined by two, smaller,
  S-expressions, and (2) atoms, which are a sequence of characters.  */
@@ -45,7 +42,6 @@ Provides function Handle require(Atom);          /// Returns (handle of) newly a
 
 // Provides function Handle make(Handle, Handle);     /// Returns (handle of) newly allocated Cons with given values of (handles of) its two components
 
-
 Provides array(char) A;
 Provides array(Cons) P;
 
@@ -59,4 +55,3 @@ Let Short $P_f$ = 1, $P_t$ = $M_p$, $P_n$ = $M_p$, $P_x$ = 0;
 Let Short $X_f$ = min($A_f$, $P_f$), $X_t$ = max($A_t$, $P_t$); 
 Let Long $X_n$ = range($X_f$, $X_t$);
 Let Short $X_x$ = $X_t$ + 1; 
-#endif

@@ -1,6 +1,6 @@
-#include "Pristine.h"
-#include "Short.h"
-#include "layout.h"
+#import "Pristine.h"
+#import "Short.h"
+#import "layout.h"
 
 Pristine::Pristine(): Pristine($P_x$) {}
 Pristine::Pristine(Short s): Knob(s) {}

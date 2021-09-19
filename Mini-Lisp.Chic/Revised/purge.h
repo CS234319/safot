@@ -1,7 +1,5 @@
-#ifndef PURGE_H
-#define PURGE_H
-#include "Pair.h"
-#include "layout.h"
+#import "Pair.h"
+#import "layout.h"
 Service {
  Unit all() Is(sweep())
  Unit preserving(Sx s)  Is(mark(s), sweep())
@@ -20,4 +18,3 @@ Service {
     }
   )
 } purge;
-#endif

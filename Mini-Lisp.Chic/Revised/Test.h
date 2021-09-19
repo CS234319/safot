@@ -1,8 +1,4 @@
-#ifndef TEST_H
-#define TEST_H
-
-#define UNCHIC
-#include "chic.h" 
+#import "unchic.h" 
 #include <gtest/gtest.h>
 
 #define ASSERT_ZZ(v)  ASSERT_EQ(v,0)
@@ -11,4 +7,3 @@
 #define EXPECT_ZZ(v)  EXPECT_EQ(v,0)
 #define EXPECT_TT     EXPECT_TRUE
 #define EXPECT_FF     EXPECT_FALSE
-#endif

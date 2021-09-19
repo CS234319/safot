@@ -1,16 +1,13 @@
-#ifndef HEAP_H
-#define HEAP_H
-#include "chic.h"
-#include "Sx.h"
-#include "Item.h"
+#import "chic.h"
+#import "Sx.h"
+#import "Item.h"
   Pair request(Sx, Sx); 
   extern Item fresh(Short, Short); 
   extern Unit free(Item); 
 
 extern const Pristine& heap;
-#include "Pristine.h"
-#include "Pair.h"
+#import "Pristine.h"
+#import "Pair.h"
 extern Pristine heapify();
 extern Unit gobble(Pair);
 Knob crude(); 
-#endif

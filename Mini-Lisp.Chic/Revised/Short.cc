@@ -1,7 +1,7 @@
-#include "Short.h"
-#include "layout.h"
+#import "Short.h"
+#import "layout.h"
 
-#include <iostream>
+#import <iostream>
 extern Short flip(Short s)    { return s + (1 << 15); } 
 extern Boolean black(Short s) { return s < $X_f$ || s > $X_t$ + 1; } 
 extern Boolean white(Short s) { return !black(s); } 

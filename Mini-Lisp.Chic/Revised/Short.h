@@ -1,8 +1,5 @@
-#ifndef SHORT_H
-#define SHORT_H
-#include "chic.h"
+#import "chic.h"
 
 Short flip(Short);
 Boolean black(Short);
 Boolean white(Short);
-#endif

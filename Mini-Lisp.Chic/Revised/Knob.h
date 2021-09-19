@@ -1,6 +1,4 @@
-#ifndef KNOB_H
-#define KNOB_H
-#include "Pair.h"
+#import "Pair.h"
 
 Type Item;
 Type Pristine;
@@ -29,4 +27,3 @@ Type Knob: private Pair { // An S-expression represented by its Knob
   Selfer(s1(Short));
   Selfer(s2(Short));
 };
-#endif

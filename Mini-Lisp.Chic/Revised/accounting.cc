@@ -1,2 +1,2 @@
-#include "accounting.h"
+#import "accounting.h"
 Accounting accounting;

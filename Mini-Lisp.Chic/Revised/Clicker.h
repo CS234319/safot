@@ -1,6 +1,4 @@
-#ifndef CLICKER_H
-#define CLICKER_H
-#include "chic.h"
+#import "chic.h"
 
 /* A very restricted integer, automatically initialized to  zero and can either
 be incremented or cleared */
@@ -15,4 +13,3 @@ Type Clicker {
   ~Clicker() { !(*this); }
   private: Clicker(int, Clicker& c): parent(&c) {}
 };
-#endif

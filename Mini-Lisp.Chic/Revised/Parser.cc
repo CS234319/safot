@@ -1,16 +1,16 @@
-#include "Parser.h"
+#import "Parser.h"
 
-#include "Tokenizer.h"
-#include "text.h"
+#import "Tokenizer.h"
+#import "text.h"
 
-#include <string.h>
+#import <string.h>
 
 #define DEBUG1  
 
 #ifdef DEBUG 
-#include <sstream>
-#include "dump.h"
-#include "io.h"
+#import <sstream>
+#import "dump.h"
+#import "io.h"
 #else 
 #undef D
 #define D(...) 0

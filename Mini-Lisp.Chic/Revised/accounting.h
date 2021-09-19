@@ -1,6 +1,4 @@
-#ifndef ACCOUNTING_H
-#define ACCOUNTING_H
-#include "Account.h"
+#import "Account.h"
 Type Function {
   operator Integer() const { return provider(); }
   Provider provider;
@@ -24,5 +22,3 @@ extern Type Accounting {
   Clicker hit = provide.kind(), miss = provide.kind();   
   auto init(Integer n) selfing(this->~Accounting(), N = n) 
 } accounting;
-#endif
-
