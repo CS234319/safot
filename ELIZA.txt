@@ -1,0 +1,21 @@
+...
+
+ME: Oh, hello, ELIZA.  It’s been a long time.
+
+ELIZA: Hi. What seems to be your problem? 
+
+ME: Lately, I’ve been feeling a little depressed.
+
+ELIZA: And how do you feel right now? 
+
+ME: I feel sad, but relieved to be writing.
+
+ELIZA: Of what does feeling sad remind you? 
+
+ME: Well, I’m an alcoholic, and I’ve been sober for a long time, but I drank
+yesterday.  And then I decided to stop drinking again.  But still; that makes
+me feel sad.
+
+ELIZA: Is it because you are an alcoholic that you came to me?  
+
+...

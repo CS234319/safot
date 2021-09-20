@@ -1,0 +1,67 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code for collecting code exerpts into a separate library and kernel files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{kernel}
+\newcounter{library}
+\setcounter{library}0
+
+\newread \tempFile % A temporary reading stream
+\newwrite \kernelFile % A stream to save kernel functions
+\newwrite \libraryFile % A stream to save library functions
+\immediate \openout \kernelFile=\jobname.kernel.lisp
+\immediate \openout \libraryFile=\jobname.library.lisp
+
+% An environment for writing kernel functions
+\newenvironment{KERNEL}{%
+  \stepcounter{kernel}
+  \def\fileName{\jobname.kernel.\arabic{kernel}.lisp}%
+  \global\let\savedifeof=\ifeof
+  \def\ifeof##1{\global\let\ifeof=\savedifeof\iftrue}%
+  \csname filecontents*\endcsname{\fileName}%
+}{%
+  \csname endfilecontents*\endcsname%
+  \pagebreak[3]%
+  \LTR
+  \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
+  \endLTR
+  \pagebreak[3]%
+  \openin\tempFile=\fileName
+  \begingroup\endlinechar=-1%
+  \loop\unless\ifeof \tempFile
+  \read\tempFile to\fileline % Read one line and store it into \fileline
+  \immediate\write\kernelFile {\unexpanded\expandafter{\fileline}}%
+  \repeat
+  \immediate\write \kernelFile {¢}%
+  \immediate\write \kernelFile {\unexpanded\expandafter{\pagebreak}[3]}%
+  \immediate\write \kernelFile {¢}%
+  \endgroup
+  \closein \tempFile
+}
+
+% An environment for writing library functions
+\newenvironment{LIBRARY}{%
+  \stepcounter{library}
+  \def\fileName{\jobname.library.\arabic{library}.lisp}%
+  \global\let\savedifeof=\ifeof
+  \def\ifeof##1{\global\let\ifeof=\savedifeof\iftrue}%
+  \csname filecontents*\endcsname{\fileName}%
+}{%
+  \csname endfilecontents*\endcsname%
+  \pagebreak[3]%
+  \LTR
+  \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{orange!20}]{\fileName}%
+  \endLTR
+  \pagebreak[3]%
+  \newread \tempFile % open the file to read from
+  \openin \tempFile=\fileName
+  \begingroup\endlinechar=-1
+  \loop\unless\ifeof \tempFile
+  \read\tempFile to\fileline % Read one line and store it into \fileline
+  \immediate\write \libraryFile
+  {\unexpanded\expandafter{\fileline}} % print the content to copy.txt
+  \repeat
+  \endgroup
+  \closein \tempFile
+}%
+
+

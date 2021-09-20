@@ -1,0 +1,6 @@
+(%i2) integrate (cos(x)^2 * exp(x), x, 0, %pi);
+
+                               %pi
+                           3 %e      3
+(%o2)                      ------- - -
+                              5      5
