@@ -29,11 +29,10 @@
   \begingroup\endlinechar=-1%
   \loop\unless\ifeof \tempFile
   \read\tempFile to\fileline % Read one line and store it into \fileline
-  \immediate\write\kernelFile {\unexpanded\expandafter{\fileline}}%
+  \ifeof\tempFile\else{
+    \immediate\write\kernelFile {\unexpanded\expandafter{\fileline}}%
+   }\fi
   \repeat
-  \immediate\write \kernelFile {¢}%
-  \immediate\write \kernelFile {\unexpanded\expandafter{\pagebreak}[3]}%
-  \immediate\write \kernelFile {¢}%
   \endgroup
   \closein \tempFile
 }
@@ -57,11 +56,11 @@
   \begingroup\endlinechar=-1
   \loop\unless\ifeof \tempFile
   \read\tempFile to\fileline % Read one line and store it into \fileline
-  \immediate\write \libraryFile
+  \ifeof \tempFile \else
+    \immediate \write \libraryFile {\unexpanded\expandafter{\fileline}}%
+   \fi
   {\unexpanded\expandafter{\fileline}} % print the content to copy.txt
   \repeat
   \endgroup
   \closein \tempFile
 }%
-
-
