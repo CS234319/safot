@@ -1,0 +1,13 @@
+(%i1) integrate(sin(x)^3, x);
+                           3
+                        cos (x)
+(%o1)                   ------- - cos(x)
+                           3
+
+(%i2) integrate(cos(x)^2 * exp(x), x, 0, %pi);
+
+                               %pi
+                           3 %e      3
+(%o2)                      ------- - -
+                              5      5
+ 
