@@ -305,7 +305,6 @@ recover,
 
 
 
-
 %	#1 Language name, as it is known to the listing package.
 %	#2 Changes to the language definition, as in the listing package 
 % #3 Name of the environment of the newly defined language.
@@ -382,4 +381,49 @@ recover,
 \lstnewenvironment{SQLprog}{\lstset{style=SQL}}{}
 \lstnewenvironment{SQLe}{\lstset{style=SQL,numbers=none}}{}
 
+%%% =========================== SNIP SNIP NEW STUFF=== 
+{%
+    \makeatletter
+    \catcode13=13\relax% Make ASCII 13 active to define it next
+    \gdef\fixNewLine{\def^^M{\space}}
+}
 
+\lstset{%
+  rangeprefix=\{,rangesuffix=\},
+  includerangemarker=false,
+}
+
+\lstdefinelanguage{Chic}{
+  language=C++,
+  deletecomment=[s]{/*}{*/},
+  keywords=[3]{Integer},
+  keywords=[2]{Var, Let},
+  keywords=[1]{goto,try,catch,return},
+  escapeinside={/**}{*/},
+  escapebegin={/** \bgroup\fixNewLine\renewcommand\baselinestretch{1.1}
+  \commentsfont\color{commentColor!40!black}\slshape},
+  escapeend={\egroup*/}
+}
+
+\lstdefinestyle{excerpt}{
+  language=Chic,
+%  backgroundcolor=\color{white},
+%  style=display, 
+%  basicstyle={\listingsfont\normalsize},
+}
+
+\lstdefinestyle{interaction}{%
+  style=display,
+  frame=none,
+  language=Pascal,
+  backgroundcolor=\color{purple!10},
+  deletekeywords={to,do,of,and,then,for},
+}
+
+\lstset{%
+  rangeprefix=\{,rangesuffix=\},
+%  language=Chic,
+  style=display,
+  backgroundcolor=\color{RoyalBlue!10},
+  includerangemarker=false,
+}
