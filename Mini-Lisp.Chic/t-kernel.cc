@@ -54,9 +54,9 @@ FIXTURE(bind,Test,
     "(defun bind (names values a-list) "
             "       (cond ((null names) "
             "           (cond ((null values) a-list)"
-            "               (t (error missing_names)))) "
+            "               (t (error 'missing_names)))) "
             "           ((null values) "
-            "               (error missing_values))  "
+            "               (error 'missing_values))  "
             "           (t  "
             "               (cons  "
             "                   (cons "
@@ -85,18 +85,20 @@ FIXTURE(apply_trivial_atomic, Test,
   "        ((eq atomic 'cons) (cons first second))"
   "        ((eq atomic 'eq) (eq first second))"
   "        ((eq atomic 'set) (set first second))"
-  "        (t (error something-went-wrong atomic))))"
+  "        (t (error 'something-went-wrong atomic))))"
 )
 
 TEST_F(apply_trivial_atomic, T1) EVAL_EQ("(apply-trivial-atomic 'atom 'a NIL)", T);
-TEST_F(apply_trivial_atomic, T2) EVAL_EQ("(apply-trivial-atomic 'car '(a b) NIL)", a);
-TEST_F(apply_trivial_atomic, T3) EVAL_EQ("(apply-trivial-atomic 'cdr '(a b) NIL)", list(b));
-TEST_F(apply_trivial_atomic, T4) EVAL_EQ("(apply-trivial-atomic 'cons 'a 'b)", a.cons(b));
-TEST_F(apply_trivial_atomic, T5) EVAL_EQ("(apply-trivial-atomic 'eq 'a 'a)", T);
-TEST_F(apply_trivial_atomic, T6) EVAL_EQ("(apply-trivial-atomic 'eq 'a 'b)", NIL);
-TEST_F(apply_trivial_atomic, T7) { eval("(apply-trivial-atomic 'set 'a 'b)");  EVAL_EQ("a", "b"); }
-TEST_F(apply_trivial_atomic, T8) EVAL_XX("(apply-trivial-atomic)", "(ATOMIC FIRST SECOND)", MISSING_ARGUMENT)
-TEST_F(apply_trivial_atomic, T9) EVAL_XX("(apply-trivial-atomic 'zzz 'a NIL)", "zzz", "SOMETHING-WENT-WRONG")
+TEST_F(apply_trivial_atomic, T2) EVAL_EQ("(apply-trivial-atomic 'atom 'NIL NIL)", T);
+TEST_F(apply_trivial_atomic, T3) EVAL_EQ("(apply-trivial-atomic 'atom '((a b)) NIL)", NIL);
+TEST_F(apply_trivial_atomic, T4) EVAL_EQ("(apply-trivial-atomic 'car '(a b) NIL)", a);
+TEST_F(apply_trivial_atomic, T5) EVAL_EQ("(apply-trivial-atomic 'cdr '(a b) NIL)", list(b));
+TEST_F(apply_trivial_atomic, T6) EVAL_EQ("(apply-trivial-atomic 'cons 'a 'b)", a.cons(b));
+TEST_F(apply_trivial_atomic, T7) EVAL_EQ("(apply-trivial-atomic 'eq 'a 'a)", T);
+TEST_F(apply_trivial_atomic, T8) EVAL_EQ("(apply-trivial-atomic 'eq 'a 'b)", NIL);
+TEST_F(apply_trivial_atomic, T9) { eval("(apply-trivial-atomic 'set 'a 'b)");  EVAL_EQ("a", "b"); }
+TEST_F(apply_trivial_atomic, Error1) EVAL_XX("(apply-trivial-atomic)", "(ATOMIC FIRST SECOND)", MISSING_ARGUMENT)
+TEST_F(apply_trivial_atomic, Error2) EVAL_XX("(apply-trivial-atomic 'zzz 'a NIL)", "(zzz)", "SOMETHING-WENT-WRONG")
 
 FIXTURE(apply_eager_atomic, apply_trivial_atomic,
   "(defun apply-eager-atomic (atomic actuals a-list)"
@@ -106,14 +108,18 @@ FIXTURE(apply_eager_atomic, apply_trivial_atomic,
   "    ((null (cdr actuals)) (apply-trivial-atomic atomic (car actuals) NIL)) "
   "    (t (apply-trivial-atomic atomic (car actuals) (car (cdr actuals)))) "
   "))")
-TEST_F(apply_eager_atomic, T1) EVAL_EQ("(apply-eager-atomic 'atom 'a ())", T);
-TEST_F(apply_eager_atomic, T2) EVAL_EQ("(apply-eager-atomic 'car '((a b) (NIL)) '())", a);
-TEST_F(apply_eager_atomic, T3) EVAL_EQ("(apply-eager-atomic 'cdr '((a b) (NIL)) '())", list(b));
-TEST_F(apply_eager_atomic, T4) EVAL_EQ("(apply-eager-atomic 'cons '(a b) '())", a.cons(b));
-TEST_F(apply_eager_atomic, T5) EVAL_EQ("(apply-eager-atomic 'eq '(a a) '())", T);
-TEST_F(apply_eager_atomic, T6) EVAL_EQ("(apply-eager-atomic 'eq '(a b) '())", NIL);
-TEST_F(apply_eager_atomic, T7) { eval("(apply-eager-atomic 'set 'y  nil)"); EVAL_EQ(lookup(y), a); }
-TEST_F(apply_eager_atomic, T8) EVAL_XX("(apply-eager-atomic)",  list(S("ATOMIC"), S("ACTUALS"), S("A-LIST")), MISSING_ARGUMENT);
+
+TEST_F(apply_eager_atomic, T0) EVAL_EQ("(apply-eager-atomic 'atom '(a b) ())", T);
+TEST_F(apply_eager_atomic, T1) EVAL_EQ("(apply-eager-atomic 'atom '(a) ())", T);
+TEST_F(apply_eager_atomic, T2) EVAL_EQ("(apply-eager-atomic 'atom '(NIL) ())", T);
+TEST_F(apply_eager_atomic, T3) EVAL_EQ("(apply-eager-atomic 'atom '((a)) ())", NIL);
+TEST_F(apply_eager_atomic, T4) EVAL_EQ("(apply-eager-atomic 'car '((a b) (NIL)) '())", a);
+TEST_F(apply_eager_atomic, T5) EVAL_EQ("(apply-eager-atomic 'cdr '((a b) (NIL)) '())", list(b));
+TEST_F(apply_eager_atomic, T6) EVAL_EQ("(apply-eager-atomic 'cons '(a b) '())", a.cons(b));
+TEST_F(apply_eager_atomic, T7) EVAL_EQ("(apply-eager-atomic 'eq '(a a) '())", T);
+TEST_F(apply_eager_atomic, T8) EVAL_EQ("(apply-eager-atomic 'eq '(a b) '())", NIL);
+TEST_F(apply_eager_atomic, T9) { eval("(apply-eager-atomic 'set 'y  nil)"); EVAL_EQ(lookup(y), a); }
+TEST_F(apply_eager_atomic, T10) EVAL_XX("(apply-eager-atomic)",  list(S("ATOMIC"), S("ACTUALS"), S("A-LIST")), MISSING_ARGUMENT);
 
 FIXTURE(evaluate_cond, Test,
   "(defun evaluate-cond(test-forms a-list)"

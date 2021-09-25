@@ -200,7 +200,7 @@ TEST(Native, ErrorC) {
 }
 
 TEST(Native, Error1) {
-    EXPECT_EXCEPTION(parse("(error 'A)").eval(), list("a"), ERROR);
+    EXPECT_EXCEPTION(parse("(error 'A)").eval(), parse("a"), ERROR);
 }
 
 TEST(Native, Error2) {
@@ -441,6 +441,10 @@ TEST(Native, Cdr4) {
 TEST(Native, Cdr5) {
   EXPECT_EXCEPTION(list(CDR,T).eval() , T, CDR);
 }
+TEST(Native, Cdr6) {
+  EXPECT_EXCEPTION(list(CDR,T).eval() , T, CDR);
+}
+
 
 TEST(Native, Car1) {
   S i = list(CAR, list(QUOTE, S("X").cons(S("Y"))));
@@ -453,19 +457,19 @@ TEST(Native, Car2) {
 }
 
 TEST(Native, Car3) {
-  EXPECT_EXCEPTION(parse("(car 'a 'b c)").eval(), S("c"), UNDEFINED_ATOM);
+  EXPECT_EXCEPTION(parse("(CAR A B)").eval(), S("A"), UNDEFINED_ATOM);
 }
 
 TEST(Native, Car4) {
-  EXPECT_EXCEPTION(parse("(car 'a 'b 'c d)").eval(), S("d"), UNDEFINED_ATOM);
+  EXPECT_EXCEPTION(parse("(car 'a 'b c)").eval(), S("c"), UNDEFINED_ATOM);
 }
 
 TEST(Native, Car5) {
-  EXPECT_EXCEPTION(list(CAR).eval() , __00, MISSING_ARGUMENT);
+  EXPECT_EXCEPTION(parse("(car 'a 'b 'c d)").eval(), S("d"), UNDEFINED_ATOM);
 }
 
 TEST(Native, Car6) {
-  EXPECT_EXCEPTION(list(CDR,T).eval() , T, CDR);
+  EXPECT_EXCEPTION(list(CAR).eval() , __00, MISSING_ARGUMENT);
 }
 
 TEST(Native, Car7) {

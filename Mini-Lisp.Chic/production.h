@@ -16,3 +16,7 @@
 #define M7(...) 0
 #define __(...) 0
 #define stack() 0
+
+#define INVOKE(x) x
+#define ENTER(x) 
+#define EXIT(x) 

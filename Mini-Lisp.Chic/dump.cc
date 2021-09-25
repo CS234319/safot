@@ -1,5 +1,6 @@
 #import  "dump.h"
 #import "basics.h"
+int indent = 0;
 bool dumping = false;
 std::ostream& operator<<(std::ostream &os, S s) { extern const S QUOTE;
   if (s.null()) return os << "nil";

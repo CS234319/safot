@@ -2,7 +2,40 @@
 \input{hacks}
 \newcommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
 \newcolumntype{T}{>{\collectcell{\TopAlign}}c<{\endcollectcell}}
+{%
+    \makeatletter
+    \catcode13=13\relax% Make ASCII 13 active to define it later
+    \gdef\fixNewLine{%
+        \def^^M{\space}%
+    }%
+}
 
+
+\lstset{%
+  rangeprefix=\{,rangesuffix=\},
+%  language=Chic,
+  style=display,
+  backgroundcolor=\color{RoyalBlue!10},
+  includerangemarker=false,
+}
+
+\lstdefinelanguage{Chic}{
+  language=C++,
+  deletecomment=[s]{/*}{*/},
+  keywords=[3]{Integer},
+  keywords=[2]{Var, Let},
+  keywords=[1]{goto,try,catch,return},
+  escapeinside={/**}{*/},
+  escapebegin={/** \bgroup\fixNewLine\renewcommand\baselinestretch{1.1}
+  \commentsfont\normalsize\color{commentColor!40!black}\slshape},
+  escapeend={\egroup*/}
+}
+
+\begin{LTR}
+  \def\codesize{\small}
+  \lstinputlisting[linerange=REPL-END,language=Chic,backgroundcolor=\color{white}]{Mini-Lisp.Chic/repl.cc}
+\end{LTR}
+\end{document}
 § מבוא
 
 §§ מחשבים עתיקים ולידתה של ליספ

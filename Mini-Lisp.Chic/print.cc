@@ -40,10 +40,10 @@ bool grunt(int result)  {
   if (errno != 0) perror("mini-lisp"); 
   throw errno; 
 }
+
 static int put(String s)  { 
   TESTING(  record(s);  )
-  return grunt(silent ? 0 : fputs(s, file)); 
-  // return grunt(fputs(s, file)); 
+  return grunt(silence ? 0 : fputs(s, file)); 
 }  
 #import "recorder.h"
 

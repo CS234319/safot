@@ -34,8 +34,12 @@ extern std::ostream& operator<<(std::ostream &os, S s);
 #define M6(X,Y,Z,W,U,A,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W) __VALUE(U) __VALUE(A) dITERATE(__VA_ARGS__) AFTER
 #define M7(X,Y,Z,W,U,A,B,...) BEFORE __VALUE(X) __VALUE(Y) __VALUE(Z) __VALUE(W) __VALUE(U)    __VALUE(A) __VALUE(B)   dITERATE(__VA_ARGS__) AFTER
 
+#define INVOKE(x) ({indent++;auto r = x;--indent;r;})
+extern int indent;
+
 #define __(X,...)     (std::cerr << std::endl), M(X, __VA_ARGS__) 
 #define LOCATE  std::cerr\
+  << std::string(2*indent,' ') \
   <<__FILE__\
   <<"("<<__LINE__<<")/" \
   <<__FUNCTION__ << "(): "

@@ -6,6 +6,7 @@
 #import "except.h"
 #define PRODUCTION
 #import "mode.h"
+
  
 extern const S DEFUN, LAMBDA, NDEFUN, NLAMBDA;
 namespace Engine { 
@@ -33,18 +34,19 @@ namespace Engine {
 
   using namespace Inner;
   S apply(S tag, S formals, S body, S actuals) {
-    M4(">> to", actuals, "apply",tag, formals, body); 
+    D(tag, formals);
+    D(actuals);
+    D(body);
+    check(actuals, BAD_ARGUMENTS);
+    S arguments = INVOKE(map(actuals, normal(tag) ? identity : eval));
     if (formals.atom())   M("Variadic binding of", formals, actuals), 
-      push(formals, actuals);
-    else { M("list of arguments");
-      S arguments = map(actuals, normal(tag) ? identity : eval);
-      check(actuals, BAD_ARGUMENTS);
+      push(formals, arguments);
+    else { M("list of arguments",actuals);
       check(formals, BAD_PARAMETERS);
       align(formals, actuals, MISSING_ARGUMENT, REDUNDANT_ARGUMENT);
       bind(formals, arguments);
     }
-    const auto result = (native(tag) ? exec : eval)(body);
-    Return(result, M4("<< application", body, "/", actuals,  result)); 
+    return INVOKE( (native(tag) ? exec : eval)(body));
   }
 
   S apply(S f, S actuals) {
@@ -53,12 +55,15 @@ namespace Engine {
     push(S("*"), f.cons(actuals));
     push(RECURSE, what);
     what.n3() || f.error(BAD_FUNCTION).t();
-    S result = apply(what.$1$(), what.$2$(), what.$3$(), actuals);
-    Return(result, alist = before);
+    S result = INVOKE(apply(what.$1$(), what.$2$(), what.$3$(), actuals));
+    alist = before;
+    return result;
   }
 
-  S eval(S s) { M3(">> Evaluating [", s, "]");
-      const S result = s.atom() ? lookup(s) : apply(s.car(), s.cdr()); 
-      return Return(result, M5("<< [", s, "] evaluated to [" , result, "]"));
+  S eval(S s) { 
+      ENTER(M(">>", s));
+      const S result = INVOKE(s.atom() ? lookup(s) : apply(s.car(), s.cdr())); 
+      EXIT(M("<<", result));
+      return result;
   }
 }

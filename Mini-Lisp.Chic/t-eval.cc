@@ -374,56 +374,56 @@ TEST(Eval, Variadic) {
   CAREFULLY_EXPECT(EQ, list(f, a, b, c).eval(), list(y, a, b, c));
 }
 
-TEST(Eval, BAD_ARGUMENTS1) { 
+TEST(EvalError, BAD_ARGUMENTS1) { 
     ndefun(f, list(x, y), list());
-    EXPECT_EXCEPTION(list(f, argument).eval(), argument, BAD_ARGUMENTS);
+    EXPECT_EXCEPTION(list(f, argument).eval(), list(y), MISSING_ARGUMENT);
 }
 
-TEST(Eval, BAD_ARGUMENTS2) { 
+TEST(EvalError, BAD_ARGUMENTS2) { 
     ndefun(f, list(x, y, z), z);
     S  expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS3) { 
+TEST(EvalError, BAD_ARGUMENTS3) { 
     ndefun(f, list(x, y), z.q());
     S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS4) { 
+TEST(EvalError, BAD_ARGUMENTS4) { 
     ndefun(f, list(x, y, z), x);
   S  expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS5) { 
+TEST(EvalError, BAD_ARGUMENTS5) { 
     ndefun(f, list(x, y), list(CAR, x));
     S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS6) { 
+TEST(EvalError, BAD_ARGUMENTS6) { 
     ndefun(f, list(x, y), list(CAR, y));
     S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS7) {  
+TEST(EvalError, BAD_ARGUMENTS7) {  
     // Define the function: "(ndefun f (x y) (set x y))"
     ndefun(f, list(x, y), list(SET, x, y));
   S  expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS8) {  
+TEST(EvalError, BAD_ARGUMENTS8) {  
     // Define the function: "(ndefun f (x y) (set x y))"
     ndefun(f, list(x, y), list(SET, x, y));
     S expr = f.cons(f);
     EXPECT_EXCEPTION(expr.eval(), f, BAD_ARGUMENTS);
 }
 
-TEST(Eval, BAD_ARGUMENTS9) { 
+TEST(EvalError, BAD_ARGUMENTS9) { 
     // Define the function: "(ndefun f (x y) (set 'x (car y)))"
     ndefun(f, list(x, y), list(SET, x.q(), list(CAR, y)));
     S expr = f.cons(f);

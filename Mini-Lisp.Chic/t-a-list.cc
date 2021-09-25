@@ -3,16 +3,6 @@
 #import  "a-list.h"
 #import  "test.h"
 
-// Mark here every exceptions that was tested;
-// Add test that all exceptions were checked.
-// Add tests that error strings are meaningful; consult with Yossi on how
-
-/**
- * Tests of mini-lisp basics; should be renamed one day
- */
-
-#define EXPECT_STRUE(e) EXPECT_TRUE(e.t())
-#define EXPECT_SFALSE(e) EXPECT_TRUE(e.null())
 using Engine::lookup, Engine::set;
 
 TEST(Lookup, T0) {
@@ -31,7 +21,7 @@ TEST(Lookup, NIL) {
   EXPECT_TRUE(lookup("NIL").null());
 }
 
-TEST(Lookup, Failuer1) {
+TEST(Lookup, Failure1) {
   EXPECT_EXCEPTION(lookup("bar baz"),S("bar baz"), UNDEFINED_ATOM);
 }
 

@@ -32,6 +32,9 @@ namespace {
    return entry(NDEFUN, name, formals);
   }
   inline S variadic(S name, S formals) {
+   return entry(DEFUN, name, formals);
+  }
+  inline S nvariadic(S name, S formals) {
    return entry(NDEFUN, name, formals);
   }
 }
@@ -44,7 +47,7 @@ extern S builtin() {
     eager(ATOM,  __00),  
     eager(CAR,   __00), 
     eager(CDR,   __00),
-    variadic(COND, __0),
+    nvariadic(COND, __0),
     eager(CONS, __12), 
     eager(EQ, __12),
     eager(EVAL, __00), 

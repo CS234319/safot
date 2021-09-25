@@ -10,10 +10,16 @@
 
 #import "atoms.h"
 
+#define EXPECT_NIL(v) EXPECT_EQ(v,NIL)
+#define EXPECT_T(v) EXPECT_EQ(v,T)
+#define EXPECT_NOT_NIL(v) EXPECT_NE(v,NIL)
+#define EXPECT_STRUE(e) EXPECT_TRUE(e.t())
+#define EXPECT_SFALSE(e) EXPECT_TRUE(e.null())
+
+extern std::ostream& operator<<(std::ostream &os, S s);
 extern bool operator == (const S s1, const S s2); 
 inline bool operator != (const S s1, const S s2)  { return ! (s1 == s2); }
 
-extern std::ostream& operator<<(std::ostream &os, S s);
 namespace Tested {
   inline S defun(S name, S parameters, S body) { return Engine::set(name, list(LAMBDA, parameters, body)); }
   inline S ndefun(S name, S parameters, S body) { return Engine::set(name, list(NLAMBDA, parameters, body)); }
@@ -31,7 +37,9 @@ namespace Tested {
 
 #undef function
 #import <gtest/gtest.h>
-  struct Test: ::testing::Test { ~Test() { Tested::reset(); } };
+
+struct Test: ::testing::Test { ~Test() { Tested::reset(); } };
+
 using namespace Tested;
 #define LINE_STRING STRINGIZE(__LINE__)
 #define STRINGIZE(x) STRINGIZE2(x)
@@ -41,10 +49,6 @@ using namespace Tested;
 
 #define EVAL_EQ(x,y)    CAREFULLY_EXPECT(EQ, eval(x), prepare(y));
 #define EVAL_XX(x,y,z)  EXPECT_EXCEPTION(eval(x), prepare(y), prepare(z)); 
-
-#define EXPECT_NIL(v) EXPECT_EQ(v,NIL)
-#define EXPECT_T(v) EXPECT_EQ(v,T)
-#define EXPECT_NOT_NIL(v) EXPECT_NE(v,NIL)
 
 #define CAREFULLY_EXPECT_NIL(v,...) \
   try { \

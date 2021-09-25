@@ -21,24 +21,22 @@ S read() { // Loop until an S expression is read
 
 #define Let const 
 /*{REPL}*/
-/** Function REPL realizes the famous ``Read, Evaluate, Print, Loop''
-of all interpreters. It loops forever (theoretically), terminating
-with end-of-file mark found on its input stream, or if the evaluation
-engine fails due to some unrecoverable error, such as memory
-exhaustion, or even due to a bug in the engine's implementation.
-
-The function \emph{does not} terminate in an evaluation error, in
-which case, the programmer is invited to feed new input. 
-
-Upon termination, this function returns the number of expressions
-successfully read and evaluated.*/
+/**Function REPL realizes its acronym---the famous ``\emph{\textbf Read,
+\textbf Evaluate, \textbf Print, \textbf Loop}'' of all interpreters. It loops
+until an end-of-file mark is entountered on its input stream. It also halts
+when the evaluation engine fails due to some unrecoverable error, such as
+memory exhaustion, or due to a bug in the engine's implementation.
+\par
+The function \emph{does not} terminate in an evaluation error, in which case,
+the programmer is invited to feed new input.  Upon termination, this function
+returns the total number of expressions successfully read and evaluated. */
 Integer REPL() {   Var Integer n = 0;
-  Start: try {
-    Read:  Let S expression = read(); // function read 
-    Eval:  Let S evaluted = eval(expression); 
-    Print: println(evaluted); 
-    Loop:  ++n;  goto Read;
-  } catch (S error) { goto Start; }  // Failed evaluation
-    catch (...)     { return n; }    // Engine failure
+  Start: try {            // Reading and evaluation may fail
+    Read:  Let S expression = read();       // Read an S-expresson
+    Eval:  Let S result = eval(expression); // Evaluate this expression 
+    Print: println(result);                 // Print the evaluation result 
+    Loop:  ++n;  goto Start;                // Loop
+  } catch (S error) { goto Start; }         // Failed evaluation is ignored
+    catch (...)     { return n; }           // Engine failure or EOF terminate REPL
 }
 /*{END}*/
