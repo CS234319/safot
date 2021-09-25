@@ -36,7 +36,7 @@ Integer REPL() {   Var Integer n = 0;
     Eval:  Let S result = eval(expression); // Evaluate this expression 
     Print: println(result);                 // Print the evaluation result 
     Loop:  ++n;  goto Start;                // Loop
-  } catch (S error) { goto Start; }         // Failed evaluation is ignored
+  } catch (S failure) { goto Start; }       // Failed evaluation is ignored
     catch (...)     { return n; }           // Engine failure or EOF terminate REPL
 }
 /*{END}*/
