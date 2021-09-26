@@ -12,15 +12,17 @@ namespace Parser {
    https://www.cs.princeton.edu/courses/archive/spring20/cos320/LL1/
 
   // Good grammar:
-E ::= X T   
-X ::= a     
-T ::= . E   
-T ::= ''    
-X ::= ' X   
-X ::= ( L ) 
-L ::= E L    
+X ::= Q P   
+Q ::= a     
+Q ::= ' Q   
+Q ::= ( L ) 
+Q ::= [ X ]
+P ::= . P    
+P ::= ''    
+L ::= X L    
 L ::= ''  
-E ::= [ E ]
+
+Try e.g., ' a . ( a a ) . ' a . ( [ ' ' ( a a ) . ( a a ) . a . ' a ] . a ) . ( a a ) . ' a . ( a a ) . ' a 
 
   // Grammar:
    // Generated automatically S ::= E // Rule S1 

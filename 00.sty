@@ -122,17 +122,19 @@
 \crefname{equation}{}{}
 \crefformat{equation}{(#2#1#3)}
 
-\renewcommand\stctitle{תוכן הענינים}
-\renewcommand\mlftitle{רשימת האיורים}
-\renewcommand\mlttitle{רשימת הטבלאות}
-\renewcommand\listfigurename{רשימת האיורים\small\bfseries}
-\renewcommand\listtablename{רשימת הטבלאות}
-\mtcfont{\footnotesize\rmfamily\upshape\bfseries}
-\mtifont{\normalsize\rmfamily\upshape\bfseries}
-\mlffont{\footnotesize\rmfamily\upshape\bfseries}
-\mlfSfont{\footnotesize\rmfamily\upshape\bfseries}
-\mltfont{\footnotesize\rmfamily\upshape\bfseries}
-\mltSfont{\footnotesize\rmfamily\upshape\bfseries}
+\renewcommand \contentsname{רשימת האיורים}
+\renewcommand \listfigurename{רשימת האיורים}
+\renewcommand \listtablename{רשימת הטבלאות}
+
+\renewcommand \mtcfont{\scriptsize\rmfamily\upshape\bfseries}
+\renewcommand \mlffont{\scriptsize\rmfamily\upshape\bfseries}
+\renewcommand \mltfont{\scriptsize\rmfamily\upshape\bfseries}
+
+\renewcommand \mtifont{\footnotesize \rmfamily\upshape\bfseries}
+
+\renewcommand \mtctitle{תוכן הענינים}
+\renewcommand \mlftitle{רשימת האיורים}
+\renewcommand \mlttitle{רשימת הטבלאות}
 
 \let\ref=\cref
 
@@ -142,15 +144,9 @@
 
 \graphicspath{{Images/}}
 
-\renewcommand\ptctitle{\stctitle}
-\renewcommand\mtctitle{\stctitle}
-\renewcommand\ptctitle{\stctitle}
-\renewcommand\mtctitle{\stctitle}
-
 \def\maketag@@@#1{\hbox{\m@th\normalfont\LRE{#1}}}
 \def\tagform@#1{\maketag@@@{(\ignorespaces#1\unskip)}}
 
- 
 
 \let\hebrewfonttt\ttfamily
 
@@ -370,6 +366,8 @@ colframe=red!75!black}
       fit=band,
     },
   },
+  nt/.style={circle,edge,fill=red!20},
+  terminal/.style={rectangle, fill=gray!10,draw,minimum width=8ex},
   cons/.style={draw,edge,fill=teal},
   atom/.style={},
   nil/.style={circle,inner sep=-6pt,fill=white,nice empty nodes,tikz={\draw  [rotate=-160,scale=0.44] 

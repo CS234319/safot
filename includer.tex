@@ -1,118 +1,58 @@
-\documentclass{article}
-\RequirePackage[utf8]{inputenc}
-\RequirePackage{fontspec}
-\RequirePackage[table,dvipsnames]{xcolor}
-\usepackage{listings}
+\documentclass{book}
+\usepackage{minitoc}
 \usepackage{forest}
-\usetikzlibrary{positioning}
 \begin{document}
+\dominitoc\dominilof\dominilot
+\renewcommand\mtcfont{\scriptsize\scshape}
+\renewcommand\mlffont{\itshape}
+\renewcommand\mltfont{\slshape}
 
-    \forestset{%
-      x tree/.style={%
-          for tree={%
-              font=\ttfamily\scriptsize,
-              s sep'+=3pt,
-              l sep'+=3pt,
-              fit=band,
-            },
-        },
-        node/.style={ellipse,minimum height=0.0ex,minimum width=0.0ex},
-        library/.style={node,fill=green!20},
-        identifier/.style={node,fill=red!20},
-        operator/.style={node,fill=yellow!20},
-        literal/.style={node,fill=blue!20},
-        function/.style={node,fill=olive!20},
-    }
+\begin{forest}
+[$S$
+  [$S_1$  
+    [$S_1$  [S[A[a]]]]
+    [\texttt.] 
+    [$S_2$ [S [A [\texttt b]]]]
+  ]
+  [\texttt.] 
+  [$S_2$ [S [A [\texttt c]]]]
+]
+\end{forest}
 
-    \begin{forest}x tree[?:,operator, 
-          tikz={\node[right=of .east]{built-in operator};}
-        ]
-      \end{forest}
-   \end{document}
-     
-    \begin{tabular}{b{5ex}p{0.3\textwidth}}
-        %\toprule
-        %\bf Notation & \bf Meaning \\
-        \midrule
-        \begin{forest}x tree[\E|?:|,operator, 
-          tikz={\node[right=of ()]{built-in operator};}
-        ]
-          & built-in operator \\
-      \begin{forest}x tree[$h()$,function] \end{forest} 
-        &identifier of a user-defined function\\
-      \begin{forest}x tree[$2$,literal] \end{forest} & 
-       identifier of a library function \\
-      \begin{forest}x tree[$a$,identifier] \end{forest} & 
-      identifier of a user-defined variable\\
-        \midrule
-        %\bottomrule
-  \end{tabular}
-\end{tabular}
-  \end{LTR}
-\end{figure}\newcommand\codesize\scriptsize
-\newfontfamily \listingsfont[
-            Extension=.otf,
-						UprightFont=*-Regular,
-						BoldFont=*-Bold,
-						ItalicFont=*-Italic,
-						BoldItalicFont=*-BoldItalic,
-]{UMTypewriter}
 
-\newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
-{%
-    \makeatletter
-    \catcode13=13\relax% Make ASCII 13 active to define it later
-    \gdef\newlinewillbreakandindent{%
-        \def^^M{\space}%
-    }%
-}
+\begin{forest}
+[$S$
+   [$S_1$ [S [A [\texttt a]]]]
+  [\texttt.]
+  [$S_2$
+    [$S_1$  [S[A[b]]]]
+    [\texttt.]
+    [$S_2$ [S [A [\texttt c]]]]
+  ]
+]
+\end{forest}
 
-\lstdefinelanguage{Chic}{
-  language=Pascal,
-  keywords=[3]{Integer},
-  keywords=[2]{Var, Let},
-  keywords=[1]{goto,try,catch,return}
-}
 
-\lstdefinestyle{code}{
-  basicstyle={\listingsfont\codesize},
-  stringstyle={\listingsfont\itshape\codesize},
-  commentstyle={\commentsfont\slshape},
-  keywordstyle={\listingsfont\bfseries},
-  keywordstyle={[2]\listingsfont\bfseries\codesize},
-  keywordstyle={[3]\listingsfont\bfseries\codesize},
-  showstringspaces=false,
-  backgroundcolor=\color{yellow!20},
-  frame=lines,
-  escapechar=¢,
-}
+\end{document}
+\chapter{First}
+\minitoc
+\minilot
+\minilof
 
-\lstdefinestyle{display}{
-  style=code,
-  columns={[c]fullflexible},
-  xleftmargin=1ex,
-  aboveskip=2pt,
-  belowskip=2pt,
-}
-
-\lstset{%
-  rangeprefix=\{,rangesuffix=\},
-  language=Chic,
-  style=display,
-  backgroundcolor=\color{RoyalBlue!10},
-  includerangemarker=false,
-}
-
-\lstdefinelanguage{Chic}{
-  language=C++,
-  keywords=[3]{Integer},
-  keywords=[2]{Var, Let},
-  keywords=[1]{goto,try,catch,return},
-  escapeinside={/**}{*/},
-  escapebegin={\bgroup\newlinewillbreakandindent},
-  escapeend={\egroup}
-}
-
-\lstinputlisting[linerange=REPL-END]{Mini-Lisp.Chic/repl.cc}
-\lstinputlisting{Mini-Lisp.Chic/repl.cc}
+My first chapter
+\section{A}
+\begin{figure}[h]
+\caption{First figure in chapter 1}
+\end{figure}
+\begin{table}[h]
+\caption{First table in chapter 1}
+\end{table}
+\section{B}
+\begin{figure}[h]
+empty figure
+\caption{Second figure in chapter 1}
+\end{figure}
+\begin{table}
+\caption{Second table in chapter 1}
+\end{table}
 \end{document}
