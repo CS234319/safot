@@ -38,7 +38,14 @@ namespace Tested {
 #undef function
 #import <gtest/gtest.h>
 
-struct Test: ::testing::Test { ~Test() { Tested::reset(); } };
+struct Test: ::testing::Test { Test() {silent();} ~Test(){Tested::reset();} };
+#define SUITE(name) struct name:Test{};
+#define FIXTURE(name, parent, body) \
+  struct name: parent {  \
+    name() { CAREFULLY_EXPECT(NE, NIL,eval(body)); } \
+  };
+
+
 
 using namespace Tested;
 #define LINE_STRING STRINGIZE(__LINE__)

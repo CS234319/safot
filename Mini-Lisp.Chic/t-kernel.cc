@@ -12,11 +12,6 @@ using Engine::lookup;
 
 S x("x"), y("y"), a("a"), b("b");
 
-#define FIXTURE(name, parent, body) \
-  struct name: parent {  \
-    name() { CAREFULLY_EXPECT(NE, NIL,eval(body)); } \
-  };
-
 FIXTURE(exists,Test,
  "(defun exists (x xs)  "
         "         (cond  "
@@ -24,7 +19,7 @@ FIXTURE(exists,Test,
         "             ((eq x (car xs)) t) "
         "             (t (exists x (cdr xs)))"
         "         ))")
-TEST_F(exists, T1) { D(Engine::globals); chatty(); EVAL_EQ("(exists 'a '(a b))", T) }
+TEST_F(exists, T1) EVAL_EQ("(exists 'a '(a b))", T) 
 TEST_F(exists, T2) EVAL_EQ("(exists 'a '(x y))", NIL)                       
 TEST_F(exists, T3) EVAL_EQ("(exists 'a '())", NIL)                           
 TEST_F(exists, T4) EVAL_XX("(exists)", list(S("X"),S("XS")), MISSING_ARGUMENT)
@@ -118,7 +113,7 @@ TEST_F(apply_eager_atomic, T5) EVAL_EQ("(apply-eager-atomic 'cdr '((a b) (NIL)) 
 TEST_F(apply_eager_atomic, T6) EVAL_EQ("(apply-eager-atomic 'cons '(a b) '())", a.cons(b));
 TEST_F(apply_eager_atomic, T7) EVAL_EQ("(apply-eager-atomic 'eq '(a a) '())", T);
 TEST_F(apply_eager_atomic, T8) EVAL_EQ("(apply-eager-atomic 'eq '(a b) '())", NIL);
-TEST_F(apply_eager_atomic, T9) { eval("(apply-eager-atomic 'set 'y  nil)"); EVAL_EQ(lookup(y), a); }
+TEST_F(apply_eager_atomic, T9) { EVAL_EQ("(apply-eager-atomic 'set '(y a)  nil)","A"); EXPECT_EQ(lookup(y), a); }
 TEST_F(apply_eager_atomic, T10) EVAL_XX("(apply-eager-atomic)",  list(S("ATOMIC"), S("ACTUALS"), S("A-LIST")), MISSING_ARGUMENT);
 
 FIXTURE(evaluate_cond, Test,

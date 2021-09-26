@@ -197,42 +197,31 @@ TEST(Eval, CarLast) {
     EXPECT_EXCEPTION(expr.eval(), list(y), MISSING_ARGUMENT);
 }
 
-TEST(Eval, CONSp0) {  
-    CAREFULLY_EXPECT(EQ,list(CONS, x.q(), y.q()).eval(), x.cons(y));
-}
+TEST(Eval, CONSp0) EVAL_EQ(list(CONS, x.q(), y.q()), x.cons(y))
 
+FIXTURE(SetX, Test, "(set 'x 'bar)")
+TEST_F(SetX, T0) { EVAL_EQ("x", "bar"); }
+TEST_F(SetX, T1) { EVAL_XX("y", "y", UNDEFINED_ATOM); }
 
-TEST(Eval, Swap0) {  
+FIXTURE(SetY, Test, "(set 'y 'foo)")
+TEST_F(SetY, T0) { EVAL_EQ("y", "foo"); }
+TEST_F(SetY, T1) { EVAL_XX("x", "x", UNDEFINED_ATOM); }
+
+FIXTURE(Swap, Test, "(ndefun swap(x y) (cons (eval y) (eval x)))")
+TEST_F(Swap, T1) { set(x, "foo"); EVAL_EQ("x", "foo"); }
+TEST_F(Swap, T2) { set(y, "bar"); EVAL_EQ("y", "bar"); }
+TEST_F(Swap, T3) { set(x, "foo"); set(y, "bar"); EVAL_EQ("(swap x y)", "y.x"); }
+TEST_F(Swap, T4) { set("u", "foo"); set("v", "bar"); EVAL_EQ("(swap u v)", "bar.foo"); }
+TEST_F(Swap, T5) EVAL_XX("(swap a b c)", "(c)", REDUNDANT_ARGUMENT) 
+TEST_F(Swap, T6) EVAL_XX("(swap a)", "(y)", MISSING_ARGUMENT) 
+TEST_F(Swap, T7) EVAL_EQ("(swap '(a b) 'c)", "(c a b)")
+
+TEST(Eval, Set0) {  
     S foo("foo"), bar("bar");
-    // Define the function: "(ndefun f (a b) (cons (eval b) (eval a)))"
-    ndefun(f, list(a, b), list(CONS, list(EVAL, b), list(EVAL,a)));
     set(x, foo );
     set(y, bar);
     EXPECT_EQ(x.eval(), foo);
     EXPECT_EQ(y.eval(), bar);
-    CAREFULLY_EXPECT(EQ,list(f, x, y).eval(), y.eval().cons(x.eval()));
-}
-
-TEST(Eval, Swap) { 
-    // Define the function: "(ndefun f (x y) (cons y x))"
-    ndefun(f, list(x, y), list(CONS, y, x));
-    // Check different evaluations:
-    expr = list(f, list(list(a, b), c));
-    EXPECT_EQ(expr.eval(), c.cons(list(a,b))) << expr;
-    expr = f.cons(list(list(x, y), z));
-    EXPECT_EQ(expr.eval(), z.cons(list(x, y))) << expr;
-    expr = f.cons(list(list(CAR, CDR), a));
-    EXPECT_EQ(expr.eval(), a.cons(list(CAR, CDR)));
-    expr = f.cons(list(list(a, b, c, x, y, z), c));
-    EXPECT_EQ(expr.eval(), c.cons(list(a, b, c, x, y, z)));
-
-    // Check evaluation errors:
-    expr = f.cons(list(a,b,c));
-    EXPECT_EXCEPTION(expr.eval(), list(c), REDUNDANT_ARGUMENT);
-    expr = f.cons(list(a));
-    EXPECT_EXCEPTION(expr.eval(), list(y) , MISSING_ARGUMENT);
-    expr = f.cons(f);
-    EXPECT_EXCEPTION(expr.eval(), f, CAR);
 }
 
 TEST(Eval, Set) { 

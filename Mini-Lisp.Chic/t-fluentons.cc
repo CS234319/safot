@@ -204,11 +204,11 @@ TEST(Native, Error1) {
 }
 
 TEST(Native, Error2) {
-    EXPECT_EXCEPTION(parse("error.'A.'B").eval(), S("a") ,S("B"));
+    EXPECT_EXCEPTION(parse("error 'A 'B").eval(), S("a") ,S("B"));
 }
 
 TEST(Native, Error3) {
-    EXPECT_EXCEPTION(parse("(error A B C)").eval(), parse("(B C)"), S("A"));
+    EXPECT_EXCEPTION(parse("(error 'A 'B 'C)").eval(), parse("(B C)"), S("A"));
 }
 
 TEST(Native,EQ) {
@@ -293,39 +293,39 @@ TEST(Native, Undefined0) {
   EXPECT_EXCEPTION(S("foo bar").eval(),S("foo bar"),UNDEFINED_ATOM);
 }
 
-TEST(Apply, MissingVariable) {
+TEST(Invocation, MissingVariable) {
   EXPECT_EXCEPTION(S(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(Apply, MissingFunction0) {
+TEST(Invocation, MissingFunction0) {
   EXPECT_EXCEPTION(list(UNIQUE).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(Apply, MissingFunction1) {
+TEST(Invocation, MissingFunction1) {
   EXPECT_EXCEPTION(list(UNIQUE, T).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(Apply, MissingFunction2) {
+TEST(Invocation, MissingFunction2) {
   EXPECT_EXCEPTION(list(UNIQUE, T, T).eval()  ,S(UNIQUE),UNDEFINED_ATOM);
 }
 
-TEST(Apply, BadFunction) {
+TEST(Invocation, BadFunction) {
   EXPECT_EXCEPTION(list(T, T).eval(), T, BAD_FUNCTION);
 }
 
-TEST(Apply, Sanity1) {
+TEST(Invocation, Sanity1) {
   EXPECT_EXCEPTION(list(NIL).eval(), NIL, BAD_FUNCTION);
 }
 
-TEST(Apply, Sanity2) {
+TEST(Invocation, Sanity2) {
   EXPECT_EXCEPTION(list(NIL, NIL).eval(), NIL, BAD_FUNCTION);
 }
 
-TEST(Apply, Sanity3) {
+TEST(Invocation, Sanity3) {
   EXPECT_EXCEPTION(list(NIL, list(NIL, NIL)).eval(), NIL, BAD_FUNCTION);
 }
 
-TEST(Apply, Sanity4) {
+TEST(Invocation, Sanity4) {
   EXPECT_EXCEPTION(list(NIL, NIL).eval(), NIL, BAD_FUNCTION);
 }
 

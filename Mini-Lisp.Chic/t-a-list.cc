@@ -5,50 +5,52 @@
 
 using Engine::lookup, Engine::set;
 
-TEST(Lookup, T0) {
+SUITE(Lookup) 
+
+TEST_F(Lookup, T0) {
   CAREFULLY_EXPECT(EQ,lookup("T"),"T", << 2); 
 }
 
-TEST(Lookup, T) {
+TEST_F(Lookup, T) {
   EXPECT_STRUE(lookup("T"));
   EXPECT_TRUE(lookup("T").eq(T));
 }
 
-TEST(Lookup, NIL) {
+TEST_F(Lookup, NIL) {
   EXPECT_SFALSE(lookup("NIL"));
   EXPECT_FALSE(lookup("NIL").t());
   EXPECT_TRUE(lookup("NIL").eq("NIL"));
   EXPECT_TRUE(lookup("NIL").null());
 }
 
-TEST(Lookup, Failure1) {
+TEST_F(Lookup, Failure1) {
   EXPECT_EXCEPTION(lookup("bar baz"),S("bar baz"), UNDEFINED_ATOM);
 }
 
-TEST(Lookup, Failure2) {
+TEST_F(Lookup, Failure2) {
   EXPECT_EXCEPTION(lookup("foo" "bar" "baz"), S("foo" "bar" "baz"), UNDEFINED_ATOM);
 }
 
-TEST(Lookup, Failure3) {
+TEST_F(Lookup, Failure3) {
   EXPECT_EXCEPTION(lookup(" Y "), S(" Y "), UNDEFINED_ATOM);
 }
 
-TEST(Lookup, Failure4) {
+TEST_F(Lookup, Failure4) {
   EXPECT_EXCEPTION(lookup("foo"), S("foo"), UNDEFINED_ATOM);
 }
 
-TEST(Lookup, Failure5) {
+TEST_F(Lookup, Failure5) {
   S y("Y a b c");
   EXPECT_EXCEPTION(lookup(y), y, UNDEFINED_ATOM);
 }
 
 
-TEST(Lookup, SetGoodLookup) {
+TEST_F(Lookup, SetGoodLookup) {
   Engine::set("X","Y");
   EXPECT_STRUE(lookup("X"));
 }
 
-TEST(Lookup, TeaAndCofee) {
+TEST_F(Lookup, TeaAndCofee) {
   Engine::set("coffee","tea");
   EXPECT_EQ(lookup("coffee"), S("tea"));
   EXPECT_EXCEPTION(lookup("tea"),S("tea"), UNDEFINED_ATOM);

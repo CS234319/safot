@@ -34,9 +34,8 @@ namespace Engine {
 
   using namespace Inner;
   S apply(S tag, S formals, S body, S actuals) {
-    D(tag, formals);
+    ENTER(D(tag,formals, body));
     D(actuals);
-    D(body);
     check(actuals, BAD_ARGUMENTS);
     S arguments = INVOKE(map(actuals, normal(tag) ? identity : eval));
     if (formals.atom())   M("Variadic binding of", formals, actuals), 
@@ -51,7 +50,7 @@ namespace Engine {
 
   S apply(S f, S actuals) {
     S before = alist;
-    S what = f.eval(); 
+    S what = INVOKE(f.eval()); 
     push(S("*"), f.cons(actuals));
     push(RECURSE, what);
     what.n3() || f.error(BAD_FUNCTION).t();
@@ -61,9 +60,11 @@ namespace Engine {
   }
 
   S eval(S s) { 
-      ENTER(M(">>", s));
-      const S result = INVOKE(s.atom() ? lookup(s) : apply(s.car(), s.cdr())); 
-      EXIT(M("<<", result));
-      return result;
+    ENTER(M(">>", s));
+    D(alist);
+    D(globals);
+    const S result = INVOKE(s.atom() ? lookup(s) : apply(s.car(), s.cdr())); 
+    EXIT(M("<<", s, result));
+    return result;
   }
 }

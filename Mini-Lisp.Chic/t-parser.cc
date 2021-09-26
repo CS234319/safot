@@ -172,18 +172,12 @@ TEST(Parser, List1x) {
   H h;
 
   h = Tokenizer::get();
-  D(h);
-  D(!Symbol(h));
   EXPECT_EQ(h, '(');
 
   h = Tokenizer::get();
-  D(h);
-  D(!Symbol(h));
   EXPECT_STREQ(Strings::pool + h, "A");
 
   h = Tokenizer::get();
-  D(h);
-  D(!Symbol(h));
   EXPECT_EQ(h, ')');
 
   feed("(a)");

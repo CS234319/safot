@@ -11,18 +11,31 @@ namespace Parser {
   /* Formal grammar of S expression
    https://www.cs.princeton.edu/courses/archive/spring20/cos320/LL1/
 
-   // Grammar:
-   // Generated automatically S ::= E // Rule S1 
-   E ::= X T   
-   T ::= . X   
-   T ::= ''    
-   X ::= ' X   
-   X ::= ( L ) 
-   X ::= a     
-   L ::= E L    
-   L ::= ''    
+  // Good grammar:
+E ::= X T   
+X ::= a     
+T ::= . E   
+T ::= ''    
+X ::= ' X   
+X ::= ( L ) 
+L ::= E L    
+L ::= ''  
+E ::= [ E ]
 
-Note: Observe that this grammar derives the dotted pair atom.atom, by E -> X T -> a T -> a . X -> a. a. 
+  // Grammar:
+   // Generated automatically S ::= E // Rule S1 
+E ::= X T   
+X ::= a     
+T ::= . X   
+T ::= ''    
+X ::= ' X   
+X ::= ( L ) 
+L ::= E L    
+L ::= ''    
+
+Note: Observe that this grammar derives the dotted pair atom.atom, by 
+
+E -> X T -> a T -> a . X -> a. a. 
    // AST: 
    E ::= X T   { $$ = NIL;                } // E1
    T ::= . X   { $-1 = cons($-1,$$);      } // T1 Tricky 
