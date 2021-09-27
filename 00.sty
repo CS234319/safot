@@ -103,7 +103,6 @@
 \newfontfamily\commentsfont[Mapping=tex-text]{Liberation Serif}
 \setmonofont{UMTypewriter-Regular.otf}
   
-
 \catcode"2318=13
 \def⌘#1{\text{\LRE{\ttfamily\bfseries\textcolor{olive}{\LRE{#1}}}}}
 \def\E|#1|{{\LR{\mbox{#1}}}}
@@ -365,6 +364,11 @@ colframe=red!75!black}
       s sep'+=-3pt,
       fit=band,
     },
+  },
+  AST/.style={
+      ellipse,
+      fit=band,
+      fill=blue!20,
   },
   nt/.style={circle,edge,fill=red!20},
   terminal/.style={rectangle, fill=gray!10,draw,minimum width=8ex},
