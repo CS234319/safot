@@ -12,14 +12,14 @@
 \usepackage{adjustbox}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{amsthm}
+%\usepackage{amsthm}
 \usepackage{bashful}
 \usepackage{booktabs}
 \usepackage{filecontents}
-\usepackage{cf}
+%\usepackage{cf}
 \usepackage{cleveref}
 \usepackage{collcell}
-\usepackage{enumitem}
+%\usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{float}
 \usepackage{fontspec}
@@ -33,16 +33,16 @@
 \usepackage{minitoc}
 \usepackage{morewrites}
 \usepackage{multicol}
-\usepackage{multirow}
-\usepackage{pbox}
+%\usepackage{multirow}
+%\usepackage{pbox}
 \usepackage{polyglossia}
-\usepackage{proof}
-\usepackage{stmaryrd}
+%\usepackage{proof}
+%\usepackage{stmaryrd}
 \usepackage{tabularx}
 \usepackage{tcolorbox}
 \usepackage{tikz}
-\usepackage{url} 
-\usepackage{verbatim} 
+%\usepackage{url} 
+%\usepackage{verbatim} 
 \usepackage{xcolor}
 
 \usepackage{yogi-code}
@@ -68,13 +68,13 @@
 
 \def\דוגמה|#1|#2\par{\begin{example}[#1]#2\end{example}}
 
-\numberwithin{equation}{section}
+%\numberwithin{equation}{section}
+%\numberwithin{figure}{section}
 
 \graphicspath{{Images/}}
 
 \setmainlanguage{hebrew}
 \setmainfont{Linux Libertine O}
-%\setmainfont[Script=Hebrew]{Ezra SIL}% 
 \setotherlanguage{english}
 \setotherlanguage{arabic}
 
@@ -96,6 +96,7 @@
 %    SlantedFont=Hadasim CLM RegularOblique,
 %    BoldSlantedFont=Hadasim CLM BoldOblique,
 %]
+%\setmainfont[Script=Hebrew]{Ezra SIL}% 
 
 \newfontfamily\arabicfont[Script=Arabic]{DejaVu Sans}
 \newfontfamily\hebrewfonttt[Script=Hebrew]{Miriam Mono CLM}
@@ -125,15 +126,20 @@
 \renewcommand \listfigurename{רשימת האיורים}
 \renewcommand \listtablename{רשימת הטבלאות}
 
-\renewcommand \mtcfont{\scriptsize\rmfamily\upshape\bfseries}
-\renewcommand \mlffont{\scriptsize\rmfamily\upshape\bfseries}
-\renewcommand \mltfont{\scriptsize\rmfamily\upshape\bfseries}
+\renewcommand \mtcfont{\scriptsize \rmfamily \upshape \bfseries}
+\renewcommand \mlffont{\scriptsize \rmfamily \upshape \bfseries}
+\renewcommand \mlfSfont{\scriptsize \rmfamily \upshape \bfseries}
 
-\renewcommand \mtifont{\footnotesize \rmfamily\upshape\bfseries}
+\renewcommand \mltfont{\scriptsize \rmfamily \upshape \bfseries}
+
+\renewcommand \mtifont{\small \rmfamily \upshape \bfseries}
 
 \renewcommand \mtctitle{תוכן הענינים}
 \renewcommand \mlftitle{רשימת האיורים}
 \renewcommand \mlttitle{רשימת הטבלאות}
+
+\mtcsetfont{minitoc}{section}{\scriptsize \rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize \rmfamily\upshape\bfseries} 
 
 \let\ref=\cref
 

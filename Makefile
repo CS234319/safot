@@ -17,10 +17,9 @@ TMP 					 := $(shell mktemp -d)
 
 
 latex:
-# This is our first target. It would become your default if you include this
-# file, without defining an targets before it. It is OK to use a target whose
-# main body is defined later. 
+
 .PHONY: help
+
 help:     
 	@echo $(if $(need-help),,Type \'$(MAKE) help\' to get help)
 
@@ -135,6 +134,8 @@ garbage := $(sort $(wildcard \
 	*[dD][eE][lL][mM][eE]*   \
 	*.detexed                \
 	*.dvi                    \
+	*.mlf* \
+	*.mw \
 	*.eho                    \
 	*.fdb_                   \
 	*.fdb_latexmk            \
@@ -163,6 +164,7 @@ garbage := $(sort $(wildcard \
 	hello.c                  \
 	*.vtc                    \
 	temp*.* 							   \
+	diff \
 ))
 G0 := $(words $(garbage)) # 0th moment, i.e., garbage count
 G1 := $(shell ls -ls $(garbage)| tee  $(TMP)/files.lst | awk "{t+=$$$$6}END{print t}")

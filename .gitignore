@@ -1,4 +1,5 @@
 # Weirdos // vim: +,/^\s*$/-1!sort -u
+*mw
 diff
 tags
 m
@@ -19,7 +20,6 @@ $.*
 \\
 \\*
 \\\\\\\\
-
 # Ignore pattern "delme" (rhymes with "readme") 
 *[dD][eE][lL][mM][Ee]*
 .*[dD][eE][lL][mM][Ee]*
