@@ -29,7 +29,7 @@
 \DeclareOption{footnotesize}{\renewcommand\codesize\footnotesize}
 \DeclareOption{tiny}{\renewcommand\codesize\tiny}
 \DeclareOption{dense}{\renewcommand\@codedisplayspace{0pt}}
-\newcommand\inlinesize{}
+\newcommand\inlinesize{\normalsize}
 \ProcessOptions
 
 \providecommand\ensureLR[1]{\ifdefined\LR\LR{#1}\else{#1}\fi}
@@ -118,12 +118,6 @@
     numberstyle=\tiny\bf,
 }
 
-
-%\lstnewenvironment{LISP}[1][]{%
-%    \pagebreak[3]%
-%    \lstset{language=mini,style=display,##1}
-%    \ensureLTR
-%  }{\pagebreak[3]}
 
 \lstdefinelanguage{Mini}{
   language=Lisp,
