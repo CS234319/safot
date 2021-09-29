@@ -4,6 +4,12 @@
 \usepackage{listings}
 \begin{document}
 
+\newcommand\lisp[1]{\lstinline[basicstyle=\Huge]{#1}}
+
+
+Hi there \lisp{lisp} LISP
+\end{document}
+
 
 \forestset{%
   s tree/.style={
@@ -45,7 +51,7 @@ tikz+={\draw[red,use path=\minboundary]; \draw[red,use path=\maxboundary];}}}
  \newcommand\NIL{[$\varepsilon$,atom]}
  \A{\texttt{?:}}
 \begin{forest}
-[{},cons
+[{},cons,fit =rectangle
   [\texttt{?:},atom]
   [{},cons
     [{},cons
