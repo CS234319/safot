@@ -43,6 +43,7 @@ typedef unsigned int __id_t;
 typedef long int __time_t;
 typedef unsigned int __useconds_t;
 typedef long int __suseconds_t;
+typedef long int __suseconds64_t;
 typedef int __daddr_t;
 typedef int __key_t;
 typedef int __clockid_t;
@@ -215,7 +216,7 @@ extern int putchar_unlocked (int __c);
 extern int getw (FILE *__stream);
 extern int putw (int __w, FILE *__stream);
 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
-     ;
+     __attribute__ ((__access__ (__write_only__, 1, 2)));
 extern __ssize_t __getdelim (char **__restrict __lineptr,
                              size_t *__restrict __n, int __delimiter,
                              FILE *__restrict __stream) ;
@@ -250,8 +251,6 @@ extern void clearerr_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __l
 extern int feof_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern void perror (const char *__s);
-extern int sys_nerr;
-extern const char *const sys_errlist[];
 extern int fileno (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern FILE *popen (const char *__command, const char *__modes) ;

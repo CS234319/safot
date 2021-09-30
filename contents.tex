@@ -1,0 +1,63 @@
+\dominilot
+\dominilof
+\dominitoc
+
+\faketableofcontents
+\fakelistoftables
+\fakelistoffigures
+\endinput
+\begingroup
+\parindent=0pt
+\setcounter{tocdepth}{2}
+\etocsetstyle{chapter}
+{}
+{\leavevmode\leftskip0em\relax}
+{\normalsize\etocifnumbered{\makebox[1.5em][l]{\etocnumber.}}{}%
+\etocname\nobreak\hfill\nobreak
+\rlap{\makebox[1.5em]{\etocpage}}\par}
+{}
+
+\etocsetstyle{section}
+{}
+{\leavevmode\leftskip0em\relax}
+{\scriptsize\bfseries\etocifnumbered{\makebox[1.5em][l]{\etocnumber.}}{}%
+\space\etocname\nobreak\hfill\nobreak
+\rlap{\makebox[1.5em]{\etocpage}}\par}
+{}
+
+\etocsetstyle{subsection}
+{\begingroup\leftskip1.5em\relax}
+{\scriptsize\rmfamily\normalfont\textbullet\hspace\itemsep%
+\nolinebreak}
+{\etocname\space}
+{\par\endgroup}
+\tableofcontents
+\endgroup
+
+\input{front}
+
+\begingroup
+\setcounter{tocdepth}{1}
+\renewcommand \contentsname{תוכן העניינים (מקוצר)}
+\tableofcontents
+\endgroup
+
+\renewcommand \contentsname{תוכן העניינים (מפורט)}
+\addcontentsline{toc}{chapter}{תוכן העניינים (מפורט)}
+\input{contents}
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{רשימת האיורים}
+\listoffigures
+
+\addcontentsline{toc}{chapter}{רשימת הטבלאות}
+\listoftables
+
+\addcontentsline{toc}{chapter}{רשימת התכניות}
+\listof{תכנית}{רשימת התכניות}
+
+\dominilof
+\dominilot
+\dominitoc
+
+

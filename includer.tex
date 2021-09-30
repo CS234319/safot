@@ -1,9 +1,25 @@
+\documentclass {article}
+\usepackage [a6paper]{geometry}
+\usepackage {bashful}
+\pagestyle {empty}
+\begin{document}
+The directories in my \texttt {/usr} directory are:
+\bash[stdout]
+ls -F /usr
+\END
+That's it!
+\end{document}
+
 \documentclass{article}
 \usepackage{forest}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{bashful}
 \begin{document}
-
+\bash
+echo "Hello"
+\END
+\end{document}
 \newcommand\lisp[1]{\lstinline[basicstyle=\Huge]{#1}}
 
 

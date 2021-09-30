@@ -7,7 +7,7 @@
 DUP 					 =  ../Programs/dup
 LANG_TOOL      =  ../Programs/LanguageTool-3.2/languagetool-commandline.jar
 LATEX_COMMAND  =  lualatex
-LATEX_FLAGS    =  -file-line-error- -synctex=1 # -halt-on-error
+LATEX_FLAGS    =  -shell-escape -file-line-error- -synctex=1 # -halt-on-error
 LATEX          = $(LATEX_COMMAND) $(LATEX_FLAGS)
 LOCALTEXMF     =  ~/texmf   #  Comment or  change  if necessary.
 MAIN           =  00

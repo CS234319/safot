@@ -1,17 +1,10 @@
 \documentclass[12pt,reqno,fleqn]{book}
 \usepackage{00}
-
-
-\long\def\OUT#1\IN{}
-\long\def\IN#1\OUT{#1}
-
 \מאומה
-
 \כותרת{
   \fontsize{120}{140}\selectfont
-     שפות תכנות
+     פרקים בשפות תכנות
 }
-
 \מחבר{
 יוסי גיל ⏎
 הפקולטה למדעי המחשב⏎
@@ -19,67 +12,58 @@
 }
 
 \begin{document}
-\dominilof
-\dominilot
-\dominitoc
-\faketableofcontents
-\fakelistoffigures
-\fakelistoftables
-\long\def\ignore{
 \frontmatter
-\input{front}
-\tableofcontents
-
-\mainmatter
-℆ רקע מתימטי
-\begin{multicols}{2}
-\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
-\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
-\minitoc
-\end{multicols}
-\input{background}
-
+\maketitle
+\input contents
+\mainmatter\def \body#1{%
+  \begin{multicols}{2}%
+  \minitoc%
+  \minilof%
+  \minilot%
+  \end{multicols}%
+  \input{#1}%
 }
-℆מיני ליספ ושיערוך
-\begin{multicols}{2}
-\minitoc
-\minilof
-\minilot
-\end{multicols}
-\input{lisp}
-\end{document}
 
-%℆צעדים ראשונים
-%\begin{multicols}{2}
-%\mtcsetfont{minitoc}{section}{\footnotesize\rmfamily\upshape\bfseries}
-%\mtcsetfont{minitoc}{subsection}{\scriptsize\rmfamily\upshape\bfseries}
-%\minitoc
-%\end{multicols}
+℆ על התחום 
+\body{motivation}
+
+℆ טיפים ללימוד שפות תכנות
+\body{tips}
+
+℆ ניתוח לקסיקלי 
+\body{steps}
+
+℆ צעדים ראשונים 
+\body{stones}
+
+℆ רקע מתימטי
+\body{background}
+
+℆ מיני ליספ ושיערוך
+\body{lisp}
+
+℆ עוד על ליספ 
+%\body{advanced-lisp}
+
+℆ מאוניברסליות לאלגנטיות 
+כל שפות התכנות המעניינות הן אוניברסלית, אך ישנן שפות שהאוניברסליות שלהן מעניינת
+במיוחד.
+\body{universal}
+
+℆ שעשועים רקורסיביים  
+\body{recursion-games}
+
+℆ הידור והרצה של תכניות Java
+\body{JVM}
 
 
-%\input{steps}
+℆ קידוד תווים
+\body{character-encoding}
 
-
-%\פרק{הביצה והתרנגולת}
-
-%\כלול{chicken-and-egg}
-
-%\פרק{קידוד תווים}
-%\כלול{character-encoding}
 \סוף{מסמך}
-
-\פרק{אבני הבנין של שפות תכנות}
-\כלול{stones}
-
-\פרק{למה בכלל?}
-\כלול{motivation}
-
-\פרק{דקדוקי עניות}
-\כלול{steps}
-
-%\כלול{steps-ex}
-%\flushbottom
-%\clearpage
+℆ דקדוקי עניות
+\body{steps}
+\input{steps-ex}
 
 \החל{multicols}{2}
 \מאומה \גודל␣הערת␣שוליים
@@ -91,87 +75,24 @@
 \מאומה \גודל␣הערת␣שוליים
 \printglossary[type=engheb]
 \סוף{multicols}
-\פרק{הִדּוּר וַהֲרָצָה שֶׁל תָּכְנִיּוֹת Java}
-\כלול{JVM}
-\סוף{מסמך}
-
-\פרק{השם ופשרו}
-\כלול{binding}
-
-\פרק{ערכים}
-\כלול{values}
-\פרק{מקרה לדוגמה: שפת פסקל}
-\כלול{pascal}
-\chapter{יצוג אריתמטי של מצביעים}
-\פרק{יצוג אריתמטי של טיפוסים}
-\כלול{arithmetics}
-
 \חומר␣אחורי
 
 \סוף{מסמך}
+
+℆ השם ופשרו}
+\body{binding}
+
+℆ ערכים}
+\body{values}
+℆ מקרה לדוגמה: שפת פסקל}
+\body{pascal}
+℆ \chapter{יצוג אריתמטי של מצביעים}
+℆ יצוג אריתמטי של טיפוסים}
+\body{arithmetics}
+
 
 \החל{מובאה}
 \setLTR\cpp{cat << EOF}
 \סוף{מובאה}
 
-איך ללמוד שפה מהר?
-קודם כל להתגבר על בעיות הדקדוק. מסתבר שהדקדוק של שפות שונות עשוי להיות שונה
-מאוד, אבל יש קוים משותפים עמוקים.
 
-§ מאפיינים דקדוקיים ויזואליים
-
-§§אבחנה בין תיבה עליונה ותחתונה
-למה קוראים להם תיבות עליונות ותחתונות? בעבר, בדפוס היתה תיבה גבוהה עם האותיות
-הגדולות ותיבה נמוכה, תחתונה שבה האותיות הקטנות.
-
-איך לומדים מהר שפה?
-§§אוסף מילות מפתח
-
-במרבית המקרים קל לנחש את המשמעות של רובם.
-
-§§אוסף האופרטורים
-
-גם כאן קל לנחש את המשמעות של רובם.
-מיון אופרטורים: אונריים, בינריים, טרנריים.
-מילולונים הם בעצם אופרטורים אפס מקומיים.
-
-תופעות יחודיות
-
-\begin{itemize}
-• סימן מיוחד למינוס אונרי…
-• מגוון סימונים לאופרטור השונה מ
-• הצבה? לא תמיד אופרטור.
-\end{itemize}
-
-§§אוסף המילולונים
-בדרך כלל קל הרבה יותר. המילולונים הם די סטנדרטיים.
-מספר שלם, או מספר ממישי, תוים וסדריות.
-עיין לעיל מילולוני סדריות
-§§גודל השפה
-האם הקלט פלט הוא חלק מהשפה או שמא הוא חלק מהסיפריה הסטנדרטית.
-
-הנטיה היום: שפה קטנה וספריה גדולה.
-
-§§דברנות
-
-האם מתכנן השפה ניסה להגדיר דקדוק כזה המזכיר את השפה האנגלית.
-
-§מאפיינים תכנוניים שניוניים
-§§תכנית ריקה
-האם השפה מקבלת תכנית ריקה?
-§§גודל התכנית הקצרה ביותר
-תכנית שאינה ריקה, אבל קצרה ביותר.
-§§גודל ה\מהדר העצמי
-נקודת שבת מענינת.
-§§אורתוגונליות של התכנון
-קשה בדרך כלל להבחין.
-
-§§שיטת הביצוע
-שפה ביצועית, לעומת שפה הצהרתית, שבה יש מנוע הקובע את שיטת החישוב.
-\begin{itemize}
-• הדור לשפת מכונה
-• הדור לשפה אחרת.
-• פרשנות
-• תרגום למכונה אבסטרקטית.
-\end{itemize}
-יש גם מכונה אבסטרקטית הצהרתית לשפת \פרולוג.
