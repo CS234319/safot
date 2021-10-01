@@ -12,6 +12,7 @@
 \usepackage{adjustbox}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{pifont}\newcommand{\cmark}{\ding{51}}\newcommand{\xmark}{\ding{55}}%
 \usepackage{amsthm}
 \usepackage{bashful}
 \usepackage{booktabs}
@@ -49,14 +50,11 @@
 \usepackage{yogi-lang}
 \usepackage{yogi-unicode}
 
-
 % remove the stray space https://tex.stackexchange.com/a/513549
 \patchcmd{\pgfutilsolvetwotwoleqfloat}
   { \noexpand\pgfmathfloatdivide@}
   {\noexpand\pgfmathfloatdivide@}
   {}{}
-
-
 
 \floatstyle{ruled}
 \restylefloat{figure}
@@ -136,20 +134,6 @@
 \renewcommand \contentsname{תוכן העניינים (מפורט)}
 \renewcommand \listfigurename{רשימת האיורים}
 \renewcommand \listtablename{רשימת הטבלאות}
-
-\renewcommand \mtcfont{\scriptsize \rmfamily \upshape \bfseries}
-\renewcommand \mlffont{\scriptsize \rmfamily \upshape \bfseries}
-\renewcommand \mlfSfont{\scriptsize \rmfamily \upshape \bfseries}
-
-\renewcommand \mltfont{\scriptsize \rmfamily \upshape \bfseries}
-\renewcommand \mtifont{\small \rmfamily \upshape \bfseries}
-
-\renewcommand \mtctitle{תוכן הענינים}
-\renewcommand \mlftitle{רשימת האיורים}
-\renewcommand \mlttitle{רשימת הטבלאות}
-
-\mtcsetfont{minitoc}{section}{\scriptsize \rmfamily\upshape\bfseries}
-\mtcsetfont{minitoc}{subsection}{\scriptsize \rmfamily\upshape\bfseries} 
 
 \let\ref=\cref
 
@@ -409,7 +393,4 @@ nice empty nodes/.style={
     delay={where content={}{shape=coordinate,for siblings={anchor=north}}{}}
 }
 }
-\usepackage{pifont}% http://ctan.org/pkg/pifont
-\newcommand{\cmark}{\ding{51}}%
-\newcommand{\xmark}{\ding{55}}%
 

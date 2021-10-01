@@ -2,6 +2,21 @@
 \dominilof
 \dominitoc
 
+\renewcommand \mtcfont{\scriptsize \rmfamily \upshape \bfseries}
+\renewcommand \mlffont{\scriptsize \rmfamily \upshape \bfseries}
+\renewcommand \mlfSfont{\scriptsize \rmfamily \upshape \bfseries}
+
+\renewcommand \mltfont{\scriptsize \rmfamily \upshape \bfseries}
+\renewcommand \mtifont{\small \rmfamily \upshape \bfseries}
+
+\renewcommand \mtctitle{תוכן הענינים}
+\renewcommand \mlftitle{רשימת האיורים}
+\renewcommand \mlttitle{רשימת הטבלאות}
+
+\mtcsetfont{minitoc}{section}{\scriptsize \rmfamily\upshape\bfseries}
+\mtcsetfont{minitoc}{subsection}{\scriptsize \rmfamily\upshape\bfseries} 
+
+
 \faketableofcontents
 \fakelistoftables
 \fakelistoffigures
@@ -44,7 +59,6 @@
 
 \renewcommand \contentsname{תוכן העניינים (מפורט)}
 \addcontentsline{toc}{chapter}{תוכן העניינים (מפורט)}
-\input{contents}
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{רשימת האיורים}

@@ -2,8 +2,20 @@
 
 1. Introduction
     - **Lecture**:
-        1. Motivation
-        2. Paradigms 
+        1. Motivation + Paradigms 
+        2. Distinctions 
+         1. Recursive Structures:
+            - Atomics vs. Compound
+            - Mutually Recursive
+         2. Names
+            - named vs. name of names
+            - Scope vs. environment
+            - Anonymous vs. nameables
+         5. Variable vs. Value vs. Type
+         6. Expression vs. command
+         7. Sequential vs. Collateral Computation
+         8. Definition vs. declaration vs. initialization
+         9. Sequential vs. Recursive vs. Collateral Definition
     - **Tutorial**:
         1. (Wet) Something
         2. (Wet) Something
@@ -16,18 +28,7 @@
 
 2. Distinctions and Techniques
     - **Lecture**:
-      1. Distinctions 
-         1. Atomics vs. Compound
-         2. Name vs. named vs. name of names
-         3. Scope vs. environment
-         4. Anonymous vs. nameables
-         5. Variable vs. Value vs. Type
-         6. Expression vs. command
-         7. Sequential vs. Collateral Computation
-         8. Definition vs. declaration vs. initialization
-         9. Sequential vs. Recursive vs. Collateral Definition
-    
-      2. Techniques 
+      1. Techniques 
          1. Scope:
             - Vision and Price
             - Paradigm
@@ -39,7 +40,7 @@
             - Where does the program start? How does it end
             - Library vs. predefined vs. lockedin 
          3. Main concepts: 
-               - Examples: expression, threds, definition, labels,
+               - Find the concepts: expression, threds, definition, labels,
                declaration, function, reference, traits, labels, macro, command,
                enumeration, procedure, class, type, module, template, 
                  monads, 
