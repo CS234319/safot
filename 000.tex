@@ -1,0 +1,110 @@
+\documentclass[12pt,reqno,fleqn]{article}
+\ifx\cname\undefined
+  \immediate\write18{%
+    xelatex -shell-escape --jobname="lisp"
+    "\gdef\string\cname{lisp}\gdef\string\Title{מיני-ליספ ושיערוך}\string\input\space\jobname"
+  }%
+  \expandafter\stop
+\fi
+
+\usepackage{00}
+
+\begin{document}
+\מחבר{
+יוסי גיל ⏎
+הפקולטה למדעי המחשב⏎
+הטכניון - מכון טכנולוגי לישראל⏎
+}
+\title{\Title}
+\maketitle
+\begin{multicols}{2}%
+  \tableofcontents
+  \listoftables
+  \listoffigures
+\end{multicols}%
+\input \cname
+\end{document}
+
+\frontmatter
+\maketitle
+\input contents
+\mainmatter\def \body#1{%
+  \begin{multicols}{2}%
+  \minitoc%
+  \minilof%
+  \minilot%
+  \end{multicols}%
+  \input{#1}%
+}
+℆ על התחום 
+\body{motivation}
+
+℆ טכניקות לניתוח שפות תכנות
+\body{techniques}
+
+℆ ניתוח לקסיקלי 
+\body{steps}
+
+℆ צעדים ראשונים 
+\body{stones}
+
+℆ רקע מתימטי
+\body{background}
+
+℆ מיני ליספ ושיערוך
+\body{lisp}
+
+℆ עוד על ליספ 
+%\body{advanced-lisp}
+
+℆ מאוניברסליות לאלגנטיות 
+כל שפות התכנות המעניינות הן אוניברסלית, אך ישנן שפות שהאוניברסליות שלהן מעניינת
+במיוחד.
+\body{universal}
+
+℆ שעשועים רקורסיביים  
+\body{recursion-games}
+
+℆ הידור והרצה של תכניות Java
+\body{JVM}
+
+
+℆ קידוד תווים
+\body{character-encoding}
+
+\סוף{מסמך}
+℆ דקדוקי עניות
+\body{steps}
+\input{steps-ex}
+
+\החל{multicols}{2}
+\מאומה \גודל␣הערת␣שוליים
+\printglossary[type=hebeng]
+\סוף{multicols}
+\clearpage
+\החל{multicols}{2}
+\setLTR
+\מאומה \גודל␣הערת␣שוליים
+\printglossary[type=engheb]
+\סוף{multicols}
+\חומר␣אחורי
+
+\סוף{מסמך}
+
+℆ השם ופשרו}
+\body{binding}
+
+℆ ערכים}
+\body{values}
+℆ מקרה לדוגמה: שפת פסקל}
+\body{pascal}
+℆ \chapter{יצוג אריתמטי של מצביעים}
+℆ יצוג אריתמטי של טיפוסים}
+\body{arithmetics}
+
+
+\החל{מובאה}
+\setLTR\cpp{cat << EOF}
+\סוף{מובאה}
+
+
