@@ -128,6 +128,8 @@ garbage := $(sort $(wildcard \
 	*.blg                    \
 	*.mlt*                    \
 	*.exitCode               \
+	*.stderr               \
+	*.stdout               \
 	*.kernel.lisp \
 	*.library.lisp \
 	*.kernel.[0-9]*.lisp \
