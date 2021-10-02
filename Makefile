@@ -126,11 +126,14 @@ garbage := $(sort $(wildcard \
 	*.bbl                    \
 	*.bcf                    \
 	*.blg                    \
+	*.mlt*                    \
+	*.exitCode               \
 	*.kernel.lisp \
 	*.library.lisp \
 	*.kernel.[0-9]*.lisp \
 	*.library.[0-9]*.lisp \
 	*blx.bib                 \
+	*pdf                 \
 	*.class                  \
 	*[dD][eE][lL][mM][eE]*   \
 	*.detexed                \
