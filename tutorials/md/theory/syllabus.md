@@ -1,14 +1,14 @@
 # Syllabus
 
 ## Introduction: 5L 1T
-1. Motivation + Paradigms: 1
-2. Quick Pascal: 2 hours
+1. Motivation + Paradigms: 1L
+2. Quick Pascal: 2L
    1. Recursive set of expressions
    2. Recursive set of statements, defined based on statements
    3. Recursive set of types
    4. Mutual recursion in nesting of procedures and functions
    5. Names, predefined, nesting
-3. Principles: 1 hour included in Pascal
+3. Principles: 0L
    1. Recursive Structures:
       - Atomics vs. Compound
       - Constructor and atoms
@@ -65,7 +65,7 @@
     3. Evaluation method
     4. Memory model (if any)
     5. Commands
-7. Lexical analysis (Tutorial)
+7. Lexical analysis 1T
    1. Methodology: identify the stages, identify the tokens, identify the meaning
    2. Stages of lexical processing:
        1. **Prepare**:
@@ -102,11 +102,10 @@
            5. **Unused Keywords**
               1. **Reserved Keyword** for future e.g., entry in early C, later dropped
               2. **Deprecated Keyword** used in the past, e.g., delete in D; frowned upon now
-              3. **Forbidden Keyword** never used, never will be used, e.g, const and goto in java, to protect against mistakes, denote nothing
-   
-
-8. Example: analyze the tokens of D
-9. **Other Lexical Perspectives**
+              3. **Forbidden Keyword** never used, never will be used, e.g, const and goto in java, to protect against 
+           mistakes, denote nothing
+8. tokens of D example: 1T
+9. Optional: **Other Lexical Perspectives**
     1. Block open/closing
     2. Separatist/Terminst/Permissive/Mixed
     3. Case
@@ -114,7 +113,7 @@
     5. Escaping
 
                                                    3. 
-10. . Example in Swift
+10.  Example in D
 
 ## Types 5L 1T
 1. Type systems: Constructors and atomic types
