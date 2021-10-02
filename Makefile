@@ -117,6 +117,7 @@ anew: $(call tip,anew,same as 'make clean'; try writing 'make anew $(firstword $
 ###############################################################################
 # vim: /=/+,/^\s*)\s*)\s*$/-1!column -t | sort -u | awk '{print "\t" $0}'
 garbage := $(sort $(wildcard \
+	Excerpts/*.temp                       \
 	*~                       \
 	*.aux                    \
 	temp*                    \

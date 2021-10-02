@@ -1,0 +1,52 @@
+\forestset{%
+    call tree/.style={%
+        for tree={%
+            font=\scriptsize,
+            rounded rectangle,
+            fill=olive!10,
+            % draw,
+            s sep'+=-4pt,
+            fit=tight,
+          },
+      },
+ }
+ \begin{forest}
+  call tree [evaluate,name=evaluate
+  [lookup,name=lookup] {%
+  \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+  }
+  [is-primitive [exists]
+  {%
+  \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:2) .. ();
+  }
+  ]
+  [evaluate-primitive
+  [apply-primitive
+  [evaluate-cond] {%
+  \draw[->] (.-20) .. controls+(-60:0.9) and+(60:0.9) .. (.20);
+  \draw[->] (.200) .. controls+(210:9) and+(120:6) .. (evaluate.120);
+  }
+  [apply-eager-primitive
+  [apply-trivial-primitive]
+  ]
+  ]
+  ]
+  [apply, name=apply
+  [apply-decomposed-lambda
+  [bind] {%
+  \draw[->] () [out=south west,in=north] .. controls+(250:2) and+(120:1) .. ();
+  }
+  [evaluate-list] {%
+  \draw[->] (.210) .. controls+(250:2) and+(120:1) .. (.150);
+  \draw[->] (.-20) .. controls+(-10:6) and+(60:3) .. (evaluate.60);
+  }
+  ]
+  ] {}
+  ]
+  \draw[->] (.180) [out=south west,in=north west] .. controls+(south west:1) and+(north west:2) .. ();
+  \path (current bounding box.south west)++(-13ex,0) coordinate (A);
+  \path (current bounding box.north east)++(11ex,1ex) coordinate (B);
+  \clip (A) rectangle (B);
+\end{forest}
+
+

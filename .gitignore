@@ -1,4 +1,5 @@
 # Weirdos // vim: +,/^\s*$/-1!sort -u
+Excerpts/*
 *mw
 diff
 tags
@@ -8,6 +9,8 @@ __.*
 *.mlf*
 *.mlt*
 *.mtc*
+*.slf*
+*.slf*
 
 #_.*
 _*

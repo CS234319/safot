@@ -1,0 +1,582 @@
+§§ האלפאבית של מיני-ליספ
+כזה המצב למשל בשפת מיני-ליספ, שבה האלפאבית~$Γ$ שמעליו נבנים ביטויי ה-\E|S| הוא
+אינסופי, ומוגדר כאוסף כל ה\ע|מילים| מעל~$Σ_{\text{Mini-Lisp}}$,
+
+האלפאבית המכיל
+את כל ה\ע|תווים| שיכולים להופיע במה שקרוי בשפת ליספ \ע|אטום|:
+\begin{equation}
+  Γ_{\text{Mini-Lisp}}=Σ_{\text{Mini-Lisp}}^*,
+\end{equation}
+כאשר
+\begin{equation}\label{alpahet:C}
+  Σ_{\text{Mini-Lisp}}=
+  Σ_{\text{upper}}∪
+  Σ_{\text{digit}}∪
+  Σ_{\text{other}}.
+\end{equation}
+בפרט~$Σ_{\text{Mini-Lisp}}$ מכיל 62 תווים:
+\begin{enumerate}
+  ✦ \ע|26 אותיות אנגליות גדולות| \[
+    Σ_{\text{upper}}=❴⌘A,⌘B,⌘C,⌘D,⌘E,⌘F,⌘G,
+    ⌘H,⌘I,⌘J,⌘K,⌘L,⌘M,⌘N,⌘O,⌘P,⌘Q,⌘R,⌘S,⌘T,⌘U,⌘V,⌘W,⌘X,⌘Y,⌘Z❵.
+\] \relax
+  ✦ \ע|10 ספרות| \[
+    Σ_{\text{digit}}=❴⌘0,⌘1,⌘2,⌘3,⌘4,⌘5,⌘6,⌘7,⌘8,⌘9❵.
+\] \relax
+
+  ✦ \ע|26 סימנים מיוחדים| \[
+    Σ_{\text{other}}=❴
+    ⌘!,
+    ⌘",
+    ⌘＃,
+    ⌘\$,
+    ⌘\%,
+    ⌘＆,
+    ⌘*,
+    ⌘+,
+    ⌘,,
+    ⌘\,
+    ⌘-,
+    ⌘/,
+    ⌘:,
+    ⌘<,
+    ⌘=,
+    ⌘>,
+    ⌘?,
+    ⌘@,
+    ⌘\textbackslash,
+    ⌘\textasciicircum,
+    ⌘\_,
+    ⌘`,
+    ⌘❴,
+    ⌘|,
+    ⌘❵,
+    ⌘\textasciitilde
+  ❵
+\] \relax
+\end{enumerate}
+
+
+§§ דקדוק חסר הקשר של שפת מיני-ליספ
+לאחר שהצגנו את כתיב הרשימות, ואת השימוש בסימן ה-\E|quote| (\cc{'}) לציון
+הפונקציה \E|quote|, נוכל לכתוב את הדקדוק המלא של שפת מיני-ליספ כרשימה של חוקי
+גזירה של דקדוק חסר הקשר.
+\begin{equation}
+  \label{eq:ambigious}
+  \begin{split}
+    S &→A ⏎
+    S &→S₁\, ⌘.\, S₂⏎
+    S₁&→S ⏎
+    S₂&→S ⏎
+    S &→⌘[\, S\, ⌘] ⏎
+    S &→⌘(\, L ⌘\,) ⏎
+    L &→S \, L\,\, |\, \,ε ⏎
+    S &→⌘'\,S ⏎
+  \end{split}
+\end{equation}
+
+במילים, תכנית בשפת מיני-ליספ היא ביטוי~\E|S|, המסומן בדקדוק באות~$S$, אשר יכול
+ללבוש את הצורות הבאות:
+\ספרר
+✦ זוג של שני ביטויי~\E|S| המופרדים בסימן הנקודה (\cc{.}), המהווים יחד רשומת
+  \E|cons|, או \E|dotted pair|.
+✦ ביטוי~\E|S| העטוף בזוג סוגריים מרובעים (הסימן~\cc[ והסימן~\cc]).
+✦ רשימה~$L$ של אפס או יותר ביטויי~\E|S| העטופים בזוג סוגריים עגולים (הסימן~\cc(והסימן~\cc)).
+✦ ביטוי~\E|S| אשר לפניו מופיע סימן ה-\E|quote| (\cc{'})
+✦ אטום בודד המסומן כ-$A$ בדקדוק.
+===
+בדקדוק \cref{eq:unambigious}, נוכל לזהות אסימונים משלושה סוגים:
+\begin{enumerate}
+✦ ארבעה סימני פיסוק:~$⌘[$,~$⌘]$,~$⌘($, ו-$⌘)$.
+✦ שני אופרטורים: האופרטור הבינארי \E|dot|, אשר מסומן בנקודה ($⌘.$), אשר
+  הוא שם אחר לפונקציה הדו-מקומית \lisp{cons}, והאופרטור האונארי \E|quote|
+  המסומן בסימן המרכאה ($⌘'$), אשר הוא שם אחר לפונקצית הספריה החד-מקומית \lisp{quote}
+✦ מספר בלתי חסום של אטומים, אשר ניתן לחשוב עליהם הן כמזהים והן כמילולונים.
+\end{enumerate}
+
+\lstdefinelanguage{Verbatim}{}
+\lstnewenvironment{Verbatim}{\lstset{language=Verbatim}}{}
+הביטוי הרגולרי הבא מתאר את האפשרויות השונות לכתיבת אטומים בשפה
+\begin{LTR}
+\begin{verbatim}
+[a-zA-Z0-9!"#$%&*+,\-/:<=>?@\^_`{|}~]+
+\end{verbatim}
+\end{LTR}
+
+ובמילים, אטום הוא סדרה באורך אחד או יותר של תווים הלקוחים מהאלפאבית של שפת ליספ:
+כל תווי ה-\E|ASCII| הגרפיים (כלומר תווים שאינם תווי בקרה וניתן להדפיס אותם),
+לבד משמונת התווים הבאים \begin{itemize}
+    ✦ ששת התווים המופיעים בדקדוק, הכוללים, כפי שראינו, ארבעה סימני פיסוק ושני אופרטורים.
+    ✦ תו הרווח, אשר נועד בעיקר להפריד בין ביטויי~\E|S| המופיעים ברשימה, אך יכול
+    להופיע בכל מקום אחר בדקדוק. כיוון שרווח זה אינו יכול להופיע בתוך אטום, הרי
+    אם הוא מתגלה בזמן שהאינטרפרטר של ליספ קורא סדרת תווים של אטום, הוא יסיים את
+    הסדרה.
+    ✦ התו נקודה-ופסיק (⌘;) המשמש לציון הערה. הערה במיני-ליספ, כמו בליספ, מתחילה
+    בסימן זה, ונמשכת עד תום השורה. האינטרפטר של ליספ מתעלם מהערות.
+\end{itemize}
+    מיני-ליספ מתעלמת לא רק מרווחים, אלא גם מסימני שורה החדשה, מסימן הטאבולציה,
+    ומכל תו בקרה אחר של \E|ASCII|. כל אלו דינם כדין רווח: הם עשויים לסיים את רצף
+    התווים המהווה אטום, אך לבד מכך, השפה מתעלמת מהם. מיני-ליספ אינה תומכת
+    ב-\E|Unicode| או בכל קידוד תווים אחר שאינו \E|ASCII|.
+
+הדקדוק~\ref{eq:eval} הוא אמנם דקדוק מדויק של מיני-ליספ, אך הוא אינו חד משמעי.
+כך למשל, ניתן לגזור מהדקדוק את התכנית \lisp{a.b.c} בשני אופנים שונים:
+\begin{enumerate}
+✦ \ע|גזירה שמאלית ביותר| (\E|left most derivation|) בה מחליפים בכל פעם את
+  המשתנה הדקדוקי השמאלי ביותר. \פנה|איור:שמאלית| מתאר גזירה זו, ואת עץ
+  הגזירה של התכנית \lisp{a.b.c} הנוצר ממנה.
+
+\begin{figure}[H]
+  \caption[גזירה שמאלית ביותר]{גזירה שמאלית ביותר של התכנית \LR{a.b.c} על פי הדקדוק הרב-משמעי של
+  ליספ~\ref{eq:ambigious}, ועץ הגזירה המתקבל ממנה}
+  \תגית|איור:שמאלית|
+\centering
+\scriptsize
+\def⌘#1{\texttt{\bfseries\textcolor{olive}{#1}}}
+\begin{LTR}
+\begin{minipage}{0.4\textwidth}
+\begin{equation}\label{eq:left}
+ \catcode`\*=\active
+  \def*#1{\textcolor{Red}{#1}}
+  \begin{split}
+      S &→*{S₁} \, ⌘.\, S₂⏎
+      &→*S \, ⌘.\, S₂\, ⌘.\, S₂⏎
+      &→* A \, ⌘.\, S₂\, ⌘.\, S₂⏎
+      &→⌘a \, ⌘.\, *{S₂}\, ⌘.\, S₂⏎
+      &→⌘a \, ⌘.\, *S \, ⌘.\, S₂⏎
+      &→⌘a \, ⌘.\, *A\, ⌘.\, S₂⏎
+      &→⌘a \, ⌘.\, ⌘b\, ⌘.\, *{S₂}⏎
+      &→⌘a \, ⌘.\, ⌘b\, ⌘.\, *S⏎
+      &→⌘a \, ⌘.\, ⌘b\, ⌘.\, *A⏎
+      &→⌘a \, ⌘.\, ⌘b\, ⌘.\, ⌘c⏎
+  \end{split}
+\end{equation}
+\end{minipage}`
+\quad
+\begin{minipage}{0.4\textwidth}
+\begin{forest}
+  for tree [$S$,nt
+  [$S₁$,nt
+    [$S₁$,nt [$S$,nt[$A$,nt[⌘a,terminal]]]]
+    [⌘.,terminal]
+    [$S₂$,nt [$S$,nt [$A$,nt [⌘b,terminal]]]]
+  ]
+  [⌘.,terminal]
+  [$S₂$,nt [$S$,nt [$A$,nt [⌘c,terminal]]]]
+]
+\end{forest}
+\end{minipage}
+\end{LTR}
+\end{figure}
+ביטוי ה-\E|S| המתקבל עבור התכנית במקרה של גזירה כזו הוא
+\begin{quote}\scriptsize
+\Forest{s tree [{},cons [{},cons [⌘a,atom],[⌘b,atom]] [⌘c,atom] ] }
+\end{quote}
+מתאים לאסוציאטיביות שמאלית של אופרטור ה-\E|dot|.
+
+✦ \ע|גזירה ימנית ביותר| (\E|right most derivation|) בה מחליפים בכל פעם את המשתנה הדקדוקי הימני ביותר:
+\פנה|איור:שמאלית| מתאר גזירה זו, ואת עץ הגזירה של התכנית \lisp{a.b.c} הנוצר ממנה.
+
+\begin{figure}[H]
+  \caption[גזירה ימנית ביותר]{
+    גזירה ימנית ביותר של התכנית \LR{a.b.c} על פי הדקדוק הרב-משמעי של ליספ \cref{eq:ambigious}, ועץ הגזירה המתקבל ממנה}
+
+  \תגית|איור:ימנית|
+\centering
+\begin{LTR}
+  \begin{minipage}{0.4\textwidth}
+\scriptsize
+\def⌘#1{\texttt{\bfseries\textcolor{olive}{#1}}}
+\begin{equation}\label{eq:right}
+ \catcode`\*=\active
+  \def*#1{\textcolor{Red}{#1}}
+  \begin{split}
+    S &→S₁ \, ⌘.\, *{S₂}⏎
+      &→S₁ \, ⌘.\, S₁\, ⌘.\, *{S₂}⏎
+      &→S₁ \, ⌘.\, S₁\, ⌘.\, *S⏎
+      &→S₁ \, ⌘.\, S₁\, ⌘.\, *A⏎
+      &→S₁ \, ⌘.\, *{S₁}\, ⌘.\, ⌘c⏎
+      &→S₁ \, ⌘.\, *S\, ⌘.\, ⌘c⏎
+      &→S₁ \, ⌘.\, *A\, ⌘.\, ⌘c⏎
+      &→*{S₁} \, ⌘.\, ⌘b\, ⌘.\, ⌘c⏎
+      &→*S \, ⌘.\, ⌘b\, ⌘.\, ⌘c⏎
+      &→*A \, ⌘.\, ⌘b\, ⌘.\, ⌘c⏎
+      &→⌘a \, ⌘.\, ⌘b\, ⌘.\, ⌘c⏎
+  \end{split}
+\end{equation}
+\end{minipage}
+\quad
+  \begin{minipage}{0.4\textwidth}
+\scriptsize
+\begin{forest}
+ [$S$,nt
+   [$S₁$,nt [$S$,nt [$A$,nt [⌘a,terminal]]]]
+  [⌘.,terminal]
+  [$S₂$,nt
+    [$S₁$,nt [$S$,nt [$A$,nt[⌘b,terminal]]]]
+    [⌘.,terminal]
+    [$S₂$,nt [$S$,nt [$A$,nt [⌘c,terminal]]]]
+  ]
+]
+\end{forest}
+\end{minipage}
+\end{LTR}
+\end{figure}
+ביטוי ה-\E|S| המתקבל עבור התכנית במקרה של גזירה כזו מתאים לאסוציאטיביות ימנית של אופרטור ה-\E|dot|.
+\begin{quote}\scriptsize
+\Forest{s tree [{},cons [⌘a,atom],[{},cons [⌘b,atom] [⌘c,atom]]] }
+\end{quote}
+\end{enumerate}
+
+התכנית \lisp{'a.b} מדגימה דו משמעות מסוג אחר: בגזירה שמאלית ביותר נקבל כי
+האופרטור quote מופעל על האטום \lisp{a}; בגזירה ימנית ביותר, האופרטור מופעל על
+הזוג \lisp{a.b}.
+
+כדי להימנע מדו-משמעות נשכתב את הדקדוק כך:
+\newcommand \Or{\;|\;}
+\newcommand \Then{\, }
+\begin{align}
+  \label{eq:unambigious}
+     S &→Q \, P ⏎
+    P &→⌘{.} P \Or ε ⏎
+    Q &→⌘{'} \Then Q \Or E ⏎
+     E &→A \Or ⌘(\Then l \Then ⌘) \Or ⌘[ \Then S \Then ⌘] ⏎
+     L &→S \Then L \Or ε ⏎
+\end{align}
+בניסוח מילולי, דקדוק זה משמעו כי ביטוי~\E|S|, המסומן בדקדוק באות~$S$, הוא סדרה
+של אחד או יותר מרכיבים מסוג~$Q$, המופרדים באופרטור ה-\E|dot|.
+המרכיב~$Q$ הוא ביטוי-\E|S| אשר אינו כולל בתוכו אופרטור זה, אלא כשהוא
+מקונן באחד משני סוגי הסוגריים. בפרט המרכיב~$Q$ מתחיל בסידרה של אפס או יותר
+מופעים של האופרטור \E|quote| המופעלים זה בזה אחר זה על המשתנה הדקדוקי
+מסוג~$E$ אשר יכול
+ללבוש את אחת מבין הצורות תהבאות
+\ספרר
+✦ אטום בודד
+✦ ביטוי~\E|S| העטוף בזוג סוגריים מרובעים (הסימן~\cc[ והסימן~\cc]).
+✦ רשימה~$L$ של אפס או יותר ביטויי~\E|S| העטופים בזוג סוגריים עגולים (הסימן~\cc(והסימן~\cc)).
+===
+% במילים, תכנית בשפת
+% מיני-ליספ ביטוי~\E|S|, המסומן בדקדוק באות~$S$, אשר יכול
+% ללבוש את הצורות הבאות:
+% \ספרר
+% ✦ זוג של שני ביטויי~\E|S| המופרדים בסימן הנקודה (\cc{.}), המהווים יחד רשומת
+% \E|cons|, או \E|dotted pair|.
+% ✦ ביטוי~\E|S| העטוף בזוג סוגריים מרובעים (הסימן~\cc[ והסימן~\cc]).
+% ✦ רשימה~$L$ של אפס או יותר ביטויי~\E|S| העטופים בזוג סוגריים עגולים (הסימן~\cc(והסימן~\cc)).
+% ✦ ביטוי~\E|S| אשר לפניו מופיע סימן ה-\E|quote| (\cc{'})
+% ✦ אטום בודד המסומן כ-$A$ בדקדוק.
+%===
+% הדקדוק~\ref{eq:unambigious} קובע כי סימן המרכאה הוא בעל קדימות גבוהה יותר מסימן
+% הנקודה, וכי לסימן הנקודה פועל אסוציאטיביות שמאלית.
+% במילים, תכנית בשפת מיני-ליספ היא ביטוי~\E|S| (המסומן בדקדוק באות~$S$), אשר יכול
+% ללבוש את הצורות הבאות:
+% \ספרר
+% ✦ זוג של שני ביטויי~\E|S| המופרדים בסימן הנקודה (\cc{.}), המהווים יחד רשומת
+% \E|cons|, או \E|dotted pair|.
+% ✦ ביטוי~\E|S| העטוף בזוג סוגריים מרובעים (\cc[ ו-\cc]).
+% ✦ רשימה~$L$ של אפס או יותר ביטויי~\E|S| העטופים בזוג סוגריים מרובעים (\cc(
+% ו-\cc)).
+% ✦ ביטוי~\E|S| אשר לפניו מופיע סימן ה-\E|quote| (\cc{'})
+% ✦ אטום בודד המסומן כ-$A$ בדקדוק.
+%===
+%
+% \begin{LTR}
+% \begin{quote}
+% \scriptsize
+% \def⌘#1{{\bfseries\textcolor{olive}{#1}}}
+% \begin{forest}
+% for tree
+% [$S$,nt
+% [$S₁$,nt
+% [$S₁$,nt [$S$,nt[$A$,nt[⌘a,terminal]]]]
+% [⌘.,terminal]
+% [$S₂$,nt [$S$,nt [$A$,nt [⌘b,terminal]]]]
+% ]
+% [⌘.,terminal]
+% [$S₂$,nt [$S$,nt [$A$,nt [⌘c,terminal]]]]
+% ]
+% \end{forest}
+% \Forest{s tree [{},cons [{},cons [⌘a,atom],[⌘b,atom]] [⌘c,atom] ] }
+% \begin{forest}
+% [$S$,nt
+% [$S₁$,nt [$S$,nt [$A$,nt [⌘a,terminal]]]]
+% [⌘.,terminal]
+% [$S₂$,nt
+% [$S₁$,nt [$S$,nt [$A$,nt[⌘b,terminal]]]]
+% [⌘.,terminal]
+% [$S₂$,nt [$S$,nt [$A$,nt [⌘c,terminal]]]]
+% ]
+% ]
+% \end{forest}
+% \Forest{s tree [{},cons [⌘a,atom],[{},cons [⌘b,atom] [⌘c,atom]]] }
+% \end{quote}
+% \end{LTR}
+
+§§ אטומים, מילולונים, ומזהים
+
+ניזכר שבביטויי~\E|S| כל אטום הוא סדרת סימנים נטולת משמעות. במיני-ליספ
+האטום 42 הוא סדרה (בת שתי אותיות) שאין לה משמעות משלה. הא, ותו לא! במיני-ליספ
+לאטום זה יכול לקבל משמעות בשתי דרכים: אם באמצעות קריאה לפונקציה
+\E|set|,
+\begin{LISP}
+(set '42 'answer)
+\end{LISP}
+ואם בדרך של קריאה לפונקציה, בה נעשית קשירה של שמות פרמטרים לערכי הארגומנטים
+שבהפעלה. אטום מציין את ערכו אחד הפרמטרים. כאשר ניתנת לאטום משמעות כזו, ניתן
+לחשוב עליו כמזהה או אף כמשתנה. אולם, במיני-ליספ אין לאטום כל משמעות אלא אם כן
+זו ניתנה לו במפורש באחת מבין שתי הדרכים האלו.
+
+במרבית המימושים של ליספ המצב שונה: האטום 42 מייצג ערך שהוא מספר שלם. אנו אומרים
+שהאטום 42 הוא \ע|מילולון| \E|(literal)|. מילולון הוא אטום שמשמעותו קבועה מראש
+והוא אינו מציין ביטוי~\E|S| אחר. משמעותו של מילולון נקבעת על ידי פירוש "מילולי"
+של סדרת התווים שבו, בניגוד למשמעותו של סמל הנקבעת באמצעות טבלת סמלים.
+
+כאמור, אין מילולונים במיני-ליספ. ב-\E|Common Lisp| יש כמה סוגים של מילולונים,
+הכוללים
+\begin{enumerate}
+  ✦ מספרים שלמים, כגון \T|-12|.
+  ✦ מספרים רציונליים, כגון \T|3/7|.
+  ✦ מספרים ממשיים כגון \T|3.1415926535897932384d0| ו-\T|6.02E+23|.
+  ✦ מספרים מרוכבים כגון \T|#C(5-3)| אשר ערכו הוא~$5-3i$.
+  ✦ מחרוזות כגון \T|"Hello, World"|
+\end{enumerate}
+
+התמיכה במילולונים נעשית על ידי הרחבת שיטת השיערוך של אטומים: אם האטום אותו יש
+לשערך הוא סדרת תווים הנחזית להיות מספר או מילולון אחר, אז השיערוך של האטום נעשה
+ללא היוועצות בטבלת הסמלים. תמיכה בפעולות אריתמטיות נעשית באמצעות הגדרה מראש של
+קישור בין האטום~\T|+| לפעולת החיבור של מספרים, בין~\T|*| ובין פעולת הכפל,
+וכו'.
+
+בכמעט כל הניבים של ליספ, ניתן לכתוב ביטוים אריתמטיים בכתיב הרשימות, והשיערוך
+שלהם יביא לתוצאה הצפויה,
+
+\begin{LISP}
+> (+¢ ¢2 (*¢ ¢3¢ ¢5))
+17
+\end{LISP}
+
+הרחבות אלו אינן נחוצות לשם הבנה של ליספ, שכן ניתן לקודד בתוך ביטויי~\E|S| את
+מספרים, וניתן באמצעות מיני-ליספ לממש את כל הפונקציות האריתמטיות הפועלות על
+מספרים. אבל, מיני-ליספ אינה מסוגלת לבדוק את תוכנה של סדרת הסימנים היוצרת אטום:
+הפעולה היחידה המותרת על אטום במיני-ליספ היא השוואתו לאטום אחר: כיוון שכך שפת
+מיני-ליספ אינה יכולה להפוך אטום כמו \T|43217| למילולון אשר משמעותו היא המספר
+הטבעי \E|$43,217$|, דהיינו, ארבעים ושלושה אלפים מאתיים ושבע עשרה.
+
+\newcounter{magicrownumbers}
+\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
+\begin{table}[!hbt]
+  \כיתוב|הפונקציות האטומיות של מיני-ליספ|
+  \תגית|טבלה:אטומיות|
+  \footnotesize
+  \rowcolors{2}{blue!10}{white}
+  \begin{tabularx}\textwidth{r>{\scriptsize\setLR}c>{\scriptsize}c
+    >{\setRL\scriptsize\raggedleft\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    >{\scriptsize\setLR\raggedright\arraybackslash}X
+    }
+
+    \toprule
+    \normalsize \bfseries ＃                          &
+    \normalsize \bfseries {\text{/arity}}שם           &
+    \normalsize \bfseries סמנטיקה                     &
+    \normalsize \bfseries תמצית                       &
+    \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+    \midrule
+
+    \rownumber                                        &
+    atom/1                                            &
+    eager                                             &
+    בדיקה אם הפרמטר הוא אטום                        &
+    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
+    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
+
+    \rownumber                                        &
+    car/1                                             &
+    eager                                             &
+    חילוץ האיבר הראשון ברשימה                         &
+    \lisp{(car '(b.a))}~$⇒$ \lisp{B.A} \newline
+    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
+    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
+    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
+    \lisp{(car t)}~$⇒$ \text{✗} \newline
+    \lisp{(car ())}~$⇒$ \text{✗} ⏎
+
+    \rownumber                                        &
+    cdr/1                                             &
+    eager                                             &
+    חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
+    \lisp{(cdr '(a.b))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
+    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
+    \lisp{(cdr t)}~$⇒$ ✗ \newline
+    \lisp{(cdr ())}~$⇒$ ✗ \newline
+    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
+
+    \rownumber                                        &
+    ($n≥0$) cond/n                                    &
+    normal                                            &
+    הכללה של פקודת \E|if|. &
+    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
+    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
+    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
+    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
+
+    \rownumber                                        &
+    cons/2                                            &
+    eager                                             &
+    הוספת איבר בתחילת רשימה                           &
+    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
+    \lisp{(cons 'b nil)}~$⇒$ \lisp{(B)} \newline
+    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
+
+    \rownumber                                        &
+    eq/2                                              &
+    eager                                             &
+    בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
+    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
+    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
+    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
+
+    \rownumber                                        &
+    ($n≥0$) error/n                                   &
+    eager                                             &
+    הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
+    \lisp{(error)}~$⇒$ ✗ \newline
+    \lisp{(error A)}~$⇒$ ✗ \newline
+    \lisp{(error my-error message)}~$⇒$ ✗ ⏎
+
+    \rownumber                                        &
+    set/2                                             &
+    eager                                             &
+    יצירת קישור בין אטום ובין ביטוי~\E|S|. &
+    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
+    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
+    \label{atomic:count}
+ ⏎
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+§§ הפונקציות המוגדרות מראש 
+
+\begin{table}[!htbp]
+  \footnotesize
+  \def\lisp#1{#1}
+  \setlength{\tabcolsep}{1pt}%
+  \rowcolors{2}{blue!10}{white}%
+  \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize}c>{\scriptsize}c
+    >{\scriptsize\raggedleft\arraybackslash}X
+    >{\setLR\scriptsize\raggedright\arraybackslash}X
+    >{\setLR\scriptsize\raggedright\arraybackslash}X
+    }
+    \toprule
+   \normalsize \bfseries ＃                                                &
+   \normalsize \bfseries {\text{/arity}}שם                                 &
+   \normalsize \bfseries סמנטיקה                                           &
+   \normalsize \bfseries תמצית                                             &
+   \multicolumn1c{\normalsize \bfseries \RL{הגדרה}}                        &
+   \multicolumn1c{\normalsize \bfseries \RL{דוגמאות}} ⏎
+   \midrule
+
+   \rownumber                                                              &
+   \E|defun/3|                                                             &
+   normal                                                                  &
+   יצירת קישור בין אטום ובין ביטוי~\E|S| שהוא פונקציה בסמנטיקה \E|eager|. &
+   \lstinline{(set 'defun}\newline
+   \mbox\quad\lstinline{(nlambda (n p b)} \newline
+   \mbox\qquad \lstinline{(set n (lambda p b))))}                               &
+   \T|(defun f (x y) (y x))|\newline\quad
+⏎
+
+    \rownumber                                                              &
+    lambda/2                                                                &
+    normal                                                                  &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|eager|. &
+    \lstinline{(ndefun lambda(p b)}\newline
+    \mbox\quad\lstinline{('lambda p b))}                                         &
+    \lstinline{((lambda (x) (car (cdr x)))}\newline
+    \mbox\quad\lstinline{'(a b)}~$⇒$ \lstinline{B} ⏎
+
+    \rownumber                                                              &
+    nil/0                                                                   &
+    n/a                                                                     &
+    האטום הנקבע על ידי~$ε$, סדרת ריקה של תווים, והמציין את הרשימה הריקה. אטום
+    זה מציין את עצמו, ונחשב גם לערך הבוליאני של שקר, \E|false|. &
+    \lstinline{(set 'nil 'nil)}                                                  &
+    \lstinline{nil}~$⇒$ \lstinline{NIL} \newline
+    \lstinline{()}~$⇒$ \lstinline{NIL} \newline
+    \lstinline{(eq nil t)}~$⇒$ \lstinline{NIL} ⏎
+
+    \rownumber                                                              &
+    null/1                                                                  &
+    eager                                                                   &
+    בדיקה אם הארגומנט הוא האטום \lstinline{nil}                                  &
+    \lstinline{(defun null (x)}\newline
+    \mbox\quad\lstinline{(eq x nil))}                                            &
+    \lstinline{(null t)}~$⇒$ \lstinline{NIL} \newline
+    \lstinline{(null nil)}~$⇒$ \lstinline{T}\newline
+    \lstinline{(null 'a)}~$⇒$ \lstinline{NIL} \newline
+    \lstinline{(null '(a a))}~$⇒$ \lstinline{NIL} ⏎
+    \rownumber                                                              &
+    ndefun/3                                                                &
+    normal                                                                  &
+    יצירת קישור בין אטום ובין ביטוי~\E|S| שהוא פונקציה בסמנטיקה \E|normal|. &
+    \lstinline{(set 'ndefun}\newline
+    \mbox\quad\lstinline{(nlambda (n p b)} \newline
+    \mbox\qquad\lstinline{(set n (nlambda p b))))}                               &
+    \T|(ndefun f(x y) (y x))|\newline\quad~$⇒$ \T|F|⏎
+
+    \rownumber                                                              &
+    nlambda/2                                                               &
+    normal                                                                  &
+    יצירת פונקציה אנונימית שהסמנטיקה שלה היא \E|normal|. &
+    \lstinline{(ndefun nlambda(p b)}\newline\mbox\quad\lstinline{('nlambda p b))}     &
+    \T|(nlambda (x y) (y x))|~$⇒$
+    \newline\mbox\quad\T|(nlambda (x y) (y x)|
+ ⏎
+    \rownumber                                                              &
+    quote/1                                                                 &
+    normal                                                                  &
+    החזרת הארגומנט מבלי לשערך אותו. &
+    \lstinline{(ndefun quote (x) x)}                                             &
+    \lstinline{(quote a)}~$⇒$ \lstinline{A} \newline
+    \lstinline{(quote (b c))}~$⇒$ \lstinline{(B C)} \newline
+    \lstinline{'a}~$⇒$ \lstinline{A} \newline
+    \lstinline{'(b c)}~$⇒$ \lstinline{(B C)} \newline ⏎
+
+    \rownumber                                                              &
+    t/0                                                                     &
+    n/a                                                                     &
+    האטום \E|t|, המציין את \E|t|, כלומר את עצמו. נחשב גם לערך הבוליאני של אמת,
+    \E|(true)|. &
+    \lstinline{(set 't 't)}                                                      &
+    \lstinline{t}~$⇒$ \lstinline{T} \newline \lstinline{(eq nil nil)}~$⇒$ \lstinline{T} ⏎
+    \bottomrule
+ \end{tabularx}
+  \כיתוב|הפונקציות המוגדרות מראש במיני-ליספ|
+  \תגית|טבלה:מראש|
+\end{table}
+
+
+במהלך הדיון, הצגנו את המימוש של הפונקציות המוגדרות מראש באמצעות הפונקציות
+האטומיות. הנה הקוד המלא של המימוש שהצגנו.
+
+\immediate\closeout \libraryFile
+\begin{LTR}
+  \lstinputlisting[language=Mini,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{orange!20}
+  ]{\jobname.library.lisp} \end{LTR}
+
+
+

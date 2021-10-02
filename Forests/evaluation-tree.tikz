@@ -1,0 +1,55 @@
+ \begin{LTR}
+    \scriptsize
+    \forestset{%
+      x tree/.style={%
+          for tree={%
+              font=\ttfamily\scriptsize,
+              s sep'+=3pt,
+              l sep'+=3pt,
+              fit=band,
+            },
+        },
+        node/.style={ellipse,minimum height=0.0ex,minimum width=0.0ex},
+        library/.style={node,fill=green!20},
+        identifier/.style={node,fill=red!20},
+        operator/.style={node,fill=yellow!20},
+        literal/.style={node,fill=blue!20},
+        function/.style={node,fill=olive!20},
+    }
+    \begin{tabular}{p{0.5\textwidth}b{0.4\textwidth}}
+      \begin{forest}
+      x tree [\E|?:|,operator
+      [$f(\cdot)$,function [$2$, literal]]
+      [$g(\cdot,\cdot,\cdot)$, function
+      [\T|++|,operator [$a$, identifier]]
+      [\T|--|,operator [$b$, identifier]]
+      [$-$,operator[$\sin(\cdot)$,library [$c$, identifier]]]
+      ]
+      [$+$,operator [$10$,literal]
+      [$h()$,function ]]
+      ]
+    \end{forest}
+      &
+\begin{mdframed}[backgroundcolor=SkyBlue!10,linecolor=SkyBlue!10]
+  \scriptsize
+    \begin{tabular}{l}
+        \begin{forest}x tree[\E|?:|,operator,tikz={
+            \node[right=8ex of .west]{builtin ternary operator};}
+          ] \end{forest} ⏎
+      \begin{forest}x tree[$2$,literal, tikz={
+            \node[right=8ex of .west]{(numerical) literal};
+       }] \end{forest}⏎
+      \begin{forest}x tree[$a$,identifier,tikz={
+          \node[right=8ex of .west]{identifier of a user-defined variable};
+        }] \end{forest} ⏎
+      \begin{forest}x tree[$g(\cdot, \codt,\cdot)$,function,tikz={
+            \node[right=8ex of .west]{identifier of a nullary user-defined function};
+      }] \end{forest} ⏎
+      \begin{forest}x tree[$\sin(\cdot)$,library, tikz={
+            \node[right=8ex of .west]{identifier of a (unary) library function};
+       }] \end{forest}⏎
+  \end{tabular}
+\end{mdframed}
+\end{tabular}
+  \end{LTR}
+

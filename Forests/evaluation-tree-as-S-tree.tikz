@@ -1,0 +1,65 @@
+\forestset{%
+      x tree/.style={%
+          for tree={%
+              fit=band,
+            },
+        }
+      }
+\begin{forest}
+x tree [{},cons
+  [\texttt{?:},atom]
+  [{},cons
+    [{},cons
+      [$f(·)$,atom]
+      [{},cons[2,atom][$𝜀$,atom]]
+    ]
+    [{},cons,
+      [{},cons
+        [$g()$,atom]
+        [{},cons
+          [{},cons
+            [\texttt{++},atom]
+            [{},cons [$a$,atom] [$𝜀$,atom]]
+          ]
+          [{},cons
+            [{},cons
+              [\texttt{--},atom]
+              [{},cons [$b$,atom] [$𝜀$,atom]]
+            ]
+            [{},cons
+              [{},cons
+                [{},cons
+                  [\texttt{-},atom]
+                  [{},cons
+                    [{},cons
+                        [$\sin(·)$,atom]
+                        [{},cons [$c$,atom] [$𝜀$,atom]]
+                    ]
+                    [$𝜀$,atom]
+                  ]
+                ]
+                [$𝜀$,atom]
+              ]
+              [$𝜀$,atom]
+            ]
+          ]
+        ]
+      ]
+      [{},cons
+        [{},cons
+            [\texttt{+},atom]
+            [{},cons
+              [10,atom]
+              [{},cons
+                [{},cons [$h(·)$,atom][$𝜀$,atom]]
+                [$𝜀$,atom]
+              ]
+            ]
+        ]
+        [$𝜀$,atom]
+      ]
+    ]
+  ]
+]
+\end{forest}
+

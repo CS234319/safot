@@ -1,0 +1,53 @@
+  \begin{LTR}
+  \begin{tabular}{
+    >{\centering}m{27ex}
+    >{\centering}m{04ex}
+    >{\centering}m{8ex}
+   >{\centering}m{04ex}
+   >{\centering}m{15ex}
+  }
+  \Forest{s tree
+    [{},name=root,cons
+      [$a$,name=car, atom],
+      [{},name=cdr,
+        cons [$b$,name=cadr,atom] [$a$,name=cddr,atom]
+      ]
+  ]
+   \path (current bounding box.south west)++(-7ex,-0.6ex) coordinate(T3);
+   \path (current bounding box.south east)++(+5ex,-0.5ex) coordinate(T1);
+   \path (current bounding box.north)++(-2ex,6ex) coordinate(T2);
+   \path[fill=yellow!50, opacity=0.5] (T1)--(T2)--(T3)--cycle;
+    %
+   \path (car.south east)++(10pt,0) coordinate(T1);
+   \path (car.north)++(4pt,6pt) coordinate(T2);
+   \path (car.south west)++(-10pt,0) coordinate(T3);
+   \path[fill=blue!50, opacity=0.5] (T1)--(T2)--(T3)--cycle;
+    %
+   \path (cadr.south west)++(-10pt,-2pt) coordinate(T3);
+   \path (cddr.south east)++(10pt,0) coordinate(T1);
+   \path (cdr.north)++(-2pt,12pt) coordinate(T2);
+   \path[fill=red!50, opacity=0.5] (T1)--(T2)--(T3)--cycle;
+    %
+  }
+  &
+  $⇒$
+  &
+  \begin{forest}
+    [$a$, name=car, atom]
+   \path (car.south east)++(10pt,0) coordinate(T1);
+   \path (car.north)++(4pt,6pt) coordinate(T2);
+   \path (car.south west)++(-10pt,0) coordinate(T3);
+   \path[fill=blue!50, opacity=0.5] (T1)--(T2)--(T3)--cycle;
+  \end{forest}
+  &
++
+  &
+\Forest{s tree[{},name=cdr,cons [$b$,name=cadr,atom] [$a$,name=cddr,atom]]]
+   \path (cadr.south west)++(-10pt,-2pt) coordinate(T3);
+   \path (cddr.south east)++(10pt,0) coordinate(T1);
+   \path (cdr.north)++(-2pt,12pt) coordinate(T2);
+   \path[fill=red!50, opacity=0.5] (T1)--(T2)--(T3)--cycle;
+}
+\end{tabular}
+\end{LTR}
+
