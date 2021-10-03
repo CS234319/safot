@@ -9,6 +9,7 @@ TEST(Stack, Empty) {
 }
 
 TEST(Stack, Push) {
+  EXPECT_TRUE(empty());
   push(3);
   EXPECT_FALSE(empty());
   EXPECT_EQ(3,pop());
@@ -16,6 +17,7 @@ TEST(Stack, Push) {
 }
 
 TEST(Stack, Push2) {
+  EXPECT_TRUE(empty());
   push(2,3);
   EXPECT_EQ(2,pop());
   EXPECT_EQ(3,pop());

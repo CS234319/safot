@@ -39,22 +39,6 @@ TEST(REPL, StderrDefun) EXPECT_STDERR("(defun fun x y z)", "Error REDUNDANT ARGU
 TEST(REPL, StderrCons)  EXPECT_STDERR("(defun fun x y z)", "Error REDUNDANT ARGUMENT(S) on (Z)\n")
 TEST(REPL, StderrCons1) EXPECT_STDERR("(cons 'x 'y 'z)", "Error REDUNDANT ARGUMENT(S) on ('Z)\n")
 TEST(REPL, StderrErr1)  EXPECT_STDERR("(eval 'a 'a)", "Error REDUNDANT ARGUMENT(S) on ('A)\n")
-TEST(REPL, StderrErr2)  EXPECT_STDERR("(error 'msg)", "Error MISSING ARGUMENTS(S) on (..2)\n")
-
-TEST(REPL, Deep) {
-    S x("x");
-    S y("y");
-    S z("z");
-    S a(UNIQUE);
-    S b(UNIQUE);
-    S c(UNIQUE);
-    S f(__FUNCTION__);
-    ndefun(f,list(a,b), list(a, b, list(CAR,a)));
-
-    S l1 = list(CONS, x, list(f, T));
-    l1 = list(CONS, l1, l1); 
-    l1 = list(CONS, l1, l1); 
-
-    S what = list(CONS, list(CONS,T,list(CONS,T,list(CONS,NIL,list(f,a,b)))));
-    EXPECT_EXCEPTION(what.eval(), list(__2), MISSING_ARGUMENT);
-}
+TEST(REPL, StderrErr2)  EXPECT_STDERR("(error 'msg)", "Error ERROR on MSG\n")
+TEST(REPL, StderrErr3)  EXPECT_STDERR("(error t)", "Error ERROR on T\n")
+TEST(REPL, StderrErr4)  EXPECT_STDERR("(error 'a 'b 'c)", "Error A on (B C)\n")

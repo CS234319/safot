@@ -30,7 +30,7 @@ m: $(addsuffix .o,$(MINI-LISP))
 	$(CXX) $(LDFLAGS) -o $@ $^ 
 
 test: t
-	./$^ --gxtest_brief=1 --gtest_filter="*-*REPL*" 
+	./$^ --gxtest_brief=1 --gtest_filter="*-" 
 
 list:
 	@echo "ENGINE        = " $(ENGINE)
