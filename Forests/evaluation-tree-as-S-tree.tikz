@@ -1,10 +1,8 @@
 \forestset{%
       x tree/.style={%
-          for tree={%
-              fit=band,
-            },
-        }
+        fit=rectangle,
       }
+    }
 \begin{forest}
 x tree [{},cons
   [\texttt{?:},atom]

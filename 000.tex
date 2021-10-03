@@ -2,7 +2,7 @@
 
 \def\run#1#2{%
   \immediate\write18{%
-    % texfot --interactive 
+    %texfot --interactive 
     xelatex -shell-escape --jobname="#1"
     "\gdef\string\cname{#1}\gdef\string\Title{#2}\string\input\space\jobname"
   }%
@@ -12,8 +12,10 @@
 %\run{techniques}{טכניקות לניתוח שפות תכנות}
 %\run{lexical}{ניתוח וסיווג האסימונים} 
 %\run{lisp}{מיני ליספ ושיערוך}
+%\run{evaluation}{ליספ, ביטויי S ושיערוך}
+\run{mini-lisp}{מיני-ליספ ומימוש של eval}
 %\run{background}{רקע מתימטי}
-\run{universal}{מאוניברסליות לאלגנטיות}
+%\run{universal}{מאוניברסליות לאלגנטיות}
 %\run{recursion-games}{שעשועים רקורסיביים}
 %\run{JVM}{הידור והרצה של תכניות Java}
 %\run{character-encoding}{קידוד תווים}

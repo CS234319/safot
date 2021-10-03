@@ -1,0 +1,21 @@
+\newcommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
+\newcolumntype{T}{>{\collectcell{\TopAlign}}c<{\endcollectcell}}
+%\input{hacks.sty}
+%{%
+%    \makeatletter
+%    \catcode13=13\relax% Make ASCII 13 active to define it later
+%    \gdef\fixNewLine{%
+%        \def^^M{\space}%
+%    }%
+%}
+§ מבוא
+\input lisp-aa
+
+§ ביטויי~\E|S|
+\תגית|פרק:S|
+\input lisp-S
+
+§עצי שיערוך ועצי דקדוק אבסטרקטי
+\input lisp-trees
+
+\end{document}

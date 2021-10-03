@@ -1,4 +1,4 @@
- \begin{LTR}
+\begin{LTR}
     \scriptsize
     \forestset{%
       x tree/.style={%
@@ -51,5 +51,4 @@
   \end{tabular}
 \end{mdframed}
 \end{tabular}
-  \end{LTR}
-
+\end{LTR}
