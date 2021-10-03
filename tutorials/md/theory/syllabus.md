@@ -1,6 +1,6 @@
 # Syllabus
 
-## Introduction: 5L 1T
+### W1-3 Introduction: 5L 1T
 1. Motivation + Paradigms: 1L
 2. Quick Pascal: 2L
    1. Recursive set of expressions
@@ -115,39 +115,42 @@
                                                    3. 
 10.  Example in D
 
-## Types 5L 1T
+### W3-5 Types 5L 1T
 1. Type systems: Constructors and atomic types
 2. Atomic types and mapping to hardware
 3. Classification
 4. Polymorphism
 5. Structural vs nominal typing
 
-
-## Symbolic Values and Pure Lisp  5L 2T
+### W6-7 Symbolic Values and Pure Lisp  5L 2T
 1. **Lecture**: 
    1. Story of Lisp 
    2. S-Expressions as special values
    3. Evaluation trees and evaluation order
-   4. Pure Lisp / Normal vs. Eager Argument PassingH; Church Rosser
+   4. Pure Lisp / Normal vs. Eager Argument Passing; Church Rosser
    5. Dynamic vs. Lexical Binding
    6. Implementation of lexical binding
 2. **Tutorial**:
    1. Using mini-lisp (Tutorial)
    2. Implementation of eval (Tutorial)
 
-## Commands and Expression
-## Prolog 2L 3T
+### W7-8 Prolog 2L 3T
 
-## Storage
-   1. Garbage collection
-   2. Reference vs. value
-   3. Lvalue vs. rvalue in C/C++
-   4. Deep and shallow copy
-## Prolog
+### W9 State and Storage 2L 1T
+- **Lecture**:
+  1. Memory Model
+  2. Reference vs. value
+  3. Lvalue vs. rvalue in C/C++
+  4. Deep and shallow copy
+- **Tutorial**
+  1. Garbage collection and RTTI
+  2. Stack and lexical scoping
 
+## W10 Commands vs Expressions 2L 1T
+1. Theoretical 
+2. Atomic commands: Assignments, assertions, empty, procedure call, ...
+3. Command constructors: Sequential and variations, conditional, iterative
+4. Sequencers
+5. Expression Language vs. Command Language including JVM? Flowcharts. Primitive goto language.
 
-
-
-# Weeeks
-
-2. 
+## W11. Closures etc. 
