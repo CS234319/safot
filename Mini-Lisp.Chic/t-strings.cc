@@ -18,6 +18,7 @@ TEST(Strings, Indices) {
   EXPECT_NE(T,NIL);
   EXPECT_EQ(T,T);
   EXPECT_NE(T.cons(T),T.cons(T));
+  EXPECT_NE(T.cons(T).handle,T.cons(T).handle);
   EXPECT_NE(NIL.cons(NIL),NIL.cons(NIL));
   EXPECT_EQ(CAR.handle, S("CAR").handle);
   EXPECT_EQ(CDR.handle, S("CDR").handle);

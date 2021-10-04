@@ -4,11 +4,17 @@
 #import  "test.h"
 
 using namespace Stack;
-TEST(Stack, Empty) {
+
+struct stack:Test {
+  ~stack() {
+  }
+};
+
+TEST_F(stack, Empty) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Push) {
+TEST_F(stack, Push) {
   EXPECT_TRUE(empty());
   push(3);
   EXPECT_FALSE(empty());
@@ -16,7 +22,7 @@ TEST(Stack, Push) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Push2) {
+TEST_F(stack, Push2) {
   EXPECT_TRUE(empty());
   push(2,3);
   EXPECT_EQ(2,pop());
@@ -24,7 +30,7 @@ TEST(Stack, Push2) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Push3) {
+TEST_F(stack, Push3) {
   push(1,2,3);
   EXPECT_EQ(1,pop());
   EXPECT_EQ(2,pop());
@@ -32,7 +38,7 @@ TEST(Stack, Push3) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Peep) {
+TEST_F(stack, Peep) {
   push(1,2,3);
   EXPECT_EQ(1,peep());
   EXPECT_EQ(1,peep(0));
@@ -45,7 +51,7 @@ TEST(Stack, Peep) {
 }
 
 
-TEST(Stack, Push4) {
+TEST_F(stack, Push4) {
   push(1,2,3,4);
   EXPECT_EQ(1,pop());
   EXPECT_EQ(2,pop());
@@ -54,7 +60,7 @@ TEST(Stack, Push4) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, reset) {
+TEST_F(stack, reset) {
   EXPECT_TRUE(empty());
   Stack::push(1,2,3,4);
   EXPECT_FALSE(empty());
@@ -64,7 +70,7 @@ TEST(Stack, reset) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, TopZero) {
+TEST_F(stack, TopZero) {
   EXPECT_TRUE(empty());
   EXPECT_TRUE(top == 0);
   push(3);
@@ -73,7 +79,7 @@ TEST(Stack, TopZero) {
   EXPECT_TRUE(top == 0);
 } 
 
-TEST(Stack, PushPush) {
+TEST_F(stack, PushPush) {
   push(3);
   EXPECT_FALSE(empty());
   push(2);
@@ -83,7 +89,7 @@ TEST(Stack, PushPush) {
   EXPECT_TRUE(empty());
 }
 
-TEST(Stack, Remaining) {
+TEST_F(stack, Remaining) {
   EXPECT_EQ(0, top);
   EXPECT_TRUE(empty());
   int before = Pairs::to_go();

@@ -13,7 +13,7 @@ namespace Engine { namespace Inner {
 using Engine::lookup;
 
 
-TEST(DISABLED_AlistGlobalLocal, SetWithNoError) {
+TEST(AlistGlobalLocal, SetWithNoError) {
     /*
      * Set 3 variables inside cond, locally,
      * and after the function return, all of them should
@@ -60,7 +60,7 @@ TEST(DISABLED_AlistGlobalLocal, SetWithNoError) {
 }
 
 
-TEST(DISABLED_AlistGlobalLocal, SetWithError) {
+TEST(AlistGlobalLocal, SetWithError) {
     /*
      * Same as before, but we call error in the third condition.
      * Thus, all the lookup MUST throw UNDEFINED_ATOM error for all the
@@ -89,19 +89,19 @@ TEST(DISABLED_AlistGlobalLocal, SetWithError) {
                     x.q()
             ),
             list(
-                    list(NULL, list(SET, b_1.q(), x.q())),
+                    list(NULL, list(ERROR, b_2.q(), b_2.q())),
                     x.q()
             ),
             list(
-                    list(NULL, list(ERROR, b_2.q(), b_2)),
+                    list(NULL, list(SET, b_1.q(), x.q())),
                     x.q()
             )
     );
 
     // Evaluate cond on the list:
-    EXPECT_EXCEPTION(s.eval(), list(S("ERROR"), b_2.q(), b_2), REDUNDANT_ARGUMENT);
+    EXPECT_EXCEPTION(s.eval(), list(b_2), b_2);
 
     // Check if b0, b1, b2 are defined:
-    EXPECT_EXCEPTION(lookup(b_0), b_0, UNDEFINED_ATOM);
+    EXPECT_EQ(lookup(b_0), x);
     EXPECT_EXCEPTION(lookup(b_1), b_1, UNDEFINED_ATOM);
 }
