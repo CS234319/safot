@@ -34,7 +34,7 @@ jobs:
 
       # Install requirements
       - name: Install more requirements
-        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y pc ocaml
+        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y fp-compiler ocaml
 
       # Runs a set of commands using the runners shell
       - name: Compile LaTeX
