@@ -32,6 +32,10 @@ jobs:
       - name: Install requirements
         run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
 
+      # Install requirements
+      - name: Install more requirements
+       run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y ocaml
+
       # Runs a set of commands using the runners shell
       - name: Compile LaTeX
         run: xelatex -file-line-error -halt-on-error -shell-escape 00
