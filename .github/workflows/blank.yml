@@ -30,6 +30,7 @@ jobs:
       - name: Setup fonts 
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
       - uses: actions/upload-artifact@v2
+      - name: Latex 
         run: xelatex -file-line-error -halt-on-error -shell-escape 00
 
   tex-00:
