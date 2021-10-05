@@ -20,15 +20,17 @@ jobs:
       - name: Install Basics 
         run:  sudo apt install -y git make 
       - name: Install Languages 
-        run:  sudo apt install -y fp-compiler ocaml 
+        run:  sudo apt-get install -y fp-compiler ocaml 
       - name: Install XeLaTeX
-        run:  sudo apt install -y texlive-xetex
+        run:  sudo apt-get install -y texlive-xetex
       - name: Install TeXLive Extra
-        run:  sudo apt install -y texlive-extra-utils texlive-lang-arabic texlive-science-doc 
+        run:  sudo apt-get install -y texlive-extra-utils texlive-lang-arabic texlive-science-doc 
       - name: Install Fonts 
-        run:  sudo apt install  -y texlive-fonts-extra texlive-science fonts-lmodern 
+        run:  sudo apt-get install  -y texlive-fonts-extra texlive-science fonts-lmodern 
       - name: Setup fonts 
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
+      - uses: actions/upload-artifact@v2
+        run: xelatex -file-line-error -halt-on-error -shell-escape 00
 
   tex-00:
     needs: install
