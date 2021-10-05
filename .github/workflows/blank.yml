@@ -13,26 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  try: 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v2
-      - name: Install Fonts 
-        run:  sudo apt-get install  -y texlive-fonts-extra texlive-science fonts-lmodern 
-      - name: Setup fonts 
-        run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
-      - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v2
-        with:
-          root_file: mini-lisp.tex 
-          latexmk_shell_escape: true
-          latexmk_use_xelatex: true
-      - uses: actions/upload-artifact@v2
-        with:
-          path: mini-lisp.pdf 
-
-  install: 
+ all: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -49,29 +30,38 @@ jobs:
       - name: Setup fonts 
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
       - name: Latex 
-        run: xelatex -file-line-error -halt-on-error -shell-escape 00
-
-  tex-00:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Compile main book as one document
-        run: xelatex -file-line-error -halt-on-error -shell-escape 00
+        run: mklatex -file-line-error -halt-on-error -shell-escape 00
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./00.pdf
           if-no-files-found: error
-      
-      
-  mini-lisp:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Compile mini-lisp 
-        run: xelatex -file-line-error -halt-on-error -shell-escape mini-lisp
+
+        run: mklatex -file-line-error -halt-on-error -shell-escape mini-lisp 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./mini-lisp.pdf
           if-no-files-found: error
+            
+        run: mklatex -file-line-error -halt-on-error -shell-escape evaluation 
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: ./evaluation.pdf
+          if-no-files-found: error
+                         
+        run: mklatex -file-line-error -halt-on-error -shell-escape background 
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: ./background.pdf
+          if-no-files-found: error
+                         
+        run: mklatex -file-line-error -halt-on-error -shell-escape techniques 
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: ./techniques.pdf
+          if-no-files-found: error
+             
