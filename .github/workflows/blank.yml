@@ -34,6 +34,7 @@ jobs:
     steps:
       - name: Compile main book as one document
         run: xelatex -file-line-error -halt-on-error -shell-escape 00
+      - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           name: Pdf Book
@@ -47,8 +48,9 @@ jobs:
     steps:
       - name: Compile mini-lisp 
         run: xelatex -file-line-error -halt-on-error -shell-escape mini-lisp
+      - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
-          name: Mini-lisp.pdf
+          name: mini lisp 
           path: ./mini-lisp.pdf
           if-no-files-found: error
