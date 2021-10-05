@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-#
 name: PDF
 
 # Controls when the action will run. 
@@ -18,92 +16,38 @@ jobs:
   install: 
     runs-on: ubuntu-latest
     steps:
-      - name: Cache APT
-        uses: actions/cache@v2
-        id: cache-apt
-        with:
-          path: "~/apt"
-          key: ${{secrets.VALGRIND_VERSION}}
-
       - uses: actions/checkout@v2
-      - name: Install requirements
-        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
+      - name: Install Basics 
+        run:  sudo apt install -y git make 
+      - name: Install Languages 
+        run:  sudo apt install -y fp-compiler ocaml 
+      - name: Install Latex
+        run:  sudo apt install -y texlive-xetex texlive-extra-utils texlive-lang-arabic texlive-science-doc 
+      - name: Install Fonts 
+        run:  sudo apt install  -y texlive-fonts-extra texlive-science fonts-lmodern 
+      - name: Setup fonts 
+        run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
       - name: Install more requirements
-        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y fp-compiler ocaml
-      - name: Install valgrind
-        env:
-          CACHE_HIT: ${{steps.cache-valgrind.outputs.cache-hit}}
-         VALGRIND_VERSION: ${{secrets.VALGRIND_VERSION}}
-        run: |
-          if [[ "$CACHE_HIT" == 'true' ]]; then
-            sudo cp --verbose --force --recursive ~/apt/* /
-          else
-            sudo apt-get install --yes valgrind="$VALGRIND_VERSION"
-            mkdir -p ~/apt
-            for dep in libc6 libgcc1 gcc-8-base; do
-              dpkg -L $dep | while IFS= read -r f; do if test -f $f; then echo $f; fi; done | xargs cp --parents --target-directory ~/valgrind/
-            done
-          fi
 
   tex-00:
     needs: install
     steps:
       - name: Compile main book as one document
         run: xelatex -file-line-error -halt-on-error -shell-escape 00
-    if: ${{ always() }}
-        with:
-          name: Pdf Book
-          path: ./00.pdf
-          if-no-files-found: error
+        if: ${{ always() }}
+          with:
+            name: Pdf Book
+            path: ./00.pdf
+            if-no-files-found: error
         
         
   mini-lisp:
     needs: install
     steps:
+      - name: Compile mini-lisp 
         run: xelatex -file-line-error -halt-on-error -shell-escape mini-lisp
         if: ${{ always() }}
           with:
             name: Mini-lisp.pdf
             path: ./mini-lisp.pdf
             if-no-files-found: error
-        
-        
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-#      - name: Setup tmate (Debug) session
-#        uses: mxschmitt/action-tmate@v3
-
-      # Install requirements
-      - name: Install requirements
-        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
-
-      # Install requirements
-      - name: Install more requirements
-        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y fp-compiler ocaml
-
-      # Runs a set of commands using the runners shell
-      - name: Compile main book as one document
-        run: xelatex -file-line-error -halt-on-error -shell-escape 00
-
-      # Runs a set of commands using the runners shell
-      - name: Compile chapters
-        run: xelatex -file-line-error -halt-on-error -shell-escape 000
-
-      - uses: actions/upload-artifact@v2
-#     Maybe will be supported in the future
-#        title: Build Artifacts
-#          - files: [ "00.pdf" ]
-#          - files: [ "00.log" ]
-        if: ${{ always() }}
-        with:
-          name: Pdf Book
-          path: ./00.pdf
-          if-no-files-found: error
