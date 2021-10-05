@@ -16,7 +16,8 @@ jobs:
  all: 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout from git
+        uses: actions/checkout@v2
       - name: Install Basics 
         run:  sudo apt install -y git make 
       - name: Install Languages 
@@ -37,28 +38,28 @@ jobs:
           path: ./00.pdf
           if-no-files-found: error
 
-        run: mklatex -file-line-error -halt-on-error -shell-escape mini-lisp 
+      - run: mklatex -file-line-error -halt-on-error -shell-escape mini-lisp 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./mini-lisp.pdf
           if-no-files-found: error
             
-        run: mklatex -file-line-error -halt-on-error -shell-escape evaluation 
+      - run: mklatex -file-line-error -halt-on-error -shell-escape evaluation 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./evaluation.pdf
           if-no-files-found: error
                          
-        run: mklatex -file-line-error -halt-on-error -shell-escape background 
+      - run: mklatex -file-line-error -halt-on-error -shell-escape background 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./background.pdf
           if-no-files-found: error
                          
-        run: mklatex -file-line-error -halt-on-error -shell-escape techniques 
+      - run: mklatex -file-line-error -halt-on-error -shell-escape techniques 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
