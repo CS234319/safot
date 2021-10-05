@@ -1,0 +1,16 @@
+\def\wrapMe{\relax}
+\makeatletter
+\ifx\documentclass\@twoclasseserror % after \documentclass
+  \ifx\@onlypreamble\@notprerr % after \begin{document}
+  \relax 
+  \else % before \begin{document}
+    \relax
+  \fi
+\else % before \documentclass
+  \def \wrapMe{
+    \def\cname{\jobname}
+    \input{000}
+  }
+\fi
+\makeatother
+\wrapMe

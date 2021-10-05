@@ -1,17 +1,5 @@
-\def\wrapMe{\relax}
-\makeatletter
-\ifx\documentclass\@twoclasseserror % after \documentclass
-  \ifx\@onlypreamble\@notprerr % after \begin{document}
-    Hello
-  \else % before \begin{document}
-    Howdy
-  \fi
-\else % before \documentclass
-  Hi!
-  \def \wrapMe{\input{000}}
-\fi
-\makeatother
-\wrapMe
+\def\Title{שפת מיני-ליספ וכתיבת המשערך שלה בה עצמה}
+\input{wrapme.sty}
 
 \providecommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
 \newcolumntype{T}{>{\collectcell{\TopAlign}}c<{\endcollectcell}}

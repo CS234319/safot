@@ -1,6 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-# We need a cached version: https://stackoverflow.com/questions/59269850/caching-apt-packages-in-github-actions-workflow
-# To solve the slow apt installation
+#
 name: PDF
 
 # Controls when the action will run. 
