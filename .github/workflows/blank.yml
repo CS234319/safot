@@ -13,6 +13,20 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  try: 
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: mini-lisp.tex 
+          latexmk_shell_escape: true
+          latexmk_use_xelatex: true
+      - uses: actions/upload-artifact@v2
+        with:
+          path: mini-lisp.pdf 
+
   install: 
     runs-on: ubuntu-latest
     steps:
