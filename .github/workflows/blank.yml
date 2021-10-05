@@ -21,8 +21,10 @@ jobs:
         run:  sudo apt install -y git make 
       - name: Install Languages 
         run:  sudo apt install -y fp-compiler ocaml 
-      - name: Install Latex
-        run:  sudo apt install -y texlive-xetex texlive-extra-utils texlive-lang-arabic texlive-science-doc 
+      - name: Install XeLaTeX
+        run:  sudo apt install -y texlive-xetex
+      - name: Install TeXLive Extra
+        run:  sudo apt install -y texlive-extra-utils texlive-lang-arabic texlive-science-doc 
       - name: Install Fonts 
         run:  sudo apt install  -y texlive-fonts-extra texlive-science fonts-lmodern 
       - name: Setup fonts 
