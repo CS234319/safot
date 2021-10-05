@@ -16,6 +16,59 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  install: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache APT
+        uses: actions/cache@v2
+        id: cache-apt
+        with:
+          path: "~/apt"
+          key: ${{secrets.VALGRIND_VERSION}}
+
+      - uses: actions/checkout@v2
+      - name: Install requirements
+        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y git make texlive-extra-utils texlive-lang-arabic texlive-fonts-extra texlive-xetex texlive-science fonts-lmodern texlive-science-doc && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
+      - name: Install more requirements
+        run: pwd && ls -alh ../ && sudo apt update -y && sudo apt install -y fp-compiler ocaml
+      - name: Install valgrind
+        env:
+          CACHE_HIT: ${{steps.cache-valgrind.outputs.cache-hit}}
+         VALGRIND_VERSION: ${{secrets.VALGRIND_VERSION}}
+        run: |
+          if [[ "$CACHE_HIT" == 'true' ]]; then
+            sudo cp --verbose --force --recursive ~/apt/* /
+          else
+            sudo apt-get install --yes valgrind="$VALGRIND_VERSION"
+            mkdir -p ~/apt
+            for dep in libc6 libgcc1 gcc-8-base; do
+              dpkg -L $dep | while IFS= read -r f; do if test -f $f; then echo $f; fi; done | xargs cp --parents --target-directory ~/valgrind/
+            done
+          fi
+
+  tex-00:
+    needs: install
+    steps:
+      - name: Compile main book as one document
+        run: xelatex -file-line-error -halt-on-error -shell-escape 00
+    if: ${{ always() }}
+        with:
+          name: Pdf Book
+          path: ./00.pdf
+          if-no-files-found: error
+        
+        
+  mini-lisp:
+    needs: install
+    steps:
+        run: xelatex -file-line-error -halt-on-error -shell-escape mini-lisp
+        if: ${{ always() }}
+          with:
+            name: Mini-lisp.pdf
+            path: ./mini-lisp.pdf
+            if-no-files-found: error
+        
+        
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
