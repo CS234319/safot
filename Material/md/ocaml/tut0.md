@@ -40,7 +40,7 @@ opam install dune utop ocaml-lsp-server ocamlformat merlin
 
 ### the OCaml REPL
 
-in the same terminal run:
+In the same terminal run:
 
 ```bash
 utop
@@ -90,9 +90,10 @@ utop
 
 ### install vscode
 
-installers are available for Windows, Linux, and MacOS on the [VS Code website](https://code.visualstudio.com/)
+Installers are available for Windows, Linux, and MacOS on the [VS Code
+website](https://code.visualstudio.com/)
 
-there's also a snap package in linux:
+There's also a snap package in linux:
 
 ```bash
 sudo snap install --classic code
