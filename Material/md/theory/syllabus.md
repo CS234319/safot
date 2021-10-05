@@ -79,7 +79,7 @@
 
 ### W6-7 Symbolic Values and Pure Lisp  5L 2T
 1. **Lecture**: 
-   1. Story of [Lisp](../../evolution.pdf) 
+   1. Story of [Lisp](../../../evolution.pdf) 
    2. S-Expressions as special values
    3. Evaluation trees and evaluation order
    4. Pure Lisp / Normal vs. Eager Argument Passing; Church Rosser
