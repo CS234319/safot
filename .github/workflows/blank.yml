@@ -29,7 +29,6 @@ jobs:
         run:  sudo apt-get install  -y texlive-fonts-extra texlive-science fonts-lmodern 
       - name: Setup fonts 
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
-      - uses: actions/upload-artifact@v2
       - name: Latex 
         run: xelatex -file-line-error -halt-on-error -shell-escape 00
 
@@ -42,7 +41,6 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
-          name: Pdf Book
           path: ./00.pdf
           if-no-files-found: error
       
@@ -56,6 +54,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
-          name: mini lisp 
           path: ./mini-lisp.pdf
           if-no-files-found: error
