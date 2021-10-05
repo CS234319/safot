@@ -67,7 +67,7 @@
     5. Commands
 
 
-
+ 
 
 ### W3-5 Types 5L 1T
 1. Type systems: Constructors and atomic types
@@ -79,7 +79,7 @@
 
 ### W6-7 Symbolic Values and Pure Lisp  5L 2T
 1. **Lecture**: 
-   1. Story of Lisp 
+   1. Story of [Lisp](../../evolution.pdf) 
    2. S-Expressions as special values
    3. Evaluation trees and evaluation order
    4. Pure Lisp / Normal vs. Eager Argument Passing; Church Rosser
@@ -112,7 +112,7 @@
 
 
 ### Tutorial on D 2T
-7. Lexical analysis 1T
+1. Lexical analysis 1T
     1. Methodology: identify the stages, identify the tokens, identify the meaning
     2. Stages of lexical processing:
         1. **Prepare**:
@@ -151,13 +151,14 @@
                 2. **Deprecated Keyword** used in the past, e.g., delete in D; frowned upon now
                 3. **Forbidden Keyword** never used, never will be used, e.g, const and goto in java, to protect against
                    mistakes, denote nothing
-8. tokens of D example: 1T
-9. Optional: **Other Lexical Perspectives**
+2. tokens of D example: 1T
+3. Optional: **Other Lexical Perspectives**
     1. Block open/closing
     2. Separatist/Terminist/Permissive/Mixed
     3. Case
     4. Lexical Conventions
     5. Escaping
 
-                                                   3. 
-10. Example in D
+                                             3. 
+4. [Example](../../lisp.pdf) in D
+   1. 

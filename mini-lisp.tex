@@ -1,3 +1,12 @@
+\ifx\cname\undefined
+\def\cname{\jobname}
+\def\Title{שפת התכנות מיני-ליספ ומימוש עצמי בה של אלגרוריתם השיערוך}
+\def\wrapMe{
+  \input 000
+}
+\else\def\wrapMe{\relax}\fi
+\wrapMe
+
 \providecommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
 \newcolumntype{T}{>{\collectcell{\TopAlign}}c<{\endcollectcell}}
 \input{hacks.sty}
