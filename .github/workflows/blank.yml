@@ -27,7 +27,6 @@ jobs:
         run:  sudo apt install  -y texlive-fonts-extra texlive-science fonts-lmodern 
       - name: Setup fonts 
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
-      - name: Install more requirements
 
   tex-00:
     needs: install
