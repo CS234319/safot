@@ -35,19 +35,19 @@ jobs:
       - name: Compile main book as one document
         run: xelatex -file-line-error -halt-on-error -shell-escape 00
         if: ${{ always() }}
-          with:
-            name: Pdf Book
-            path: ./00.pdf
-            if-no-files-found: error
-        
-        
-  mini-lisp:
-    needs: install
-    steps:
-      - name: Compile mini-lisp 
-        run: xelatex -file-line-error -halt-on-error -shell-escape mini-lisp
-        if: ${{ always() }}
-          with:
-            name: Mini-lisp.pdf
-            path: ./mini-lisp.pdf
-            if-no-files-found: error
+        with:
+          name: Pdf Book
+          path: ./00.pdf
+          if-no-files-found: error
+      
+      
+mini-lisp:
+  needs: install
+  steps:
+    - name: Compile mini-lisp 
+      run: xelatex -file-line-error -halt-on-error -shell-escape mini-lisp
+      if: ${{ always() }}
+      with:
+        name: Mini-lisp.pdf
+        path: ./mini-lisp.pdf
+        if-no-files-found: error
