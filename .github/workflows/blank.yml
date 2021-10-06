@@ -23,7 +23,7 @@ jobs:
       - name: Install Languages 
         run:  sudo apt-get install -y fp-compiler ocaml 
       - name: Install XeLaTeX
-        run:  sudo apt-get install -y texlive-xetex
+        run:  sudo apt-get install -y texlive-xetex latexmk
       - name: Install TeXLive Extra
         run:  sudo apt-get install -y texlive-extra-utils texlive-lang-arabic texlive-science-doc 
       - name: Install Fonts 
