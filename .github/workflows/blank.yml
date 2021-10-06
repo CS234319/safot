@@ -30,39 +30,69 @@ jobs:
         run:  sudo apt-get install  -y texlive-fonts-extra texlive-science fonts-lmodern 
       - name: Setup fonts 
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
-      - name: Latex 
-        run: mklatex -file-line-error -halt-on-error -shell-escape 00
+
+      - name: 00.pdf 
+        run: latexmk -file-line-error -halt-on-error -shell-escape 00
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./00.pdf
           if-no-files-found: error
 
-      - run: mklatex -file-line-error -halt-on-error -shell-escape mini-lisp 
+      - name: mini-lisp.pdf
+        run: latexmk -file-line-error -halt-on-error -shell-escape mini-lisp 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./mini-lisp.pdf
           if-no-files-found: error
             
-      - run: mklatex -file-line-error -halt-on-error -shell-escape evaluation 
+        name: evaluation.pdf
+        run: latexmk -file-line-error -halt-on-error -shell-escape evaluation 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./evaluation.pdf
           if-no-files-found: error
                          
-      - run: mklatex -file-line-error -halt-on-error -shell-escape background 
+      - name: background.pdf
+        run: latexmk -file-line-error -halt-on-error -shell-escape background 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./background.pdf
           if-no-files-found: error
                          
-      - run: mklatex -file-line-error -halt-on-error -shell-escape techniques 
+      - name: techniques.pdf
+        run: latexmk -file-line-error -halt-on-error -shell-escape techniques 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           path: ./techniques.pdf
           if-no-files-found: error
-             
+
+      - name: recursion-games.pdf 
+        run: latexmk -file-line-error -halt-on-error -shell-escape recursion-games
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: ./recursion-games.pdf
+          if-no-files-found: error
+
+      - name: lexical.pdf 
+        run: latexmk -file-line-error -halt-on-error -shell-escape lexical 
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: ./lexical.pdf
+          if-no-files-found: error
+
+      - name: JVM.pdf 
+        run: latexmk -file-line-error -halt-on-error -shell-escape JVM 
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: ./JVM.pdf
+          if-no-files-found: error
+
+
