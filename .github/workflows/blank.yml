@@ -47,7 +47,7 @@ jobs:
           path: ./mini-lisp.pdf
           if-no-files-found: error
             
-        name: evaluation.pdf
+      - name: evaluation.pdf
         run: latexmk -file-line-error -halt-on-error -shell-escape evaluation 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
