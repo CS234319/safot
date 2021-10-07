@@ -1,7 +1,9 @@
 Program Reverse;
+TYPE
+  lower = 'a'..'z';
 VAR
   c: char;
-  Counts: Array['a'..'z'] of Integer;
+  Counts: Array[lower] of Integer;
 
 Function ToLower(c:Char): Char;
 Begin
@@ -23,12 +25,13 @@ Begin
     For c := 'a' to 'z' do 
       Counts[c] := 0;
     While not EOF do
-    Begin
-      Read(c);
-      c := ToLower(c);
-      If (c >= 'a') and (c <= 'z') then 
-        Counts[c] := Counts[c] + 1
-    end;
+      Begin
+        Read(c);
+        c := ToLower(c);
+        If (c >= 'a') and (c <= 'z') then 
+          Counts[c] := Counts[c] + 1
+      end;
+
     For c := 'a' to 'z' do 
       If Counts[c] <> 0 then
          WriteLn(c,'/', ToUpper(c), '   ',Counts[c]);  

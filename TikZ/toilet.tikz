@@ -1,11 +1,3 @@
-\documentclass{article}
-\usepackage{tikz}
-\usetikzlibrary{shapes,arrows}
-
-\begin{document}
-
-\pagestyle{empty}
-
 % Define block styles
 \tikzstyle{decision} = [diamond, draw, fill=blue!20,
 text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
@@ -26,18 +18,19 @@ minimum height=2em]
 \node[decision, below of=sex, node distance=4cm] (sex2) { i.sex = pre-op transsexuel female ?};
 
 \node[block, right of=sex2, node distance=6cm] (execution_block_1) {i.enter(toilet)\\
-i.open(trousers)\\
-i.target(eyes, center)\\
-i.target(hands, center)
+  i.open(trousers)\\
+  i.target(eyes, center)\\
+  i.target(hands, center)
 };
 
 \node[block, below of=execution_block_1] (open_bladder) { i.open(bladder) };
 \node [decision, below of=open_bladder, text width=2cm] (bladder_empty) {i.bladder = empty?};
 
-\node[block, below of=bladder_empty] (execution_block_2) { i.close(bladder)\\
- i.close(trousers)\\
- i.flush(urinal)
- };
+\node[block, below of=bladder_empty] (execution_block_2) { 
+  i.close(bladder)\\
+  i.close(trousers)\\
+  i.flush(urinal)
+};
 
 \node [block, below of=execution_block_2] (exit) { i.exit() };
 
@@ -55,5 +48,3 @@ i.target(hands, center)
 \path [line] (bladder_empty) -- node [near start] {yes} (execution_block_2);
 \path [line] (bladder_empty) -- +(4,0) -- +(4,3) -- node [near start] {no} (open_bladder);
 \end{tikzpicture}
-
-\end{document}
