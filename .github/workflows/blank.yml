@@ -6,9 +6,9 @@ on:
   push:
     branches: [ master ]
     paths: 
-      - *.tex
-      - *.sty
-      - *.tikz
+      - '*.tex'
+      - '*.sty'
+      - '*.tikz'
   pull_request:
     branches: [ master ]
 
