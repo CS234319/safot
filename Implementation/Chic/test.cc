@@ -23,6 +23,7 @@ namespace Tested {
       if (Parser::status() != Parser::Status::accept) {
           Parser::reset();
           ADD_FAILURE() << "Parser crashed on " << s; 
+          return NIL;
       }
       return Parser::result();
   }

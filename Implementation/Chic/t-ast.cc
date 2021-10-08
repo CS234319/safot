@@ -264,20 +264,3 @@ TEST(AST, LibNDefun) {
   EXPECT_STREQ(expected,~Parser::result());
   Parser::reset();
 }
-
-TEST(DISABLED_AST, SquareBrackets) {
-  parse(""
-    "(set 'ndefun\n"
-      "'(nlambda (name parameters body)\n"
-    "(set name (nlambda parameters body]\n"
- "\n"
- "\n");
-  ASSERT_NE(Status::ready, status());
-  ASSERT_NE(Status::reject, status());
-  EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ(""
-      "(SET (QUOTE NDEFUN) " "(QUOTE (NLAMBDA (NAME PARAMETERS BODY) " //
-      "(SET NAME (NLAMBDA PARAMETERS BODY)))))"
-  "",~Parser::result());
-  Parser::reset();
-}
