@@ -7,8 +7,20 @@
 #define PRODUCTION
 #import "mode.h"
 
- 
+namespace Frame { 
+  const struct Entry { 
+    S key; Entry(S s): key(s) {}  
+    S record(S value) const { return Engine::entry(key, value), value; }
+  } NAME("\r //"),  ACTUALS("\r [...]"), LAMBDA("\r ..");
+  S until(S s) {
+    D(s);
+    for (; ; s = s.cdr()) 
+      if (s.null() ||  s.car().car().eq(NAME.key)) return s;
+  }
+}
+
 extern const S DEFUN, LAMBDA, NDEFUN, NLAMBDA;
+
 namespace Engine { 
   namespace Inner { 
     bool normal(S tag) { return tag.eq(NDEFUN) || tag.eq(NLAMBDA); }
@@ -27,7 +39,7 @@ namespace Engine {
     }
     void bind(S formals, S arguments) {
       if (formals.null() || arguments.null()) return; 
-      push(formals.car(), arguments.car());
+      entry(formals.car(), arguments.car());
       bind(formals.cdr(), arguments.cdr());
     }
   }
@@ -35,11 +47,10 @@ namespace Engine {
   using namespace Inner;
   S apply(S tag, S formals, S body, S actuals) {
     ENTER(D(tag,formals, body));
-    D(actuals);
     check(actuals, BAD_ARGUMENTS);
     S arguments = INVOKE(map(actuals, normal(tag) ? identity : eval));
-    if (formals.atom())   M("Variadic binding of", formals, actuals), 
-      push(formals, arguments);
+    if (formals.atom())   
+      entry(formals, arguments);
     else { M("list of arguments",actuals);
       check(formals, BAD_PARAMETERS);
       align(formals, actuals, MISSING_ARGUMENT, REDUNDANT_ARGUMENT);
@@ -50,11 +61,11 @@ namespace Engine {
 
   S apply(S f, S actuals) {
     S before = alist;
-    S what = INVOKE(f.eval()); 
-    push(S("*"), f.cons(actuals));
-    push(RECURSE, what);
-    what.n3() || f.error(BAD_FUNCTION).t();
-    S result = INVOKE(apply(what.$1$(), what.$2$(), what.$3$(), actuals));
+    Frame::NAME.record(f);
+    Frame::ACTUALS.record(actuals);
+    S lambda = Frame::LAMBDA.record(f.eval()); 
+    lambda.n3() || f.error(BAD_FUNCTION).t();
+    S result = INVOKE(apply(lambda.$1$(), lambda.$2$(), lambda.$3$(), actuals));
     alist = before;
     return result;
   }

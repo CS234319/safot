@@ -44,6 +44,12 @@ extern S builtin() {
   static S inner = list(
     NIL.cons(NIL), 
     T.cons(T), 
+    eager(NULL, __00), 
+    normal(QUOTE, __00), 
+    normal(LAMBDA, __12), 
+    normal(NLAMBDA, __12),
+    normal(DEFUN, __123), 
+    normal(NDEFUN, __123), 
     eager(ATOM,  __00),  
     eager(CAR,   __00), 
     eager(CDR,   __00),
@@ -51,14 +57,10 @@ extern S builtin() {
     eager(CONS, __12), 
     eager(EQ, __12),
     eager(EVAL, __00), 
-    variadic(ERROR, __0),
     eager(SET, __12),
-    eager(NULL, __00), 
-    normal(QUOTE, __00), 
-    normal(LAMBDA, __12), 
-    normal(NLAMBDA, __12),
-    normal(DEFUN, __123), 
-    normal(NDEFUN, __123) 
+    variadic(ERROR, __0),
+    eager(GLOBALS, NIL), 
+    eager(RESET, NIL) 
   ); 
   return inner;
 } 
@@ -117,6 +119,9 @@ extern S exec(S key) {
       { NDEFUN,  ndefun },
       { LAMBDA,  lambda }, 
       { NLAMBDA, nlambda }, 
+    // Backdoor functions
+      { GLOBALS, Dump::globals },
+      { RESET, Engine::reset },
     // 1 end marker
       { NIL, 0}
     };

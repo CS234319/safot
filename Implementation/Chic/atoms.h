@@ -1,14 +1,15 @@
 #include "S.h"
 #undef NULL
 extern const S 
+/* Elementary: */ NIL, T, 
 /* Primitives */
 /*   Unary   */ ATOM, CAR, CDR, COND, 
 /*   Binary  */ CONS, EQ, 
 /* Add-ons */   EVAL, ERROR, SET, 
 /* Library */
-/*   Variables */ NIL, T, 
 /*   Unary:    */ NULL, QUOTE,
-/*   Ternary:  */ DEFUN, NDEFUN, LAMBDA, NLAMBDA
+/*   Ternary:  */ DEFUN, NDEFUN, LAMBDA, NLAMBDA,
+/* Backdoor */ GLOBALS, RESET 
 ;
 // Stack trace:
 extern const S RECURSE;

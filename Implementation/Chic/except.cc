@@ -6,7 +6,7 @@
 /** Assertions like */
 extern bool die(Pair p) { 
   err(), print("Error "), print(p.cdr), print(" on "), println(p.car), out();
-  Engine::traceback(); 
+  Dump::calls(); 
   Engine::clear();
   throw p;
 }
@@ -14,8 +14,8 @@ extern bool die(Pair p) {
 extern bool die(S s) { 
   D(s);
   err(); 
-  print("Error "), println(s), out(),out();
-  Engine::traceback(); 
+  print("Error "), println(s), out();
+  Dump::calls(); 
   Engine::clear();
   throw s;
 }

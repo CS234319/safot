@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xvf
 ###########################################
 # Script to run all the given lisp files,
 # and compare the results with golden.

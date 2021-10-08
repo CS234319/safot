@@ -38,22 +38,16 @@ namespace Pairs {
   }
 
   H allocate() {
-    D(next(), remaining);
     (remaining > 0 &&  next() > 0) ||  die(MEMORY_CONS);
     const H $ = next();
     remaining--, next() = pool[next()].next;
-    D($, next(), remaining);
     return $;
   }
 
   H allocate(H car, H cdr) {
-    D(next(), car, cdr, remaining);
     H $ = allocate();
-    D(next(), car, cdr, remaining);
     pool[$].car = car;
     pool[$].cdr = cdr;
-    //D($,pool[$].car,pool[$].cdr, S($), S(pool[$].car), S(pool[$].cdr));
-    D($);
     return $;
   }
 

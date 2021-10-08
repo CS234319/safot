@@ -292,8 +292,6 @@ TEST(Book, EvalOnEvalError1) {
     EXPECT_EXCEPTION(parse("(eval (atom (eval (car 'a))))").eval(), a, CAR);
 }
 
-TEST(DISABLED_Book, EvalOnEvalError2) {
-    EXPECT_EXCEPTION(parse("(eval atom (atom (eval (car 'a))))").eval(),
-       list(list(S("ATOM"), list(S("EVAL"), list(S("CAR"), list(S("QUOTE"), a))))),
-                     REDUNDANT_ARGUMENT);
+TEST(Book, EvalOnEvalError2) {
+    EXPECT_EXCEPTION(parse("(eval atom (atom (eval (car 'a))))").eval(),"A", CAR);
 }

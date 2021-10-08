@@ -21,8 +21,7 @@ representation Pair {
 /** A pool of all pairs is managed by the pairs module (see pairs.cc). The pool
  * is an array; an index into this array, also called a handle, is a half word
  * (type H), and can be thought of as a pointer. All indices are strictly
- * positive.
- */
+ * positive.  */
 namespace Pairs {
    extern Pair *const pool;         /* Array of all pair records, free and allocated */
    extern H allocate(H car, H cdr); /* Retrieve a free pair, and set it values */

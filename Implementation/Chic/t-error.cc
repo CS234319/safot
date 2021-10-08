@@ -41,7 +41,7 @@ static S s1(t,n);
 static S s2(s1,s1);
 static S s3(s2,s1);
 
-using Engine::apply, Engine::push; 
+using Engine::apply, Engine::entry; 
 
 TEST(Except, UNDEFINED_ATOM) {
   reset();
@@ -78,25 +78,25 @@ TEST(Except, CdrOfNil) {
 
 TEST(Except, BAD_FUNCTION1) {
   S f("my function"), x("x"), y("y"), z("z");
-  push(f, list(LAMBDA)); 
+  entry(f, list(LAMBDA)); 
   EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
 }
 
 TEST(Except, BAD_FUNCTION2) {
   S f("my function"), x("x"), y("y"), z("z");
-  push(f, list()); 
+  entry(f, list()); 
   EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
 }
 
 TEST(Except, BAD_FUNCTION3) {
   S f("my function"), x("x"), y("y"), z("z");
-  push(f, list(LAMBDA,x)); 
+  entry(f, list(LAMBDA,x)); 
   EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
 }
 
 TEST(Except, BAD_FUNCTION4) {
   S f("my function"), x("x"), y("y"), z("z");
-  push(f, list(LAMBDA,x,y,z)); 
+  entry(f, list(LAMBDA,x,y,z)); 
   EXPECT_EXCEPTION(list(f, x, y).eval(), f, BAD_FUNCTION);
 }
 

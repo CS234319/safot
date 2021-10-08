@@ -5,8 +5,12 @@
 
 using namespace Stack;
 
-struct stack:Test {
+struct stack:Test{
+  stack() {
+    Stack::reset();
+  }
   ~stack() {
+    Stack::reset();
   }
 };
 

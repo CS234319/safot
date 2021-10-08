@@ -35,3 +35,9 @@ inline S list(S a, S b, S c, S d, S e, S f, S g, S h, S i, S j, S k, S l, S m, S
     return a.cons(list(b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)); }
 inline S list(S a, S b, S c, S d, S e, S f, S g, S h, S i, S j, S k, S l, S m, S n, S o, S p, S q) {
     return a.cons(list(b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q)); }
+inline S list(S a, S b, S c, S d, S e, S f, S g, S h, S i, S j, S k, S l, S m, S n, S o, S p, S q, S r) {
+    return a.cons(list(b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r)); }
+inline S list(S a, S b, S c, S d, S e, S f, S g, S h, S i, S j, S k, S l, S m, S n, S o, S p, S q, S r, S s) {
+    return a.cons(list(b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s)); }
+inline S list(S a, S b, S c, S d, S e, S f, S g, S h, S i, S j, S k, S l, S m, S n, S o, S p, S q, S r, S s, S t) {
+    return a.cons(list(b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t)); }

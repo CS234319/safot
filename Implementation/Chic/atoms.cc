@@ -12,5 +12,8 @@ const S _(NDEFUN), _(DEFUN), _(NLAMBDA), _(LAMBDA), _(QUOTE), _(NULL);
 // Stack trace:
 const S _(RECURSE);
 
+const S GLOBALS("/SET");
+const S RESET("/RESET");
+
 // Arguments to natives 
 const S __0(".."), __1("1.."), __2("2.."), __3("3..");

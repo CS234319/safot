@@ -10,7 +10,7 @@ SOURCES   = $(addsuffix .cc,$(MODULES))
 HEADERS 	= $(sort $(filter %.h,$(shell cat .depend)))
 
 MINI-LISP = 00 dump $(REPL)  
-TESTER    = t-main dump $(TESTS) $(REPL)
+TESTER    = atoms t-main dump $(TESTS) $(REPL)
 REPL      = repl $(READ) $(EVALUATE) $(PRINT)
 EVALUATE  = $(ENGINE) $(MACHINE) 
 
