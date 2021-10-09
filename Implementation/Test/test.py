@@ -13,6 +13,42 @@ from time import sleep
 from typing import List, Dict, Union
 from pathlib import Path
 
+def f():
+    return 3
+
+
+def test_foo():
+    assert f() == 5
+
+def test_xfunction():
+    assert f() == 4
+
+def test_basic(shell):
+    """
+    Check the mini-lisp interpreter stdout (using the examples from the book)
+    """
+    assert shell.feed("nil") == "NIL"
+    assert shell.feed("()") == "NIL"
+    assert shell.feed("(car '(a b))") == "A"
+    assert shell.feed("(cdr '(a b))") == "(B)"
+    assert shell.feed("(atom 'a)") == "T"
+    assert shell.feed("(atom T)") == "T"
+    assert shell.feed("(null t)") == "NIL"
+    assert shell.feed("(null nil)") == "T"
+    assert shell.feed("(null 'a)") == "NIL"
+    assert shell.feed("(null '(a a))") == "NIL"
+    assert shell.feed("(eq nil t)") == "NIL"
+    assert shell.feed("(eq 'a 'a)") == "T"
+    assert shell.feed("(eq 'a 'b)") == "NIL"
+    assert shell.feed("(quote a)") == "A"
+    assert shell.feed("(quote (m o))") == "(M O)"
+    assert shell.feed("'a") == "A"
+    assert shell.feed("'(n j)") == "(N J)"
+    assert shell.feed("(cons 'p '(i u))") == "(P I U)"
+    assert shell.feed("(cond (nil 'A) (t 'B))") == "B"
+    assert shell.feed("((lambda (x) (car (cdr x))) '(a b))") == "B"
+
+
 class MiniLispShell:
     """
     This class represents a mini-lisp shell.  It can feed the shell, and get
@@ -153,31 +189,6 @@ def shell():
     shell = MiniLispShell(os.getenv('MINI_LISP_SHELL'))
     shell.start_mini_lisp()
     return shell
-
-def test_basic(shell):
-    """
-    Check the mini-lisp interpreter stdout (using the examples from the book)
-    """
-    assert shell.feed("nil") == "NIL"
-    assert shell.feed("()") == "NIL"
-    assert shell.feed("(car '(a b))") == "A"
-    assert shell.feed("(cdr '(a b))") == "(B)"
-    assert shell.feed("(atom 'a)") == "T"
-    assert shell.feed("(atom T)") == "T"
-    assert shell.feed("(null t)") == "NIL"
-    assert shell.feed("(null nil)") == "T"
-    assert shell.feed("(null 'a)") == "NIL"
-    assert shell.feed("(null '(a a))") == "NIL"
-    assert shell.feed("(eq nil t)") == "NIL"
-    assert shell.feed("(eq 'a 'a)") == "T"
-    assert shell.feed("(eq 'a 'b)") == "NIL"
-    assert shell.feed("(quote a)") == "A"
-    assert shell.feed("(quote (m o))") == "(M O)"
-    assert shell.feed("'a") == "A"
-    assert shell.feed("'(n j)") == "(N J)"
-    assert shell.feed("(cons 'p '(i u))") == "(P I U)"
-    assert shell.feed("(cond (nil 'A) (t 'B))") == "B"
-    assert shell.feed("((lambda (x) (car (cdr x))) '(a b))") == "B"
 
 
 
@@ -728,5 +739,9 @@ if __name__ == '__main__':
     logging.root.setLevel(logging.INFO)
     res = 1 if FlowRunner.run(files, golden_dir) is True else 0
     print(res)
+
+
+
+
 
 
