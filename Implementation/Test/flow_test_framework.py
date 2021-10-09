@@ -8,9 +8,9 @@ from framework.lib.mini_lisp_shell import MiniLispShell
 
 class FlowTestFramework:
     """
-    This class represents a test framework to run lisp files,
-    using the interpreter, compile functions and evaluate s-expr,
-    compare the results with golden output files.
+    This class represents a test framework to run lisp files, using the
+    interpreter, compile functions and evaluate S-expression, compare the
+    results with golden output files.
     """
     def __init__(self, mini_lisp: str, filter_newline=True):
         self.shell = MiniLispShell(mini_lisp)
@@ -21,7 +21,7 @@ class FlowTestFramework:
         if self.shell:
             self.shell.close_mini_lisp()
 
-    def load_function_file(self, file: str) -> None:
+    def injectFile(self, file: str) -> None:
         """
         Feed the mini-lisp interpreter with functions declaration. (1 or more)
 

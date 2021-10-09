@@ -7,22 +7,6 @@
 #       % run_all_tests.sh flow # Run flow tests:
 #       % run_all_tests.sh all  # Run both unit and flow tests
 
-function check_configurations() {
-  # Check python version > 3:
-  which python3 &> /dev/null
-  if [ "$?" == "1" ]; then
-    echo "ERROR: require Python version > 3"
-    exit
-  fi
-
-  # Check if pytest exists:
-  pip show pytest &> /dev/null
-  if [ "$?" == "1" ]; then
-    echo "ERROR: Can't find pytest package"
-    exit
-  fi
-}
-
 function run_unit_tests() {
     cd $1
     python3 -m pytest -rA -vv --exitfirst

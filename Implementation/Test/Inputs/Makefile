@@ -1,8 +1,13 @@
-all: extract
-.PHONY: extract all
-extract: ./00.awk
-	./00.awk ../../../mini-lisp*.tex
+all: .extract
+
+INPUTS=../../../mini-lisp*.tex
+
+.PHONY: all
+
+.extract: ./00.awk $(INPUTS)
+	gawk -f $^
+	@touch $@ 
 
 clean:
-		rm -f *.lisp *~
+	rm -f *.lisp *~ .extract
 

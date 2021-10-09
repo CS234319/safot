@@ -19,26 +19,46 @@ out == "" { next }
   names[name]++
   out = name ".lisp";
 }
+
 out != "" { 
   if (header != "") {
     print header >> out;
     header = "";
   }
-  printf("%s\n",$0)>out 
+  print $0>>out 
 }
+
 function start(outputName) {
   out = outputName;
-  header = ""
-  header = header ";;;;;;;;;;;;;;;;;;;;\n" 
-  header = header sprintf("; %s(%d) \n", origin(),NR) 
-  header = header ";;;;;;;;;;;;;;;;;;;;" 
+  header = location();
   next;
 }
-function origin(temp) {
-  temp = FILENAME
-  gsub(/^[\.\/]*/, "", temp) 
-  return temp;
-}
+
 function end() {
+  print location() >> out
   out = ""; next
 }
+
+function location(result) {
+  extracted = sprintf("; %s(%d)", inputName(),FNR) 
+  result = result padding(extracted)  "\n"
+  result = result extracted  "\n"
+  result = result padding(extracted)
+  return result;
+}
+
+function inputName() {
+  gsub(/^[\.\/]*/, "", FILENAME) 
+  return FILENAME
+}
+
+
+
+function padding(s,i, result) {
+  result = "";
+  for (i = 0; i < length(s); i++)
+    result = result ";"
+  return result; 
+}
+
+

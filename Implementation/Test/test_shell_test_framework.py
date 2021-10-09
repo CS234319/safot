@@ -39,7 +39,7 @@ def test_run_s_expr_file(flow, input_dir):
                                          "B\n"
 
 
-def test_load_function_file(flow, input_dir):
+def test_injectFile(flow, input_dir):
     """
     Compile 2 functions: exists + id
     Run to s_expr files, which includes s_expr that use those functions.
@@ -50,7 +50,7 @@ def test_load_function_file(flow, input_dir):
     s_expr_file_2 = f"{input_dir}/lisp02.lisp"
 
     # Compile functions:
-    flow.load_function_file(functions_file)
+    flow.injectFile(functions_file)
 
     # Run s_expr:
     out_file = flow.run_s_expr_file(s_expr_file_1)

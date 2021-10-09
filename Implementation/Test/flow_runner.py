@@ -45,7 +45,7 @@ class FlowRunner:
         # Compile all functions/lib files:
         for file in categorized_files[FileType.FUNCTION]:
             logging.info(f"Compiling file {file} ...")
-            flow.load_function_file(file)
+            flow.injectFile(file)
 
         # Running s_expr files and compare:
         for file in categorized_files[FileType.S_EXPR]:

@@ -9,4 +9,4 @@ install:
 	@$(RUN_SETUP)
 
 clean:
-	rm *~
+	rm *~ *log

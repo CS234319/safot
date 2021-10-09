@@ -81,10 +81,11 @@ After you did that, run python3 and the following command must not raise ModuleN
 import framework.lib
 ```
 ShellTestFramework Python package has 2 main API:
-* **MiniLispShell**<br>
+**MiniLispShell**<br>
 This class represents a mini-lisp shell - it can feed the shell, and get the output from it in real-time.<br>
 The IPC (Inter-process communication) with the mini-lisp executable done here.
 The class supports the `with` statement for convenience.<br>
+
 **Unit Tests:**<br> ./test/unit/test_mini_lisp_shell.py <br>
 **Usage example:**<br>
   ```bash
@@ -109,10 +110,10 @@ The class supports the `with` statement for convenience.<br>
   ```
   
 * **FlowTestFramework**<br>
-This class represents a test framework to run Mini-Lisp files,
-using the MiniLispShell API. Feed the shell (the REPL loop) with huge input files 
+This class represents a test framework to run Mini-Lisp files, using the
+MiniLispShell API. Feed the shell (the REPL loop) with huge input files 
 with a lot of s-expressions, and dump an output file for each
-of the input file that you feeded the shell with.<br>
+of the input file that were fed into the shell.<br>
 The main advantage of this API, is the ability to compile a lot of functions,
 and after that run s-expressions with there new functions, without the need of 
 each time creating 1 input file with everything and compiling all again.<br>
@@ -136,7 +137,7 @@ each time creating 1 input file with everything and compiling all again.<br>
   flow = FlowTestFramework(executable)
   
   # Run:
-  flow.load_function_file(functions_file)        # Compile the functions
+  flow.injecFil(functions_file)        # Compile the functions
   out_file = flow.run_s_expr_file(input_file)    # Run the s-expression + generate out_file
   print(Path(out_file).read_text())	       # Print it
   ```
