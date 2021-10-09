@@ -44,9 +44,9 @@
 # Define paths:
 SCRIPT_PATH=`realpath $0`
 SCRIPT_DIR=`dirname ${SCRIPT_PATH}`
-MINI_LISP_INPUTS_DIR=${SCRIPT_DIR}/Mini-Lisp.Inputs/
-MINI_LISP_EXPECTED_DIR=${SCRIPT_DIR}/Mini-Lisp.Expected/
-RUN_FLOW_SCRIPT=${SCRIPT_DIR}/../Mini-Lisp.ShellTestFramework/bin/run_flow.sh
+MINI_LISP_INPUTS_DIR=${SCRIPT_DIR}/Inputs/
+MINI_LISP_EXPECTED_DIR=${SCRIPT_DIR}/Expected/
+RUN_FLOW_SCRIPT=${SCRIPT_DIR}/run_flow.sh
 
 echo "========================================================="
 echo "INFO: Generate lisp files from the book ... "

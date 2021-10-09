@@ -54,7 +54,7 @@ bind מחזירה רשימת קישורים חדשה, המכילה רשימה ש
 \begin{KERNEL}
 (defun bind (formals actuals a-list) ; Bind parameters to arguments, and prepend to a-list
   (cond ((null formals) ; no more formals left
-        (cond ((null actuals) a-list) ; no more actuals left, binding done-> return a-list
+        (cond ((null actuals) a-list) ; no more actuals left, binding done-- return a-list
               (t (error missing-formals)))) ; more actuals than formals
         ((null actuals) ; formals is not nil but actuals is, i.e., more formals than actuals
           (error missing-actuals))
