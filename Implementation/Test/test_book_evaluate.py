@@ -2,8 +2,8 @@ import logging
 import pytest
 import glob
 from pathlib import Path
-from framework.lib.flow_test_framework import FlowTestFramework
-from framework.lib.utils import get_flow
+from flow_test_framework import FlowTestFramework
+from utils import get_flow
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ import tempfile
 import logging
 from pathlib import Path
 from typing import List, Union
-from framework.lib.mini_lisp_shell import MiniLispShell
+from mini_lisp_shell import MiniLispShell
 
 
 class FlowTestFramework:
@@ -108,3 +108,9 @@ class FlowTestFramework:
         Update golden file for a test
         """
         Path(gold_path).write_text(Path(out_path).read_text())
+
+
+
+
+
+
