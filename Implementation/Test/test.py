@@ -16,10 +16,8 @@ from pathlib import Path
 class MiniLispShell:
     """
     This class represents a mini-lisp shell.  It can feed the shell, and get
-    the output from it.
-
-    This class supporting the "with" statement,
-    thus you don't need to call directly to start_mini_lisp/close_mini_lisp.
+    the output from it.  The class supports the "with" statement, thus you
+    don't need to call directly to start_mini_lisp/close_mini_lisp.
 
     Test file:
         test_mini_lisp_shell.py
