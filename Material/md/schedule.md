@@ -1,8 +1,17 @@
 # 236319: 2021/22 Schedule
+### Extrac curricular
+1. Hello world 1.3
+2. History of programming langauges: 2.3
+3. Type constructors of Mock 3.3
+4. Atomic types: 3.5
+5. Type constructors in actual languages self read: 3.4
+6. Kinds of Arrays 5.2 dead; array representation live.
+7. Exceptions 6.9 abbreviated
+8. 
 
 ## Week 1
 - **Lecture**
-   1. [Motivation and Paradigms](?)
+   1. [Motivation and Paradigms](?) 1.1, 1.2
    2. [Quick Pascal](?)
 - **Tutorial (Wet)**
    1. [ML - Introduction](sml/introduction.md)
@@ -30,7 +39,8 @@
 
 ## Week 4
 - **Lecture**
-   1. [Types (Cont.)](?)
+   1. Overflow of types
+   2. [Types (Cont.)](?)
 - **Recitation (Dry)**
    1. [ML's Type System](theory/ml-type-system.md)
 - **Tutorial (Wet)**
@@ -75,7 +85,8 @@
 
 ## Week 9
 - **Lecture**
-   1. [Commands vs Expressions](?)
+   1. More on state
+   2. Commands
 - **Recitation (Dry)**
    1. [Python Generators](?)
    2. [C# Coroutines](?)
@@ -86,7 +97,8 @@
 
 ## Week 10
 - **Lecture**
-   1. TBD - 2L
+   1. Commands (cont)
+   2. 
 - **Tutorial (Wet)**
    1. [Prolog - TBD - 1T](prolog/?.md)
    2. [Prolog - Exam Questions](prolog/exam-questions.md)
@@ -102,7 +114,13 @@
 
 ## Week 12
 - **Lecture**
-   1. [Advanced Constructs - Closures](?)
+   1. [Advanced Constructs - Beyond Closures](?)
+      1. Function objects, 
+      2. Java iterators
+      3. Generators
+      4. Co routines.
+      5. Java iterators.
+   2. [Advanced Constructs - Closures](?)
 - **Recitation (Dry)**
    1. [Lexical and Dynamic Scoping](theory/scoping.md)
    2. TBD - 1T
@@ -110,7 +128,8 @@
 
 ## Week 13
 - **Lecture**
-   1. [Advanced Constructs - Beyond Closures](?)
+   1. 
+   2. 
 - **Recitation (Dry)**
    1. [Exam Questions](?.md)
 - **Reading material**

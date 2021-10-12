@@ -1,0 +1,50 @@
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20,
+text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+text width=4cm, text centered, rounded corners, minimum height=4em, minimum width=4.5cm]
+
+\tikzstyle{line} = [draw, -latex']
+
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+minimum height=2em]
+
+\begin{tikzpicture}[node distance = 3cm, auto]
+% The nodes
+\node[cloud] (business) {Business};
+\node[block, below of=business] (person) {i:=person};
+\node[decision, below of=person] (sex) { i.sex = male ?};
+\node[decision, below of=sex, node distance=4cm] (sex2) { i.sex = pre-op transsexuel female ?};
+
+\node[block, right of=sex2, node distance=6cm] (execution_block_1) {i.enter(toilet)\\
+  i.open(trousers)\\
+  i.target(eyes, center)\\
+  i.target(hands, center)
+};
+
+\node[block, below of=execution_block_1] (open_bladder) { i.open(bladder) };
+\node [decision, below of=open_bladder, text width=2cm] (bladder_empty) {i.bladder = empty?};
+
+\node[block, below of=bladder_empty] (execution_block_2) { 
+  i.close(bladder)\\
+  i.close(trousers)\\
+  i.flush(urinal)
+};
+
+\node [block, below of=execution_block_2] (exit) { i.exit() };
+
+% The connections
+\path [line] (business) -- (person);
+\path [line] (person) -- (sex);
+\path [line] (execution_block_1) -- (open_bladder);
+\path [line] (execution_block_2) -- (exit);
+
+\path [line] (sex) -- node [near start] {no} (sex2);
+\path [line] (sex) -| node [near start] {yes} (execution_block_1);
+\path [line] (sex2) -- node [near start] {no} (execution_block_1);
+\path [line] (sex2) |- node [near start] {yes} (exit);
+\path [line] (open_bladder) -- (bladder_empty);
+\path [line] (bladder_empty) -- node [near start] {yes} (execution_block_2);
+\path [line] (bladder_empty) -- +(4,0) -- +(4,3) -- node [near start] {no} (open_bladder);
+\end{tikzpicture}

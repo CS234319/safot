@@ -5,6 +5,10 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
+    paths: 
+      - '*.tex'
+      - '*.sty'
+      - '*.tikz'
   pull_request:
     branches: [ master ]
 
@@ -32,7 +36,7 @@ jobs:
         run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections && sudo apt-get install ttf-mscorefonts-installer && mkdir -p ~/.fonts ; cp ./fonts/* ~/.fonts/ && fc-cache -f
 
       - name: 00.pdf 
-        run: latexmk -file-line-error -halt-on-error -shell-escape 00
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape 00
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -40,7 +44,7 @@ jobs:
           if-no-files-found: error
 
       - name: mini-lisp.pdf
-        run: latexmk -file-line-error -halt-on-error -shell-escape mini-lisp 
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape mini-lisp || true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -48,7 +52,7 @@ jobs:
           if-no-files-found: error
             
       - name: evaluation.pdf
-        run: latexmk -file-line-error -halt-on-error -shell-escape evaluation 
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape evaluation || true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -56,7 +60,7 @@ jobs:
           if-no-files-found: error
                          
       - name: background.pdf
-        run: latexmk -file-line-error -halt-on-error -shell-escape background 
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape background || true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -64,7 +68,7 @@ jobs:
           if-no-files-found: error
                          
       - name: techniques.pdf
-        run: latexmk -file-line-error -halt-on-error -shell-escape techniques 
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape techniques || true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -72,7 +76,7 @@ jobs:
           if-no-files-found: error
 
       - name: recursion-games.pdf 
-        run: latexmk -file-line-error -halt-on-error -shell-escape recursion-games
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape recursion-games|| true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -80,7 +84,7 @@ jobs:
           if-no-files-found: error
 
       - name: lexical.pdf 
-        run: latexmk -file-line-error -halt-on-error -shell-escape lexical 
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape lexical || true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
@@ -88,7 +92,7 @@ jobs:
           if-no-files-found: error
 
       - name: JVM.pdf 
-        run: latexmk -file-line-error -halt-on-error -shell-escape JVM 
+        run: latexmk -f -file-line-error -halt-on-error -shell-escape JVM || true
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:

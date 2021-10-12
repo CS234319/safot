@@ -1,4 +1,0 @@
-((A.X) (B.Y))
-((A.X) (B.Y) (C.T) (Z.T))
-Error [UNDEFINED] in MISSING-FORMALS
-Error [UNDEFINED] in MISSING-ACTUALS

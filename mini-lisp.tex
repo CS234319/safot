@@ -1,9 +1,9 @@
 \def\Title{שפת מיני-ליספ וכתיבת המשערך שלה בה עצמה}
-\input{wrapme.sty}
+\input{wrap}
 
 \providecommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
 \newcolumntype{T}{>{\collectcell{\TopAlign}}c<{\endcollectcell}}
-\input{hacks.sty}
+\input{save-lisp}
 {%
     \makeatletter
     \catcode13=13\relax% Make ASCII 13 active to define it later
@@ -17,15 +17,16 @@
 \input mini-lisp-aa
 
 § שימוש במיני-ליספ 
-\תגית|פרק:מיני|
+\תגית|פרק:שימוש|
 \input mini-lisp-tutorial
 
 § מפרט של מיני-ליספ
-\input lisp-specification
+\תגית|פרק:מפרט|
+\input mini-lisp-specification
 
 § אלגוריתם השיערוך ומימושו במיני-ליספ 
-\input lisp-evaluation-S-self
-\תגית|פרק:שיערוך|
+\input mini-lisp-evaluate-implementation
+\תגית|פרק:מימוש|
 
 § תרגילים
 \input lisp-exercises
