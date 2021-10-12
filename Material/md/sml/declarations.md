@@ -10,44 +10,41 @@
 
 ```sml
 val pi = 3.14159;
-(*val pi = 3.14159 : real*)
 
 fun area r = pi * r * r;
-(*val area = fn : real -> real*)
 
 area 2.0;
-(*val it = 12.56636  : real*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
 ### identifiers in ML
 
 * `val` declaration binds a name to a value
-* a name can not be used to change its value
-  * actually a constant
+* a name can not be used to change its value (actually a constant)
 * a name can be reused for another purpose
 
-    ```sml
-    val pi = "pi";
-    (*val pi = "pi" : string*)
-    ```
+```sml
+val pi = "pi";
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
-* if a name is declared again the new meaning is adopted afterwards
+if a name is declared again the new meaning is adopted afterwards
 
-    ```sml
-    pi;
-    (*val it = "pi": string*)
-    ```
+```sml
+pi;
+(*val it = "pi": string*)
+```
 
-* but does not affect existing uses of the name
+but does not affect existing uses of the name
 
-    ```sml
-    area 1.0;
-    (*val it = 3.14159: real*)
-    ```
+```sml
+area 1.0;
+(*val it = 3.14159: real*)
+```
 
 ---vert---
 
@@ -65,38 +62,38 @@ area 2.0;
 
 ### `val` and `val rec`
 
-* we can define a function using val
+we can define a function using val
 
-    ```sml
-    val sq = fn x => x * x;
-    ```
+```sml
+val sq = fn x => x * x;
+```
 
-* what about recursive functions?
+what about recursive functions?
 
-    ```sml
-    fun f(n) = if n=0 then 1 else n * f(n-1);
+```sml
+fun f(n) = if n=0 then 1 else n * f(n-1);
 
-    val f = fn (n) => if n=0 then 1 else n * ??;
+val f = fn (n) => if n=0 then 1 else n * ??;
 
-    val rec f = fn (n) =>
-        if n=0 then 1
-        else n * f(n-1);
-    ```
-
-* `val rec` stands for "recursive definition" and it is just like `fun`
+val rec f = fn (n) =>
+    if n=0 then 1
+    else n * f(n-1);
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
 ### pattern matching
 
-* patterns can be used to simplify function definition
+patterns can be used to simplify function definitions
 
-    ```sml
-    fun factorial 0 = 1
-      | factorial n = n * factorial(n-1);
-    ```
+```sml
+fun factorial 0 = 1
+  | factorial n = n * factorial(n-1);
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* when the function is called, the first pattern to match the actual parameter determines which expression on the right hand side will be evaluated
+when the function is called, the first pattern to match the actual parameter determines which expression on the right hand side will be evaluated
 
 ---vert---
 
@@ -125,6 +122,7 @@ foo(2,2);
 foo(1,1);
 (*val it = ? : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -141,6 +139,7 @@ case p-q of
   | 2 => "two"
   | n => if n<10 then "lots" else "lots &lots";
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 * if `P1` is the first to match then the result is `E1`
 * equivalent to an expression that defines a function by cases and applies it to `E`
@@ -166,6 +165,7 @@ fun (x1,y1) ++ (x2,y2) : vec = (x1+x2,y1+y2);
 (3.6,0.9) ++ (0.1,0.2) ++ (20.0,30.0);
 (*val it = (23.7,31.1) : vec*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -188,6 +188,7 @@ fun fraction(n,d)=
   end;
 (*val fraction = fn: int*int -> int*int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 * `D` may be a compound declaration
   * `D1; D2; ...; Dn`
@@ -200,6 +201,7 @@ fun fraction(n,d)=
 ```sml
 fun fraction (n,d) = (fn c => (n div c, d div c))(gcd(n,d));
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -220,8 +222,8 @@ fun sqroot a =
   in 
     findroot 1.0 
   end;
-(*val sqroot = fn: real -> real*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -239,8 +241,8 @@ local
 in
   fun fib n = itfib(n, 0, 1)
 end
-(*val fib = fn : int -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 (`D1` is visible only within `D2`)
 
@@ -256,8 +258,8 @@ fun fib n = let
 in
   itfib(n, 0, 1)
 end
-(*val fib = fn : int -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ```sml
 local
@@ -267,8 +269,8 @@ local
 in
   fun fib n = itfib(n, 0, 1)
 end
-(*val fib = fn : int -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -280,8 +282,8 @@ fun pow4 n: int = let
 in
   n2 * n2
 end;
-(*val pow4 = fn : int -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -294,9 +296,8 @@ in
   val y = x + 2;
   val z = x * x;
 end;
-(*val y = 627 : int
-  val z = 390625 : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -316,6 +317,7 @@ val x = y and y = x;
 (*val x = 5 : int
   val y = 3 : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -333,6 +335,7 @@ fun sum (d, one) =
     then sum(d-2.0,~one) + one/d
     else 0.0;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -349,9 +352,6 @@ H: if z>0 then (z:=z-x; goto F) else stop
 fun F(x,y,z) = G(x+1,y,z)
 and G(x,y,z) = if y < z then F(x,y,z) else H(x,x+y,z)
 and H(x,y,z) = if z > 0 then F(x,y,z-x) else (x,y,z);
-(*val F = fn : int * int * int -> int * int * int
-  val G = fn : int * int * int -> int * int * int
-  val H = fn : int * int * int -> int * int * int*)
 F(0,0,0);
-(*val it = (1,1,0) : int * int * int*)
 ```
+<!-- .element: data-thebe-executable-sml -->

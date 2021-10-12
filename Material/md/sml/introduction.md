@@ -35,20 +35,13 @@ val it = 10 : int
 
 ### a simple tutorial
 
-* ML is usually used as an interpreter (a compiler is also available)
+* ML is usually used as an interpreter
 * expressions followed by a semicolon yield a response
 
-    ```sml
-    2 + 2;
-    ```
-    <!-- .element: data-thebe-executable-sml -->
-
-* doing simple arithmetic
-
-    ```sml
-    3.2 - 2.3;
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+```sml
+2 + 2;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 

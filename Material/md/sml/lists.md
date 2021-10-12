@@ -21,6 +21,7 @@ order matters
 [1, 2, 3] <> [3, 2, 1];
 (*val it = true: bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 and repetitions count
 
@@ -28,6 +29,7 @@ and repetitions count
 [3, 3, 3] <> [3];
 (*val it = true: bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -44,6 +46,7 @@ elements may have any type
 [5, "five"];
 (*stdIn:2.1-2.12 Error: ...*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -59,6 +62,7 @@ the empty list has a polymorphic type
 nil;
 (*val it = []: 'a list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -79,6 +83,7 @@ use the infix operator `::` (aka. `cons`) to build a list
 1 :: 2 :: 3 :: [];
 (*val it = [1,2,3]: int list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -99,6 +104,7 @@ fun replace_head (_::t) x = x :: t
   | replace_head [] _ = []
 ;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -113,6 +119,7 @@ fun null [] = true
   | null (_::_) = false;
 (*val null = fn : 'a list -> bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -123,6 +130,7 @@ fun hd (x::_) = x;
 (*Warning: Patterns not exhaustive
 val hd = fn : 'a  list -> 'a*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -133,6 +141,7 @@ fun tl (_::xs) = xs;
 (**Warning: Patterns not exhaustive
 val tl = fn : 'a  list -> 'a  list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -157,6 +166,7 @@ val op-- = range;
 2 -- 5;
 (*val it = [2,3,4] : int list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -172,8 +182,11 @@ val op-- = range;
 
 ```sml
 fun take (0, _)     = []
-  | take (i, x::xs) = x :: take (i-1, xs);
+  | take (i, x::xs) = x :: (take (i-1, xs));
+```
+<!-- .element: data-thebe-executable-sml -->
 
+```sml
 take (3, [9,8,7,6,5,4])
 9 :: take (2, [8,7,6,5,4])
 9 :: (8 :: take (1, [7,6,5,4]))
@@ -191,7 +204,10 @@ take (3, [9,8,7,6,5,4])
 ```sml
 fun drop (0, xs)    = xs
   | drop (i, _::xs) = drop (i-1, xs);
+```
+<!-- .element: data-thebe-executable-sml -->
 
+```sml
 drop (3, [9,8,7,6,5,4])
 drop (2,   [8,7,6,5,4])
 drop (1,     [7,6,5,4])
@@ -209,8 +225,9 @@ normal recursion
 
 ```sml
 fun take(0, _)     = []
-  | take(i, x::xs) = x::take(i-1, xs);
+  | take(i, x::xs) = x::(take(i-1, xs));
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 tail recursion
 
@@ -218,6 +235,7 @@ tail recursion
 fun drop (0, xs)    = xs
   | drop (i, _::xs) = drop (i-1, xs);
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -227,6 +245,7 @@ fun drop (0, xs)    = xs
 fun length []      = 0
   | length (_::xs) = 1 + length xs;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 use an **accumulator** to make it iterative
 
@@ -238,6 +257,7 @@ in
   fun length xs = ilen (0, xs)
 end;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -253,6 +273,7 @@ fun []      @ ys = ys
 ["Append", "is"] @ ["never", "boring"];
 (*["Append","is","never","boring"] : string list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 * is it tail recursive?
 * why can't it be used in patterns?
@@ -280,6 +301,7 @@ fun powoftwo n =
   (even n andalso powoftwo (n div 2));
 (*val powoftwo = fn : int -> bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 is `powoftwo` tail-recursive?
 
@@ -298,6 +320,7 @@ val sqlist = map (fn x => x*x);
 sqlist [1,2,3];
 (*val it = [1,4,9] : int list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -308,8 +331,9 @@ transposing a matrix using `map`
 ```sml
 fun transp ([]::_) = []
   | transp rows =
-      (map hd rows) :: transp (map tl rows);
+      (map hd rows) :: (transp (map tl rows));
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -325,6 +349,7 @@ fun filter pred []      = []
 filter (fn x => x mod 2 = 0) [1,2,3,4,5];
 (*val it = [2,4] : int list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 `filter` is bound as `List.filter`
 
@@ -340,6 +365,7 @@ a polynomial is represented as a list of `$(coeff,degree)$` pairs
 type polynomial = (int*int) list;
 val a = [(5,3), (2,1), (7,0)]: polynomial;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -359,6 +385,7 @@ fun derive (p: polynomial): polynomial =
 derive a;
 (*val it = [(15,2),(2,0)] : polynomial*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -373,6 +400,7 @@ fun foldl f init []      = init
   | foldl f init (x::xs) = foldl f (f (x, init)) xs;
 (*val foldl = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 calculates `$[x_1, x_2, … ,x_n] \rightarrow f(x_n, … ,f(x_2, f(x_1,init)))$`
 
@@ -385,6 +413,7 @@ fun foldr f init []      = init
   | foldr f init (x::xs) = f (x, foldr f init xs);
 (*val foldr = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 calculates `$[x_1, x_2, … ,x_n] \rightarrow f(x1, … ,f(xn-1, f(xn,init)))$`
 
@@ -404,6 +433,7 @@ fun reverse l = foldl op:: [] l;
 fun xs @ ys = foldr op:: ys xs;
 (*val @ = fn : 'a list * 'a list -> 'a list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -418,6 +448,7 @@ fun exists p []      = false
   | exists p (x::xs) = (p x) orelse exists p xs;
 (*val exists = fn:('a -> bool)-> 'a list -> bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 checks if the predicate `p` is satisfied by at least one element of the list
 
@@ -425,6 +456,7 @@ checks if the predicate `p` is satisfied by at least one element of the list
 exists (fn x => x < 0) [1, 2, ~3, 4];
 (*val it = true : bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 bound as `List.exists`
 
@@ -437,6 +469,7 @@ fun all p []      = true
   | all p (x::xs) = (p x) andalso all p xs;
 (*val forall = fn:('a -> bool) -> 'a list -> bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 checks if the predicate `p` is satisfied by **all** elements of the list
 
@@ -444,6 +477,7 @@ checks if the predicate `p` is satisfied by **all** elements of the list
 all (fn x => x >= 0) [1, 2, ~3, 4];
 (*val it = false : bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 bound as `List.all`
 
@@ -454,6 +488,7 @@ fun disjoint (xs, ys) =
   all (fn x => all (fn y => x<>y) ys) xs;
 (*val disjoint = fn : ''a list * ''a list -> bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -472,8 +507,10 @@ equality is polymorphic in a restricted sense
 ML has a polymorphic equality type `''a`
 
 ```sml
-op= : (''a * ''a) -> bool
+op=:
+(*val it = fn : ''a * ''a -> bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 somewhat like an interface in other languages
 
@@ -494,6 +531,7 @@ a list of functions is a perfectly legitimate value
 map (fn f => f 3) it;
 (*val it = [6,9] : int list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 

@@ -24,6 +24,7 @@ fun head (Cons (x, _)) = x;
 fun tail (Cons (_, xf)) = xf();
 (*val tail = fn : 'a seq -> 'a seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ML evaluates `E` in `Cons(x,E)`, so to obtain laziness we must write `Cons(x, fn()=>E)`
 
@@ -41,6 +42,7 @@ from 1;
 tail it;
 (*val it = Cons (2,fn) : int seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -56,6 +58,7 @@ squares (from 1);
 head (tail (tail (tail (tail it))));
 (*val it = 25 : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -69,6 +72,7 @@ fun addq (Cons (x, xf), Cons (y, yf)) =
   | addq _ = Nil;
 (*val addq = fn : int seq * int seq -> int seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -84,6 +88,7 @@ fun appendq (Nil, yq) = yq
         Cons (x, fn() => appendq (xf(), yq));
 (*val appendq = fn : 'a seq * 'a seq -> 'a seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 what would `appendq(xq,yq)` be if `xq` is infinite?
 
@@ -97,6 +102,7 @@ fun interleaving (Nil, yq)       = yq
         Cons (x, fn()=>interleaving (yq, xf()));
 (*val interleaving = fn : 'a seq * 'a seq -> 'a seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -108,6 +114,7 @@ fun mapq f Nil           = Nil
         Cons (f(x), fn()=>mapq f (xf()));
 (*val mapq = fn : ('a -> 'b) -> 'a seq -> 'b seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -121,6 +128,7 @@ fun filterq pred Nil = Nil
         else filterq pred (xf());
 (*val filterq = fn : ('a -> bool) -> 'a seq -> 'a seq*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 

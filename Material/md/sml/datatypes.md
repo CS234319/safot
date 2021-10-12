@@ -21,9 +21,9 @@ datatype single = only;
 only;
 (*val it = only : single*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
-* `only` denotes the only value in the type `single`
-* isomorphic to `unit`
+`only` denotes the only value of type `single` (isomorphic to `unit`)
 
 ---vert---
 
@@ -36,6 +36,7 @@ datatype bool = true | false;
 true;
 (*val it = true : bool*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -43,18 +44,16 @@ allows pattern matching
 
 ```sml
 datatype piece = king | queen | rook | bishop | knight | pawn;
-(*datatype piece = bishop | king | knight | pawn | queen | rook*)
 
 fun value king = Real.posInf (*infinity*)
   | value queen = 9.0
   | value rook = 5.0
   | value (bishop | knight) = 3.0
   | value pawn = 1.0;
-(*val value = fn: piece -> real*)
 
 value bishop;
-(*val it = 3.0 : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -71,6 +70,7 @@ val (body, engine) = (0.0122, 50.0);
 a engine body; (* oops *)
 (*val it = 4098.36065574 : real*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -85,6 +85,7 @@ fun a (m:mass) (f:force) : acceleration = f/m;
 a engine body; (* still oops *)
 (*val it = 4098.36065574 : acceleration*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -107,6 +108,7 @@ a body engine;
 a engine body;
 (*Error: operator and operand don't agree [tycon mismatch]*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -125,6 +127,7 @@ Kg;
 Newton;
 (*val it = fn : real -> force*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -140,8 +143,8 @@ datatype shape =
 fun area (point | Line _) = 0.0
   | area (Circle r) = Math.pi*r*r
   | area (Rectangle (w, h)) = w * h;
-(*val area = fn : shape -> real*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -157,6 +160,7 @@ val Line length = line;
 val Circle radius = line;
 (*uncaught exception Bind [nonexhaustive binding failure]*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -168,6 +172,7 @@ val point = 5.3
 (*Error: pattern and expression in val dec don't agree
 [tycon mismatch]*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -183,6 +188,7 @@ datatype intlist =
 fun length nil     = 0
   | length (x::xs) = 1 + length xs;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -196,6 +202,7 @@ datatype 'a list =
 "hello" :: "world" :: nil;
 (*val it = "hello" :: "world" :: nil : string list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -212,6 +219,7 @@ head [1, 2, 3];
 head (tl [1]);
 (*val it = NONE : int option*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -231,6 +239,7 @@ val five_or_hello = if true then five else hello;
 val int_char_list = [type1 5, type2 #"a"];
 (*val five_or_hello = [type1 5, type2 #"a"] : (int,char) union list*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -252,6 +261,7 @@ fun size Nil = 0
   | size (Br (v,t1,t2)) = 1 + size t1 + size t2;
 (*val size = fn : 'a tree -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -276,6 +286,7 @@ fun get (Br ((node_k, v), left, right)) k =
 (*stdIn:22.28-22.164 Warning: match nonexhaustive ...*)
 (*val get = fn : (int * 'a) tree -> int -> 'a*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -292,3 +303,4 @@ in
 end;
 (*val insert = fn : (int * 'a) tree -> int * 'a -> (int * 'a) tree*)
 ```
+<!-- .element: data-thebe-executable-sml -->

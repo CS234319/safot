@@ -6,29 +6,27 @@
 
 ### side note - operators
 
-* a function of two arguments can be treated as an infix operator
+a function of two arguments can be treated as an infix operator
 
-    ```sml
-    fun d(x,y) = Math.sqrt(x*x + y*y);
-    (*val d = fn : real * real -> real*)
-    ```
+```sml
+fun d (x,y) = Math.sqrt (x*x + y*y);
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* convert to an infix operator
+convert to an infix operator
 
-    ```sml
-    infix d;
-    (*infix d*)
+```sml
+infix d;
 
-    3.0 d 4.0;
-    (*val it = 5.0 : real*)
+3.0 d 4.0;
 
-    1.0 d 3.0 d 2.0 d 5.0;
-    (*val it = 6.2449979984 : real*)
-    ```
+1.0 d 3.0 d 2.0 d 5.0;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
-* the infix declaration can come __before__ the function definition
+the infix declaration can come __before__ the function definition
 
 ```sml
 infix d;
@@ -43,25 +41,27 @@ op d;
 op d(1.0,3.0);
 (*val it = 3.16227766017 : real*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
 ### curried functions
 
-* any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
-* example
+any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
 
-    ```sml
-    fun prefix (pre, post) = pre ^ post;
-    (*val prefix = fn : string * string -> string*)
-    ```
+```sml
+fun prefix (pre, post) = pre ^ post;
+(*val prefix = fn : string * string -> string*)
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* the curried version
+the curried version
 
-    ```sml
-    fun prefix pre = fn post => pre^post;
-    (*val prefix = fn : string -> string -> string*)
-    ```
+```sml
+fun prefix pre = fn post => pre^post;
+(*val prefix = fn : string -> string -> string*)
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -69,7 +69,7 @@ reminder: `->` is right associative
 
 ```sml
 val prefix = fn : string -> string -> string
-
+(*is equivalent to*)
 val prefix = fn : string -> (string -> string)
 ```
 
@@ -77,25 +77,27 @@ val prefix = fn : string -> (string -> string)
 
 ### partial application
 
-* you don't have to give the next arguments!
+you don't have to give the next arguments!
 
-    ```sml
-    prefix "Dr. ";
-    (*val it = fn : string -> string*)
+```sml
+prefix "Dr. ";
+(*val it = fn : string -> string*)
 
-    it "Tomer";
-    (*val it = "Dr. Tomer" : string*)
-    ```
+it "Tomer";
+(*val it = "Dr. Tomer" : string*)
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* as always, functions are values
+as always, functions are values
 
-    ```sml
-    val doctorify = prefix "Dr. ";
-    (*val doctorify = fn : string -> string*)
+```sml
+val doctorify = prefix "Dr. ";
+(*val doctorify = fn : string -> string*)
 
-    doctorify "Jackal";
-    (*val it = "Dr. Jackal" : string*)
-    ```
+doctorify "Jackal";
+(*val it = "Dr. Jackal" : string*)
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -104,30 +106,31 @@ val prefix = fn : string -> (string -> string)
 ```sml
 fun prefix pre post = pre ^ post;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 is equivalent to
 
 ```sml
 fun prefix pre = fn post => pre ^ post;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
 ### function calls
 
-* function call
+```sml
+(prefix "Dr. ") "Tomer";
+(*val it = "Dr. Tomer" : string*)
 
-    ```sml
-    (prefix "Dr. ") "Tomer";
-    (*val it = "Dr. Tomer" : string*)
+prefix "Dr. " "Tomer";
+(*val it = "Dr. Tomer" : string*)
+```
+<!-- .element: data-thebe-executable-sml -->
 
-    prefix "Dr. " "Tomer";
-    (*val it = "Dr. Tomer" : string*)
-    ```
-
-* the rule is:
-  * a function call `F E1 E2 ... En`
-  * abbreviates `(...((F E1) E2)...) En`
+the rule is:
+* a function call `F E1 E2 ... En`
+* abbreviates `(...((F E1) E2)...) En`
 
 ---
 
@@ -145,6 +148,7 @@ add5 2;
 fun mul5 y = op* (5, y);
 (*val mul5 = fn: int -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
@@ -160,6 +164,7 @@ val add5 = something5 op+;
 fun intsec x (f:int*int->int) y = f(x,y);
 (*val intsec = fn : int -> (int * int -> int) -> int -> int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -180,6 +185,7 @@ val times_4 = times 4;
 times_4 8;
 (*val it = 32 : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -202,6 +208,7 @@ it (16.0);
 it #"1";
 (*val it = 1 : int*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
