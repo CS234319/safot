@@ -504,7 +504,58 @@ lengthvec (5.0, 12.0);
 * types can be stated explicitly
 
 ---
-<!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut2-type_constraints.ipynb" data-background-interactive -->
+
+what will be printed for the following definitions of `min`?
+
+---vert---
+
+```sml
+fun min(x, y) = if x < y then x else y;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+---vert---
+
+```sml
+fun min(x:real,y) = if x < y then x else y;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+---vert---
+
+```sml
+fun min(x:string,y) = if x < y then x else y;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+---vert---
+
+```sml
+fun min(x,y):real = if x < y then x else y;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+---vert---
+
+```sml
+fun min(x,y) = if x < y then x:real else y;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+---
+
+write a function foo such that its type is:
+
+```sml
+val foo = fn : int * real -> real
+```
+
+but you can't use type annotations
+
+```sml
+...
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -540,25 +591,51 @@ fun pair (x,y) = (y,x);
 ### functions as values - the polymorphic case
 
 ---vert---
-<!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut2-functions-polymorphic.ipynb" data-background-interactive -->
+
+what will be printed?
+
+```sml
+fun twice f = fn x => f (f x);
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---vert---
 
-* sometimes ML gives us a hard time when we give a polymorphic value to a polymorphic function.
+what will be printed?
 
-    ```sml
-    fun twice f = fn x => f (f x);
-    fun ident x = x;
-    twice ident;
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+```sml
+fun ident x = x;
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* you usually may ignore it. or use a workaround:
+---
 
-    ```sml
-    fn x => (twice ident) (x);
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+what will be printed?
+
+```sml
+fun twice f = fn x => f (f x);
+twice (fn x => x * x);
+it(2);
+```
+<!-- .element: data-thebe-executable-sml -->
+
+---vert---
+
+sometimes ML gives us a hard time
+
+```sml
+fun twice f = fn x => f (f x);
+fun ident x = x;
+twice ident;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+you usually may ignore it. or use a workaround:
+
+```sml
+fn x => (twice ident) (x);
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
