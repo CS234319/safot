@@ -49,7 +49,7 @@ npm start
 and on a different terminal:
 
 ```bash
-npm run notebook
+npm run jupyter-server
 ```
 
 go to <http://localhost:16788/>
