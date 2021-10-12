@@ -49,7 +49,6 @@ gulp.task("serve", () => {
     if (!fs.existsSync(output_dir)) {
         fs.mkdirSync(output_dir);
     }
-    generate_slides(path.join("hbs", "ocaml-slide.hbs"), "ocaml");
     generate_slides(path.join("hbs", "sml-slide.hbs"), "sml");
     generate_slides(path.join("hbs", "prolog-slide.hbs"), "prolog");
 
