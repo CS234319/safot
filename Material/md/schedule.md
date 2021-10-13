@@ -8,7 +8,7 @@
    1. [ML - Introduction](sml/introduction.md)
    2. [ML - Functions](sml/functions.md)
 - **Reading material**
-- **HW**: [HW1](hw/1.md) is published \[24.10\]
+- **HW**: [HW1](hw/1.md) is published \[30.10\]
 
 ## Week 2 \[31.10-6.11\]
 - **Lecture**
@@ -105,7 +105,7 @@
    1. [Classifying OCaml's Tokens](theory/ocaml-tokens-classification.md)
 - **Reading material**
 - **Submission**: [HW5](hw/5.md) \[15.11 23:59\]
-- **HW**: [HW6](hw/6.md) is published \[13.11\]
+- **HW**: [HW6](hw/6.md) is published \[15.11\]
 
 ## Week 12 \[16.1-22.1\]
 - **Lecture**
