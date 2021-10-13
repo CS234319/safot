@@ -15,7 +15,7 @@
    1. [Quick Pascal (Cont.)](?)
    2. [Types](?)
 - **Recitation (Dry)**
-   1. [Lexical Analysis and ASTs](theory/?)
+   1. [Lexical Analysis and ASTs](theory/lexical-analysis.md)
 - **Tutorial (Wet)**
    1. [ML - Declarations](sml/declarations.md)
 - **Reading material**
@@ -54,7 +54,7 @@
 - **Lecture**
    1. [Symbolic Values and Pure Lisp](?)
 - **Recitation (Dry)**
-   1. [Garbage Collection](theory/gc.md)
+   1. [Automatic Memory Management](theory/automatic-memory-management.md)
    2. [RTTI](theory/rtti.md)
 - **Tutorial (Wet)**
    1. [ML - Sequences (Cont.)](sml/sequences.md)
@@ -65,7 +65,7 @@
 - **Lecture**
    1. [Symbolic Values and Pure Lisp (Cont.)](?)
 - **Tutorial (Wet)**
-   1. [mini lisp](minilisp/introduction.md)
+   1. [mini lisp](theory/mini-lisp.md)
 - **Reading material**
 - **Submission**: [HW3](hw/3.md) \[18.12 23:59\]
 - **HW**: [HW4](hw/4.md) is published \[18.12\]
@@ -82,11 +82,9 @@
 - **Lecture**
    1. More on state
    2. Commands
-- **Recitation (Dry)**
-   1. [Python Generators](?)
-   2. [C# Coroutines](?)
 - **Tutorial (Wet)**
    1. [Prolog - Lists](prolog/lists.md)
+   2. [Prolog - TBD - 1T](prolog/?.md)
 - **Reading material**
 - **Submission**: [HW4](hw/4.md) \[1.1 23:59\]
 - **HW**: [HW5](hw/5.md) is published \[1.1\]
@@ -96,8 +94,8 @@
    1. Commands (cont)
    2. 
 - **Tutorial (Wet)**
-   1. [Prolog - TBD - 1T](prolog/?.md)
-   2. [Prolog - Exam Questions](prolog/exam-questions.md)
+   1. [Prolog - Exam Questions](prolog/exam-questions.md)
+   2. [TBD - 1T](?)
 - **Reading material**
 
 ## Week 11 \[9.1-15.11\]
@@ -115,12 +113,13 @@
       1. Function objects, 
       2. Java iterators
       3. Generators
-      4. Co routines.
+      4. Coroutines.
       5. Java iterators.
    2. [Advanced Constructs - Closures](?)
 - **Recitation (Dry)**
    1. [Lexical and Dynamic Scoping](theory/scoping.md)
-   2. TBD - 1T
+   2. [Python Generators](theory/python-generators.md)
+   3. [C# Coroutines](theory/csharp-coroutines.md)
 - **Reading material**
 
 ## Week 13 \[23.1-29.11\]
