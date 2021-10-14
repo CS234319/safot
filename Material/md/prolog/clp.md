@@ -95,7 +95,7 @@ X #< 5
 
 ---vert---
 
-we can use the `in` operator in out code
+we can use the `in` operator in our code
 
 ```prolog
 X in 1..5.
@@ -132,4 +132,40 @@ X in 1..3, indomain(X).
 ```prolog
 X in 0..sup, indomain(X).
 % ERROR: Arguments are not sufficiently instantiated
+```
+
+---
+
+### question
+
+implement the predicate `change/2`. `change(S, L)` is true iff:
+
+* `S` is a positive integer
+* `L` is a **sorted** (descending) list made of the integers `1`, `5`, `10`
+* `S` is the sum of the numbers in L
+
+(assume `S` is concrete)
+
+```prolog
+change(21, [10, 5, 1, 1, 1, 1, 1, 1]).
+% true.
+```
+
+---vert---
+
+```prolog
+:- use_module(library(clpfd)).
+
+repeat(0, _, []) :- !.
+repeat(N, C, [C|L]) :- N1 #= N - 1, repeat(N1, C, L).
+
+build([], []).
+build([[N,C]|T], L) :- repeat(N, C, Xs), build(T, Ys), append(Xs, Ys, L).
+
+change(S, L) :-
+    S #= A1 + A5 * 5 + A10 * 10,
+    A1 #>= 0, A5 #>= 0, A10 #>= 0,
+    label([A1, A5, A10]),
+    build([[A10, 10], [A5, 5], [A1, 1]], L)
+.
 ```
