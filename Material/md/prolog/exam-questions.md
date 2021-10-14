@@ -6,7 +6,7 @@
 
 ### question 1
 
----vert---
+<!--vert-->
 
 #### question 1.1
 
@@ -15,7 +15,7 @@ write rules for the predicate `interleave/2` such that `interleave(L, R)` is tru
 * you may assume that `L` is a concrete list of lists
 * example: `interleave([[p,l],[r,o],[o,g]], [p,r,o,l,o,g])`
 
----vert---
+<!--vert-->
 
 ```prolog
 interleave([], []).
@@ -25,7 +25,7 @@ interleave([[X|Xs]|Ys], [X|R]) :-
     interleave(Z, R).
 ```
 
----vert---
+<!--vert-->
 
 #### question 1.2
 
@@ -33,7 +33,7 @@ the predicates `cond1/1` and `cond2/1` take a concrete integer. implement `filte
 
 * you may assume `Xs` is a concrete list of integers
 
----vert---
+<!--vert-->
 
 ```prolog
 filter([], []).

@@ -13,7 +13,7 @@ val x = ref 4;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 `ref` is a constructor and as such is also a function
 
@@ -41,7 +41,7 @@ val := = fn : 'a ref * 'a -> unit
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 use `!` to get the the cell's contents
 
@@ -67,7 +67,7 @@ fun swap x y =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 an expression created by `;` evaluates to the value of the last expression
 
@@ -103,7 +103,7 @@ fun memoize (memo: (''a, 'b) memoizer) f x =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 local
@@ -120,7 +120,7 @@ end;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 let's compare
 

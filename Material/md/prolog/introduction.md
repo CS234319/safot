@@ -60,11 +60,11 @@ LISP: only one data structure, called S-expression,
 
 ### basic constructs
 
----vert---
+<!--vert-->
 
 the basic constructs of prolog are terms and statements
 
----vert---
+<!--vert-->
 
 #### terms - atoms
 
@@ -76,7 +76,7 @@ $<@
 'an atom'
 ```
 
----vert---
+<!--vert-->
 
 an **atom** is
 
@@ -84,14 +84,14 @@ an **atom** is
 * a string of special characters (`+ - * / < > = : . & _ ~`): `$<@` `<---->` `.:.`
 * a string of characters enclosed in single quotes: `'Tom'` `'2A$'`
 
----vert---
+<!--vert-->
 
 #### terms - numbers
 
 * integers: `123` `-42`
 * real numbers: `3.14` `-0.573` `2.4e3`
 
----vert---
+<!--vert-->
 
 #### terms - variables
 
@@ -102,7 +102,7 @@ X_25
 _result
 ```
 
----vert---
+<!--vert-->
 
 #### compound terms
 
@@ -114,7 +114,7 @@ course(236319, pl)
 
 a functor `f` of arity `n` is denoted `f/n`
 
----vert---
+<!--vert-->
 
 #### terminology
 
@@ -123,7 +123,7 @@ a functor `f` of arity `n` is denoted `f/n`
 * a **predicate** (פרדיקט) is a functor for which a list of clauses is defined
 * a **clause** (פסוקית) is a fact or a rule
 
----vert---
+<!--vert-->
 
 #### facts
 
@@ -135,7 +135,7 @@ eats(bear, honey).
 
 this fact states that the **predicate** `father` holds for the atoms `bear` and `honey`
 
----vert---
+<!--vert-->
 
 facts can have any arity
 
@@ -145,7 +145,7 @@ sad(john).
 plus(2, 3, 5).
 ```
 
----vert---
+<!--vert-->
 
 a finite set of facts constitutes a program
 
@@ -159,7 +159,7 @@ eats(rat, salmon).
 eats(salmon, warm).
 ```
 
----vert---
+<!--vert-->
 
 facts can contain variables
 
@@ -171,7 +171,7 @@ variables are universally quantified
 
 $$\forall X,likes(X, course236319)$$
 
----vert---
+<!--vert-->
 
 #### queries
 
@@ -186,7 +186,7 @@ variables are existentially quantified
 
 $$\exists X,eats(X, salmon) \land eats(X, honey)$$
 
----vert---
+<!--vert-->
 
 #### rules
 
@@ -196,7 +196,7 @@ a **rule** (חוק, כלל) is a statement which enables us to define new relati
 predicate(term1, ..., termN) :- goal1, ..., goalN.
 ```
 
----vert---
+<!--vert-->
 
 `Y` is a survival dependency of `X` if:
 
@@ -219,7 +219,7 @@ survival_dependency(X, Y) :-
 * type `consult(prog.pl)`
 * query the interpreter
 
----vert---
+<!--vert-->
 
 #### dynamic clauses
 
@@ -236,7 +236,7 @@ assertz((
 
 `asserta` asserts the clause as first clause of the predicate while `assertz` asserts it as last clause
 
----vert---
+<!--vert-->
 
 dynamically remove a clause using `retract/1`
 
@@ -252,7 +252,7 @@ p(a).
 % false.
 ```
 
----vert---
+<!--vert-->
 
 dynamically remove clauses using `retractall/1`
 
@@ -270,7 +270,7 @@ p(b).
 % false.
 ```
 
----vert---
+<!--vert-->
 
 dynamically remove a predicate using `abolish/1`
 
@@ -305,7 +305,7 @@ two terms match if:
 * they are identical
 * the variables in both terms can be instantiated to make the terms identical
 
----vert---
+<!--vert-->
 
 the operator `=` performs matching
 
@@ -318,7 +318,7 @@ G = 95.
 */
 ```
 
----vert---
+<!--vert-->
 
 ```prolog
 course(N, S, 95) = course(Y, M, 96).
@@ -328,7 +328,7 @@ course(X) = semester(Y).
 % false.
 ```
 
----vert---
+<!--vert-->
 
 #### matching rules
 
@@ -342,7 +342,7 @@ terms `S` and `T` match if:
   * all their corresponding arguments match
   * the variable instantiations are compatible
 
----vert---
+<!--vert-->
 
 #### geometric example
 
@@ -354,7 +354,7 @@ seg( point(1, 1), point(2, 3) )
 triangle( point(4, 2), point(6, 4), point(7, 1) )
 ```
 
----vert---
+<!--vert-->
 
 ```prolog
 triangle(point(1, 1), A, point(2, 3))
@@ -367,7 +367,7 @@ Z = 3.
 */
 ```
 
----vert---
+<!--vert-->
 
 #### matching as means of computation
 
@@ -408,7 +408,7 @@ X is 1 + 2.
 % X = 3.
 ```
 
----vert---
+<!--vert-->
 
 #### comparison operators
 
@@ -421,7 +421,7 @@ X =:= Y  % equal
 X =\= Y  % not equal
 ```
 
----vert---
+<!--vert-->
 
 the comparison operators also force evaluation
 
@@ -433,7 +433,7 @@ the comparison operators also force evaluation
 % true.
 ```
 
----vert---
+<!--vert-->
 
 #### `=` VS. `=:=`
 
@@ -448,7 +448,7 @@ the comparison operators also force evaluation
 % ERROR: =:=/2: Arguments are not sufficiently instantiated
 ```
 
----vert---
+<!--vert-->
 
 #### GCD
 
@@ -467,7 +467,7 @@ gcd(X, Y, D) :-
 
 ### builtin control predicates
 
----vert---
+<!--vert-->
 
 #### conjunction
 
@@ -477,7 +477,7 @@ the `,/2` predicate: the goal `(G1, G2)` succeeds if `G1` and `G2` succeed
 TODO: example
 ```
 
----vert---
+<!--vert-->
 
 #### disjunction
 
@@ -492,19 +492,19 @@ the `;/2` predicate: the goal `(G1 ; G2)` succeeds if `G1` or `G2` succeed. defi
 TODO: example
 ```
 
----vert---
+<!--vert-->
 
 #### true
 
 the predicate `true/0` always succeeds
 
----vert---
+<!--vert-->
 
 #### false
 
 the predicates `false/0` and `fail/0` always fail
 
----vert---
+<!--vert-->
 
 #### negation as failure
 
@@ -512,7 +512,7 @@ the predicates `false/0` and `fail/0` always fail
 * for known predicates, prolog works under a closed world assumption - if something can't be proved then it is false
 * it is not logical negation!
 
----vert---
+<!--vert-->
 
 ```prolog
 assertz(person(jimmy)).
@@ -525,7 +525,7 @@ person(rick).
 % true.
 ```
 
----vert---
+<!--vert-->
 
 it might not work like you'd expect
 
@@ -539,14 +539,14 @@ person(X).
 
 why doesn't prolog answer with `X = rick` or simply with `true`?
 
----vert---
+<!--vert-->
 
 `person(X)` succeeds so its negation fails
 
 * if `G` fails `\+ G` succeeds
 * if `G` succeeds `\+ G` fails
 
----vert---
+<!--vert-->
 
 `\+/1` allows for non-monotonic reasoning - a fact can become false by adding clauses to the database
 
@@ -566,7 +566,7 @@ legal(theft).
 
 ## exercises
 
----vert---
+<!--vert-->
 
 ### family tree
 
@@ -583,19 +583,19 @@ parent(cain, enoch).
 
 define a predicate `grandparent(X)` that holds when `X` is a grandparent
 
----vert---
+<!--vert-->
 
 ```prolog
 grandparent(X) :- parent(X, Y), parent(Y, _).
 ```
 
----vert---
+<!--vert-->
 
 define a predicate `nuclear(X, Y)` that holds when `X` and `Y` are in the same nuclear family
 
 a nuclear family consists of 2 parents and their common children
 
----vert---
+<!--vert-->
 
 ```prolog
 nuclear(X, Y) :-  % siblings
@@ -607,7 +607,7 @@ nuclear(X, Y) :-
     parent(X, C), parent(Y, C).
 ```
 
----vert---
+<!--vert-->
 
 ### binary trees
 
@@ -618,7 +618,7 @@ we represent binary trees as terms:
 
 define a predicate `tree_size(T, S)` such that `T` is a binary tree and `S` is its size
 
----vert---
+<!--vert-->
 
 ```prolog
 tree_size(nil, 0).
@@ -628,13 +628,13 @@ tree_size(node(_, Tl, Tr), S) :-
     S is Sl + Sr + 1.
 ```
 
----vert---
+<!--vert-->
 
 define a predicate `tree_max(T, M)` such that `T` is a binary tree and `M` is the max of the values of `T`'s nodes
 
 you may use the arithmetic function `max/2`
 
----vert---
+<!--vert-->
 
 ```prolog
 tree_max(node(N, nil, nil), N).
@@ -648,7 +648,7 @@ tree_max(node(N, Tl, Tr), M) :-
     M is max(N, Ml, Mr).
 ```
 
----vert---
+<!--vert-->
 
 define a predicate `perfect_tree(T, H)` such that `T` is a perfect binary tree and `H` is its height
 
@@ -656,7 +656,7 @@ a node's value should be its height
 
 a perfect binary tree is a binary tree in which all interior nodes have two children and all leaves have the same depth
 
----vert---
+<!--vert-->
 
 ```prolog
 perfect_tree(nil, 0).

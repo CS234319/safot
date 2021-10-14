@@ -11,7 +11,7 @@
 * FD = **F**inite **D**omains, namely integers
 * use it to solve a set of constraints over integers
 
----vert---
+<!--vert-->
 
 write in the interpreter:
 
@@ -29,7 +29,7 @@ or write the following at the top of a file:
 
 ### arithmetic constraints
 
----vert---
+<!--vert-->
 
 #### comparison operators
 
@@ -44,7 +44,7 @@ X #= Y.
 X #\= Y.
 ```
 
----vert---
+<!--vert-->
 
 `X` and `Y` can be any arithmetic expression:
 
@@ -56,7 +56,7 @@ X #\= Y.
 * `min(Expr1,Expr2)`
 * `max(Expr1,Expr2)`
 
----vert---
+<!--vert-->
 
 how are these different from the regular comparison operators?
 
@@ -81,7 +81,7 @@ the `#`-operators don't require that any of the variables are instantiated
 % X in 1..4.
 ```
 
----vert---
+<!--vert-->
 
 in a domain `sup` is for supremum and `inf` is for infimum
 
@@ -93,7 +93,7 @@ X #< 5
 % X in inf..4.
 ```
 
----vert---
+<!--vert-->
 
 we can use the `in` operator in our code
 
@@ -102,7 +102,7 @@ X in 1..5.
 % X in 1..5.
 ```
 
----vert---
+<!--vert-->
 
 `\/` is used for domains union
 
@@ -114,7 +114,7 @@ X in 1\/2\/3.
 % X in 1..3.
 ```
 
----vert---
+<!--vert-->
 
 #### labeling
 
@@ -125,7 +125,7 @@ X in 1..3, indomain(X).
 % X = 1 ; X = 2 ; X = 3.
 ```
 
----vert---
+<!--vert-->
 
 `indomain` must always terminate
 
@@ -151,7 +151,7 @@ change(21, [10, 5, 1, 1, 1, 1, 1, 1]).
 % true.
 ```
 
----vert---
+<!--vert-->
 
 ```prolog
 :- use_module(library(clpfd)).

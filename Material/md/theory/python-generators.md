@@ -15,7 +15,7 @@ def fib():
 ```
 <!-- .element: data-thebe-executable-python -->
 
----vert---
+<!--vert-->
 
 a generator function returns a **generator object**
 
@@ -24,7 +24,7 @@ g = fib()
 ```
 <!-- .element: data-thebe-executable-python -->
 
----vert---
+<!--vert-->
 
 to get the values that the generator yields use `next`
 

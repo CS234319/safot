@@ -24,7 +24,7 @@ infix d;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 the infix declaration can come __before__ the function definition
 
@@ -63,7 +63,7 @@ fun prefix pre = fn post => pre^post;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 reminder: `->` is right associative
 
@@ -150,7 +150,7 @@ fun mul5 y = op* (5, y);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 now generalize the operator and operand
 
@@ -214,6 +214,6 @@ it #"1";
 
 ### exam questions
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut3-exam-questions.ipynb" data-background-interactive -->

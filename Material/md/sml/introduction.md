@@ -16,7 +16,7 @@ Standard ML of New Jersey v110.79 [built: Sat Oct 26 12:27:04 2019]
 val it = 10 : int
 ```
 
----vert---
+<!--vert-->
 
 * create a file named `myfile.sml`
 * start ML and
@@ -47,7 +47,7 @@ val it = 10 : int
 
 ### declaring constants
 
----vert---
+<!--vert-->
 
 naming constants
 
@@ -56,7 +56,7 @@ val seconds = 60;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 using names in expressions
 
@@ -69,7 +69,7 @@ seconds * minutes * hours;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 the identifier `it`
 
@@ -86,7 +86,7 @@ val secs_in_hour = it;
 
 ### legal names
 
----vert---
+<!--vert-->
 
 ### alphabetic names
 
@@ -102,7 +102,7 @@ hamlet_prince_of_denmark
 h''3_H
 ```
 
----vert---
+<!--vert-->
 
 ### symbolic names
 
@@ -151,7 +151,7 @@ val +-+-+ = 1415;
     * `~85601435654638`
 * infix operations: `+` `-` `*` `div` `mod`
 
----vert---
+<!--vert-->
 
 * conventional precedence (parenthesis can be dropped without change of meaning)
 
@@ -173,7 +173,7 @@ val +-+-+ = 1415;
     * `~123.4E~2` is the same as `~1.234`
 * infix operators: `+` `-` `*` `/`
 
----vert---
+<!--vert-->
 
 * functions
   * `floor(r)` converts `real` to `int`
@@ -185,7 +185,7 @@ val +-+-+ = 1415;
 
 ### strings
 
----vert---
+<!--vert-->
 
 constants are written in double quotes
 
@@ -196,7 +196,7 @@ constants are written in double quotes
 
 special characters `\n`, `\t`, `\"`, `\\`
 
----vert---
+<!--vert-->
 
 concatenation
 
@@ -205,7 +205,7 @@ concatenation
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 comparison
 
@@ -216,7 +216,7 @@ comparison
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 `size` returns the number of characters
 
@@ -229,7 +229,7 @@ size "SML";
 
 ### characters
 
----vert---
+<!--vert-->
 
 chars are distinguished from strings of length 1 by `#`
 
@@ -240,7 +240,7 @@ chars are distinguished from strings of length 1 by `#`
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 conversion between strings and chars
 
@@ -251,7 +251,7 @@ String.sub("hello", 0);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 conversion between chars and ASCII
 
@@ -310,7 +310,7 @@ val a = (1.5, 6.8);
 * type lists each field as `label : type`
 * enclosed in braces `{...}`
 
----vert---
+<!--vert-->
 
 * selecting a field
 
@@ -370,7 +370,7 @@ fun sq(x: int) = x*x;
 * `x:int` is the formal parameter with type constraint
 * `x*x` is the body and it is an **expression**
 
----vert---
+<!--vert-->
 
 * the result of the function is the result of evaluating the **expression** of the function body with the actual parameter
 * `int->int` is the standard mathematical notation for a function type that takes an integer and returns an integer
@@ -400,7 +400,7 @@ fun sq(x: int) = x*x;
     ```
     <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 * parentheses are also optional in function definitions
 
@@ -507,35 +507,35 @@ lengthvec (5.0, 12.0);
 
 what will be printed for the following definitions of `min`?
 
----vert---
+<!--vert-->
 
 ```sml
 fun min(x, y) = if x < y then x else y;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 fun min(x:real,y) = if x < y then x else y;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 fun min(x:string,y) = if x < y then x else y;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 fun min(x,y):real = if x < y then x else y;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 fun min(x,y) = if x < y then x:real else y;
@@ -590,7 +590,7 @@ fun pair (x,y) = (y,x);
 
 ### functions as values - the polymorphic case
 
----vert---
+<!--vert-->
 
 what will be printed?
 
@@ -599,7 +599,7 @@ fun twice f = fn x => f (f x);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 what will be printed?
 
@@ -619,7 +619,7 @@ it(2);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 sometimes ML gives us a hard time
 
@@ -647,7 +647,7 @@ fn x => (twice ident) (x);
 
 `$$gcd(m,n) = \begin{cases}n,\;m = 0&\\gcd(n\;mod\;m,m), \;m>0\end{cases}$$`
 
----vert---
+<!--vert-->
 
 ### GCD - Pascal vs. ML
 

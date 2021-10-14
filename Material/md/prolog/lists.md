@@ -12,7 +12,7 @@ a **list** is a sequence of any number of terms
 [a, [1, 2, 3], tom, 15, date(1, may, 1995)]
 ```
 
----vert---
+<!--vert-->
 
 a list is actually a pair of a head and a tail
 
@@ -40,7 +40,7 @@ length(L, 4).
 % L = [_10798, _10804, _10810, _10816].
 ```
 
----vert---
+<!--vert-->
 
 ### length with CLP(FD)
 
@@ -59,7 +59,7 @@ length([_|Tail], N) :-
 
 ### list predicates
 
----vert---
+<!--vert-->
 
 #### is_list/1 (predefined)
 
@@ -68,7 +68,7 @@ is_list([]).
 is_list([X|Xs]) :- is_list(Xs).
 ```
 
----vert---
+<!--vert-->
 
 #### member/2 (predefined)
 
@@ -77,7 +77,7 @@ member(X, [X|Xs]).
 member(X, [Y|Ys]) :- member(X, Ys).
 ```
 
----vert---
+<!--vert-->
 
 #### prefix/2
 
@@ -86,7 +86,7 @@ prefix([], L).
 prefix([X|Xs], [X|Ys]) :- prefix(Xs, Ys).
 ```
 
----vert---
+<!--vert-->
 
 #### suffix/2
 
@@ -95,7 +95,7 @@ suffix(Xs, Xs).
 suffix(Xs, [Y|Ys]) :- suffix(Xs, Ys).
 ```
 
----vert---
+<!--vert-->
 
 #### del/3
 
@@ -110,7 +110,7 @@ del(X, [X|Xs], Xs).
 del(X, [Y|Ys], [Y,Zs]) :- del(X, Ys, Zs).
 ```
 
----vert---
+<!--vert-->
 
 #### insert/3
 
@@ -118,7 +118,7 @@ del(X, [Y|Ys], [Y,Zs]) :- del(X, Ys, Zs).
 insert(X, L, R) :- del(X, R, L).
 ```
 
----vert---
+<!--vert-->
 
 #### append/3
 
@@ -127,7 +127,7 @@ append([], Ys, Ys).
 append([X|Xs], Ys, [X|Zs]) :- append(Xs, Ys, Zs).
 ```
 
----vert---
+<!--vert-->
 
 #### define member/2 using append/3
 
@@ -135,7 +135,7 @@ append([X|Xs], Ys, [X|Zs]) :- append(Xs, Ys, Zs).
 member(X, Xs) :- append(_, [X|_], Xs).
 ```
 
----vert---
+<!--vert-->
 
 #### sublist/2
 
@@ -145,7 +145,7 @@ sublist(Xs, Ys) :-
     append(Xs, Cs, Bs).
 ```
 
----vert---
+<!--vert-->
 
 ```prolog
 prefix(Xs, Ys) :- append(Xs, _, Ys).
@@ -157,7 +157,7 @@ sublist(Xs, Ys) :-
     suffix(Xs, Ps).
 ```
 
----vert---
+<!--vert-->
 
 #### permutation/2
 

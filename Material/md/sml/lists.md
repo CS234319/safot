@@ -13,7 +13,7 @@ a list is an __immutable__ finite sequence of elements
 []: 'a list
 ```
 
----vert---
+<!--vert-->
 
 order matters
 
@@ -31,7 +31,7 @@ and repetitions count
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 elements may have any type
 
@@ -48,7 +48,7 @@ elements may have any type
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 the empty list has a polymorphic type
 
@@ -72,7 +72,7 @@ a list is either *empty* or *a head followed by a tail*
 
 `[1,2,3]` ➭ head: `1` tail: `[2,3]`
 
----vert---
+<!--vert-->
 
 use the infix operator `::` (aka. `cons`) to build a list
 
@@ -85,7 +85,7 @@ use the infix operator `::` (aka. `cons`) to build a list
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 `::` associates to the right, so
 
@@ -95,7 +95,7 @@ use the infix operator `::` (aka. `cons`) to build a list
 
 `(x1 :: (x2 :: (... :: (xn :: nil)...)`
 
----vert---
+<!--vert-->
 
 `::` is a *constructor* so it can be used in patterns
 
@@ -110,7 +110,7 @@ fun replace_head (_::t) x = x :: t
 
 ### builtin fundamental functions
 
----vert---
+<!--vert-->
 
 `null` - tests whether a list is empty
 
@@ -121,7 +121,7 @@ fun null [] = true
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 `hd` - evaluates to the head of a non-empty list
 
@@ -132,7 +132,7 @@ val hd = fn : 'a  list -> 'a*)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 `tl` - evaluates to the tail of a non-empty list
 
@@ -143,7 +143,7 @@ val tl = fn : 'a  list -> 'a  list*)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut4-hd-tl-examples.ipynb" data-background-interactive -->
 
@@ -176,7 +176,7 @@ val op-- = range;
 `$$take(k, xs) = [x_1, x_2, x_3, \ldots, x_k]$$`
 `$$drop(k, xs) = [x_{k+1}, \ldots, x_n]$$`
 
----vert---
+<!--vert-->
 
 ### the computation of `take`
 
@@ -197,7 +197,7 @@ take (3, [9,8,7,6,5,4])
 [9,8,7]
 ```
 
----vert---
+<!--vert-->
 
 ### the computation of `drop`
 
@@ -219,7 +219,7 @@ drop (0,       [6,5,4])
 
 ### tail recursion
 
----vert---
+<!--vert-->
 
 normal recursion
 
@@ -237,7 +237,7 @@ fun drop (0, xs)    = xs
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### normal to tail recursive
 
@@ -290,7 +290,7 @@ B1 andalso B2 = if B1 then B2  else false;
 B1 orelse  B2 = if B1 then true else B2;
 ```
 
----vert---
+<!--vert-->
 
 ```sml
 fun even n = (n mod 2 = 0); 
@@ -322,7 +322,7 @@ sqlist [1,2,3];
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 transposing a matrix using `map`
 
@@ -367,7 +367,7 @@ val a = [(5,3), (2,1), (7,0)]: polynomial;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 taking the derivative of a polynomial
 
@@ -391,7 +391,7 @@ derive a;
 
 ### `foldl` and `foldr`
 
----vert---
+<!--vert-->
 
 ### builtin function `foldl`
 
@@ -404,7 +404,7 @@ fun foldl f init []      = init
 
 calculates `$[x_1, x_2, … ,x_n] \rightarrow f(x_n, … ,f(x_2, f(x_1,init)))$`
 
----vert---
+<!--vert-->
 
 ### builtin function `foldr`
 
@@ -417,7 +417,7 @@ fun foldr f init []      = init
 
 calculates `$[x_1, x_2, … ,x_n] \rightarrow f(x1, … ,f(xn-1, f(xn,init)))$`
 
----vert---
+<!--vert-->
 
 ### using `foldl` and `foldr`
 
@@ -439,7 +439,7 @@ fun xs @ ys = foldr op:: ys xs;
 
 ### `exists` and `all`
 
----vert---
+<!--vert-->
 
 ### builtin function `exists`
 
@@ -460,7 +460,7 @@ exists (fn x => x < 0) [1, 2, ~3, 4];
 
 bound as `List.exists`
 
----vert---
+<!--vert-->
 
 ### builtin function `all`
 
@@ -481,7 +481,7 @@ all (fn x => x >= 0) [1, 2, ~3, 4];
 
 bound as `List.all`
 
----vert---
+<!--vert-->
 
 ```sml
 fun disjoint (xs, ys) =
@@ -502,7 +502,7 @@ equality is polymorphic in a restricted sense
   * reals, because e.g. nan != nan
   * elements of abstract types
 
----vert---
+<!--vert-->
 
 ML has a polymorphic equality type `''a`
 
@@ -537,7 +537,7 @@ map (fn f => f 3) it;
 
 ### exam questions
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut4-exam-questions.ipynb" data-background-interactive -->
 
@@ -545,6 +545,6 @@ map (fn f => f 3) it;
 
 ### extra questions
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut4-extra-questions.ipynb" data-background-interactive -->

@@ -4,7 +4,7 @@
 
 ## reference counting
 
----vert---
+<!--vert-->
 
 ### reference counting
 
@@ -22,7 +22,7 @@ b = a;
 // RC(B) = 0 -> B is deallocated
 ```
 
----vert---
+<!--vert-->
 
 ### pros
 
@@ -33,7 +33,7 @@ b = a;
   * automatic memory management system
 * cost is proportional to actual computation
 
----vert---
+<!--vert-->
 
 ### cons
 
@@ -44,7 +44,7 @@ b = a;
 
 ## garbage collection
 
----vert---
+<!--vert-->
 
 ### garbage collection
 
@@ -54,7 +54,7 @@ deallocation is the responsibility of the language runtime system, not the progr
 * a GC procedure collects unused variables from time to time
 * GC is found in: Java, Python, ML, Lisp, ...
 
----vert---
+<!--vert-->
 
 ### mark & sweep
 

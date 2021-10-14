@@ -25,7 +25,7 @@ only;
 
 `only` denotes the only value of type `single` (isomorphic to `unit`)
 
----vert---
+<!--vert-->
 
 order doesn't matter
 
@@ -38,7 +38,7 @@ true;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 allows pattern matching
 
@@ -72,7 +72,7 @@ a engine body; (* oops *)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 type aliasing doesn't help
 
@@ -87,7 +87,7 @@ a engine body; (* still oops *)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 simulate branding using `datatype`
 
@@ -162,7 +162,7 @@ val Circle radius = line;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ⚠️ constructors cannot be rebound by `val`
 
@@ -204,7 +204,7 @@ datatype 'a list =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 datatype 'a option = NONE | SOME of 'a;
@@ -221,7 +221,7 @@ head (tl [1]);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 datatype ('a, 'b) union = type1 of 'a
@@ -272,7 +272,7 @@ fun size Nil = 0
 * values may be anything
 * assumption: the tree is sorted
 
----vert---
+<!--vert-->
 
 ```sml
 val cmp = Int.compare;
@@ -288,7 +288,7 @@ fun get (Br ((node_k, v), left, right)) k =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 local

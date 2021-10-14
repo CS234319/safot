@@ -10,7 +10,7 @@
 * **may** be infinite
 * example: a sequence of all even integers `$0, 2, -2, 4, \ldots$`
 
----vert---
+<!--vert-->
 
 ### lazy lists in ML
 
@@ -44,7 +44,7 @@ tail it;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ```sml
 fun squares Nil = Nil
@@ -74,11 +74,11 @@ fun addq (Cons (x, xf), Cons (y, yf)) =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut9-sequence-functions.ipynb" data-background-interactive -->
 
----vert---
+<!--vert-->
 
 appending two sequences
 
@@ -92,7 +92,7 @@ fun appendq (Nil, yq) = yq
 
 what would `appendq(xq,yq)` be if `xq` is infinite?
 
----vert---
+<!--vert-->
 
 interleaving two sequences
 
@@ -104,7 +104,7 @@ fun interleaving (Nil, yq)       = yq
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### `mapq`
 
@@ -116,7 +116,7 @@ fun mapq f Nil           = Nil
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### `filterq`
 
@@ -136,7 +136,7 @@ fun filterq pred Nil = Nil
 
 ![sieve gif](./../imgs/tut9-sieve.gif)
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut9-primes.ipynb" data-background-interactive -->
 
@@ -144,14 +144,14 @@ fun filterq pred Nil = Nil
 
 ### exam questions
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut9-exam-question-1.ipynb" data-background-interactive -->
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut9-exam-question-2.ipynb" data-background-interactive -->
 
----vert---
+<!--vert-->
 
 <!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut9-exam-question-3.ipynb" data-background-interactive -->

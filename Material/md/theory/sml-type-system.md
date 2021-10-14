@@ -10,7 +10,7 @@
 * composition: $\{ l_1=\cdot,\ldots,l_n=\cdot \}$
 * decomposition: $\#l_i(\cdot)$
 
----vert---
+<!--vert-->
 
 in SML:
 
@@ -26,7 +26,7 @@ type record = {x: int, y: real};
 * composition: $\langle\cdot,\ldots,\cdot\rangle$
 * decomposition: $\#_i(\cdot)$
 
----vert---
+<!--vert-->
 
 in SML:
 
@@ -42,7 +42,7 @@ type product = int * real * string;
 * composition: $l_i(\cdot)$
 * decomposition: $$
 
----vert---
+<!--vert-->
 
 in SML:
 
@@ -58,7 +58,7 @@ datatype ('a, 'b) union = A of 'a | B of b;
 * composition $l(\cdot)$
 * decomposition: $\#l(\cdot)$
 
----vert---
+<!--vert-->
 
 in SML:
 
@@ -66,7 +66,7 @@ in SML:
 datatype X = X of int;
 ```
 
----vert---
+<!--vert-->
 
 note that `type` create an alias, it doesn't brand
 
@@ -81,7 +81,7 @@ fun (x: X): int = x; (*OK*)
 
 * notation: $S\rightarrow T$
 
----vert---
+<!--vert-->
 
 in SML:
 
@@ -95,7 +95,7 @@ type ('a, 'b) F = 'a -> 'b;
 
 * notation: $\tau = E(\tau,T_1,\ldots,T_n)$
 
----vert---
+<!--vert-->
 
 in SML:
 
@@ -114,7 +114,7 @@ datatype 'a list =
     $$\tau_1 = E(T_1,\ldots,T_m, \tau_1,\ldots,\tau_n)$$
     $$\tau_n = E(T_1,\ldots,T_m, \tau_1,\ldots,\tau_n)$$
 
----vert---
+<!--vert-->
 
 in SML:
 

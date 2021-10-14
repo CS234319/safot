@@ -17,7 +17,7 @@ area 2.0;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### identifiers in ML
 
@@ -30,7 +30,7 @@ val pi = "pi";
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 if a name is declared again the new meaning is adopted afterwards
 
@@ -46,7 +46,7 @@ area 1.0;
 (*val it = 3.14159: real*)
 ```
 
----vert---
+<!--vert-->
 
 ### is permanence of names a good feature?
 
@@ -95,7 +95,7 @@ fun factorial 0 = 1
 
 when the function is called, the first pattern to match the actual parameter determines which expression on the right hand side will be evaluated
 
----vert---
+<!--vert-->
 
 * patterns can consist of
   * constants - int, real, string, ...
@@ -106,7 +106,7 @@ when the function is called, the first pattern to match the actual parameter det
 * any variable in the pattern is bound to the corresponding value in X
 * there is no binding where the wildcard is used
 
----vert---
+<!--vert-->
 
 ```sml
 fun foo (x,1) = x
@@ -124,7 +124,7 @@ foo(1,1);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### patterns using `case`
 
@@ -194,7 +194,7 @@ fun fraction(n,d)=
   * `D1; D2; ...; Dn`
   * semicolons are optional
 
----vert---
+<!--vert-->
 
 `let` can be simulated using anonymous functions
 
@@ -203,7 +203,7 @@ fun fraction (n,d) = (fn c => (n div c, d div c))(gcd(n,d));
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### nested scopes
 
@@ -225,7 +225,7 @@ fun sqroot a =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### `local`
 
@@ -246,7 +246,7 @@ end
 
 (`D1` is visible only within `D2`)
 
----vert---
+<!--vert-->
 
 ### comparing `let` and `local` (1)
 
@@ -272,7 +272,7 @@ end
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### comparing `let` and `local` (2)
 
@@ -285,7 +285,7 @@ end;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### comparing `let` and `local` (3)
 
@@ -319,7 +319,7 @@ val x = y and y = x;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### mutually recursive functions
 
@@ -337,7 +337,7 @@ fun sum (d, one) =
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----vert---
+<!--vert-->
 
 ### emulating `goto` statements
 
