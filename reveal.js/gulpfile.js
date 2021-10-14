@@ -15,7 +15,7 @@ function buildHtml(output_dir, renderTemplate, name, dir) {
 }
 
 const output_dir = path.join(__dirname, "slides");
-const md_dir = path.join(__dirname, path.join("material", "md"));
+const md_dir = path.join(__dirname, path.join("material", "tutorials"));
 
 function generate_slides(template_name, dir) {
     fs.readdir(path.join(md_dir, dir), (err, files) => {
@@ -70,5 +70,5 @@ gulp.task("serve", () => {
         },
     });
 
-    gulp.watch(["material/md/*/*.md", "index.html"], gulp.series("reload"));
+    gulp.watch(["material/tutorials/*/*.md", "index.html"], gulp.series("reload"));
 });
