@@ -417,6 +417,19 @@ derive a;
 
 ---
 
+### `find`
+
+```sml
+fun find f [] = NONE
+  | find f (x::xs) = if f x then SOME x else find f xs;
+(*val find = fn : ('a -> bool) -> 'a list -> 'a option*)
+```
+<!-- .element: data-thebe-executable-sml -->
+
+bound as `List.find`
+
+---
+
 ### `foldl` and `foldr`
 
 <!--vert-->
@@ -540,11 +553,7 @@ op=:
 ```
 <!-- .element: data-thebe-executable-sml -->
 
-somewhat like an interface in other languages
-
----
-
-![list functions](./../imgs/list-fns.png)
+somewhat like an interface/trait in other languages
 
 ---
 
@@ -696,7 +705,9 @@ flatten : 'a list list -> 'a list;
 ```sml
 fun flatten ...
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ```sml
 [1,2,3,4,5,6,7,8,9] = flatten [[1,2,3],[4,5,6],[],[7,8,9]];
 ```
+<!-- .element: data-thebe-executable-sml -->
