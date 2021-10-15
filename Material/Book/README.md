@@ -5,11 +5,13 @@
 
 ### Prerequesites
 
-To clone the repository you'd need `git` installed on your computer. You _should_ probably use a POSIX system. Either Linux or Mac OS.
+To clone the repository you'd need `git` installed on your computer. You
+_should_ probably use a POSIX system. Either Linux or Mac OS.
 
 This project was not tested to compile successfully on Microsoft Windows.
 
-On OSX, it was tested that `MacPorts` works well for installing `tex` related packages.
+On OSX, it was tested that `MacPorts` works well for installing `tex` related
+packages.
 
 #### Tex Packages
 
@@ -23,7 +25,9 @@ On OSX, it was tested that `MacPorts` works well for installing `tex` related pa
 
 #### Fonts 
 
-1. `ttf-mscorefonts-installer` (available with `apt`. Solves the `font "Times New Roman" cannot be found` issue, don't think it's needed on Mac)
+1. `ttf-mscorefonts-installer` (available with `apt`. Solves the `font "Times
+   New Roman" cannot be found` issue, don't think it's needed on Mac)
+
 2. You also need to install the fonts in [this zip file](https://drive.google.com/file/d/1y9sTd3x2OzyUanRpMJxpUXaa4D1ofB6l/view?usp=sharing)
 
 ##### Linux
@@ -42,16 +46,20 @@ You need to:
 
 ### Cloning
 
-Clone the repo from master (see [GitHub repo](https://github.com/yossigil/safot/))
+Clone the repository from master (see [GitHub repo](https://github.com/yossigil/safot/))
 
 ### Compiling
 
-After having all the fonts installed, you can compile the project by typing `make` to a terminal inside the project's root directory.
+After having all the fonts installed, you can compile the project by typing
+`make` to a terminal inside the project's root directory.
 
-It is possible you will need to remove the short `\bash` section from the file `00.tex`.
+It is possible you will need to remove the short `\bash` section from the file
+`00.tex`.
 
 ## Editing
 
-The majority of the document was editted using `gvim`.
+The majority of the document was edited using `gvim`.
 
 Personally, I recommend editing using `kile`. It handles the Hebrew/English switches well enough.
+
+(Authored by Gur Telem)
