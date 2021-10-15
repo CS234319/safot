@@ -1,16 +1,16 @@
 # programming languages slides
 
-## requirements
-
-- npm
-- nodejs
-- jupyter-notebook
-
-### install dependencies
+## install dependencies
 
 ```bash
 sudo apt install nodejs npm jupyter-notebook zlib1g-dev libgmp-dev libzmq5-dev git
 ```
+
+## sml jupyter kernel
+
+install the kernel from <https://github.com/twyair/simple-ismlnj>
+
+it is used for executing the sml code embedded in the slides
 
 ## install
 
