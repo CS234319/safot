@@ -51,6 +51,7 @@ gulp.task("serve", () => {
     }
     generate_slides(path.join("hbs", "sml-slide.hbs"), "sml");
     generate_slides(path.join("hbs", "prolog-slide.hbs"), "prolog");
+    generate_slides(path.join("hbs", "theory-slide.hbs"), "theory");
 
     const cors = function (req, res, next) {
         res.setHeader("Access-Control-Allow-Private-Network", "true");
