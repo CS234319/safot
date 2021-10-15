@@ -55,10 +55,3 @@ It is possible you will need to remove the short `\bash` section from the file `
 The majority of the document was editted using `gvim`.
 
 Personally, I recommend editing using `kile`. It handles the Hebrew/English switches well enough.
-
-## Submitting Pull Request
-
-You can submit a PR (Pull Request) using GitHub. To do so, please fork the project, add commits to it. Then, create a cross repository pull request.
-
-~~Before submitting, please make sure there are no merge conflict and that the CD/CI passes successfully~~ (TODO: Create CD/CI)
-
