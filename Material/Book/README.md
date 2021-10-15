@@ -34,7 +34,7 @@ Extracting the zip's contents to `~/.local/share/fonts` then running `fc-cache -
 
 You need to:
 
-1.  Download and extract the zip
+1. Download and extract the zip
 2. Open `Font Book`
 3. Click on the `+` to add new fonts
 4. Locate the extracted folder
