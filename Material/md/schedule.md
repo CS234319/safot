@@ -14,17 +14,15 @@
 - **Lecture**
    1. [Quick Pascal (Cont.)](?)
    2. [Types](?)
-- **Recitation (Dry)**
-   1. [Lexical Analysis and ASTs](theory/lexical-analysis.md)
 - **Tutorial (Wet)**
    1. [ML - Declarations](sml/declarations.md)
+   2. [ML - Datatypes](sml/datatypes.md)
 - **Reading material**
 
 ## Week 3 \[7.11-13.11\]
 - **Lecture**
    1. [Types (Cont.)](?)
 - **Tutorial (Wet)**
-   1. [ML - Datatypes](sml/datatypes.md)
    2. [ML - Lists](sml/lists.md)
 - **Reading material**
 - **Submission**: [HW1](hw/1.md) \[13.11 23:59\]
@@ -37,15 +35,15 @@
 - **Recitation (Dry)**
    1. [ML's Type System](theory/ml-type-system.md)
 - **Tutorial (Wet)**
-   1. [ML - Lists (Cont.)](sml/lists.md)
+   1. [ML - References](sml/ref.md)
 - **Reading material**
 
 ## Week 5 \[21.11-27.11\]
 - **Lecture**
    1. [State and Storage](?)
 - **Tutorial (Wet)**
-   1. [ML - References](sml/ref.md)
-   2. [ML - Sequences](sml/sequences.md)
+   1. [ML - Sequences](sml/sequences.md)
+   2. [ML - Exceptions](sml/exceptions.md)
 - **Reading material**
 - **Submission**: [HW2](hw/2.md) \[27.11 23:59\]
 - **HW**: [HW3](hw/3.md) is published \[27.11\]
@@ -56,16 +54,14 @@
 - **Recitation (Dry)**
    1. [Automatic Memory Management](theory/automatic-memory-management.md)
    2. [RTTI](theory/rtti.md)
-- **Tutorial (Wet)**
-   1. [ML - Sequences (Cont.)](sml/sequences.md)
-   2. [ML - Exceptions](sml/exceptions.md)
+   3. [Lexical Analysis and ASTs](theory/lexical-analysis.md)
 - **Reading material**
 
 ## Week 7 \[12.12-18.12\]
 - **Lecture**
    1. [Symbolic Values and Pure Lisp (Cont.)](?)
 - **Tutorial (Wet)**
-   1. [mini lisp](theory/mini-lisp.md)
+   1. [mini-lisp](theory/mini-lisp.md)
 - **Reading material**
 - **Submission**: [HW3](hw/3.md) \[18.12 23:59\]
 - **HW**: [HW4](hw/4.md) is published \[18.12\]
@@ -94,8 +90,8 @@
    1. Commands (cont)
    2. 
 - **Tutorial (Wet)**
-   1. [Prolog - Exam Questions](prolog/exam-questions.md)
-   2. [TBD - 1T](?)
+   1. [Prolog - TBD - 1T](?)
+   2. [Prolog - Exam Questions](prolog/exam-questions.md)
 - **Reading material**
 
 ## Week 11 \[9.1-15.11\]
@@ -110,11 +106,11 @@
 ## Week 12 \[16.1-22.1\]
 - **Lecture**
    1. [Advanced Constructs - Beyond Closures](?)
-      1. Function objects, 
+      1. Function objects 
       2. Java iterators
       3. Generators
-      4. Coroutines.
-      5. Java iterators.
+      4. Coroutines
+      5. Java iterators
    2. [Advanced Constructs - Closures](?)
 - **Recitation (Dry)**
    1. [Lexical and Dynamic Scoping](theory/scoping.md)
