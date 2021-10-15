@@ -145,7 +145,35 @@ val tl = fn : 'a  list -> 'a  list*)
 
 <!--vert-->
 
-<!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut4-hd-tl-examples.ipynb" data-background-interactive -->
+```sml
+hd[ [ [1,2], [3] ], [ [4] ] ];
+```
+
+```sml
+hd it;
+```
+
+```sml
+hd it;
+```
+
+<!--vert--->
+
+```sml
+tl ["how", "are", "you?"];
+```
+
+```sml
+tl it;
+```
+
+```sml
+tl it;
+```
+
+```sml
+tl it;
+```
 
 ---
 
@@ -539,7 +567,96 @@ map (fn f => f 3) it;
 
 <!--vert-->
 
-<!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut4-exam-questions.ipynb" data-background-interactive -->
+#### question 1
+
+implement `map` using `foldl`
+
+```sml
+val map : ('a -> 'b) -> 'a list -> 'b list;
+```
+
+```sml
+fun map f inpList = foldl
+    _
+    _
+    inpList
+;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+#### question 2
+
+implement `insSort` using `foldr`
+
+`insSort` (insertion sort) sorts a list according to a given less-then function.
+
+```sml
+val insSort : ('a * 'a -> bool) -> 'a list -> 'a list;
+```
+
+(you may write an auxilary function)
+
+```sml
+fun insSort lt inpList = foldr
+    _
+    _
+    inpList
+;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+
+#### question 3
+
+```sml
+fun upto m n = if (m > n)
+    then []
+    else m::(upto (m+1) n)
+;
+
+infix o;
+fun f o g = fn x => f (g x);
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+what will be printed?
+
+```sml
+val a = map (upto 2) (upto 2 5);
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+what will be printed?
+
+```sml
+map
+    (
+        (fn f => null (f()))
+        o
+        (fn t => fn () => tl t)
+    )
+    a
+;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+what will be printed?
+
+```sml
+map
+    (List.filter (fn t => t mod 2 = 0))
+    a
+;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -547,4 +664,39 @@ map (fn f => f 3) it;
 
 <!--vert-->
 
-<!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut4-extra-questions.ipynb" data-background-interactive -->
+#### question 1
+
+implement a tail recursive `append`
+
+**reminder**:
+
+```sml
+infix @;
+fun []      @ ys = ys
+  | (x::xs) @ ys = x :: (xs @ ys);
+```
+
+<!--vert--->
+
+```sml
+fun append ...
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert--->
+
+#### question 2
+
+implement `flatten` using `foldr`
+
+```sml
+flatten : 'a list list -> 'a list;
+```
+
+```sml
+fun flatten ...
+```
+
+```sml
+[1,2,3,4,5,6,7,8,9] = flatten [[1,2,3],[4,5,6],[],[7,8,9]];
+```
