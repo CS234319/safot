@@ -134,7 +134,7 @@ fun filterq pred Nil = Nil
 
 ### example - prime numbers
 
-![sieve gif](./../imgs/tut9-sieve.gif)
+![sieve gif](./imgs/tut9-sieve.gif)
 
 <!--vert-->
 

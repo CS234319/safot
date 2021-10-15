@@ -354,7 +354,7 @@ sqlist [1,2,3];
 
 transposing a matrix using `map`
 
-![transp gif](./../imgs/matrix_transpose.gif)
+![transp gif](./imgs/matrix_transpose.gif)
 
 ```sml
 fun transp ([]::_) = []
