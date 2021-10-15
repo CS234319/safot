@@ -216,4 +216,36 @@ it #"1";
 
 <!--vert-->
 
-<!-- .slide: data-background-iframe="http://localhost:8888/notebooks/tut3-exam-questions.ipynb" data-background-interactive -->
+what will be printed?
+
+```sml
+fun f1 a b = f1 a b;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+what will be printed?
+
+```sml
+fun f2 g x = g (f2 g) x;
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+what will be printed?
+
+```sml
+fun f3 x y z = (x, x(y), y(z));
+```
+<!-- .element: data-thebe-executable-sml -->
+
+<!--vert-->
+
+what will be printed?
+
+```sml
+fun f4 f = f f4;
+```
+<!-- .element: data-thebe-executable-sml -->
