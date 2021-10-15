@@ -116,8 +116,10 @@
 
 1. Hello world 1.3
 2. History of programming langauges: 2.3
-3. Type constructors of Mock 3.3
-4. Atomic types: 3.5
-5. Type constructors in actual languages self read: 3.4
-6. Kinds of Arrays 5.2 dead; array representation live.
-7. Exceptions 6.9 abbreviated
+3. Syntax notation: regexp, bnf, ebnf
+4. Type constructors of Mock 3.3
+5. Atomic types: 3.5
+6. Type constructors in actual languages self read: 3.4
+7. Kinds of Arrays 5.2 dead; array representation live.
+8. Exceptions 6.9 abbreviated
+9. Parallel execution OCCAM pigsty
