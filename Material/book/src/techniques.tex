@@ -502,7 +502,7 @@ string, char, ו-bool,
 ועם זאת אפשר לשנות זאת באמצעות הגדרות ההידור של תכנית. להלן דוגמה לכך משפת \סי:
 (המקור- מסמך "צעדים ראשונים", עמוד 20)
 
-\lstinputlisting{sources/hello.cpp}
+\lstinputlisting{Sources/hello.cpp}
 
 • \גיבור{הגישה ההוליסטית - \גאוה:} גישה שמכלילה את הגישה הקודמת. לפי גישה זו,
 נקודת התחלת הביצוע עודנה חיצונית לשפה עצמה, אך עם זאת השפה מגדירה קביעות
@@ -545,7 +545,7 @@ string, char, ו-bool,
 \ציינן
 • בִּשְׂפַת \סי, אפשר להגדיר משתנה המצביע לטיפוס רשומה, עוד לפני שהטיפוס מוגדר.
 
-\lstinputlisting[language=C]{sources/pointer-before-declaretion.c}
+\lstinputlisting[language=C]{Sources/pointer-before-declaretion.c}
 
  בדוגמה רואים הגדרה של המשתנה \קד{p} שהטיפוס שלו הוא מצביע למשתנה מהטיפוס \קד{struct Data} וזאת עוד לפני שהטיפוס \קד{struct Data} הוגדר.
 • בשפת \פסקל, ניתן להשתמש בטיפוס של מצביע לטיפוס, עוד טרם שהטיפוס הוגדר.
@@ -554,11 +554,11 @@ string, char, ו-bool,
 \ציינן
 • הנה דוגמא בִּשְׂפַת \סי:
 
-\lstinputlisting[language=C++]{sources/declaration-and-definition.c}{C}
+\lstinputlisting[language=C++]{Sources/declaration-and-definition.c}{C}
 
 • והנה דוגמא בִּשְׂפַת \פסקל:
 
-\lstinputlisting[language=C++]{sources/declaration-and-definition.pas}{Pascal}
+\lstinputlisting[language=C++]{Sources/declaration-and-definition.pas}{Pascal}
 
 ===
 \end{enumerate}
@@ -570,7 +570,7 @@ string, char, ו-bool,
 \שי{C++}, וְ-\שי{C＃}, קיים מנגנון חזק יותר, לפיו הטווח של הגדרה הוא הבלוק שבה
 היא מתבצעת, כלומר ה-Scope של הגדרה יכול להתחיל עוד לפני שההגדרה עצמה בוצעה.
 
-\lstinputlisting[language=C++]{sources/friendly-rec.cpp}{C++}
+\lstinputlisting[language=C++]{Sources/friendly-rec.cpp}{C++}
 
 §§ הגדרות קולטרליות
 הגדרות של פונקציות ומחלקות בתוך מחלקה של \שי{C++}, או \גאוה, מוכרות בכל המחלקה.
@@ -607,9 +607,9 @@ string, char, ו-bool,
 
 נראה מספר דוגמאות\הערת␣שוליים{ראוי להדגיש נקודה חשובה זו.} לתכניות המדפיסות את עצמן:
 
-\lstinputlisting[language=Java]{sources/quine.java}
-\lstinputlisting[language=Perl]{sources/quine.perl}
-\lstinputlisting[language=Python]{sources/quine.py}
+\lstinputlisting[language=Java]{Sources/quine.java}
+\lstinputlisting[language=Perl]{Sources/quine.perl}
+\lstinputlisting[language=Python]{Sources/quine.py}
 
 ולהלן דוגמה ב-שיא חד, המלווה בהסבר ובהרחבה.
 
@@ -662,7 +662,7 @@ S=√{p·(p-a)·(p-b)·(p-c)}
 p=\frac{a+b+c}{2}
 \] הבה נכתוב בזריזות תכנית \פסקל בעבור הנוסחה הזו
 
-\lstinputlisting[language=Pascal]{sources/triangle.pas}
+\lstinputlisting[language=Pascal]{Sources/triangle.pas}
 {לדוגמא תכונית}
 
 מי שכתב אי פעם תכנית בִּשְׂפַת מכונה כלשהי, יכול לשוות בנפשו כיצד יתרגם המהדר את התכנית לעיל לשפת המכונה שעליה היא תרוץ, למעט ענין פעוט אחד: ידוע לכל כי ישנן פקודות מכונה לחישוב הסכום הסכום, המכפלה, ההפרש והמנה של שני מספרים ממשיים. אבל, כיצד יחושב השורש הריבועי? אפילו אם נניח כי יש המכונה מכילה פקודה לחישוב השורש, עדיין ישנה השאלה של התרגום של פקודות הקלט והפלט שבתכנית, שהרי אלו בוודאות אינן מצויות באוסף פקודות המכונה.
@@ -692,7 +692,7 @@ p=\frac{a+b+c}{2}
 מילים שמורות בשפה, והמתכנת יכול להגדירן מחדש. בפרט, התכנית הבאה המדגימה את
 סיסמת המפלגה בספר 1984 של ג'ורג' אורוול היא תכנית חוקית בְּPascal:
 
-\lstinputlisting[language=C++]{sources/1984.pas}{Pascal}{מספר? ... הוא ושקר שקר הוא אמת}
+\lstinputlisting[language=C++]{Sources/1984.pas}{Pascal}{מספר? ... הוא ושקר שקר הוא אמת}
 
 מרבית הסיכויים הם שאם תזין תכנית זו במהדר ה-Pascal החביב עליך, הוא יפלוט בתגובה
 שגיאות הידור לרוב. התפתחות השפה הביאה לכך שהמילים \קד{true} וְ-\קד{false} הפכו
