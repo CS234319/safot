@@ -63,7 +63,6 @@
    1. [Prolog](?)
 - **Tutorial**
    1. [Prolog - Introduction](tutorials/prolog/introduction.md)
-   2. [Prolog - CLP(FD)](tutorials/prolog/clp.md)
 
 ## Week 9 \[26.12-1.1\]
 - **Lecture**
@@ -71,7 +70,7 @@
    2. Commands
 - **Tutorial**
    1. [Prolog - Lists](tutorials/prolog/lists.md)
-   2. [Prolog - Higher Order Programming](tutorials/prolog/higher-order.md)
+   2. [Prolog - CLP(FD)](tutorials/prolog/clp.md)
 - **Submission**: [HW4](hw/4.md) \[1.1 23:59\]
 - **HW**: [HW5](hw/5.md) is published \[1.1\]
 
@@ -79,7 +78,7 @@
 - **Lecture**
    1. Commands (cont)
 - **Tutorial**
-   1. [Prolog - TBD - 1T](?)
+   1. [Prolog - Higher Order Programming](tutorials/prolog/higher-order.md)
    2. [Prolog - Exam Questions](tutorials/prolog/exam-questions.md)
 
 ## Week 11 \[9.1-15.11\]

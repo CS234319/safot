@@ -6,7 +6,7 @@
 - [ ] theory/rtti
 - [ ] theory/mini-lisp WIP
 - [ ] prolog/exam-questions WIP
-- [ ] prolog/higher-order
+- [ ] prolog/higher-order WIP
 - [ ] prolog/?
 - [ ] theory/ocaml-tokens-classification.md
 - [ ] theory/python-generators.md WIP
