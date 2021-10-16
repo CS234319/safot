@@ -1,5 +1,5 @@
 # Programming Language Course
 
-## Contributiion
+## Contribution
 
 look [here](CONTRIBUTING.md)
