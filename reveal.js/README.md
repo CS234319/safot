@@ -4,6 +4,7 @@
 
 ```bash
 sudo apt install nodejs npm jupyter-notebook zlib1g-dev libgmp-dev libzmq5-dev git
+sudo pip3 install jupyter-server
 ```
 
 ## sml jupyter kernel
