@@ -5,7 +5,7 @@ var path = require("path");
 var Handlebars = require("handlebars");
 
 function buildHtml(output_dir, renderTemplate, name, dir) {
-    var html = renderTemplate({ tutorial_name: name });
+    var html = renderTemplate({ tutorial_name: name, sub: dir });
     fs.writeFile(`${output_dir}/${dir}-${name}.html`, html, (err) => {
         if (err) {
             console.log(err);
@@ -49,9 +49,9 @@ gulp.task("serve", () => {
     if (!fs.existsSync(output_dir)) {
         fs.mkdirSync(output_dir);
     }
-    generate_slides(path.join("hbs", "sml-slide.hbs"), "sml");
-    generate_slides(path.join("hbs", "prolog-slide.hbs"), "prolog");
-    generate_slides(path.join("hbs", "theory-slide.hbs"), "theory");
+    generate_slides("slide.hbs", "sml");
+    generate_slides("slide.hbs", "prolog");
+    generate_slides("slide.hbs", "theory");
 
     const cors = function (req, res, next) {
         res.setHeader("Access-Control-Allow-Private-Network", "true");
