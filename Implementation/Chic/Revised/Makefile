@@ -1,6 +1,6 @@
+
 all: test services
 services: tags .depend 
-
 .PHONY: all services clean wc gvim list
 
 CFLAGS += -w -std=gnu2x
@@ -8,9 +8,9 @@ CFLAGS += -w -std=gnu2x
 
 PRIMITIVES=Short Word
 SERVICES=accounting heap text layout 
-TYPES=Handle Id Item Knob Pair Parser Pristine Sx 
-READ=Pushdown Tokenizer Parser 
-TESTERS=t-heap t-misc t-purge t-Pushdown t-accounting 
+TYPES=Handle Id Item Knob Pair Pristine Sx 
+READ=Pushdown lexer parser 
+TESTERS=t-heap t-misc t-purge t-Pushdown t-accounting t-lexer t-parser
 
 CORE            := $(PRIMITIVES) $(SERVICES) $(TYPES) $(READ)  
 TEST            := $(CORE) $(TESTERS)

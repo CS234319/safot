@@ -43,7 +43,10 @@ Service {
   }
   Pristine first;
   private:
-    Unit panic() { throw EXHAUSTED; }
+    Unit panic() { 
+      extern Sx EXHAUSTED;
+      throw EXHAUSTED; 
+    }
 } $H$;
 
 const Pristine& heap = $H$.first; 

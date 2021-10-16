@@ -1,13 +1,9 @@
-#import "Tokenizer.h"
+#import "lexer.h"
 #import "text.h"
+#define PRODUCTION
+#import "mode.h"
 
-#define SILENT 1
-#if SILENT
-#undef D
-#define D(...) 0
-#endif
-
-namespace Tokenizer {
+namespace lexer {
 static char *head;
 static Boolean pending = false;
 static inline char& C(); 

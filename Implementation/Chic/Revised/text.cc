@@ -8,7 +8,6 @@ extern Boolean exists(char c, Text s) {
   return false;
 }
 
-
 static Short used = $A_t$;
 
 /* Making an S expression from an input string is by moving the used marker 
@@ -55,8 +54,4 @@ static char upper(char c) {
 
 #import "gtest/gtest.h"
 
-inline auto operator == (const Id s1, const Id s2) { 
-  return s1.handle() == s2.handle();
-}
-
-
+inline auto operator ==(const Id s1, const Id s2) Is (s1.handle() == s2.handle())

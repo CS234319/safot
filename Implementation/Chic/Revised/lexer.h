@@ -1,5 +1,5 @@
 #import "chic.h"
-namespace Tokenizer {
+namespace lexer {
   enum { undefined = 128, $};
   extern void initialize(char *buffer);
   const char tokens[] = "()[].\'";

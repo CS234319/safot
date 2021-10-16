@@ -4,7 +4,7 @@
 #import "accounting.h"
 #import "Short.h"
 
-#import "Test.h"
+#import "Testee.h"
 
 
 TEST(Sx, Pair) {
@@ -153,7 +153,7 @@ TEST(Purge, mess) {
   heapify();
   try { // Do not dare in real life!
     purge.preserving(request(2,3)); // Use a raw S-Expression.
-    EXPECT_TT(corrupted.something()); // The heap may be corrupted, or an exception
+    EXPECT_TT(corrupted.something()); // The heap may be corrupted, throw exception
   } catch(...) {
     EXPECT_TT(true); // Something bad should happen' we don't know which 
   }

@@ -120,7 +120,7 @@ typedef std::function<long long()> Provider;
   } 
 
 #import <cstdint>         // Standard header providing integer types with widths 
-#define As(t) operator t() const
+#define As(t)  operator t() const
 #define Provides extern
 #define Let constexpr 
 #define Service static struct 
@@ -143,8 +143,7 @@ typedef std::function<long long()> Provider;
 #define Selfer(X)       Self X 
 #define Is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
-#define by(...) :__VA_ARGS__{}
-
+#define by(...) :__VA_ARGS__{}.cc                                             
 #define Unit int 
 #define Service static struct
 #define Fluenter(name) auto name()  
@@ -162,7 +161,7 @@ Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
 are fixed width signed integers, represented in two's complement, and are
 similar to the types byte, short, and int of the Java virtual machine. Punning
 is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte or halves ordering is assumed. */
+halves. No particular byte ghalves ordering is assumed. */
 
 typedef int8_t  Byte; /// JVM's byte                |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// like  JVM's short | 16 bits signed integer | Knob of an S-expression 
@@ -181,7 +180,7 @@ Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
 are fixed width signed integers, represented in two's complement, and are
 similar to the types byte, short, and int of the Java virtual machine. Punning
 is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte or halves ordering is assumed. */
+halves. No particular byte ghalves ordering is assumed. */
 
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | Knob of an S-expression 
