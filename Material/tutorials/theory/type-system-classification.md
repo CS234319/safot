@@ -87,3 +87,56 @@ examples: SML, OCaml
 <!--vert-->
 
 > semi-implicit typing - (TODO: remove?)
+
+---
+
+## javascript
+
+<!--vert--->
+
+javascript is:
+
+* dynamically typed
+* weakly typed
+
+<!--vert-->
+
+certain operations in javascript coerce the operands to make the operation succeed
+
+how bad can it get?
+
+<!--vert-->
+
+what will js do?
+
+```javascript
+5 + "10";
+```
+<!-- .element: data-thebe-executable-javascript -->
+
+<!--vert-->
+
+what will js do?
+
+```javascript
+5 * "";
+```
+<!-- .element: data-thebe-executable-javascript -->
+
+<!--vert-->
+
+what will js do?
+
+```javascript
+[] + [];
+```
+<!-- .element: data-thebe-executable-javascript -->
+
+<!--vert-->
+
+what will js do?
+
+```javascript
+5 + [1, ] == 51;
+```
+<!-- .element: data-thebe-executable-javascript -->
