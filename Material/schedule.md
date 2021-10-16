@@ -31,7 +31,8 @@
    2. [Types (Cont.)](?)
 - **Tutorial**
    1. [ML's Type System](tutorials/theory/ml-type-system.md)
-   2. [ML - References](tutorials/sml/ref.md)
+   2. [Classification of Type System](tutorials/theory/type-system-classification.md)
+   3. [ML - References](tutorials/sml/ref.md)
 
 ## Week 5 \[21.11-27.11\]
 - **Lecture**
