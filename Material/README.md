@@ -11,4 +11,4 @@
 - [ ] theory/ocaml-tokens-classification.md
 - [ ] theory/python-generators.md WIP
 - [ ] theory/csharp-coroutines.md
-- [ ] theory/scoping.md
+- [ ] theory/scoping.md WIP
