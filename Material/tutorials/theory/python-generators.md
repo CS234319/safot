@@ -12,6 +12,7 @@ def fib():
     while True:
         yield b
         a, b = b, a + b
+fib
 ```
 <!-- .element: data-thebe-executable-python -->
 
@@ -21,6 +22,7 @@ a generator function returns a **generator object**
 
 ```python
 g = fib()
+g
 ```
 <!-- .element: data-thebe-executable-python -->
 
