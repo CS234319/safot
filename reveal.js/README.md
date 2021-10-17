@@ -3,7 +3,7 @@
 ## install dependencies
 
 ```bash
-sudo apt install sml ipython3 nodejs npm jupyter-notebook zlib1g-dev libgmp-dev libzmq5-dev git
+sudo apt install smlnj ipython3 nodejs npm jupyter-notebook zlib1g-dev libgmp-dev libzmq5-dev git
 sudo pip3 install jupyter-server
 ```
 
