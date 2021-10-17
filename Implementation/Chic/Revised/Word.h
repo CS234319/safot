@@ -1,10 +1,10 @@
 #import "chic.h"
 Type Word { // The different perspectives of a word.
   Representation {
-    perspective(Long l)        
+    Capsule(perspective(Long l))        
     perspective(Short s1, s2)      
   };
   Word(Short, Short);
   Word();
-  Property(Short hash);
+  Property(Short hash) below
 };

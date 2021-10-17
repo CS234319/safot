@@ -11,8 +11,9 @@ Type S: private Handle { // An S-expression represented by its handle
   Property(Boolean atom) Is(handle() <= 0) 
   Property(Boolean null) Is(handle() == 0);
   Property(Boolean t) Is(not null()) 
-  Property(Boolean eq(S other)) Is(handle() == other.handle() and atom()) 
   Property(Type Pair Pair); 
   Property(S car);
   Property(S cdr);
+
+  Query(eq) with(S other) Is(atom() and handle() == other.handle()) 
 };

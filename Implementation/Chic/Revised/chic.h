@@ -128,6 +128,7 @@ typedef std::function<long long()> Provider;
 #define variable auto 
 #define Allocate 
 #define function   
+#define with(x) x   
 #define property inline  
 #define procedure void  
 #define array(type) type *const
@@ -140,6 +141,7 @@ typedef std::function<long long()> Provider;
 #define Constructor(X)  X 
 #define Construct(X)    X 
 #define Property(X)     X() const
+#define Query(X)        auto X 
 #define Mutator(X)      X 
 #define Selfer(X)       Self X 
 #define Is(...)        { return (__VA_ARGS__); }
@@ -150,6 +152,7 @@ typedef std::function<long long()> Provider;
 #define Service static struct
 #define Fluenter(name) auto name()  
 #define selfing(...)  { return (__VA_ARGS__), *this; }
+#define with(x) (x) const
 #define do(...)  ((__VA_ARGS__), 0)
 #define Capsule(...) private: __VA_ARGS__; public: 
 
