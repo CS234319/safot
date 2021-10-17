@@ -1,7 +1,7 @@
 # TODO
 
 - [X] theory/type-system-classification
-- [ ] theory/sml-type-system WIP
+- [X] theory/sml-type-system
 - [ ] theory/lexical-analysis
 - [ ] theory/automatic-memory-management WIP
 - [ ] theory/rtti
