@@ -13,6 +13,10 @@ install the kernel from <https://github.com/twyair/simple-ismlnj>
 
 it is used for executing the sml code embedded in the slides
 
+## javascript jupyter kernel
+
+install the kernel from <https://github.com/n-riesco/ijavascript>
+
 ## install
 
 ```bash

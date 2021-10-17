@@ -35,7 +35,3 @@ const REVEAL_PARAMS = {
         37: 'prev'
     }
 };
-
-function init(kernel, mode, selector) {
-    Reveal.initialize(REVEAL_PARAMS).then(() => thebe_init(kernel, mode, selector));
-}
