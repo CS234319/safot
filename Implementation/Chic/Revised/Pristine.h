@@ -1,7 +1,7 @@
 #import "Knob.h"
 Type Pristine: private Knob {
   // Decomposition
-  using Knob::handle;
+  // using Knob::handle;
   using Knob::x;
   using Knob::Item, Knob::Pair;
   Constructor(Pristine());

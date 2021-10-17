@@ -1,6 +1,6 @@
 #import "Knob.h"
 Type Item: private Knob {
-  using Knob::x, Knob::handle;
+  using Knob::x;
   Item();
   Item(Short);
 

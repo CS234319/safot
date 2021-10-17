@@ -1,29 +1,30 @@
 #import "chic.h"
 #import "S.h"
-#import "Word.h"
-Type Pair: S {
-  typedef Pair Self;
-  Pair(Short);
-  Pair(); 
-  Selfer(car(S)); 
-  Selfer(cdr(S)); 
-  Property(S car);
-  Property(S cdr);
+#import "Knob.h"
 
-  Property(Boolean x); // Change someday to nil
-  Property(Boolean ok); // Consolidate variadic macro
+Type Pair: Handle {
+  Constructor Pair(Short) below
+  Constructor Pair() below 
 
-  Property(Boolean foreign);
+  Property(S car) below
+  Property(S cdr) below
+  Selfer(car(S)) below 
+  Selfer(cdr(S)) below 
 
-  Property(Boolean unseen);
-  Property(Boolean seen);
+  Property(Boolean x) below // Change someday to nil
+  Property(Boolean ok) below // Consolidate variadic macro
 
-  Selfer(visit()); // Consolidate variadic macro
-  Selfer(leave()); 
+  Property(Boolean foreign) below
 
-  static Boolean ok(Word);
+  Property(Boolean unseen) below
+  Property(Boolean seen) below
+
+  Selfer(visit()) below // Consolidate variadic macro
+  Selfer(leave()) below 
+
+  static Boolean ok(Word) below
   protected:
-    Property(Word& p);
-    Property(Short& s1) Is(p().s1)
-    Property(Short& s2) Is(p().s2)
+    property(s1) is(p().s1)
+    property(s2) is(p().s2)
+    Property(Word& p) below
 };

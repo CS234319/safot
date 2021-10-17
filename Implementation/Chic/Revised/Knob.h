@@ -4,19 +4,17 @@ Type Item;
 Type Pristine;
 
 Type Knob: private Pair { // An S-expression represented by its Knob
-  typedef Knob Self;
-  typedef Pair Super;
   using Pair::handle;
-  Constructor(Knob(Short));
-  Constructor(Knob());
-  Property(Short   s1);
-  Property(Short   s2);       
-  Property(Boolean ok);
-  Property(Boolean pair);
-  Property(Boolean item);
-  Property(Boolean pristine);
-  Property(Boolean weirdo);
-  Property(Boolean x);
+  Constructor(Knob(Short)) below
+  Constructor(Knob()) below
+  Property(Short   s1) below
+  Property(Short   s2) below       
+  Property(Boolean ok) below
+  Property(Boolean pair) below
+  Property(Boolean item) below
+  Property(Boolean pristine) below
+  Property(Boolean weirdo) below
+  Property(Boolean x) below
 
   // Converters:
   Type Pair     Pair()       const;

@@ -1,19 +1,23 @@
 #import "Handle.h"
-Type S: private Handle { // An S-expression represented by its handle
+Type S: public Handle { // An S-expression represented by its handle
   using Handle::handle;
+
   typedef S Self;
-  Construct(S) ()               by(S((Short) 0))
-  Construct(S) (Short s)        by(Handle(s))
-  Construct(S) (Handle h)       by(S(h.handle()))
-  Constructor(S) (const S& s1,const S  &s2) below 
-  Constructor(S) (const Text t) below     
+  Construct(S) from() by(S((Short) 0))
+  Construct(S) from(Short s) by(Handle(s))
+  Construct(S) from(Handle h) by(S(h.handle()))
 
-  Property(Boolean atom) Is(handle() <= 0) 
-  Property(Boolean null) Is(handle() == 0);
-  Property(Boolean t) Is(not null()) 
-  Property(Type Pair Pair); 
-  Property(S car);
-  Property(S cdr);
+  property(atom) is(handle() <= 0) 
+  property(compound) is(not atom())
+  property(null) is(handle() == 0);
+  property(t) is(not null()) 
+  Query(eq) with(S s) is(atom() and handle() == s.handle()) 
 
-  Query(eq) with(S other) Is(atom() and handle() == other.handle()) 
+  Constructor(S) from(const S&,const S &) below 
+  Constructor(S) from(const Text) below
+
+  Property(Text text) below 
+  Property(Type Pair Pair) below 
+  Property(S car) below
+  Property(S cdr) below
 };

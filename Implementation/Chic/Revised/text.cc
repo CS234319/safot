@@ -46,12 +46,4 @@ static char upper(char c) {
   return c < 'a' || c > 'z' ? c : c - 'a' + 'A'; 
 }
 
-#undef min
-#undef max
-#undef data
-#undef function
-#undef Type
-
-#import "gtest/gtest.h"
-
 inline auto operator ==(const Id s1, const Id s2) Is (s1.handle() == s2.handle())

@@ -141,10 +141,12 @@ typedef std::function<long long()> Provider;
 #define Constructor(X)  X 
 #define Construct(X)    X 
 #define Property(X)     X() const
+#define property(X)     inline auto X() const
 #define Query(X)        auto X 
 #define Mutator(X)      X 
 #define Selfer(X)       Self X 
 #define Is(...)        { return (__VA_ARGS__); }
+#define is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__ {}
 #define below ;  
@@ -153,6 +155,9 @@ typedef std::function<long long()> Provider;
 #define Fluenter(name) auto name()  
 #define selfing(...)  { return (__VA_ARGS__), *this; }
 #define with(x) (x) const
+#define from(...) (__VA_ARGS__) 
+#define pairing(x,y) (x,y) 
+#define nothing 
 #define do(...)  ((__VA_ARGS__), 0)
 #define Capsule(...) private: __VA_ARGS__; public: 
 

@@ -14,7 +14,7 @@ TESTERS=t-heap t-misc t-purge t-Pushdown t-accounting t-lexer t-parser
 
 CORE            := $(PRIMITIVES) $(SERVICES) $(TYPES) $(READ)  
 TEST            := $(CORE) $(TESTERS)
-MODULES         := $(TEST)
+MODULES         := $(PRIMITIVES) $(SERVICE) $(TYPES) $(TEST)
 
 SOURCES         := $(addsuffix .cc,$(MODULES)) 
 HEADERS         := $(sort $(filter %.h,$(shell cat .depend 2> /dev/null)))

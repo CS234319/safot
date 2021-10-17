@@ -19,3 +19,4 @@
 #undef begin
 #undef end
 #undef Unit
+#undef is

@@ -37,7 +37,7 @@ inline bool isRule(int i) {
 
 inline Text operator ~(parser::Symbol s) {
     if (atom(s))
-      return S(s).asAtom();
+      return S(s).text();
     switch (s) {
       case parser::$: return "$";
       case parser::s: return "s";

@@ -2,9 +2,9 @@
 #import "Word.h"
 Type Handle { // A handle of an S-Expression
   Constructor(Handle(Short));
-  Property(Boolean ok); 
-  Property(Short handle); 
-  Property(Word& p); 
-  Property(Text a); 
+  Property(Boolean ok) below
+  Property(Short handle) below 
+  Property(Word& cons) below
+  Property(Text text) below 
   private: struct { Short capsule; }; 
 };

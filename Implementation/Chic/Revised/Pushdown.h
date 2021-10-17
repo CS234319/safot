@@ -15,18 +15,18 @@
 Type Pushdown {
   Short pop();
   typedef Pushdown Self;
-  Property(Boolean empty);
-  Property(Short peep);    // Examine stack's, but without popping it.
-  Fluenton(clear());               // Clear the stack, returning all elements to the pool
-  Fluenton(push(Short));
-  Fluenton(push(Short,Short));
-  Fluenton(push(Short,Short,Short));
-  Fluenton(push(Short,Short,Short,Short));
-  Fluenton(push(Short,Short,Short,Short,Short));
-  Short peep(Short) const; // Peep deeper into the stack.
-  void poke(Short v);    // Examine stack's, but without popping it.
-  void poke(Short h, Short v);    // Change stack, without popping it. 
+  Property(Boolean empty) below
+  Property(Short peep) below    // Examine stack's, but without popping it.
+  Fluenton(clear()) below               // Clear the stack, returning all elements to the pool
+  Fluenton(push(Short)) below
+  Fluenton(push(Short,Short)) below
+  Fluenton(push(Short,Short,Short)) below
+  Fluenton(push(Short,Short,Short,Short)) below
+  Fluenton(push(Short,Short,Short,Short,Short)) below
+  Short peep(Short) const below // Peep deeper into the stack.
+  void poke(Short v) below    // Examine stack's, but without popping it.
+  void poke(Short h, Short v) below    // Change stack, without popping it. 
   Item top = Item();
   Short size = 0;
-  ~Pushdown();
+  ~Pushdown() below
 };
