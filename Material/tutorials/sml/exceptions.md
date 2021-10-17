@@ -125,7 +125,6 @@ let val name = raise Exp in some_expression end
 
 local val name = raise Exp in some_declaration end
 ```
-<!-- .element: data-thebe-executable-sml -->
 
 ---
 
