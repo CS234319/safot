@@ -14,6 +14,11 @@
 #import "Testee.h"
 #import "mark.h"
 
+inline std::ostream& operator<<(std::ostream &os, Pristine p) {
+  if (p.x())
+    return  os << "Px";
+  return os << "Pristine[" << p.prev().handle() << "." << p.next().handle()  << "]";
+}
 
 TEST(Heapify, exists) { 
   heapify();

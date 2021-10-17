@@ -5,8 +5,8 @@ Type Account {
   Capsule(Clicker& plus = p, minus = m)
   Capsule(Account* const parent = 0);
   As(Integer) is(plus - minus) // Value
-  Construct(Account) from(nothing) by(Account(Clicker(), Clicker()))
-  Construct(Account) from(const Clicker& p, const Clicker& m) by(plus(p), minus(m))
+  Construct(Account) from(nothing) by(p(), m())
+  Construct(Account) from(Clicker& p, Clicker& m) by(plus(p), minus(m))
   Account& operator ++() {  // Increment
     Keep((*this) >= 0)
     selfing(plus() | (not parent or do (++*parent))) 
@@ -18,6 +18,6 @@ Type Account {
   }  
   Account& operator !() selfing(!plus | !minus) // Clear 
   ~Account() { !(*this); }
-  Account kind() const { return Account(0,*this); } 
+  Account kind() { return Account(0,*this); } 
   private: Account(int, Account& c): parent(&c) {}
 };

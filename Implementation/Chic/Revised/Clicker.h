@@ -9,7 +9,7 @@ Type Clicker {
   As(Integer) is(value)      // Value
   Clicker& operator()() selfing(++value | (not parent or do((*parent)())))
   Clicker& operator!() selfing(value = 0) // Clear
-  // Clicker kind() { return Clicker(0,*this); } 
+  Clicker kind() { return Clicker(0,*this); } 
   ~Clicker() { !(*this); }
-  private: Construct(Clicker) from(Integer, Clicker& c): parent(&c) {}
+  private: Construct(Clicker) from(Integer valuePrime, Clicker& c) by(parent(&c),value(valuePrime))
 };

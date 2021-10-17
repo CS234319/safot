@@ -141,7 +141,7 @@ typedef std::function<long long()> Provider;
 #define constant(type) const type 
 #define modifier 
 #define perspective(...) struct{__VA_ARGS__;};
-#define Representation union
+#define Representation(...) union {__VA_ARGS__; };
 #define Type struct
 #define Constructor(X)  X 
 #define Construct(X)    X 
@@ -165,6 +165,16 @@ typedef std::function<long long()> Provider;
 #define nothing 
 #define do(...)  ((__VA_ARGS__), 0)
 #define Capsule(...) private: __VA_ARGS__; public: 
+
+#define Occasionally(sub,sup,...) \
+  Type sub: protected sup {\
+    typedef sub Self;\
+    typedef sup Super;\
+    property(sup) is((Super)*this)\
+    __VA_ARGS__\
+  };\
+  
+
 
 #ifndef Type
 #error
