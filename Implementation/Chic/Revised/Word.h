@@ -1,4 +1,4 @@
-#import "chic.h"
+#import "CHIC"
 Type Word { // The different perspectives of a word.
   Representation {
     perspective(Long l)        

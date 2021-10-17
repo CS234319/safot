@@ -1,4 +1,4 @@
-#import "chic.h"
+#import "CHIC"
 #import "heap.h"
 
 #import "Short.h"

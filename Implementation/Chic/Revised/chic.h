@@ -1,5 +1,10 @@
 // Poor man's edition of a bit cleaner C/C++
 
+#if __INCLUDE_LEVEL__ == 2
+#define Implementation 1
+#else
+#define Implementation 0
+#endif 
 #import <functional>
 #import <iostream>
 

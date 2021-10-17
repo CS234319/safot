@@ -1,4 +1,4 @@
-#import "chic.h"
+#import "CHIC"
 #import "S.h"
 #import "Item.h"
 extern Pair request(S, S); 

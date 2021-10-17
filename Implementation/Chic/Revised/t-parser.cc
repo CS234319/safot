@@ -17,13 +17,13 @@ TEST(AST, AtomChar) {
   ASSERT_NE(Status::ready, status());
   ASSERT_NE(Status::reject, status());
   EXPECT_EQ(Status::accept, status());
-  EXPECT_STREQ("Z", S(result()).asAtom());   
+  EXPECT_STREQ("Z", S(result()).text());   
   parser::reset();
 }
 
 TEST(AST, AtomLong) {
   parse("Atom");
-  EXPECT_STREQ("ATOM", S(result()).asAtom());   
+  EXPECT_STREQ("ATOM", S(result()).text());   
   parser::reset();
 }
 
@@ -40,7 +40,7 @@ TEST(AST, List1) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("HELLO",s.car().asAtom());
+  EXPECT_STREQ("HELLO",s.car().text());
   EXPECT_EQ(NIL,s.cdr());
   parser::reset();
 }
@@ -52,9 +52,9 @@ TEST(AST, List2) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("1",s.car().asAtom());
+  EXPECT_STREQ("1",s.car().text());
   s = s.cdr();
-  EXPECT_STREQ("2",s.car().asAtom());
+  EXPECT_STREQ("2",s.car().text());
   EXPECT_EQ(NIL,s.cdr());
   parser::reset();
 }
@@ -66,11 +66,11 @@ TEST(AST, List3) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("A",s.car().asAtom());
+  EXPECT_STREQ("A",s.car().text());
   s = s.cdr();
-  EXPECT_STREQ("B",s.car().asAtom());
+  EXPECT_STREQ("B",s.car().text());
   s = s.cdr();
-  EXPECT_STREQ("C",s.car().asAtom());
+  EXPECT_STREQ("C",s.car().text());
   EXPECT_EQ(NIL,s.cdr());
   parser::reset();
 }
@@ -82,9 +82,9 @@ TEST(AST, QuoteA) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("QUOTE",s.car().asAtom());
+  EXPECT_STREQ("QUOTE",s.car().text());
   s = s.cdr();
-  EXPECT_STREQ("Z",s.car().asAtom());
+  EXPECT_STREQ("Z",s.car().text());
   EXPECT_EQ(NIL,s.cdr());
   parser::reset();
 }
@@ -96,15 +96,15 @@ TEST(AST, QuoteAA) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
-  EXPECT_STREQ("QUOTE",s.car().asAtom());
+  EXPECT_STREQ("QUOTE",s.car().text());
   s = s.cdr();
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_TRUE(islist(s));
   s = s.car();
-  EXPECT_STREQ("QUOTE",s.car().asAtom());
+  EXPECT_STREQ("QUOTE",s.car().text());
   s = s.cdr();
-  EXPECT_STREQ("Z",s.car().asAtom());
+  EXPECT_STREQ("Z",s.car().text());
   EXPECT_EQ(NIL,s.cdr());
   parser::reset();
 }
@@ -115,8 +115,8 @@ TEST(AST, Pair) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_FALSE(islist(s));
-  EXPECT_STREQ("HELLO",s.car().asAtom());
-  EXPECT_STREQ("WORLD",s.cdr().asAtom());
+  EXPECT_STREQ("HELLO",s.car().text());
+  EXPECT_STREQ("WORLD",s.cdr().text());
   parser::reset();
 }
 
@@ -126,8 +126,8 @@ TEST(AST, PairYZ) {
   ASSERT_FALSE(s.null());
   ASSERT_FALSE(s.atom());
   ASSERT_FALSE(islist(s));
-  EXPECT_STREQ("Y",s.car().asAtom());
-  EXPECT_STREQ("Z",s.cdr().asAtom());
+  EXPECT_STREQ("Y",s.car().text());
+  EXPECT_STREQ("Z",s.cdr().text());
   parser::reset();
 }
 

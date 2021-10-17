@@ -1,13 +1,12 @@
-#import "chic.h"
+#import "CHIC"
 #import "Clicker.h"
 Type Account {
   Capsule(Clicker  p, m)
   Capsule(Clicker& plus = p, minus = m)
   Capsule(Account* const parent = 0);
-  operator Integer() Is(plus - minus) // Value
-  As(Integer) Is(plus - minus) // Value
-  Account() {}
-  Account(Clicker& p, Clicker& m): plus(p), minus(m) {}
+  As(Integer) is(plus - minus) // Value
+  Construct(Account) from(nothing) by(Account(Clicker(), Clicker()))
+  Construct(Account) from(const Clicker& p, const Clicker& m) by(plus(p), minus(m))
   Account& operator ++() {  // Increment
     Keep((*this) >= 0)
     selfing(plus() | (not parent or do (++*parent))) 
@@ -19,6 +18,6 @@ Type Account {
   }  
   Account& operator !() selfing(!plus | !minus) // Clear 
   ~Account() { !(*this); }
-  Account kind() { return Account(0,*this); } 
+  Account kind() const { return Account(0,*this); } 
   private: Account(int, Account& c): parent(&c) {}
 };

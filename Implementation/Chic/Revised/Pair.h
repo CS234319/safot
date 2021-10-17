@@ -1,10 +1,10 @@
-#import "chic.h"
+#import "CHIC"
 #import "S.h"
-#import "Knob.h"
+#import "Handle.cc"
 
 Type Pair: Handle {
-  Constructor Pair(Short) below
-  Constructor Pair() below 
+  Constructor(Pair) from(Short) below
+  Constructor(Pair) from(nothing) below
 
   Property(S car) below
   Property(S cdr) below
