@@ -138,12 +138,13 @@ typedef std::function<long long()> Provider;
 #define Representation union
 #define Type struct
 #define Constructor(X)  X 
+#define Construct(X)    X 
 #define Property(X)     X() const
 #define Mutator(X)      X 
 #define Selfer(X)       Self X 
 #define Is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
-#define by(...) :__VA_ARGS__{}.cc                                             
+#define by(...) :__VA_ARGS__ {}
 #define Unit int 
 #define Service static struct
 #define Fluenter(name) auto name()  

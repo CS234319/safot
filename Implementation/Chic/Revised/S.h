@@ -2,9 +2,8 @@
 #import "Sx.h"
 
 Type S: Sx {
-  S cons(S cdr) const Is(Sx(*this, cdr))
-  bool eq(S other) const { return handle == other.handle && atom(); }
-  bool eq(S other) const { return handle == other.handle && atom(); }
+  // S cons(S cdr) const Is(Sx(*this, cdr))
+  bool eq(S other) const { return handle() == other.handle() && atom(); }
 }
 
 #if 0

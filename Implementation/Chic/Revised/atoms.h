@@ -1,5 +1,9 @@
 #include "S.h"
 #undef NULL
+extern const S NIL;
+
+
+
 extern const S 
 /* Elementary: */ NIL, T, 
 /* Primitives */
