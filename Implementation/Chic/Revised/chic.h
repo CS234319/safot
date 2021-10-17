@@ -145,6 +145,7 @@ typedef std::function<long long()> Provider;
 #define Is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__ {}
+#define below ;  
 #define Unit int 
 #define Service static struct
 #define Fluenter(name) auto name()  

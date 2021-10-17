@@ -1,14 +1,14 @@
 #import "chic.h"
-#import "Sx.h"
+#import "S.h"
 #import "Word.h"
-Type Pair: Sx {
+Type Pair: S {
   typedef Pair Self;
   Pair(Short);
   Pair(); 
-  Selfer(car(Sx)); 
-  Selfer(cdr(Sx)); 
-  Property(Sx car);
-  Property(Sx cdr);
+  Selfer(car(S)); 
+  Selfer(cdr(S)); 
+  Property(S car);
+  Property(S cdr);
 
   Property(Boolean x); // Change someday to nil
   Property(Boolean ok); // Consolidate variadic macro

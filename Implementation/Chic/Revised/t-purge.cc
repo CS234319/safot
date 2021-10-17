@@ -7,9 +7,9 @@
 #import "Testee.h"
 
 
-TEST(Sx, Pair) {
+TEST(S, Pair) {
   heapify();
-  Sx s(13);
+  S s(13);
   Pair p = s.Pair();
   EXPECT_EQ(p.handle(), s.handle());
 }
@@ -495,8 +495,8 @@ TEST(Purge, complete7) {
   EXPECT_FF(live6.ok());
 }
 
-TEST(Sx, Pair1) {
-  Sx s(13);
+TEST(S, Pair1) {
+  S s(13);
   Pair p = s.Pair();
   EXPECT_EQ(p.handle(), s.handle());
 }

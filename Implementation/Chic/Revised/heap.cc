@@ -44,7 +44,7 @@ Service {
   Pristine first;
   private:
     Unit panic() { 
-      extern Sx EXHAUSTED;
+      extern S EXHAUSTED;
       throw EXHAUSTED; 
     }
 } $H$;
@@ -105,6 +105,6 @@ Unit collect(Pair p) { accounting.collect();
 }
 
 
-Pair request(Sx car, Sx cdr) { 
+Pair request(S car, S cdr) { 
   return request(Word(car.handle(),cdr.handle())); 
 }

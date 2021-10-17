@@ -2,7 +2,7 @@
 #import "S.h"
 
 extern const S __0, __1, __2, __3, __00, __12, __123;
-inline bool exists(S x, S xs) Is(!xs.null() and (xs.car()==x or exists(x, xs.cdr())))
+inline bool exists(S x, S xs) Is(!xs.null() and (xs.car().eq(x) or exists(x, xs.cdr())))
 inline bool islist(S s) Is(s.null() || !s.atom() and islist(s.cdr()))
 inline S pair(S car, S cdr) Is(car.cons(cdr))
 inline S list() Is(NIL0)

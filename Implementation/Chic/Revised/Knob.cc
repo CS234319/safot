@@ -24,7 +24,7 @@ Knob Knob::s2(Short  s) { P[handle()].s2 = s; return  *this; }
 
 // Properties:
 Pair     Knob::Pair()     const  { return  handle(); }
-Pair Knob::Pair(Sx car, Sx cdr) const {
+Pair Knob::Pair(S car, S cdr) const {
   return Pair().car(car).cdr(cdr);
 }
 Item     Knob::Item()     const  { return  handle(); }

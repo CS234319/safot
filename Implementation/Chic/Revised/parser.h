@@ -1,5 +1,5 @@
 #import "lexer.h"
-#import "Sx.h"
+#import "S.h"
 
 /** An implementation of a simple, single instance hand tailored LL(1) parser.
  * Here is pseudo code describing its services.
@@ -13,7 +13,7 @@
  * }
  * </pre> */
 namespace parser {
-  extern Sx result(); // Result of parsing action; undefined if status is not accept 
+  extern S result(); // Result of parsing action; undefined if status is not accept 
   enum Status { ready, accept, reject}; // Should still work on resuming after NL 
   extern enum Status status();
   extern void supply(char *input); // What to parse, possibly in installments

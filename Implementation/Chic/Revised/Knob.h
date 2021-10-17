@@ -20,7 +20,7 @@ Type Knob: private Pair { // An S-expression represented by its Knob
 
   // Converters:
   Type Pair     Pair()       const;
-  Type Pair     Pair(Sx, Sx) const;
+  Type Pair     Pair(S, S) const;
   Type Item     Item()       const;
   Type Pristine Pristine()   const;
   // Mutators:

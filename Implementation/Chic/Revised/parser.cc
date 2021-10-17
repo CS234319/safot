@@ -54,7 +54,7 @@ namespace parser {
   extern enum Status status() {
     return current_status;
   }
-  Sx $$(NIL);
+  S $$(NIL);
   extern S result() {
     return $$; 
   }
@@ -167,7 +167,7 @@ namespace parser {
           }
           break;
         case X1:
-          $$ = S(QUOTE,S($$.cons(NIL))); 
+          $$ = S(QUOTE,S($$,NIL)); 
           reduce();
           continue;
         case X2:
@@ -190,7 +190,7 @@ namespace parser {
         case T1:
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
-          $$ = S(stack.peep(1)).cons($$);
+          $$ = S(stack.peep(1),$$);
           stack.poke(1,$$.handle());
           M1("Update T1: ",$$, ~top, stack());
           continue;

@@ -8,7 +8,7 @@ CFLAGS += -w -std=gnu2x
 
 PRIMITIVES=Short Word
 SERVICES=accounting heap text layout 
-TYPES=Handle Id Item Knob Pair Pristine Sx 
+TYPES=Handle Id Item Knob Pair Pristine S 
 READ=Pushdown lexer parser 
 TESTERS=t-heap t-misc t-purge t-Pushdown t-accounting t-lexer t-parser
 
@@ -17,7 +17,7 @@ TEST            := $(CORE) $(TESTERS)
 MODULES         := $(TEST)
 
 SOURCES         := $(addsuffix .cc,$(MODULES)) 
-HEADERS         := $(sort $(filter %.h,$(shell cat .depend)))
+HEADERS         := $(sort $(filter %.h,$(shell cat .depend 2> /dev/null)))
 
 test: $(addsuffix .o,$(TEST))
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread 

@@ -5,7 +5,7 @@
 #import "Pristine.h"
 #import "Short.h"
 #import "Pair.h"
-#import "Sx.h"
+#import "S.h"
 
 #import "corrupted.h"
 
@@ -456,7 +456,7 @@ TEST(Fresh, Length) {
 TEST(request, exists) { 
   try {
     heapify();
-    request(Sx(0xDE),Sx(0xAD));
+    request(S(0xDE),S(0xAD));
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
   }
@@ -465,7 +465,7 @@ TEST(request, exists) {
 TEST(request, pair) { 
   try {
     heapify();
-    Pair h = request(Sx(0xDE),Sx(0xAD));
+    Pair h = request(S(0xDE),S(0xAD));
     EXPECT_TT(h.ok());
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
@@ -475,7 +475,7 @@ TEST(request, pair) {
 TEST(request, correct) { 
   try {
     heapify();
-    Short h = request(Sx(0xDE),Sx(0xAD)).handle();
+    Short h = request(S(0xDE),S(0xAD)).handle();
     EXPECT_EQ(P[h].s1, 0xDE);
     EXPECT_EQ(P[h].s2, 0xAD);
   } catch(int e) {

@@ -2,9 +2,9 @@
 #import "layout.h"
 Service {
  Unit all() Is(sweep())
- Unit preserving(Sx s)  Is(mark(s), sweep())
+ Unit preserving(S s)  Is(mark(s), sweep())
  Capsule(
-    Unit mark(Sx s) 
+    Unit mark(S s) 
       Is(s.atom() or mark(s.Pair())) 
     Unit mark(Pair p) 
       Is(p.seen() or do(mark(p.car()) | mark(p.cdr()), p.visit()))

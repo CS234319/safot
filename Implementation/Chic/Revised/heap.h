@@ -1,7 +1,7 @@
 #import "chic.h"
-#import "Sx.h"
+#import "S.h"
 #import "Item.h"
-  Pair request(Sx, Sx); 
+  Pair request(S, S); 
   extern Item fresh(Short, Short); 
   extern Unit free(Item); 
 
