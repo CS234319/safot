@@ -1,4 +1,4 @@
-#import "CHIC"
+#import "chic.h"
 #import "Clicker.h"
 Type Account {
   Capsule(Clicker  p, m)

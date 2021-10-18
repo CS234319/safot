@@ -1,15 +1,15 @@
-#import "CHIC"
+#import "chic.h"
+
 #import "Knob.h"
-Type Item: private Knob {
+Occasionally(Item, Knob, 
   using Knob::x;
-  Construct(Item) from(nohing) by(Knob())
-  Construct(Item) from(Short s) by(Knob(s))
+  Construct(Item) from(Short s) by(Super(s))
   Property(Item rest) below
   Property(Short head) below
-  Property(Boolean ok);
-  Item head(Short s);
-  Item rest(Short s);
-}; 
+  Property(Boolean ok) below
+  Item head(Short s) below
+  Item rest(Short s) below
+)
 #import "Short.h"
 
 #if Implementation

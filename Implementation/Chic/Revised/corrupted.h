@@ -1,6 +1,6 @@
 #import "layout.h"
 
-#import "heap.h"
+#import "heap.cc"
 #import "accounting.h"
 
 inline Short length() {

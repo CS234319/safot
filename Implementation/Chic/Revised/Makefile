@@ -1,10 +1,8 @@
-
 all: test services
 services: tags .depend 
 .PHONY: all services clean wc gvim list
 
-CFLAGS += -w -std=gnu2x
-
+CFLAGS += -DCHIC="\"chic.h\"" -w -std=gnu2x
 
 PRIMITIVES=Short Word
 SERVICES=accounting heap text layout 

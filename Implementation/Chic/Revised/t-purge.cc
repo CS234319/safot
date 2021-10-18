@@ -1,5 +1,5 @@
 #import "purge.h"
-#import "heap.h"
+#import "heap.cc"
 #import "corrupted.h"
 #import "accounting.h"
 #import "Short.h"
@@ -8,21 +8,21 @@
 
 
 TEST(S, Pair) {
-  heapify();
+  reset();
   S s(13);
   Pair p = s.Pair();
   EXPECT_EQ(p.handle(), s.handle());
 }
 
 TEST(Collect, Singleton) {
-  heapify();
+  reset();
   auto s = request(-1,-2);
   purge.preserving(s);
   EXPECT_EQ(accounting.used, 1);
 } 
 
 TEST(Collect, ParentaToSingleton) {
-  heapify();
+  reset();
   auto s1 = request(-1,-2);
   auto s2 = request(s1, s1);
   purge.preserving(s1);
@@ -30,7 +30,7 @@ TEST(Collect, ParentaToSingleton) {
 }
 
 TEST(Collect, ParentaToLeftSingleton) {
-  heapify();
+  reset();
   auto s0 = request(-1,-2);
   auto s1 = request(s0, s0);
   auto s2 = request(s1, s0);
@@ -39,7 +39,7 @@ TEST(Collect, ParentaToLeftSingleton) {
 }
 
 TEST(Collect, ParentaToRightSingleton) {
-  heapify();
+  reset();
   auto s0 = request(-1,-2);
   auto s1 = request(s0, s0);
   auto s2 = request(s1, s1);
@@ -48,7 +48,7 @@ TEST(Collect, ParentaToRightSingleton) {
 }
 
 TEST(Collect, ParentaToBoth) {
-  heapify();
+  reset();
   auto s1 = request(-1,-2);
   auto s2 = request(-3,-4);
   auto s3 = request(s1, s2);
@@ -66,13 +66,13 @@ TEST(Collect, ParentaToBoth) {
 
 
 TEST(Visit, exists) {
-  heapify();
+  reset();
   auto s = request(2,3);
   s.visit();
 }
 
 TEST(Visit, repertoire) {
-  heapify();
+  reset();
   Pair p = request(-2,-3);
   p.visit();
   p.leave();
@@ -80,12 +80,12 @@ TEST(Visit, repertoire) {
 }
 
 TEST(Visit, exists2) {
-  heapify();
+  reset();
   request(2,3).visit();
 }
 
 TEST(Visit, seen) {
-  heapify();
+  reset();
   Pair p = request(5,6);
   EXPECT_FF(p.seen());
   EXPECT_TT(p.visit().seen());
@@ -93,7 +93,7 @@ TEST(Visit, seen) {
 }
 
 TEST(Visit, distinct) {
-  heapify();
+  reset();
   auto x = request(2,3);
   Word w = P[x.handle()];
   x.visit();
@@ -107,7 +107,7 @@ TEST(Visit, unseen) {
 }
 
 TEST(Visit, reversible) {
-  heapify();
+  reset();
   auto x = request(2,3);
   Word w = P[x.handle()];
   EXPECT_FF(x.visit().leave().seen());
@@ -116,7 +116,7 @@ TEST(Visit, reversible) {
 
 
 TEST(Visit, flip) {
-  heapify();
+  reset();
   auto p = request(2,3);
   Short before = p.car().handle();
   p.visit(); 
@@ -126,7 +126,7 @@ TEST(Visit, flip) {
 }
 
 TEST(Visit, ok) {
-  heapify();
+  reset();
   Pair p = request(2,3);
   EXPECT_TT(p.ok());
   EXPECT_TT(not p.visit().ok());
@@ -143,14 +143,14 @@ TEST(Visit, special) {
 }
 
 TEST(Purge, exists) {
-  heapify();
+  reset();
   auto s = request(-2,-3);
   purge.preserving(s);
   EXPECT_FF(corrupted.something());
 }
 
 TEST(Purge, mess) {
-  heapify();
+  reset();
   try { // Do not dare in real life!
     purge.preserving(request(2,3)); // Use a raw S-Expression.
     EXPECT_TT(corrupted.something()); // The heap may be corrupted, throw exception
@@ -160,7 +160,7 @@ TEST(Purge, mess) {
 }
 
 TEST(Purge, singleton) {
-  heapify();
+  reset();
   auto dead = request(-3,-2);
   auto live = request(-2,-3);
   EXPECT_TT(live.ok());
@@ -169,7 +169,7 @@ TEST(Purge, singleton) {
 }
 
 TEST(Purge, singletonKill) {
-  heapify();
+  reset();
   auto dead = request(-3,-2);
   auto live = request(-2,-3);
   EXPECT_TT(dead.ok());
@@ -178,7 +178,7 @@ TEST(Purge, singletonKill) {
 }
 
 TEST(Purge, singletonPristine) {
-  heapify();
+  reset();
   auto dead = request(-3,-2);
   auto live = request(-2,-3);
   EXPECT_TT(dead.ok());
@@ -187,7 +187,7 @@ TEST(Purge, singletonPristine) {
 }
 
 TEST(Purge, singletonPrepended) {
-  heapify();
+  reset();
   auto dead = request(-3,-2);
   auto live = request(-2,-3);
   purge.preserving(live);
@@ -195,7 +195,7 @@ TEST(Purge, singletonPrepended) {
 }
 
 TEST(Purge, singletonCount) {
-  heapify();
+  reset();
   auto dead = request(-3,-2);
   auto live = request(-2,-3);
   EXPECT_EQ(accounting.used, 2);
@@ -205,7 +205,7 @@ TEST(Purge, singletonCount) {
 }
 
 TEST(Purge, pairCount) {
-  heapify();
+  reset();
   auto dead1 = request(-3,-2);
   auto dead2 = request(-5,-2);
   auto dead3 = request(dead2,dead1);
@@ -218,7 +218,7 @@ TEST(Purge, pairCount) {
 }
 
 TEST(Purge, tripleCount) {
-  heapify();
+  reset();
   auto dead1 = request(-3,-2);
   auto dead2 = request(-5,-2);
   auto live = request(-2,-3);
@@ -227,7 +227,7 @@ TEST(Purge, tripleCount) {
 }
 
 TEST(Purge, live2a) {
-  heapify();
+  reset();
   auto dead1 = request(-3,-2);
   auto dead2 = request(-5,-2);
   auto live1 = request(-2,-3);
@@ -238,7 +238,7 @@ TEST(Purge, live2a) {
 }
 
 TEST(Purge, live2b) {
-  heapify();
+  reset();
   auto dead1 = request(-3,-2);
   auto dead2 = request(-5,-2);
   auto live1 = request(-2,-3);
@@ -249,7 +249,7 @@ TEST(Purge, live2b) {
 }
 
 TEST(Purge, live5) {
-  heapify();
+  reset();
   auto d1 = request(-3,-2).handle();
   auto l1 = request(-2,-3).handle();
   auto d2 = request(d1,d1).handle();
@@ -274,7 +274,7 @@ TEST(Purge, live5) {
 }
 
 TEST(Purge, sanity_t2a) {
-  heapify();
+  reset();
 
   EXPECT_ZZ(accounting.allocate);
   EXPECT_ZZ(accounting.collect);
@@ -409,7 +409,7 @@ TEST(Purge, sanity_t2a) {
 }
 
 TEST(Purge, t2b) {
-  heapify();
+  reset();
   auto t1 = request(-2,-3);
   auto t2 = request(-4,t1.handle());
   purge.preserving(t2);
@@ -418,7 +418,7 @@ TEST(Purge, t2b) {
 }
 
 TEST(Purge, t5) {
-  heapify();
+  reset();
   auto l1 = request(-2,-3).handle();
   auto l2 = request(l1,-4).handle();
   auto t1 = request(-2,-3);
@@ -437,7 +437,7 @@ TEST(Purge, t5) {
 
 
 TEST(Purge, complete3) {
-  heapify();
+  reset();
   auto live1 = request(-2,-3);
   auto live2 = request(-3,-4);
   auto live3 = request(-8,-6);
@@ -455,7 +455,7 @@ TEST(Purge, complete3) {
 
 
 TEST(Purge, complete7) {
-  heapify();
+  reset();
   auto live1 = request(-2,-3);
   auto live2 = request(-3,-4);
   auto live3 = request(-8,-6);
@@ -502,7 +502,7 @@ TEST(S, Pair1) {
 }
 
 TEST(Purge, complete15) {
-  heapify();
+  reset();
   auto live1 = request(-1,-10);
   auto live2 = request(-2,live1);
   auto live3 = request(-3,live2);
@@ -551,7 +551,7 @@ TEST(Purge, complete15) {
 
 
 TEST(Purge, live31) {
-  heapify();
+  reset();
   auto live1 = request(-1,-3);
   auto live2 = request(-2,-4);
   auto live3 = request(-3,-6);
@@ -604,7 +604,7 @@ TEST(Purge, live31) {
 
 
 TEST(Purge, DAG) {
-  heapify();
+  reset();
   auto live1 = request(-2,-3);
   auto live2 = request(live1.handle(),-4);
   auto live3 = request(live2.handle(),-5);
@@ -621,7 +621,7 @@ TEST(Purge, DAG) {
 }
 
 auto trailLeft(auto n) {
-  heapify(); Pair p[n];
+  reset(); Pair p[n];
   p[0] = request(-2, -3);
   for (auto i = 1; i < n; i++) p[i] = request(p[i-1],request(-i, -i));
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i; 
@@ -638,7 +638,7 @@ TEST(Purge, trailLeft6) { trailLeft(6); }
 TEST(Purge, trailLeft7) { trailLeft(7); }
 
 auto trailRight(auto n) {
-  heapify(); Pair p[n];
+  reset(); Pair p[n];
   p[0] = request(-2, -3);
   for (auto i = 1; i < n; i++) p[i] = request(p[i-1],request(-i, -i));
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;
@@ -654,7 +654,7 @@ TEST(Purge, traiRight6) { trailRight(6); }
 TEST(Purge, traiRight7) { trailRight(7); }
 
 auto fibonnaci(auto n) {
-  heapify(); Pair p[n];
+  reset(); Pair p[n];
   p[0] = request(-2, -3); p[1] = request(-5, -8);
   for (auto i = 2; i < n; i++) p[i] = request(p[i-2], p[i-1]);
   for (auto i = 1; i < n; ++i) ASSERT_TT(p[i].ok()) << i;

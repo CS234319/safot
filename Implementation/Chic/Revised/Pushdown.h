@@ -1,6 +1,6 @@
 #import "layout.h"
 #import "Item.h"
-#import "heap.h"
+#import "heap.cc"
 /* Manages a singleton stack of handles, used by the LL parsing algorithm. This
  * stack is implemented as a dynamically allocated singly linked list, where
  * each element is a pair of handles: One handle in the pair carries the data;

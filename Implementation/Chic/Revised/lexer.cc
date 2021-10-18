@@ -86,7 +86,7 @@ static Short nextAtom() {
   D(begin);
   char c = C();
   C() = '\0';
-  let $ = request(begin);
+  let $ = text::request(begin);
   C() = c;
   D($);
   return $.handle();
@@ -105,6 +105,6 @@ static Boolean isIgnored() {
 }
 
 static Boolean isToken() {
-  return exists(C(),tokens);
+  return text::exists(C(),tokens);
 }
 }

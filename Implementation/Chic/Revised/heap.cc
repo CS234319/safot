@@ -1,9 +1,31 @@
-#import "CHIC"
-#import "heap.h"
+#import "chic.h"
+#import "Pair.cc"
+#import "S.h"
+#import "Item.h"
+#import "Pristine.h"
+
+Module heap {
+  extern Pair request(S, S); 
+  extern Item fresh(Short, Short); 
+  extern Unit free(Item); 
+  extern const Pristine& heap;
+  extern Pristine reset();
+  extern Unit gobble(Pair);
+}
+
+#if Implementation
+
+#import "Pristine.h"
+#import "Pair.cc"
+Module heap {
+  Knob crude(); 
+}
+
+
 
 #import "Short.h"
-#import "Word.h"
-#import "Pair.h"
+#import "Word.cc"
+#import "Pair.cc"
 
 #import "layout.h"
 #import "accounting.h"
@@ -86,7 +108,7 @@ static Pair request(Word w, Short s) {
   return P[s].l == w.l ? reuse(s) : (++accounting.pairs,Pristine(s).ok()) ? hit(w,s) : miss(w);
 }
 
-extern Pristine heapify() {
+extern Pristine reset() {
   $H$.init();
   accounting.init($P_n$);
 }
@@ -105,6 +127,7 @@ Unit collect(Pair p) { accounting.collect();
 }
 
 
-Pair request(S car, S cdr) { 
-  return request(Word(car.handle(),cdr.handle())); 
+Module heap {
+  Pair request(S car, S cdr) is(request(Word(car.handle(),cdr.handle()))) 
 }
+#endif

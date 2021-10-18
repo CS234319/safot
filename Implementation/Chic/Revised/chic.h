@@ -144,6 +144,7 @@ typedef std::function<long long()> Provider;
 #define Representation(...) union {__VA_ARGS__; };
 #define Type struct
 #define Constructor(X)  X 
+#define Module          namespace  
 #define Construct(X)    X 
 #define Property(X)     X() const
 #define property(X)     inline auto X() const
@@ -170,7 +171,8 @@ typedef std::function<long long()> Provider;
   Type sub: protected sup {\
     typedef sub Self;\
     typedef sup Super;\
-    property(sup) is((Super)*this)\
+    property(super) is(*(const Super *)this)\
+    Construct(sub) from(nothing) by(Super(nothing))  \
     __VA_ARGS__\
   };\
   

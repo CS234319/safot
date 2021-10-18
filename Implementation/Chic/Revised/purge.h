@@ -1,4 +1,4 @@
-#import "Pair.h"
+#import "Pair.cc"
 #import "layout.h"
 Service {
  Unit all() Is(sweep())

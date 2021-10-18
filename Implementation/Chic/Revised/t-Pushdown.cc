@@ -1,6 +1,6 @@
 #import "Pushdown.h"
 #import "Pristine.h"
-#import "heap.h"
+#import "heap.cc"
 #import "accounting.h"
 
 #import "Testee.h"
@@ -11,14 +11,14 @@ TEST(Pushdown, empty) {
 }
 
 TEST(Pushdown, push) {
-  heapify();
+  reset();
   Pushdown p;
   p.clear().push(3);
   EXPECT_TT(!p.empty());
 }
 
 TEST(Pushdown, clear) {
-  heapify();
+  reset();
   Pushdown p;
   p.clear().push(3).push(7).push(19).pop();
   p.push(21).pop(); 
@@ -28,14 +28,14 @@ TEST(Pushdown, clear) {
 }
 
 TEST(Pushdown, pushPopEmpty) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(3).pop();
   EXPECT_TT(p.empty());
 }
 
 TEST(Pushdown, correctPop1) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(3);
   EXPECT_FF(p.empty());
@@ -44,7 +44,7 @@ TEST(Pushdown, correctPop1) {
 }
 
 TEST(Pushdown, correctPop2) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(3);
   p.push(2);
@@ -54,7 +54,7 @@ TEST(Pushdown, correctPop2) {
 }
 
 TEST(Item, 1Count) {
-  heapify();
+  reset();
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
@@ -66,7 +66,7 @@ TEST(Item, 1Count) {
 }
 
 TEST(Pushdown, 2Push0) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(3).push(2);
   EXPECT_EQ(2,p.pop());
@@ -75,7 +75,7 @@ TEST(Pushdown, 2Push0) {
 }
 
 TEST(Pushdown, 2Push2) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(2,3);
   EXPECT_EQ(2,p.pop());
@@ -93,21 +93,21 @@ TEST(Pushdown, Push3) {
 }
 
 TEST(Pushdown, Peep0) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(13);
   EXPECT_EQ(13,p.peep());
 }
 
 TEST(Pushdown, 0Peep0) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(13).push(12);
   EXPECT_EQ(12,p.peep(0));
 }
 
 TEST(Pushdown, size) {
-  heapify();
+  reset();
   Pushdown p;
   EXPECT_EQ(p.push(1,2,3).size, 3);
 }
@@ -126,7 +126,7 @@ TEST(Pushdown, 3Peep) {
 }
 
 TEST(Pushdown, Push4) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(1,2,3,4);
   EXPECT_EQ(1,p.pop());
@@ -137,7 +137,7 @@ TEST(Pushdown, Push4) {
 }
 
 TEST(Pushdown, Clear) {
-  heapify();
+  reset();
   Pushdown p;
   EXPECT_TT(p.empty());
   p.push(1,2,3,4);
@@ -149,7 +149,7 @@ TEST(Pushdown, Clear) {
 }
 
 TEST(Pushdown, TopZero) {
-  heapify();
+  reset();
   Pushdown p;
   EXPECT_TT(p.empty());
   EXPECT_TT(p.top.x());
@@ -160,7 +160,7 @@ TEST(Pushdown, TopZero) {
 } 
 
 TEST(Pushdown, Size) {
-  heapify();
+  reset();
   Pushdown p;
   EXPECT_EQ(p.size,0);
   p.push(__LINE__);
@@ -182,7 +182,7 @@ TEST(Pushdown, Size) {
 } 
 
 TEST(Pushdown, PushPush) {
-  heapify();
+  reset();
   Pushdown p;
   p.push(3);
   EXPECT_FF(p.empty());
@@ -194,7 +194,7 @@ TEST(Pushdown, PushPush) {
 }
 
 TEST(Pushdown, Destructor) {
-  heapify();
+  reset();
   {
     Pushdown p;
     p.push(1,2,3,4,5);

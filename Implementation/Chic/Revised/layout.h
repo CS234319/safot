@@ -1,5 +1,5 @@
-#import "CHIC"
-#import "Word.h"
+#import "chic.h"
+#import "Word.cc"
 Provides array(char) A;
 Provides array(Word) P;
 Let Short $M_a$ = 1<<12; 

@@ -1,14 +1,17 @@
-#import "CHIC"
+#import "chic.h"
 #import "S.h"
 #import "Item.h"
-extern Pair request(S, S); 
-extern Item fresh(Short, Short); 
-extern Unit free(Item); 
+Module heap {
+  extern Pair request(S, S); 
+  extern Item fresh(Short, Short); 
+  extern Unit free(Item); 
 
 extern const Pristine& heap;
-
+}
 #import "Pristine.h"
-#import "Pair.h"
-extern Pristine heapify();
-extern Unit gobble(Pair);
-Knob crude(); 
+#import "Pair.cc"
+Module heap {
+  extern Pristine reset();
+  extern Unit gobble(Pair);
+  Knob crude(); 
+}

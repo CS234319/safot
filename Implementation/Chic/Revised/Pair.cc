@@ -1,30 +1,28 @@
-#import "CHIC"
-
-#import "Handle.h"
+#import "chic.h"
+#import "Handle.cc"
 
 Occasionally(Pair, Handle,
+  Construct(Pair) from(Short s) by(Super(s))
+  Construct(Pair) from(Handle h) by(Super(h))
+  property(s1) is(word().s1)
+  property(s2) is(word().s2)
+
+  Property(Word &word) below
+
   Property(Boolean unseen) below
   Property(Boolean seen) below
   Property(Boolean ok) below // Consolidate variadic macro
-  Constructor(Pair) from(Short) below
   Property(Boolean x) below // Change someday to nil
-
   Property(Boolean foreign) below
-
-
   Selfer(visit()) below // Consolidate variadic macro
   Selfer(leave()) below 
 
   static Boolean ok(Word) below
-  protected:
-    Selfer(s1(S)) below 
-    Selfer(s2(S)) below 
-    property(s1) is(p().s1)
-    property(s2) is(p().s2)
-    Property(Word& p) below
+  Selfer(s1(Handle)) below 
+  Selfer(s2(Handle)) below 
 )
+
 #if Implementation
-#import "Short.h"
 #import "layout.h" // Do we need all this; Just P and A!
 #import "accounting.h"
 
@@ -33,8 +31,8 @@ Property(Boolean Pair::ok)      is(white(s1()) && white(s2()))
 Property(Boolean Pair::seen)    {Expect(white(s2())) is(black(s1())) }
 Property(Boolean Pair::foreign) is(black(s2()))
 
-Pair::Pair(Short s): Super(s) {}
 
+Property(Word& Pair::word)  is(P[capsule])
 Boolean Pair::ok(Word w) is(white(w.s1) && white(w.s2))
 
 Pair Pair::visit()  { accounting.visit();

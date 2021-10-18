@@ -1,4 +1,4 @@
-#import "CHIC"
+#import "chic.h"
 namespace lexer {
   enum { undefined = 128, $};
   extern void initialize(char *buffer);

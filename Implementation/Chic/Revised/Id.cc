@@ -1,2 +1,3 @@
-#import "Id.h"
-Id::Id(Short s): Inner(s) {}
+#import "chic.h"
+#import "Handle.cc"
+Occasionally(Id, Handle, )

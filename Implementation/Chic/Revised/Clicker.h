@@ -1,4 +1,4 @@
-#import "CHIC"
+#import "chic.h"
 
 /* A very restricted integer, automatically initialized to  zero and can either
 be incremented or cleared */

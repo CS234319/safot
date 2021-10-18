@@ -1,17 +1,18 @@
+#import "chic.h"
 #import "layout.h"
-#import "Word.h"
+#import "Word.cc"
 
 Let Long $m$ = $M_a$ + $M_p$ * sizeof (Word);
 
 Service {
-  Representation {
-   char block[$m$];
-   struct {
-     char $A_0$[$M_a$ - LIMBO];
-     char A[LIMBO] = { 'N', 'I', 'L', '\0' };
-     Word P[$M_p$];
-    };
-  };
+  Representation(
+    perspective(char block[$m$])
+    perspective( 
+      char $A_0$[$M_a$ - LIMBO];
+      char A[LIMBO] = { 'N', 'I', 'L', '\0' };
+      Word P[$M_p$];
+   ) 
+  )
 } memory; 
 
 Let array(Word) P = memory.P - 1;
