@@ -1,6 +1,5 @@
-#import "Pushdown.h"
-#import "Tokenizer.h"
-#import "Sx.h"
+#import "lexer.h"
+#import "S.h"
 
 /** An implementation of a simple, single instance hand tailored LL(1) parser.
  * Here is pseudo code describing its services.
@@ -12,10 +11,9 @@
  *  case reject: use reset() to supply() some more
  *  case ready: supply() some more; parser is waiting
  * }
- * </pre>
- */
-namespace Parser {
-  extern Sx result(); // Result of parsing action; undefined if status is not accept 
+ * </pre> */
+namespace parser {
+  extern S result(); // Result of parsing action; undefined if status is not accept 
   enum Status { ready, accept, reject}; // Should still work on resuming after NL 
   extern enum Status status();
   extern void supply(char *input); // What to parse, possibly in installments
@@ -26,7 +24,7 @@ namespace Parser {
    * handle.  
    */
   enum Symbol : Short { 
-    $ = Tokenizer::$, s, Atom, // Special symbols, EOF, S
+    $ = lexer::$, s, Atom, // Special symbols, EOF, S
     E, X, T, L, 
     MIN_RULE, // DUMMY 
     s1, // _ ::= E $

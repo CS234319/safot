@@ -17,6 +17,7 @@ in SML:
 ```sml
 type record = {x: int, y: real};
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -33,6 +34,7 @@ in SML:
 ```sml
 type product = int * real * string;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -49,6 +51,7 @@ in SML:
 ```sml
 datatype ('a, 'b) union = A of 'a | B of b;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -65,15 +68,17 @@ in SML:
 ```sml
 datatype X = X of int;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 <!--vert-->
 
-note that `type` create an alias, it doesn't brand
+note that `type` creates an alias, it doesn't brand
 
 ```sml
 type X = int;
 fun (x: X): int = x; (*OK*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -88,6 +93,7 @@ in SML:
 ```sml
 type ('a, 'b) F = 'a -> 'b;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -104,6 +110,7 @@ datatype 'a list =
     nil
   | :: of 'a * 'a list;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -119,6 +126,9 @@ datatype 'a list =
 in SML:
 
 ```sml
-datatype T1 = ...
-and T2 = ...;
+datatype 'a foo = Foo of ('a * 'a bar)
+and 'a bar = Bar of 'a foo | None;
+
+Foo (1, Bar (Foo (2, None)));
 ```
+<!-- .element: data-thebe-executable-sml -->

@@ -1,9 +1,26 @@
+#import "CHIC"
+#import "Knob.h"
+Occasionally(Pristine, Knob, 
+  // Decomposition
+  // using Knob::handle;
+  using Knob::x;
+  using Knob::Item, Knob::Pair;
+  Construct(Pristine) from(nothing) by(Super(nothing))
+  Construct(Pristine) from(Short s) by(Super(s)) 
+  Property(Pristine prev);
+  Property(Pristine next);
+  Property(Boolean ok);
+
+  Pristine& prev(Pristine); 
+  Pristine& next(Pristine); 
+)
+#if Implementation
 #import "Pristine.h"
 #import "Short.h"
 #import "layout.h"
 
-Pristine::Pristine(): Pristine($P_x$) {}
-Pristine::Pristine(Short s): Knob(s) {}
+// Pristine::Pristine(): Pristine($P_x$) {}
+// Pristine::Pristine(Short s): Knob(s) {}
 
 Property(Pristine Pristine::prev) { 
   Expect(!x());
@@ -51,3 +68,4 @@ Pristine& Pristine::next(Pristine p) {
   s2(flip(s)); 
   return *this;
 }
+#endif

@@ -3,7 +3,7 @@
 #import "heap.h"
 #import "accounting.h"
 
-#import "Test.h"
+#import "Testee.h"
 
 TEST(Pushdown, empty) {
   Pushdown p;

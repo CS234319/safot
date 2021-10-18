@@ -1,4 +1,4 @@
-#import "chic.h"
+#import "CHIC"
 #import "Word.h"
 Provides array(char) A;
 Provides array(Word) P;

@@ -1,5 +1,10 @@
 // Poor man's edition of a bit cleaner C/C++
 
+#if __INCLUDE_LEVEL__ == 2
+#define Implementation 1
+#else
+#define Implementation 0
+#endif 
 #import <functional>
 #import <iostream>
 
@@ -120,7 +125,7 @@ typedef std::function<long long()> Provider;
   } 
 
 #import <cstdint>         // Standard header providing integer types with widths 
-#define As(t) operator t() const
+#define As(t)  operator t() const
 #define Provides extern
 #define Let constexpr 
 #define Service static struct 
@@ -128,6 +133,7 @@ typedef std::function<long long()> Provider;
 #define variable auto 
 #define Allocate 
 #define function   
+#define with(x) x   
 #define property inline  
 #define procedure void  
 #define array(type) type *const
@@ -135,22 +141,40 @@ typedef std::function<long long()> Provider;
 #define constant(type) const type 
 #define modifier 
 #define perspective(...) struct{__VA_ARGS__;};
-#define Representation union
+#define Representation(...) union {__VA_ARGS__; };
 #define Type struct
 #define Constructor(X)  X 
+#define Construct(X)    X 
 #define Property(X)     X() const
+#define property(X)     inline auto X() const
+#define Query(X)        auto X 
 #define Mutator(X)      X 
 #define Selfer(X)       Self X 
 #define Is(...)        { return (__VA_ARGS__); }
+#define is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
-#define by(...) :__VA_ARGS__{}
-
+#define by(...) :__VA_ARGS__ {}
+#define below ;  
 #define Unit int 
 #define Service static struct
 #define Fluenter(name) auto name()  
 #define selfing(...)  { return (__VA_ARGS__), *this; }
+#define with(x) (x) const
+#define from(...) (__VA_ARGS__) 
+#define pairing(x,y) (x,y) 
+#define nothing 
 #define do(...)  ((__VA_ARGS__), 0)
 #define Capsule(...) private: __VA_ARGS__; public: 
+
+#define Occasionally(sub,sup,...) \
+  Type sub: protected sup {\
+    typedef sub Self;\
+    typedef sup Super;\
+    property(sup) is((Super)*this)\
+    __VA_ARGS__\
+  };\
+  
+
 
 #ifndef Type
 #error
@@ -162,7 +186,7 @@ Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
 are fixed width signed integers, represented in two's complement, and are
 similar to the types byte, short, and int of the Java virtual machine. Punning
 is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte or halves ordering is assumed. */
+halves. No particular byte ghalves ordering is assumed. */
 
 typedef int8_t  Byte; /// JVM's byte                |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// like  JVM's short | 16 bits signed integer | Knob of an S-expression 
@@ -181,7 +205,7 @@ Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
 are fixed width signed integers, represented in two's complement, and are
 similar to the types byte, short, and int of the Java virtual machine. Punning
 is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte or halves ordering is assumed. */
+halves. No particular byte ghalves ordering is assumed. */
 
 typedef int8_t  byte; /// JVM's byte              |  8 bits signed integer | character in an atom
 typedef int16_t Short; /// Short a Long/JVM's short | 16 bits signed integer | Knob of an S-expression 

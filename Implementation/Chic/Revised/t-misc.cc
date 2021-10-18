@@ -1,4 +1,3 @@
-#import "chic.h"
 #import "Short.h"
 #import "layout.h"
 #import "Word.h"
@@ -8,10 +7,10 @@
 #import "Handle.h"
 #import "layout.h"
 #import "text.h"
-#import "Test.h"
+#import "Testee.h"
 #import "Clicker.h"
 
-#import "Test.h"
+#import "Testee.h"
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

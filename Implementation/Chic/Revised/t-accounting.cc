@@ -1,6 +1,5 @@
 #import "accounting.h"
-
-#import "Test.h"
+#import "Testee.h"
 
 TEST(accounting, init) {
  accounting.init(17); 
@@ -9,5 +8,3 @@ TEST(accounting, init) {
  EXPECT_ZZ(accounting.used);
  EXPECT_EQ(accounting.unused,17);
 }
-
-

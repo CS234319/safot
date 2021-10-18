@@ -1,1 +1,1 @@
-extern void mark(Sx s); 
+extern void mark(S s); 

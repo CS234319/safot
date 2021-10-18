@@ -1,6 +1,8 @@
-#import "Parser.h"
+#import "parser.h"
+#import "Pushdown.h"
 
-#import "Tokenizer.h"
+#import "atoms.h"
+#import "lexer.h"
 #import "text.h"
 
 #import <string.h>
@@ -21,7 +23,7 @@
 #define __(...) 0
 #endif
 
-namespace Parser {
+namespace parser {
   /* Formal grammar of S expression
    https://www.cs.princeton.edu/courses/archive/spring20/cos320/LL1/
 
@@ -52,8 +54,8 @@ namespace Parser {
   extern enum Status status() {
     return current_status;
   }
-  Sx $$(NIL);
-  extern Sx result() {
+  S $$(NIL);
+  extern S result() {
     return $$; 
   }
 
@@ -61,7 +63,7 @@ namespace Parser {
 
   extern void supply(char *buffer) {
     D(buffer);
-    Tokenizer::initialize(buffer);
+    lexer::initialize(buffer);
     parse();
   }
  
@@ -116,7 +118,7 @@ namespace Parser {
     D(stack());
     while (!stack.empty()) {
       top  = (Symbol) stack.pop();
-      token = (Symbol) Tokenizer::get();
+      token = (Symbol) lexer::get();
       __("LOOP", $$, ~token, ~top, stack());
       if (atom(token) && top == Atom) {
         M1("Match Atom", ~token,~top);
@@ -127,7 +129,7 @@ namespace Parser {
         M1("Match Ignore", ~token,~top);
         continue;
       }
-      Tokenizer::unget();
+      lexer::unget();
       switch (top) {
         case s:
           if (token == '\'' || token == '(' || atom(token)) {
@@ -165,7 +167,7 @@ namespace Parser {
           }
           break;
         case X1:
-          $$ = QUOTE.cons($$.cons(NIL)); 
+          $$ = S(QUOTE,S($$,NIL)); 
           reduce();
           continue;
         case X2:
@@ -188,7 +190,7 @@ namespace Parser {
         case T1:
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
-          $$ = Sx(stack.peep(1)).cons($$);
+          $$ = S(stack.peep(1),$$);
           stack.poke(1,$$.handle());
           M1("Update T1: ",$$, ~top, stack());
           continue;
@@ -209,7 +211,7 @@ namespace Parser {
           break;
         case L1:
           reduce(); 
-          $$ = Sx(stack.pop()).cons($$);
+          $$ = S(stack.pop(),$$);
           M1("Set", $$);
           continue;
         case L2:

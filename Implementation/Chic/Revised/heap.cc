@@ -1,4 +1,4 @@
-#import "chic.h"
+#import "CHIC"
 #import "heap.h"
 
 #import "Short.h"
@@ -43,7 +43,10 @@ Service {
   }
   Pristine first;
   private:
-    Unit panic() { throw EXHAUSTED; }
+    Unit panic() { 
+      extern S EXHAUSTED;
+      throw EXHAUSTED; 
+    }
 } $H$;
 
 const Pristine& heap = $H$.first; 
@@ -102,6 +105,6 @@ Unit collect(Pair p) { accounting.collect();
 }
 
 
-Pair request(Sx car, Sx cdr) { 
+Pair request(S car, S cdr) { 
   return request(Word(car.handle(),cdr.handle())); 
 }

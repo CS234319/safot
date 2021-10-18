@@ -1,11 +1,12 @@
-#import "chic.h"
-#import "Sx.h"
+#import "CHIC"
+#import "S.h"
 #import "Item.h"
-  Pair request(Sx, Sx); 
-  extern Item fresh(Short, Short); 
-  extern Unit free(Item); 
+extern Pair request(S, S); 
+extern Item fresh(Short, Short); 
+extern Unit free(Item); 
 
 extern const Pristine& heap;
+
 #import "Pristine.h"
 #import "Pair.h"
 extern Pristine heapify();
