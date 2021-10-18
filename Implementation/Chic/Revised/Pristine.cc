@@ -1,5 +1,5 @@
 #import "chic.h"
-#import "Knob.h"
+#import "Knob.cc"
 Occasionally(Pristine, Knob, 
   // Decomposition
   // using Knob::handle;

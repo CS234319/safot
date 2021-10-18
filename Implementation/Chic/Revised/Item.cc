@@ -1,6 +1,6 @@
 #import "chic.h"
 
-#import "Knob.h"
+#import "Knob.cc"
 Occasionally(Item, Knob, 
   using Knob::x;
   Construct(Item) from(Short s) by(Super(s))

@@ -1,7 +1,7 @@
 #import "Short.h"
 #import "layout.h"
 #import "Word.cc"
-#import "Knob.h"
+#import "Knob.cc"
 #import "Pristine.h"
 #import "Account.h"
 #import "Handle.cc"
