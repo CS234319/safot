@@ -420,8 +420,8 @@ gcd(X, Y, D) :-
 the `,/2` predicate: the goal `(G1, G2)` succeeds if `G1` and `G2` succeed
 
 ```prolog
-TODO: example
 ```
+<!--TODO: example-->
 
 <!--vert-->
 
@@ -435,8 +435,8 @@ the `;/2` predicate: the goal `(G1 ; G2)` succeeds if `G1` or `G2` succeed. defi
 ```
 
 ```prolog
-TODO: example
 ```
+<!--TODO: example-->
 
 <!--vert-->
 
@@ -510,11 +510,7 @@ legal(theft).
 
 ---
 
-## exercises
-
-<!--vert-->
-
-### family tree
+### exercise - family tree
 
 you have a database with the following predicate
 
@@ -532,6 +528,12 @@ define a predicate `grandparent(X)` that holds when `X` is a grandparent
 <!--vert-->
 
 ```prolog
+```
+<!--TODO: make editable-->
+
+<!--vert-->
+
+```prolog
 grandparent(X) :- parent(X, Y), parent(Y, _).
 ```
 
@@ -540,6 +542,12 @@ grandparent(X) :- parent(X, Y), parent(Y, _).
 define a predicate `nuclear(X, Y)` that holds when `X` and `Y` are in the same nuclear family
 
 a nuclear family consists of 2 parents and their common children
+
+<!--vert-->
+
+```prolog
+```
+<!--TODO: make editable-->
 
 <!--vert-->
 
@@ -553,9 +561,9 @@ nuclear(X, Y) :-
     parent(X, C), parent(Y, C).
 ```
 
-<!--vert-->
+---
 
-### binary trees
+### exercise - binary trees
 
 we represent binary trees as terms:
 
@@ -563,6 +571,12 @@ we represent binary trees as terms:
 * `node(N, Tl, Tr)` is a tree node where `N` is some number and `Tl` and `Tr` are binary trees
 
 define a predicate `tree_size(T, S)` such that `T` is a binary tree and `S` is its size
+
+<!--vert-->
+
+```prolog
+```
+<!--TODO: make editable-->
 
 <!--vert-->
 
@@ -579,6 +593,10 @@ tree_size(node(_, Tl, Tr), S) :-
 define a predicate `tree_max(T, M)` such that `T` is a binary tree and `M` is the max of the values of `T`'s nodes
 
 you may use the arithmetic function `max/2`
+
+```prolog
+```
+<!--TODO: make editable-->
 
 <!--vert-->
 
@@ -601,6 +619,12 @@ define a predicate `perfect_tree(T, H)` such that `T` is a perfect binary tree a
 a node's value should be its height
 
 a perfect binary tree is a binary tree in which all interior nodes have two children and all leaves have the same depth
+
+<!--vert-->
+
+```prolog
+```
+<!--TODO: make editable-->
 
 <!--vert-->
 
