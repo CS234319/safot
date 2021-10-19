@@ -5,8 +5,8 @@
 - [ ] theory/automatic-memory-management WIP
 - [ ] theory/mini-lisp WIP
 - [ ] prolog/higher-order WIP
-- [ ] prolog/exam-questions WIP
-- [ ] theory/python-generators WIP
+- [X] prolog/exam-questions WIP
+- [ ] theory/python-generators
 - [ ] theory/csharp-coroutines
 - [ ] theory/scoping - add more questions
 - [ ] prolog/introduction - make code editable
