@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "gulp serve",
-    "notebook": "jupyter notebook --NotebookApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://localhost:16788/\"}}' --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.disable_check_xsrf=\"True\" --no-browser --NotebookApp.port=16789",
-    "jupyter-server": "jupyter server --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://localhost:16788/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=16789"
+    "jupyter-server": "jupyter server --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://localhost:16788/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=16789",
+    "docker-start": "gulp serve --ip='0.0.0.0'",
+    "docker-jupyter-server": "jupyter server --ServerApp.ip='0.0.0.0' --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://0.0.0.0:16788/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=16789"
   },
   "repository": {
     "type": "git",
@@ -19,13 +20,14 @@
     "slides",
     "presentation"
   ],
-  "devDependencies": {
+  "dependencies": {
     "core-js": "^3.12.1",
     "gulp": "^4.0.2",
     "gulp-connect": "^5.7.0",
     "handlebars": "^4.7.7",
     "revealjs": "hakimel/reveal.js",
-    "thebe": "twyair/thebe"
+    "thebe": "twyair/thebe",
+    "yargs": "^17.2.1"
   },
   "browserslist": "> 0.5%, IE 11, not dead"
 }

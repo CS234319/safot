@@ -3,6 +3,9 @@ const connect = require("gulp-connect");
 var fs = require("fs");
 var path = require("path");
 var Handlebars = require("handlebars");
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const argv = yargs(hideBin(process.argv)).argv;
 
 function buildHtml(output_dir, renderTemplate, name, dir) {
     var html = renderTemplate({ tutorial_name: name, sub: dir });
@@ -64,7 +67,7 @@ gulp.task("serve", () => {
     connect.server({
         root: ".",
         port: 16788,
-        host: "localhost",
+        host: argv.ip || "localhost",
         livereload: true,
         middleware: function () {
             return [cors];
