@@ -2,10 +2,10 @@
 #import "Handle.cc"
 
 Occasionally(Pair, Handle,
-  Construct(Pair) from(Short s) by(Super(s))
-  Construct(Pair) from(Handle h) by(Super(h))
-  property(s1) is(word().s1)
-  property(s2) is(word().s2)
+  Initialize(Pair) from(Short s) by(Super(s))
+  Initialize(Pair) from(Handle h) by(Super(h))
+  Feature(s1) is(word().s1)
+  Feature(s2) is(word().s2)
 
   Property(Word &word) below
 

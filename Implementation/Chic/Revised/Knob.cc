@@ -8,8 +8,8 @@ Type Pristine below
 
 Occasionally(Knob, Pair,
   using Super::handle;
-  Constructor(Knob) from(Short s) by(Super(s)) 
-  Construct(Knob) from(Handle h) by(Super(h))
+  Initialize(Knob) from(Short s) by(Super(s)) 
+  Initialize(Knob) from(Handle h) by(Super(h))
   Property(Short s1) below
   Property(Short s2) below       
   Property(Boolean ok) below
@@ -32,7 +32,7 @@ Occasionally(Knob, Pair,
 #import "layout.h"
 
 #import "Pair.cc"
-#import "Item.h"
+#import "Item.cc"
 #import "Pristine.h"
 #import "Short.h"
 

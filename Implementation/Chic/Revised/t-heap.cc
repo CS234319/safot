@@ -1,7 +1,7 @@
 #import "heap.cc"
 
-#import "text.h"
-#import "Pushdown.h"
+#import "text.cc"
+#import "Pushdown.cc"
 #import "Pristine.h"
 #import "Short.h"
 #import "Pair.cc"

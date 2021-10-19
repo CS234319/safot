@@ -6,7 +6,7 @@
 #import "Account.h"
 #import "Handle.cc"
 #import "layout.h"
-#import "text.h"
+#import "text.cc"
 #import "Testee.h"
 #import "Clicker.h"
 
@@ -95,7 +95,7 @@ TEST(Store, PrimitiveSizs) {
   EXPECT_EQ(sizeof(S), 2);
 }
 
-TEST(Handle, Construct) {
+TEST(Handle, Initialize) {
   const Handle h = Handle(17);
 }
 

@@ -28,7 +28,7 @@ test: $(addsuffix .o,$(TEST))
 
 include .depend
 
-tags:   $(SOURCES) $(HEADERS)
+tags: $(SOURCES) $(HEADERS)
 	@ctags $(SOURCES) > $@
 
 list:

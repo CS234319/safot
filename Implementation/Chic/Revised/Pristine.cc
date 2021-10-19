@@ -5,7 +5,7 @@ Occasionally(Pristine, Knob,
   // using Knob::handle;
   using Knob::x;
   //using Knob::Item, Knob::Pair;
-  Construct(Pristine) from(Short s) by(Super(s)) 
+  Initialize(Pristine) from(Short s) by(Super(s)) 
   Property(Pristine prev);
   Property(Pristine next);
   Property(Boolean ok);

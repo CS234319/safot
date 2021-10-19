@@ -2,7 +2,7 @@
 #import "dump.h"
 #import "parser.h"
 #import "S.h"
-#import "Pushdown.h"
+#import "Pushdown.cc"
 
 #import <cstring>
 #import <iostream>

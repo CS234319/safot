@@ -1,23 +1,34 @@
-#import "lexer.h"
-#import "text.h"
+#import "chic.h"
+Module lexer {
+  enum { undefined = 128, $};
+  const Letter tokens[] = "()[].\'";
+  // Retrieve the next token: if non-positive, this is an atom (including NIL)
+  // else it is a character as per the table above
+  Provides void initialize(Letter buffer[]) below
+  Provides Short next() below 
+  Provides Short get() below 
+  Provides Short unget() below 
+  Provides Short peep() below
+  Provides Short peep(),get() below
+}
+
+#if Implementation
 #define PRODUCTION
 #import "mode.h"
 
-namespace lexer {
-static char *head;
-static Boolean pending = false;
-static inline char& C(); 
+Module lexer {
+  Hides char *head;
+  Hides Short last; 
+  Hides Boolean pending = false;
+  Hides inline Letter& C(); 
+  Hides inline Letter& C() { return *head; }
 
-extern void initialize(char *buffer) {
+extern void initialize(Letter *buffer) {
   head = buffer;
   pending = false;
 }
 
-static inline char& C() {
-  return *head;
-}
 
-static Short last; 
 
 Short peep() {
   Short Short = get();
@@ -34,7 +45,7 @@ Short get() {
 
 static Short nextAtom();
 
-static char advance();
+static Letter advance();
 static Boolean isToken();
 static Boolean isAtom();
 static Boolean isNewLine(); 
@@ -56,7 +67,7 @@ extern Short next() {
   return nextAtom();
 }
 
-static char advance() {
+static Letter advance() {
     D(head, *head, C());
   for (; ; ++head) {
     D(head, *head, C());
@@ -84,7 +95,7 @@ static Short nextAtom() {
     if (!isAtom())
       break;
   D(begin);
-  char c = C();
+  Letter c = C();
   C() = '\0';
   let $ = text::request(begin);
   C() = c;
@@ -108,3 +119,5 @@ static Boolean isToken() {
   return text::exists(C(),tokens);
 }
 }
+#endif
+

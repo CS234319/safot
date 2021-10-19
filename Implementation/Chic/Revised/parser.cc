@@ -1,9 +1,9 @@
 #import "parser.h"
-#import "Pushdown.h"
+#import "Pushdown.cc"
 
 #import "atoms.h"
-#import "lexer.h"
-#import "text.h"
+#import "lexer.cc"
+#import "text.cc"
 
 #import <string.h>
 
@@ -182,7 +182,7 @@ namespace parser {
             shift(T1, '.', X);
             continue;
           }
-          if (exists(token, "()'") || token == $ || atom(token)) {
+          if (text::contains(token, "()'") || token == $ || atom(token)) {
             shift(T2);
             continue;
           }

@@ -129,12 +129,13 @@ typedef std::function<long long()> Provider;
 #define Provides extern
 #define Let constexpr 
 #define Service static struct 
+#define Hiding
 #define let const auto 
 #define variable auto 
 #define Allocate 
 #define function   
 #define with(x) x   
-#define property inline  
+#define Feature inline auto 
 #define procedure void  
 #define array(type) type *const
 #define variable(type) type & 
@@ -143,15 +144,17 @@ typedef std::function<long long()> Provider;
 #define perspective(...) struct{__VA_ARGS__;};
 #define Representation(...) union {__VA_ARGS__; };
 #define Type struct
-#define Constructor(X)  X 
+#define Initialize(X)  explicit X 
 #define Module          namespace  
-#define Construct(X)    X 
+#define Singleton       namespace  
+#define Initialize(X)    X 
 #define Property(X)     X() const
-#define property(X)     inline auto X() const
+#define Feature(X)     inline auto X() const
+#define feature(X)     inline X() const
 #define Query(X)        auto X 
+#define query(X)        X 
+#define Typed(T)    T 
 #define Mutator(X)      X 
-#define Selfer(X)       Self X 
-#define Is(...)        { return (__VA_ARGS__); }
 #define is(...)        { return (__VA_ARGS__); }
 #define	returns(x) const {return x;}
 #define by(...) :__VA_ARGS__ {}
@@ -160,6 +163,7 @@ typedef std::function<long long()> Provider;
 #define Service static struct
 #define Fluenter(name) auto name()  
 #define selfing(...)  { return (__VA_ARGS__), *this; }
+#define Selfer(X)       Self X 
 #define with(x) (x) const
 #define from(...) (__VA_ARGS__) 
 #define pairing(x,y) (x,y) 
@@ -171,8 +175,8 @@ typedef std::function<long long()> Provider;
   Type sub: protected sup {\
     typedef sub Self;\
     typedef sup Super;\
-    property(super) is(*(const Super *)this)\
-    Construct(sub) from(nothing) by(Super(nothing))  \
+    Feature(super) is(*(const Super *)this)\
+    Initialize(sub) from(nothing) by(Super(nothing))  \
     __VA_ARGS__\
   };\
   
@@ -195,7 +199,8 @@ typedef int16_t Short; /// like  JVM's short | 16 bits signed integer | Knob of 
 typedef int32_t Long; ///   like  JVM's int    | 32 bits signed integer | an dotted Pair S-expression   
 typedef int64_t Integer; ///  like JVM's long    | 32 bits signed integer | an dotted Pair S-expression   
 typedef bool    Boolean; /// JVM's byte                |  8 bits signed integer | character in an atom
-typedef const char *const Text; // Representation of immutable srings
+typedef const char Letter; // Representation of character 
+// typedef const char *const Text; // Representation of immutable srings
 
 // typedef enum { ok } OK;
 template<typename T> constexpr inline T max(T s1, T s2) { return s1 > s2 ? s1 : s2; } 

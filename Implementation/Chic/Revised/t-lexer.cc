@@ -1,5 +1,5 @@
 #import  <gtest/gtest.h>
-#import  "lexer.h"
+#import  "lexer.cc"
 
 static void t(const char *s) {
   lexer::initialize(strdup(s));

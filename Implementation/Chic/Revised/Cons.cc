@@ -1,7 +1,7 @@
 #import "chic.h"
 
 Occasionally(Cons, S,
-  Constructor(Cons) from(Short) below
+  Initialize(Cons) from(Short) below
 
   Property(S car) below
   Property(S cdr) below

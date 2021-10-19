@@ -1,14 +1,15 @@
 #import "chic.h"
 #import "Handle.cc"
 Occasionally(S, Handle, 
-  Construct(S) from(Short s) by(Super(s))
-  Constructor(S) from(S,S) below 
-  Constructor(S) from(Text) below
+  using Super::handle;
+  Initialize(S) from(Short s) by(Super(s))
+  Initialize(S) from(S,S) below 
+  Initialize(S) from(Text) below
 
-  property(atom) is(handle() <= 0) 
-  property(compound) is(not atom())
-  property(null) is(handle() == 0);
-  property(t) is(not null()) 
+  Feature(atom) is(handle() <= 0) 
+  Feature(compound) is(not atom())
+  Feature(null) is(handle() == 0);
+  Feature(t) is(not null()) 
 
   Query(eq) with(S s) is(atom() and capsule == s.handle()) 
 
@@ -30,8 +31,8 @@ Property(S S::cdr)  is(word().s2)
 namespace heap {
   extern S request(S, S); 
 }
-Construct(S::S) from(S s1, S s2) by(S(heap::request(s1, s2))) 
+Initialize(S::S) from(S s1, S s2) by(S(heap::request(s1, s2))) 
 
 
-Construct(S::S) from(Text t) by(S(text::request(t))) 
+Initialize(S::S) from(Text t) by(S(text::request(t))) 
 #endif
