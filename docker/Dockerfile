@@ -11,7 +11,12 @@ RUN apt update
 RUN apt install -y nodejs smlnj ipython3 jupyter-notebook git python3-pip
 RUN pip3 install jupyter-server
 RUN npm install -g npm@latest
+RUN git clone https://github.com/twyair/simple-ismlnj.git
+RUN ln -s /usr/src/app/simple-ismlnj /usr/share/jupyter/kernels/smlnj
+RUN npm install -g ijavascript
+RUN ijsinstall
 RUN git clone https://github.com/CS234319/safot.git
 RUN cd safot/reveal.js; npm install --production
+
 
 EXPOSE 16788 16789
