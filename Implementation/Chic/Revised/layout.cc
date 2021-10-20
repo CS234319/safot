@@ -6,8 +6,8 @@ Let Long $m$ = $M_a$ + $M_p$ * sizeof (Word);
 
 Service {
   Representation(
-    perspective(char block[$m$])
-    perspective( 
+    perhap(char block[$m$])
+    perhap( 
       char $A_0$[$M_a$ - LIMBO];
       char A[LIMBO] = { 'N', 'I', 'L', '\0' };
       Word P[$M_p$];

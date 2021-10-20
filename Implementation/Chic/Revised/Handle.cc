@@ -1,20 +1,30 @@
 #import "chic.h"
-#import "Word.cc"
-#import "Text.cc"
-Type Handle { // A handle of an S-Expression
-  Feature(handle) is(capsule)
-  Representation(Short capsule) 
+Type Text below
+Type Word below
+Perspective(Handle, Short, 
+  Feature(handle) is(matter)
   Initialize(Handle) from(nothing) below 
-  Initialize(Handle) from(Short s) by(capsule(s)) 
-  Initialize(Handle) from(const Handle& h) by(capsule(h.capsule)) 
-
   Property(Boolean ok) below
   Property(Word& cons) below
   Property(Text text) below 
-};
+)
 
-#if Implementation 
+#if Implementation
+#import "Word.cc"
+#import "Text.cc"
 #import "layout.h"
-Initialize(Handle::Handle) from(nothing) by(Handle($X_x$))
-Property(Boolean Handle::ok)  is(capsule >= $X_f$ and capsule <= $X_t$)
+Initializing(Handle) from(nothing) by (Handle($X_x$))
+Property(Boolean Handle::ok)  is(matter >= $X_f$ and matter <= $X_t$)
+int f() {
+  int i;
+  Handle h;
+  Handle h1((short)i);
+  Handle h2();
+  Handle h3(0);
+  Handle h4(h3);
+  Handle h5((Short)h1);
+  Handle h6((short)i);
+
+}
 #endif
+

@@ -8,13 +8,13 @@ Type Knob below
 Type S below
 
 Module heap {
-  extern const Pristine& heap;
-  extern Item fresh(Short, Short); 
-  extern Pair request(S, S); 
-  extern Pristine reset();
-  extern Unit free(Item); 
-  extern Unit gobble(Pair);
-  Knob crude(); 
+  Provides const Pristine& heap below
+  Provides Item fresh(Short, Short) below 
+  Provides Pair request(S, S) below 
+  Provides Pristine reset() below
+  Provides Unit free(Item) below 
+  Provides Unit gobble(Pair) below
+  Provides Knob crude() below 
 }
 
 
@@ -24,7 +24,7 @@ Module heap {
 #import "Knob.cc"
 #import "layout.h"
 #import "Pair.cc"
-#import "Pristine.h"
+#import "Pristine.cc"
 #import "S.h"
 #import "Short.h"
 #import "Word.cc"

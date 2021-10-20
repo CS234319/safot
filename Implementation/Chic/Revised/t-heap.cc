@@ -2,7 +2,7 @@
 
 #import "text.cc"
 #import "Pushdown.cc"
-#import "Pristine.h"
+#import "Pristine.cc"
 #import "Short.h"
 #import "Pair.cc"
 #import "S.h"

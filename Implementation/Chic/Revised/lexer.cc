@@ -5,7 +5,7 @@ Module lexer {
   // Retrieve the next token: if non-positive, this is an atom (including NIL)
   // else it is a character as per the table above
   Provides void initialize(Letter buffer[]) below
-  Provides Short next() below 
+  Provides Short next(), get() below 
   Provides Short get() below 
   Provides Short unget() below 
   Provides Short peep() below

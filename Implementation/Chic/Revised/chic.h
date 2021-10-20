@@ -1,10 +1,6 @@
 // Poor man's edition of a bit cleaner C/C++
+#define Implementation (__INCLUDE_LEVEL__ == 0)
 
-#if __INCLUDE_LEVEL__ == 2
-#define Implementation 1
-#else
-#define Implementation 0
-#endif 
 #import <functional>
 #import <iostream>
 
@@ -124,62 +120,87 @@ typedef std::function<long long()> Provider;
     return __; \
   } 
 
+#define below ;  
+
+#define Type struct
+#define perhap(...) struct{__VA_ARGS__;};
+#define Representation(...) union {__VA_ARGS__; };
+
+#define Initializing(T)  T::T 
+#define Initialize(X)  explicit X 
+#define from(...)    (__VA_ARGS__)  
+#define by(...)      :__VA_ARGS__ {}
+
+#define Feature(X)     inline auto X() const
+#define is(...)       { return (__VA_ARGS__); }
+
+#define Query(X)      auto X 
+#define Property(X)   X() const
+
+#define Typed(T)      T 
+#define feature(X)     inline X() const
+#define query(X)      X 
+#define action(X)      X 
+#define with(...)    (__VA_ARGS__) const
+#define nothing 
+#define taking(...)  (__VA_ARGS__)
+
+#define	returns(x) const {return x;}
+
+#define Module          namespace  
+#define Provides        extern
+#define Unit int 
+
+#define Service static struct 
+
 #import <cstdint>         // Standard header providing integer types with widths 
 #define As(t)  operator t() const
-#define Provides extern
 #define Let constexpr 
-#define Service static struct 
-#define Hiding
 #define let const auto 
 #define variable auto 
+#define Hiding static
 #define Allocate 
 #define function   
-#define with(x) x   
-#define Feature inline auto 
 #define procedure void  
 #define array(type) type *const
 #define variable(type) type & 
 #define constant(type) const type 
 #define modifier 
-#define perspective(...) struct{__VA_ARGS__;};
-#define Representation(...) union {__VA_ARGS__; };
-#define Type struct
-#define Initialize(X)  explicit X 
-#define Module          namespace  
-#define Singleton       namespace  
-#define Initialize(X)    X 
-#define Property(X)     X() const
-#define Feature(X)     inline auto X() const
-#define feature(X)     inline X() const
-#define Query(X)        auto X 
-#define query(X)        X 
-#define Typed(T)    T 
 #define Mutator(X)      X 
-#define is(...)        { return (__VA_ARGS__); }
-#define	returns(x) const {return x;}
-#define by(...) :__VA_ARGS__ {}
-#define below ;  
-#define Unit int 
+
+
 #define Service static struct
 #define Fluenter(name) auto name()  
+#define Fluent(name) Self &name 
+
+
 #define selfing(...)  { return (__VA_ARGS__), *this; }
 #define Selfer(X)       Self X 
-#define with(x) (x) const
-#define from(...) (__VA_ARGS__) 
 #define pairing(x,y) (x,y) 
-#define nothing 
 #define do(...)  ((__VA_ARGS__), 0)
 #define Capsule(...) private: __VA_ARGS__; public: 
 
-#define Occasionally(sub,sup,...) \
-  Type sub: protected sup {\
-    typedef sub Self;\
-    typedef sup Super;\
-    Feature(super) is(*(const Super *)this)\
-    Initialize(sub) from(nothing) by(Super(nothing))  \
+//     Initialize(Special) from(nothing) by(Super(nothing))  \
+
+#define Occasionally(Special,General,...) \
+  Type Special: protected General {\
+    typedef General Super;\
+    typedef Special Self;\
+    template<typename... Ts> Initialize (Special) from(Ts... ts) by(General(ts...)) \
+    Feature(super) is(*(const General *)this) \
     __VA_ARGS__\
   };\
-  
+
+#define Perspective(P, Matter, ...) \
+  Type P { \
+    P(const P&) = default;\
+    Representation(Matter matter) \
+    Initialize(P) from(Matter m) by(matter(m)) \
+    explicit operator Matter() const is(matter) \
+      __VA_ARGS__\
+  };
+
+
 
 
 #ifndef Type

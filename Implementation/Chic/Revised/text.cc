@@ -18,7 +18,7 @@ Module text {
 #import "layout.h"
 
 Module text {
-  Hides Short used = $A_t$;
+  Hiding Short used = $A_t$;
 
   /* Making an S expression from an input string is by moving the used marker 
    * down, and then copying the input there. Attempt to save space is made by
@@ -28,10 +28,11 @@ Module text {
 
  Provides Id request(Text t) {
     for (Short __ = 0; __ >= used; --__) 
-      if (eq(t, A + __))
+      if (t.eq(A + __))
         return __;
-    const Short n = size(t);
+    const Short n = t.size();
     used -= n;
+    t.into(A + used)
     for (Short h = 0; h < n; ++h) // Only case in code to change the pool 
       const_cast<char&>(A[used + h]) = upper(t[h]);
     return used;

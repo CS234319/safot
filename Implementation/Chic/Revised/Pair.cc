@@ -1,9 +1,8 @@
 #import "chic.h"
 #import "Handle.cc"
+#import "Word.cc"
 
 Occasionally(Pair, Handle,
-  Initialize(Pair) from(Short s) by(Super(s))
-  Initialize(Pair) from(Handle h) by(Super(h))
   Feature(s1) is(word().s1)
   Feature(s2) is(word().s2)
 
@@ -25,6 +24,7 @@ Occasionally(Pair, Handle,
 #if Implementation
 #import "layout.h" // Do we need all this; Just P and A!
 #import "accounting.h"
+#import "Short.h"
 
 // Properties:
 Property(Boolean Pair::ok)      is(white(s1()) && white(s2()))

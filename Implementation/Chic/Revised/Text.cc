@@ -7,9 +7,11 @@ Type Text {
   Feature (more)  is (not empty())
   Feature (first) is (*capsule) 
   Feature (rest)  is (Text(1 + capsule)) 
-  Typed (Short) feature (size)  below
+  Typed (Short)   feature (size)  below
   Typed (Boolean) query (contains) with (Letter l) below
   Typed (Boolean) query (eq) with (Text t) below
+  Typed (Letter)  action(into) with(Letter x) below
+ // is (s[0] = first() and (empty() or rest().into(s+1)))
 };
 
 #if Implementation 

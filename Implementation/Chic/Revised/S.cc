@@ -2,7 +2,7 @@
 #import "Handle.cc"
 Occasionally(S, Handle, 
   using Super::handle;
-  Initialize(S) from(Short s) by(Super(s))
+  template<typename T> S(T t) by (Super(t))
   Initialize(S) from(S,S) below 
   Initialize(S) from(Text) below
 
@@ -11,7 +11,7 @@ Occasionally(S, Handle,
   Feature(null) is(handle() == 0);
   Feature(t) is(not null()) 
 
-  Query(eq) with(S s) is(atom() and capsule == s.handle()) 
+  Query(eq) with(S s) is(atom() and matter == s.handle()) 
 
   Property(Text text) below 
   Property(Word &word) below 
@@ -22,17 +22,13 @@ Occasionally(S, Handle,
 #if Implementation 
 #import "layout.h"
 
-Property(Word& S::word)  is(P[capsule])
-Property(Text S::text)   is(A + capsule) 
+Property(Word& S::word)  is(P[matter])
+Property(Text S::text)   is(A + matter) 
 Property(S S::car)  is(word().s1) 
 Property(S S::cdr)  is(word().s2) 
 
 #import "heap.cc"
-namespace heap {
-  extern S request(S, S); 
-}
+#import "text.cc"
 Initialize(S::S) from(S s1, S s2) by(S(heap::request(s1, s2))) 
-
-
 Initialize(S::S) from(Text t) by(S(text::request(t))) 
 #endif

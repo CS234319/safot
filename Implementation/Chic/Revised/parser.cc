@@ -182,7 +182,7 @@ namespace parser {
             shift(T1, '.', X);
             continue;
           }
-          if (text::contains(token, "()'") || token == $ || atom(token)) {
+          if (Text("()'").contains(token) || token == $ || atom(token)) {
             shift(T2);
             continue;
           }
@@ -190,7 +190,7 @@ namespace parser {
         case T1:
           reduce(); 
           M1("Update T1: ",$$, ~top, stack());
-          $$ = S(stack.peep(1),$$);
+          $$ = S(S(stack.peep(1)),$$);
           stack.poke(1,$$.handle());
           M1("Update T1: ",$$, ~top, stack());
           continue;
@@ -198,7 +198,7 @@ namespace parser {
           reduce(); 
           continue;
         case L:
-          if (exists(token,"'(") || atom(token)) {
+          if (Text("(").contains(token) || atom(token)) {
             Short $1 = reserve(); 
             shift(L1, E, $1, L);
             continue;
@@ -211,7 +211,7 @@ namespace parser {
           break;
         case L1:
           reduce(); 
-          $$ = S(stack.pop(),$$);
+          $$ = S(S(stack.pop()),$$);
           M1("Set", $$);
           continue;
         case L2:

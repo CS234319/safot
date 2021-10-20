@@ -2,7 +2,7 @@
 #import "layout.h"
 #import "Word.cc"
 #import "Knob.cc"
-#import "Pristine.h"
+#import "Pristine.cc"
 #import "Account.h"
 #import "Handle.cc"
 #import "layout.h"

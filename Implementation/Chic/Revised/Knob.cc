@@ -4,12 +4,9 @@
 Type Item below
 Type Pristine below
 
-  // An S-expression represented by its Knob
-
 Occasionally(Knob, Pair,
   using Super::handle;
-  Initialize(Knob) from(Short s) by(Super(s)) 
-  Initialize(Knob) from(Handle h) by(Super(h))
+  Initialize(Knob) from(nothing) below 
   Property(Short s1) below
   Property(Short s2) below       
   Property(Boolean ok) below
@@ -19,10 +16,6 @@ Occasionally(Knob, Pair,
   Property(Boolean weirdo) below
   Property(Boolean x) below
 
-  // Type Pair     Pair(S, S) const;
-  // Type Item     Item()       const;
-  // Type Pristine Pristine()   const;
-  // Mutators:
   Selfer(s1(Short));
   Selfer(s2(Short));
 )
@@ -33,7 +26,7 @@ Occasionally(Knob, Pair,
 
 #import "Pair.cc"
 #import "Item.cc"
-#import "Pristine.h"
+#import "Pristine.cc"
 #import "Short.h"
 
 Property(Boolean Knob::ok)       is(x() || handle() >= $P_f$ and handle() <= $P_t$)
@@ -44,13 +37,26 @@ Property(Boolean Knob::pair)     is(white(s1()) and white(s2()))
 Property(Boolean Knob::pristine) is(black(s1()) and black(s2()))
 Property(Boolean Knob::item)     is(white(s1()) and black(s2()))
 Property(Boolean Knob::weirdo)   is(black(s1()) and white(s2()))
-Knob::Knob()     by(Self($P_x$)) 
+/*
+Pair     Knob::Pair(S s1, S s2) const { return Pair().s1(s1).s2(s2); }
+Item     Knob::Item()     const  { return  handle(); }
+Pristine Knob::Pristine() const  { return  handle(); }
+*/
 
 Knob Knob::s1(Short  s) { P[handle()].s1 = s; return  *this; }
 Knob Knob::s2(Short  s) { P[handle()].s2 = s; return  *this; }
 
-// Properties:
-Pair     Knob::Pair(S s1, S s2) const { return Pair().s1(s1).s2(s2); }
-Item     Knob::Item()     const  { return  Pair().handle(); }
-Pristine Knob::Pristine() const  { return  Pair().handle(); }
+#include "layout.h"
+
+Initializing(Knob::Knob) from(nothing)   by(Knob($P_x$)) 
+int f() {
+  int i;
+  Knob h;
+  Knob h1((short)i);
+  Knob h2();
+  Knob h3(0);
+  Knob h4(h3);
+  Knob h5((Short)h1);
+  Knob h6((short)i);
+}
 #endif

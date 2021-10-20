@@ -67,7 +67,7 @@ static struct {
       Expect(accounting.unused <= $P_n$);
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let p = Pristine(h);
+        let p = Prisitine.cc);
         if (!p.ok()) 
           continue;
         ++n;
