@@ -4,7 +4,7 @@
 
 ---
 
-### loading and Saving
+### running
 
 * REPL (sort of)
 * first prompt (-) and secondary prompt (=)
@@ -17,23 +17,6 @@ val it = 10 : int
 ```
 
 <!--vert-->
-
-* create a file named `myfile.sml`
-* start ML and
-
-    ```sml
-    use "c:\\myfile.sml";
-    ```
-
-* or redirect the input and output
-
-    ```bash
-    sml < myfile.sml > output
-    ```
-
----
-
-### a simple tutorial
 
 * ML is usually used in a REPL
 * expressions followed by a semicolon yield a response
@@ -173,13 +156,16 @@ val +-+-+ = 1415;
     * `~123.4E~2` is the same as `~1.234`
 * infix operators: `+` `-` `*` `/`
 
+NOTE: note that `+`, `-`, `*` are overloaded
+
 <!--vert-->
 
-* functions
-  * `floor(r)` converts `real` to `int`
-  * `real(i)` converts `int` to `real`
-  * `sqrt`, `sin`, `cos`, `tan`, `exp`, `ln` all of type `real->real`
-  * all need the `Math.` prefix: `Math.sqrt`
+functions
+
+* `floor(r)` converts `real` to `int`
+* `real(i)` converts `int` to `real`
+* `sqrt`, `sin`, `cos`, `tan`, `exp`, `ln` all of type `real->real`
+* all need the `Math.` prefix: `Math.sqrt`
 
 ---
 
@@ -266,7 +252,7 @@ chr it;
 
 ### boolean
 
-the two values are
+the two values are `true` and `false`
 
 ```sml
 true;
@@ -334,29 +320,33 @@ val a = (1.5, 6.8);
 
 ### lists
 
-* a list is a finite sequence of elements
+a list is a finite sequence of elements
 
-    ```sml
-    [3, 5, 9];
-    ["a", "list"];
-    [];
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+```sml
+[3, 5, 9];
+["a", "list"];
+[];
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* elements may appear more than once
+<!--vert-->
 
-    ```sml
-    [3,4,3];
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+elements may appear more than once
 
-* elements may have any type but all elements must have the same type
+```sml
+[3,4,3];
+```
+<!-- .element: data-thebe-executable-sml -->
 
-    ```sml
-    [(1, "one"), (2, "two")] : (int*string) list
-    [[3.1], [], [5.7, ~0.6]] : (real list) list
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+<!--vert-->
+
+elements may have any type but all elements must have the same type
+
+```sml
+[(1, "one"), (2, "two")] : (int*string) list;
+[[3.1], [], [5.7, ~0.6]] : (real list) list;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -550,7 +540,7 @@ fun min(x,y) = if x < y then x:real else y;
 
 ---
 
-write a function foo such that its type is:
+write a function `foo` such that its type is:
 
 ```sml
 val foo = fn : int * real -> real
@@ -589,7 +579,7 @@ fun pairself x = (x, x);
 
 pairself 4.0;
 
-fun pair (x,y) = (y,x);
+fun pair (x,y) = (y, x);
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -615,7 +605,7 @@ fun ident x = x;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
----
+<!--vert-->
 
 what will be printed?
 
@@ -658,26 +648,25 @@ fn x => (twice ident) (x);
 
 ### GCD - Pascal vs. ML
 
-* an imperative Pascal program:
+an imperative Pascal program:
 
-    ```pascal
-    function gcd(m,n: integer): integer;
-    var prevm: integer;
-    begin
-        while m<>0 do begin
-            prevm := m;
-            m := n mod m;
-            n := prevm
-        end;
-        gcd := n
+```pascal
+function gcd(m,n: integer): integer;
+var prevm: integer;
+begin
+    while m<>0 do begin
+        prevm := m;
+        m := n mod m;
+        n := prevm
     end;
-    ```
+    gcd := n
+end;
+```
 
-* a functional program in Standard ML:
+a functional program in Standard ML:
 
-    ```sml
-    fun gcd(m,n) =
-        if m=0 then n else gcd(n mod m, m);
-    ```
+```sml
+fun gcd(m,n) = if m=0 then n else gcd(n mod m, m);
+```
 
-* which one is more efficient? 🧐
+which one is more efficient? 🧐
