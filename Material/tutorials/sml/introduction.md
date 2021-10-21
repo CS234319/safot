@@ -6,7 +6,7 @@
 
 ### loading and Saving
 
-* interpreter
+* REPL (sort of)
 * first prompt (-) and secondary prompt (=)
 * semicolon terminated
 
@@ -45,11 +45,11 @@ val it = 10 : int
 
 ---
 
-### declaring constants
+### naming values
 
 <!--vert-->
 
-naming constants
+naming values
 
 ```sml
 val seconds = 60;
@@ -84,11 +84,11 @@ val secs_in_hour = it;
 
 ---
 
-### legal names
+### legal identifiers
 
 <!--vert-->
 
-### alphabetic names
+### alphabetic identifiers
 
 * begins with a letter
 * followed by letters, digits, underscore, or single quotes
@@ -104,7 +104,7 @@ h''3_H
 
 <!--vert-->
 
-### symbolic names
+### additional identifiers
 
 * permitted over the characters:
 
@@ -272,6 +272,8 @@ the two values are
 true;
 
 false;
+
+2 + 2 = 4;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -386,7 +388,7 @@ fun sq(x: int) = x*x;
     ```
     <!-- .element: data-thebe-executable-sml -->
 
-* when a function is called the parameter is evaluated and then passed to the function
+* when a function is called the argument is evaluated and then passed to the function
 
     ```sml
     sq (sq 3);
@@ -467,6 +469,8 @@ lengthvec (5.0, 12.0);
     val inttwice = fn : (int -> int) -> (int -> int)
     ```
 
+<!--vert-->
+
 * example
 
     ```sml
@@ -490,7 +494,7 @@ lengthvec (5.0, 12.0);
     ```
     <!-- .element: data-thebe-executable-sml -->
 
-  * constants `0` and `1` have type `int`.</span>
+  * literals `0` and `1` have type `int`.</span>
   * therefore `n=0` and `n-1` involve integers so `n` has type `int`</span>
   * `n*p` must be integer multiplication, so `p` has type `int`</span>
   * `facti` returns type `int`</span>
@@ -564,10 +568,10 @@ but you can't use type annotations
 |                           |        | flexibility | security |
 |:-------------------------:|:------:|:-----------:|:--------:|
 |        weakly typed       |  lisp  |      ✔      |          |
-|       strongly typed      | Pascal |             |     ✔    |
+|       strongly typed*     | Pascal |             |     ✔    |
 | polymorphic type checking |   ML   |      ✔      |     ✔    |
 
-and in ML most types are deduced automatically 😎
+and in ML most types are inferred automatically 😎
 
 ---
 

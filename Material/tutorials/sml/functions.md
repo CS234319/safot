@@ -1,6 +1,6 @@
 # Standard ML
 
-## curried functions
+## functions
 
 ---
 
@@ -134,7 +134,7 @@ the rule is:
 
 ---
 
-### general-purpose functions
+### example
 
 applying infix operator only to one operand
 
