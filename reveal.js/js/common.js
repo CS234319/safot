@@ -17,7 +17,7 @@ function thebe_init(kernel, mode, selector) {
         mathjaxConfig: "TeX-AMS_CHTML-full,Safe",
         codeMirrorConfig: {
             mode: mode,
-            theme: "monokai"
+            theme: "idea"
         },
         on_output_change: () => { Reveal.layout(); },
         on_execute: (cm) => {

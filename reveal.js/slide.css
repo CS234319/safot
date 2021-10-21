@@ -1,13 +1,17 @@
 .reveal pre {
     width: 100%;
+    box-shadow: none;
 }
 .reveal .code-wrapper code {
     font-size: 20px;
+    border: grey 2px solid;
+    border-radius: 4px;
 }
 .p-Widget, .lm-Widget {
     overflow: auto;
 }
 .jp-OutputArea-output > pre {
+    border-top: green 2px solid;
     margin: 0;
     width: 100%;
     box-shadow: none;

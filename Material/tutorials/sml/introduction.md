@@ -35,7 +35,7 @@ val it = 10 : int
 
 ### a simple tutorial
 
-* ML is usually used as an interpreter
+* ML is usually used in a REPL
 * expressions followed by a semicolon yield a response
 
 ```sml
@@ -142,7 +142,7 @@ val +-+-+ = 1415;
 
 ### int
 
-* constants
+* literals
   * sequence of digits
     * 0
     * 01234
@@ -163,7 +163,7 @@ val +-+-+ = 1415;
 
 ### real
 
-* constants
+* literal
   * decimal point
     * `0.01`
     * `2.718281828`
@@ -187,7 +187,7 @@ val +-+-+ = 1415;
 
 <!--vert-->
 
-constants are written in double quotes
+literals are written in double quotes
 
 ```sml
 "ML is the best";
@@ -417,7 +417,7 @@ fun sq(x: int) = x*x;
 
 * every function has one argument and one result
 * any type can be passed/returned!!!
-* tuples are used to pass/return several arguments
+* tuples are used to pass/return several values
 
 ```sml
 val a = (3.0, 4.0);
@@ -434,22 +434,24 @@ lengthvec (5.0, 12.0);
 
 ### functions as values
 
-* anonymous functions with `fn` notation
+anonymous functions with `fn` notation
 
-    ```sml
-    fn x:int => x*x;
+```sml
+fn x:int => x*x;
 
-    it 3;
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+it 3;
+```
+<!-- .element: data-thebe-executable-sml -->
 
-* the following declarations are identical
+<!--vert-->
 
-    ```sml
-    fun sq x:int = x*x;
-    val sq = fn x:int => x*x;
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+the following declarations are identical
+
+```sml
+fun sq x:int = x*x;
+val sq = fn x:int => x*x;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -471,14 +473,14 @@ lengthvec (5.0, 12.0);
 
 <!--vert-->
 
-* example
+example
 
-    ```sml
-    inttwice (fn x => x*x);
+```sml
+inttwice (fn x => x*x);
 
-    it 3;
-    ```
-    <!-- .element: data-thebe-executable-sml -->
+it 3;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 ---
 
@@ -573,13 +575,14 @@ but you can't use type annotations
 
 and in ML most types are inferred automatically 😎
 
+NOTE: Pascal has type punning so its not as strongly typed as ML
+
 ---
 
 ### polymorphic function definitions
 
-* an object is polymorphic if it can be regarded as having any kind of type
-* If type inference leaves some types completely unconstrained then the definition is polymorphic
-* A polymorphic type contains a type variable, e.g. 'a, 'b
+* if type inference leaves some types completely unconstrained then the definition is polymorphic
+* a polymorphic type contains a type variable, e.g. 'a, 'b
 
 ```sml
 fun pairself x = (x, x);
