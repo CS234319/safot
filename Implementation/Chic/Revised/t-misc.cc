@@ -95,7 +95,7 @@ TEST(Store, PrimitiveSizs) {
   EXPECT_EQ(sizeof(S), 2);
 }
 
-TEST(Handle, Initialize) {
+TEST(Handle, Create) {
   const Handle h = Handle(17);
 }
 

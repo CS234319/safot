@@ -6,7 +6,7 @@ Type Pristine below
 
 Occasionally(Knob, Pair,
   using Super::handle;
-  Initialize(Knob) from(nothing) below 
+  Create(Knob) from(nothing) below 
   Property(Short s1) below
   Property(Short s2) below       
   Property(Boolean ok) below

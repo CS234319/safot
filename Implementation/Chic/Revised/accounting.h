@@ -20,5 +20,5 @@ extern Type Accounting {
   Clicker visit, leave; 
   Clicker request, reuse = request.kind(), provide = request.kind(); 
   Clicker hit = provide.kind(), miss = provide.kind();   
-  auto init(Integer n) selfing(this->~Accounting(), N = n) 
+  auto reset(Integer n) selfing(this->~Accounting(), N = n) 
 } accounting;

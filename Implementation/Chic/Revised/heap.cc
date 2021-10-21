@@ -30,19 +30,20 @@ Module heap {
 #import "Word.cc"
 
 Service {
+  Pristine first;
   auto empty() { return first.x(); } 
   Knob pop() {
     not first.x() or panic();  
     Surely(first.prev().x());
     accounting.pop();
-    let old = first;
+    let pop = first;
     first = first.next();
-    if (!first.x()) first.prev($P_x$);
-    return old.handle(); 
+    if (not first.x()) first.prev(Pristine($P_x$));
+    return pop; 
   }
   Unit push(Pristine p) {
     accounting.push();
-    p.prev($P_x$).next(first); 
+    p.prev(Pristine($P_x$)).next(first); 
     if (!first.x()) first.prev(p);
     first = p;
   }
@@ -62,7 +63,6 @@ Service {
     accounting.reset($P_n$);
     first = Pristine($P_f$);
   }
-  Pristine first;
   private:
     Unit panic() { 
       extern S EXHAUSTED;
@@ -72,7 +72,7 @@ Service {
 
 
  
-static inline auto reuse(Short s) { accounting.reuse(); return Pair(s);  }
+static inline auto reuse(Short s) { accounting.reuse(); is(Pair(s))  }
 
 static inline auto hit(Word w, Short s) {  
   accounting.hit();
@@ -80,16 +80,12 @@ static inline auto hit(Word w, Short s) {
   P[s].l = w.l; 
   return Pair(s);
 }
-
 static inline auto miss(Word w) {  
-  accounting.miss(); return $H$.pop().Pair(w.s1,w.s2); 
+  accounting.miss(); is($H$.pop().Pair(w.s1,w.s2))
 }
 
 static Pair request(Word w, Short s) {
-  Expect(Pair::ok(w));
-  Expect(s != $P_x$);
-  Expect(s >= $P_f$);
-  Expect(s <= $P_t$);
+  expecting(Pair::ok(w), s != $P_x$, s >= $P_f$, s <= $P_t$)
   return P[s].l == w.l ? reuse(s) : (++accounting.pairs,Pristine(s).ok()) ? hit(w,s) : miss(w);
 }
 
@@ -98,7 +94,7 @@ static Pair request(Word w) {
 }
   
 Unit collect(Pair p) { accounting.collect(); 
-  Expect(p.ok());
+  expecting(p.ok())
   $H$.push(Pristine(p.handle())) | --accounting.pairs;
 }
 
@@ -109,9 +105,7 @@ Module heap {
     accounting.reset($P_n$);
   }
   Item fresh(Short s1, Short s2) { 
-    Expect(white(s1));
-    Expect(white(s2));
-    Expect(s2 == $P_x$ or s2 >= $P_f$ and s2 <= $P_t$);
+    expecting(white(s1), white(s2), s2 == $P_x$ or s2 >= $P_f$ and s2 <= $P_t$)
     if ($H$.empty()) throw __LINE__; 
     ++accounting.items;
     return $H$.pop().Item().head(s1).rest(s2);

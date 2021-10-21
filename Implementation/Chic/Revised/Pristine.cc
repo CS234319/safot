@@ -2,7 +2,7 @@
 #import "Knob.cc"
 Occasionally(Pristine, Knob, 
   using Knob::x;
-  Initialize(Pristine) from(Short s) by(Super(s)) 
+  Create(Pristine) from(Short s) by(Super(s)) 
   Property(Pristine prev) below
   Property(Pristine next) below
   Property(Boolean ok) below
@@ -21,7 +21,7 @@ Occasionally(Pristine, Knob,
 Property(Pristine Pristine::prev) { 
   Expect(!x())
   Expect(black(s1()))
-  is(flip(s1())); 
+  is(Pristine(flip(s1())); 
 }
 
 Property(Pristine Pristine::next) { 
@@ -63,5 +63,17 @@ Pristine& Pristine::next(Pristine p) {
   Expect(white(s))
   s2(flip(s)); 
   return *this;
+}
+
+int f() {
+  int i;
+  Pristine h;
+  Pristine h1((short)i);
+  Pristine h2();
+  Pristine h3(0);
+  Pristine h4(h3);
+  Pristine h5((Short)h1);
+  Pristine h6((short)i);
+
 }
 #endif

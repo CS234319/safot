@@ -3,7 +3,7 @@ Type Text below
 Type Word below
 Perspective(Handle, Short, 
   Feature(handle) is(matter)
-  Initialize(Handle) from(nothing) below 
+  Create(Handle) from(nothing) below 
   Property(Boolean ok) below
   Property(Word& cons) below
   Property(Text text) below 

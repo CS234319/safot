@@ -46,7 +46,7 @@ namespace parser {
    X ::= ( L ) { $$ = $1                  } // X2 Copy
    X ::= a     { $$ = $1                  } // X3 Copy
    L ::= E L   { $$ = pair($1,$$);        } // L1: Pair 
-   L ::= ''    { $$ = NIL;                } // L2: Initialize
+   L ::= ''    { $$ = NIL;                } // L2: Create
    */
 
   static Pushdown stack;
