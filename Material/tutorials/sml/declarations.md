@@ -36,19 +36,19 @@ if a name is declared again the new meaning is adopted afterwards
 
 ```sml
 pi;
-(*val it = "pi": string*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 but does not affect existing uses of the name
 
 ```sml
 area 1.0;
-(*val it = 3.14159: real*)
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 <!--vert-->
 
-### is permanence of names a good feature?
+### is it a good feature?
 
 <div style="text-align: left">
 👍 redefining cannot damage your program
@@ -67,6 +67,7 @@ we can define a function using val
 ```sml
 val sq = fn x => x * x;
 ```
+<!-- .element: data-thebe-executable-sml -->
 
 what about recursive functions?
 
@@ -74,7 +75,9 @@ what about recursive functions?
 fun f(n) = if n=0 then 1 else n * f(n-1);
 
 val f = fn (n) => if n=0 then 1 else n * ??;
+```
 
+```sml
 val rec f = fn (n) =>
     if n=0 then 1
     else n * f(n-1);
@@ -93,7 +96,7 @@ fun factorial 0 = 1
 ```
 <!-- .element: data-thebe-executable-sml -->
 
-when the function is called, the first pattern to match the actual parameter determines which expression on the right hand side will be evaluated
+when the function is called, the first pattern to match the argument determines which expression on the right hand side will be evaluated
 
 <!--vert-->
 
@@ -108,19 +111,32 @@ when the function is called, the first pattern to match the actual parameter det
 
 <!--vert-->
 
+what will be printed?
+
 ```sml
 fun foo (x,1) = x
   | foo (1,_) = 0
   | foo _ = ~1;
-(*val foo = fn : int * int -> int*)
+```
+<!-- .element: data-thebe-executable-sml -->
+
+```sml
 foo(3,1);
-(*val it = 3 : int*)
+```
+<!-- .element: data-thebe-executable-sml -->
+
+```sml
 foo(1,3);
-(*val it = 0 : int*)
+```
+<!-- .element: data-thebe-executable-sml -->
+
+```sml
 foo(2,2);
-(*val it = ~1 : int*)
+```
+<!-- .element: data-thebe-executable-sml -->
+
+```sml
 foo(1,1);
-(*val it = ? : int*)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -133,7 +149,7 @@ case E of P1 => E1 | ... | Pn => En
 ```
 
 ```sml
-case p-q of
+case 7 of
     0 => "zero"
   | 1 => "one"
   | 2 => "two"
@@ -148,22 +164,18 @@ case p-q of
 
 ---
 
-### type abbreviation
+### type aliasing
 
 * you can give a new name to an existing type
-
 * the new name is only an alias
 
 ```sml
 type vec = real*real;
-(*type vec = real * real*)
 
 infix ++;
 fun (x1,y1) ++ (x2,y2) : vec = (x1+x2,y1+y2);
-(*val ++ = fn: (real * real) * (real * real) -> vec*)
 
 (3.6,0.9) ++ (0.1,0.2) ++ (20.0,30.0);
-(*val it = (23.7,31.1) : vec*)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -176,9 +188,10 @@ let D in E end
 ```
 
 ```sml
+fun gcd (n, m) = if m=0 then n else gcd(n mod m, m);
+
 fun fraction (n,d) =
   (n div gcd(n,d), d div gcd(n,d));
-(*val fraction = fn: int*int -> int*int*)
 
 fun fraction(n,d)=
   let 
@@ -186,13 +199,22 @@ fun fraction(n,d)=
   in
     (n div com, d div com)
   end;
-(*val fraction = fn: int*int -> int*int*)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
-* `D` may be a compound declaration
-  * `D1; D2; ...; Dn`
-  * semicolons are optional
+<!--vert-->
+
+`D` may be a compound declaration
+
+```sml
+let
+  val x = 5
+  val y = 17
+in
+  x * y
+end;
+```
+<!-- .element: data-thebe-executable-sml -->
 
 <!--vert-->
 
@@ -240,7 +262,7 @@ local
     else itfib (n-1, curr, prev + curr)
 in
   fun fib n = itfib(n, 0, 1)
-end
+end;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -257,7 +279,7 @@ fun fib n = let
     else itfib (n-1, curr, prev + curr)
 in
   itfib(n, 0, 1)
-end
+end;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -268,7 +290,7 @@ local
     else itfib (n-1, curr, prev + curr)
 in
   fun fib n = itfib(n, 0, 1)
-end
+end;
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -314,8 +336,6 @@ val ID1 = E1 and ... and IDn = En
 val x = 3;
 val y = 5;
 val x = y and y = x;
-(*val x = 5 : int
-  val y = 3 : int*)
 ```
 <!-- .element: data-thebe-executable-sml -->
 
@@ -323,7 +343,7 @@ val x = y and y = x;
 
 ### mutually recursive functions
 
-`$$\frac{\pi}{4}=\sum_{k=0}^\infty \frac{1}{4k+1} - \frac{1}{4k+3} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9}$$`
+$$\frac{\pi}{4}=\sum_{k=0}^\infty \frac{1}{4k+1} - \frac{1}{4k+3} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \cdots$$
 
 ```sml
 fun pos d = neg (d-2.0) + 1.0/d
@@ -334,24 +354,5 @@ fun sum (d, one) =
     if d > 0.0
     then sum(d-2.0,~one) + one/d
     else 0.0;
-```
-<!-- .element: data-thebe-executable-sml -->
-
-<!--vert-->
-
-### emulating `goto` statements
-
-```pascal
-var x:=0; y:=0; z:=0;
-F: x := x+1; goto G
-G: if y<z then goto F else (y:=x+y; goto H)
-H: if z>0 then (z:=z-x; goto F) else stop
-```
-
-```sml
-fun F(x,y,z) = G(x+1,y,z)
-and G(x,y,z) = if y < z then F(x,y,z) else H(x,x+y,z)
-and H(x,y,z) = if z > 0 then F(x,y,z-x) else (x,y,z);
-F(0,0,0);
 ```
 <!-- .element: data-thebe-executable-sml -->
