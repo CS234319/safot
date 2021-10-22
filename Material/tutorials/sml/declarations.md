@@ -6,7 +6,7 @@
 
 ### example - circle area
 
-`$$area = \pi \cdot r^2$$`
+$$area = \pi \cdot r^2$$
 
 ```sml
 val pi = 3.14159;
