@@ -10,11 +10,9 @@
 .p-Widget, .lm-Widget {
     overflow: auto;
 }
+
 .jp-OutputArea-output > pre {
-    border-top: green 2px solid;
     margin: 0;
-    width: 100%;
-    box-shadow: none;
     white-space: pre-wrap;
 }
 
@@ -83,4 +81,24 @@ pre.docs-tooltip {
     white-space: pre-wrap;
     width: 40%;
     z-index: 9;
+}
+
+.thebelab-button {
+    display: none;
+}
+
+.thebelab-busy {
+    position: absolute;
+}
+
+.jp-RenderedText pre {
+    font-size: 20px;
+}
+
+.jp-OutputArea > :first-child {
+    padding-top: 0;
+}
+
+.CodeMirror pre.CodeMirror-line {
+    font-size: 20px;
 }
