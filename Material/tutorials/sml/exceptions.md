@@ -65,7 +65,7 @@ exception Problem of int;
 Problem;
 (*val it = fn : int -> exn*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -85,7 +85,7 @@ fun whats_the_problem (Problem p) = p;
 (*Warning: match nonexhaustive ...*)
 (*val whats_the_problem = fn : exn -> int*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ... except
 
@@ -93,7 +93,7 @@ fun whats_the_problem (Problem p) = p;
 x = x;
 (*Error: operator and operand don't agree [equality type required]*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -141,7 +141,7 @@ fun tl (_::xs) = xs
   | tl []      = raise Empty;
 (*val tl = fn : 'a list -> 'a list*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -160,7 +160,7 @@ Exp_0 handle
 ```sml
 fun len l = 1 + len (tl l) handle Empty => 0;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -191,7 +191,7 @@ fun throw _ = raise Empty;
 fun bar x = if x>0 then x else raise Underflow;
 (*val bar = fn : int -> int*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -229,7 +229,7 @@ hd ["good"] handle nil => "bad";
 hd ["good"] handle Empty => false;
 (*Error: expression and handler don't agree [tycon mismatch]*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -242,7 +242,7 @@ in
     fun f (E "Hello", E x) = x;
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -255,7 +255,7 @@ in
     ) 2 handle Exy n => n
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 

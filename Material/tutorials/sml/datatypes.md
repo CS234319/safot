@@ -19,7 +19,7 @@ datatype single = only;
 
 only;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 `only` denotes the only value of type `single` (isomorphic to `unit`)
 
@@ -30,7 +30,7 @@ order doesn't matter
 ```sml
 datatype bool = true | false;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -47,7 +47,7 @@ fun value king = Real.posInf (*infinity*)
 
 value bishop;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -62,7 +62,7 @@ val (body, engine) = (0.0122, 50.0);
 
 a engine body; (* oops *)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -75,7 +75,7 @@ fun a (m:mass) (f:force) : acceleration = f/m;
 
 a engine body; (* still oops *)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -95,7 +95,7 @@ a body engine; (*OK*)
 
 a engine body; (*Error*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -112,7 +112,7 @@ Kg;
 
 Newton;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -129,7 +129,7 @@ fun area (point | Line _) = 0.0
   | area (Circle r) = Math.pi*r*r
   | area (Rectangle (w, h)) = w * h;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -138,17 +138,17 @@ fun area (point | Line _) = 0.0
 ```sml
 val line = Line 5.3;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 val Line length = line;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 val Circle radius = line;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -158,7 +158,7 @@ val Circle radius = line;
 val point = point; (*OK*)
 val point = 5.3; (*Error*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -174,7 +174,7 @@ datatype intlist =
 fun length nil     = 0
   | length (x::xs) = 1 + length xs;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -189,7 +189,7 @@ datatype 'a list =
 ```sml
 "hello" :: "world" :: nil;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -203,7 +203,7 @@ head [1, 2, 3];
 
 head (tl [1]);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -219,7 +219,7 @@ val five_or_hello = if true then five else hello;
 
 val int_char_list = [type1 5, type2 #"a"];
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -236,7 +236,7 @@ val tree2 = Br (2, Leaf 1, Leaf 3);
 val tree5 = Br (5, Leaf 6, Leaf 7);
 val tree4 = Br (4, tree2, tree5);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 fun size Nil = 0
@@ -244,7 +244,7 @@ fun size Nil = 0
 
 size tree4;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -267,7 +267,7 @@ fun get (Br ((node_k, v), left, right)) k =
   | LESS    => get left k
 ;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -283,4 +283,4 @@ in
         | LESS    => Br (node, insert left item, right)
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->

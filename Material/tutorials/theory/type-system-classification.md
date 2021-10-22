@@ -110,7 +110,7 @@ what will js do?
 ```javascript
 5 + "10";
 ```
-<!-- .element: data-thebe-executable-javascript -->
+<!-- .element: data-thebe-executable-javascript data-language="text/x-javascript" -->
 
 <!--vert-->
 
@@ -119,7 +119,7 @@ what will js do?
 ```javascript
 5 * "";
 ```
-<!-- .element: data-thebe-executable-javascript -->
+<!-- .element: data-thebe-executable-javascript data-language="text/x-javascript" -->
 
 <!--vert-->
 
@@ -128,7 +128,7 @@ what will js do?
 ```javascript
 [] + [];
 ```
-<!-- .element: data-thebe-executable-javascript -->
+<!-- .element: data-thebe-executable-javascript data-language="text/x-javascript" -->
 
 <!--vert-->
 
@@ -137,4 +137,4 @@ what will js do?
 ```javascript
 5 + [1, ] == 51;
 ```
-<!-- .element: data-thebe-executable-javascript -->
+<!-- .element: data-thebe-executable-javascript data-language="text/x-javascript" -->

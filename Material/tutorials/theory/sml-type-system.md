@@ -17,7 +17,7 @@ in SML:
 ```sml
 type record = {x: int, y: real};
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -34,7 +34,7 @@ in SML:
 ```sml
 type product = int * real * string;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -51,7 +51,7 @@ in SML:
 ```sml
 datatype ('a, 'b) union = A of 'a | B of b;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -68,7 +68,7 @@ in SML:
 ```sml
 datatype X = X of int;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -78,7 +78,7 @@ note that `type` creates an alias, it doesn't brand
 type X = int;
 fun (x: X): int = x; (*OK*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -93,7 +93,7 @@ in SML:
 ```sml
 type ('a, 'b) F = 'a -> 'b;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -110,7 +110,7 @@ datatype 'a list =
     nil
   | :: of 'a * 'a list;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -131,4 +131,4 @@ and 'a bar = Bar of 'a foo | None;
 
 Foo (1, Bar (Foo (2, None)));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->

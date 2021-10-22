@@ -11,7 +11,7 @@ a function of two arguments can be treated as an infix operator
 ```sml
 fun d (x,y) = Math.sqrt (x*x + y*y);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 convert to an infix operator
 
@@ -22,7 +22,7 @@ infix d;
 
 1.0 d 3.0 d 2.0 d 5.0;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -41,7 +41,7 @@ op d;
 op d(1.0,3.0);
 (*val it = 3.16227766017 : real*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -53,7 +53,7 @@ any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expr
 fun prefix (pre, post) = pre ^ post;
 (*val prefix = fn : string * string -> string*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 the curried version
 
@@ -61,7 +61,7 @@ the curried version
 fun prefix pre = fn post => pre^post;
 (*val prefix = fn : string -> string -> string*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -86,7 +86,7 @@ prefix "Dr. ";
 it "Tomer";
 (*val it = "Dr. Tomer" : string*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 as always, functions are values
 
@@ -97,7 +97,7 @@ val doctorify = prefix "Dr. ";
 doctorify "Jackal";
 (*val it = "Dr. Jackal" : string*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -106,14 +106,14 @@ doctorify "Jackal";
 ```sml
 fun prefix pre post = pre ^ post;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 is equivalent to
 
 ```sml
 fun prefix pre = fn post => pre ^ post;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -126,7 +126,7 @@ fun prefix pre = fn post => pre ^ post;
 prefix "Dr. " "Tomer";
 (*val it = "Dr. Tomer" : string*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 the rule is:
 * a function call `F E1 E2 ... En`
@@ -148,7 +148,7 @@ add5 2;
 fun mul5 y = op* (5, y);
 (*val mul5 = fn: int -> int*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -164,7 +164,7 @@ val add5 = something5 op+;
 fun intsec x (f:int*int->int) y = f(x,y);
 (*val intsec = fn : int -> (int * int -> int) -> int -> int*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -185,7 +185,7 @@ val times_4 = times 4;
 times_4 8;
 (*val it = 32 : int*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -208,7 +208,7 @@ it (16.0);
 it #"1";
 (*val it = 1 : int*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -221,7 +221,7 @@ what will be printed?
 ```sml
 fun f1 a b = f1 a b;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -230,7 +230,7 @@ what will be printed?
 ```sml
 fun f2 g x = g (f2 g) x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -239,7 +239,7 @@ what will be printed?
 ```sml
 fun f3 x y z = (x, x(y), y(z));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -248,4 +248,4 @@ what will be printed?
 ```sml
 fun f4 f = f f4;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->

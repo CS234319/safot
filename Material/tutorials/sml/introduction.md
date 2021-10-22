@@ -24,7 +24,7 @@ val it = 10 : int
 ```sml
 2 + 2;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -37,7 +37,7 @@ naming values
 ```sml
 val seconds = 60;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -50,7 +50,7 @@ val hours = 24;
 
 seconds * minutes * hours;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -63,7 +63,7 @@ it div 24;
 
 val secs_in_hour = it;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -107,7 +107,7 @@ h''3_H
 ```sml
 val +-+-+ = 1415;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -178,7 +178,7 @@ literals are written in double quotes
 ```sml
 "ML is the best";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 special characters `\n`, `\t`, `\"`, `\\`
 
@@ -189,7 +189,7 @@ concatenation
 ```sml
 "Standard" ^ " ML";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -200,7 +200,7 @@ comparison
 
 "zzz" > "aaa";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -209,7 +209,7 @@ comparison
 ```sml
 size "SML";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -224,7 +224,7 @@ chars are distinguished from strings of length 1 by `#`
 
 #"0";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -235,7 +235,7 @@ str #"0";
 
 String.sub("hello", 0);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -246,7 +246,7 @@ ord #"0";
 
 chr it;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -261,7 +261,7 @@ false;
 
 2 + 2 = 4;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -282,7 +282,7 @@ val a = (1.5, 6.8);
 
 ("str",1,true,(#"0",0.1));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -293,7 +293,7 @@ val a = (1.5, 6.8);
     ```sml
     val me = { name="Ofir", age=30 };
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * type lists each field as `label : type`
 * enclosed in braces `{...}`
@@ -305,14 +305,14 @@ val a = (1.5, 6.8);
     ```sml
     #name me;
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * tuples **can be seen as** records with numbers as implicit field labels
 
     ```sml
     #2 ("one", "two", "three");
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * note that the numbering starts with 1
 
@@ -327,7 +327,7 @@ a list is a finite sequence of elements
 ["a", "list"];
 [];
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -336,7 +336,7 @@ elements may appear more than once
 ```sml
 [3,4,3];
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -346,7 +346,7 @@ elements may have any type but all elements must have the same type
 [(1, "one"), (2, "two")] : (int*string) list;
 [[3.1], [], [5.7, ~0.6]] : (real list) list;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -355,7 +355,7 @@ elements may have any type but all elements must have the same type
 ```sml
 fun sq(x: int) = x*x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * keyword `fun` starts the function declaration
 * `sq` is the function name
@@ -376,21 +376,21 @@ fun sq(x: int) = x*x;
     ```sml
     (sq 3);
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * when a function is called the argument is evaluated and then passed to the function
 
     ```sml
     sq (sq 3);
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * the parentheses are optional
 
     ```sml
     sq 3;
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -399,7 +399,7 @@ fun sq(x: int) = x*x;
     ```sml
     fun sq x:int = x*x;
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -418,7 +418,7 @@ lengthvec a;
 
 lengthvec (5.0, 12.0);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -431,7 +431,7 @@ fn x:int => x*x;
 
 it 3;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -441,7 +441,7 @@ the following declarations are identical
 fun sq x:int = x*x;
 val sq = fn x:int => x*x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -453,7 +453,7 @@ val sq = fn x:int => x*x;
     fun inttwice(f: (int->int)) =
         fn x => f (f x);
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * the arrow is right associative so the type of `inttwice` is equivalent to:
 
@@ -470,7 +470,7 @@ inttwice (fn x => x*x);
 
 it 3;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -484,7 +484,7 @@ it 3;
         if n=0 then p else facti (n-1, n*p);
     (*val facti = fn : int * int -> int*)
     ```
-    <!-- .element: data-thebe-executable-sml -->
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
   * literals `0` and `1` have type `int`.</span>
   * therefore `n=0` and `n-1` involve integers so `n` has type `int`</span>
@@ -508,35 +508,35 @@ what will be printed for the following definitions of `min`?
 ```sml
 fun min(x, y) = if x < y then x else y;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```sml
 fun min(x:real,y) = if x < y then x else y;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```sml
 fun min(x:string,y) = if x < y then x else y;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```sml
 fun min(x,y):real = if x < y then x else y;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```sml
 fun min(x,y) = if x < y then x:real else y;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -551,7 +551,7 @@ but you can't use type annotations
 ```sml
 ...
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -581,7 +581,7 @@ pairself 4.0;
 
 fun pair (x,y) = (y, x);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -594,7 +594,7 @@ what will be printed?
 ```sml
 fun twice f = fn x => f (f x);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -603,7 +603,7 @@ what will be printed?
 ```sml
 fun ident x = x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -614,7 +614,7 @@ fun twice f = fn x => f (f x);
 twice (fn x => x * x);
 it(2);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -625,14 +625,14 @@ fun twice f = fn x => f (f x);
 fun ident x = x;
 twice ident;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 you usually may ignore it. or use a workaround:
 
 ```sml
 fn x => (twice ident) (x);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 

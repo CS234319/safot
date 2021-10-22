@@ -22,7 +22,7 @@ fun head (Cons (x, _)) = x;
 
 fun tail (Cons (_, xf)) = xf();
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ML evaluates `E` in `Cons(x,E)`, so to obtain laziness we must write `Cons(x, fn()=>E)`
 
@@ -35,12 +35,12 @@ fun from k = Cons (k, fn() => from (k+1));
 
 from 1;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```
 tail it;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -49,17 +49,17 @@ fun squares Nil = Nil
   | squares (Cons (x, xf)) =
         Cons (x*x, fn() => squares (xf()));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 squares (from 1);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 head (tail (tail (tail (tail it))));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -75,7 +75,7 @@ implement `addq` that takes two integer sequences and adds them element-wise
 ...
 (*val addq = fn : int seq * int seq -> int seq*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -84,7 +84,7 @@ fun addq (Cons (x, xf), Cons (y, yf)) =
         Cons (x+y, fn() => addq (xf(), yf()))
   | addq _ = Nil;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -96,7 +96,7 @@ implement `appendq` that appends two sequences
 ...
 (*val appendq = fn : 'a seq * 'a seq -> 'a seq*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -105,7 +105,7 @@ fun appendq (Nil, yq) = yq
   | appendq (Cons(x, xf), yq) =
         Cons (x, fn() => appendq (xf(), yq));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 what would `appendq(xq,yq)` be if `xq` is infinite?
 
@@ -119,7 +119,7 @@ implement `mapq` that applies a function on the elements of a sequence
 ...
 (*val mapq = fn : ('a -> 'b) -> 'a seq -> 'b seq*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -128,7 +128,7 @@ fun mapq f Nil           = Nil
   | mapq f (Cons (x,xf)) =
         Cons (f(x), fn()=>mapq f (xf()));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -140,7 +140,7 @@ implement `filterq` that filters a sequence based on a predicate
 ...
 (*val filterq = fn : ('a -> bool) -> 'a seq -> 'a seq*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -151,7 +151,7 @@ fun filterq pred Nil = Nil
         then Cons (x, fn()=>filterq pred (xf()))
         else filterq pred (xf());
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -163,7 +163,7 @@ implement `interleaveq` that interleaves two sequences
 ...
 (*val interleaveq = fn : 'a seq * 'a seq -> 'a seq*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -172,4 +172,4 @@ fun interleaving (Nil, yq)       = yq
   | interleaving (Cons(x,xf),yq) =
         Cons (x, fn()=>interleaving (yq, xf()));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->

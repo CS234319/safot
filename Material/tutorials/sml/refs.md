@@ -11,7 +11,7 @@ use `ref` to create a single **mutable** cell
 ```sml
 val x = ref 4;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -21,7 +21,7 @@ val x = ref 4;
 ref;
 (*val it = fn : 'a -> 'a ref*)
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -32,14 +32,14 @@ val x = ref 0;
 x := 15;
 x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 note that `:=` returns `()`
 
 ```sml
 val := = fn : 'a ref * 'a -> unit
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -49,7 +49,7 @@ use `!` to get the the cell's contents
 val x = ref 8;
 !x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 val ! = fn : 'a ref -> 'a
@@ -65,7 +65,7 @@ val ! = fn : 'a ref -> 'a
 fun swap x y =
     (x := !x + !y ; y := !x - !y ; x := !x - !y);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -75,7 +75,7 @@ an expression created by `;` evaluates to the value of the last expression
 val x = ref 42;
 (x := !x * !x; !x);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -101,7 +101,7 @@ fun memoize (memo: (''a, 'b) memoizer) f x =
         end
     );
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -118,7 +118,7 @@ fun fib 0 = 0
     end
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -127,7 +127,7 @@ let's compare
 ```sml
 fib 43;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 fun fib_exp 0 = 0
@@ -135,4 +135,4 @@ fun fib_exp 0 = 0
   | fib_exp n = (fib_exp (n-1)) + (fib_exp (n-2));
 fib_exp 43;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->

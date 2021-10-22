@@ -15,7 +15,7 @@ fun area r = pi * r * r;
 
 area 2.0;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -28,7 +28,7 @@ area 2.0;
 ```sml
 val pi = "pi";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -37,14 +37,14 @@ if a name is declared again the new meaning is adopted afterwards
 ```sml
 pi;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 but does not affect existing uses of the name
 
 ```sml
 area 1.0;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -67,7 +67,7 @@ we can define a function using val
 ```sml
 val sq = fn x => x * x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 what about recursive functions?
 
@@ -82,7 +82,7 @@ val rec f = fn (n) =>
     if n=0 then 1
     else n * f(n-1);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -94,7 +94,7 @@ patterns can be used to simplify function definitions
 fun factorial 0 = 1
   | factorial n = n * factorial(n-1);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 when the function is called, the first pattern to match the argument determines which expression on the right hand side will be evaluated
 
@@ -118,27 +118,27 @@ fun foo (x,1) = x
   | foo (1,_) = 0
   | foo _ = ~1;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 foo(3,1);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 foo(1,3);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 foo(2,2);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 foo(1,1);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -155,7 +155,7 @@ case 7 of
   | 2 => "two"
   | n => if n<10 then "lots" else "lots &lots";
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 * if `P1` is the first to match then the result is `E1`
 * equivalent to an expression that defines a function by cases and applies it to `E`
@@ -177,7 +177,7 @@ fun (x1,y1) ++ (x2,y2) : vec = (x1+x2,y1+y2);
 
 (3.6,0.9) ++ (0.1,0.2) ++ (20.0,30.0);
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -200,7 +200,7 @@ fun fraction(n,d)=
     (n div com, d div com)
   end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -214,7 +214,7 @@ in
   x * y
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -223,7 +223,7 @@ end;
 ```sml
 fun fraction (n,d) = (fn c => (n div c, d div c))(gcd(n,d));
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -245,7 +245,7 @@ fun sqroot a =
     findroot 1.0 
   end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -264,7 +264,7 @@ in
   fun fib n = itfib(n, 0, 1)
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 (`D1` is visible only within `D2`)
 
@@ -281,7 +281,7 @@ in
   itfib(n, 0, 1)
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 local
@@ -292,7 +292,7 @@ in
   fun fib n = itfib(n, 0, 1)
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -305,7 +305,7 @@ in
   n2 * n2
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -319,7 +319,7 @@ in
   val z = x * x;
 end;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -337,7 +337,7 @@ val x = 3;
 val y = 5;
 val x = y and y = x;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -355,4 +355,4 @@ fun sum (d, one) =
     then sum(d-2.0,~one) + one/d
     else 0.0;
 ```
-<!-- .element: data-thebe-executable-sml -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
