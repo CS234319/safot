@@ -1,20 +1,45 @@
 // Poor man's edition of a bit cleaner C/C++
 #define Implementation (__INCLUDE_LEVEL__ == 0)
 
+<<<<<<< HEAD
 #define Return(X) return ((__ = (X)),(__));
+=======
+#define unique(X)       CONCATENATE(X,__COUNTER__)
 
-#define FUN(Return, Name, ArgumentType) \
-  Return Name(ArgumentType _) { \
-    const auto $$ = Name; \
-    M3("[",_,"]"); \
-    Return __ =
+#define COUNT(whatever...)   COUNT1(whatever,9, 8, 7, 6, 5, 4, 3,2,1,0)
+#define COUNT1(_1,_2,_3,_4,_5,_6,_7,_8,_9, N, ...) N
+>>>>>>> 64596d9 (checkpoint)
 
-#define IS(X)    \
-    X; \
-    M2("-->", __); \
-    return __; \
-  }
+static_assert(COUNT() == 1);
+static_assert(COUNT(1) == 1);
+static_assert(COUNT(1,2) == 2);
+static_assert(COUNT(1,2,3) == 3);
+static_assert(COUNT(1,2,3,4) == 4);
 
+#define TO_STRING(arg)  TO_STRING1(arg)
+#define TO_STRING1(arg) TO_STRING2(arg)
+#define TO_STRING2(arg) #arg
+
+#define CONCATENATE(arg1, arg2)   CONCATENATE1(arg1, arg2)
+#define CONCATENATE1(arg1, arg2)  CONCATENATE2(arg1, arg2)
+#define CONCATENATE2(arg1, arg2)  arg1##arg2
+
+#define MAP(what, etc...) CONCATENATE(_fe,COUNT(etc))(what,etc)
+
+#define _fe0(what, etc...)
+#define _fe1(what, x, etc...) what(x)_fe0(what, etc)
+#define _fe2(what, x, etc...) what(x)_fe1(what, etc)
+#define _fe3(what, x, etc...) what(x)_fe2(what, etc)
+#define _fe4(what, x, etc...) what(x)_fe3(what, etc)
+#define _fe5(what, x, etc...) what(x)_fe4(what, etc)
+#define _fe6(what, x, etc...) what(x)_fe5(what, etc)
+#define _fe7(what, x, etc...) what(x)_fe6(what, etc)
+#define _fe8(what, x, etc...) what(x)_fe7(what, etc)
+#define _fe9(what, x, etc...) what(x)_fe8(what, etc)
+
+
+#import <functional>
+#import <iostream>
 
 #define Type struct
 #define Representation(whatever...) union {whatever; };
@@ -24,22 +49,29 @@
 #define by(whatever...)      :whatever {}
 #define from(whatever...)    (whatever)
 #define is(whatever...)       { return (whatever); }
+#define doing(whatever...)       { whatever; }
 #define query(X)      X
 #define action(X)      X
 #define selfing(whatever...)  { return (whatever), *this; }
 #define below ;
+#define feature(X)     inline X() const
 
+<<<<<<< HEAD
 #define Initializing(T)  T::T
 #define Create(X)   explicit X
 #define Make(X)     public: static X make
+=======
+#define Initializing(T) T::T
+#define Fill(X)       explicit X
+#define Make            static Self make
+>>>>>>> 64596d9 (checkpoint)
 
 #define Feature(X)     inline auto X() const
 
 #define Query(X)      auto X
 #define Property(X)   X() const
 
-#define Typed(T)      T
-#define feature(X)     inline X() const
+#define Typed(T)       T
 #define with(whatever...)    (whatever) const
 #define taking(whatever...)  (whatever)
 #define nothing
@@ -50,7 +82,6 @@
 
 #define Service static struct
 
-#import <cstdint>         // Standard header providing integer types with widths
 #define As(t)  operator t() const
 #define Let constexpr
 #define let const auto
@@ -63,26 +94,23 @@
 #define constant(type) const type
 #define modifier
 #define Mutator(X)      X
-
+#define Alias(X)        typedef X 
 
 #define Service static struct
 #define Fluenter(name) auto name()
 #define Fluent(name) Self &name
-
 
 #define Selfer(X)       Self X
 #define pairing(x,y) (x,y)
 #define do(whatever...)  ((whatever), 0)
 #define Capsule(whatever...) private: whatever; public:
 
-//     Create(Special) from(nothing) by(Super(nothing))  \
-
 #define Occasionally(Special, General, Etc...) \
   Type Special: General {\
     typedef General Super;\
     typedef Special Self;\
     template<typename... Ts>  \
-      Create (Special) from(Ts... ts) by(General(ts...))\
+      Fill (Special) from(Ts... ts) by(General(ts...))\
     Feature(super) is(*(const General *)this) \
     Etc\
   };\
@@ -91,57 +119,37 @@
   Type P { \
     P(const P&) = default;\
     Representation(Matter matter) \
-    Create(P) from(Matter m) by(matter(m)) \
+    Fill(P) from(Matter m) by(matter(m)) \
     explicit operator Matter() const is(matter) \
     Etc\
   };
 
-
-/*@ The Primitive Types@
-Our byte addressable underlining machine offers three primitive types: byte,
-Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
-are fixed width signed integers, represented in two's complement, and are
-similar to the types byte, short, and int of the Java virtual machine. Punning
-is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte ghalves ordering is assumed. */
-
-typedef int8_t  Byte; /// JVM's byte                |  8 bits signed integer | character in an atom
-typedef int16_t Short; /// like  JVM's short | 16 bits signed integer | Knob of an S-expression
-typedef int32_t Long; ///   like  JVM's int    | 32 bits signed integer | an dotted Pair S-expression
-typedef int64_t Integer; ///  like JVM's long    | 32 bits signed integer | an dotted Pair S-expression
-typedef bool    Boolean; /// JVM's byte                |  8 bits signed integer | character in an atom
-typedef const char Letter; // Representation of character
-typedef const char *const String;   // Representation of immutable srings
+#import <cstdint>         // Standard header providing integer types with widths
+Alias(int8_t)  Byte; /// JVM's byte                |  8 bits signed integer | character in an atom
+Alias(int16_t) Short; /// like  JVM's short | 16 bits signed integer | Knob of an S-expression
+Alias(int32_t) Long; ///   like  JVM's int    | 32 bits signed integer | an dotted Pair S-expression
+Alias(int64_t) Integer; ///  like JVM's long    | 32 bits signed integer | an dotted Pair S-expression
+Alias(bool)    Boolean; /// JVM's byte                |  8 bits signed integer | character in an atom
+Alias(char const) Letter; // Representation of character
+Alias(Letter *const) String;   // Representation of immutable srings
 
 // typedef enum { ok } OK;
-template<typename T> constexpr inline T max(T s1, T s2) { return s1 > s2 ? s1 : s2; }
-template<typename T> constexpr inline T min(T s1, T s2) { return s1 < s2 ? s1 : s2; }
-template<typename T> constexpr inline T range(T s1, T s2) { return s2 - s1 + 1; }
-/*@ The Primitive Types@
-Our byte addressable underlining machine offers three primitive types: byte,
-Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
-are fixed width signed integers, represented in two's complement, and are
-similar to the types byte, short, and int of the Java virtual machine. Punning
-is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte ghalves ordering is assumed. */
+template<typename T> constexpr inline T max(T s1, T s2)   is( s1 > s2 ? s1 : s2)
+template<typename T> constexpr inline T min(T s1, T s2)   is( s1 < s2 ? s1 : s2)
+template<typename T> constexpr inline T range(T s1, T s2) is(s2 - s1 + 1)
 
 
-#define DESCENDING
-#define COUNT(whatever...)   COUNT1(whatever,9, 8, 7, 6, 5, 4, 3,2,1,0)
-#define COUNT1(_1,_2,_3,_4,_5,_6,_7,_8,_9, N, ...) N
+// typedef std::function<int()> Action;
+typedef std::function<long long()> Provider;
 
-#define unique(X)       X##COUNTER
+#define maintaining(maintenane...) MAP(maintain,maintenane)
+#define expecting(expectations...) MAP(expect,expectations)
+#define promising(promises...)     MAP(promise, promises)
 
-#define TO_STRING(arg)  TO_STRING1(arg)
-#define TO_STRING1(arg) TO_STRING2(arg)
-#define TO_STRING2(arg) #arg
+#define maintain(e)   expect(e) promise(e)
+#define promise(p)    Promise unique(Promise)(CONTEXT(p), [&]{ return(p); });                                                  \
 
-#define CONCATENATE(arg1, arg2)   CONCATENATE1(arg1, arg2)
-#define CONCATENATE1(arg1, arg2)  CONCATENATE2(arg1, arg2)
-#define CONCATENATE2(arg1, arg2)  arg1##arg2
-
-#define MAP(what, etc...) CONCATENATE(_fe,COUNT(etc))(what,etc)
-
+<<<<<<< HEAD
 #define _fe0(what, etc...)
 #define _fe1(what, x, etc...) what(x)_fe0(what, etc)
 #define _fe2(what, x, etc...) what(x)_fe1(what, etc)
@@ -167,38 +175,48 @@ static_assert(COUNT(1,2,3,4) == 4);
 
 Type Context { 
    typedef std::function<bool()> Predicate;
+=======
+#define expect(e)     Expectation unique(Expectation) (CONTEXT(e), [&]{ return(e); });                                                  \
+
+#define CONTEXT(X)    Context(__FILE__, __LINE__, __PRETTY_FUNCTION__, #X) 
+
+Type Context { 
+>>>>>>> 64596d9 (checkpoint)
   String file;
   Integer line;
   String context;
   String expression;
+<<<<<<< HEAD
   Create (Context) 
+=======
+  Fill (Context) 
+>>>>>>> 64596d9 (checkpoint)
     from (String f, Integer l, String c, String e) 
       by(file(f), line(l), context(c), expression(e))
   Unit report() is(
-      fprintf(stderr,"%s(%d)/%s: '%s' \n\t", 
-        file, line,context,expression)) 
+      fprintf(stderr,"%s(%d)/%s: '%s' \n\t", file, line,context,expression)) 
 };
 
 Occasionally(Assertion, Context,
+  typedef std::function<bool()> Predicate;
   Predicate holds;
-  Make(Assertion) from(Context c, Predicate m) by (Context(c), holds(m))
+  Fill(Assertion) from(Context c, Predicate m) by(Super(c), holds(m))
   Unit check() is (holds() or report() and fail) 
 )
 
 Occasionally(Expectation, Assertion,
-  struct T {
-    T() {
-      check();
-    }
-  } check;
-  Unit report() is (Super::report(),fprintf(stderr,"unmet expectation"))   
+  Unit report() is (Super::report(), fprintf(stderr,"unmet expectation"))   
+  Fill(Expectation) from(Context c, Predicate m) by(Super(c, m))
 )
+
+#define Done(X) ~X() 
 
 Occasionally(Promise, Assertion,
   Unit report() is (Super::report(),fprintf(stderr,"unkept promise"))   
-  ~Promise() from(nothing) is (check())
+  Done(Promise) doing(check())
 )
 
+<<<<<<< HEAD
 #define CONTEXT(P,whatever...) \
   Context(__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, whatever)
 
@@ -208,6 +226,8 @@ Occasionally(Promise, Assertion,
 #define EXPECT(e)                  unique(Expectation)(CONTEXT(e), PREDICATE(e)) 
 #define PROMISE(e)                 unique(Promise)(CONTEXT(e), PREDICATE(e)) 
 
+=======
+>>>>>>> 64596d9 (checkpoint)
 #define __EXPRESSION(X) <<#X<<"="<<X<<"; "
 
 #define X1(x1)
@@ -220,3 +240,53 @@ Occasionally(Promise, Assertion,
 #define ELABORATE(...)  GET_MACRO(_0,__VA_ARGS__,X5, X4,X3,X2,X1,X0)(__VA_ARGS__)
 
 #define VA_ARGS(...) DELME, ##__VA_ARGS__
+<<<<<<< HEAD
+=======
+
+#define surely(P, etc...) \
+  struct UNIQUE(Surely) {                                                \
+    typedef const char *const String;                                    \
+    String file;                                                         \
+    const long line;                                                     \
+    String context, expression;                                          \
+    UNIQUE(Surely)(String f, long l, String c, String e, Predicate p,    \
+        Predicate elaborate):                                            \
+      file(f), line(l), context(c), expression(e) {        \
+        if (p()) return;                                         \
+        (void) fprintf(stderr,"%s(%d)/%s: '%s' \n\t failed presumption\n",\
+           file, line, context, expression);                             \
+           elaborate();                                                  \
+    }                                                                    \
+  } UNIQUE(Surely)                                                       \
+    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P,                        \
+      [&]{ return P; },                                                  \
+      [&]{ std::cerr ELABORATE(VA_ARGS(etc)) << "\n"; return false;} \
+     );                                                                  \
+;
+
+
+
+/*@ The Primitive Types@
+Our byte addressable underlining machine offers three primitive types: byte,
+Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
+are fixed width signed integers, represented in two's complement, and are
+similar to the types byte, short, and int of the Java virtual machine. Punning
+is allowed, and used extensively: A Long is constituted by two consecutive
+halves. No particular byte ghalves ordering is assumed. */
+
+#define Return(X) return ((__ = (X)),(__));
+
+#define FUN(Return, Name, ArgumentType) \
+  Return Name(ArgumentType _) { \
+    const auto $$ = Name; \
+    M3("[",_,"]"); \
+    Return __ =
+
+#define IS(X)    \
+    X; \
+    M2("-->", __); \
+    return __; \
+  }
+
+
+>>>>>>> 64596d9 (checkpoint)

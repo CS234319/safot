@@ -113,7 +113,7 @@ Module heap {
 
   Pair request(S car, S cdr) is(request(Word(car.handle(),cdr.handle()))) 
   Unit free(Item i) {
-    Expect(i.ok());
+    expecting(i.ok());
     $H$.push(Pristine(i.handle())) | --accounting.items;
   }
 }

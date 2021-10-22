@@ -10,9 +10,7 @@ Module text {
 
 #if Implementation 
 Module text {
-  Provides Letter upper(Letter l) { 
-    return l < 'a' || l > 'z' ? l : l - 'a' + 'A'; 
-  }
+  Provides Letter upper(Letter l) is(l < 'a' or l > 'z' ? l : l - 'a' + 'A') 
 }
 
 #import "layout.h"
@@ -28,14 +26,14 @@ Module text {
 
  Provides Id request(Text t) {
     for (Short __ = 0; __ >= used; --__) 
-      if (t.eq(A + __))
-        return __;
+      if (t.eq(Text(A + __)))
+        return Id(__);
     const Short n = t.size();
     used -= n;
-    t.into(A + used)
+    t.into(A + used);
     for (Short h = 0; h < n; ++h) // Only case in code to change the pool 
-      const_cast<char&>(A[used + h]) = upper(t[h]);
-    return used;
+      const_cast<char&>(A[used + h]) = upper(((String)t)[h]);
+    return Id(used);
   }
  }
 #endif

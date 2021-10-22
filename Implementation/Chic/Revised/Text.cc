@@ -1,18 +1,16 @@
 #import "chic.h"
 
-Type Text { 
-  Representation (Letter * const capsule) 
-  Initialize (Text) from (Letter *letters) by (capsule(letters))
-  Feature (empty) is (*capsule == '\0')
+Perspective(Text, Letter * const,
+  Feature (empty) is (*matter != '\0')
   Feature (more)  is (not empty())
-  Feature (first) is (*capsule) 
-  Feature (rest)  is (Text(1 + capsule)) 
+  Feature (first) is (*matter) 
+  Feature (rest)  is (Text(1 + matter)) 
   Typed (Short)   feature (size)  below
   Typed (Boolean) query (contains) with (Letter l) below
   Typed (Boolean) query (eq) with (Text t) below
-  Typed (Letter)  action(into) with(Letter x) below
+  Typed (Letter)  action(into) with(String s) below
  // is (s[0] = first() and (empty() or rest().into(s+1)))
-};
+)
 
 #if Implementation 
 Typed (Short) feature (Text::size)  is (empty() ? 0 : 1 + rest().size())

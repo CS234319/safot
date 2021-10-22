@@ -26,8 +26,8 @@ Let array(char) $A_1$  = memory.A + $M_a$;
 Provides constant(Long) $m$;    /// how many bytes are used by the store 
 // Atoms:
 Provides constant(Short) $M_a$;  /// how many atoms are initially available 
-Provides function Short $v_a$(); /// how many chars remain available for allocation 
-Provides function Short $u_a$(); /// how many chars were allocated 
+Provides Short $v_a$(); /// how many chars remain available for allocation 
+Provides Short $u_a$(); /// how many chars were allocated 
 // Pairs
 Provides constant(Short) $M_p$;  /// how many pairs are initially available 
 Provides Short m$_p$;              /// how many are currently available 

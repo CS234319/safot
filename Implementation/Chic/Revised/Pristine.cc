@@ -2,7 +2,7 @@
 #import "Knob.cc"
 Occasionally(Pristine, Knob, 
   using Knob::x;
-  Create(Pristine) from(Short s) by(Super(s)) 
+  Fill(Pristine) from(Short s) by(Super(s)) 
   Property(Pristine prev) below
   Property(Pristine next) below
   Property(Boolean ok) below
@@ -19,15 +19,13 @@ Occasionally(Pristine, Knob,
 // Pristine::Pristine(Short s): Knob(s) {}
 
 Property(Pristine Pristine::prev) { 
-  Expect(!x())
-  Expect(black(s1()))
-  is(Pristine(flip(s1())); 
+  expecting(not x(), black(s1()))
+  is(Pristine(flip(s1()))) 
 }
 
 Property(Pristine Pristine::next) { 
-  Expect(!x())
-  Expect(black(s2()))
-  is(flip(s2())) 
+  expecting(not x(), black(s2()))
+  is(Pristine(flip(s2()))) 
 }
 
 Property(Boolean Pristine::ok) { 
@@ -35,14 +33,14 @@ Property(Boolean Pristine::ok) {
   if (white(s1()) || white(s2())) return false;
   let p = prev().handle(), n = next().handle();
   if (p != $P_x$) {
-    Expect(p >= $P_f$,p) 
-    Expect(p <= $P_t$,p) 
+    expect(p >= $P_f$) 
+    expect(p <= $P_t$) 
     if (p < $P_f$) return false;
     if (p > $P_t$) return false;
   }
   if (n != $P_x$) {
-    Expect(n >= $P_f$,n) 
-    Expect(n <= $P_t$,n) 
+    expect(n >= $P_f$) 
+    expect(n <= $P_t$) 
     if (n < $P_f$) return false;
     if (n > $P_t$) return false;
   }
@@ -50,17 +48,17 @@ Property(Boolean Pristine::ok) {
 }
 
 Pristine& Pristine::prev(Pristine p) { 
-  Expect(!x())
+  expect(not x())
   let s = p.handle();
-  Expect(white(s))
+  expect(white(s))
   s1(flip(s)); 
   return *this;
 }
 
 Pristine& Pristine::next(Pristine p) { 
-  Expect(!x())
+  expect(not x())
   let s = p.handle();
-  Expect(white(s))
+  expect(white(s))
   s2(flip(s)); 
   return *this;
 }

@@ -45,7 +45,7 @@ Property(Boolean Pushdown::empty) {
 } 
 
 Short Pushdown::pop() {
-  Expect(!empty());
+  expecting(!empty());
   let $ = top.head();
   let old = top;
   top = top.rest();
@@ -56,10 +56,9 @@ Short Pushdown::pop() {
 
 
 Pushdown& Pushdown::push(Short s) { 
-  Expect(white(s));
-  Keep(top.ok());
-  Promise(!top.x());
-  Promise(top.head() == s);
+  expecting(white(s));
+  maintaining(top.ok());
+  promising(!top.x(), Promise(top.head() == s);
   ++size | do(top = fresh(s, top.handle())); 
   return *this; 
 }
@@ -76,30 +75,23 @@ Pushdown& Pushdown::clear() {
 }
 
 Short Pushdown::peep() const {
-  Expect(!empty());
+  expecting(!empty());
   return top.head();
 }
 
 Short Pushdown::peep(Short depth) const {
-  Expect(!empty());
-  Expect(depth <= size);
-  Expect(depth >= 0);
-  Expect(!top.x());
+  expecting(!empty(), depth <= size, depth >= 0, !top.x());
   for (auto i = top; ; i = i.rest(), --depth) {
-    Expect(i.ok());
-    Expect(!i.x());
+    expecting(i.ok(), (!i.x());
     if (depth == 0)
       return i.head();
   }
 }
 
 void Pushdown::poke(Short depth, Short value) {
-  Expect(!empty());
-  Expect(depth < size);
-  Expect(depth >= 0);
+  expecting(!empty(), depth < size, depth >= 0);
   for (auto i = top; ; i = i.rest(), --depth) {
-    Expect(i.ok());
-    Expect(!i.x());
+    expecting(i.ok(), !i.x());
     if (depth == 0) {
       i.head(value);
       return;

@@ -3,8 +3,8 @@
 Occasionally(S, Handle, 
   using Super::handle;
   template<typename T> S(T t) by (Super(t))
-  Create(S) from(S,S) below 
-  Create(S) from(Text) below
+  Fill(S) from(S,S) below 
+  Fill(S) from(Text) below
 
   Feature(atom) is(handle() <= 0) 
   Feature(compound) is(not atom())
@@ -29,6 +29,6 @@ Property(S S::cdr)  is(word().s2)
 
 #import "heap.cc"
 #import "text.cc"
-Create(S::S) from(S s1, S s2) by(S(heap::request(s1, s2))) 
-Create(S::S) from(Text t) by(S(text::request(t))) 
+Fill(S::S) from(S s1, S s2) by(S(heap::request(s1, s2))) 
+Fill(S::S) from(Text t) by(S(text::request(t))) 
 #endif
