@@ -1,4 +1,4 @@
-#import "S.h"
+#import "S.cc"
 
 extern bool die(S s);
 extern bool die(Pair p);

@@ -1,7 +1,7 @@
 #import "Pushdown.cc"
 #import "Pristine.cc"
 #import "heap.cc"
-#import "accounting.h"
+#import "accounting.cc"
 
 #import "Testee.h"
 

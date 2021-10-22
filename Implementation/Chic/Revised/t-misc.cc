@@ -3,7 +3,7 @@
 #import "Word.cc"
 #import "Knob.cc"
 #import "Pristine.cc"
-#import "Account.h"
+#import "Account.cc"
 #import "Handle.cc"
 #import "layout.h"
 #import "text.cc"

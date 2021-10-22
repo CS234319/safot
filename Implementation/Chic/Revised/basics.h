@@ -1,5 +1,5 @@
 /* A set of utility functions which make it possible to write the engine without nitty gritty details */
-#import "S.h"
+#import "S.cc"
 
 extern const S __0, __1, __2, __3, __00, __12, __123;
 inline bool exists(S x, S xs) Is(!xs.null() and (xs.car().eq(x) or exists(x, xs.cdr())))

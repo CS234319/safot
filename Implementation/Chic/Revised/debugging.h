@@ -1,7 +1,7 @@
 // #import "basics.h"
 #import "dump.h"
 #import "parser.h"
-#import "S.h"
+#import "S.cc"
 #import "Pushdown.cc"
 
 #import <cstring>

@@ -1,4 +1,4 @@
-#import "S.h"
+#import "S.cc"
 #import <iostream>
 /* Quick hacks for dumping; DALUT SOREFET; we do a lot of dumps for debugging,
  * no debugger in this project */

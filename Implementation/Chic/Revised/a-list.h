@@ -1,4 +1,4 @@
-#import "S.h"
+#import "S.cc"
 
 /* Get the alist */
 namespace Engine {

@@ -2,7 +2,7 @@
 Type Text below
 Type Word below
 Perspective(Handle, Short, 
-  Feature(handle) is(matter)
+  Feature(handle) is(inner)
   Fill(Handle) from(nothing) below 
   Property(Boolean ok) below
   Property(Word& cons) below
@@ -13,8 +13,8 @@ Perspective(Handle, Short,
 #import "Word.cc"
 #import "Text.cc"
 #import "layout.h"
-Initializing(Handle) from(nothing) by (Handle($X_x$))
-Property(Boolean Handle::ok)  is(matter >= $X_f$ and matter <= $X_t$)
+Filling(Handle) from(nothing) by (Handle($X_x$))
+Property(Boolean Handle::ok)  is(inner >= $X_f$ and inner <= $X_t$)
 int f() {
   int i;
   Handle h;

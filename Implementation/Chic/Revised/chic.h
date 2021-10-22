@@ -57,11 +57,15 @@ static_assert(COUNT(1,2,3,4) == 4);
 #define feature(X)     inline X() const
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define Initializing(T)  T::T
 #define Create(X)   explicit X
 #define Make(X)     public: static X make
 =======
 #define Initializing(T) T::T
+=======
+#define Filling(T)    T::T
+>>>>>>> a5d5e07 (checkpoint)
 #define Fill(X)       explicit X
 #define Make            static Self make
 >>>>>>> 64596d9 (checkpoint)
@@ -115,12 +119,12 @@ static_assert(COUNT(1,2,3,4) == 4);
     Etc\
   };\
 
-#define Perspective(P, Matter, Etc...) \
+#define Perspective(P, Inner, Etc...) \
   Type P { \
     P(const P&) = default;\
-    Representation(Matter matter) \
-    Fill(P) from(Matter m) by(matter(m)) \
-    explicit operator Matter() const is(matter) \
+    Representation(Inner inner) \
+    Fill(P) from(Inner m) by(inner(m)) \
+    explicit operator Inner() const is(inner) \
     Etc\
   };
 
@@ -147,8 +151,9 @@ typedef std::function<long long()> Provider;
 #define promising(promises...)     MAP(promise, promises)
 
 #define maintain(e)   expect(e) promise(e)
-#define promise(p)    Promise unique(Promise)(CONTEXT(p), [&]{ return(p); });                                                  \
+#define promise(p)    Promise unique(Promise) from (CONTEXT(p), PREDICATE(p));
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #define _fe0(what, etc...)
 #define _fe1(what, x, etc...) what(x)_fe0(what, etc)
@@ -177,9 +182,15 @@ Type Context {
    typedef std::function<bool()> Predicate;
 =======
 #define expect(e)     Expectation unique(Expectation) (CONTEXT(e), [&]{ return(e); });                                                  \
+=======
+#define expect(e)     Expectation unique(Expectation) from (CONTEXT(e), PREDICATE(e));
+>>>>>>> a5d5e07 (checkpoint)
 
 #define CONTEXT(X)    Context(__FILE__, __LINE__, __PRETTY_FUNCTION__, #X) 
+#define PREDICATE(X)  Predicate([&]{ return(X); }) 
 
+
+  typedef std::function<bool()> Predicate;
 Type Context { 
 >>>>>>> 64596d9 (checkpoint)
   String file;
@@ -197,11 +208,30 @@ Type Context {
       fprintf(stderr,"%s(%d)/%s: '%s' \n\t", file, line,context,expression)) 
 };
 
+#define Occasionally(Special, General, Etc...) \
+  Type Special: General {\
+    typedef General Super;\
+    typedef Special Self;\
+    template<typename... Ts>  \
+      Fill (Special) from(Ts... ts) by(General(ts...))\
+    Feature(super) is(*(const General *)this) \
+    Etc\
+  };\
+
+#define Perspective(P, Inner, Etc...) \
+  Type P { \
+    P(const P&) = default;\
+    Representation(Inner inner) \
+    Fill(P) from(Inner i) by(inner(i)) \
+    As(Inner) is(inner) \
+    Etc\
+  };
+
+
 Occasionally(Assertion, Context,
-  typedef std::function<bool()> Predicate;
   Predicate holds;
-  Fill(Assertion) from(Context c, Predicate m) by(Super(c), holds(m))
   Unit check() is (holds() or report() and fail) 
+  Fill(Assertion) from(const Context& c, const Predicate& m) by(Super(c), holds(m))
 )
 
 Occasionally(Expectation, Assertion,

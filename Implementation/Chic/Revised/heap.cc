@@ -17,9 +17,12 @@ Module heap {
   Provides Knob crude() below 
 }
 
+Handle -> {Pair, 
+Knob -> {Item,  Prisitine, } 
+
 
 #if Implementation
-#import "accounting.h"
+#import "accounting.cc"
 #import "Item.cc"
 #import "Knob.cc"
 #import "layout.h"
@@ -34,7 +37,7 @@ Service {
   auto empty() { return first.x(); } 
   Knob pop() {
     not first.x() or panic();  
-    Surely(first.prev().x());
+    expecting(first.prev().x());
     accounting.pop();
     let pop = first;
     first = first.next();
@@ -48,7 +51,7 @@ Service {
     first = p;
   }
   Unit pick(Pristine p) {
-    Surely(p.ok());
+    expecting(p.ok());
     accounting.pick();
     auto prev = p.prev(), next = p.next();
     if (!prev.x()) prev.next(next); 
@@ -70,8 +73,6 @@ Service {
     }
 } $H$;
 
-
- 
 static inline auto reuse(Short s) { accounting.reuse(); is(Pair(s))  }
 
 static inline auto hit(Word w, Short s) {  
@@ -108,7 +109,7 @@ Module heap {
     expecting(white(s1), white(s2), s2 == $P_x$ or s2 >= $P_f$ and s2 <= $P_t$)
     if ($H$.empty()) throw __LINE__; 
     ++accounting.items;
-    return $H$.pop().Item().head(s1).rest(s2);
+    return Item($H$.pop()).head(s1).rest(s2);
   }
 
   Pair request(S car, S cdr) is(request(Word(car.handle(),cdr.handle()))) 

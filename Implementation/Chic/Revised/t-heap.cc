@@ -5,7 +5,7 @@
 #import "Pristine.cc"
 #import "Short.h"
 #import "Pair.cc"
-#import "S.h"
+#import "S.cc"
 
 #import "corrupted.h"
 
@@ -151,7 +151,7 @@ TEST(Accounting, reset) {
   EXPECT_ZZ(accounting.request); 
   EXPECT_ZZ(accounting.reuse); 
   EXPECT_ZZ(accounting.provide); 
-  EXPECT_ZZ(accounting.hit); 
+  EXPECT_ZZ(accounting.ccit); 
   EXPECT_ZZ(accounting.miss); 
 }
 
@@ -187,7 +187,7 @@ TEST(Accounting, push) {
   EXPECT_ZZ(accounting.request); 
   EXPECT_ZZ(accounting.reuse); 
   EXPECT_ZZ(accounting.provide); 
-  EXPECT_ZZ(accounting.hit); 
+  EXPECT_ZZ(accounting.ccit); 
   EXPECT_ZZ(accounting.miss); 
 }
 

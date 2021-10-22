@@ -1,4 +1,4 @@
-#include "S.h"
+#include "S.cc"
 #undef NULL
 extern const S NIL;
 

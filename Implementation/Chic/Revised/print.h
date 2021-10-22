@@ -1,4 +1,4 @@
-#import "S.h"
+#import "S.cc"
 /** Print some text */ extern int print(Text);
 /** Print an S expression */ extern int print(S);
 /** Print a newline */ inline int println() { print("\n"); }

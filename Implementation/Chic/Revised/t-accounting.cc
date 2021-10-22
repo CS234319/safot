@@ -1,4 +1,4 @@
-#import "accounting.h"
+#import "accounting.cc"
 #import "Testee.h"
 
 TEST(accounting, init) {

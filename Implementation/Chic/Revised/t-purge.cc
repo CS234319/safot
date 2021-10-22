@@ -1,7 +1,7 @@
 #import "purge.h"
 #import "heap.cc"
 #import "corrupted.h"
-#import "accounting.h"
+#import "accounting.cc"
 #import "Short.h"
 
 #import "Testee.h"
@@ -278,7 +278,7 @@ TEST(Purge, sanity_t2a) {
 
   EXPECT_ZZ(accounting.allocate);
   EXPECT_ZZ(accounting.collect);
-  EXPECT_ZZ(accounting.hit);
+  EXPECT_ZZ(accounting.ccit);
   EXPECT_ZZ(accounting.items);
   EXPECT_ZZ(accounting.leave);
   EXPECT_ZZ(accounting.live);
@@ -299,7 +299,7 @@ TEST(Purge, sanity_t2a) {
   auto t1 = request(-2,-3);
 
   EXPECT_EQ(accounting.allocate, 1);
-  EXPECT_EQ(accounting.hit, 1);
+  EXPECT_EQ(accounting.ccit, 1);
   EXPECT_EQ(accounting.live, 1);
   EXPECT_EQ(accounting.pairs, 1);
   EXPECT_EQ(accounting.pick, 1);
@@ -321,7 +321,7 @@ TEST(Purge, sanity_t2a) {
   request(-2,-3); // Repeat the previous request
 
   EXPECT_EQ(accounting.allocate, 1);
-  EXPECT_EQ(accounting.hit, 1);
+  EXPECT_EQ(accounting.ccit, 1);
   EXPECT_EQ(accounting.live, 1);
   EXPECT_EQ(accounting.pairs, 1);
   EXPECT_EQ(accounting.pick, 1);
@@ -343,7 +343,7 @@ TEST(Purge, sanity_t2a) {
   auto t2 = request(t1.handle(),-4);
 
   EXPECT_EQ(accounting.allocate, 2);
-  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.ccit, 2);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_EQ(accounting.pairs, 2);
   EXPECT_EQ(accounting.pick, 2);
@@ -366,7 +366,7 @@ TEST(Purge, sanity_t2a) {
   purge.preserving(t2);
 
   EXPECT_EQ(accounting.allocate, 2);
-  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.ccit, 2);
   EXPECT_EQ(accounting.leave,2);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_EQ(accounting.pairs, 2);
@@ -388,7 +388,7 @@ TEST(Purge, sanity_t2a) {
   purge.preserving(t2);
 
   EXPECT_EQ(accounting.allocate, 2);
-  EXPECT_EQ(accounting.hit, 2);
+  EXPECT_EQ(accounting.ccit, 2);
   EXPECT_EQ(accounting.leave,4);
   EXPECT_EQ(accounting.live, 2);
   EXPECT_EQ(accounting.pairs, 2);

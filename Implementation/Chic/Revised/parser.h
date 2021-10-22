@@ -1,5 +1,5 @@
 #import "lexer.cc"
-#import "S.h"
+#import "S.cc"
 
 /** An implementation of a simple, single instance hand tailored LL(1) parser.
  * Here is pseudo code describing its services.

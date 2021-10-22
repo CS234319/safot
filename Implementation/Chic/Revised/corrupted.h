@@ -1,7 +1,7 @@
 #import "layout.h"
 
 #import "heap.cc"
-#import "accounting.h"
+#import "accounting.cc"
 
 inline Short length() {
   Short result = 0;
@@ -41,13 +41,15 @@ static struct {
   }
   Boolean pairs() {
     try {
-      Expect(accounting.pairs >= 0);
-      Expect(accounting.pairs  <= $P_n$);
-      Expect(accounting.reuse  >= 0);
-      Expect(accounting.reuse  >= 0);
-      Expect(accounting.miss >= 0);
-      Expect(accounting.pairs != 0 || accounting.reuse ==0)
-      Expect(accounting.pairs != 0 || accounting.miss ==0)
+      expecting(
+          accounting.pairs >= 0, 
+          accounting.pairs  <= $P_n$, 
+          accounting.reuse  >= 0,
+          accounting.reuse  >= 0, 
+          accounting.miss >= 0, 
+          accounting.pairs != 0 || accounting.reuse ==0, 
+          accounting.pairs != 0 || accounting.miss ==0
+      )
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
         let c = Pair(h);
@@ -55,7 +57,7 @@ static struct {
           continue;
         ++n;
       }
-      Expect(n == accounting.pairs);
+      expecting(n == accounting.pairs)
       return false;
     } catch(...) {
       return true;
@@ -63,23 +65,20 @@ static struct {
   }
   Boolean pristines() {
     try {
-      Expect(accounting.unused >= 0);
-      Expect(accounting.unused <= $P_n$);
+      expecting(accounting.unused >= 0, accounting.unused <= $P_n$)
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let p = Prisitine.cc);
+        let p = Prisitine.hande;
         if (!p.ok()) 
           continue;
         ++n;
-        Expect(n <= accounting.unused);
-        Expect (Pristine(p.next()).x() || Pristine(p.next()).ok());
-        Expect (Pristine(p.prev()).x() || Pristine(p.prev()).ok());
-        if (!Pristine(p.next()).x())  
-          Expect(Pristine(p.next()).ok());
-        if (!Pristine(p.prev()).x())  
-          Expect(Pristine(p.prev()).ok());
+        expecting(
+            n <= accounting.unused, 
+            Pristine(p.next()).x() || Pristine(p.next()).ok(), 
+            Pristine(p.prev()).x() || Pristine(p.prev()).ok()
+        )
       }
-      Expect(n == accounting.unused, n, accounting.unused);
+      expecting(n == accounting.unused, n, accounting.unused);
       return false;
     } catch(...) {
       return true;
@@ -92,10 +91,12 @@ static struct {
         let i = Item(h);
         if (!i.ok()) continue;
         ++n;
-        Expect(Item(i.rest()).x() || Item(i.rest()).ok());
-        Expect(n <= accounting.items);
+        expecting(
+            Item(i.rest()).x() || Item(i.rest()).ok() 
+            n <= accounting.items
+        )
         if (!Item(i.rest()).x())  
-          Expect(Item(i.rest()).ok());
+          expecting(Item(i.rest()).ok());
       }
       return false;;
     } catch(...) {

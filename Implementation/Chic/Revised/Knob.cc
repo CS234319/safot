@@ -48,7 +48,7 @@ Knob Knob::s2(Short  s) { P[handle()].s2 = s; return  *this; }
 
 #include "layout.h"
 
-Initializing(Knob::Knob) from(nothing)   by(Knob($P_x$)) 
+Filling(Knob) from(nothing)   by(Knob($P_x$)) 
 int f() {
   int i;
   Knob h;

@@ -1,10 +1,10 @@
 #import "chic.h"
 
 Perspective(Text, Letter * const,
-  Feature (empty) is (*matter != '\0')
+  Feature (empty) is (*inner != '\0')
   Feature (more)  is (not empty())
-  Feature (first) is (*matter) 
-  Feature (rest)  is (Text(1 + matter)) 
+  Feature (first) is (*inner) 
+  Feature (rest)  is (Text(1 + inner)) 
   Typed (Short)   feature (size)  below
   Typed (Boolean) query (contains) with (Letter l) below
   Typed (Boolean) query (eq) with (Text t) below

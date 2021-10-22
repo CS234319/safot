@@ -17,34 +17,33 @@ Occasionally(Pair, Handle,
   Selfer(leave()) below 
 
   static Boolean ok(Word) below
-  Selfer(s1(Handle)) below 
-  Selfer(s2(Handle)) below 
+  Selfer(s1(Short)) below 
+  Selfer(s2(Short)) below 
 )
 
 #if Implementation
 #import "layout.h" // Do we need all this; Just P and A!
-#import "accounting.h"
+#import "accounting.cc"
 #import "Short.h"
 
 // Properties:
 Property(Boolean Pair::ok)      is(white(s1()) && white(s2()))
-Property(Boolean Pair::seen)    {Expect(white(s2())) is(black(s1())) }
+Property(Boolean Pair::seen)    {expect(white(s2())) is(black(s1())) }
 Property(Boolean Pair::foreign) is(black(s2()))
 
 
-Property(Word& Pair::word)  is(P[capsule])
+Property(Word& Pair::word)  is(P[inner])
 Boolean Pair::ok(Word w) is(white(w.s1) && white(w.s2))
 
 Pair Pair::visit()  { accounting.visit();
-  Expect(not seen()); 
-  Promise(black(s1()));
-  Promise(seen()); 
+  expecting(not seen()); 
+  promising(black(s1()), seen()); 
   return s1(flip(s1())); 
 } 
 
 Pair Pair::leave() { accounting.leave();
-  Expect(seen()); 
-  Promise(not seen()); 
+  expecting(seen()); 
+  promising(not seen()); 
   return s1(flip(s1())); 
 } 
 // Pair::Pair(): Pair($P_x$) {} 

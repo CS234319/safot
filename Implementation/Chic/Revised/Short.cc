@@ -7,7 +7,7 @@ Perspective(Stained, Short,
 )
 #if Implementation 
 #import "layout.h"
-Typed(Short)   feature(Stained::flip) is(matter + (1 << 15))
-Typed(Boolean) feature(Stained::black) is (matter < $X_f$ || matter > $X_t$ + 1)
+Typed(Short)   feature(Stained::flip) is(inner + (1 << 15))
+Typed(Boolean) feature(Stained::black) is (inner < $X_f$ || inner > $X_t$ + 1)
 Typed(Boolean) feature(Stained::white) is (not black()) 
 #endif
