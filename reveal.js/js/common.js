@@ -1,6 +1,13 @@
+// FIXME: slow! calls lots of callbacks to refresh a single cm instance
+// use the `auto_refresh` addon when it becomes available
+CodeMirror.defineOption("autoRefresh", false, function (cm, val) {
+    Reveal.on("slidechanged", event => {
+        cm.refresh();
+    });
+});
+
 function thebe_init(kernel, mode, selector) {
     thebelab.bootstrap({
-        bootstrap: true,
         requestKernel: true,
         outputSelector: '[data-output]',
         kernelOptions: {
@@ -13,25 +20,25 @@ function thebe_init(kernel, mode, selector) {
             }
         },
         selector: `[data-thebe-executable-${selector}]`,
-        mathjaxUrl: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
-        mathjaxConfig: "TeX-AMS_CHTML-full,Safe",
         codeMirrorConfig: {
             mode: mode,
-            theme: "idea"
+            theme: "idea",
+            autoRefresh: true,
         },
-        on_output_change: () => { Reveal.layout(); },
-        on_execute: (cm) => {
-            cm.display.input.blur();
-        },
+        // on_output_change: () => { Reveal.layout(); },
+        // on_execute: (cm) => {
+        //     cm.display.input.blur();
+        // },
     });
 }
 
 const REVEAL_PARAMS = {
     hash: true,
     slideNumber: true,
-    plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ],
+    plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
     keyboard: {
         39: 'next',
         37: 'prev'
     }
 };
+
