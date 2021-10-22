@@ -25,7 +25,7 @@
     "gulp": "^4.0.2",
     "gulp-connect": "^5.7.0",
     "handlebars": "^4.7.7",
-    "revealjs": "hakimel/reveal.js",
+    "reveal.js": "^4.0.2",
     "thebe": "twyair/thebe",
     "yargs": "^17.2.1"
   },
