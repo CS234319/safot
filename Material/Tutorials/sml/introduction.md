@@ -1,8 +1,15 @@
 # Standard ML
+## What's SML? 
+Born 1985. Named Standard ML = Meta Language...
+  - The 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
+  - To makes the user had to interact with LCF
+  - ML invened as an embedded scripting language
+  - Many ad hoc independet implementations, many new ideas
+  - "Standard ML" on 1985 by Robert Milner
+  - 1997: First real standard
+---
 
-## introduction
-
-Role
+## Why SML?
  - Exemplar of fuctional programming
     - Functional = forget about variables
     - Functional = functions are values
@@ -14,18 +21,18 @@ Role
         - Statically typed: all type erors are detected at compile time
 Influenced: Haskell, OCaml, Scala, F#, ...
 ---
-## history
-Born 1985. Named Standard ML = Meta Language...
-  - The 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
-  - To makes the user had to interact with LCF
-  - ML invened as an embedded scripting language
-  - Many ad hoc independet implementations, many new ideas
-  - "Standard ML" on 1985 by Robert Milner
-  - 1997: First real standard
+## More on SML
+
 Main applications:
  - Research
  - Teaching
  - Few industrial applications including algorithmic trading and data base management
+Structure:
+  - Core language
+  - Extensions, e.g., module system
+  - Library
+
+---
 
 ### running
 
