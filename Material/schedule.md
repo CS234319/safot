@@ -2,8 +2,8 @@
 
 ## Week 1 \[24.10-30.10\]
 - **Lecture**
-   1. [Motivation and Paradigms](Lectures) 1.1, 1.2
-   2. [Quick Pascal](?)
+   1. [Motivation and Paradigms](Lectures/introduction.md) 1.1, 1.2
+   2. [Quick Pascal](Lectures/Introduction/pascal.md)
 - **Tutorial**
    1. [ML - Introduction](Tutorials/sml/introduction.md)
    2. [ML - Functions](Tutorials/sml/functions.md)

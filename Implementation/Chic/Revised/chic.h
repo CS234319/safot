@@ -1,7 +1,6 @@
 // Poor man's edition of a bit cleaner C/C++
 #define Implementation (__INCLUDE_LEVEL__ == 0)
 
-
 #define Return(X) return ((__ = (X)),(__));
 
 #define FUN(Return, Name, ArgumentType) \
@@ -31,7 +30,7 @@
 #define below ;
 
 #define Initializing(T)  T::T
-#define Create(X)  explicit X
+#define Create(X)   explicit X
 #define Make(X)     public: static X make
 
 #define Feature(X)     inline auto X() const
@@ -161,18 +160,17 @@ static_assert(COUNT(1,2,3) == 3);
 static_assert(COUNT(1,2,3,4) == 4);
 
 #import <functional>
-#import <iostream>
 
 // typedef std::function<int()> Action;
 // typedef std::function<long long()> Provider;
-//
+// #import <iostream>
 
 Type Context { 
    typedef std::function<bool()> Predicate;
-  Text file;
+  String file;
   Integer line;
-  Text context;
-  Text expression;
+  String context;
+  String expression;
   Create (Context) 
     from (String f, Integer l, String c, String e) 
       by(file(f), line(l), context(c), expression(e))
@@ -201,13 +199,14 @@ Occasionally(Promise, Assertion,
   ~Promise() from(nothing) is (check())
 )
 
-;
-
 #define CONTEXT(P,whatever...) \
   Context(__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, whatever)
 
-#define expecting(expectations...) const Expectation MAP(EXPECT,expectations);
-#define Expect(e, whatever...)     unique(Expectation)(CONTEXT(x,whatever) 
+#define promising(promises...)     MAP(PROMISE, promises)
+#define expecting(expectations...) MAP(EXPECT, expectations)
+
+#define EXPECT(e)                  unique(Expectation)(CONTEXT(e), PREDICATE(e)) 
+#define PROMISE(e)                 unique(Promise)(CONTEXT(e), PREDICATE(e)) 
 
 #define __EXPRESSION(X) <<#X<<"="<<X<<"; "
 
@@ -221,29 +220,3 @@ Occasionally(Promise, Assertion,
 #define ELABORATE(...)  GET_MACRO(_0,__VA_ARGS__,X5, X4,X3,X2,X1,X0)(__VA_ARGS__)
 
 #define VA_ARGS(...) DELME, ##__VA_ARGS__
-
-#define surely(P, etc...) \
-  struct UNIQUE(Surely) {                                                \
-    typedef const char *const String;                                    \
-    String file;                                                         \
-    const long line;                                                     \
-    String context, expression;                                          \
-    UNIQUE(Surely)(String f, long l, String c, String e, Predicate p,    \
-        Predicate elaborate):                                            \
-      file(f), line(l), context(c), expression(e) {        \
-        if (p()) return;                                         \
-        (void) fprintf(stderr,"%s(%d)/%s: '%s' \n\t failed presumption\n",\
-           file, line, context, expression);                             \
-           elaborate();                                                  \
-    }                                                                    \
-  } UNIQUE(Surely)                                                       \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P,                        \
-      [&]{ return P; },                                                  \
-      [&]{ std::cerr ELABORATE(VA_ARGS(etc)) << "\n"; return false;} \
-     );                                                                  \
-;
-
-#define promising(promises...) MAP(promise, expectations)
-
-#define Keep(X) expect(X) promise(X)
-#define xCurrent(X) ([=]{return X;})()
