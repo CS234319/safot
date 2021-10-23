@@ -56,7 +56,8 @@ exhausting a finite generator raises the `StopIteration` exception.
 
 ### how does it work?
 
----
+<!--vert-->
+
 generator functions are calculated *lazily*. the function is first executed after `next` is first applied on the 
 generator object. `yield` is a **sequencer** - after a `yield` statement, execution jumps back to the statement after `next`.
 <!--vert-->
@@ -68,7 +69,7 @@ object have been deleted.
 
 ### send and throw
 
----
+<!--vert-->
 in fact, `yield` is a *command expression*. in addition to its role as a sequencer, it can also be used to receive
 values from outside the generator using `send`
 ```python
@@ -137,7 +138,7 @@ g.throw(ValueError())
 
 ### exercises
 
----
+<!--vert-->
 1. create a generator function returning all prime numbers.
 <!--vert-->
 solution:
