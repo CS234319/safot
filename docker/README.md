@@ -34,7 +34,11 @@ npm run docker-start &
 npm run docker-jupyter-server &
 ```
 
-note: `&` moves the process to the background to handle these jobs use `bg`, `fg`, `jobs` and `CTRL+Z` (see [this](https://www.thegeekdiary.com/understanding-the-job-control-commands-in-linux-bg-fg-and-ctrlz/) for a simple guide)
+### note
+
+* `&` moves a process (job) to the background
+* to handle these jobs use `bg`, `fg`, `jobs` and `CTRL+Z`
+* see [this](https://www.thegeekdiary.com/understanding-the-job-control-commands-in-linux-bg-fg-and-ctrlz/) for a simple guide
 
 ### open slides
 
