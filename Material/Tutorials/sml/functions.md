@@ -136,7 +136,7 @@ the rule is:
 
 ---
 
-### example
+### Example of partial application
 
 applying infix operator only to one operand
 
@@ -154,7 +154,7 @@ fun mul5 y = op* (5, y);
 
 <!--vert-->
 
-now generalize the operator and operand
+Now, generalize the operator and operand
 
 ```sml
 fun something5 (f:int*int->int) y = f (5, y);
@@ -170,7 +170,7 @@ fun intsec x (f:int*int->int) y = f(x,y);
 
 ---
 
-### recursive curried functions
+### Recursive curried functions
 
 ```sml
 fun times n m =
@@ -191,7 +191,7 @@ times_4 8;
 
 ---
 
-### composition operator
+### Function composition operator
 
 ```sml
 infix o;
@@ -214,7 +214,7 @@ it #"1";
 
 ---
 
-### exam questions
+### Questions from exams
 
 <!--vert-->
 
