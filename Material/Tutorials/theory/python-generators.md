@@ -146,12 +146,11 @@ def primes():
     last = 1
     while True:
         last += 1
-        flag = True
         for i in range(2, last):
             if last % i == 0:
-                flag = False
-        if flag:
-                yield last
+                break
+        else:
+            yield last
 ```
 <!-- .element: data-thebe-executable-python -->
 <!--vert-->
