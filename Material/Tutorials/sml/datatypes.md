@@ -9,24 +9,19 @@
   - enumerated types, as found in Pascal, C, and Java, e.g., `enum  { };
   - union types, as found in Pascal variant records and union in C
   - branding, as done by Pascal's TYPE, but difficult to achieve in Java and C.
+
 - Essential: you cannot do lists, trees, etc., without it.
   - Reason: lists must support the distinction between an empty and an non-empty lists, and function next is not type-safe
 
 ---
 
 ### concrete datatypes
-<<<<<<< HEAD
-
-* `datatype` creates new types
-* datatypes can be constructed and taken apart
-=======
 dattatype are a SML type constructor:
   - Given: a list of types and list of tags
   - Produce: a new type out of these
 `datatype` creates new types
 * these datatypes are **concrete** (not abstract)
 * concrete datatypes can be inspected - constructed and taken apart
->>>>>>> 8403f10 (small updates)
 * ML's datatypes have two kinds of values: **atomic** and **composite**
 
 ---
@@ -175,13 +170,9 @@ val Circle radius = line;
 
 ```sml
 val point = point; (*OK*)
-<<<<<<< HEAD
-val point = 5.3; (*Error*)
-=======
 val point = 5.3
 (*Error: pattern and expression in val dec do not agree
 [tycon mismatch]*)
->>>>>>> 8403f10 (small updates)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
