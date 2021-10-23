@@ -2,11 +2,34 @@
 
 ## introduction
 
+Role
+ - Exemplar of fuctional programming
+    - Functional = forget about variables
+    - Functional = functions are values
+    - Functional = higher leverl functions
+    - ...
+ - Exemplar of type safe functional programming
+    - Safe=
+        - Strongly typed: no type error can go undetected
+        - Statically typed: all type erors are detected at compile time
+Influenced: Haskell, OCaml, Scala, F#, ...
 ---
+## history
+Born 1985. Named Standard ML = Meta Language...
+  - The 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
+  - To makes the user had to interact with LCF
+  - ML invened as an embedded scripting language
+  - Many ad hoc independet implementations, many new ideas
+  - "Standard ML" on 1985 by Robert Milner
+  - 1997: First real standard
+Main applications:
+ - Research
+ - Teaching
+ - Few industrial applications including algorithmic trading and data base management
 
 ### running
 
-* REPL (sort of)
+* REPL (sort of; it is not interpreted)
 * first prompt (-) and secondary prompt (=)
 * semicolon terminated
 
