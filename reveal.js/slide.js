@@ -6,7 +6,7 @@ CodeMirror.defineOption("autoRefresh", false, function (cm, val) {
     });
 });
 
-function thebe_init(kernel, mode, selector) {
+function thebe_init(kernel, selector) {
     thebelab.bootstrap({
         requestKernel: true,
         outputSelector: '[data-output]',
@@ -21,15 +21,19 @@ function thebe_init(kernel, mode, selector) {
         },
         selector: `[data-thebe-executable-${selector}]`,
         codeMirrorConfig: {
-            mode: mode,
             theme: "idea",
             autoRefresh: true,
         },
-        // on_output_change: () => { Reveal.layout(); },
-        // on_execute: (cm) => {
-        //     cm.display.input.blur();
-        // },
     });
+}
+
+function thebe_init_all(sub) {
+    if (sub === "sml") {
+        thebe_init("smlnj", "sml");
+    } else if (sub === "theory") {
+        thebe_init("python3", "python");
+        thebe_init("javascript", "javascript");
+    }
 }
 
 const REVEAL_PARAMS = {

@@ -26,7 +26,9 @@
 			</div>
 		</div>
 
-		<script src="../js/common.js"></script>
-		<script src="../js/{{this.sub}}-slide.js"></script>
+		<script src="../slide.js"></script>
+		<script>
+			Reveal.initialize(REVEAL_PARAMS).then(() => thebe_init_all("{{this.sub}}"));
+		</script>
 	</body>
 </html>

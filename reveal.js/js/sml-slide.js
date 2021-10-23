@@ -1,1 +1,0 @@
-Reveal.initialize(REVEAL_PARAMS).then(() => thebe_init("smlnj", "text/x-ocaml", "sml"));
