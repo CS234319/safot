@@ -29,7 +29,7 @@ docker run -p 127.0.0.1:16788:16788 -p 127.0.0.1:16789:16789 -it twyair/safot-re
 run:
 
 ```bash
-cd safot/revealjs
+cd safot/reveal.js
 npm run docker-start &
 npm run docker-jupyter-server &
 ```
