@@ -1,24 +1,32 @@
 #import "chic.h"
-
+/**
+Context	::=	Assertion
+Assertion	::=	Expectation | Assertion
+Handle	::=	Pair | S
+Pair	  ::=	Knob
+Knob	::=	Item | Pristine
+S	::=	Cons | Id
+*/ 
 Type Pair below
 Type Item below
 Type Item below
 Type Pristine below
 Type Knob below
 Type S below
+Type Cons below
+
 
 Module heap {
   Provides const Pristine& heap below
   Provides Item fresh(Short, Short) below 
-  Provides Pair request(S, S) below 
+  Provides Cons request(S, S) below 
   Provides Pristine reset() below
   Provides Unit free(Item) below 
   Provides Unit gobble(Pair) below
   Provides Knob crude() below 
 }
 
-Handle -> {Pair, 
-Knob -> {Item,  Prisitine, } 
+// Handle -> {S -> {Cons, Id},  Pair -> Knob -> {Item,  Pristine,  } }
 
 
 #if Implementation
@@ -28,7 +36,7 @@ Knob -> {Item,  Prisitine, }
 #import "layout.h"
 #import "Pair.cc"
 #import "Pristine.cc"
-#import "S.h"
+#import "S.cc"
 #import "Short.h"
 #import "Word.cc"
 
@@ -36,8 +44,7 @@ Service {
   Pristine first;
   auto empty() { return first.x(); } 
   Knob pop() {
-    not first.x() or panic();  
-    expecting(first.prev().x());
+    expecting(not first.x(), first.prev().x());
     accounting.pop();
     let pop = first;
     first = first.next();
@@ -73,26 +80,25 @@ Service {
     }
 } $H$;
 
-static inline auto reuse(Short s) { accounting.reuse(); is(Pair(s))  }
+#include "Cons.cc"
 
-static inline auto hit(Word w, Short s) {  
+static inline Cons reuse(Short s) { accounting.reuse(); is(Cons(s))  }
+
+static inline Cons hit(Word w, Short s) {  
   accounting.hit();
   $H$.pick(Pristine(s)); 
   P[s].l = w.l; 
-  return Pair(s);
-}
-static inline auto miss(Word w) {  
-  accounting.miss(); is($H$.pop().Pair(w.s1,w.s2))
+  return Cons(s);
 }
 
-static Pair request(Word w, Short s) {
+static inline Cons miss(Word w) is (accounting.miss() then Cons($H$.pop().w(w)))
+
+static Cons request(Word w, Short s) {
   expecting(Pair::ok(w), s != $P_x$, s >= $P_f$, s <= $P_t$)
   return P[s].l == w.l ? reuse(s) : (++accounting.pairs,Pristine(s).ok()) ? hit(w,s) : miss(w);
 }
 
-static Pair request(Word w) {
-  return request(w, w.hash());
-}
+static Cons request(Word w) is(request(w, w.hash()))
   
 Unit collect(Pair p) { accounting.collect(); 
   expecting(p.ok())
@@ -112,7 +118,7 @@ Module heap {
     return Item($H$.pop()).head(s1).rest(s2);
   }
 
-  Pair request(S car, S cdr) is(request(Word(car.handle(),cdr.handle()))) 
+  Cons request(S car, S cdr) is(request(Word(car.handle(),cdr.handle()))) 
   Unit free(Item i) {
     expecting(i.ok());
     $H$.push(Pristine(i.handle())) | --accounting.items;

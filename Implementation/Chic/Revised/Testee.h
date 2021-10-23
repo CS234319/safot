@@ -1,6 +1,6 @@
 #import "basics.h"
 #import "print.h"
-#import "parser.h"
+#import "parser.cc"
 #import <string.h>
 #import "debugging.h"
 #import "except.h"
@@ -33,9 +33,9 @@ namespace Tested {
   inline auto operator == (const S s1, String s2)    { return prepare(s1) == prepare(s2); } 
   inline auto operator == (String s1, S s2)          { return prepare(s1) == prepare(s2); } 
   void reset();
-};
+}
 
-#undef function
+#include "unchic.h"
 #import <gtest/gtest.h>
 
 struct Test: ::testing::Test { Test() {silent();} ~Test(){Tested::reset();} };

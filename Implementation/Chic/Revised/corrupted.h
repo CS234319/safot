@@ -5,18 +5,18 @@
 
 inline Short length() {
   Short result = 0;
-  for (auto h = heap; !h.x();  h = h.next()) 
+  for (auto h = heap::heap; not h.x();  h = h.next()) 
       ++result;
   return result;
 }
 
 static struct {
-  Boolean something() Is(uncounted() || excess() || asymmetric() || cyclic() || weirdos() || pristines() || items() || pairs()); 
-  Boolean uncounted() Is(length() > accounting.unused); 
-  Boolean excess()   Is(length() < accounting.unused); 
+  Boolean something() is(uncounted() or excess() or asymmetric() or cyclic() or weirdos() or pristines() or items() or pairs()); 
+  Boolean uncounted() is(length() > accounting.unused); 
+  Boolean excess()   is(length() < accounting.unused); 
   Boolean cyclic() {
-    if (!heap.x())
-      for (auto h = heap, h2 = heap.next(); !h2.x(); h = h.next()) { 
+    if (!heap::heap.x())
+      for (auto h = heap::heap, h2 = heap::heap.next(); !h2.x(); h = h.next()) { 
         if (h.handle() == h2.handle()) 
           return true;
         if (!h2.x()) h2 = h2.next();
@@ -31,7 +31,7 @@ static struct {
     return false;
   }  
   Boolean asymmetric() {
-    for (auto p = heap; !p.x(); p = p.next()) { 
+    for (auto p = heap::heap; !p.x(); p = p.next()) { 
       if (!p.prev().x() && p.prev().next().handle() != p.handle()) 
         return true;
       if (!p.next().x() && p.next().prev().handle() != p.handle()) 
@@ -47,8 +47,8 @@ static struct {
           accounting.reuse  >= 0,
           accounting.reuse  >= 0, 
           accounting.miss >= 0, 
-          accounting.pairs != 0 || accounting.reuse ==0, 
-          accounting.pairs != 0 || accounting.miss ==0
+          accounting.pairs != 0 or accounting.reuse ==0, 
+          accounting.pairs != 0 or accounting.miss ==0
       )
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
@@ -68,17 +68,17 @@ static struct {
       expecting(accounting.unused >= 0, accounting.unused <= $P_n$)
       short n = 0; 
       for (auto h = $P_f$; h <= $P_t$; ++h) { 
-        let p = Prisitine.hande;
-        if (!p.ok()) 
+        let p = Pristine(h);
+        if (not p.ok()) 
           continue;
         ++n;
         expecting(
             n <= accounting.unused, 
-            Pristine(p.next()).x() || Pristine(p.next()).ok(), 
-            Pristine(p.prev()).x() || Pristine(p.prev()).ok()
+            Pristine(p.next()).x() or Pristine(p.next()).ok(), 
+            Pristine(p.prev()).x() or Pristine(p.prev()).ok()
         )
       }
-      expecting(n == accounting.unused, n, accounting.unused);
+      expecting(n == accounting.unused)
       return false;
     } catch(...) {
       return true;
@@ -92,7 +92,7 @@ static struct {
         if (!i.ok()) continue;
         ++n;
         expecting(
-            Item(i.rest()).x() || Item(i.rest()).ok() 
+            Item(i.rest()).x() or Item(i.rest()).ok(),
             n <= accounting.items
         )
         if (!Item(i.rest()).x())  

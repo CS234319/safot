@@ -1,74 +1,63 @@
-#import "parser.h"
-#import "Pushdown.cc"
+#import "chic.h"
+#import "lexer.cc"
+#import "S.cc"
 
+/** An implementation of a simple, single instance hand tailored LL(1) parser.
+ * Here is pseudo code describing its services.
+ * <pre>
+ * reset();
+ * supply(buffer);
+ * switch (status()) {
+ *  case accept: use result() to retrieve tree 
+ *  case reject: use reset() to supply() some more
+ *  case ready: supply() some more; parser is waiting
+ * }
+ * </pre> */
+namespace parser {
+  extern S result(); // Result of parsing action; undefined if status is not accept 
+  enum Status { ready, accept, reject}; // Should still work on resuming after NL 
+  extern enum Status status();
+  extern void supply(char *input); // What to parse, possibly in installments
+  extern void reset(); // Must call before the first supply
+}
+
+#if Implementation
+
+#import "Pushdown.cc"
+#import "LL.cc"
+namespace parser { 
+  using namespace LL;
+  using LL::Symbol;
+  inline static auto atom(Symbol s) is(s <= 0)
+  Pushdown stack;
+  enum Status current_status = ready;
+}
+
+#import "Pushdown.cc"
 #import "atoms.h"
 #import "lexer.cc"
 #import "text.cc"
+#import "LL.cc"
 
 #import <string.h>
 
-#define DEBUG1  
-
-#ifdef DEBUG 
-#import <sstream>
-#import "dump.h"
-#import "io.h"
-#else 
-#undef D
-#define D(...) 0
-#define M1(...) 0
-#define M2(...) 0
-#define M3(...) 0
-#define M4(...) 0
-#define __(...) 0
-#endif
-
+#define PRODUCTION
+#import "mode.h"
 namespace parser {
-  /* Formal grammar of S expression
-   https://www.cs.princeton.edu/courses/archive/spring20/cos320/LL1/
-
-   // Grammar:
-   // Generated automatically S ::= E // Rule S1 
-   E ::= X T   
-   T ::= . X   
-   T ::= ''    
-   X ::= ' X   
-   X ::= ( L ) 
-   X ::= a     
-   L ::= E L    
-   L ::= ''    
-
-   // AST: 
-   E ::= X T   { $$ = NIL;                } // E1
-   T ::= . X   { $-1 = pair($-1,$$);      } // T1 Tricky 
-   T ::= ''                                 // T2 
-   X ::= ' X   { $$ = $1                  } // X1 Copy
-   X ::= ( L ) { $$ = $1                  } // X2 Copy
-   X ::= a     { $$ = $1                  } // X3 Copy
-   L ::= E L   { $$ = pair($1,$$);        } // L1: Pair 
-   L ::= ''    { $$ = NIL;                } // L2: Fill
-   */
-
-  static Pushdown stack;
-  static enum Status current_status = ready;
-  extern enum Status status() {
-    return current_status;
-  }
+  using LL::Symbol;
+  Symbol token;
+  Symbol top;
+  extern enum Status status() is(current_status)
   S $$(NIL);
-  extern S result() {
-    return $$; 
-  }
+  extern S result() is($$) 
 
   static void parse();
 
   extern void supply(char *buffer) {
     D(buffer);
-    lexer::initialize(buffer);
+    lexer::reset(buffer);
     parse();
   }
- 
-  Symbol token;
-  Symbol top;
 
   void reduce() {
     M4("Reduce",~top,"returns",$$, stack());
@@ -82,7 +71,7 @@ namespace parser {
 
   Short reserve() {
     M2("Reserve",~top, stack());
-    stack.push(T);               // reserved location for result, defaults to atom T 
+    stack.push(LL::T);               // reserved location for result, defaults to atom T 
     M2("--Reserve",stack(), stack.top);
     return stack.top.head();
   }
@@ -122,7 +111,7 @@ namespace parser {
       __("LOOP", $$, ~token, ~top, stack());
       if (atom(token) && top == Atom) {
         M1("Match Atom", ~token,~top);
-        $$ = token;
+        $$ = S(token);
         continue;
       }
       if (token == top) {
@@ -140,11 +129,11 @@ namespace parser {
           }
           break;
         case s1:
-          $$ = stack.pop();
+          $$ = S(stack.pop());
           continue;
         case E:
           if (token == '\'' || token == '(' || atom(token)) {
-            shift(E1, X, T);
+            shift(E1, X, LL::T);
             continue;
           }
           break;
@@ -161,7 +150,7 @@ namespace parser {
             continue;
           }
           if (atom(token)) {
-            $$ = token;
+            $$ = S(token);
             shift(X3,Atom);
             continue;
           }
@@ -176,7 +165,7 @@ namespace parser {
         case X3:
           reduce(); 
           continue;
-        case T:
+        case LL::T:
           if (token == '.') {
             stack.poke(1, $$.handle());
             shift(T1, '.', X);
@@ -227,3 +216,4 @@ namespace parser {
     current_status = accept;
   }
 }
+#endif

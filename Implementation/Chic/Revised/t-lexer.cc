@@ -2,7 +2,7 @@
 #import  "lexer.cc"
 
 static void t(const char *s) {
-  lexer::initialize(strdup(s));
+  lexer::reset(strdup(s));
 }
 
 using lexer::next;
@@ -18,7 +18,7 @@ static const char* nextS() {
 #import  <string.h>
 
 TEST(lexer, ListTokenizationWithGet) {
-  lexer::initialize(strdup("(a)"));
+  lexer::reset(strdup("(a)"));
   Short token = lexer::get();
   EXPECT_EQ(token, '(');
   EXPECT_STREQ("A", nextS());
@@ -28,7 +28,7 @@ TEST(lexer, ListTokenizationWithGet) {
 
 TEST(lexer, ListTokenizationTwice) {
   {
-    lexer::initialize(strdup("(a)"));
+    lexer::reset(strdup("(a)"));
     Short token = lexer::get();
     EXPECT_EQ(token, '(');
     EXPECT_STREQ("A", nextS());
@@ -36,7 +36,7 @@ TEST(lexer, ListTokenizationTwice) {
     EXPECT_EQ($, lexer::get());
   }
   {
-    lexer::initialize(strdup("(a)"));
+    lexer::reset(strdup("(a)"));
     Short token = lexer::get();
     EXPECT_EQ(token, '(');
     EXPECT_STREQ("A", nextS());
@@ -47,7 +47,7 @@ TEST(lexer, ListTokenizationTwice) {
 
 TEST(lexer, ListTokenizationThrice) {
   {
-    lexer::initialize(strdup("(a)"));
+    lexer::reset(strdup("(a)"));
     Short token;
     token = lexer::get();
     EXPECT_EQ(token, '(');
@@ -56,7 +56,7 @@ TEST(lexer, ListTokenizationThrice) {
     EXPECT_EQ($, lexer::get());
   }
   {
-    lexer::initialize(strdup("(a)"));
+    lexer::reset(strdup("(a)"));
     Short token = lexer::get();
     EXPECT_EQ(token, '(');
     EXPECT_STREQ("A", nextS());

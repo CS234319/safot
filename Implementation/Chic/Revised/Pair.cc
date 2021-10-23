@@ -19,6 +19,7 @@ Occasionally(Pair, Handle,
   static Boolean ok(Word) below
   Selfer(s1(Short)) below 
   Selfer(s2(Short)) below 
+  Selfer(w(Word)) below
 )
 
 #if Implementation
@@ -32,7 +33,7 @@ Property(Boolean Pair::seen)    {expect(white(s2())) is(black(s1())) }
 Property(Boolean Pair::foreign) is(black(s2()))
 
 
-Property(Word& Pair::word)  is(P[inner])
+Property(Word& Pair::word)  is(P[_])
 Boolean Pair::ok(Word w) is(white(w.s1) && white(w.s2))
 
 Pair Pair::visit()  { accounting.visit();

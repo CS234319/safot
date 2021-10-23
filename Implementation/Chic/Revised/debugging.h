@@ -1,6 +1,6 @@
 // #import "basics.h"
 #import "dump.h"
-#import "parser.h"
+#import "parser.cc"
 #import "S.cc"
 #import "Pushdown.cc"
 
@@ -20,41 +20,41 @@
 inline std::ostream& operator <<(std::ostream &os, std::ostringstream o) {
   return os << o.str();
 }
+#import "Cons.cc"
 
-inline std::ostream& operator <<(std::ostream &os, Pair p) {
-  return os << "[" << S(p.car()) << "." << S(p.cdr())  << "]";
+inline std::ostream& operator <<(std::ostream &os, Cons c) {
+  return os << "[" << S(c.car()) << "." << S(c.cdr())  << "]";
 }
 
-inline Text operator ~(S s) {
+inline String operator ~(S s) {
  std::ostringstream o;
  o << s;
  return strdup(o.str().c_str());
 }
 
-inline bool isRule(int i) {
-  return i> parser::MIN_RULE && i < parser::MAX_RULE;  
-}
+#import "LL.cc"
+inline bool isRule(int i) is(i> LL::Symbol::MIN_RULE && i < LL::Symbol::MAX_RULE)  
 
-inline Text operator ~(parser::Symbol s) {
-    if (atom(s))
+inline String operator ~(LL::Symbol s) {
+    if (s < 0)
       return S(s).text();
     switch (s) {
-      case parser::$: return "$";
-      case parser::s: return "s";
-      case parser::Atom: return "Atom";
-      case parser::E: return "E";
-      case parser::X: return "X";
-      case parser::T: return "T";
-      case parser::L: return "L";
-      case parser::s1: return "s1:s->E$";
-      case parser::E1: return "E1:E->XT";
-      case parser::X1: return "X1:X->'X";
-      case parser::X2: return "X2:X->(L)";
-      case parser::X3: return "X3:X->Atom";
-      case parser::T1: return "T1:T->.X";
-      case parser::T2: return "T2:T->''";
-      case parser::L1: return "L1:L->EL";
-      case parser::L2: return "L2:L->''";
+      case LL::$: return "$";
+      case LL::s: return "s";
+      case LL::Atom: return "Atom";
+      case LL::E: return "E";
+      case LL::X: return "X";
+      case LL::T: return "T";
+      case LL::L: return "L";
+      case LL::s1: return "s1:s->E$";
+      case LL::E1: return "E1:E->XT";
+      case LL::X1: return "X1:X->'X";
+      case LL::X2: return "X2:X->(L)";
+      case LL::X3: return "X3:X->Atom";
+      case LL::T1: return "T1:T->.X";
+      case LL::T2: return "T2:T->''";
+      case LL::L1: return "L1:L->EL";
+      case LL::L2: return "L2:L->''";
     }
     std::ostringstream o;
     if (s < 127)
@@ -67,27 +67,19 @@ inline Text operator ~(parser::Symbol s) {
     return strdup(o.str().c_str());
   }
 
-inline Short& data(Short h) {
-  return Pairs::get(h).data;
-}
-
-inline Short next(Short h) {
-  return Pairs::get(h).next;
-}
-
-inline Test stack() {
+#if 0
+inline String stack() {
   static std::ostringstream o;
   o.str("");
   o << "[";
   using namespace parser;
-  Symbol::E1 < Symbol::L2;
-  for (Short h = Stack::top; h != 0;) {
-    o << h << "@";
-    o << ~Symbol(data(h));
-    if ((h = next(h)) == 0)
+  for (Item i = parser::stack.top; not i.x(); ) {
+    o << i.head() << "@" << ~LL::Symbol(i.head());
+    if ((i = i.rest()).x()) 
       break;
     o << " ";
   }
   o << "]";
   return strdup(o.str().c_str());
 }
+#endif

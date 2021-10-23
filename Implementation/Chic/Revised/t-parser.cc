@@ -3,11 +3,11 @@
 #import  "Testee.h"
 // #import  "basics.h"
 
-#import "parser.h"
+#import "parser.cc"
 using namespace parser;
 
 static auto t(const char *s) {
-  return lexer::initialize(strdup(s));
+  return lexer::reset(strdup(s));
 }
 
 extern std::ostream& <<(std::ostream &os, S s); 

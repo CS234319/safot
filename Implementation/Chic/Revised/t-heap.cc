@@ -20,30 +20,38 @@ inline std::ostream& operator<<(std::ostream &os, Pristine p) {
   return os << "Pristine[" << p.prev().handle() << "." << p.next().handle()  << "]";
 }
 
+using namespace heap;
+using heap::reset;
+
+#define EXPECT_TT     EXPECT_TRUE
+#define EXPECT_FF     EXPECT_FALSE
+#define EXPECT_ZZ(Z)  EXPECT_EQ(0,Z)
+
 TEST(Heapify, exists) { 
-  reset();
+  heap::reset();
 }
 
 TEST(Heapify, head) { 
-  reset();
-  EXPECT_FF(heap.x());
+  heap::reset();
+  heap::heap.x();
+  EXPECT_FF(heap::heap.x());
 }
 
 TEST(Heapify, allPristine) { 
-  reset();
+  heap::reset();
   for (Short s = $P_f$; s <= $P_t$; ++s)
     ASSERT_TRUE(Pristine(s).ok()) << s;
 }
 
 TEST(Heapify, entryFirst) { 
-  reset();
+  heap::reset();
   EXPECT_TT(Pristine($P_f$).prev().x()); 
   EXPECT_FF(Pristine($P_f$).next().x()); 
   EXPECT_EQ(Pristine($P_f$).next().handle(), $P_f$+1); 
 }
 
 TEST(Heapify, entryLast) { 
-  reset();
+  heap::reset();
   EXPECT_TT(Pristine($P_t$).next().x()); 
   EXPECT_FF(Pristine($P_t$).prev().x()); 
   EXPECT_EQ(Pristine($P_t$).prev().handle(), $P_t$-1); 
@@ -67,7 +75,7 @@ TEST(Heapify, entry5) {
 }
 
 TEST(Heapify, entryBetween) { 
-  reset();
+  heap::reset();
   for (Short s = $P_f$ + 1; s < $P_t$; ++s) {
     EXPECT_EQ(Pristine(s).prev().handle(), s-1) << s; 
     EXPECT_EQ(Pristine(s).next().handle(), s+1) << s; 
@@ -75,9 +83,9 @@ TEST(Heapify, entryBetween) {
 }
 
 TEST(Heapify, prefix) { 
-  reset();
-  EXPECT_EQ(heap.handle(), $P_f$);
-  EXPECT_EQ(heap.handle(), $P_f$);
+  heap::reset();
+  EXPECT_EQ(heap::heap._, $P_f$);
+  EXPECT_EQ(heap::heap, $P_f$);
   EXPECT_EQ(Pristine($P_f$).next().handle(), 2);
   EXPECT_ZZ(Pristine($P_f$).prev().handle());
   EXPECT_EQ(Pristine(2).next().handle(), 3);
@@ -87,7 +95,7 @@ TEST(Heapify, prefix) {
 }
 
 TEST(Heapify, counters) { 
-  reset();
+  heap::reset();
   EXPECT_ZZ(accounting.used);
   EXPECT_ZZ(accounting.miss);
   EXPECT_ZZ(accounting.reuse);
@@ -96,42 +104,42 @@ TEST(Heapify, counters) {
 }
 
 TEST(Heapify, pristines) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.pristines());
 }
 
 TEST(Heapify, items) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.items());
 }
 
 TEST(Heapify, pairs) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.pairs());
 }
 
 TEST(Heapify, symmetric) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.asymmetric());
 }
 
 TEST(Heapify, acyclic) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.cyclic());
 }
 
 TEST(Heapify, weirdos) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.weirdos());
 }
 
 TEST(Heapify, valid) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.something());
 }
 
 TEST(Accounting, reset) { 
-  reset();
+  heap::reset();
   EXPECT_ZZ(accounting.used);
   EXPECT_EQ(accounting.unused, $P_n$);
   EXPECT_ZZ(accounting.use); 
@@ -151,12 +159,12 @@ TEST(Accounting, reset) {
   EXPECT_ZZ(accounting.request); 
   EXPECT_ZZ(accounting.reuse); 
   EXPECT_ZZ(accounting.provide); 
-  EXPECT_ZZ(accounting.ccit); 
+  EXPECT_ZZ(accounting.hit); 
   EXPECT_ZZ(accounting.miss); 
 }
 
 TEST(Accounting, Nesting) { 
-  reset();
+  heap::reset();
   ++accounting.items;
   EXPECT_EQ(accounting.use, 1); 
   EXPECT_EQ(accounting.used, 1); 
@@ -166,7 +174,7 @@ TEST(Accounting, Nesting) {
 }
 
 TEST(Accounting, push) { 
-  reset();
+  heap::reset();
   Pushdown p;
   p.push(3);
   EXPECT_EQ(accounting.use, 1); 
@@ -187,16 +195,16 @@ TEST(Accounting, push) {
   EXPECT_ZZ(accounting.request); 
   EXPECT_ZZ(accounting.reuse); 
   EXPECT_ZZ(accounting.provide); 
-  EXPECT_ZZ(accounting.ccit); 
+  EXPECT_ZZ(accounting.hit); 
   EXPECT_ZZ(accounting.miss); 
 }
 
 TEST(Accounting, request) {
-  reset();
+  heap::reset();
   EXPECT_ZZ(accounting.used);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
-      request(i,j);
+      request(S(i),S(j));
   EXPECT_EQ(accounting.used, 25);
 }
 
@@ -222,9 +230,9 @@ TEST(Item, 3Count) {
 
 TEST(Corruption, makeCyclic) { 
   try {
-    reset();
+    heap::reset();
     EXPECT_FF(corrupted.cyclic());
-    Pristine($P_t$-3).next(($P_f$ + $P_t$)/2);
+    Pristine($P_t$-3).next(Pristine(($P_f$ + $P_t$)/2));
     EXPECT_TT(corrupted.cyclic());
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
@@ -233,7 +241,7 @@ TEST(Corruption, makeCyclic) {
 
 TEST(Corruption, ofPrev) { 
   try {
-    reset();
+    heap::reset();
     Pristine($P_t$).prev(($P_f$ + $P_t$)/2);
     EXPECT_TT(corrupted.asymmetric());
   } catch(int e) {
@@ -243,7 +251,7 @@ TEST(Corruption, ofPrev) {
 
 TEST(Corruption, ofNext) { 
   try {
-    reset();
+    heap::reset();
     Pristine(Word(13,17).hash()).next(Word(17,13).hash());
     EXPECT_TT(corrupted.asymmetric());
   } catch(int e) {
@@ -253,7 +261,7 @@ TEST(Corruption, ofNext) {
 
 TEST(Corruption, selfLoop) { 
   try {
-    reset();
+    heap::reset();
     Pristine(Word(13,17).hash()).next(Word(13,17).hash());
     EXPECT_TT(corrupted.cyclic());
   } catch(int e) {
@@ -262,18 +270,18 @@ TEST(Corruption, selfLoop) {
 }
 
 TEST(Fresh, exists) { 
-  reset();
+  heap::reset();
   fresh(15,21);
 }
 
 TEST(Fresh, uncorrupting) {
-  reset();
+  heap::reset();
   fresh(15,$P_x$);
   EXPECT_FF(corrupted.something());
 }
 
 TEST(Fresh, correct) { 
-  reset();
+  heap::reset();
   Item i = fresh(15,$P_x$);
   EXPECT_TT(i.ok());
   EXPECT_EQ(i.handle(), 1);
@@ -307,7 +315,7 @@ TEST(Pair, Hash13) {
 }
 
 TEST(Pair, request) {
-  reset();
+  heap::reset();
   auto d1 = request(-3,-2).handle();
   auto l1 = request(-2,-3).handle();
   auto d2 = request(d1,d1).handle();
@@ -345,7 +353,7 @@ TEST(Pair, request) {
 
 
 TEST(Pair, Hash13a) {
-  reset();
+  heap::reset();
   auto c1 = request(13,13); 
   EXPECT_EQ(P[c1.handle()].hash(), Word(13,13).hash());
   Word w = hash13();
@@ -360,7 +368,7 @@ TEST(Pair, Hash13a) {
 }
 
 TEST(Pair, reuse) {
-  reset();
+  heap::reset();
   EXPECT_ZZ(accounting.reuse);
   for (int i = 0;  i <= 4; i++)  
     for (int j = 0;  j <= 4; j++) 
@@ -378,7 +386,7 @@ TEST(Pair, reuse) {
 
 TEST(Pair, Miss) {
   enum { N = 220 };
-  reset();
+  heap::reset();
   EXPECT_ZZ(accounting.miss);
   int n = 0;
   for (int i = 0;  i < N; i++) { 
@@ -401,7 +409,7 @@ TEST(Pair, Miss) {
 }
 
 TEST(Counters, freshFree) { 
-  reset();
+  heap::reset();
   auto i = fresh(15,21);
   EXPECT_EQ(accounting.unused, $P_n$ -1);
   free(i);
@@ -423,7 +431,7 @@ TEST(Fresh, 3) {
 
 TEST(Fresh, Length) { 
   try {
-    reset();
+    heap::reset();
     EXPECT_EQ(length(), $P_n$);
     EXPECT_EQ(length(), accounting.unused);
 
@@ -460,7 +468,7 @@ TEST(Fresh, Length) {
 
 TEST(request, exists) { 
   try {
-    reset();
+    heap::reset();
     request(S(0xDE),S(0xAD));
   } catch(int e) {
     ADD_FAILURE() << "Died at line " << e;
@@ -469,7 +477,7 @@ TEST(request, exists) {
 
 TEST(request, pair) { 
   try {
-    reset();
+    heap::reset();
     Pair h = request(S(0xDE),S(0xAD));
     EXPECT_TT(h.ok());
   } catch(int e) {
@@ -479,7 +487,7 @@ TEST(request, pair) {
 
 TEST(request, correct) { 
   try {
-    reset();
+    heap::reset();
     Short h = request(S(0xDE),S(0xAD)).handle();
     EXPECT_EQ(P[h].s1, 0xDE);
     EXPECT_EQ(P[h].s2, 0xAD);
@@ -490,7 +498,7 @@ TEST(request, correct) {
 
 TEST(request, 3) { 
   try {
-    reset();
+    heap::reset();
     auto s1 = request(2,3);
     auto s2 = request(4,5);
     auto s3 = request(6,7);
@@ -500,7 +508,7 @@ TEST(request, 3) {
 }
 
 TEST(request, correct3) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
   auto s1 = request(2,3);
@@ -526,7 +534,7 @@ TEST(request, correct3) {
 }
 
 TEST(request, Scenario) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap.handle(),1);
   auto s1 = request(2,3);
@@ -555,7 +563,7 @@ TEST(request, Scenario) {
 }
 
 TEST(Words, reuse) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$);
   EXPECT_EQ(length(), accounting.unused);
@@ -623,7 +631,7 @@ void mess(Pushdown &p) {
 }
 
 TEST(Exhaust, Almost) { 
-  reset();
+  heap::reset();
   EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
@@ -636,7 +644,7 @@ TEST(Exhaust, Almost) {
 }
 
 TEST(Exhaust, LateItemCorrect) { 
-  reset();
+  heap::reset();
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
   Item i = fresh(-2, $P_x$); 
@@ -645,7 +653,7 @@ TEST(Exhaust, LateItemCorrect) {
 }
 
 TEST(Exhaust, LastItem) { 
-  reset();
+  heap::reset();
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
   Item i = fresh(-2, $P_x$); 
@@ -656,7 +664,7 @@ TEST(Exhaust, LastItem) {
 }
 
 TEST(Exhaust, items) { 
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.something());
   EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) {
@@ -673,7 +681,7 @@ TEST(Exhaust, items) {
 }
 
 TEST(Exhaust, andRestore) { 
-  reset();
+  heap::reset();
   Pushdown p;
   EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s <= $P_n$; ++s) 
@@ -694,7 +702,7 @@ TEST(Exhaust, andRestore) {
 }
 
 TEST(Churn, Pushdown) { 
-  reset();
+  heap::reset();
   for (int i = 0; i < 200 ; i++) { 
     {
       Pushdown p[103];
@@ -710,7 +718,7 @@ TEST(Churn, Pushdown) {
 }  
 
 TEST(Churn, request) { 
-  reset();
+  heap::reset();
   int n = 0;
   for (Short i = 0;  ; i++) { 
     for (Short j = 0;  i <= j; j++) {
@@ -730,7 +738,7 @@ done:
 }  
 
 TEST(Churn, Both) { 
-  reset();
+  heap::reset();
   for (int i = 0, n = 0;  ; i++) { 
     Pushdown p[10];
     for (int j = 0; j <= i; ++j, ++n) {
@@ -758,7 +766,7 @@ TEST(Counting, items) {
 }
 
 TEST(Counting, pairs) {
-  reset();
+  heap::reset();
   const Integer before = accounting.unused;
   request(13,14);
   EXPECT_NE(accounting.unused, before);
@@ -771,7 +779,7 @@ TEST(Counting, pairs) {
 }
 
 TEST(Counting, itemsPristines2) {
-  reset();
+  heap::reset();
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());
@@ -784,7 +792,7 @@ TEST(Counting, itemsPristines2) {
 
 TEST(Pristine, itemsPristines3) {
   EXPECT_FF(corrupted.asymmetric());
-  reset();
+  heap::reset();
   Pushdown p;
   p.push(3,2,1);
   EXPECT_FF(corrupted.asymmetric());
@@ -797,7 +805,7 @@ TEST(Pristine, itemsPristines3) {
 }
 
 TEST(Pristine, itemsPristines4) {
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.something());
   Pushdown p;
   int before = accounting.unused;
@@ -818,7 +826,7 @@ TEST(Pristine, itemsPristines4) {
 }
 
 TEST(Pristine, requestConsN) {
-  reset();
+  heap::reset();
   EXPECT_FF(corrupted.something());
   Pushdown p;
   int before = accounting.unused;
@@ -841,7 +849,7 @@ TEST(Pristine, requestConsN) {
 TEST(Exercise, PushrequestPoprequest) {
   enum {N = 16};
   EXPECT_FF(corrupted.something());
-  reset();
+  heap::reset();
   Pushdown p;
   int before = accounting.unused;
   for (int i = 0, n = 0;  i < 16; i++)  
@@ -867,7 +875,7 @@ TEST(Exercise, PushrequestPoprequest) {
 
 TEST(Pristine, requestAtom) {
   Pushdown p;
-  reset();
+  heap::reset();
   int before = accounting.unused;
   p.push(3,2,1);
   request("ABC");
@@ -892,7 +900,7 @@ TEST(Pristine, 1requestAtom) {
 
 TEST(Pristine, requestBoth) {
   EXPECT_FF(corrupted.something());
-  reset();
+  heap::reset();
   Pushdown p;
   EXPECT_TT(p.top.x());
   EXPECT_TT(p.empty());

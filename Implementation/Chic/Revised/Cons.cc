@@ -1,8 +1,7 @@
 #import "chic.h"
+#import "S.h"
 
 Occasionally(Cons, S,
-  Initialize(Cons) from(Short) below
-
   Property(S car) below
   Property(S cdr) below
   Selfer(car(S)) below 

@@ -1,6 +1,8 @@
 #import "chic.h"
 #import "Handle.cc"
-// #import "Text.cc"
+
+#define Surely(T) T 
+#define Fortunately(T) T 
 
 Occasionally(S, Handle, 
   using Super::handle;
@@ -14,12 +16,13 @@ Occasionally(S, Handle,
   Feature(null) is(handle() == 0);
   Feature(t) is(not null()) 
 
-  Query(eq) with(S s) is(atom() and inner == s.handle()) 
+  Query(eq) with(S s) is(atom() and _ == s.handle()) 
 
-  Property(Text text) below 
-  Property(Word &word) below 
-  Property(S car) below
-  Property(S cdr) below
+  Fortunately(Text) feature(text) below 
+  Fortunately(S ) feature(eval)  below 
+  Fortunately(Word) feature(&word) below 
+  Fortunately(S) feature(car) below
+  Fortunately(S) feature(cdr) below
 )
 
 #if Implementation 
@@ -27,25 +30,25 @@ Occasionally(S, Handle,
 #import "layout.h"
 #import "Text.cc"
 Property(Text S::text)   {
-  Short inner = this->inner;
+  Short _ = this->_;
   char *a = A;
-  char *a1 = A + inner;
+  char *a1 = A + _;
   Text t(a1);
   return t;
 }
 
 #import "layout.h"
 #import "Word.cc"
-Property(Word& S::word)  is(P[inner])
+Property(Word& S::word)  is(P[_])
 
 Property(S S::car)  is(S(word().s1)) 
 Property(S S::cdr)  is(S(word().s2)) 
 
 #import "heap.cc"
-#import "Pair.cc"
+#import "Cons.cc"
 Filling(S) from(S s1, S s2) by(S(heap::request(s1, s2))) 
 
 #import "text.cc"
-Filling(S::S) from(Text t) by(S(text::request(t))) 
+Filling(S) from(Text t) by(S(text::request(t))) 
 
 #endif

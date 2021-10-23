@@ -1,8 +1,8 @@
 #import "chic.h"
-#import "Handle.cc"
-Occasionally(Id, Handle, 
+#import "S.cc"
+Occasionally(Id, S, 
   //using Handle::handle;
-  //typedef Handle Inner;
+  //typedef Handle _;
   // Composition
   // Id(Short);
 )

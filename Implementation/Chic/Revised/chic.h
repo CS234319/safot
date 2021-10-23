@@ -44,15 +44,20 @@ static_assert(COUNT(1,2,3,4) == 4);
 #define Type struct
 #define Representation(whatever...) union {whatever; };
 
-#define perhap(whatever...) struct{whatever;};
 #define fail ({0; throw *this; this;})
+
+#define perhap(whatever...) struct{whatever;};
 #define by(whatever...)      :whatever {}
+#define selfing(whatever...) is(((whatever),*this))
+#define doing(whatever...)   { whatever; }
 #define from(whatever...)    (whatever)
-#define is(whatever...)       { return (whatever); }
-#define doing(whatever...)       { whatever; }
+#define is(whatever)      { return (whatever); }
+#define with(whatever...)    (whatever) const
+#define taking(whatever...)  (whatever)
+#define nothing
+#define then ,  
 #define query(X)      X
 #define action(X)      X
-#define selfing(whatever...)  { return (whatever), *this; }
 #define below ;
 #define feature(X)     inline X() const
 
@@ -67,8 +72,12 @@ static_assert(COUNT(1,2,3,4) == 4);
 #define Filling(T)    T::T
 >>>>>>> a5d5e07 (checkpoint)
 #define Fill(X)       explicit X
+<<<<<<< HEAD
 #define Make            static Self make
 >>>>>>> 64596d9 (checkpoint)
+=======
+#define Make          static Self make
+>>>>>>> d1db79c (checkpoint)
 
 #define Feature(X)     inline auto X() const
 
@@ -76,17 +85,15 @@ static_assert(COUNT(1,2,3,4) == 4);
 #define Property(X)   X() const
 
 #define Typed(T)       T
-#define with(whatever...)    (whatever) const
-#define taking(whatever...)  (whatever)
-#define nothing
 
 #define Module          namespace
 #define Provides        extern
+#define Hides           static
 #define Unit int
 
 #define Service static struct
 
-#define As(t)  operator t() const
+#define As(T)  operator T() const
 #define Let constexpr
 #define let const auto
 #define variable auto
@@ -122,11 +129,21 @@ static_assert(COUNT(1,2,3,4) == 4);
 #define Perspective(P, Inner, Etc...) \
   Type P { \
     P(const P&) = default;\
-    Representation(Inner inner) \
-    Fill(P) from(Inner m) by(inner(m)) \
-    explicit operator Inner() const is(inner) \
+    Representation(Inner _) \
+    Fill(P) from(Inner __) by(_(_)) \
+    operator Inner() const is(_) \
     Etc\
   };
+
+
+/*@ The Primitive Types@
+Our byte addressable underlining machine offers three primitive types: byte,
+Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
+are fixed width signed integers, represented in two's complement, and are
+similar to the types byte, short, and int of the Java virtual machine. Punning
+is allowed, and used extensively: A Long is constituted by two consecutive
+halves. No particular byte ghalves ordering is assumed. */
+
 
 #import <cstdint>         // Standard header providing integer types with widths
 Alias(int8_t)  Byte; /// JVM's byte                |  8 bits signed integer | character in an atom
@@ -134,7 +151,8 @@ Alias(int16_t) Short; /// like  JVM's short | 16 bits signed integer | Knob of a
 Alias(int32_t) Long; ///   like  JVM's int    | 32 bits signed integer | an dotted Pair S-expression
 Alias(int64_t) Integer; ///  like JVM's long    | 32 bits signed integer | an dotted Pair S-expression
 Alias(bool)    Boolean; /// JVM's byte                |  8 bits signed integer | character in an atom
-Alias(char const) Letter; // Representation of character
+Alias(char) Character; // Representation of character
+Alias(const Character) Letter; // Representation of character
 Alias(Letter *const) String;   // Representation of immutable srings
 
 // typedef enum { ok } OK;
@@ -144,7 +162,10 @@ template<typename T> constexpr inline T range(T s1, T s2) is(s2 - s1 + 1)
 
 
 // typedef std::function<int()> Action;
-typedef std::function<long long()> Provider;
+Alias(std::function<long long()>) Provider;
+Alias(std::function<bool()>) Predicate;
+
+#define Perform(something,etc...) {etc{something}}
 
 #define maintaining(maintenane...) MAP(maintain,maintenane)
 #define expecting(expectations...) MAP(expect,expectations)
@@ -190,7 +211,6 @@ Type Context {
 #define PREDICATE(X)  Predicate([&]{ return(X); }) 
 
 
-  typedef std::function<bool()> Predicate;
 Type Context { 
 >>>>>>> 64596d9 (checkpoint)
   String file;
@@ -210,22 +230,13 @@ Type Context {
 
 #define Occasionally(Special, General, Etc...) \
   Type Special: General {\
-    typedef General Super;\
-    typedef Special Self;\
+    Alias(General) Super;\
+    Alias(Special) Self;\
     template<typename... Ts>  \
       Fill (Special) from(Ts... ts) by(General(ts...))\
     Feature(super) is(*(const General *)this) \
     Etc\
   };\
-
-#define Perspective(P, Inner, Etc...) \
-  Type P { \
-    P(const P&) = default;\
-    Representation(Inner inner) \
-    Fill(P) from(Inner i) by(inner(i)) \
-    As(Inner) is(inner) \
-    Etc\
-  };
 
 
 Occasionally(Assertion, Context,
@@ -235,14 +246,14 @@ Occasionally(Assertion, Context,
 )
 
 Occasionally(Expectation, Assertion,
-  Unit report() is (Super::report(), fprintf(stderr,"unmet expectation"))   
+  Unit report() is ((Super::report(), fprintf(stderr,"unmet expectation")))   
   Fill(Expectation) from(Context c, Predicate m) by(Super(c, m))
 )
 
 #define Done(X) ~X() 
 
 Occasionally(Promise, Assertion,
-  Unit report() is (Super::report(),fprintf(stderr,"unkept promise"))   
+  Unit report() is ((Super::report(),fprintf(stderr,"unkept promise")))   
   Done(Promise) doing(check())
 )
 
@@ -273,36 +284,6 @@ Occasionally(Promise, Assertion,
 <<<<<<< HEAD
 =======
 
-#define surely(P, etc...) \
-  struct UNIQUE(Surely) {                                                \
-    typedef const char *const String;                                    \
-    String file;                                                         \
-    const long line;                                                     \
-    String context, expression;                                          \
-    UNIQUE(Surely)(String f, long l, String c, String e, Predicate p,    \
-        Predicate elaborate):                                            \
-      file(f), line(l), context(c), expression(e) {        \
-        if (p()) return;                                         \
-        (void) fprintf(stderr,"%s(%d)/%s: '%s' \n\t failed presumption\n",\
-           file, line, context, expression);                             \
-           elaborate();                                                  \
-    }                                                                    \
-  } UNIQUE(Surely)                                                       \
-    (__FILE__, __LINE__, __PRETTY_FUNCTION__, #P,                        \
-      [&]{ return P; },                                                  \
-      [&]{ std::cerr ELABORATE(VA_ARGS(etc)) << "\n"; return false;} \
-     );                                                                  \
-;
-
-
-
-/*@ The Primitive Types@
-Our byte addressable underlining machine offers three primitive types: byte,
-Short, and, Long whose sizes are 8, 16, and 32 bits respectively.  These types
-are fixed width signed integers, represented in two's complement, and are
-similar to the types byte, short, and int of the Java virtual machine. Punning
-is allowed, and used extensively: A Long is constituted by two consecutive
-halves. No particular byte ghalves ordering is assumed. */
 
 #define Return(X) return ((__ = (X)),(__));
 

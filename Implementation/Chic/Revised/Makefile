@@ -2,12 +2,12 @@ all: test services
 services: tags .depend 
 .PHONY: all services clean wc gvim list
 
-CFLAGS += -DCHIC="\"chic.h\"" -w -std=gnu2x
+CFLAGS += -w -std=gnu2x -fmax-errors=10
 
 PRIMITIVES=Short Word
 SERVICES=accounting heap text layout 
 TYPES=Handle Id Item Knob Pair Pristine S 
-READ=Pushdown lexer parser 
+READ=Pushdown lexer LL parser 
 TESTERS=t-heap t-misc t-purge t-Pushdown t-accounting t-lexer t-parser
 
 CORE            := $(PRIMITIVES) $(SERVICES) $(TYPES) $(READ)  
@@ -36,7 +36,7 @@ list:
 	@echo "SOURCES        = " $(SOURCES)
 
 gvim: 
-	@gvim $(SOURCES) $(HEADERS) Makefile -c make
+	@gvim $(SOURCES) $(HEADERS) Makefile -c make -c cwindow
 
 wc: 
 	@wc -l $(SOURCES) $(HEADERS) Makefile | sort -n 
