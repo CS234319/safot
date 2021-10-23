@@ -3,22 +3,23 @@
 Born 1985. Named Standard ML = Meta Language...
   - The 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
   - To makes the user had to interact with LCF
-  - ML invened as an embedded scripting language
-  - Many ad hoc independet implementations, many new ideas
+  - ML invented as an embedded scripting language of LCF
+  - Many ad-hoc independent implementations, many new ideas
   - "Standard ML" on 1985 by Robert Milner
   - 1997: First real standard
 ---
 
 ## Why SML?
- - Exemplar of fuctional programming
+ - Exemplar of functional programming
     - Functional = forget about variables
     - Functional = functions are values
     - Functional = higher leverl functions
     - ...
- - Exemplar of type safe functional programming
+ - Exemplar of **type safe** functional programming
     - Safe=
         - Strongly typed: no type error can go undetected
         - Statically typed: all type erors are detected at compile time
+
 Influenced: Haskell, OCaml, Scala, F#, ...
 ---
 ## More on SML
@@ -33,9 +34,24 @@ Structure:
   - Library
 
 ---
+## Language Spirit
+. . . ML is a general purpose programming language. It is derived in different
+aspects from ISWIM, POP2 and GEDANKEN, and contains perhaps two new
+features. First, it has an escape and escape trapping mechanism, well-adapted to
+programming strategies which may be (in fact usually are) inapplicable to certain
+goals. Second, it has a polymorphic type discipline which combines the flexibility
+of programming in a typeless language with the security of compile-time type
+checking (as in other languages, you may also define your own types, which may
+be abstract and/or recursive); this is what ensures that a well-typed program
+cannot perform faulty proofs.
+This original ML was an embedded language within the interactive theorem proving system LCF,
+serving as a logically-secure scripting language. Its type system enforced the logical validity of 
 
-### running
 
+---
+
+### Running
+Mode of operation
 * REPL (sort of; it is not interpreted)
 * first prompt (-) and secondary prompt (=)
 * semicolon terminated
@@ -58,7 +74,7 @@ val it = 10 : int
 
 ---
 
-### naming values
+### Naming Values
 
 <!--vert-->
 
@@ -71,7 +87,7 @@ val seconds = 60;
 
 <!--vert-->
 
-using names in expressions
+using named values in expressions
 
 ```sml
 val minutes = 60;
@@ -225,18 +241,18 @@ functions
 
 <!--vert-->
 
-literals are written in double quotes
+String literals are written in double quotes
 
 ```sml
 "ML is the best";
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-special characters `\n`, `\t`, `\"`, `\\`
+Escape sequences: `\n`, `\t`, `\"`, `\\`
 
 <!--vert-->
 
-concatenation
+Concatenation operator
 
 ```sml
 "Standard" ^ " ML";
@@ -245,7 +261,7 @@ concatenation
 
 <!--vert-->
 
-comparison
+Comparison of strings
 
 ```sml
 "abc" < "cba";
@@ -265,11 +281,11 @@ size "SML";
 
 ---
 
-### characters
+### Characters
 
 <!--vert-->
 
-chars are distinguished from strings of length 1 by `#`
+characters (values of type `char`) are distinguished from strings of length 1 by using the character `#`
 
 ```sml
 "0";
@@ -280,7 +296,7 @@ chars are distinguished from strings of length 1 by `#`
 
 <!--vert-->
 
-conversion between strings and chars
+Conversion between strings and chars
 
 ```sml
 str #"0";
@@ -291,7 +307,7 @@ String.sub("hello", 0);
 
 <!--vert-->
 
-conversion between chars and ASCII
+Conversion between chars and ASCII
 
 ```sml
 ord #"0";
@@ -304,7 +320,7 @@ chr it;
 
 ### boolean
 
-the two values are `true` and `false`
+Two named values: `true` and `false`
 
 ```sml
 true;

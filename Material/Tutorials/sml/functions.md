@@ -46,6 +46,7 @@ op d(1.0,3.0);
 ---
 
 ### curried functions
+Currey = Haskell Currey (1900-1982), who invented the "trick"
 
 any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
 
@@ -76,15 +77,16 @@ val prefix = fn : string -> (string -> string)
 ---
 
 ### partial application
+AKA=partial evaluation
 
-you don't have to give the next arguments!
+you don't have to provide the next arguments!
 
 ```sml
 prefix "Dr. ";
 (*val it = fn : string -> string*)
 
-it "Tomer";
-(*val it = "Dr. Tomer" : string*)
+it "Watson";
+(*val it = "Dr. Watson" : string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -94,8 +96,8 @@ as always, functions are values
 val doctorify = prefix "Dr. ";
 (*val doctorify = fn : string -> string*)
 
-doctorify "Jackal";
-(*val it = "Dr. Jackal" : string*)
+doctorify "Jekyll";
+(*val it = "Dr. Jekyll" : string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -117,19 +119,19 @@ fun prefix pre = fn post => pre ^ post;
 
 ---
 
-### function calls
+### Invoking a function
 
 ```sml
-(prefix "Dr. ") "Tomer";
-(*val it = "Dr. Tomer" : string*)
+(prefix "Dr. ") "Watson";
+(*val it = "Dr. Watson" : string*)
 
-prefix "Dr. " "Tomer";
-(*val it = "Dr. Tomer" : string*)
+prefix "Dr. " "Watson";
+(*val it = "Dr. Watson" : string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 the rule is:
-* a function call `F E1 E2 ... En`
+* a function invocation `F E1 E2 ... En`
 * abbreviates `(...((F E1) E2)...) En`
 
 ---
