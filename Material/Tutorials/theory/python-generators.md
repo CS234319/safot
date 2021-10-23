@@ -155,7 +155,7 @@ def primes():
 ```
 <!-- .element: data-thebe-executable-python -->
 <!--vert-->
-2. create a generator function for the Fibonacci sequence. the function can receive a pair of integers,
+2. create a generator function for the Fibonacci sequence. the generator can receive a pair of integers,
 and when it does, it restarts the sequence with the values as the new initial values. (example in next slide)
 <!--vert-->
 example:
