@@ -7,6 +7,10 @@
 - **Tutorial**
    1. [ML - Introduction](Tutorials/sml/introduction.md)
    2. [ML - Functions](Tutorials/sml/functions.md)
+- **Reading material**
+   1. [Summary of first lecture: chapters 1--2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
+   2. [Specificaiton of Pascal 72](PascalReport.pdf)
+   3. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
 - **HW**: [HW1](hw/1.md) is published \[30.10\]
 
 ## Week 2 \[31.10-6.11\]
@@ -16,7 +20,9 @@
 - **Tutorial**
    1. [ML - Declarations](Tutorials/sml/declarations.md)
    2. [ML - Datatypes](Tutorials/sml/datatypes.md)
-
+- **Reading material**
+   1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
+   2. [ML - Functions](Tutorials/sml/functions.md)
 ## Week 3 \[7.11-13.11\]
 - **Lecture**
    1. [Types (Cont.)](?)
