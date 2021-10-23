@@ -67,15 +67,36 @@ val secs_in_hour = it;
 
 ---
 
-### legal identifiers
+### Identifiers in SML
+Two kinds of identifiers:
+  - Alphabetical identifiers, as found in most languages
+  - Special identifiers, mainly for defining new operators
+Use of identifiers:
+  - Names of types
+  - Names of values
+    - Ordinary values
+    - Functions 
+Identifier congestion?
+ - Scoping
+ - Hiding
+ - No overloading!
+
 
 <!--vert-->
 
-### alphabetic identifiers
+### Alphabetic Identifiers
 
-* begins with a letter
-* followed by letters, digits, underscore, or single quotes
+* begin with a letter
+* followed by a sequence of 
+  - letters
+  - digits, 
+  - underscore, or,
+  - single quote
 * case sensitive
+* some alphabetical identifiers are reserved words
+  - names of operators: `and`, `if`, `then`, `else`, `orelse`, ...
+  - punctuations: fun, let, local, of,  
+  - many more
 
 ```sml
 x
@@ -87,9 +108,10 @@ h''3_H
 
 <!--vert-->
 
-### additional identifiers
+### Special Identifiers
+Are called `symbolic` identifiers in the SML lingo.
 
-* permitted over the characters:
+* A sequence of  one or more of the following 
 
     ```sml
     ! % & $ # + - * / : < = > ? @ \ ~ \ ^ |
