@@ -141,6 +141,12 @@ g.throw(ValueError())
 <!--vert-->
 1. create a generator function returning all prime numbers.
 <!--vert-->
+code block for solution:
+```python
+
+```
+<!-- .element: data-thebe-executable-python -->
+<!--vert-->
 solution:
 ```python
 def primes():
@@ -171,6 +177,12 @@ next(g) # returns 2
 next(g) # returns 3
 next(g) # returns 5
 ```
+<!--vert-->
+code block for solution:
+```python
+
+```
+<!-- .element: data-thebe-executable-python -->
 <!--vert-->
 solution:
 ```python
