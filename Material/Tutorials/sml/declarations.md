@@ -1,10 +1,40 @@
 # Standard ML
 
-## declarations
+## Reminder: Values and Types in ML
+Every thing in ML is a *value*:
+  - Integers are values
+  - A pair of an integer and real is a value
+  - Every function is a value
+Every value in ML has a *type*:
+  - Some types are atomic
+  - Some types are builtin 
+  - Some types may be both builtin and atomic
+  - Other types are compound, made from smaller types
+Remember: not everything in ML is a value, types are not values!
+
+## Declarations
+Where do values come from?
+  - Computation: during execution, the program generates more and more values
+    - Example: the elements of the Fibonacci sequence
+    - But where 
+  - Initial values introduced by programmer:
+    - Atomic values: every literal is a value
+    - Composite values: expressions, function definitions
+Declarations:
+  - Making new values out of previous values and literals
+  - Providing names for this value
+REPL (reminder):
+  - Programmer types in a new value (expression, function definition)
+  - ML Engine:  
+    - Infer type of value: `int`, `int * real,  `'a-> int -> int`,  ???
+    - Compute value (if it is an expression)
+    - Associate the name `it` with this value
+Declaration: - If the programmer types in a *named value*,  the engine saves
+  this name (in addition to `it`)
 
 ---
 
-### example - circle area
+### Example: The Area of a Circle 
 
 $$area = \pi \cdot r^2$$
 
@@ -19,11 +49,16 @@ area 2.0;
 
 <!--vert-->
 
-### identifiers in ML
+### Identifiers in ML
 
 * `val` declaration binds a name to a value
+* names are not variables!
 * a name can not be used to change its value (actually a constant)
-* a name can be reused for another purpose
+    - did we say that names are not variables?
+* Name can be reused for another purpose
+  - by scoping rules
+  - by hiding a name in an outer scope, 
+  - but, also, by redefinitions to the REPL...
 
 ```sml
 val pi = "pi";
@@ -56,6 +91,10 @@ area 1.0;
 👎 redefining may have no visible effect
 
 ⚠️ when modifying a program, be sure to recompile the entire file
+
+
+Redefining indicates that internally, the SML engine is not an interpreter, it
+actually compiles and links, and does not amend this linking upone
 </div>
 
 ---
@@ -86,7 +125,7 @@ val rec f = fn (n) =>
 
 ---
 
-### pattern matching
+### Pattern Matching
 
 patterns can be used to simplify function definitions
 
@@ -142,7 +181,7 @@ foo(1,1);
 
 <!--vert-->
 
-### patterns using `case`
+### Patterns using `case`
 
 ```sml
 case E of P1 => E1 | ... | Pn => En
@@ -164,7 +203,7 @@ case 7 of
 
 ---
 
-### type aliasing
+### Type aliasing
 
 * you can give a new name to an existing type
 * the new name is only an alias
@@ -181,7 +220,7 @@ fun (x1,y1) ++ (x2,y2) : vec = (x1+x2,y1+y2);
 
 ---
 
-### declarations inside an expression
+### Declarations inside an expression
 
 ```sml
 let D in E end
@@ -227,7 +266,7 @@ fun fraction (n,d) = (fn c => (n div c, d div c))(gcd(n,d));
 
 <!--vert-->
 
-### nested scopes
+### Nested scopes
 
 ```sml
 fun sqroot a =
@@ -270,7 +309,7 @@ end;
 
 <!--vert-->
 
-### comparing `let` and `local` (1)
+### Comparing `let` and `local` (1)
 
 ```sml
 fun fib n = let
@@ -296,7 +335,7 @@ end;
 
 <!--vert-->
 
-### comparing `let` and `local` (2)
+### Comparing `let` and `local` (2)
 
 ```sml
 fun pow4 n: int = let
@@ -309,7 +348,7 @@ end;
 
 <!--vert-->
 
-### comparing `let` and `local` (3)
+### Comparing `let` and `local` (3)
 
 ```sml
 local
@@ -323,7 +362,7 @@ end;
 
 ---
 
-### simultaneous declarations (collateral)
+### Simultaneous declarations (collateral)
 
 ```sml
 val ID1 = E1 and ... and IDn = En
@@ -341,7 +380,7 @@ val x = y and y = x;
 
 <!--vert-->
 
-### mutually recursive functions
+### Mutually recursive functions
 
 $$\frac{\pi}{4}=\sum_{k=0}^\infty \frac{1}{4k+1} - \frac{1}{4k+3} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \cdots$$
 

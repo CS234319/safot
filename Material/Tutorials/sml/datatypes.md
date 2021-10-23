@@ -1,9 +1,9 @@
 # Standard ML
 
-## datatypes 
+## Datatypes 
 
 - Created: using the `datatype` keyword
-- Realize: the theoretical type constructor of disjoing union
+- Realize: the theoretical type constructor of disjoint union
 - Generalize
   - the `null` pointer of C, Pascal, Java
   - enumerated types, as found in Pascal, C, and Java, e.g., `enum  { };
@@ -15,7 +15,7 @@
 
 ---
 
-### concrete datatypes
+### Concrete Datatypes
 dattatype are a SML type constructor:
   - Given: a list of types and list of tags
   - Produce: a new type out of these
@@ -26,7 +26,7 @@ dattatype are a SML type constructor:
 
 ---
 
-### enumeration types
+### Enumeration Types
 
 ```sml
 datatype single = only;
@@ -65,7 +65,7 @@ value bishop;
 
 ---
 
-### branding
+### Type Branding
 
 Newton's second law
 
@@ -113,9 +113,13 @@ a engine body; (*Error*)
 
 ---
 
-### constructors
+### Constructors (of SML)
+The term *constructor* may be confusing
+  - constructors of classes, as in C++
+  - consturcotrs of types, as in abstract type constructors
+  - in the construction industry...
 
-constructors are functions
+In SML, constructors are functions
 
 ```sml
 datatype mass = Kg of real;
@@ -130,7 +134,7 @@ Newton;
 
 ---
 
-### variant types
+### Variant Types
 
 ```sml
 datatype shape =
@@ -147,7 +151,7 @@ fun area (point | Line _) = 0.0
 
 ---
 
-### pattern matching
+### Pattern Matching
 
 ```sml
 val line = Line 5.3;
@@ -178,7 +182,7 @@ val point = 5.3
 
 ---
 
-### recursive datatypes
+### Recursive Datatypes
 
 🛈 every list is either `nil` or `head::tail`
 
@@ -194,7 +198,7 @@ fun length nil     = 0
 
 ---
 
-### polymorphic datatypes
+### Polymorphic Datatypes
 
 ```sml
 datatype 'a list =
@@ -239,7 +243,7 @@ val int_char_list = [type1 5, type2 #"a"];
 
 ---
 
-### trees
+### Trees
 
 ```sml
 datatype 'a tree =
@@ -264,7 +268,7 @@ size tree4;
 
 ---
 
-### binary search trees
+### Binary Search Trees
 
 * implement an associative array using trees
 * the keys are `int`s
