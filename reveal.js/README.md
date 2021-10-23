@@ -37,14 +37,19 @@ npm update .
 
 ## run
 
-run the following commands on separate terminals:
+run the following commands:
 
 ```bash
-npm start
+npm start &
+npm run jupyter-server &
 ```
 
-```bash
-npm run jupyter-server
-```
+### note
+
+* `&` moves a process (job) to the background
+* to handle these jobs use `bg`, `fg`, `jobs` and `CTRL+Z`
+* see [this](https://www.thegeekdiary.com/understanding-the-job-control-commands-in-linux-bg-fg-and-ctrlz/) for a simple guide
+
+## open slides
 
 go to <http://localhost:16788/>
