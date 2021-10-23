@@ -6,6 +6,14 @@ CodeMirror.defineOption("autoRefresh", false, function (cm, val) {
     });
 });
 
+CodeMirror.defineOption("blurOnExecute", false, function (cm, val) {
+    cm.on("keydown", (cm, event) => {
+        if (event.code == "Enter" && event.shiftKey) {
+            cm.display.input.blur();
+        }
+    });
+});
+
 function thebe_init(kernel, selector) {
     thebelab.bootstrap({
         requestKernel: true,
@@ -23,6 +31,7 @@ function thebe_init(kernel, selector) {
         codeMirrorConfig: {
             theme: "idea",
             autoRefresh: true,
+            blurOnExecute: true,
         },
     });
 }
