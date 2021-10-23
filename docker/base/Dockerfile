@@ -15,8 +15,5 @@ RUN git clone https://github.com/twyair/simple-ismlnj.git
 RUN ln -s /usr/src/app/simple-ismlnj /usr/share/jupyter/kernels/smlnj
 RUN npm install -g ijavascript
 RUN ijsinstall
-RUN git clone https://github.com/CS234319/safot.git
-RUN cd safot/reveal.js; npm install --production
-
 
 EXPOSE 16788 16789
