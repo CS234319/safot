@@ -1,19 +1,19 @@
 # Standard ML
 
-## functions
+## Functions
 
 ---
 
-### side note - operators
+### Side note - operators
 
-a function of two arguments can be treated as an infix operator
+A function of two arguments can be treated as an infix operator
 
 ```sml
 fun d (x,y) = Math.sqrt (x*x + y*y);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-convert to an infix operator
+Convert to an infix operator
 
 ```sml
 infix d;
@@ -45,10 +45,10 @@ op d(1.0,3.0);
 
 ---
 
-### curried functions
-Currey = Haskell Currey (1900-1982), who invented the "trick"
+### Curried functions
+Curry = Haskell Curry (1900-1982), who invented the "trick"
 
-any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
+Any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
 
 ```sml
 fun prefix (pre, post) = pre ^ post;
@@ -66,7 +66,7 @@ fun prefix pre = fn post => pre^post;
 
 <!--vert-->
 
-reminder: `->` is right associative
+Reminder: `->` is right associative
 
 ```sml
 val prefix = fn : string -> string -> string
@@ -79,7 +79,7 @@ val prefix = fn : string -> (string -> string)
 ### partial application
 AKA=partial evaluation
 
-you don't have to provide the next arguments!
+You don't have to provide subsequent arguments 
 
 ```sml
 prefix "Dr. ";
