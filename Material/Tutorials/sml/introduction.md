@@ -35,18 +35,21 @@ Structure:
 
 ---
 ## Language Spirit
-. . . ML is a general purpose programming language. It is derived in different
+Robin Milner: "ML is a general purpose programming language. It is derived in different
 aspects from ISWIM, POP2 and GEDANKEN, and contains perhaps two new
-features. First, it has an escape and escape trapping mechanism, well-adapted to
+features. First, it has **an escape and escape trapping mechanism**, well-adapted to
 programming strategies which may be (in fact usually are) inapplicable to certain
-goals. Second, it has a polymorphic type discipline which combines the flexibility
+goals. Second, it has a **polymorphic type discipline** which combines the flexibility
 of programming in a typeless language with the security of compile-time type
 checking (as in other languages, you may also define your own types, which may
 be abstract and/or recursive); this is what ensures that a well-typed program
-cannot perform faulty proofs.
-This original ML was an embedded language within the interactive theorem proving system LCF,
-serving as a logically-secure scripting language. Its type system enforced the logical validity of 
+cannot perform faulty proofs."
 
+Two main features emphasized 
+- Exception mechanism for disciplined management of errors
+- Type system
+  - Flexibility of typeless
+  - Safety of typed§
 
 ---
 
