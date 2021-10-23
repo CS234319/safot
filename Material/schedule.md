@@ -7,9 +7,11 @@
 - **Tutorial**
    1. [ML - Introduction](Tutorials/sml/introduction.md)
    2. [ML - Functions](Tutorials/sml/functions.md)
-- **Reading material**
+- **Reading**
    1. [Summary of first lecture: chapters 1--2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
-   2. [Specificaiton of Pascal 72](PascalReport.pdf)
+- **Reference**
+   1. [Specificaiton of Pascal 72](PascalReport.pdf)
+   2. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
    3. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
 - **HW**: [HW1](hw/1.md) is published \[30.10\]
 
