@@ -25,6 +25,16 @@ cd safot/reveal.js
 npm install
 ```
 
+## update
+
+when in `safot/reveal.js` run:
+
+```bash
+git fetch
+git pull
+npm update .
+```
+
 ## run
 
 run the following commands on separate terminals:
