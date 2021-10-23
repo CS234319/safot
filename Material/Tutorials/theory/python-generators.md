@@ -22,36 +22,35 @@ a generator function returns a **generator object**
 
 ```python
 g = fib()
-```
-<!-- .element: data-thebe-executable-python -->
-
-
-such that 
-```python
 type(g)
 ```
 <!-- .element: data-thebe-executable-python -->
 
-would return `<class 'generator'>`.
 <!--vert-->
 to get the values that the generator yields use `next`
 
 ```python
-next(g)
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
 ```
 <!-- .element: data-thebe-executable-python -->
 <!--vert-->
 
 you can also define finite generators:
 ```python
-def first_three_primes():
+def first_two_primes():
     yield 2
     yield 3
-    yield 5
+g = first_two_primes()
+print(next(g))
+print(next(g))
+print(next(g))
 ```
 <!-- .element: data-thebe-executable-python -->
 exhausting a finite generator raises the `StopIteration` exception.
-<!--vert-->
 
 ---
 
@@ -60,13 +59,13 @@ exhausting a finite generator raises the `StopIteration` exception.
 ---
 generator functions are calculated *lazily*. the function is first executed after `next` is first applied on the 
 generator object. `yield` is a **sequencer** - after a `yield` statement, execution jumps back to the statement after `next`.
-
+<!--vert-->
 Python creates a *closure* around generator functions - local variables and other storage cells used in the generator function are
 saved and not deleted by the garbage collector until either the generator is exhausted, or all references to the generator
 object have been deleted. 
 
 ---
-<!--vert-->
+
 ### send and throw
 
 ---
@@ -79,11 +78,13 @@ def echoer():
         last = (yield last) * 2
 
 g = echoer()
-value = next(g)
+next(g)
 ```
 <!-- .element: data-thebe-executable-python -->
 
-places -1 in `value` (because it yields `last`, which is -1 to start). now,
+is -1, because it yields `last`, which is -1 to start.
+<!--vert-->
+now,
 ```python
 g.send(5)
 ```
@@ -95,12 +96,15 @@ command expression, and running the function until the next `yield`, and so on.
 <!--vert-->
 
 another option for control flow with generators is `throw` - throw throws an exception stacktraced as if it was thrown
- in the last `yield` executed in the generators - it does not resume execution of the function. here is a demonstrative example:
+ in the last `yield` executed in the generators - it does not resume execution of the function. 
+<!--vert-->
+example:
 ```python
 def thrower():
     while True:
         print("x")
         yield 5
+thrower
 ```
 <!-- .element: data-thebe-executable-python -->
 <!--vert-->
@@ -112,23 +116,72 @@ value = next(g)
 ```
 <!-- .element: data-thebe-executable-python -->
 
-places value 5 in `value` and prints `x`. however,
+places value 5 in `value` and prints `x`.
+<!--vert-->
+however,
 ```python
 g.throw(ValueError())
 ```
 <!-- .element: data-thebe-executable-python -->
 
-causes a `ValueError` with a stacktrace that refers to the `yield` *that already occurred*:
+causes a `ValueError` with a stacktrace that refers to the `yield` *that already occurred* without printing `x`!
+<!--vert-->
+if `next(g)` was never called before throwing, the exception will be stacktraced to line 1:
+```python
+g = thrower()
+g.throw(ValueError())
 ```
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "<stdin>", line 4, in thrower
-ValueError
+<!-- .element: data-thebe-executable-python -->
+
+---
+
+### exercises
+
+---
+1. create a generator function returning all prime numbers.
+<!--vert-->
+solution:
+```python
+def primes():
+    last = 1
+    while True:
+        last += 1
+        flag = True
+        for i in range(2, last):
+            if last % i == 0:
+                flag = False
+        if flag:
+                yield last
 ```
-without printing `x`! if `next(g)` was never called before throwing, the exception will be stacktraced to line 1:
+<!-- .element: data-thebe-executable-python -->
+<!--vert-->
+2. create a generator function for the Fibonacci sequence. the function can receive a pair of integers,
+and when it does, it restarts the sequence with the values as the new initial values. (example in next slide)
+<!--vert-->
+example:
+```python
+g = new_fib()
+next(g) # returns 1
+next(g) # returns 1
+next(g) # returns 2
+next(g) # returns 3
+# ...
+g.send((1, 2)) # returns 1
+next(g) # returns 2
+next(g) # returns 3
+next(g) # returns 5
 ```
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "<stdin>", line 1, in thrower
-ValueError
+<!--vert-->
+solution:
+```python
+def new_fib():
+    a = 0
+    b = 1
+    while True:
+        pair = yield b
+        if pair != None:
+            a, b = pair
+            a, b = b - a, a
+        else:
+            a, b = b, a + b
 ```
