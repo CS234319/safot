@@ -2,10 +2,14 @@
     width: 100%;
     box-shadow: none;
 }
-.reveal .code-wrapper code {
+.reveal .code-wrapper code, [data-codeblock-editable] {
     font-size: 20px;
     border: grey 2px solid;
     border-radius: 4px;
+}
+
+[data-codeblock-editable]:focus-within {
+    border-color: green;
 }
 
 .reveal blockquote {

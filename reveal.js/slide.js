@@ -36,12 +36,30 @@ function thebe_init(kernel, selector) {
     });
 }
 
+function make_codeblock_editable(element) {
+    const mode = element.dataset.language;
+    const isReadOnly = element.dataset.readonly !== undefined;
+    const text = element.innerText.trim();
+    const cm = new CodeMirror(elt => {
+        element.replaceChildren(elt);
+    }, {
+        value: text,
+        mode: mode,
+        theme: "idea",
+        readonly: isReadOnly,
+    });
+    element.codemirror = cm;
+}
+
 function thebe_init_all(sub) {
     if (sub === "sml") {
         thebe_init("smlnj", "sml");
     } else if (sub === "theory") {
         thebe_init("python3", "python");
         thebe_init("javascript", "javascript");
+    }
+    for (const cb of document.querySelectorAll("[data-codeblock-editable]")) {
+        make_codeblock_editable(cb);
     }
 }
 
