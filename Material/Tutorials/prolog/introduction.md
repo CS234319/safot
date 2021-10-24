@@ -528,8 +528,9 @@ define a predicate `grandparent(X)` that holds when `X` is a grandparent
 <!--vert-->
 
 ```prolog
+...
 ```
-<!--TODO: make editable-->
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
 
 <!--vert-->
 
@@ -546,8 +547,9 @@ a nuclear family consists of 2 parents and their common children
 <!--vert-->
 
 ```prolog
+...
 ```
-<!--TODO: make editable-->
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
 
 <!--vert-->
 
@@ -575,8 +577,9 @@ define a predicate `tree_size(T, S)` such that `T` is a binary tree and `S` is i
 <!--vert-->
 
 ```prolog
+...
 ```
-<!--TODO: make editable-->
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
 
 <!--vert-->
 
@@ -595,8 +598,9 @@ define a predicate `tree_max(T, M)` such that `T` is a binary tree and `M` is th
 you may use the arithmetic function `max/2`
 
 ```prolog
+...
 ```
-<!--TODO: make editable-->
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
 
 <!--vert-->
 
@@ -623,8 +627,9 @@ a perfect binary tree is a binary tree in which all interior nodes have two chil
 <!--vert-->
 
 ```prolog
+...
 ```
-<!--TODO: make editable-->
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
 
 <!--vert-->
 

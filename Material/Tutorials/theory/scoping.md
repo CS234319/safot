@@ -75,7 +75,7 @@ write a program that prints "DYN" if the language uses dynamic scoping and "LEX"
 ```cpp
 ...
 ```
-TODO: make this ^ editable
+<!-- .element: data-codeblock-editable data-language="C" -->
 
 <!--vert-->
 
