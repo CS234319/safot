@@ -8,17 +8,18 @@
 
 what's a value?
 
-- integers are values
-- a pair of an integer and real is a value
-- every function is a value
+* integers are values
+* a pair of an integer and real is a value
+* every function is a value
 
 <!--vert-->
 
 every value in ML has a *type*:
-- some types are atomic
-- some types are builtin 
-- some types may be both builtin and atomic
-- other types are compound (made from smaller types)
+
+* some types are atomic
+* some types are builtin
+* some types may be both builtin and atomic
+* other types are compound (made from smaller types)
 
 remember: not everything in ML is a value, types are not values!
 
@@ -26,31 +27,32 @@ remember: not everything in ML is a value, types are not values!
 
 where do values come from?
 
-- computation: during execution, the program generates more and more values
-  - example: the elements of the Fibonacci sequence
-- initial values introduced by programmer:
-  - atomic values: every literal is a value
-  - composite values: expressions, function definitions
+* computation: during execution, the program generates more and more values
+  * example: the elements of the Fibonacci sequence
+* initial values introduced by programmer:
+  * atomic values: every literal is a value
+  * composite values: expressions, function definitions
 
 <!--vert-->
 
 declarations:
-- making new values out of previous values and literals
-- providing names for this value
+
+* making new values out of previous values and literals
+* providing names for this value
 
 <!--vert-->
 
 REPL (reminder):
 
-- programmer types in a new value (expression, function definition)
-- ML Engine:  
-  - infers type of value: `int`, `int * real`, `'a -> int -> int`, ...
-  - computes value (if it is an expression)
-  - associates the name `it` with this value
+* programmer types in a new value (expression, function definition)
+* ML Engine:  
+  * infers type of value: `int`, `int * real`, `'a -> int -> int`, ...
+  * computes value (if it is an expression)
+  * associates the name `it` with this value
 
 ---
 
-### Example: The Area of a Circle 
+### Example: The Area of a Circle
 
 $$area = \pi \cdot r^2$$
 
@@ -71,9 +73,9 @@ area 2.0;
 * names are not variables!
 * a name can not be used to change its value (actually a constant)
 * a name can be reused for another purpose
-  - by scoping rules
-  - by hiding a name in an outer scope
-  - by redefinitions to the REPL...
+  * by scoping rules
+  * by hiding a name in an outer scope
+  * by redefinitions to the REPL...
 
 ```sml
 val pi = "pi";

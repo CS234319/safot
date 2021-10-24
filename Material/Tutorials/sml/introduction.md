@@ -4,37 +4,39 @@
 
 ---
 
-### What's SML? 
+### What's SML?
 
 born 1985. named Standard ML = Meta Language...
-  - the 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
-  - to makes the user had to interact with LCF
-  - ML invented as an embedded scripting language of LCF
-  - many ad-hoc independent implementations, many new ideas
-  - 1997: first real standard
+
+* the 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
+* to makes the user had to interact with LCF
+* ML invented as an embedded scripting language of LCF
+* many ad-hoc independent implementations, many new ideas
+* 1997: first real standard
 
 <!--vert-->
 
 ### Why SML?
-- exemplar of functional programming
-  - functional = forget about variables
-  - functional = functions are values
-  - functional = higher leverl functions
-  - ...
-- exemplar of **type safe** functional programming
-  - safe=
-    - strongly typed: no type error can go undetected
-    - statically typed: all type erors are detected at compile time
-- influenced: Haskell, OCaml, Scala, F#, ...
+
+* exemplar of functional programming
+  * functional = forget about variables
+  * functional = functions are values
+  * functional = higher leverl functions
+  * ...
+* exemplar of **type safe** functional programming
+  * strongly typed: no type error can go undetected
+  * statically typed: all type erors are detected at compile time
+* influenced: Haskell, OCaml, Scala, F#, ...
 
 <!--vert-->
 
 ### More on SML
 
 main applications:
-- research
-- teaching
-- few industrial applications
+
+* research
+* teaching
+* few industrial applications
 
 <!--vert-->
 
@@ -46,11 +48,12 @@ NOTE: "ML is a general purpose programming language. It is derived in different 
 
 <!--vert-->
 
-two main features emphasized 
-- exception mechanism for disciplined management of errors
-- type system
-  - flexibility of typeless
-  - safety of typed
+two main features emphasized
+
+* exception mechanism for disciplined management of errors
+* type system
+  * flexibility of typeless
+  * safety of typed
 
 ---
 
@@ -122,23 +125,26 @@ val secs_in_hour = it;
 ### Identifiers in SML
 
 two kinds of identifiers:
-- alphabetical identifiers, as found in most languages
-- special identifiers, mainly for defining new operators
+
+* alphabetical identifiers, as found in most languages
+* special identifiers, mainly for defining new operators
 
 <!--vert-->
 
 use of identifiers:
-- names of types
-- names of values
-  - ordinary values
-  - functions 
+
+* names of types
+* names of values
+  * ordinary values
+  * functions
 
 <!--vert-->
 
 identifier congestion?
-- scoping
-- hiding
-- no overloading!
+
+* scoping
+* hiding
+* no overloading!
 
 <!--vert-->
 
@@ -148,9 +154,9 @@ identifier congestion?
 * followed by a sequence of letters, digits, `_`, or `'`
 * case sensitive
 * some alphabetical identifiers are reserved words
-  - names of operators: `and`, `if`, `then`, `else`, `orelse`, ...
-  - punctuations: fun, let, local, of,  
-  - many more
+  * names of operators: `and`, `if`, `then`, `else`, `orelse`, ...
+  * punctuations: fun, let, local, of,  
+  * many more
 
 ```sml
 x

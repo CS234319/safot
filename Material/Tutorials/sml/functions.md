@@ -46,9 +46,10 @@ op d(1.0,3.0);
 ---
 
 ### Curried functions
+
 Curry = Haskell Curry (1900-1982), who invented the "trick"
 
-Any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
+any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expressed as a **curried** function of one argument `$\alpha\rightarrow (\beta \rightarrow \gamma)$`
 
 ```sml
 fun prefix (pre, post) = pre ^ post;
@@ -77,9 +78,10 @@ val prefix = fn : string -> (string -> string)
 ---
 
 ### partial application
+
 AKA=partial evaluation
 
-You don't have to provide subsequent arguments 
+You don't have to provide subsequent arguments
 
 ```sml
 prefix "Dr. ";
@@ -131,6 +133,7 @@ prefix "Dr. " "Watson";
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 the rule is:
+
 * a function invocation `F E1 E2 ... En`
 * abbreviates `(...((F E1) E2)...) En`
 

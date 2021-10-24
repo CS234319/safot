@@ -9,7 +9,6 @@ a list is an __immutable__ finite sequence of elements
 ```sml
 [3, 5, 9]: int list
 ["a", "list"]: str list
-["🍏", "🍊", "🍌"]: str list
 []: 'a list
 ```
 
@@ -615,7 +614,6 @@ fun insSort lt inpList = foldr
 ;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
-
 
 #### question 3
 

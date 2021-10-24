@@ -1,25 +1,29 @@
 # Standard ML
 
-## Datatypes 
+## Datatypes
 
-- Created: using the `datatype` keyword
-- Realize: the theoretical type constructor of disjoint union
-- Generalize
-  - the `null` pointer of C, Pascal, Java
-  - enumerated types, as found in Pascal, C, and Java, e.g., `enum  { };
-  - union types, as found in Pascal variant records and union in C
-  - branding, as done by Pascal's TYPE, but difficult to achieve in Java and C.
+* Created: using the `datatype` keyword
+* Realize: the theoretical type constructor of disjoint union
+* Generalize
+  * the `null` pointer of C, Pascal, Java
+  * enumerated types, as found in Pascal, C, and Java, e.g., `enum  { };
+  * union types, as found in Pascal variant records and union in C
+  * branding, as done by Pascal's TYPE, but difficult to achieve in Java and C.
 
-- Essential: you cannot do lists, trees, etc., without it.
-  - Reason: lists must support the distinction between an empty and an non-empty lists, and function next is not type-safe
+* Essential: you cannot do lists, trees, etc., without it.
+  * Reason: lists must support the distinction between an empty and an non-empty lists, and function next is not type-safe
 
 ---
 
 ### Concrete Datatypes
-dattatype are a SML type constructor:
-  - Given: a list of types and list of tags
-  - Produce: a new type out of these
+
+`dattatype` is an SML type constructor:
+
+* given: a list of types and list of tags
+* produce: a new type out of these
+
 `datatype` creates new types
+
 * these datatypes are **concrete** (not abstract)
 * concrete datatypes can be inspected - constructed and taken apart
 * ML's datatypes have two kinds of values: **atomic** and **composite**
@@ -114,12 +118,14 @@ a engine body; (*Error*)
 ---
 
 ### Constructors (of SML)
-The term *constructor* may be confusing
-  - constructors of classes, as in C++
-  - consturcotrs of types, as in abstract type constructors
-  - in the construction industry...
 
-In SML, constructors are functions
+the term *constructor* may be confusing
+
+* constructors of classes, as in C++
+* consturcotrs of types, as in abstract type constructors
+* in the construction industry...
+
+in SML constructors are functions
 
 ```sml
 datatype mass = Kg of real;

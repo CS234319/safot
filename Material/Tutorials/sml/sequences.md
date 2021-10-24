@@ -37,7 +37,7 @@ from 1;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-```
+```sml
 tail it;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
