@@ -1,6 +1,10 @@
 # Standard ML
 
-## Reminder: Values and Types in ML
+## declarations
+
+---
+
+## Reminder: Values and Types
 
 what's a value?
 
@@ -18,7 +22,7 @@ every value in ML has a *type*:
 
 remember: not everything in ML is a value, types are not values!
 
-## Declarations
+<!--vert-->
 
 where do values come from?
 
