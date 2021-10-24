@@ -168,7 +168,7 @@ h''3_H
 
 ### Special Identifiers
 
-are called `symbolic` identifiers in the SML lingo.
+are called "symbolic" identifiers in the SML lingo.
 
 * a sequence of one or more of the following ``! % & $ # + - * / : < = > ? @ \ ~ \ ^ | ` ``
 
@@ -188,6 +188,8 @@ are called `symbolic` identifiers in the SML lingo.
 
 `abstype` | `and` | `andalso` | `as` | `case` | `datatype` | `do` | `else` | `end |` `eqtype` | `exception` | `fn` | `fun` | `functor` | `handle` | `if` | `in |` `include` | `infix` | `infixr` | `let` | `local` | `nonfix` | `of` | `op` | `open |` `orelse` | `raise` | `rec` | `sharing` | `sig` | `signature` | `struct |` `structure` | `then` | `type` | `val` | `while` | `with` | `withtype`
 
+Keywords are words that look like identifiers, but cannot be used as such; they are reserved for other purposes.
+
 ---
 
 ### The Basic Types of ML
@@ -200,6 +202,28 @@ Six "basic" types: `int`, `real`, `string`, `char`, `bool`, `unit`
    - User defined types can be copmound
    - A programming language may furnish the user with some builtin, non-atomic types (not in SML)
 ---
+
+
+### Names of Basic Types are Predeefined
+
+The words "basic" types: `int`, `real`, `string`, `char`, `bool`, `unit`
+ - Are valid identifiers
+ - Are not reserved identifiers; they can be used for any purpose
+ - Are not keywords
+ - Are predefined identifiers, naming the builtin types;
+ - The identifiers may be used for other purposes; the underlying type may remain nameless.
+
+```sml
+type integer = int;
+val int = 6;
+type Real = real;
+val real = 7;
+real * int - real 
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+---
+
+
 
 ### int
 
