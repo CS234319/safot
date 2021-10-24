@@ -10,17 +10,17 @@
 - **Reading**
    1. [Summary of first lecture: chapters 1--2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 - **Reference**
-   1. [Specificaiton of Pascal 72](PascalReport.pdf)
+   1. [Specificaiton of Pascal 72](Misc/PascalReport.pdf)
    2. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
    3. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
    4. [Programming in Standard ML ’97:
 A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364/ECS-LFCS-97-364.pdf)
-- **HW**: [HW1](hw/1.md) is published \[30.10\]
+- **HW**: [HW1](???) is published \[30.10\]
 
 ## Week 2 \[31.10-6.11\]
 - **Lecture**
-   1. [Quick Pascal (Cont.)](?)
-   2. [Types](?)
+   1. [Quick Pascal (Cont.)](Lectures/Introduction/pascal.md)
+   2. [Types](https://drive.google.com/file/d/0B3645jTHku6WSjFXVW9nU01lYzQ/view?resourcekey=0-_Ro--wmFchAQKkwX_yKsLQ)
 - **Tutorial**
    1. [ML - Declarations](Tutorials/sml/declarations.md)
    2. [ML - Datatypes](Tutorials/sml/datatypes.md)
@@ -29,16 +29,16 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
    2. [ML - Functions](Tutorials/sml/functions.md)
 ## Week 3 \[7.11-13.11\]
 - **Lecture**
-   1. [Types (Cont.)](?)
+   1. [Types (Cont.)](https://drive.google.com/file/d/0B3645jTHku6WSjFXVW9nU01lYzQ/view?resourcekey=0-_Ro--wmFchAQKkwX_yKsLQ)
+   2. [Advanced Typing](https://drive.google.com/file/d/0B3645jTHku6WUWEtMEFIRVpWcEE/view?resourcekey=0---lOsbEJlKkLYFC0Ng7WXQ)
 - **Tutorial**
    1. [ML - Lists](Tutorials/sml/lists.md)
-- **Submission**: [HW1](hw/1.md) \[13.11 23:59\]
-- **HW**: [HW2](hw/2.md) is published \[13.11\]
+- **Submission**: [HW1](???) \[13.11 23:59\]
+- **HW**: [HW2](???) is published \[13.11\]
 
 ## Week 4 \[14.11-20.11\]
 - **Lecture**
-   1. Overflow of types
-   2. [Types (Cont.)](?)
+   1. [Advanced Typing (Cont.)](https://drive.google.com/file/d/0B3645jTHku6WUWEtMEFIRVpWcEE/view?resourcekey=0---lOsbEJlKkLYFC0Ng7WXQ)
 - **Tutorial**
    1. [ML's Type System](Tutorials/theory/ml-type-system.md)
    2. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
@@ -46,16 +46,16 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
 
 ## Week 5 \[21.11-27.11\]
 - **Lecture**
-   1. [State and Storage](?)
+   1. [State and Storage](https://drive.google.com/file/d/0B3645jTHku6WaUREbnpFQlRnVDA/view?resourcekey=0-7g0Cj4zdQEQdEpPXzQUBnw)
 - **Tutorial**
    1. [ML - Sequences](Tutorials/sml/sequences.md)
    2. [ML - Exceptions](Tutorials/sml/exceptions.md)
-- **Submission**: [HW2](hw/2.md) \[27.11 23:59\]
-- **HW**: [HW3](hw/3.md) is published \[27.11\]
+- **Submission**: [HW2](???) \[27.11 23:59\]
+- **HW**: [HW3](???) is published \[27.11\]
 
 ## Week 6 \[5.12-11.12\]
 - **Lecture**
-   1. [Symbolic Values and Pure Lisp](?)
+   1. [Symbolic Values and Pure Lisp](???)
 - **Tutorial**
    1. [Automatic Memory Management](Tutorials/theory/automatic-memory-management.md)
    2. [RTTI](Tutorials/theory/rtti.md)
@@ -63,52 +63,46 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
 
 ## Week 7 \[12.12-18.12\]
 - **Lecture**
-   1. [Symbolic Values and Pure Lisp (Cont.)](?)
+   1. [Symbolic Values and Pure Lisp (Cont.)](???)
 - **Tutorial**
    1. [mini-lisp](Tutorials/theory/mini-lisp.md)
-- **Submission**: [HW3](hw/3.md) \[18.12 23:59\]
-- **HW**: [HW4](hw/4.md) is published \[18.12\]
+- **Submission**: [HW3](???) \[18.12 23:59\]
+- **HW**: [HW4](???) is published \[18.12\]
 
 ## Week 8 \[19.12-25.12\]
 - **Lecture**
-   1. [Prolog](?)
+   1. [Prolog](???)
 - **Tutorial**
    1. [Prolog - Introduction](Tutorials/prolog/introduction.md)
 
 ## Week 9 \[26.12-1.1\]
 - **Lecture**
-   1. More on state
-   2. Commands
+   1. [Commands](https://drive.google.com/file/d/0B3645jTHku6WY1Fwb1FKSzRNTnM/view?resourcekey=0-Uf3eTZeNENnxvGhDqzAj2w)
 - **Tutorial**
    1. [Prolog - Lists](Tutorials/prolog/lists.md)
    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
-- **Submission**: [HW4](hw/4.md) \[1.1 23:59\]
-- **HW**: [HW5](hw/5.md) is published \[1.1\]
+- **Submission**: [HW4](???) \[1.1 23:59\]
+- **HW**: [HW5](???) is published \[1.1\]
 
 ## Week 10 \[2.1-8.1\]
 - **Lecture**
-   1. Commands (cont)
+   1. [Commands (Cont.)](https://drive.google.com/file/d/0B3645jTHku6WY1Fwb1FKSzRNTnM/view?resourcekey=0-Uf3eTZeNENnxvGhDqzAj2w)
 - **Tutorial**
    1. [Prolog - Higher Order Programming](Tutorials/prolog/higher-order.md)
    2. [Prolog - Exam Questions](Tutorials/prolog/exam-questions.md)
 
 ## Week 11 \[9.1-15.11\]
 - **Lecture**
-   1. [Advanced Constructs - Evaluation Strategies](?)
+   1. [Advanced Constructs - Evaluation Strategies]([???](https://drive.google.com/file/d/0B3645jTHku6WLWZ2Nm5BY21ta0U/view?resourcekey=0-yiAJupBOux7eJcQM7DecNA))
 - **Tutorial**
-   1. [Classifying OCaml's Tokens](Tutorials/theory/ocaml-tokens-classification.md)
-- **Submission**: [HW5](hw/5.md) \[15.11 23:59\]
-- **HW**: [HW6](hw/6.md) is published \[15.11\]
+   1. [Classifying OCaml's Tokens](???)
+- **Submission**: [HW5](???) \[15.11 23:59\]
+- **HW**: [HW6](???) is published \[15.11\]
 
 ## Week 12 \[16.1-22.1\]
 - **Lecture**
-   1. [Advanced Constructs - Beyond Closures](?)
-      1. Function objects 
-      2. Java iterators
-      3. Generators
-      4. Coroutines
-      5. Java iterators
-   2. [Advanced Constructs - Closures](?)
+   1. [Advanced Constructs - Closures](https://drive.google.com/file/d/0B3645jTHku6WLWZ2Nm5BY21ta0U/view?resourcekey=0-yiAJupBOux7eJcQM7DecNA)
+   2. [Advanced Constructs - Beyond Closures](https://drive.google.com/file/d/0B3645jTHku6WLWZ2Nm5BY21ta0U/view?resourcekey=0-yiAJupBOux7eJcQM7DecNA)
 - **Tutorial**
    1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
    2. [Python Generators](Tutorials/theory/python-generators.md)
@@ -119,9 +113,9 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
 - **Lecture**
    1. TBD
 - **Tutorial**
-   1. [Exam Questions](?.md)
+   1. [Exam Questions](???)
 - **Reading material**
-- **Submission**: [HW6](hw/6.md) \[29.11 23:59\]
+- **Submission**: [HW6](???) \[29.11 23:59\]
 
 ## Extra curricular
 
