@@ -365,6 +365,8 @@ false;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+- The names `true` and `false` are not keywords; they are predefined identifiers 
+- In trurth, type `boolean` is a predefined enumerated type
 ---
 
 ### tuples - cartesian product type
