@@ -7,6 +7,12 @@
     border: grey 2px solid;
     border-radius: 4px;
 }
+
+.reveal blockquote {
+    width: 100%;
+    box-shadow: 2px 2px 8px rgb(0 0 0 / 20%);
+}
+
 .p-Widget, .lm-Widget {
     overflow: auto;
 }
