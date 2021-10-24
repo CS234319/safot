@@ -16,7 +16,8 @@ for example, a class instance may have fields in it, which may themselves have f
 the same 16 bytes may be interpreted in countless different ways, and when we reach a value, we do not know what's in it!
 
 <!--vert-->
-here is an example. we consider the following C `struct`s: 
+#### example
+consider the following C `struct`s
 ```C
 struct S1 {
     int a;
@@ -43,9 +44,9 @@ it is especially pronounced in languages with dynamic typing - types must be che
 <!--vert-->
 statically-typed languages can check for *type errors* in compile time and from there assume all field accesses are valid.
 
-however, in dynamically-typed languages, saving type information is indeed necessary for any type of type checking to function correctly.
+in dynamically-typed languages RTTI is necessary for type checking
 
-actually, we find that, in some cases, it can be beneficial in statically-typed languages as well.
+statically-typed languages can benefit from RTTI too
 
 ---
 
@@ -56,8 +57,13 @@ actually, we find that, in some cases, it can be beneficial in statically-typed 
 - specifies the type of the data to which it is attached
 - is useful in both statically- and dynamically-typed languages
 <!--vert-->
-in both statically- and dynamically-typed languages which have it, RTTI is used for serialization, deep-cloning and garbage collection
-these are purposes that require traversal of a type structure that has to be known in runtime.
+RTTI is used for:
+
+* serialization
+* deep-cloning
+* garbage collection
+
+NOTE: these are purposes that require traversal of a type structure that has to be known in runtime
 
 in dynamically-typed languages, the RTTI is also used for type checking, which is done in runtime.
 
