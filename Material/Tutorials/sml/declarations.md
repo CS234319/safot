@@ -1,36 +1,48 @@
 # Standard ML
 
 ## Reminder: Values and Types in ML
-Every thing in ML is a *value*:
-  - Integers are values
-  - A pair of an integer and real is a value
-  - Every function is a value
-Every value in ML has a *type*:
-  - Some types are atomic
-  - Some types are builtin 
-  - Some types may be both builtin and atomic
-  - Other types are compound, made from smaller types
-Remember: not everything in ML is a value, types are not values!
+
+what's a value?
+
+- integers are values
+- a pair of an integer and real is a value
+- every function is a value
+
+<!--vert-->
+
+every value in ML has a *type*:
+- some types are atomic
+- some types are builtin 
+- some types may be both builtin and atomic
+- other types are compound (made from smaller types)
+
+remember: not everything in ML is a value, types are not values!
 
 ## Declarations
-Where do values come from?
-  - Computation: during execution, the program generates more and more values
-    - Example: the elements of the Fibonacci sequence
-    - But where 
-  - Initial values introduced by programmer:
-    - Atomic values: every literal is a value
-    - Composite values: expressions, function definitions
-Declarations:
-  - Making new values out of previous values and literals
-  - Providing names for this value
+
+where do values come from?
+
+- computation: during execution, the program generates more and more values
+  - example: the elements of the Fibonacci sequence
+- initial values introduced by programmer:
+  - atomic values: every literal is a value
+  - composite values: expressions, function definitions
+
+<!--vert-->
+
+declarations:
+- making new values out of previous values and literals
+- providing names for this value
+
+<!--vert-->
+
 REPL (reminder):
-  - Programmer types in a new value (expression, function definition)
-  - ML Engine:  
-    - Infer type of value: `int`, `int * real,  `'a-> int -> int`,  ???
-    - Compute value (if it is an expression)
-    - Associate the name `it` with this value
-Declaration: - If the programmer types in a *named value*,  the engine saves
-  this name (in addition to `it`)
+
+- programmer types in a new value (expression, function definition)
+- ML Engine:  
+  - infers type of value: `int`, `int * real`, `'a -> int -> int`, ...
+  - computes value (if it is an expression)
+  - associates the name `it` with this value
 
 ---
 
@@ -54,11 +66,10 @@ area 2.0;
 * `val` declaration binds a name to a value
 * names are not variables!
 * a name can not be used to change its value (actually a constant)
-    - did we say that names are not variables?
-* Name can be reused for another purpose
+* a name can be reused for another purpose
   - by scoping rules
-  - by hiding a name in an outer scope, 
-  - but, also, by redefinitions to the REPL...
+  - by hiding a name in an outer scope
+  - by redefinitions to the REPL...
 
 ```sml
 val pi = "pi";
@@ -91,11 +102,9 @@ area 1.0;
 👎 redefining may have no visible effect
 
 ⚠️ when modifying a program, be sure to recompile the entire file
-
-
-Redefining indicates that internally, the SML engine is not an interpreter, it
-actually compiles and links, and does not amend this linking upone
 </div>
+
+NOTE: redefining indicates that internally, the SML engine is not an interpreter, it actually compiles and links, and does not amend this linking upone
 
 ---
 
