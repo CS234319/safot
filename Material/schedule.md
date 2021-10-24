@@ -27,6 +27,7 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
 - **Reading material**
    1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
    2. [ML - Functions](Tutorials/sml/functions.md)
+
 ## Week 3 \[7.11-13.11\]
 - **Lecture**
    1. [Types (Cont.)](https://drive.google.com/file/d/0B3645jTHku6WSjFXVW9nU01lYzQ/view?resourcekey=0-_Ro--wmFchAQKkwX_yKsLQ)
@@ -95,7 +96,7 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
 - **Lecture**
    1. [Advanced Constructs - Evaluation Strategies]([???](https://drive.google.com/file/d/0B3645jTHku6WLWZ2Nm5BY21ta0U/view?resourcekey=0-yiAJupBOux7eJcQM7DecNA))
 - **Tutorial**
-   1. [Classifying OCaml's Tokens](???)
+   1. TBD
 - **Submission**: [HW5](???) \[15.11 23:59\]
 - **HW**: [HW6](???) is published \[15.11\]
 
@@ -106,7 +107,7 @@ A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364
 - **Tutorial**
    1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
    2. [Python Generators](Tutorials/theory/python-generators.md)
-   3. [C# Coroutines](Tutorials/theory/csharp-coroutines.md)
+   3. TBD
 - **Reading material**
 
 ## Week 13 \[23.1-29.11\]
