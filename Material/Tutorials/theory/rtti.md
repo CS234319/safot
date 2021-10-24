@@ -20,23 +20,18 @@ the same 16 bytes may be interpreted in countless different ways, and when we re
 consider the following C `struct`s
 ```C
 struct S1 {
-    int a;
-    int b;
-    int c;
-}
-```
-```C
+    int x;
+};
 struct S2 {
-    long a;
-    int b;
-}
+    int *ptr;
+};
 ```
-assuming a 4 byte `int` and 8 byte `long`, any 96 bit long sequence can fit either struct!
 <!--vert-->
-when we encounter a 96 bit sequence, how can we know whether it should be interpreted as `S1`, as `S2` or in any other way?
-now, imagine a longer struct that has fields that are themselves structs. the interpretation problem becomes very hard.
 
-we conclude that if we want to keep track of types *in runtime*, we must save type information for our data.
+assuming `sizeof(int) == sizeof(int*) && sizeof(int*) == 8`, and given an 8 bit long variable, how can we know if it has to be interpreted as `S1` or as `S2`?
+this is a problem because it shows that *we cannot tell apart pointers and data*, making implementing GC impossible. 
+
+conclusion: we must have type information at *runtime*
 <!--vert-->
 the problem of traversal on networks of objects is not specific to garbage collection algorithms, and recurs in various other places like deep cloning and serialization.
 
@@ -65,12 +60,15 @@ RTTI is used for:
 
 NOTE: these are purposes that require traversal of a type structure that has to be known in runtime
 
-in dynamically-typed languages, the RTTI is also used for type checking, which is done in runtime.
+in dynamically-typed languages, also:
+* type checking
 
 <!--vert-->
 C & C++ have a "no hidden costs" policy - when a programmer allocates memory, it should be guaranteed that no extra memory is used.
-therefore, these languages *do not* have RTTI (except for a very limited form in C++ for the implementation of `virtual`).
- 
+therefore, these languages *do not* have RTTI
+
+NOTE: except for a very limited form in C++ for the implementation of `virtual`, i.e., `vptr` and `vtbl`
+
 this is why these languages **do not, and can not**, have general purpose GC, serialization, cloning or any "deep" operations.
  
 <!--vert-->
@@ -86,8 +84,9 @@ the offset `off(day)` is known in compile-time, because Java is statically-typed
 in JavaScript, we also dereference `today`, but we must examine the RTTI to determine `off(day)` to then advance by it and update the field.
 this is because JavaScript is dynamically-typed.
 
+NOTE: in this case, C would operate similarly to Java, except it has no RTTI to ignore.
+
 <!--vert-->
 JavaScript's dynamic typing causes it to not know the required offsets in compile time. 
 
 this example demonstrates the difference between statically- and dynamically-typed languages in their use of RTTI.
-
