@@ -1,60 +1,63 @@
 # Standard ML
-## What's SML? 
-Born 1985. Named Standard ML = Meta Language...
-  - The 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
-  - To makes the user had to interact with LCF
+
+## introduction
+
+---
+
+### What's SML? 
+
+born 1985. named Standard ML = Meta Language...
+  - the 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
+  - to makes the user had to interact with LCF
   - ML invented as an embedded scripting language of LCF
-  - Many ad-hoc independent implementations, many new ideas
-  - "Standard ML" on 1985 by Robert Milner
-  - 1997: First real standard
----
+  - many ad-hoc independent implementations, many new ideas
+  - 1997: first real standard
 
-## Why SML?
- - Exemplar of functional programming
-    - Functional = forget about variables
-    - Functional = functions are values
-    - Functional = higher leverl functions
-    - ...
- - Exemplar of **type safe** functional programming
-    - Safe=
-        - Strongly typed: no type error can go undetected
-        - Statically typed: all type erors are detected at compile time
+<!--vert-->
 
-Influenced: Haskell, OCaml, Scala, F#, ...
----
-## More on SML
+### Why SML?
+- exemplar of functional programming
+  - functional = forget about variables
+  - functional = functions are values
+  - functional = higher leverl functions
+  - ...
+- exemplar of **type safe** functional programming
+  - safe=
+    - strongly typed: no type error can go undetected
+    - statically typed: all type erors are detected at compile time
+- influenced: Haskell, OCaml, Scala, F#, ...
 
-Main applications:
- - Research
- - Teaching
- - Few industrial applications including algorithmic trading and data base management
-Structure:
-  - Core language
-  - Extensions, e.g., module system
-  - Library
+<!--vert-->
 
----
-## Language Spirit
-Robin Milner: "ML is a general purpose programming language. It is derived in different
-aspects from ISWIM, POP2 and GEDANKEN, and contains perhaps two new
-features. First, it has **an escape and escape trapping mechanism**, well-adapted to
-programming strategies which may be (in fact usually are) inapplicable to certain
-goals. Second, it has a **polymorphic type discipline** which combines the flexibility
-of programming in a typeless language with the security of compile-time type
-checking (as in other languages, you may also define your own types, which may
-be abstract and/or recursive); this is what ensures that a well-typed program
-cannot perform faulty proofs."
+### More on SML
 
-Two main features emphasized 
-- Exception mechanism for disciplined management of errors
-- Type system
-  - Flexibility of typeless
-  - Safety of typed§
+main applications:
+- research
+- teaching
+- few industrial applications
+
+<!--vert-->
+
+### Language Spirit
+
+> "ML is a general purpose programming language. First, it has **an escape and escape trapping mechanism**, well-adapted to programming strategies which may be inapplicable to certain goals. Second, it has a **polymorphic type discipline** which combines the flexibility of programming in a typeless language with the security of compile-time type checking." - Robin Milner
+
+NOTE: "ML is a general purpose programming language. It is derived in different aspects from ISWIM, POP2 and GEDANKEN, and contains perhaps two new features. First, it has **an escape and escape trapping mechanism**, well-adapted to programming strategies which may be (in fact usually are) inapplicable to certain goals. Second, it has a **polymorphic type discipline** which combines the flexibility of programming in a typeless language with the security of compile-time type checking (as in other languages, you may also define your own types, which may be abstract and/or recursive); this is what ensures that a well-typed program cannot perform faulty proofs."
+
+<!--vert-->
+
+two main features emphasized 
+- exception mechanism for disciplined management of errors
+- type system
+  - flexibility of typeless
+  - safety of typed
 
 ---
 
 ### Running
-Mode of operation
+
+mode of operation
+
 * REPL (sort of; it is not interpreted)
 * first prompt (-) and secondary prompt (=)
 * semicolon terminated
@@ -117,30 +120,32 @@ val secs_in_hour = it;
 ---
 
 ### Identifiers in SML
-Two kinds of identifiers:
-  - Alphabetical identifiers, as found in most languages
-  - Special identifiers, mainly for defining new operators
-Use of identifiers:
-  - Names of types
-  - Names of values
-    - Ordinary values
-    - Functions 
-Identifier congestion?
- - Scoping
- - Hiding
- - No overloading!
 
+two kinds of identifiers:
+- alphabetical identifiers, as found in most languages
+- special identifiers, mainly for defining new operators
+
+<!--vert-->
+
+use of identifiers:
+- names of types
+- names of values
+  - ordinary values
+  - functions 
+
+<!--vert-->
+
+identifier congestion?
+- scoping
+- hiding
+- no overloading!
 
 <!--vert-->
 
 ### Alphabetic Identifiers
 
 * begin with a letter
-* followed by a sequence of 
-  - letters
-  - digits, 
-  - underscore, or,
-  - single quote
+* followed by a sequence of letters, digits, `_`, or `'`
 * case sensitive
 * some alphabetical identifiers are reserved words
   - names of operators: `and`, `if`, `then`, `else`, `orelse`, ...
@@ -158,27 +163,20 @@ h''3_H
 <!--vert-->
 
 ### Special Identifiers
-Are called `symbolic` identifiers in the SML lingo.
 
-* A sequence of  one or more of the following 
+are called `symbolic` identifiers in the SML lingo.
 
-    ```sml
-    ! % & $ # + - * / : < = > ? @ \ ~ \ ^ |
-    ```
+* a sequence of one or more of the following ``! % & $ # + - * / : < = > ? @ \ ~ \ ^ | ` ``
 
-* should not be one of:
-
-    ```sml
-    : _ | = => -> #
-    ```
+* should not be one of: `: | = => -> #`
 
 * allowed wherever an alphabetic name is
-* try to avoid using it
 
-```sml
-val +-+-+ = 1415;
-```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+    ```sml
+    val +-+-+ = 1415;
+    val <=> = "asdf";
+    ```
+    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -244,18 +242,18 @@ functions
 
 <!--vert-->
 
-String literals are written in double quotes
+string literals are written in double quotes
 
 ```sml
 "ML is the best";
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-Escape sequences: `\n`, `\t`, `\"`, `\\`
+escape sequences: `\n`, `\t`, `\"`, `\\`
 
 <!--vert-->
 
-Concatenation operator
+concatenation operator
 
 ```sml
 "Standard" ^ " ML";
@@ -264,7 +262,7 @@ Concatenation operator
 
 <!--vert-->
 
-Comparison of strings
+comparison of strings
 
 ```sml
 "abc" < "cba";
@@ -299,7 +297,7 @@ characters (values of type `char`) are distinguished from strings of length 1 by
 
 <!--vert-->
 
-Conversion between strings and chars
+conversion between strings and chars
 
 ```sml
 str #"0";
@@ -310,7 +308,7 @@ String.sub("hello", 0);
 
 <!--vert-->
 
-Conversion between chars and ASCII
+conversion between chars and ASCII
 
 ```sml
 ord #"0";
@@ -323,7 +321,7 @@ chr it;
 
 ### boolean
 
-Two named values: `true` and `false`
+two named values: `true` and `false`
 
 ```sml
 true;
