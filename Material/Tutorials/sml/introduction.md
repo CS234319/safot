@@ -41,14 +41,12 @@ main applications:
 <!--vert-->
 
 ### Language Spirit
-
+Robin Milner on ML: 
 > "ML is a general purpose programming language. First, it has **an escape and escape trapping mechanism**, well-adapted to programming strategies which may be inapplicable to certain goals. Second, it has a **polymorphic type discipline** which combines the flexibility of programming in a typeless language with the security of compile-time type checking." - Robin Milner
-
-NOTE: "ML is a general purpose programming language. It is derived in different aspects from ISWIM, POP2 and GEDANKEN, and contains perhaps two new features. First, it has **an escape and escape trapping mechanism**, well-adapted to programming strategies which may be (in fact usually are) inapplicable to certain goals. Second, it has a **polymorphic type discipline** which combines the flexibility of programming in a typeless language with the security of compile-time type checking (as in other languages, you may also define your own types, which may be abstract and/or recursive); this is what ensures that a well-typed program cannot perform faulty proofs."
 
 <!--vert-->
 
-two main features emphasized
+Two main features emphasized by the language creator
 
 * exception mechanism for disciplined management of errors
 * type system
@@ -192,10 +190,15 @@ are called `symbolic` identifiers in the SML lingo.
 
 ---
 
-### ML Primitive Types
+### The Basic Types of ML
 
-`int`, `real`, `string`, `char`, `bool`, `unit`
-
+Six "basic" types: `int`, `real`, `string`, `char`, `bool`, `unit`
+- The six are basic, since they are *atomic*, i.e., not created from other types
+- The six are basic, since they are *builtin*
+- There are other, user defined types:
+   - User defined types can be atomic (no in SML; enumerated types are made of `unit`
+   - User defined types can be copmound
+   - A programming language may furnish the user with some builtin, non-atomic types (not in SML)
 ---
 
 ### int
