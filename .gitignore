@@ -122,7 +122,6 @@ out/
 *.o
 *.obj
 *.out
-*.pdf
 *.pyc
 *.slf*
 *.snm

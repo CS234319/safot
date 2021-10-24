@@ -17,4 +17,4 @@
 ## lectures
 
 - [ ] add slides' source
-- [ ] add slides as pdfs
+- [X] add slides as pdfs
