@@ -33,14 +33,12 @@ Property(Boolean Pristine::ok) {
   if (white(s1()) || white(s2())) return false;
   let p = prev().handle(), n = next().handle();
   if (p != $P_x$) {
-    expect(p >= $P_f$) 
-    expect(p <= $P_t$) 
+    expecting(p >= $P_f$,  p <= $P_t$) 
     if (p < $P_f$) return false;
     if (p > $P_t$) return false;
   }
   if (n != $P_x$) {
-    expect(n >= $P_f$) 
-    expect(n <= $P_t$) 
+    expecting(n >= $P_f$,  n <= $P_t$) 
     if (n < $P_f$) return false;
     if (n > $P_t$) return false;
   }
@@ -48,17 +46,17 @@ Property(Boolean Pristine::ok) {
 }
 
 Pristine& Pristine::prev(Pristine p) { 
-  expect(not x())
+  expecting(not x())
   let s = p.handle();
-  expect(white(s))
+  expecting(white(s))
   s1(flip(s)); 
   return *this;
 }
 
 Pristine& Pristine::next(Pristine p) { 
-  expect(not x())
+  expecting(not x())
   let s = p.handle();
-  expect(white(s))
+  expecting(white(s))
   s2(flip(s)); 
   return *this;
 }

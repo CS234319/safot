@@ -1,14 +1,10 @@
 // Poor man's edition of a bit cleaner C/C++
 #define Implementation (__INCLUDE_LEVEL__ == 0)
 
-<<<<<<< HEAD
-#define Return(X) return ((__ = (X)),(__));
-=======
 #define unique(X)       CONCATENATE(X,__COUNTER__)
 
 #define COUNT(whatever...)   COUNT1(whatever,9, 8, 7, 6, 5, 4, 3,2,1,0)
 #define COUNT1(_1,_2,_3,_4,_5,_6,_7,_8,_9, N, ...) N
->>>>>>> 64596d9 (checkpoint)
 
 static_assert(COUNT() == 1);
 static_assert(COUNT(1) == 1);
@@ -61,23 +57,13 @@ static_assert(COUNT(1,2,3,4) == 4);
 #define below ;
 #define feature(X)     inline X() const
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 #define Initializing(T)  T::T
-#define Create(X)   explicit X
 #define Make(X)     public: static X make
-=======
 #define Initializing(T) T::T
-=======
 #define Filling(T)    T::T
->>>>>>> a5d5e07 (checkpoint)
 #define Fill(X)       explicit X
-<<<<<<< HEAD
 #define Make            static Self make
->>>>>>> 64596d9 (checkpoint)
-=======
 #define Make          static Self make
->>>>>>> d1db79c (checkpoint)
 
 #define Feature(X)     inline auto X() const
 
@@ -165,17 +151,6 @@ template<typename T> constexpr inline T range(T s1, T s2) is(s2 - s1 + 1)
 Alias(std::function<long long()>) Provider;
 Alias(std::function<bool()>) Predicate;
 
-#define Perform(something,etc...) {etc{something}}
-
-#define maintaining(maintenane...) MAP(maintain,maintenane)
-#define expecting(expectations...) MAP(expect,expectations)
-#define promising(promises...)     MAP(promise, promises)
-
-#define maintain(e)   expect(e) promise(e)
-#define promise(p)    Promise unique(Promise) from (CONTEXT(p), PREDICATE(p));
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 #define _fe0(what, etc...)
 #define _fe1(what, x, etc...) what(x)_fe0(what, etc)
 #define _fe2(what, x, etc...) what(x)_fe1(what, etc)
@@ -199,33 +174,32 @@ static_assert(COUNT(1,2,3,4) == 4);
 // typedef std::function<long long()> Provider;
 // #import <iostream>
 
-Type Context { 
    typedef std::function<bool()> Predicate;
-=======
-#define expect(e)     Expectation unique(Expectation) (CONTEXT(e), [&]{ return(e); });                                                  \
-=======
-#define expect(e)     Expectation unique(Expectation) from (CONTEXT(e), PREDICATE(e));
->>>>>>> a5d5e07 (checkpoint)
+
+#define Perform(something,etc...) {etc{something}}
+
+#define expecting(expectations...) MAP(EXPECT,   expectations)
+#define maintaining(maintenane...) MAP(MAINTAIN, maintenane)
+#define promising(promises...)     MAP(PROMISE,  promises)
+
+#define MAINTAIN(x)   EXPECT(x) PROMISE(x)
+#define EXPECT(e)     Expectation unique(Expectation) (CONTEXT(e), PREDICATE(e)); 
+#define PROMISE(e)    Promise     unique(Promise)     (CONTEXT(e), PREDICATE(e)); 
 
 #define CONTEXT(X)    Context(__FILE__, __LINE__, __PRETTY_FUNCTION__, #X) 
 #define PREDICATE(X)  Predicate([&]{ return(X); }) 
 
 
 Type Context { 
->>>>>>> 64596d9 (checkpoint)
   String file;
   Integer line;
   String context;
   String expression;
-<<<<<<< HEAD
-  Create (Context) 
-=======
   Fill (Context) 
->>>>>>> 64596d9 (checkpoint)
     from (String f, Integer l, String c, String e) 
       by(file(f), line(l), context(c), expression(e))
-  Unit report() is(
-      fprintf(stderr,"%s(%d)/%s: '%s' \n\t", file, line,context,expression)) 
+  Unit report() 
+    is( fprintf(stderr,"%s(%d)/%s: '%s' \n\t", file, line,context,expression)) 
 };
 
 #define Occasionally(Special, General, Etc...) \
@@ -257,18 +231,6 @@ Occasionally(Promise, Assertion,
   Done(Promise) doing(check())
 )
 
-<<<<<<< HEAD
-#define CONTEXT(P,whatever...) \
-  Context(__FILE__, __LINE__, __PRETTY_FUNCTION__, #P, whatever)
-
-#define promising(promises...)     MAP(PROMISE, promises)
-#define expecting(expectations...) MAP(EXPECT, expectations)
-
-#define EXPECT(e)                  unique(Expectation)(CONTEXT(e), PREDICATE(e)) 
-#define PROMISE(e)                 unique(Promise)(CONTEXT(e), PREDICATE(e)) 
-
-=======
->>>>>>> 64596d9 (checkpoint)
 #define __EXPRESSION(X) <<#X<<"="<<X<<"; "
 
 #define X1(x1)
@@ -281,9 +243,6 @@ Occasionally(Promise, Assertion,
 #define ELABORATE(...)  GET_MACRO(_0,__VA_ARGS__,X5, X4,X3,X2,X1,X0)(__VA_ARGS__)
 
 #define VA_ARGS(...) DELME, ##__VA_ARGS__
-<<<<<<< HEAD
-=======
-
 
 #define Return(X) return ((__ = (X)),(__));
 
@@ -298,6 +257,3 @@ Occasionally(Promise, Assertion,
     M2("-->", __); \
     return __; \
   }
-
-
->>>>>>> 64596d9 (checkpoint)

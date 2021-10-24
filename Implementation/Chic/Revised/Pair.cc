@@ -29,7 +29,7 @@ Occasionally(Pair, Handle,
 
 // Properties:
 Property(Boolean Pair::ok)      is(white(s1()) && white(s2()))
-Property(Boolean Pair::seen)    {expect(white(s2())) is(black(s1())) }
+Property(Boolean Pair::seen)    {expecting(white(s2())) is(black(s1())) }
 Property(Boolean Pair::foreign) is(black(s2()))
 
 

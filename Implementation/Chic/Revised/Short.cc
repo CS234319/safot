@@ -1,5 +1,4 @@
 #import "chic.h"
-xads asdf a asdfasf .
 Perspective(Stained, Short, 
   Typed (Boolean) feature(black) below
   Typed (Boolean) feature(white) below
