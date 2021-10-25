@@ -415,28 +415,22 @@ gcd(X, Y, D) :-
 
 <!--vert-->
 
-#### conjunction
+#### conjunction `,/2`
 
-the `,/2` predicate: the goal `(G1, G2)` succeeds if `G1` and `G2` succeed
-
-```prolog
-```
-<!--TODO: example-->
+the goal `(G1, G2)` succeeds if `G1` and `G2` succeed
 
 <!--vert-->
 
-#### disjunction
+#### disjunction `;/2`
 
-the `;/2` predicate: the goal `(G1 ; G2)` succeeds if `G1` or `G2` succeed. defined as follows:
+the goal `(G1 ; G2)` succeeds if `G1` or `G2` succeed
+
+defined as follows:
 
 ```prolog
 (G1 ; G2) :- G1.
 (G1 ; G2) :- G2.
 ```
-
-```prolog
-```
-<!--TODO: example-->
 
 <!--vert-->
 
