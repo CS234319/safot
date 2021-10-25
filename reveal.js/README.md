@@ -22,7 +22,7 @@ git clone https://github.com/CS234319/safot.git
 
 cd safot/reveal.js
 
-npm install
+npm install --production
 ```
 
 ## update
@@ -53,3 +53,7 @@ npm run jupyter-server &
 ## open slides
 
 go to <http://localhost:16788/>
+
+## TODO
+
+* [ ] thebe: call `Reveal.layout()` when the output changes
