@@ -10,6 +10,7 @@
    2. [ML - Functions](Tutorials/sml/functions.md) - [pdf](Tutorials/pdfs/sml/functions.pdf)
 - **Reading**
    1. [Summary of first lecture: chapters 1-2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
+   2. [Specificaiton of Pascal 72](Misc/PascalReport.pdf)
 - **Reference**
    1. [Specificaiton of Pascal 72](Misc/PascalReport.pdf)
    2. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
@@ -20,6 +21,9 @@
   2. Context free grammars
   3. Bakus Naur Form (BNF) and Extended  BNF.
   4. Recursive definitions and structural induction
+   3. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
+   4. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
+   5. [Programming in Standard ML ’97: A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364/ECS-LFCS-97-364.pdf)
 - **HW**: [HW1](???) is published \[30.10\]
 
 ## Week 2 \[31.10-6.11\]
@@ -40,6 +44,8 @@
    2. [Advanced Typing](Lectures/slides/pdfs/chapter-4.pdf)
 - **Tutorial**
    1. [ML - Lists](Tutorials/sml/lists.md)
+- **Optional Reading**
+[Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
 - **Submission**: [HW1](???) \[13.11 23:59\]
 - **HW**: [HW2](???) is published \[13.11\]
 
