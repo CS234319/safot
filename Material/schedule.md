@@ -6,8 +6,8 @@
    1. [Motivation and Paradigms](Lectures/introduction.md) 1.1, 1.2
    2. [Quick Pascal](Lectures/Introduction/pascal.md)
 - **Tutorial**
-   1. [ML - Introduction](Tutorials/sml/introduction.md)
-   2. [ML - Functions](Tutorials/sml/functions.md)
+   1. [ML - Introduction](Tutorials/sml/introduction.md) - [pdf](Tutorials/pdfs/sml/introduction.pdf)
+   2. [ML - Functions](Tutorials/sml/functions.md) - [pdf](Tutorials/pdfs/sml/functions.pdf)
 - **Reading**
    1. [Summary of first lecture: chapters 1-2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 - **Reference**
