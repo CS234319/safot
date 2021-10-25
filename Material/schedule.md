@@ -15,6 +15,11 @@
    2. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
    3. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
    4. [Programming in Standard ML ’97: A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364/ECS-LFCS-97-364.pdf)
+- **Pre-requisites terms**
+  1. Regular expressions
+  2. Context free grammars
+  3. Bakus Naur Form (BNF) and Extended  BNF.
+  4. Recursive definitions and structural induction
 - **HW**: [HW1](???) is published \[30.10\]
 
 ## Week 2 \[31.10-6.11\]
