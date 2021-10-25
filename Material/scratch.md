@@ -163,50 +163,6 @@
 4. [Example](../../lisp.pdf) in D
 
 
-<!-----
-NEW: Check the "Suppress top comment" option to remove this info from the output.
-
-Conversion time: 0.998 seconds.
-
-
-Using this Markdown file:
-
-1. Paste this output into your source file.
-2. See the notes and action items below regarding this conversion run.
-3. Check the rendered output (headings, lists, code blocks, tables) for proper
-   formatting and use a linkchecker before you publish this page.
-
-Conversion notes:
-
-* Docs to Markdown version 1.0β31
-* Sun Oct 24 2021 23:50:34 GMT-0700 (PDT)
-* Source doc: 234319: Syllabus
------>
-
-
-
-# Course Syllabus
-
-
-# CS 234319 \
-Programming Languages
-
-
-```
-<p dir="rtl">
-אם אין לך זכות עריכה במסמך, ואתה זקוק לה, אנא פנה ל yossi.gil@gmail.com וציין כתובת gmail תקינה. המסמך פתוח להערות סטודנטים. למעשה כל אחד יכול להעיר.  ההערות יכולות להיכתב באופן אנונימי, או לשאת את שם הכותב. אני מעדיף את הסוג האחרון, אבל אתייחס לכל הערה. כמובן, המסמך לא יכתב באופן דמוקרטי, אבל הדעות השונות חושבות מאוד והן תשמענה בלב פתוח ובנפש חפצה.
-</p>
-
-<p dir="rtl">
-כדי להוסיף הערה, יש לעשות שני צעדים פשוטים:
-</p>
-
-```
-
-
-
-1. **<code>לסמן קטע טקסט.</code></strong>
-2. <strong><code>ללחוץ Alt-Ctrl-M (לחילופין: תפריט "הוסף" + "הערה" - לא להתבלבל בין "הערה" ובין "הערת שוליים" שהיא משהו אחר לחלוטין)</code></strong>
 
 Prof. J. Gil
 
@@ -221,16 +177,6 @@ Prof. J. Gil
     * separatist, terminist, and variations.
     * Guiding principles in language design: example the C rules: the division between preprocessor, compiler and linker. The no hiding principle. Programmer are big boys principle.
     * BNF, EBNF
-    * Why Pascal:
-        4. Extermely Influential
-        5. Easy to study: designed for beginners.
-        6. Autarkic programming language
-        7. Nested functions
-        8. Set type constructor
-        9. Subrange types
-        10. Nested functions and procedures
-        11. Functions and procedures are _not_ first class values
-        12. Named labels, although naming is by integers
 
     **Reading**: 
 
