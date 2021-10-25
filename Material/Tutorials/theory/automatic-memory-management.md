@@ -58,6 +58,6 @@ deallocation is the responsibility of the language runtime system, not the progr
 
 ### mark & sweep
 
-* **mark** mark all cells as unused
-* **sweep** unmark all cells in use (stack, global variables), and cells which can be accessed (directly or indirectly) from these
-* **release** release all marked cells
+* **mark** unmark all cells
+* **sweep** mark all cells in use (stack, global variables), and cells which can be accessed (directly or indirectly) from them
+* **release** release all unmarked cells

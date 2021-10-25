@@ -80,17 +80,13 @@ write a program that prints "DYN" if the language uses dynamic scoping and "LEX"
 <!--vert-->
 
 ```cpp
-bool x = false;
+const char *x = "LEX";
 
-bool foo() { return x; }
+const char *foo() { return x; }
 
 int main() {
-    bool x = true;
-    if (foo()) {
-        printf("DYN");
-    } else {
-        printf("LEX");
-    }
+    const char *x = "DYN";
+    printf(foo());
 }
 ```
 
@@ -102,4 +98,14 @@ can a language with static typing use dynamic scoping?
 
 <!--vert-->
 
-TODO: answer
+answer - it's possible but **very** awkward making it an unlikely combination
+
+```sml
+fun foo () = x;
+fun bar () = x + 5;
+fun baz (x: float) = bar ();
+```
+
+* what's the type of `foo`?
+* what's the type of `bar`?
+* should `baz` pass typechecking?

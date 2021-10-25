@@ -25,7 +25,7 @@
 - **Tutorial**
    1. [ML - Declarations](Tutorials/sml/declarations.md)
    2. [ML - Datatypes](Tutorials/sml/datatypes.md)
-- **Reading material**
+- **Reading**
    1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 
 ## Week 3 \[7.11-13.11\]
@@ -43,8 +43,8 @@
 - **Lecture**
    1. [Advanced Typing (Cont.)](Lectures/slides/pdfs/chapter-4.pdf)
 - **Tutorial**
-   1. [ML's Type System](Tutorials/theory/ml-type-system.md)
-   2. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
+   1. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
+   2. [ML's Type System](Tutorials/theory/ml-type-system.md)
    3. [ML - References](Tutorials/sml/refs.md)
 
 ## Week 5 \[21.11-27.11\]
@@ -103,7 +103,7 @@
 ## Week 11 \[9.1-15.11\]
 
 - **Lecture**
-   1. [Advanced Constructs - Evaluation Strategies]([???](Lectures/slides/pdfs/chapter-7.pdf))
+   1. [Advanced Constructs - Evaluation Strategies](Lectures/slides/pdfs/chapter-7.pdf)
 - **Tutorial**
    1. TBD
 - **Submission**: [HW5](???) \[15.11 23:59\]

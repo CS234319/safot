@@ -8,7 +8,7 @@
 - [ ] theory/mini-lisp WIP
 - [ ] prolog/higher-order WIP
 - [ ] prolog/exam-questions WIP
-- [ ] theory/scoping - add more questions
+- [X] theory/scoping
 - [X] prolog/introduction
 - [X] theory/python-generators
 - [X] theory/type-system-classification
