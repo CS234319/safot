@@ -33,13 +33,13 @@ infix d;
 fun (x d y) = Math.sqrt(x*x + y*y);
 
 d;
-(*stdIn:40.1 Error: expression or pattern begins with infix identifier "d"*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+```sml
 op d;
-(*val it = fn : real * real -> real*)
 
 op d(1.0,3.0);
-(*val it = 3.16227766017 : real*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -53,7 +53,6 @@ any function of two arguments `$(\alpha * \beta)\rightarrow \gamma$` can be expr
 
 ```sml
 fun prefix (pre, post) = pre ^ post;
-(*val prefix = fn : string * string -> string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -61,7 +60,6 @@ the curried version
 
 ```sml
 fun prefix pre = fn post => pre^post;
-(*val prefix = fn : string -> string -> string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -85,10 +83,8 @@ You don't have to provide subsequent arguments
 
 ```sml
 prefix "Dr. ";
-(*val it = fn : string -> string*)
 
 it "Watson";
-(*val it = "Dr. Watson" : string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -96,10 +92,8 @@ as always, functions are values
 
 ```sml
 val doctorify = prefix "Dr. ";
-(*val doctorify = fn : string -> string*)
 
 doctorify "Jekyll";
-(*val it = "Dr. Jekyll" : string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -125,10 +119,8 @@ fun prefix pre = fn post => pre ^ post;
 
 ```sml
 (prefix "Dr. ") "Watson";
-(*val it = "Dr. Watson" : string*)
 
 prefix "Dr. " "Watson";
-(*val it = "Dr. Watson" : string*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -145,13 +137,10 @@ applying infix operator only to one operand
 
 ```sml
 fun add5 y = op+ (5, y);
-(*val add5 = fn: int -> int*)
 
 add5 2;
-(*val it = 7 : int*)
 
 fun mul5 y = op* (5, y);
-(*val mul5 = fn: int -> int*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -161,13 +150,10 @@ Now, generalize the operator and operand
 
 ```sml
 fun something5 (f:int*int->int) y = f (5, y);
-(*val something5 = fn: (int*int->int) -> int -> int*)
 
 val add5 = something5 op+;
-(*val add5 = fn: int -> int*)
 
 fun intsec x (f:int*int->int) y = f(x,y);
-(*val intsec = fn : int -> (int * int -> int) -> int -> int*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -179,16 +165,12 @@ fun intsec x (f:int*int->int) y = f(x,y);
 fun times n m =
     if m=0 then 0
     else n + times n (m-1);
-(*val times = fn : int -> int -> int*)
 
 times 4 5;
-(*val it = 20 : int*)
 
 val times_4 = times 4;
-(*val times_4 = fn : int -> int*)
 
 times_4 8;
-(*val it = 32 : int*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -199,19 +181,14 @@ times_4 8;
 ```sml
 infix o;
 fun (f o g) x = f (g x);
-(*val o = fn : ('a -> 'b) * ('c -> 'a) -> 'c -> 'b*)
 
 Math.sqrt o Math.sqrt;
-(*val it = fn : real -> real*)
 
 it (16.0);
-(*val it = 2.0 : real*)
 
 (fn x => x - ord #"0") o ord;
-(*val it = fn : char -> int*)
 
 it #"1";
-(*val it = 1 : int*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
