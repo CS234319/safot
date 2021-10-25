@@ -2,37 +2,37 @@
 
 ## Week 1 \[24.10-30.10\]
 
-* **Lecture**
-    1. [Motivation and Paradigms](Lectures/introduction.md) 1.1, 1.2
-    2. [Quick Pascal](Lectures/Introduction/pascal.md)
-* **Tutorial**
-    1. [ML - Introduction](Tutorials/sml/introduction.md) - [pdf](Tutorials/pdfs/sml/introduction.pdf)
-    2. [ML - Functions](Tutorials/sml/functions.md) - [pdf](Tutorials/pdfs/sml/functions.pdf)
-* **Reading**
-    1. [Summary of first lecture: chapters 1-2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
-    2. [Specificaiton of Pascal 72](Misc/PascalReport.pdf)
-* **Reference**
-    1. [Specificaiton of Pascal 72](Misc/PascalReport.pdf)
-    2. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
-    3. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
-    4. [Programming in Standard ML ’97: A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364/ECS-LFCS-97-364.pdf)
-* **Pre-requisites terms**
-    1. Regular expressions
-    2. Context free grammars
-    3. Bakus Naur Form (BNF) and Extended BNF.
-    4. Recursive definitions and structural induction
-* **HW**: [HW1](???) is published \[30.10\]
+- **Lecture**
+   1. [Motivation and Paradigms](Lectures/introduction.md) 1.1, 1.2
+   2. [Abstract Introduction](https://docs.google.com/presentation/d/1LKVaPEXuPYzI149K-68XZR-HHv6cJkOWgdBg9T98cog/edit?usp=sharing)
+   2. [Quick Pascal](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
+- **Tutorial**
+   1. [ML - Introduction](Tutorials/sml/introduction.md) - [pdf](Tutorials/pdfs/sml/introduction.pdf)
+   2. [ML - Functions](Tutorials/sml/functions.md) - [pdf](Tutorials/pdfs/sml/functions.pdf)
+- **Reading**
+   1. [Summary of first lecture: chapters 1-2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
+   2. [Specification of Pascal 72](Misc/PascalReport.pdf)
+- **Reference**
+   2. [Summary of Standard ML (Hebrew)](https://drive.google.com/file/d/0B3645jTHku6WZm4zeEJxSzRTMU0/view?usp=sharing&resourcekey=0-bLE_IX7sWV2H21phV4i6Vw)
+   3. [Programming in Standard ML](https://drive.google.com/file/d/0B8_AnUZwVFgoTEpaM1VOWXY5NWs/view?usp=sharing&resourcekey=0-wsdSa5CtgDEwdDZZ4KNY6w)
+   4. [Programming in Standard ML ’97: A Tutorial Introduction](http://www.lfcs.inf.ed.ac.uk/reports/97/ECS-LFCS-97-364/ECS-LFCS-97-364.pdf)
+- **Pre-requisites terms**
+  1. Regular expressions
+  2. Context free grammars
+  3. Bakus Naur Form (BNF) and Extended  BNF.
+  4. Recursive definitions and structural induction
+- **HW**: [HW1](???) is published \[30.10\]
 
 ## Week 2 \[31.10-6.11\]
 
-* **Lecture**
-    1. [Quick Pascal (Cont.)](Lectures/Introduction/pascal.md)
-    2. [Types](Lectures/slides/pdfs/chapter-3.pdf)
-* **Tutorial**
-    1. [ML - Declarations](Tutorials/sml/declarations.md)
-    2. [ML - Datatypes](Tutorials/sml/datatypes.md)
-* **Reading**
-    1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
+- **Lecture**
+   1. [Quick Pascal (Cont.)](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
+   2. [Types](Lectures/slides/pdfs/chapter-3.pdf)
+- **Tutorial**
+   1. [ML - Declarations](Tutorials/sml/declarations.md)
+   2. [ML - Datatypes](Tutorials/sml/datatypes.md)
+- **Reading**
+   1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 
 ## Week 3 \[7.11-13.11\]
 
@@ -129,11 +129,20 @@
 
 ## Week 13 \[23.1-29.11\]
 
+<<<<<<< HEAD
 * **Lecture**
     1. TBD
 * **Tutorial**
     1. [Exam Questions](???)
 * **Submission**: [HW6](???) \[29.11 23:59\]
+=======
+- **Lecture**
+   1. [Real Life Programming Languages](https://docs.google.com/presentation/d/1FGUzbhURUqzL3hfzCj8m3nR1swqmpG8CYu77H4Tgm5U/edit#slide=id.gb50064ae0_0_89)
+- **Tutorial**
+   1. [Exam Questions](???)
+- **Reading material**
+- **Submission**: [HW6](???) \[29.11 23:59\]
+>>>>>>> d103708 (Links to introduction)
 
 ## Extra curricular
 
