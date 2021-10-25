@@ -56,4 +56,4 @@ go to <http://localhost:16788/>
 
 ## TODO
 
-* [ ] thebe: call `Reveal.layout()` when the output changes
+* [X] thebe: call `Reveal.layout()` when the output changes

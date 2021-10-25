@@ -61,6 +61,14 @@ function thebe_init_all(sub) {
     for (const cb of document.querySelectorAll("[data-codeblock-editable]")) {
         make_codeblock_editable(cb);
     }
+    const observer = new ResizeObserver(entries => {
+        Reveal.layout();
+        console.log("layout");
+    });
+    for (const elt of document.querySelectorAll(".jp-OutputArea")) {
+        observer.observe(elt);
+    }
+
 }
 
 const REVEAL_PARAMS = {
