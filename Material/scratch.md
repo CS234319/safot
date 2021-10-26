@@ -8,43 +8,7 @@
    3. Recursive set of types
    4. Mutual recursion in nesting of procedures and functions
    5. Names, predefined, nesting
-3. Principles: 0L
-   1. Recursive Structures:
-      - Atomics vs. Compound
-      - Constructor and atoms
-      - Mutually Recursive
-   2. Names
-      - named vs. name of names
-      - binding
-      - Scope vs. environment
-      - Anonymous vs. nameables
-   3. Basic terminology
-      1. Variable vs. Value vs. Type
-      2. Expression vs. command vs. Statement
-      3. Definition vs. Declaration
-   4. The Collateral Confusion
-      1. Sequential vs. Collateral Computation
-      2. Definition vs. declaration vs. initialization
-      3. Sequential vs. Recursive vs. Collateral definition   +/Pas : 3
-4. Language Analysis Techniques
-   1. Language Scope:
-      - Vision and Price
-      - Paradigm
-      - Method of language definition 
-   2. Execution
-      - Hello World
-      - Extent of program
-      - Interpreted, P-System or Compiled
-      - Where does the program start? How does it end
-      - Library vs. predefined vs. lockedin 
-   3. Concepts and names
-       - Find the concepts: expression, threads, definition, labels,
-         declaration, function, reference, traits, labels, macro, command,
-         enumeration, procedure, class, type, module, template,
-         monads,
-       - Recursive relationship among concepts
-       - Are they nameable? can they be anonymous? can they have
-       multiple names?
+
 5. **Values**: what values can the language manipulate? how close are they to the machine?
       1. Symbolic values:
           1. Strings: e.g., icon and Snobol
