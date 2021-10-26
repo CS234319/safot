@@ -14,7 +14,7 @@ CodeMirror.defineOption("blurOnExecute", false, function (cm, val) {
     });
 });
 
-function thebe_init(kernel, selector) {
+function thebe_init(kernel, selector, port) {
     thebelab.bootstrap({
         requestKernel: true,
         outputSelector: '[data-output]',
@@ -23,8 +23,8 @@ function thebe_init(kernel, selector) {
             kernelName: kernel,
             path: ".",
             serverSettings: {
-                "baseUrl": "http://localhost:16789",
-                "wsUrl": "ws://localhost:16789"
+                "baseUrl": `http://localhost:${port}`,
+                "wsUrl": `ws://localhost:${port}`
             }
         },
         selector: `[data-thebe-executable-${selector}]`,
@@ -51,12 +51,12 @@ function make_codeblock_editable(element) {
     element.codemirror = cm;
 }
 
-function thebe_init_all(sub) {
+function thebe_init_all(sub, port) {
     if (sub === "sml") {
-        thebe_init("smlnj", "sml");
+        thebe_init("smlnj", "sml", port);
     } else if (sub === "theory") {
-        thebe_init("python3", "python");
-        thebe_init("javascript", "javascript");
+        thebe_init("python3", "python", port);
+        thebe_init("javascript", "javascript", port);
     }
     for (const cb of document.querySelectorAll("[data-codeblock-editable]")) {
         make_codeblock_editable(cb);

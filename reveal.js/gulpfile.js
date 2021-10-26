@@ -8,7 +8,7 @@ const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 
 function buildHtml(output_dir, renderTemplate, name, dir) {
-    var html = renderTemplate({ tutorial_name: name, sub: dir });
+    var html = renderTemplate({ tutorial_name: name, sub: dir, port: argv.portjupyter, });
     fs.writeFile(`${output_dir}/${dir}-${name}.html`, html, (err) => {
         if (err) {
             console.log(err);
@@ -66,7 +66,7 @@ gulp.task("serve", () => {
 
     connect.server({
         root: ".",
-        port: 16788,
+        port: argv.port,
         host: argv.ip || "localhost",
         livereload: true,
         middleware: function () {
