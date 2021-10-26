@@ -31,7 +31,24 @@ Study of programming languages:
 - Object oriented
 - Logical
 ---
+## A Taste of Lisp
+The implementation of a `cond` a lisp function similar to `swhitch`
+```Lisp
+(defun evaluate-cond(test-forms a-list)
+  (cond ((null test-forms) nil) ; if no more test-forms, return nil
+        ((evaluate (car (car test-forms)) a-list) ; evaluate condition part of the first test-form
+        (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate value part (second part) of the first test-form
+        (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on rest of test-forms
+```
+---
 
+## A Taste of OO
+```Smalltalk
+1 + 2 * 3 * 0 + a < b
+  ifTrue: [^'a is less than b']
+  ifFalse: [^'a is greater than or equal to b']
+```
+---
 ## A Taste of Prolog
 ```prolog
 % prolog # try to run prolog
