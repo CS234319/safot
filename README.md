@@ -6,7 +6,7 @@ look [here](CONTRIBUTING.md)
 
 ## TODO
 
-* [ ] use git-lfs for fonts (.otf, .ttf)
+* [X] use git-lfs for fonts (.otf, .ttf)
 * [ ] use git-lfs for images (.png, .jpg, .svg, .gif)
 
 see
