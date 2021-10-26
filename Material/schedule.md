@@ -3,7 +3,7 @@
 ## Week 1 \[24.10-30.10\]
 
 * **Lecture**
-   1. [Motivation and Paradigms](Lectures/introduction.md) 1.1, 1.2
+   1. [Motivation and Paradigms](Lectures/introduction.md)
    2. [Abstract Introduction](https://docs.google.com/presentation/d/1LKVaPEXuPYzI149K-68XZR-HHv6cJkOWgdBg9T98cog/edit?usp=sharing)
    3. [Quick Pascal](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
 * **Tutorial**
@@ -27,7 +27,7 @@
 
 * **Lecture**
    1. [Quick Pascal (Cont.)](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
-   2. [Types](Lectures/slides/pdfs/chapter-3.pdf)
+   2. [Types](Lectures/slides/chapter-3.pdf)
 * **Tutorial**
    1. [ML - Declarations](Tutorials/sml/declarations.md)
    2. [ML - Datatypes](Tutorials/sml/datatypes.md)
@@ -37,8 +37,8 @@
 ## Week 3 \[7.11-13.11\]
 
 * **Lecture**
-    1. [Types (Cont.)](Lectures/slides/pdfs/chapter-3.pdf)
-    2. [Advanced Typing](Lectures/slides/pdfs/chapter-4.pdf)
+    1. [Types (Cont.)](Lectures/slides/chapter-3.pdf)
+    2. [Advanced Typing](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md)
 * **Optional Reading**
@@ -49,7 +49,7 @@
 ## Week 4 \[14.11-20.11\]
 
 * **Lecture**
-    1. [Advanced Typing (Cont.)](Lectures/slides/pdfs/chapter-4.pdf)
+    1. [Advanced Typing (Cont.)](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
     2. [ML's Type System](Tutorials/theory/ml-type-system.md)
@@ -58,7 +58,7 @@
 ## Week 5 \[21.11-27.11\]
 
 * **Lecture**
-    1. [State and Storage](Lectures/slides/pdfs/chapter-5.pdf)
+    1. [State and Storage](Lectures/slides/chapter-5.pdf)
 * **Tutorial**
     1. [ML - Sequences](Tutorials/sml/sequences.md)
     2. [ML - Exceptions](Tutorials/sml/exceptions.md)
@@ -93,7 +93,7 @@
 ## Week 9 \[26.12-1.1\]
 
 * **Lecture**
-    1. [Commands](Lectures/slides/pdfs/chapter-6.pdf)
+    1. [Commands](Lectures/slides/chapter-6.pdf)
 * **Tutorial**
     1. [Prolog - Lists](Tutorials/prolog/lists.md)
     2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
@@ -103,7 +103,7 @@
 ## Week 10 \[2.1-8.1\]
 
 * **Lecture**
-    1. [Commands (Cont.)](Lectures/slides/pdfs/chapter-6.pdf)
+    1. [Commands (Cont.)](Lectures/slides/chapter-6.pdf)
 * **Tutorial**
     1. [Prolog - Higher Order Programming](Tutorials/prolog/higher-order.md)
     2. [Prolog - Exam Questions](Tutorials/prolog/exam-questions.md)
@@ -111,7 +111,7 @@
 ## Week 11 \[9.1-15.11\]
 
 * **Lecture**
-    1. [Advanced Constructs - Evaluation Strategies](Lectures/slides/pdfs/chapter-7.pdf)
+    1. [Advanced Constructs - Evaluation Strategies](Lectures/slides/chapter-7.pdf)
 * **Tutorial**
     1. TBD
 * **Submission**: [HW5](???) \[15.11 23:59\]
@@ -120,8 +120,8 @@
 ## Week 12 \[16.1-22.1\]
 
 * **Lecture**
-    1. [Advanced Constructs - Closures](Lectures/slides/pdfs/chapter-7.pdf)
-    2. [Advanced Constructs - Beyond Closures](Lectures/slides/pdfs/chapter-7.pdf)
+    1. [Advanced Constructs - Closures](Lectures/slides/chapter-7.pdf)
+    2. [Advanced Constructs - Beyond Closures](Lectures/slides/chapter-7.pdf)
 * **Tutorial**
     1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
     2. [Python Generators](Tutorials/theory/python-generators.md)
