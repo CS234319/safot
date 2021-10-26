@@ -26,8 +26,7 @@
     "gulp-connect": "^5.7.0",
     "handlebars": "^4.7.7",
     "reveal.js": "^4.0.2",
-    "thebe": "^0.8.0",
-    "yargs": "^17.2.1"
+    "thebe": "^0.8.0"
   },
   "browserslist": "> 0.5%, IE 11, not dead"
 }
