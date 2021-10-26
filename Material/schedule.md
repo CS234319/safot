@@ -6,6 +6,21 @@
    1. [Motivation and Paradigms](Lectures/introduction.md)
    2. [Abstract Introduction](https://docs.google.com/presentation/d/1LKVaPEXuPYzI149K-68XZR-HHv6cJkOWgdBg9T98cog/edit?usp=sharing)
    3. [Quick Pascal](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
+
+  Today's lecture started with technical problems, and time was taken to
+  reiterate formalities, grading policy, bonus assignments, and the recycle
+  promise. The four main paradigms: functional, object-oriented, imperative,
+  and logic based, were discussed. The four main programming languages used in
+  the course are Prolog, Pascal, ML, and Lisp.
+
+  - In response to students' request, we discussed the issue of a programming
+  language being universal; see these [notes](Misc/univrsal.pdf)
+
+  - Other terms discussed: variable != value; name != named;  anonymous
+  entities; anonymous variables; nested functions; anonymous types with struct`
+  in C; builtin != predefined != reserved identifier; recursive structure;
+  atomic != compound
+
 * **Tutorial**
    1. [ML - Introduction](Tutorials/sml/introduction.md) - [pdf](Tutorials/pdfs/sml/introduction.pdf)
    2. [ML - Functions](Tutorials/sml/functions.md) - [pdf](Tutorials/pdfs/sml/functions.pdf)

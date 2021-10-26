@@ -93,7 +93,6 @@ X = 14.
 ---
 
 
-
  
 ## Languages covered in this course
 You should be able to recognize the main concepts and how they appear in
