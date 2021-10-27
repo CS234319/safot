@@ -20,7 +20,13 @@
   entities; anonymous variables; nested functions; anonymous types with struct`
   in C; builtin != predefined != reserved identifier; recursive structure;
   atomic != compound
-
+  - The semicolon in Pascal issue was discussed:
+    - Separatist grammar: ';' is a command separator
+    - Lenient separatist grammar: ';' is a command separator, but there is also an empty command
+    - Terminist grammar: ';' terminates commands
+    - Separatist terminist grammar: ';' separates commands, is optional at end (almost the same as lenient separatist)
+    - Lenient grammar: as found in Python, ';' can be omitted at eoln
+    - Go's grammar: ';' is automatically omitted at eoln
 * **Tutorial**
    1. [ML - Introduction](Tutorials/sml/introduction.md) - [pdf](Tutorials/pdfs/sml/introduction.pdf)
    2. [ML - Functions](Tutorials/sml/functions.md) - [pdf](Tutorials/pdfs/sml/functions.pdf)
