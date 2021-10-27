@@ -511,7 +511,7 @@ TEST(request, correct3) {
   heap::reset();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap::heap.handle(),1);
-  auto s1 = request(2,3);
+  auto s1 = request(S(2),S(3));
   EXPECT_EQ(heap::heap.handle(),1);
   EXPECT_NE(s1.handle(),1);
   EXPECT_EQ(P[s1.handle()].s1,2);
@@ -519,14 +519,14 @@ TEST(request, correct3) {
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
   EXPECT_EQ(length(), accounting.unused);
-  auto s2 = request(4,5);
+  auto s2 = request(S(4),S(5));
   EXPECT_EQ(s2.car().handle(),4);
   EXPECT_EQ(s2.cdr().handle(),5);
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap::heap.handle(),1);
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), accounting.unused);
-  auto s3 = request(6,7);
+  auto s3 = request(S(6),S(7));
   EXPECT_EQ(heap::heap.handle(),1);
   EXPECT_EQ(s3.car().handle(),6);
   EXPECT_EQ(P[s3.handle()].s2,7);
@@ -537,7 +537,7 @@ TEST(request, Scenario) {
   heap::reset();
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(heap::heap.handle(),1);
-  auto s1 = request(2,3);
+  auto s1 = request(S(2),S(3));
   EXPECT_EQ(heap::heap.handle(),1);
   EXPECT_EQ(s1.handle(),Word(2,3).hash());
   EXPECT_EQ(P[s1.handle()].s1,2);
@@ -545,7 +545,7 @@ TEST(request, Scenario) {
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
   EXPECT_EQ(length(), accounting.unused);
-  auto s2 = request(4,5);
+  auto s2 = request(S(4),S(5));
   EXPECT_EQ(s2.handle(),Word(4,5).hash());
   EXPECT_EQ(heap::heap.handle(),1);
   EXPECT_EQ(P[s2.handle()].s1,4);
@@ -553,7 +553,7 @@ TEST(request, Scenario) {
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), accounting.unused);
-  auto s3 = request(6,7);
+  auto s3 = request(S(6),S(7));
   EXPECT_EQ(s3.handle(),Word(6,7).hash());
   EXPECT_EQ(P[s3.handle()].s1,6);
   EXPECT_EQ(P[s3.handle()].s2,7);
@@ -568,42 +568,42 @@ TEST(Words, reuse) {
   EXPECT_EQ(length(), $P_n$);
   EXPECT_EQ(length(), accounting.unused);
 
-  auto s1 = request(3,3);
+  auto s1 = request(S(3),S(3));
   EXPECT_TT(s1.ok());
   EXPECT_EQ(s1.handle(), P[s1.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-1);
   EXPECT_EQ(length(), accounting.unused);
 
-  auto s2 = request(2,3);
+  auto s2 = request(S(2),S(3));
   EXPECT_TT(s2.ok());
   EXPECT_EQ(s2.handle(),P[s2.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), accounting.unused);
 
-  auto s3 = request(3,2);
+  auto s3 = request(S(3),S(2));
   EXPECT_EQ(s3.handle(), P[s3.handle()].hash());
   EXPECT_TT(s3.ok());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_EQ(length(), accounting.unused);
 
-  auto s4 = request(2,3);
+  auto s4 = request(S(2),S(3));
   EXPECT_TT(s4.ok());
   EXPECT_EQ(s4.handle(), P[s4.handle()].hash());
   EXPECT_FF(corrupted.asymmetric());
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_EQ(length(), accounting.unused);
 
-  auto s5 = request(3,3);
+  auto s5 = request(S(3),S(3));
   EXPECT_TT(s5.ok());
   EXPECT_EQ(s5.handle(), P[s5.handle()].hash());
   EXPECT_EQ(length(), $P_n$-3);
   EXPECT_EQ(length(), accounting.unused);
   EXPECT_FF(corrupted.asymmetric());
 
-  auto s6 = request(3,2);
+  auto s6 = request(S(3),S(2));
   EXPECT_TT(s6.ok());
   EXPECT_EQ(s6.handle(), P[s6.handle()].hash());
   EXPECT_EQ(length(), accounting.unused);
@@ -635,7 +635,7 @@ TEST(Exhaust, Almost) {
   EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
-  EXPECT_FF(heap.x());
+  EXPECT_FF(heap::heap.x());
   EXPECT_EQ(accounting.unused, 1);
   EXPECT_EQ(accounting.items, $P_n$ - 1);
   EXPECT_FF(corrupted.pristines());
@@ -674,7 +674,7 @@ TEST(Exhaust, items) {
     EXPECT_EQ(accounting.unused, $P_n$ - s); 
     EXPECT_EQ(accounting.items, s); 
   }
-  EXPECT_TT(heap.x());
+  EXPECT_TT(heap::heap.x());
   EXPECT_ZZ(accounting.unused);
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pristines());
@@ -722,7 +722,7 @@ TEST(Churn, request) {
   int n = 0;
   for (Short i = 0;  ; i++) { 
     for (Short j = 0;  i <= j; j++) {
-      Pair c(request(S(i),S(j)).handle());
+      Cons c(request(S(i),S(j)));
       ++n;
       EXPECT_TT(c.ok());
       EXPECT_EQ(i, c.car().handle());
@@ -742,9 +742,9 @@ TEST(Churn, Both) {
   for (int i = 0, n = 0;  ; i++) { 
     Pushdown p[10];
     for (int j = 0; j <= i; ++j, ++n) {
-      if (heap.x()) goto done;
+      if (heap::heap.x()) goto done;
       auto const c = request(S(i),S(j));
-      if (heap.x()) goto done;
+      if (heap::heap.x()) goto done;
       int d = P[c.handle()].hash() % 10;
       mess(p[d]);
     }
@@ -768,7 +768,7 @@ TEST(Counting, items) {
 TEST(Counting, pairs) {
   heap::reset();
   const Integer before = accounting.unused;
-  request(13,14);
+  request(S(13), S(14));
   EXPECT_NE(accounting.unused, before);
   EXPECT_EQ(accounting.unused, before - 1);
   EXPECT_EQ(accounting.unused, $P_n$ - 1);
@@ -796,9 +796,9 @@ TEST(Pristine, itemsPristines3) {
   Pushdown p;
   p.push(3,2,1);
   EXPECT_FF(corrupted.asymmetric());
-  request(12,13);
+  request(S(12),S(13));
   EXPECT_FF(corrupted.asymmetric());
-  request(12,13);
+  request(S(12),S(13));
   EXPECT_FF(corrupted.asymmetric());
   p.pop();
   EXPECT_FF(corrupted.asymmetric());
@@ -812,9 +812,9 @@ TEST(Pristine, itemsPristines4) {
   p.push(3,2,1);
   EXPECT_EQ(accounting.unused, before - 3);
   EXPECT_EQ(accounting.unused, before - 3);
-  request(12,13);
+  request(S(12),S(13));
   EXPECT_EQ(accounting.unused, before - 4);
-  request(12,13);
+  request(S(12),S(13));
   EXPECT_EQ(accounting.unused, before - 4);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
@@ -863,9 +863,9 @@ TEST(Exercise, PushrequestPoprequest) {
   EXPECT_EQ(before - accounting.unused, 2 * N * N);
   for (int i = 0;  i < 16; i++)  
     for (int j = 0;  j < 16; j++) {
-      request(i+50, j+100);
+      request(S(i+50), S(j+100));
       p.pop();
-      request(i, j);
+      request(S(i), S(j));
     }
   EXPECT_TT(p.top.x());
   EXPECT_FF(corrupted.something());
@@ -878,10 +878,10 @@ TEST(Pristine, requestAtom) {
   heap::reset();
   int before = accounting.unused;
   p.push(3,2,1);
-  request("ABC");
+  text::request("ABC");
   EXPECT_EQ(accounting.unused, before - 3);
-  request("ABC");
-  request("CDE");
+  text::request("ABC");
+  text::request("CDE");
   EXPECT_EQ(accounting.unused, before - 3);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
@@ -892,7 +892,7 @@ TEST(Pristine, requestAtom) {
 TEST(Pristine, 1requestAtom) {
   int before = accounting.unused;
   EXPECT_EQ(accounting.unused, before);
-  request("Foo Bar");
+  text::request("Foo Bar");
   EXPECT_NE(accounting.unused, before -1);
   EXPECT_EQ(accounting.unused, before);
   EXPECT_FF(corrupted.something());
@@ -910,17 +910,17 @@ TEST(Pristine, requestBoth) {
   EXPECT_EQ(accounting.unused, before -1);
   p.push(2);
   EXPECT_EQ(accounting.unused, before -2);
-  request("ABC");
+  text::request("ABC");
   EXPECT_EQ(accounting.unused, before -2);
   request("CDE");
   EXPECT_EQ(accounting.unused, before -2);
-  request("ABC");
+  text::request("ABC");
   EXPECT_EQ(accounting.unused, before -2);
-  request("CDE");
+  text::request("CDE");
   EXPECT_EQ(accounting.unused, before -2);
-  request(12,13);
+  request(S(12),S(13));
   EXPECT_EQ(accounting.unused, before -3);
-  request(12,13);
+  request(S(12),S(13));
   EXPECT_EQ(accounting.unused, before -3);
   EXPECT_EQ(2,p.pop());
   EXPECT_EQ(accounting.unused, before -2);
