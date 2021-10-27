@@ -4,9 +4,11 @@
 
 ---
 
-## Reminder: Values and Types
+### Reminder: Values and Types
 
-what's a value?
+<!--vert-->
+
+what's a **value**?
 
 * integers are values
 * a pair of an integer and real is a value
@@ -14,7 +16,7 @@ what's a value?
 
 <!--vert-->
 
-every value in ML has a *type*:
+every value in ML has a **type**:
 
 * some types are atomic
 * some types are builtin
@@ -138,6 +140,8 @@ val rec f = fn (n) =>
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: `fun` VS `val rec` is a matter of taste
+
 ---
 
 ### Pattern Matching
@@ -207,12 +211,11 @@ case 7 of
     0 => "zero"
   | 1 => "one"
   | 2 => "two"
-  | n => if n<10 then "lots" else "lots &lots";
+  | n => if n < 10 then "lots" else "lots &lots";
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-* if `P1` is the first to match then the result is `E1`
-* equivalent to an expression that defines a function by cases and applies it to `E`
+* if `Pi` is the first to match then the result is `Ei`
 * no symbol terminates the case expression
   * enclose in parentheses to eliminate ambiguity
 
@@ -361,6 +364,8 @@ end;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: a declaration in a `let` expression may refer to a parameter of the enclosing function
+
 <!--vert-->
 
 ### Comparing `let` and `local` (3)
@@ -374,6 +379,22 @@ in
 end;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: the "body" of `local` may contain multiple declarations
+
+<!--vert-->
+
+### Comparing `let` and `local` (4)
+
+```sml
+local
+  val x = pow4 5
+in
+end;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: the "body" of `local` may be empty
 
 ---
 
