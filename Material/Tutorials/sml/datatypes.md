@@ -2,25 +2,29 @@
 
 ## Datatypes
 
-* Created: using the `datatype` keyword
-* Realize: the theoretical type constructor of disjoint union
-* Generalize
-  * the `null` pointer of C, Pascal, Java
-  * enumerated types, as found in Pascal, C, and Java, e.g., `enum  { };
-  * union types, as found in Pascal variant records and union in C
-  * branding, as done by Pascal's TYPE, but difficult to achieve in Java and C.
-
-* Essential: you cannot do lists, trees, etc., without it.
-  * Reason: lists must support the distinction between an empty and an non-empty lists, and function next is not type-safe
-
 ---
 
-### Concrete Datatypes
+### datatype
+
+* is **created** using the `datatype` keyword
+* **realizes** the theoretical type constructor of disjoint union
+* **generalizes**
+  * the `null` pointer of C, Pascal, Java
+  * enumerated types, as found in Pascal, C, and Java
+  * union types, as found in Pascal and C
+  * branding, as done by Pascal's TYPE, but difficult to achieve in Java and C
+* is **essential**: you cannot do lists, trees, etc., without it
+
+<!--vert-->
 
 `dattatype` is an SML type constructor:
 
 * given: a list of types and list of tags
 * produce: a new type out of these
+
+<!--vert-->
+
+### Concrete Datatypes
 
 `datatype` creates new types
 
@@ -123,7 +127,8 @@ the term *constructor* may be confusing
 
 * constructors of classes, as in C++
 * consturcotrs of types, as in abstract type constructors
-* in the construction industry...
+
+<!--vert-->
 
 in SML constructors are functions
 
@@ -180,9 +185,7 @@ val Circle radius = line;
 
 ```sml
 val point = point; (*OK*)
-val point = 5.3
-(*Error: pattern and expression in val dec do not agree
-[tycon mismatch]*)
+val point = 5.3; (*Error*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -190,21 +193,25 @@ val point = 5.3
 
 ### Recursive Datatypes
 
-🛈 every list is either `nil` or `head::tail`
+🛈 every `intlist` is either `NIL` or `head $$ tail`
 
 ```sml
 datatype intlist =
-    nil
-  | :: of int * intlist;
+    NIL
+  | $$ of int * intlist;
 
-fun length nil     = 0
-  | length (x::xs) = 1 + length xs;
+infix $$;
+
+fun length NIL     = 0
+  | length (x $$ xs) = 1 + length xs;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
 ### Polymorphic Datatypes
+
+🛈 every `list` is either `nil` or `head::tail`
 
 ```sml
 datatype 'a list =
@@ -297,16 +304,27 @@ fun get (Br ((node_k, v), left, right)) k =
 
 <!--vert-->
 
+implement `insert` that takes a BST, a key `k` and a value `v` and returns an updated BST with the node `(k, v)`
+
 ```sml
-local
-   fun compare (k1,_) (k2,_) = cmp (k1, k2)
-in
-    fun insert Nil item = Br (item, Nil, Nil)
-      | insert (Br (node, left, right)) item = 
-        case compare node item of 
-          EQUAL   => Br (item, left, right)
-        | GREATER => Br (node, left, insert right item)
-        | LESS    => Br (node, insert left item, right)
-end;
+val insert = fn : (int * 'a) tree -> int -> 'a -> (int * 'a) tree
+```
+
+<!--vert-->
+
+```sml
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+fun insert Nil k v = Br ((k, v), Nil, Nil)
+  | insert (Br (node, left, right)) k v = 
+    case cmp (#1 node, k) of 
+      EQUAL   => Br ((k, v), left, right)
+    | GREATER => Br (node, left, insert right k v)
+    | LESS    => Br (node, insert left k v, right);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
