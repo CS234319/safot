@@ -18,7 +18,6 @@ order matters
 
 ```sml
 [1, 2, 3] <> [3, 2, 1];
-(*val it = true: bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -26,7 +25,6 @@ and repetitions count
 
 ```sml
 [3, 3, 3] <> [3];
-(*val it = true: bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -42,8 +40,7 @@ elements may have any type
 ... but all elements must have the same type
 
 ```sml
-[5, "five"];
-(*stdIn:2.1-2.12 Error: ...*)
+[5, "five"]; (*ERROR*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -59,7 +56,6 @@ the empty list has a polymorphic type
 
 ```sml
 nil;
-(*val it = []: 'a list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -73,14 +69,12 @@ a list is either *empty* or *a head followed by a tail*
 
 <!--vert-->
 
-use the infix operator `::` (aka. `cons`) to build a list
+use the infix operator `::` (aka `cons`) to build a list
 
 ```sml
 1 :: [2, 3];
-(*val it = [1,2,3]: int list*)
 
 1 :: 2 :: 3 :: [];
-(*val it = [1,2,3]: int list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -116,7 +110,6 @@ fun replace_head (_::t) x = x :: t
 ```sml
 fun null [] = true
   | null (_::_) = false;
-(*val null = fn : 'a list -> bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -126,8 +119,23 @@ fun null [] = true
 
 ```sml
 fun hd (x::_) = x;
-(*Warning: Patterns not exhaustive
-val hd = fn : 'a  list -> 'a*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+hd[ [ [1,2], [3] ], [ [4] ] ];
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+```sml
+hd it;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+```sml
+hd it;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -137,61 +145,51 @@ val hd = fn : 'a  list -> 'a*)
 
 ```sml
 fun tl (_::xs) = xs;
-(**Warning: Patterns not exhaustive
-val tl = fn : 'a  list -> 'a  list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```sml
-hd[ [ [1,2], [3] ], [ [4] ] ];
-```
-
-```sml
-hd it;
-```
-
-```sml
-hd it;
-```
-
-<!--vert--->
-
-```sml
 tl ["how", "are", "you?"];
 ```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 tl it;
 ```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 tl it;
 ```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```sml
 tl it;
 ```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
-### building a list of integers
+### example - building a list of integers
 
 ```sml
 fun range (m, n) =
   if m = n then []
   else m :: (range (m+1, n));
-(*val range = fn : int * int -> int list*)
 
 range (2, 5);
-(*val it = [2,3,4] : int list*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+<!--vert-->
+
+```sml
 infix --;
 val op-- = range;
 
 2 -- 5;
-(*val it = [2,3,4] : int list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -199,9 +197,9 @@ val op-- = range;
 
 ### `take` and `drop`
 
-`$$xs = [x_1, x_2, x_3, \ldots, x_k, x_{k+1}, \ldots, x_n]$$`
-`$$take(k, xs) = [x_1, x_2, x_3, \ldots, x_k]$$`
-`$$drop(k, xs) = [x_{k+1}, \ldots, x_n]$$`
+$$xs = [x_1, x_2, x_3, \ldots, x_k, x_{k+1}, \ldots, x_n]$$
+$$take(k, xs) = [x_1, x_2, x_3, \ldots, x_k]$$
+$$drop(k, xs) = [x_{k+1}, \ldots, x_n]$$
 
 <!--vert-->
 
@@ -298,7 +296,6 @@ fun []      @ ys = ys
   | (x::xs) @ ys = x :: (xs @ ys);
 
 ["Append", "is"] @ ["never", "boring"];
-(*["Append","is","never","boring"] : string list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -321,12 +318,10 @@ B1 orelse  B2 = if B1 then true else B2;
 
 ```sml
 fun even n = (n mod 2 = 0); 
-(*val even = fn : int -> bool*)
 
 fun powoftwo n =
   (n=1) orelse
   (even n andalso powoftwo (n div 2));
-(*val powoftwo = fn : int -> bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -339,13 +334,13 @@ is `powoftwo` tail-recursive?
 ```sml
 fun map f []      = []
   | map f (x::xs) = (f x) :: (map f xs);
-(*val map = fn:('a -> 'b)-> 'a list -> 'b list*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+```sml
 val sqlist = map (fn x => x*x);
-(*val sqlist = fn : int list -> int list*)
 
 sqlist [1,2,3];
-(*val it = [1,4,9] : int list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -371,10 +366,11 @@ fun filter pred []      = []
   | filter pred (x::xs) =
        if pred x then (x:: filter pred xs)
                  else      filter pred xs;
-(*val filter = fn : ('a -> bool) -> 'a list-> 'a list*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+```sml
 filter (fn x => x mod 2 = 0) [1,2,3,4,5];
-(*val it = [2,4] : int list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -386,7 +382,7 @@ filter (fn x => x mod 2 = 0) [1,2,3,4,5];
 
 a polynomial is represented as a list of `$(coeff,degree)$` pairs
 
-`$$5x^3 + 2x + 7$$`
+$$5x^3 + 2x + 7$$
 
 ```sml
 type polynomial = (int*int) list;
@@ -407,10 +403,8 @@ fun derive (p: polynomial): polynomial =
             p
         )
 ;
-(*val derive = fn : polynomial -> polynomial*)
 
 derive a;
-(*val it = [(15,2),(2,0)] : polynomial*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -421,7 +415,6 @@ derive a;
 ```sml
 fun find f [] = NONE
   | find f (x::xs) = if f x then SOME x else find f xs;
-(*val find = fn : ('a -> bool) -> 'a list -> 'a option*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -438,7 +431,6 @@ bound as `List.find`
 ```sml
 fun foldl f init []      = init
   | foldl f init (x::xs) = foldl f (f (x, init)) xs;
-(*val foldl = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -451,7 +443,6 @@ calculates `$[x_1, x_2, … ,x_n] \rightarrow f(x_n, … ,f(x_2, f(x_1,init)))$`
 ```sml
 fun foldr f init []      = init
   | foldr f init (x::xs) = f (x, foldr f init xs);
-(*val foldr = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -465,13 +456,10 @@ let's redefine some functions...
 
 ```sml
 fun sum l = foldl op+ 0 l;
-(*val sum = fn : int list -> int*)
 
 fun reverse l = foldl op:: [] l;
-(*val sum = fn : 'a list -> 'a list*)
 
 fun xs @ ys = foldr op:: ys xs;
-(*val @ = fn : 'a list * 'a list -> 'a list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -486,7 +474,6 @@ fun xs @ ys = foldr op:: ys xs;
 ```sml
 fun exists p []      = false
   | exists p (x::xs) = (p x) orelse exists p xs;
-(*val exists = fn:('a -> bool)-> 'a list -> bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -494,7 +481,6 @@ checks if the predicate `p` is satisfied by at least one element of the list
 
 ```sml
 exists (fn x => x < 0) [1, 2, ~3, 4];
-(*val it = true : bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -507,7 +493,6 @@ bound as `List.exists`
 ```sml
 fun all p []      = true
   | all p (x::xs) = (p x) andalso all p xs;
-(*val forall = fn:('a -> bool) -> 'a list -> bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -515,7 +500,6 @@ checks if the predicate `p` is satisfied by **all** elements of the list
 
 ```sml
 all (fn x => x >= 0) [1, 2, ~3, 4];
-(*val it = false : bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -526,7 +510,6 @@ bound as `List.all`
 ```sml
 fun disjoint (xs, ys) =
   all (fn x => all (fn y => x<>y) ys) xs;
-(*val disjoint = fn : ''a list * ''a list -> bool*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -547,8 +530,7 @@ equality is polymorphic in a restricted sense
 ML has a polymorphic equality type `''a`
 
 ```sml
-op=:
-(*val it = fn : ''a * ''a -> bool*)
+op=;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -556,31 +538,17 @@ somewhat like an interface/trait in other languages
 
 ---
 
-### a list of functions - example
-
-a list of functions is a perfectly legitimate value
-
-```sml
-[fn x => 2 * x, fn x => 3 * x];
-(*val it = [fn,fn] : (int -> int) list*)
-
-map (fn f => f 3) it;
-(*val it = [6,9] : int list*)
-```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
-
----
-
 ### exam questions
 
 <!--vert-->
 
-#### question 1
+#### exercise 1
 
 implement `map` using `foldl`
 
 ```sml
-val map : ('a -> 'b) -> 'a list -> 'b list;
+val foldl = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b;
+val map = fn : ('a -> 'b) -> 'a list -> 'b list;
 ```
 
 ```sml
@@ -592,19 +560,21 @@ fun map f inpList = foldl
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+```sml
+map (fn x => x * 2) [1,2,3,4];
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
 <!--vert-->
 
-#### question 2
-
-implement `insSort` using `foldr`
+#### exercise 2
 
 `insSort` (insertion sort) sorts a list according to a given less-then function.
 
 ```sml
+val foldr = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b;
 val insSort : ('a * 'a -> bool) -> 'a list -> 'a list;
 ```
-
-(you may write an auxilary function)
 
 ```sml
 fun insSort lt inpList = foldr
@@ -615,7 +585,14 @@ fun insSort lt inpList = foldr
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-#### question 3
+```sml
+insSort (op<) [1, ~3, 5, 0];
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+#### exercise 3
 
 ```sml
 fun upto m n = if (m > n)
@@ -665,13 +642,9 @@ map
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
----
-
-### extra questions
-
 <!--vert-->
 
-#### question 1
+#### exercise 4
 
 implement a tail recursive `append`
 
@@ -683,16 +656,25 @@ fun []      @ ys = ys
   | (x::xs) @ ys = x :: (xs @ ys);
 ```
 
-<!--vert--->
+<!--vert-->
 
 ```sml
 fun append ...
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-<!--vert--->
+NOTE:
 
-#### question 2
+```sml
+fun aux([], ys) = ys
+  | aux(x::xs, ys) = aux (xs, x::ys);
+
+fun append (xs, ys) = aux (aux (xs, []), ys);
+```
+
+<!--vert-->
+
+#### exercise 5
 
 implement `flatten` using `foldr`
 
@@ -709,3 +691,9 @@ fun flatten ...
 [1,2,3,4,5,6,7,8,9] = flatten [[1,2,3],[4,5,6],[],[7,8,9]];
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE:
+
+```sml
+fun flatten xs = foldr (op@) [] xs;
+```
