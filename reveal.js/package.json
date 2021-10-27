@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "start": "gulp serve --port=${npm_config_port} --portjupyter=${npm_config_portjupyter} 2> npm-start-err.log > npm-start.log",
-    "jupyter-server": "jupyter server --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://localhost:${npm_config_port}/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=${npm_config_portjupyter} 2> jupyter-server-err.log > jupyter-server.log",
-    "docker-start": "gulp serve --ip='0.0.0.0' --port=${npm_config_port} --portjupyter=${npm_config_portjupyter} 2> npm-start-err.log > npm-start.log",
-    "docker-jupyter-server": "jupyter server --allow-root --ServerApp.ip='0.0.0.0' --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://0.0.0.0:${npm_config_port}/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=${npm_config_portjupyter} 2> jupyter-server-err.log > jupyter-server.log"
+    "start": "gulp serve --port=${npm_config_port:-16788} --portjupyter=${npm_config_portjupyter:-16789} 2> npm-start-err.log > npm-start.log",
+    "jupyter-server": "jupyter server --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://localhost:${npm_config_port:-16788}/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=${npm_config_portjupyter:-16789} 2> jupyter-server-err.log > jupyter-server.log",
+    "docker-start": "gulp serve --ip='0.0.0.0' --port=${npm_config_port:-16788} --portjupyter=${npm_config_portjupyter:-16789} 2> npm-start-err.log > npm-start.log",
+    "docker-jupyter-server": "jupyter server --allow-root --ServerApp.ip='0.0.0.0' --ServerApp.tornado_settings='{\"headers\":{\"Access-Control-Allow-Origin\": \"*\", \"Content-Security-Policy\": \"frame-ancestors self http://0.0.0.0:${npm_config_port:-16788}/\"}}' --ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*' --ServerApp.disable_check_xsrf=\"True\" --no-browser --ServerApp.port=${npm_config_portjupyter:-16789} 2> jupyter-server-err.log > jupyter-server.log"
   },
   "repository": {
     "type": "git",
@@ -29,8 +29,4 @@
     "yargs": "^17.2.1"
   },
   "browserslist": "> 0.5%, IE 11, not dead",
-  "config": {
-    "port": "16788",
-    "portjupyter": "16789"
-  }
 }
