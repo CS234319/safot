@@ -8,8 +8,7 @@
 
 born 1985. named Standard ML = Meta Language...
 
-* the 1970s, Robin Milner and group working at Edinburgh University on "LCF", a  theorem proover.
-* to makes the user had to interact with LCF
+* the 1970s, Robin Milner and group working at Edinburgh University on "LCF" (a  theorem proover)
 * ML invented as an embedded scripting language of LCF
 * many ad-hoc independent implementations, many new ideas
 * 1997: first real standard
@@ -21,11 +20,11 @@ born 1985. named Standard ML = Meta Language...
 * exemplar of functional programming
   * functional = forget about variables
   * functional = functions are values
-  * functional = higher leverl functions
+  * functional = higher lever functions
   * ...
 * exemplar of **type safe** functional programming
   * strongly typed: no type error can go undetected
-  * statically typed: all type erors are detected at compile time
+  * statically typed: all type errors are detected at compile time
 * influenced: Haskell, OCaml, Scala, F#, ...
 
 <!--vert-->
@@ -41,12 +40,14 @@ main applications:
 <!--vert-->
 
 ### Language Spirit
-Robin Milner on ML: 
-> "ML is a general purpose programming language. First, it has **an escape and escape trapping mechanism**, well-adapted to programming strategies which may be inapplicable to certain goals. Second, it has a **polymorphic type discipline** which combines the flexibility of programming in a typeless language with the security of compile-time type checking." - Robin Milner
+
+Robin Milner on ML:
+
+> "ML is a general purpose programming language. First, it has **an escape and escape trapping mechanism**, well-adapted to programming strategies which may be inapplicable to certain goals. Second, it has a **polymorphic type discipline** which combines the flexibility of programming in a typeless language with the security of compile-time type checking."
 
 <!--vert-->
 
-Two main features emphasized by the language creator
+two main features emphasized by the language creator
 
 * exception mechanism for disciplined management of errors
 * type system
@@ -146,14 +147,14 @@ identifier congestion?
 
 <!--vert-->
 
-### Alphabetic Identifiers
+### Alphabetical Identifiers
 
 * begin with a letter
 * followed by a sequence of letters, digits, `_`, or `'`
 * case sensitive
 * some alphabetical identifiers are reserved words
   * names of operators: `and`, `if`, `then`, `else`, `orelse`, ...
-  * punctuations: fun, let, local, of,  
+  * punctuations: `fun`, `let`, `local`, `of`, ... 
   * many more
 
 ```sml
@@ -168,12 +169,10 @@ h''3_H
 
 ### Special Identifiers
 
-are called "symbolic" identifiers in the SML lingo.
+are called "symbolic" identifiers in the SML lingo
 
 * a sequence of one or more of the following ``! % & $ # + - * / : < = > ? @ \ ~ \ ^ | ` ``
-
 * should not be one of: `: | = => -> #`
-
 * allowed wherever an alphabetic name is
 
     ```sml
@@ -188,84 +187,87 @@ are called "symbolic" identifiers in the SML lingo.
 
 `abstype` | `and` | `andalso` | `as` | `case` | `datatype` | `do` | `else` | `end |` `eqtype` | `exception` | `fn` | `fun` | `functor` | `handle` | `if` | `in |` `include` | `infix` | `infixr` | `let` | `local` | `nonfix` | `of` | `op` | `open |` `orelse` | `raise` | `rec` | `sharing` | `sig` | `signature` | `struct |` `structure` | `then` | `type` | `val` | `while` | `with` | `withtype`
 
-Keywords are words that look like identifiers, but cannot be used as such; they are reserved for other purposes.
+keywords are words that look like identifiers, but cannot be used as such; they are reserved for other purposes.
 
 ---
 
 ### The Basic Types of ML
 
-Six "basic" types: `int`, `real`, `string`, `char`, `bool`, `unit`
-- The six are basic, since they are *atomic*, i.e., not created from other types
-- The six are basic, since they are *builtin*
-- There are other, user defined types:
-   - User defined types can be atomic (no in SML; enumerated types are made of `unit`
-   - User defined types can be copmound
-   - A programming language may furnish the user with some builtin, non-atomic types (not in SML)
----
+six "basic" types: `int`, `real`, `string`, `char`, `bool`, `unit`
 
-
-### Names of Basic Types are Predeefined
-
-The words "basic" types: `int`, `real`, `string`, `char`, `bool`, `unit`
- - Are valid identifiers
- - Are not reserved identifiers; they can be used for any purpose
- - Are not keywords
- - Are predefined identifiers, naming the builtin types;
- - The identifiers may be used for other purposes; the underlying type may remain nameless.
-
-```sml
-type integer = int;
-val int = 6;
-type Real = real;
-val real = 7;
-real * int - real 
-```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
----
-
-
-
-### int
-
-* literals
-  * sequence of digits
-    * 0
-    * 01234
-  * `~` for a unary minus sign
-    * `~23`
-    * `~85601435654638`
-* infix operations: `+` `-` `*` `div` `mod`
+* they are basic, since they are *atomic*
+* they are basic, since they are *builtin*
+* there are other, user defined types:
+  * user defined types can be atomic
+  * user defined types can be compound
+  * a programming language may furnish the user with some builtin, non-atomic types (not in SML)
 
 <!--vert-->
 
-* conventional precedence (parenthesis can be dropped without change of meaning)
+`int`, `real`, `string`, `char`, `bool`, `unit`
 
-    ```sml
-    (((m * n) * l) - (m div j)) + j
-    ```
+* are valid identifiers
+* are not reserved identifiers
+* are not keywords
+* are predefined identifiers, naming the builtin types
+* the identifiers may be used for other purposes; the underlying type may remain nameless
+
+```sml
+val int = 6;
+val real = 7;
+real * int - real;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+---
+
+### int
+
+#### literals
+
+* sequence of digits
+  * 0
+  * 01234
+* `~` for a unary minus sign
+  * `~23`
+  * `~85601435654638`
+
+<!--vert-->
+
+infix operations: `+` `-` `*` `div` `mod`
+
+conventional precedence (parenthesis can be dropped without change of meaning)
+
+```sml
+(((m * n) * l) - (m div j)) + j
+```
 
 ---
 
 ### real
 
-* literal
-  * decimal point
-    * `0.01`
-    * `2.718281828`
-  * e notation
-    * `7E~5`
-    * `~1.2E12`
-    * `~123.4E~2` is the same as `~1.234`
-* infix operators: `+` `-` `*` `/`
+#### literal
+
+* decimal point
+  * `0.01`
+  * `2.718281828`
+* e notation
+  * `7E~5`
+  * `~1.2E12`
+  * `~123.4E~2` is the same as `~1.234`
+
+<!--vert-->
+
+infix operators: `+` `-` `*` `/`
 
 NOTE: note that `+`, `-`, `*` are overloaded
 
 <!--vert-->
 
-functions
+#### functions
 
-* `floor(r)` converts `real` to `int`
-* `real(i)` converts `int` to `real`
+* `floor` converts `real` to `int`
+* `real` converts `int` to `real`
 * `sqrt`, `sin`, `cos`, `tan`, `exp`, `ln` all of type `real->real`
 * all need the `Math.` prefix: `Math.sqrt`
 
@@ -313,13 +315,15 @@ size "SML";
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+notice the syntax of function application - no parentheses!
+
 ---
 
 ### Characters
 
 <!--vert-->
 
-characters (values of type `char`) are distinguished from strings of length 1 by using the character `#`
+characters (values of type `char`) are distinguished from strings of length 1 by the character `#`
 
 ```sml
 "0";
@@ -365,8 +369,8 @@ false;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-- The names `true` and `false` are not keywords; they are predefined identifiers 
-- In trurth, type `boolean` is a predefined enumerated type
+he names `true` and `false` are not keywords; they are predefined identifiers 
+
 ---
 
 ### tuples - cartesian product type
@@ -580,20 +584,19 @@ it 3;
 
 ### type inference
 
-* ML deduces the types in expressions
-* type checking the function:
+ML deduces the types in expressions
 
-    ```sml
-    fun facti (n, p) =
-        if n=0 then p else facti (n-1, n*p);
-    (*val facti = fn : int * int -> int*)
-    ```
-    <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+```sml
+fun facti (n, p) =
+    if n=0 then p else facti (n-1, n*p);
+(*val facti = fn : int * int -> int*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-  * literals `0` and `1` have type `int`.</span>
-  * therefore `n=0` and `n-1` involve integers so `n` has type `int`</span>
-  * `n*p` must be integer multiplication, so `p` has type `int`</span>
-  * `facti` returns type `int`</span>
+* literals `0` and `1` have type `int`.</span>
+* therefore `n=0` and `n-1` involve integers so `n` has type `int`</span>
+* `n*p` must be integer multiplication, so `p` has type `int`</span>
+* `facti` returns type `int`</span>
 
 ---
 
@@ -746,7 +749,7 @@ fn x => (twice ident) (x);
 * functional - stateless. using expressions recursively to calculate the result
 * example: Euclid's algorithm for the Greatest Common Divisor (GCD) of two natural numbers:
 
-`$$gcd(m,n) = \begin{cases}n,\;m = 0&\\gcd(n\;mod\;m,m), \;m>0\end{cases}$$`
+$$gcd(m,n) = \begin{cases}n,m = 0&\\gcd(n mod m,m), m>0\end{cases}$$
 
 <!--vert-->
 
