@@ -31,6 +31,19 @@ where do values come from?
 
 * computation: during execution, the program generates more and more values
   * example: the elements of the Fibonacci sequence
+  * operators: create values
+    - div creates values of type int
+    - (12, 12.3) is a compound value
+    - {age = "old", name = 1 }
+    - `fn ? => ?` creates values which are functions
+    - `fun x(t) = ...` creates a values which is a fucntion and names it.
+  * type constructor is not an operator, takes types creates a new type
+    - '->' 
+    - `*`
+    - `{...}`
+    - ....
+  * value concstructor is always an operator
+     - fn?
 * initial values introduced by programmer:
   * atomic values: every literal is a value
   * composite values: expressions, function definitions
@@ -41,6 +54,8 @@ declarations:
 
 * making new values out of previous values and literals
 * providing names for this value
+* or making new types of previous types (builtin and user defined)
+* providing names for these new types
 
 <!--vert-->
 
@@ -133,6 +148,8 @@ fun f(n) = if n=0 then 1 else n * f(n-1);
 val f = fn (n) => if n=0 then 1 else n * ??;
 ```
 
+
+
 ```sml
 val rec f = fn (n) =>
     if n=0 then 1
@@ -140,7 +157,26 @@ val rec f = fn (n) =>
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+Notes: It is always a question when does a binding get into effect
+ - In Pascal and C a function 'int f(double d) **** {...}'
+ - In C (and Pascal) this applies also to types:
+    ```
+    struct X *p; // OK Struct X is an incomplete type 
+    struct X y; // Error struct X not defined
+    struct X { int a; }; // Complete definition of struct x.
+    struct Y { int b; } Y; // Y is variable of type 'struct Y'
+    typedef struct Z {int c; } Z; // Z is alias to type struct Z.
+    ```
+    - C: `struct X *y; struct X { ....} `
+     - gives body to type 'struct X`. 
+     - The type struct X exists even before
+     - The type 'X' never exists
+    - 
+    - `
+
 NOTE: `fun` VS `val rec` is a matter of taste
+
+
 
 ---
 
