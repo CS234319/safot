@@ -38,7 +38,7 @@
 
 * **Lecture**
     1. [Types (Cont.)](Lectures/slides/chapter-3.pdf)
-    2. [ML's Type System](Tutorials/theory/ml-type-system.md)
+    2. [ML's Type System](Tutorials/theory/sml-type-system.md)
     3. [Advanced Typing](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md)
