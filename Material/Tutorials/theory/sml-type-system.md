@@ -38,6 +38,16 @@ type product = int * real * string;
 
 ---
 
+### unit type
+- Is either
+  - empty record `{}`
+  - empty tuple `()`
+- Predefined name: `Unit`
+- Only value: `()`
+
+---
+
+
 ### disjoint union
 
 * notation: $l_1(T_1)\cup\cdots\cup l_n(T_n)$
@@ -81,7 +91,18 @@ fun (x: X): int = x; (*OK*)
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
+### The empty/null/bottom type
+Usually by disjoint sum of a list of zero types
+- Not in SML!
+- Datatype can never be empty
+- Milner did not like "Bottom" type; used exceptions instead
 
+Best approximation for a function that never returns:
+ - Return type is `Unit`
+ - Function always throws an exception
+
+
+---
 ### mapping
 
 * notation: $S\rightarrow T$
