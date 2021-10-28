@@ -1,6 +1,5 @@
 #import "chic.h"
-#import "S.h"
-
+#import "S.cc"
 Occasionally(Cons, S,
   Property(S car) below
   Property(S cdr) below

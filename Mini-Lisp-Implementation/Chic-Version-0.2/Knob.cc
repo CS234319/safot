@@ -14,7 +14,7 @@ Occasionally(Knob, Pair,
   Property(Boolean item) below
   Property(Boolean pristine) below
   Property(Boolean weirdo) below
-  Property(Boolean x) below
+  Property(Boolean none) below
 
   Selfer(s1(Short));
   Selfer(s2(Short));
@@ -29,8 +29,8 @@ Occasionally(Knob, Pair,
 #import "Pristine.cc"
 #import "Short.h"
 
-Property(Boolean Knob::ok)       is(x() || handle() >= $P_f$ and handle() <= $P_t$)
-Property(Boolean Knob::x)        is(handle() == $P_x$)
+Property(Boolean Knob::ok)       is(none() or handle() >= $P_f$ and handle() <= $P_t$)
+Property(Boolean Knob::none)     is(handle() == $P_x$)
 Property(Short   Knob::s1)       is(P[handle()].s1)  
 Property(Short   Knob::s2)       is(P[handle()].s2)  
 Property(Boolean Knob::cons)     is(white(s1()) and white(s2()))

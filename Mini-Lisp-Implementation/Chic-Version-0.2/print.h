@@ -1,4 +1,5 @@
 #import "S.cc"
+#import "Text.cc"
 /** Print some text */ extern int print(String);
 /** Print an S expression */ extern int print(S);
 /** Print a newline */ inline int println() { print("\n"); }

@@ -17,7 +17,7 @@ Type Cons below
 
 
 Module heap {
-  Provides const Pristine& heap below
+  Provides const Pristine& first below
   Provides Item fresh(Short, Short) below 
   Provides Cons request(S, S) below 
   Provides Pristine reset() below
@@ -106,7 +106,7 @@ Unit collect(Pair p) { accounting.collect();
 }
 
 Module heap {
-  const Pristine& heap = $H$.first; 
+  const Pristine& first = $H$.first; 
   Pristine reset() {
     $H$.reset();
     accounting.reset($P_n$);

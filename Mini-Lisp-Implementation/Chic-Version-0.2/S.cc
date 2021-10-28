@@ -18,24 +18,18 @@ Occasionally(S, Handle,
 
   Query(eq) with(S s) is(atom() and _ == s.handle()) 
 
-  Fortunately(Text) feature(text) below 
-  Fortunately(S ) feature(eval)  below 
-  Fortunately(Word) feature(&word) below 
-  Fortunately(S) feature(car) below
-  Fortunately(S) feature(cdr) below
+  Fortunately(Text)   feature(text)  below 
+  Fortunately(S)      feature(eval)  below 
+  Fortunately(Word)   feature(& word)  below 
+  Fortunately(S)      feature(car)   below
+  Fortunately(S)      feature(cdr)   below
 )
 
 #if Implementation 
 
 #import "layout.h"
 #import "Text.cc"
-Property(Text S::text)   {
-  Short _ = this->_;
-  char *a = A;
-  char *a1 = A + _;
-  Text t(a1);
-  return t;
-}
+Property(Text S::text) is(Text(A + this->_))
 
 #import "layout.h"
 #import "Word.cc"

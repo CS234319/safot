@@ -1,13 +1,15 @@
+#import "chic.h"
+#import "S.cc"
 #import "Pair.cc"
 #import "layout.h"
 Service {
- Unit all() Is(sweep())
- Unit preserving(S s)  Is(mark(s), sweep())
+ Unit all() is(sweep())
+ Unit preserving(S s)  is((mark(s), sweep()))
  Capsule(
     Unit mark(S s) 
-      Is(s.atom() or mark(s.Pair())) 
+      is(s.atom() or mark(Pair(s))) 
     Unit mark(Pair p) 
-      Is(p.seen() or do(mark(p.car()) | mark(p.cdr()), p.visit()))
+      is(p.seen() or do(mark(S(p.s1())) | mark(S(p.s2())), p.visit()))
     Unit sweep() {
       for (auto s = $P_f$; s <= $P_t$; ++s) 
         consider(Pair(s)); 

@@ -2,10 +2,12 @@
 
 #import "heap.cc"
 #import "accounting.cc"
+#import "Pristine.cc"
+#import "Item.cc"
 
 inline Short length() {
   Short result = 0;
-  for (auto h = heap::heap; not h.x();  h = h.next()) 
+  for (auto h = heap::first; not h.x();  h = h.next()) 
       ++result;
   return result;
 }
@@ -15,8 +17,8 @@ static struct {
   Boolean uncounted() is(length() > accounting.unused); 
   Boolean excess()   is(length() < accounting.unused); 
   Boolean cyclic() {
-    if (!heap::heap.x())
-      for (auto h = heap::heap, h2 = heap::heap.next(); !h2.x(); h = h.next()) { 
+    if (!heap::first.x())
+      for (auto h = heap::first, h2 = heap::first.next(); !h2.x(); h = h.next()) { 
         if (h.handle() == h2.handle()) 
           return true;
         if (!h2.x()) h2 = h2.next();
@@ -31,7 +33,7 @@ static struct {
     return false;
   }  
   Boolean asymmetric() {
-    for (auto p = heap::heap; !p.x(); p = p.next()) { 
+    for (auto p = heap::first; !p.x(); p = p.next()) { 
       if (!p.prev().x() && p.prev().next().handle() != p.handle()) 
         return true;
       if (!p.next().x() && p.next().prev().handle() != p.handle()) 

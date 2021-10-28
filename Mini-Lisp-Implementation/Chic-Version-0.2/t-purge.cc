@@ -6,87 +6,95 @@
 
 #import "Testee.h"
 
+inline Pair request(Short s1, Short s2) { return Pair(heap::request(S(s1), S(s2))); }
 
 TEST(S, Pair) {
   reset();
   S s(13);
-  Pair p = s.Pair();
+  Pair p = Pair(s);
   EXPECT_EQ(p.handle(), s.handle());
 }
 
 TEST(Collect, Singleton) {
   reset();
-  auto s = request(-1,-2);
+  S s(request(S(-1),S(-2)));
   purge.preserving(s);
   EXPECT_EQ(accounting.used, 1);
 } 
 
 TEST(Collect, ParentaToSingleton) {
   reset();
-  auto s1 = request(-1,-2);
-  auto s2 = request(s1, s1);
+  S s1(request(-1,-2));
+  S s2(request(s1, s1));
   purge.preserving(s1);
   EXPECT_EQ(accounting.used, 1);
 }
 
 TEST(Collect, ParentaToLeftSingleton) {
   reset();
-  auto s0 = request(-1,-2);
+  auto s0 = request(S(-1),S(-2));
   auto s1 = request(s0, s0);
   auto s2 = request(s1, s0);
-  purge.preserving(s1);
+  purge.preserving(S(s1));
   EXPECT_EQ(accounting.used, 2);
 }
 
 TEST(Collect, ParentaToRightSingleton) {
   reset();
-  auto s0 = request(-1,-2);
+  auto s0 = request(S(-1),S(-2));
   auto s1 = request(s0, s0);
   auto s2 = request(s1, s1);
-  purge.preserving(s1);
+  purge.preserving(S(s1));
   EXPECT_EQ(accounting.used, 2);
 }
 
 TEST(Collect, ParentaToBoth) {
   reset();
-  auto s1 = request(-1,-2);
-  auto s2 = request(-3,-4);
+  auto s0 = request(S(-1),S(-2));
+  auto s1 = request(S(-1),S(-2));
+  auto s2 = request(S(-3),S(-4));
   auto s3 = request(s1, s2);
   auto s4 = request(s2, s3);
   auto s5 = request(s3, s4);
-  purge.preserving(s5);
+  purge.preserving(S(s5));
   EXPECT_EQ(accounting.used, 5);
-  purge.preserving(s4);
+  purge.preserving(S(s4));
   EXPECT_EQ(accounting.used, 4);
-  purge.preserving(s3);
+  purge.preserving(S(s3));
   EXPECT_EQ(accounting.used, 3);
-  purge.preserving(s2);
+  purge.preserving(S(s2));
   EXPECT_EQ(accounting.used, 1);
 }
 
 
 TEST(Visit, exists) {
   reset();
-  auto s = request(2,3);
+  Pair s(request(2,3));
   s.visit();
 }
 
 TEST(Visit, repertoire) {
   reset();
-  Pair p = request(-2,-3);
+  Pair p(request(-2,-3));
   p.visit();
   p.leave();
   p.seen();
 }
 
-TEST(Visit, exists2) {
+TEST(Visit, exists1) {
   reset();
   request(2,3).visit();
 }
 
+
+TEST(Visit, exists2) {
+  reset();
+  Pair(request(2,3)).visit();
+}
+
 TEST(Visit, seen) {
   reset();
-  Pair p = request(5,6);
+  Pair p(request(5,6));
   EXPECT_FF(p.seen());
   EXPECT_TT(p.visit().seen());
   EXPECT_TT(!p.leave().seen());
@@ -94,14 +102,14 @@ TEST(Visit, seen) {
 
 TEST(Visit, distinct) {
   reset();
-  auto x = request(2,3);
+  Pair x(request(2,3));
   Word w = P[x.handle()];
   x.visit();
   EXPECT_NE(w.l,P[x.handle()].l);
 }
 
 TEST(Visit, unseen) {
-  auto x = request(2,3);
+  Pair x(request(2,3));
   Word w = P[x.handle()];
   EXPECT_FF(x.visit().leave().seen());
 }
@@ -117,10 +125,10 @@ TEST(Visit, reversible) {
 
 TEST(Visit, flip) {
   reset();
-  auto p = request(2,3);
-  Short before = p.car().handle();
+  auto p = (request(2,3));
+  Short before = Cons(p).car().handle();
   p.visit(); 
-  Short after = p.car().handle();
+  Short after = Cons(p).car().handle();
   EXPECT_EQ(before, flip(after)); 
   EXPECT_EQ(after, flip(before)); 
 }

@@ -14,6 +14,8 @@
 #import "Testee.h"
 #import "mark.h"
 
+auto inline request(String s) { return text::request(Text(s)); }
+
 inline std::ostream& operator<<(std::ostream &os, Pristine p) {
   if (p.x())
     return  os << "Px";
@@ -23,9 +25,6 @@ inline std::ostream& operator<<(std::ostream &os, Pristine p) {
 using namespace heap;
 using heap::reset;
 
-#define EXPECT_TT     EXPECT_TRUE
-#define EXPECT_FF     EXPECT_FALSE
-#define EXPECT_ZZ(Z)  EXPECT_EQ(0,Z)
 
 TEST(Heapify, exists) { 
   heap::reset();
@@ -33,8 +32,8 @@ TEST(Heapify, exists) {
 
 TEST(Heapify, head) { 
   heap::reset();
-  heap::heap.x();
-  EXPECT_FF(heap::heap.x());
+  heap::first.x();
+  EXPECT_FF(heap::first.x());
 }
 
 TEST(Heapify, allPristine) { 
@@ -84,8 +83,8 @@ TEST(Heapify, entryBetween) {
 
 TEST(Heapify, prefix) { 
   heap::reset();
-  EXPECT_EQ(heap::heap._, $P_f$);
-  EXPECT_EQ(heap::heap, $P_f$);
+  EXPECT_EQ(heap::first._, $P_f$);
+  EXPECT_EQ(heap::first, $P_f$);
   EXPECT_EQ(Pristine($P_f$).next().handle(), 2);
   EXPECT_ZZ(Pristine($P_f$).prev().handle());
   EXPECT_EQ(Pristine(2).next().handle(), 3);
@@ -285,7 +284,7 @@ TEST(Fresh, correct) {
   Item i = fresh(15,$P_x$);
   EXPECT_TT(i.ok());
   EXPECT_EQ(i.handle(), 1);
-  EXPECT_EQ(heap::heap.handle(), 2);
+  EXPECT_EQ(heap::first.handle(), 2);
   EXPECT_EQ(i.head(), 15);
   EXPECT_EQ(i.rest().handle(), $P_x$);
   EXPECT_TT(i.ok());
@@ -448,17 +447,17 @@ TEST(Fresh, Length) {
     EXPECT_EQ(length(), accounting.unused);
 
     free(s1);
-    EXPECT_EQ(heap::heap.handle(), 1);
+    EXPECT_EQ(heap::first.handle(), 1);
     EXPECT_EQ(length(), $P_n$ - 2);
     EXPECT_EQ(length(), accounting.unused);
 
     free(s3);
-    EXPECT_EQ(heap::heap.handle(), 3);
+    EXPECT_EQ(heap::first.handle(), 3);
     EXPECT_EQ(length(), $P_n$ - 1);
     EXPECT_EQ(length(), accounting.unused);
 
     free(s2);
-    EXPECT_EQ(heap::heap.handle(), 2);
+    EXPECT_EQ(heap::first.handle(), 2);
     EXPECT_EQ(length(), $P_n$);
     EXPECT_EQ(length(), accounting.unused);
   } catch(int e) {
@@ -510,9 +509,9 @@ TEST(request, 3) {
 TEST(request, correct3) { 
   heap::reset();
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   auto s1 = request(S(2),S(3));
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   EXPECT_NE(s1.handle(),1);
   EXPECT_EQ(P[s1.handle()].s1,2);
   EXPECT_EQ(P[s1.handle()].s2,3);
@@ -523,11 +522,11 @@ TEST(request, correct3) {
   EXPECT_EQ(s2.car().handle(),4);
   EXPECT_EQ(s2.cdr().handle(),5);
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   EXPECT_EQ(length(), $P_n$-2);
   EXPECT_EQ(length(), accounting.unused);
   auto s3 = request(S(6),S(7));
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   EXPECT_EQ(s3.car().handle(),6);
   EXPECT_EQ(P[s3.handle()].s2,7);
   EXPECT_EQ(P[s3.handle()].s2,s3.cdr().handle());
@@ -536,9 +535,9 @@ TEST(request, correct3) {
 TEST(request, Scenario) { 
   heap::reset();
   EXPECT_FF(corrupted.asymmetric());
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   auto s1 = request(S(2),S(3));
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   EXPECT_EQ(s1.handle(),Word(2,3).hash());
   EXPECT_EQ(P[s1.handle()].s1,2);
   EXPECT_EQ(P[s1.handle()].s2,3);
@@ -547,7 +546,7 @@ TEST(request, Scenario) {
   EXPECT_EQ(length(), accounting.unused);
   auto s2 = request(S(4),S(5));
   EXPECT_EQ(s2.handle(),Word(4,5).hash());
-  EXPECT_EQ(heap::heap.handle(),1);
+  EXPECT_EQ(heap::first.handle(),1);
   EXPECT_EQ(P[s2.handle()].s1,4);
   EXPECT_EQ(P[s2.handle()].s2,5);
   EXPECT_FF(corrupted.asymmetric());
@@ -635,7 +634,7 @@ TEST(Exhaust, Almost) {
   EXPECT_EQ(accounting.unused, $P_n$); 
   for (auto s = 1 ; s < $P_n$; ++s)
     Item i = fresh(s, $P_x$);
-  EXPECT_FF(heap::heap.x());
+  EXPECT_FF(heap::first.x());
   EXPECT_EQ(accounting.unused, 1);
   EXPECT_EQ(accounting.items, $P_n$ - 1);
   EXPECT_FF(corrupted.pristines());
@@ -674,7 +673,7 @@ TEST(Exhaust, items) {
     EXPECT_EQ(accounting.unused, $P_n$ - s); 
     EXPECT_EQ(accounting.items, s); 
   }
-  EXPECT_TT(heap::heap.x());
+  EXPECT_TT(heap::first.x());
   EXPECT_ZZ(accounting.unused);
   EXPECT_FF(corrupted.items());
   EXPECT_FF(corrupted.pristines());
@@ -742,9 +741,9 @@ TEST(Churn, Both) {
   for (int i = 0, n = 0;  ; i++) { 
     Pushdown p[10];
     for (int j = 0; j <= i; ++j, ++n) {
-      if (heap::heap.x()) goto done;
+      if (heap::first.x()) goto done;
       auto const c = request(S(i),S(j));
-      if (heap::heap.x()) goto done;
+      if (heap::first.x()) goto done;
       int d = P[c.handle()].hash() % 10;
       mess(p[d]);
     }
@@ -878,10 +877,10 @@ TEST(Pristine, requestAtom) {
   heap::reset();
   int before = accounting.unused;
   p.push(3,2,1);
-  text::request("ABC");
+  request("ABC");
   EXPECT_EQ(accounting.unused, before - 3);
-  text::request("ABC");
-  text::request("CDE");
+  request("ABC");
+  request("CDE");
   EXPECT_EQ(accounting.unused, before - 3);
   EXPECT_EQ(3,p.pop());
   EXPECT_EQ(2,p.pop());
@@ -892,7 +891,7 @@ TEST(Pristine, requestAtom) {
 TEST(Pristine, 1requestAtom) {
   int before = accounting.unused;
   EXPECT_EQ(accounting.unused, before);
-  text::request("Foo Bar");
+  request("Foo Bar");
   EXPECT_NE(accounting.unused, before -1);
   EXPECT_EQ(accounting.unused, before);
   EXPECT_FF(corrupted.something());
@@ -910,13 +909,13 @@ TEST(Pristine, requestBoth) {
   EXPECT_EQ(accounting.unused, before -1);
   p.push(2);
   EXPECT_EQ(accounting.unused, before -2);
-  text::request("ABC");
+  request("ABC");
   EXPECT_EQ(accounting.unused, before -2);
   request("CDE");
   EXPECT_EQ(accounting.unused, before -2);
-  text::request("ABC");
+  request("ABC");
   EXPECT_EQ(accounting.unused, before -2);
-  text::request("CDE");
+  request("CDE");
   EXPECT_EQ(accounting.unused, before -2);
   request(S(12),S(13));
   EXPECT_EQ(accounting.unused, before -3);

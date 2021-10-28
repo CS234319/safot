@@ -10,11 +10,14 @@
 
 #import "atoms.h"
 
-#define EXPECT_NIL(v) EXPECT_EQ(v,NIL)
-#define EXPECT_T(v) EXPECT_EQ(v,T)
-#define EXPECT_NOT_NIL(v) EXPECT_NE(v,NIL)
-#define EXPECT_STRUE(e) EXPECT_TRUE(e.t())
-#define EXPECT_SFALSE(e) EXPECT_TRUE(e.null())
+# define  EXPECT_TT          EXPECT_TRUE
+# define  EXPECT_FF          EXPECT_FALSE
+# define  EXPECT_ZZ(Z)       EXPECT_EQ(0,Z)
+# define  EXPECT_NIL(v)      EXPECT_EQ(v,NIL)
+# define  EXPECT_T(v)        EXPECT_EQ(v,T)
+# define  EXPECT_NOT_NIL(v)  EXPECT_NE(v,NIL)
+# define  EXPECT_STRUE(e)    EXPECT_TRUE(e.t())
+# define  EXPECT_SFALSE(e)   EXPECT_TRUE(e.null())
 
 extern std::ostream& operator<<(std::ostream &os, S s);
 extern bool operator == (const S s1, const S s2); 

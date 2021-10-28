@@ -12,6 +12,8 @@
 
 #import "Testee.h"
 
+auto inline request(String s) { return text::request(Text(s)); }
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
@@ -56,37 +58,37 @@ TEST(ByteOrdering, Long) {
       Short s2;
     };
     struct {
-      byte b1;
-      byte b2;
-      byte b3;
-      byte b4;
+      Byte b1;
+      Byte b2;
+      Byte b3;
+      Byte b4;
     };
   } v;
   v.w = 0xDEAD'BEEF;
   EXPECT_EQ(v.s1,(Short)  0xBEEF);
   EXPECT_EQ(v.s2,(Short)  0xDEAD);
-  EXPECT_EQ(v.b1,(byte)  0xEF);
-  EXPECT_EQ(v.b2,(byte)  0xBE);
-  EXPECT_EQ(v.b3,(byte)  0xAD);
-  EXPECT_EQ(v.b4, (byte) 0xDE);
+  EXPECT_EQ(v.b1,(Byte)  0xEF);
+  EXPECT_EQ(v.b2,(Byte)  0xBE);
+  EXPECT_EQ(v.b3,(Byte)  0xAD);
+  EXPECT_EQ(v.b4, (Byte) 0xDE);
 }
 
 TEST(ByteOrdering, Short) { 
   union {
     Short h;
     struct {
-      byte b1;
-      byte b2;
+      Byte b1;
+      Byte b2;
     };
   } v;
   v.h = 0xCAFE;
-  EXPECT_EQ(v.b1, (byte) 0xFE);
-  EXPECT_EQ(v.b2, (byte) 0xCA);
+  EXPECT_EQ(v.b1, (Byte) 0xFE);
+  EXPECT_EQ(v.b2, (Byte) 0xCA);
 }
 
 TEST(Store, PrimitiveSizs) { 
   struct S: Knob {};
-  EXPECT_EQ(sizeof(byte), 1);
+  EXPECT_EQ(sizeof(Byte), 1);
   EXPECT_EQ(sizeof(char), 1);
   EXPECT_EQ(sizeof(Short), 2);
   EXPECT_EQ(sizeof(Long), 4);
