@@ -6,25 +6,9 @@
     1. [Motivation and Paradigms](Lectures/introduction.md)
     2. [Abstract Introduction](https://docs.google.com/presentation/d/1LKVaPEXuPYzI149K-68XZR-HHv6cJkOWgdBg9T98cog/edit?usp=sharing)
     3. [Quick Pascal](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
-* **Tutorial**
-    1. [ML - Introduction](Tutorials/sml/introduction.md) \[[pdf](Tutorials/pdfs/sml/introduction.pdf)\]
-    2. [ML - Functions](Tutorials/sml/functions.md) \[[pdf](Tutorials/pdfs/sml/functions.pdf)\]
-
-Aftermath:
- - Functions are values.
- - Types are not values.
- - 'fn' .. '=>' is an operator!!!
- - Values can be anonymous
- - Types can be anonymous.
- - Variables? Huh? Huh? Huh?
- - Ovderloading??? When the same name refers to two values, of different types, and the parser/evaluator chooses the correct one based on type:
-   - Example: builtin `+` in ML denotes two functions:  `int * int -> int` and `real *real -> real`
-      - A mishap, not working properly!
-      - Cannot reproduce by user.
-      - Hiding is not overloading. 
-         ```int f() { int i = 3; { extern double i(int); } }``` 
-         - Rebinding is not overloading: ```val a = 2; val a = true; ``` and it is not assignment.
-
+* **Tutorial** \[[summary](Tutorials/summaries/1.md)\]
+    1. [ML - Introduction](Tutorials/sml/introduction.md) --- [pdf](Tutorials/pdfs/sml/introduction.pdf)
+    2. [ML - Functions](Tutorials/sml/functions.md) --- [pdf](Tutorials/pdfs/sml/functions.pdf)
 * **Reading**
     1. [Summary of first lecture: chapters 1-2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
     2. [Specification of Pascal 72](Misc/PascalReport.pdf)
@@ -45,8 +29,8 @@ Aftermath:
     1. [Quick Pascal (Cont.)](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
     2. [Types](Lectures/slides/chapter-3.pdf)
 * **Tutorial**
-    1. [ML - Declarations](Tutorials/sml/declarations.md) \[[pdf](Tutorials/pdfs/sml/declarations.pdf)\]
-    2. [ML - Datatypes](Tutorials/sml/datatypes.md) \[[pdf](Tutorials/pdfs/sml/datatypes.pdf)\]
+    1. [ML - Declarations](Tutorials/sml/declarations.md) --- [pdf](Tutorials/pdfs/sml/declarations.pdf)
+    2. [ML - Datatypes](Tutorials/sml/datatypes.md) --- [pdf](Tutorials/pdfs/sml/datatypes.pdf)
 * **Reading**
     1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 
@@ -70,7 +54,7 @@ Aftermath:
 * **Tutorial**
     1. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
     2. [Structural (sub)typing ML and Go](Tutorials/theory/structural-typing.md)
-    4. [ML - References](Tutorials/sml/refs.md)
+    3. [ML - References](Tutorials/sml/refs.md)
 
 ## Week 5 \[21.11-27.11\]
 
