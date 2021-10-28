@@ -54,7 +54,8 @@ Aftermath:
 
 * **Lecture**
     1. [Types (Cont.)](Lectures/slides/chapter-3.pdf)
-    2. [Advanced Typing](Lectures/slides/chapter-4.pdf)
+    2. [ML's Type System](Tutorials/theory/ml-type-system.md)
+    3. [Advanced Typing](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md)
 * **Optional Reading**
@@ -68,8 +69,8 @@ Aftermath:
     1. [Advanced Typing (Cont.)](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
-    2. [ML's Type System](Tutorials/theory/ml-type-system.md)
-    3. [ML - References](Tutorials/sml/refs.md)
+    2. [Structural (sub)typing ML and Go](Tutorials/theory/structural-typing.md)
+    4. [ML - References](Tutorials/sml/refs.md)
 
 ## Week 5 \[21.11-27.11\]
 
