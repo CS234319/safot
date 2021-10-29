@@ -4,12 +4,12 @@
 
 - [ ] theory/lexical-analysis
 - [ ] theory/structural-typing
-- [ ] theory/automatic-memory-management WIP
-- [ ] theory/mini-lisp WIP
-- [ ] prolog/higher-order WIP
-- [ ] prolog/exam-questions WIP
+- [ ] theory/automatic-memory-management
+- [ ] theory/mini-lisp
+- [ ] prolog/higher-order
+- [ ] prolog/exam-questions
 - [ ] theory/python-async
-- [ ] ? theory/python-recap
+- [ ] theory/python-recap
 - [X] theory/rtti
 - [X] theory/scoping
 - [X] prolog/introduction
