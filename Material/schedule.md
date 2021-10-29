@@ -43,7 +43,7 @@
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md)
 * **Optional Reading**
-[Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
+    1. [Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
 * **Submission**: [HW1](???) \[13.11 23:59\]
 * **HW**: [HW2](???) is published \[13.11\]
 
@@ -53,7 +53,7 @@
     1. [Advanced Typing (Cont.)](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
-    2. [Structural (sub)typing ML and Go](Tutorials/theory/structural-typing.md)
+    2. [Structural (sub)typing](Tutorials/theory/structural-typing.md)
     3. [ML - References](Tutorials/sml/refs.md)
 
 ## Week 5 \[21.11-27.11\]
@@ -128,14 +128,14 @@
     2. [Python Generators](Tutorials/theory/python-generators.md)
     3. TBD
 
-## Week 13 \[23.1-29.11\]
+## Week 13 \[23.1-29.1\]
 
 * **Lecture**
    1. [Real Life Programming Languages](https://docs.google.com/presentation/d/1FGUzbhURUqzL3hfzCj8m3nR1swqmpG8CYu77H4Tgm5U/edit#slide=id.gb50064ae0_0_89)
 * **Tutorial**
    1. [Exam Questions](???)
 * **Reading material**
-* **Submission**: [HW6](???) \[29.11 23:59\]
+* **Submission**: [HW6](???) \[29.1 23:59\]
 
 ## Extra curricular
 
