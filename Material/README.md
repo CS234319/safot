@@ -3,11 +3,14 @@
 ## tutorials
 
 - [ ] theory/lexical-analysis
-- [ ] theory/rtti WIP
+- [ ] theory/structural-typing
 - [ ] theory/automatic-memory-management WIP
 - [ ] theory/mini-lisp WIP
 - [ ] prolog/higher-order WIP
 - [ ] prolog/exam-questions WIP
+- [ ] theory/python-async
+- [ ] ? theory/python-recap
+- [X] theory/rtti
 - [X] theory/scoping
 - [X] prolog/introduction
 - [X] theory/python-generators
