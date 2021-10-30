@@ -8,8 +8,8 @@
 - [ ] theory/mini-lisp
 - [ ] prolog/higher-order
 - [ ] prolog/exam-questions
-- [ ] theory/python-async
-- [ ] theory/python-recap
+- [ ] python/async
+- [ ] python/recap
 - [X] theory/rtti
 - [X] theory/scoping
 - [X] prolog/introduction
