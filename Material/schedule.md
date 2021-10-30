@@ -125,7 +125,7 @@
     2. [Advanced Constructs - Beyond Closures](Lectures/slides/chapter-7.pdf)
 * **Tutorial**
     1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
-    2. [Python Generators](Tutorials/theory/python-generators.md)
+    2. [Python Generators](Tutorials/python/generators.md)
     3. TBD
 
 ## Week 13 \[23.1-29.1\]

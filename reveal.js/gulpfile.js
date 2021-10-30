@@ -54,6 +54,7 @@ gulp.task("serve", () => {
     }
     generate_slides("slide.hbs", "sml");
     generate_slides("slide.hbs", "prolog");
+    generate_slides("slide.hbs", "python");
     generate_slides("slide.hbs", "theory");
 
     const cors = function (req, res, next) {

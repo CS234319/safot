@@ -55,8 +55,9 @@ function thebe_init_all(sub, port) {
     if (sub === "sml") {
         thebe_init("smlnj", "sml", port);
     } else if (sub === "theory") {
-        thebe_init("python3", "python", port);
         thebe_init("javascript", "javascript", port);
+    } else if (sub === "python") {
+        thebe_init("python3", "python", port);
     }
     for (const cb of document.querySelectorAll("[data-codeblock-editable]")) {
         make_codeblock_editable(cb);
