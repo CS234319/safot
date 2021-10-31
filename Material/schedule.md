@@ -7,8 +7,8 @@
     2. [Abstract Introduction](https://docs.google.com/presentation/d/1LKVaPEXuPYzI149K-68XZR-HHv6cJkOWgdBg9T98cog/edit?usp=sharing)
     3. [Quick Pascal](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
 * **Tutorial** \[[summary](Tutorials/summaries/1.md)\]
-    1. [ML - Introduction](Tutorials/sml/introduction.md) --- [pdf](Tutorials/pdfs/sml/introduction.pdf)
-    2. [ML - Functions](Tutorials/sml/functions.md) --- [pdf](Tutorials/pdfs/sml/functions.pdf)
+    1. [ML - Introduction](Tutorials/sml/introduction.md) --- [pdf-article](Tutorials/pdfs/articles/sml/introduction.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/introduction.pdf)
+    2. [ML - Functions](Tutorials/sml/functions.md) --- [pdf-article](Tutorials/pdfs/articles/sml/functions.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/functions.pdf)
 * **Reading**
     1. [Summary of first lecture: chapters 1-2](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
     2. [Specification of Pascal 72](Misc/PascalReport.pdf)
@@ -29,8 +29,8 @@
     1. [Quick Pascal (Cont.)](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
     2. [Types](Lectures/slides/chapter-3.pdf)
 * **Tutorial**
-    1. [ML - Declarations](Tutorials/sml/declarations.md) --- [pdf](Tutorials/pdfs/sml/declarations.pdf)
-    2. [ML - Datatypes](Tutorials/sml/datatypes.md) --- [pdf](Tutorials/pdfs/sml/datatypes.pdf)
+    1. [ML - Declarations](Tutorials/sml/declarations.md) --- [pdf-article](Tutorials/pdfs/articles/sml/declarations.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/declarations.pdf)
+    2. [ML - Datatypes](Tutorials/sml/datatypes.md) --- [pdf-article](Tutorials/pdfs/articles/sml/datatypes.pdf) --- [pdf-article](Tutorials/pdfs/slides/sml/datatypes.pdf)
 * **Reading**
     1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 
