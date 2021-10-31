@@ -315,7 +315,7 @@ val insert = fn : (int * 'a) tree -> int -> 'a -> (int * 'a) tree
 ```sml
 ...
 ```
-<!-- .element: data-codeblock-editable data-language="text/x-ocaml" -->
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
