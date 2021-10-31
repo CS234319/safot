@@ -10,7 +10,7 @@ const argv = yargs(hideBin(process.argv)).argv;
 const OUTPUT_DIR = path.join(__dirname, "slides");
 const MD_DIR = path.join(__dirname, "material", "Tutorials");
 const TEMPLATE_PATH = path.join(__dirname, "slide.hbs");
-const SUBS = ["sml", "prolog", "python", "theory"];
+const SUBS = ["ocaml", "sml", "prolog", "python", "theory"];
 
 function generate_slides(dir, template) {
     fs.readdir(path.join(MD_DIR, dir), (err, files) => {
