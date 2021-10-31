@@ -12,7 +12,6 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "core-js": "^3.12.1",
     "gulp": "^4.0.2",
     "gulp-connect": "^5.7.0",
     "handlebars": "^4.7.7",
