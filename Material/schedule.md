@@ -30,7 +30,7 @@
     2. [Types](Lectures/slides/chapter-3.pdf)
 * **Tutorial**
     1. [ML - Declarations](Tutorials/sml/declarations.md) --- [pdf-article](Tutorials/pdfs/articles/sml/declarations.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/declarations.pdf)
-    2. [ML - Datatypes](Tutorials/sml/datatypes.md) --- [pdf-article](Tutorials/pdfs/articles/sml/datatypes.pdf) --- [pdf-article](Tutorials/pdfs/slides/sml/datatypes.pdf)
+    2. [ML - Datatypes](Tutorials/sml/datatypes.md) --- [pdf-article](Tutorials/pdfs/articles/sml/datatypes.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/datatypes.pdf)
 * **Reading**
     1. [Summary of first lecture: chapter 3](https://docs.google.com/document/d/1LNSWwi2VYPrOcNPdQ3YvXhFfZtg_r4D6SH9adcFAIK4/edit?usp=sharing)
 
