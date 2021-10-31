@@ -1,46 +1,34 @@
 const gulp = require("gulp");
 const connect = require("gulp-connect");
-var fs = require("fs");
-var path = require("path");
-var Handlebars = require("handlebars");
+const fs = require("fs");
+const path = require("path");
+const Handlebars = require("handlebars");
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 
-function buildHtml(output_dir, renderTemplate, name, dir) {
-    var html = renderTemplate({ tutorial_name: name, sub: dir, port: argv.portjupyter, });
-    fs.writeFile(`${output_dir}/${dir}-${name}.html`, html, (err) => {
-        if (err) {
-            console.log(err);
-            process.exit(1);
-        }
-    });
-}
+const OUTPUT_DIR = path.join(__dirname, "slides");
+const MD_DIR = path.join(__dirname, "material", "Tutorials");
+const TEMPLATE_PATH = path.join(__dirname, "slide.hbs");
+const SUBS = ["sml", "prolog", "python", "theory"];
 
-const output_dir = path.join(__dirname, "slides");
-const md_dir = path.join(__dirname, path.join("material", "Tutorials"));
-
-function generate_slides(template_name, dir) {
-    fs.readdir(path.join(md_dir, dir), (err, files) => {
+function generate_slides(dir, template) {
+    fs.readdir(path.join(MD_DIR, dir), (err, files) => {
         if (err) {
             console.error("Could not list the directory.", err);
             process.exit(1);
         }
 
-        var template = fs.readFileSync(
-            path.resolve(path.join(__dirname, template_name)),
-            "utf-8"
-        );
-        var renderTemplate = Handlebars.compile(template);
-
         files.forEach((file, _index) => {
             if (file.endsWith(".md")) {
-                buildHtml(
-                    output_dir,
-                    renderTemplate,
-                    file.substring(0, file.length - 3),
-                    dir
-                );
+                const name = file.substring(0, file.length - 3);
+                const html = template({ tutorial_name: name, sub: dir, port: argv.portjupyter, });
+                fs.writeFile(`${OUTPUT_DIR}/${dir}-${name}.html`, html, (err) => {
+                    if (err) {
+                        console.error(err);
+                        process.exit(1);
+                    }
+                });
             }
         });
     });
@@ -49,31 +37,33 @@ function generate_slides(template_name, dir) {
 gulp.task("reload", () => gulp.src(["*.html", "*.md"]).pipe(connect.reload()));
 
 gulp.task("serve", () => {
-    if (!fs.existsSync(output_dir)) {
-        fs.mkdirSync(output_dir);
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR);
     }
-    generate_slides("slide.hbs", "sml");
-    generate_slides("slide.hbs", "prolog");
-    generate_slides("slide.hbs", "python");
-    generate_slides("slide.hbs", "theory");
 
-    const cors = function (req, res, next) {
-        res.setHeader("Access-Control-Allow-Private-Network", "true");
-        if (req.url.startsWith("/thebe/")) {
-            req.url = "/node_modules" + req.url;
-        }
-        next();
-    };
+    const template = Handlebars.compile(fs.readFileSync(
+        path.resolve(TEMPLATE_PATH),
+        "utf-8"
+    ));
+    for (const sub of SUBS) {
+        generate_slides(sub, template);
+    }
 
     connect.server({
         root: ".",
         port: argv.port,
         host: argv.ip || "localhost",
         livereload: true,
-        middleware: function () {
-            return [cors];
+        middleware: () => {
+            return [(req, res, next) => {
+                res.setHeader("Access-Control-Allow-Private-Network", "true");
+                if (req.url.startsWith("/thebe/")) {
+                    req.url = "/node_modules" + req.url;
+                }
+                next();
+            }];
         },
     });
 
-    gulp.watch(["material/Tutorials/*/*.md", "index.html"], gulp.series("reload"));
+    gulp.watch(["material/Tutorials/*/*.md"], gulp.series("reload"));
 });
