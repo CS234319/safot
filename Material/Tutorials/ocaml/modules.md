@@ -12,7 +12,7 @@ module MyModule = struct
 end
 ```
 
----vert---
+<!--vert-->
 
 a module can contain any kind of binding
 
@@ -25,7 +25,7 @@ end;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 outside a module refer to a binding from another module by:
 
@@ -35,7 +35,7 @@ MyModule.answer;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 a file `foo.ml` implicitly defines a module `Foo` as if its contents are surrounded by:
 
@@ -45,7 +45,7 @@ module Foo = struct
 end
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 open MyModule;;
@@ -71,7 +71,7 @@ module ModuleName : SIGNAME = struct
 end
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 module type MATHLIB = sig
@@ -88,7 +88,7 @@ end;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 a module will not type-check unless it matches the signature
 
@@ -139,7 +139,7 @@ sub word idx ((length word) - idx);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 and there's a more concise syntax
 
@@ -148,7 +148,7 @@ String.(sub word idx ((length word) - idx));;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 the general syntax is:
 
@@ -177,7 +177,7 @@ module Functor =
     end;;
 ```
 
----vert---
+<!--vert-->
 
 applying a functor
 
@@ -185,7 +185,7 @@ applying a functor
 module FModule = Functor(Module);;
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 module type ORDERED_TYPE =
@@ -209,7 +209,7 @@ module SortedList =
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 module SortedIntList = SortedList(Int);;
@@ -219,7 +219,7 @@ add 5 (add 6 (add 2 (add 4 (add 3 (add 1 empty)))));;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let open SortedList(String) in

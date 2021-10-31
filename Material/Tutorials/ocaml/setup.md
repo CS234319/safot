@@ -6,7 +6,7 @@
 
 ## on windows
 
----vert---
+<!--vert-->
 
 ### install cygwin + ocaml
 
@@ -16,7 +16,7 @@ taken from the [OCaml for Windows project](https://fdopen.github.io/opam-reposit
 
 [64bit installer](https://github.com/fdopen/opam-repository-mingw/releases/download/0.0.0.2/OCaml64.exe)
 
----vert---
+<!--vert-->
 
 make sure you have the correct version
 
@@ -25,7 +25,7 @@ ocaml --version
 # The OCaml toplevel, version 4.12.0
 ```
 
----vert---
+<!--vert-->
 
 ### install tools
 
@@ -36,7 +36,7 @@ ocaml --version
 opam install dune utop ocaml-lsp-server ocamlformat merlin
 ```
 
----vert---
+<!--vert-->
 
 ### the OCaml REPL
 
@@ -54,7 +54,7 @@ and you can start running code! 🎉
 
 ## on ubuntu
 
----vert---
+<!--vert-->
 
 ### install ocaml + opam + tools
 
@@ -64,7 +64,7 @@ sudo apt install ocaml opam
 opam install dune utop ocaml-lsp-server ocamlformat merlin
 ```
 
----vert---
+<!--vert-->
 
 change to the version we use in this course
 
@@ -72,7 +72,7 @@ change to the version we use in this course
 opam switch create 4.12.0 ocaml-variants.4.12.0+options
 ```
 
----vert---
+<!--vert-->
 
 ### utop
 
@@ -86,7 +86,7 @@ utop
 
 ## vscode
 
----vert---
+<!--vert-->
 
 ### install vscode
 
@@ -99,7 +99,7 @@ There's also a snap package in linux:
 sudo snap install --classic code
 ```
 
----vert---
+<!--vert-->
 
 ### the OCaml extension
 
@@ -111,7 +111,7 @@ sudo snap install --classic code
 
 * install it
 
----vert---
+<!--vert-->
 
 ### running vscode on windows
 
@@ -125,7 +125,7 @@ eval $(opam env)
 
 * `USERNAME` should be replaced by your windows username with spaces escaped (e.g. `'John Doe'` → `'John\ Doe'`)
 
----vert---
+<!--vert-->
 
 now to run vscode:
 

@@ -14,7 +14,7 @@ a list is an __immutable__ finite sequence of elements
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 order matters
 
@@ -24,7 +24,7 @@ order matters
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 and repetitions count
 
@@ -34,7 +34,7 @@ and repetitions count
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 elements may have any type
 
@@ -51,7 +51,7 @@ elements may have any type
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 the empty list has a polymorphic type
 
@@ -68,7 +68,7 @@ a list is either *empty* or *a head followed by a tail*
 
 `[1; 2; 3]` ➭ head: `1` tail: `[2; 3]`
 
----vert---
+<!--vert-->
 
 use the infix operator `::` (aka. `cons`) to build a list
 
@@ -81,7 +81,7 @@ use the infix operator `::` (aka. `cons`) to build a list
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 `::` associates to the right, so
 
@@ -91,7 +91,7 @@ use the infix operator `::` (aka. `cons`) to build a list
 
 `(x1 :: (x2 :: (... :: (xn :: nil)...)`
 
----vert---
+<!--vert-->
 
 `::` is a **constructor** so it can be used in patterns
 
@@ -107,7 +107,7 @@ let replace_head = function
 
 ### builtin fundamental functions
 
----vert---
+<!--vert-->
 
 `List.hd` - evaluates to the head of a non-empty list
 
@@ -119,7 +119,7 @@ let hd = function
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 `List.tl` - evaluates to the tail of a non-empty list
 
@@ -131,7 +131,7 @@ let tl = function
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let it = List.hd [ [ [1;2]; [3] ]; [ [4] ] ];;
@@ -148,7 +148,7 @@ let it = List.hd it;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let it = List.tl ["how"; "are"; "you"];;
@@ -198,7 +198,7 @@ $$xs = [x_1, x_2, x_3, \ldots, x_k, x_{k+1}, \ldots, x_n]$$
 $$take(k, xs) = [x_1, x_2, x_3, \ldots, x_k]$$
 $$drop(k, xs) = [x_{k+1}, \ldots, x_n]$$
 
----vert---
+<!--vert-->
 
 ### the computation of `take`
 
@@ -222,7 +222,7 @@ let rec take n l = match n, l with
 [9; 8; 7]
 ```
 
----vert---
+<!--vert-->
 
 ### the computation of `drop`
 
@@ -247,7 +247,7 @@ drop 0          [6; 5; 4]
 
 ### tail recursion
 
----vert---
+<!--vert-->
 
 normal recursion
 
@@ -269,7 +269,7 @@ let rec drop n l = match n, l with
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### normal to tail recursive
 
@@ -291,7 +291,7 @@ let iter_length xs = aux 0 xs;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 let's test them!
 
@@ -306,7 +306,7 @@ let long_list = repeat 1000000;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 iter_length long_list;;
@@ -349,7 +349,7 @@ B1 && B2 = if B1 then B2  else false;;
 B1 ||  B2 = if B1 then true else B2;;
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 let even n = n mod 2 = 0;;
@@ -383,7 +383,7 @@ sqlist [1;2;3];;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 transposing a matrix using `map`
 
@@ -429,7 +429,7 @@ let rec filter_map f = function
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### using `filter_map`
 
@@ -443,7 +443,7 @@ let a: polynomial = [(5, 3); (2, 1); (7, 0)];;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 taking the derivative of a polynomial
 
@@ -462,7 +462,7 @@ derive a;;
 
 ### `fold_left` and `fold_right`
 
----vert---
+<!--vert-->
 
 ### builtin function `fold_left`
 
@@ -476,7 +476,7 @@ let rec fold_left f init = function
 
 computes `$[x_1, x_2, … ,x_n] \rightarrow f(x_n, … ,f(x_2, f(x_1,init)))$`
 
----vert---
+<!--vert-->
 
 ### builtin function `fold_right`
 
@@ -490,7 +490,7 @@ let rec fold_right f init = function
 
 computes `$[x_1, x_2, … ,x_n] \rightarrow f(x1, … ,f(xn-1, f(xn,init)))$`
 
----vert---
+<!--vert-->
 
 ### using `fold_left` and `fold_right`
 
@@ -512,7 +512,7 @@ let (@) xs ys = List.fold_right List.cons xs ys;;
 
 ### `exists` and `for_all`
 
----vert---
+<!--vert-->
 
 ### builtin function `exists`
 
@@ -532,7 +532,7 @@ List.exists ((>) 0) [1; 2; -3; 4];;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### builtin function `for_all`
 
@@ -552,7 +552,7 @@ List.for_all ((<=) 0) [1; 2; -3; 4];;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let disjoint xs ys =
@@ -589,7 +589,7 @@ List.iteri;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let print_list l =
@@ -605,7 +605,7 @@ print_list [1; 2; 3; 4];;
 
 ### exam questions
 
----vert---
+<!--vert-->
 
 implement `map` using `fold_left`
 
@@ -625,7 +625,7 @@ let () = assert (map (( * ) 2) [1; 2; 3] = [2; 4; 6]);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let map f xs = List.fold_left
@@ -636,7 +636,7 @@ let map f xs = List.fold_left
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 implement `insertion_sort` using `fold_right` (you may define helper functions)
 
@@ -656,7 +656,7 @@ let () = assert (insertion_sort (<) [0;3;2;4;1] = [0;1;2;3;4]);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let rec insert x = function
@@ -677,7 +677,7 @@ let insertion_sort lt xs = List.fold_right
 
 ### extra questions
 
----vert---
+<!--vert-->
 
 implement a tail recursive append
 
@@ -694,7 +694,7 @@ let () = assert ([1;2;3] @ [4;5;6] = [1;2;3;4;5;6]);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let rec aux acc = function
@@ -705,7 +705,7 @@ let (@) xs ys = aux ys (aux [] xs);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 implement `flatten` using `fold_right`
 
@@ -725,7 +725,7 @@ let () = assert (flatten [[1;2;3]; [4;5;6]; []; [7;8]] = [1;2;3;4;5;6;7;8]);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let flatten xs = List.fold_right
@@ -736,7 +736,7 @@ let flatten xs = List.fold_right
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 implement `flatten` using `fold_left`
 
@@ -751,7 +751,7 @@ let () = assert (flatten [[1;2;3]; [4;5;6]; []; [7;8]] = [1;2;3;4;5;6;7;8]);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let flatten xs = List.fold_left

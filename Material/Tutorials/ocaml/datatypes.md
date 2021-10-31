@@ -25,7 +25,7 @@ Only;;
 * `Only` denotes the only value in the type `single`
 * isomorphic to `unit`
 
----vert---
+<!--vert-->
 
 note that a constructor's name must be capitalized
 
@@ -34,7 +34,7 @@ type single = only;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 order doesn't matter
 
@@ -45,7 +45,7 @@ True;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 allows pattern matching
 
@@ -77,7 +77,7 @@ a engine body;; (* oops *)
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 type aliasing doesn't help
 
@@ -90,7 +90,7 @@ a engine body;; (* still oops *)
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 simulate branding using `type`
 
@@ -128,7 +128,7 @@ let area = function | (Point | Line _) -> 0.0
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 the arguments of variant types can be defined like records
 
@@ -187,7 +187,7 @@ type 'a list =
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 (*predefined*)
@@ -205,7 +205,7 @@ hd' [];;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 type ('a, 'b) union = Type1 of 'a
@@ -235,7 +235,7 @@ let tree4 = Br(4, tree2, tree5);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 #### implement `size`
 
@@ -251,7 +251,7 @@ size tree4;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let rec size = function
@@ -260,7 +260,7 @@ let rec size = function
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### binary search trees
 
@@ -268,7 +268,7 @@ let rec size = function
 * the keys and values may be anything
 * assumption: the tree is ordered
 
----vert---
+<!--vert-->
 
 #### implement `get`
 
@@ -280,14 +280,14 @@ reminder:
 type 'a option = None | Some of 'a;;
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 (*val get : ('a * 'b) tree -> 'a -> 'b option*)
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let rec get tr k = match tr with
@@ -299,7 +299,7 @@ let rec get tr k = match tr with
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 #### implement `insert`
 
@@ -308,7 +308,7 @@ let rec get tr k = match tr with
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let rec insert tr (k, v) = match tr with

@@ -26,7 +26,7 @@ area 2.0;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### identifiers in OCaml
 
@@ -40,7 +40,7 @@ area 2.0;;
     ```
     <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 * if a name is declared again the new meaning is adopted afterwards
 
@@ -56,7 +56,7 @@ area 2.0;;
     ```
     <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### is permanence of names a good feature?
 
@@ -85,7 +85,7 @@ area 2.0;;
 
 * when the function is called, the first pattern to match the actual parameter determines which expression on the right hand side will be evaluated
 
----vert---
+<!--vert-->
 
 * patterns can consist of
   * constants - int, real, string, ...
@@ -96,7 +96,7 @@ area 2.0;;
 * any variable in the pattern is bound to the corresponding value
 * there is no binding where the wildcard is used
 
----vert---
+<!--vert-->
 
 ```ocaml
 let foo = function
@@ -115,7 +115,7 @@ foo(1,1);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### patterns using `match`
 
@@ -129,7 +129,7 @@ match E with | P1 -> E1 | ... | Pn -> En
   * enclose in parentheses to eliminate ambiguity
   * or enclose in `begin ... end`
 
----vert---
+<!--vert-->
 
 ```ocaml
 match Random.int 10 with
@@ -140,7 +140,7 @@ match Random.int 10 with
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 match guards using `when`:
 
@@ -191,7 +191,7 @@ let fraction n d =
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 `let ... in` can be simulated using anonymous functions
 
@@ -201,7 +201,7 @@ let fraction n d =
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### nested scopes
 
@@ -235,7 +235,7 @@ let x = y and y = x;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### mutually recursive functions
 
@@ -253,7 +253,7 @@ let rec sum d one = if d > 0.0
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ### FIXME emulating `goto` statements
 

@@ -6,7 +6,7 @@
 
 ### basic usage
 
-* interpreter - `utop` or `ocaml`
+* REPL - `utop` or `ocaml`
 * prompt (#)
 * double-semicolon terminated
 
@@ -16,7 +16,7 @@
 - : int = 8
 ```
 
----vert---
+<!--vert-->
 
 ### load from file
 
@@ -33,11 +33,11 @@
     ocaml myfile.ml
     ```
 
----vert---
+<!--vert-->
 
 ### REPL
 
-* OCaml can be used through an interpreter
+* OCaml can be used through a REPL
 * expressions followed by **two semicolons** yield a response
 
     ```ocaml
@@ -47,7 +47,7 @@
 
 * the response is the computed value and its type
 
----vert---
+<!--vert-->
 
 OCaml can also be compiled
 
@@ -57,7 +57,7 @@ OCaml can also be compiled
 
 ### declaring constants
 
----vert---
+<!--vert-->
 
 naming constants
 
@@ -66,7 +66,7 @@ let seconds = 60;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 using names in expressions
 
@@ -83,7 +83,7 @@ seconds * minutes * hours;;
 
 ### legal names
 
----vert---
+<!--vert-->
 
 ### alphabetic names
 
@@ -99,9 +99,9 @@ hamlet_prince_of_denmark
 h''3_H
 ```
 
----vert---
+<!--vert-->
 
-### symbolic names
+### special names
 
 * permitted over the characters:
 
@@ -123,7 +123,7 @@ h''3_H
     <     <-    =     >     ?     :>    :=    ||
     ```
 
----vert---
+<!--vert-->
 
 * to name something with a symbolic name use parentheses:
 
@@ -131,8 +131,6 @@ h''3_H
     let ( +-+-+ ) = 1415;;
     ```
     <!-- .element: data-thebe-executable-ocaml -->
-
-* avoid using it for values
 
 * used mainly for defining operators (more on that later...)
 
@@ -183,9 +181,9 @@ foo (1, 2);; (*compilation error!*)
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
-you might need to add parentheses at times
+you may need to add parentheses at times
 
 ```ocaml
 foo (-1) (-2);; (*OK*)
@@ -199,7 +197,7 @@ foo -1 -2;; (*compilation error! parsed as `((foo - 1) - 2)`*)
 
 ---
 
-### OCaml Primitive Types
+### OCaml atomic types
 
 `int`, `float`, `string`, `char`, `bool`, `unit`
 
@@ -215,15 +213,17 @@ foo -1 -2;; (*compilation error! parsed as `((foo - 1) - 2)`*)
   * `-85601435654638`
 * infix operators: `+` `-` `*` `/` `mod`
 
----vert---
+<!--vert-->
 
-conventional precedence (parentheses can be dropped without change of meaning)
+conventional precedence
 
 ```ocaml
 let m, n, l, j = 39, 41, 82, 85;;
 (((m * n) * l) - (m / j)) + j = m * n * l - m / j + j;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
+
+NOTE: parentheses can be dropped without change of meaning
 
 ---
 
@@ -239,7 +239,7 @@ let m, n, l, j = 39, 41, 82, 85;;
 * infix operators: `+.` `-.` `*.` `/.` (all end with a dot) and `**` (exponentiation)
 * `-.` or `~-.` for unary minus (`-` is allowed for literals)
 
----vert---
+<!--vert-->
 
 ### float functions
 
@@ -258,7 +258,7 @@ and many more: `sqrt`, `sin`, `cos`, `tan`, `exp`, `log` (all of type `float->fl
 
 ### string
 
----vert---
+<!--vert-->
 
 constants are written in double quotes
 
@@ -269,7 +269,7 @@ constants are written in double quotes
 
 special characters `\n`, `\t`, `\"`, `\\`
 
----vert---
+<!--vert-->
 
 concatenation
 
@@ -278,7 +278,7 @@ concatenation
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 comparison
 
@@ -289,7 +289,7 @@ comparison
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 `String.length` returns the number of characters
 
@@ -302,7 +302,7 @@ String.length "ABC";;
 
 ### char
 
----vert---
+<!--vert-->
 
 chars are enclosed in single quotes
 
@@ -311,7 +311,7 @@ chars are enclosed in single quotes
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 conversion between strings and chars
 
@@ -322,7 +322,7 @@ String.get "hello" 0;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 conversion between chars and ASCII
 
@@ -371,7 +371,7 @@ the n-tuple whose components are `x1`, ..., `xn`:
 
 (the parentheses are optional)
 
----vert---
+<!--vert-->
 
 the tuple type is written using `*`
 
@@ -380,7 +380,7 @@ the tuple type is written using `*`
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 the components can be of any type, including tuples
 
@@ -406,7 +406,7 @@ let me = {name="Ofir"; age=30};;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 selecting a field using `.`
 
@@ -415,7 +415,7 @@ me.name;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 a record is identified by its fields
 
@@ -426,7 +426,7 @@ let me = {name="Ofir"; age=30};;
 
 note that `me` is of type `person`, it was inferred from the field names
 
----vert---
+<!--vert-->
 
 you can destructure records using `let`
 
@@ -448,7 +448,7 @@ a list is a finite homogenous sequence of elements
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 note that elements are separated by a `;` and not by a `,`
 
@@ -459,7 +459,7 @@ note that elements are separated by a `;` and not by a `,`
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 elements may have any type but all elements must have the same type
 
@@ -520,7 +520,7 @@ let sq (x: int) = x * x;;
 * `x:int` is the formal parameter with type constraint
 * `x * x` is the body and it is an **expression**
 
----vert---
+<!--vert-->
 
 * the result of the function is the result of evaluating the **expression** of the function body with the actual parameter
 * `int->int` is the standard mathematical notation for a function type that takes an integer and returns an integer
@@ -583,7 +583,7 @@ let rec factorial n =
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 without `rec` we'll get an error:
 
@@ -670,7 +670,7 @@ let foo (n: int) = n;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 constraining the return type
 
@@ -679,7 +679,7 @@ let foo n : int = n;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 constraining an expression's type
 
@@ -688,7 +688,7 @@ let foo n = (n : int);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 #### what will be printed?
 
@@ -697,35 +697,35 @@ let min (x: float) y = if x < y then x else y;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let min (x: string) y = if x < y then x else y;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let min x y: float = if x < y then x else y;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let min x y = if x < y then x else (y: string);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let min_abs x y = if x *. x < y *. y then x else y;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 write a function `foo` such that its type is:
 
@@ -773,31 +773,171 @@ let pair (x,y) = (y,x);;
 
 ### functions as values - the polymorphic case
 
----vert---
+<!--vert-->
 
 ```ocaml
 let twice f = fun x -> f (f x);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let ident x = x;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 let g = twice (fun x -> x * x);;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 ```ocaml
 g 2;;
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+---
+
+---
+
+### side note - operators
+
+a function of two arguments can be treated as an infix operator
+
+```ocaml
+let (--) x y = sqrt(x *. x +. y *. y);;
+(*val ( -- ) : float -> float -> float = <fun>*)
+
+3.0 -- 4.0;;
+(*- : float = 5.*)
+
+1.0 -- 3.0 -- 2.0 -- 5.0;;
+(*- : float = 6.24499799839839831*)
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+<!--vert-->
+
+the operator can be used as a regular function
+
+```ocaml
+(--);;
+(*- : float -> float -> float = <fun>*)
+
+(--) 1. 3.;;
+(*- : float = 3.16227766016837952*)
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+<!--vert-->
+
+precedence and associativity are predefined and determined by the characters used in the operator
+
+![ocaml operators](../imgs/ocaml-operators.png)
+
+---
+
+### currying
+
+any function of two arguments is actually a **curried** function of one argument $$\alpha\rightarrow (\beta \rightarrow \gamma)$$
+
+<!--vert-->
+
+```ocaml
+let prefix pre post = pre ^ post;;
+(*val prefix : string -> string -> string = <fun>*)
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+is equivalent to:
+
+```ocaml
+let prefix pre = fun post -> pre ^ post;;
+(*val prefix : string -> string -> string = <fun>*)
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+<!--vert-->
+
+reminder: `->` is right associative, so
+
+```ocaml
+val prefix : string -> string -> string
+```
+
+is equivalent to
+
+```ocaml
+val prefix : string -> (string -> string)
+```
+
+---
+
+### partial application
+
+you don't have to give the next arguments!
+
+```ocaml
+let doctorify = prefix "Dr. ";;
+(*val doctorify : string -> string = <fun>*)
+
+doctorify "Tomer";;
+(*- : string = "Dr. Tomer"*)
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+---
+
+### function calls
+
+* a function call `F E1 E2 ... En`
+* abbreviates `(...((F E1) E2)...) En`
+
+```ocaml
+(prefix "Dr. ") "Tomer";;
+(*- : string = "Dr. Tomer"*)
+
+prefix "Dr. " "Tomer";;
+(*- : string = "Dr. Tomer"*)
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+---
+
+### exam questions
+
+#### what will be printed?
+
+<!--vert-->
+
+```ocaml
+let rec f1 a b = f1 a b;;
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+<!--vert-->
+
+```ocaml
+let rec f2 g x = g (f2 g) x;;
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+<!--vert-->
+
+```ocaml
+let f3 x y z = (x, x y, y z);;
+```
+<!-- .element: data-thebe-executable-ocaml -->
+
+<!--vert-->
+
+```ocaml
+let rec f4 f = f f4;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
@@ -809,7 +949,7 @@ g 2;;
 * functional - stateless. using expressions recursively to calculate the result
 * example: Euclid's algorithm for the Greatest Common Divisor (GCD) of two natural numbers: `$$gcd(m,n) = \begin{cases}n,\;m = 0&\\gcd(n\;mod\;m,m), \;m>0\end{cases}$$`
 
----vert---
+<!--vert-->
 
 ### GCD - C vs. OCaml
 

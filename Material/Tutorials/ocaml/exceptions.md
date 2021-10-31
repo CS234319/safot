@@ -9,7 +9,7 @@
 * an extensive part of code is error handling
 * a function can return an answer, or fail to find one, or signal that a solution does not exists
 
----vert---
+<!--vert-->
 
 ### exceptions - alternative
 
@@ -59,7 +59,7 @@ Problem 5;;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 values of type `exn` have all the privileges of other values
 
@@ -93,7 +93,7 @@ raise Exp;;
 * `raise Exp` evaluates to an <span style="color: red;">exception packet</span> containing `e`
 * packets are not OCaml values!
 
----vert---
+<!--vert-->
 
 * exception packets propagate under the call by value rule
 * all of the following evaluate to `raise Exp`

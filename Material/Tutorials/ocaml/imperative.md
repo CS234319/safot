@@ -15,7 +15,7 @@ let p = { x_coord=0.; y_coord=0.};;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 `<-` is used for setting a mutable field
 
@@ -35,7 +35,7 @@ the builtin `ref` type represents a single mutable cell
 type 'a ref = { mutable contents: 'a };;
 ```
 
----vert---
+<!--vert-->
 
 use `ref` to create a single mutable cell
 
@@ -50,7 +50,7 @@ implementation:
 let ref x = { contents = x };;
 ```
 
----vert---
+<!--vert-->
 
 use `:=` to replace the cell's contents
 
@@ -66,7 +66,7 @@ implementation:
 let ( := ) r v = r.contents <- v;;
 ```
 
----vert---
+<!--vert-->
 
 use `!` to get the the cell's contents
 
@@ -95,7 +95,7 @@ let swap x y =
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 an expression created by `;` evaluates to the value of the last expression
 
@@ -105,7 +105,7 @@ x := !x * !x; !x
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 all non-final expressions should be of type `unit` otherwise you'd get a warning
 
@@ -118,7 +118,7 @@ all non-final expressions should be of type `unit` otherwise you'd get a warning
 
 ### loops
 
----vert---
+<!--vert-->
 
 #### while loops
 
@@ -128,7 +128,7 @@ while condition do
 done
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 let counter = ref 0 in
@@ -141,7 +141,7 @@ done;
 ```
 <!-- .element: data-thebe-executable-ocaml -->
 
----vert---
+<!--vert-->
 
 #### for loops
 
@@ -155,7 +155,7 @@ for variable = start_v downto end_v do
 done
 ```
 
----vert---
+<!--vert-->
 
 ```ocaml
 let fib n = let a, b = ref 0, ref 1 in
