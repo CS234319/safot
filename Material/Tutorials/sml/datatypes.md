@@ -145,20 +145,24 @@ Newton;
 
 ---
 
-### Variant Types
+### Variant Types in Pascal: No type saftey
 
+Definition
 ```Pascal
-type kind = (point,Line, Circle)
+type kind = (point, line, circle, rectangle)
 shape = record 
- c: Color; 
  case k: kind of
-  point: 
-  Line: length:real;
-  Circle: radius:real;
- end
+  point: (* No fields in this case *) 
+  line: length:real; 
+  circle: radius:real;
+  Rectangle:  width, length: real; end
 end
 ```
-
+In SML:
+  - Code is shorter: 
+    - use Cartesian product instead of record
+    - fewer keywords
+    - no semicolons
 
 ```sml
 datatype shape =
@@ -166,13 +170,36 @@ datatype shape =
   | Line of real
   | Circle of real
   | Rectangle of real*real;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+
+Usage (similar case structure)
+
+```Pascal 
+function area(s: shape) : real;
+begin 
+  case s of
+    point,Line: area:=0
+    cirle: area := 3.14 * radius * radius;
+    rectnagle: area := width * length;
+  end
+end
+```
+Type safety? None.
+- Same memory block is allocated to either (nothing) / (length) / (radius) / (width + height)
+- It is the programmer's responsibility to make that for each value of field
+  kind, only the correct fields are accessed.
+
+
+In SML:
+  - type safety
+  - invent fields names if you need to make it
+```
 fun area (point | Line _) = 0.0
   | area (Circle r) = Math.pi*r*r
   | area (Rectangle (w, h)) = w * h;
 ```
-
-
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ```Pascal
