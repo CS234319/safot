@@ -5,7 +5,7 @@
 ---
 
 ### datatype
-
+`datatype` is a mechanism for defining **new** types; `type` is a mechanism for giving new names to existing types. 
 * is **created** using the `datatype` keyword
 * **realizes** the theoretical type constructor of disjoint union
 * **generalizes**
@@ -36,6 +36,7 @@
 
 ### Enumeration Types
 
+An enumeration with only one body
 ```sml
 datatype single = only;
 
@@ -145,7 +146,7 @@ Newton;
 
 ---
 
-### Variant Types in Pascal: No type saftey
+### Variant Types in Pascal: No type safetey
 
 Definition
 ```Pascal
@@ -158,21 +159,6 @@ shape = record
   Rectangle:  width, length: real; end
 end
 ```
-In SML:
-  - Code is shorter: 
-    - use Cartesian product instead of record
-    - fewer keywords
-    - no semicolons
-
-```sml
-datatype shape =
-    point
-  | Line of real
-  | Circle of real
-  | Rectangle of real*real;
-```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
-
 
 Usage (similar case structure)
 
@@ -186,29 +172,43 @@ begin
   end
 end
 ```
+
 Type safety? None.
 - Same memory block is allocated to either (nothing) / (length) / (radius) / (width + height)
 - It is the programmer's responsibility to make that for each value of field
   kind, only the correct fields are accessed.
 
 
+---
+## Redoing variant records with datatype
+
+In SML:
+  - Code is shorter: 
+    - use Cartesian product instead of record
+    - fewer keywords
+    - no semicolons
+    - minimal baggage
+
+```sml
+datatype shape =
+    point
+  | Line of real
+  | Circle of real
+  | Rectangle of real*real;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+
 In SML:
   - type safety
-  - invent fields names if you need to make it
+  - invent fields names if you need to use them 
 ```
 fun area (point | Line _) = 0.0
   | area (Circle r) = Math.pi*r*r
   | area (Rectangle (w, h)) = w * h;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
-
-```Pascal
-functio Area(s:shape): real;
-begin
- case s.kind of 
-   point,line: Area := 0;
-   circle: area := 
-end
+Pattern matching is a generalization of switch
 
 ---
 
@@ -267,6 +267,7 @@ fun length NIL     = 0
 datatype 'a list =
     nil
   | :: of 'a * ('a list);
+infix ::
 ```
 
 ```sml
