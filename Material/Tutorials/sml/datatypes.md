@@ -147,6 +147,19 @@ Newton;
 
 ### Variant Types
 
+```Pascal
+type kind = (point,Line, Circle)
+shape = record 
+ c: Color; 
+ case k: kind of
+  point: 
+  Line: length:real;
+  Circle: radius:real;
+ end
+end
+```
+
+
 ```sml
 datatype shape =
     point
@@ -158,7 +171,17 @@ fun area (point | Line _) = 0.0
   | area (Circle r) = Math.pi*r*r
   | area (Rectangle (w, h)) = w * h;
 ```
+
+
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+```Pascal
+functio Area(s:shape): real;
+begin
+ case s.kind of 
+   point,line: Area := 0;
+   circle: area := 
+end
 
 ---
 
