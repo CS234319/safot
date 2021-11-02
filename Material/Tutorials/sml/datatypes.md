@@ -5,7 +5,9 @@
 ---
 
 ### datatype
-`datatype` is a mechanism for defining **new** types; `type` is a mechanism for giving new names to existing types. 
+
+`datatype` is a mechanism for defining **new** types
+
 * is **created** using the `datatype` keyword
 * **realizes** the theoretical type constructor of disjoint union
 * **generalizes**
@@ -13,7 +15,11 @@
   * enumerated types, as found in Pascal, C, and Java
   * union types, as found in Pascal and C
   * branding, as done by Pascal's TYPE, but difficult to achieve in Java and C
-* is **essential**: you cannot do lists, trees, etc., without it
+* is **essential**: cannot do lists, trees, etc., without it
+
+NOTE:
+
+don't confuse with with `type` which is a mechanism for giving new names to existing types
 
 <!--vert-->
 
@@ -36,7 +42,6 @@
 
 ### Enumeration Types
 
-An enumeration with only one body
 ```sml
 datatype single = only;
 
@@ -51,7 +56,7 @@ only;
 order doesn't matter
 
 ```sml
-datatype bool = true | false;
+datatype bool' = true' | false';
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -146,9 +151,10 @@ Newton;
 
 ---
 
-### Variant Types in Pascal: No type safetey
+### Variant Types in Pascal
 
-Definition
+#### definition
+
 ```Pascal
 type kind = (point, line, circle, rectangle)
 shape = record 
@@ -160,9 +166,11 @@ shape = record
 end
 ```
 
-Usage (similar case structure)
+<!--vert-->
 
-```Pascal 
+#### usage (similar case structure)
+
+```Pascal
 function area(s: shape) : real;
 begin 
   case s of
@@ -173,21 +181,16 @@ begin
 end
 ```
 
-Type safety? None.
-- Same memory block is allocated to either (nothing) / (length) / (radius) / (width + height)
-- It is the programmer's responsibility to make that for each value of field
-  kind, only the correct fields are accessed.
+type safety? none.
 
+* same memory block is allocated to either (nothing) / (length) / (radius) / (width + height)
+* programmer's responsibility to make sure that only the correct fields are accessed
 
 ---
-## Redoing variant records with datatype
 
-In SML:
-  - Code is shorter: 
-    - use Cartesian product instead of record
-    - fewer keywords
-    - no semicolons
-    - minimal baggage
+## redoing variant records with datatype
+
+in SML - code is shorter
 
 ```sml
 datatype shape =
@@ -198,17 +201,27 @@ datatype shape =
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE:
 
-In SML:
-  - type safety
-  - invent fields names if you need to use them 
-```
+* use Cartesian product instead of record
+* fewer keywords
+* no semicolons
+* minimal baggage
+
+<!--vert-->
+
+in SML - type safety
+
+```sml
 fun area (point | Line _) = 0.0
   | area (Circle r) = Math.pi*r*r
   | area (Rectangle (w, h)) = w * h;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
-Pattern matching is a generalization of switch
+
+NOTE:
+
+pattern matching is a generalization of switch
 
 ---
 
@@ -250,7 +263,7 @@ datatype intlist =
     NIL
   | $$ of int * intlist;
 
-infix $$;
+infixr $$;
 
 fun length NIL     = 0
   | length (x $$ xs) = 1 + length xs;
@@ -267,7 +280,7 @@ fun length NIL     = 0
 datatype 'a list =
     nil
   | :: of 'a * ('a list);
-infix ::
+infixr ::;
 ```
 
 ```sml
