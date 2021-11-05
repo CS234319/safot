@@ -3,13 +3,12 @@
 ## tutorials
 
 - [ ] theory/lexical-analysis
-- [ ] theory/structural-typing
 - [ ] theory/automatic-memory-management
 - [ ] theory/mini-lisp
-- [ ] prolog/higher-order
 - [ ] prolog/exam-questions
 - [ ] python/async
 - [ ] python/recap
+- [X] sml/modules
 - [X] theory/rtti
 - [X] theory/scoping
 - [X] prolog/introduction
