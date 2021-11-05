@@ -27,7 +27,6 @@
 
 * **Lecture**
     1. [Quick Pascal (Cont.)](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
-    2. [Types](Lectures/slides/chapter-3.pdf)
 * **Tutorial**
     1. [ML - Declarations](Tutorials/sml/declarations.md) --- [pdf-article](Tutorials/pdfs/articles/sml/declarations.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/declarations.pdf)
     2. [ML - Datatypes](Tutorials/sml/datatypes.md) --- [pdf-article](Tutorials/pdfs/articles/sml/datatypes.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/datatypes.pdf)
@@ -37,9 +36,8 @@
 ## Week 3 \[7.11-13.11\]
 
 * **Lecture**
-    1. [Types (Cont.)](Lectures/slides/chapter-3.pdf)
+    1. [Types](Lectures/slides/chapter-3.pdf)
     2. [ML's Type System](Tutorials/theory/sml-type-system.md)
-    3. [Advanced Typing](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md)
 * **Optional Reading**
@@ -50,11 +48,12 @@
 ## Week 4 \[14.11-20.11\]
 
 * **Lecture**
-    1. [Advanced Typing (Cont.)](Lectures/slides/chapter-4.pdf)
+    1. [Advanced Typing](Lectures/slides/chapter-4.pdf)
 * **Tutorial**
-    1. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
-    2. [Structural (sub)typing](Tutorials/theory/structural-typing.md)
+    1. [ML - Modules](Tutorials/sml/modules.md)
+    2. [ML - Exceptions](Tutorials/sml/exceptions.md)
     3. [ML - References](Tutorials/sml/refs.md)
+    4. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
 
 ## Week 5 \[21.11-27.11\]
 
@@ -62,7 +61,6 @@
     1. [State and Storage](Lectures/slides/chapter-5.pdf)
 * **Tutorial**
     1. [ML - Sequences](Tutorials/sml/sequences.md)
-    2. [ML - Exceptions](Tutorials/sml/exceptions.md)
 * **Submission**: [HW2](???) \[27.11 23:59\]
 * **HW**: [HW3](???) is published \[27.11\]
 
