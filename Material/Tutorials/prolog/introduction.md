@@ -634,3 +634,177 @@ perfect_tree(node(H, Tl, Tl), H) :-
     H1 is H - 1,
     perfect_tree(Tl, H1).
 ```
+
+---
+
+### cuts
+
+<!--vert-->
+
+automatic backtracking may cause inefficiency.
+
+consider the following rule set:
+```prolog
+f(X, 0) :- X #< 3.
+f(X, 2) :- 3 #=< X, X #< 6.
+f(X, 4) :- 6 #=< X. 
+```
+and the goal
+```prolog
+f(1, Y), 2 #< Y.
+```
+
+<!--vert-->
+
+we notice the goal fails: the only option for `Y #>= 4` is `Y = 6` but that requires `X #>= 6` to succeed. therefore, this goal fails.
+
+these rules are disjoint - at most one of them will succeed. if a goal matches one of the rules and fails, there's no use in trying the rest of the rules.
+
+how can we prevent this?
+
+<!--vert-->
+
+*cuts* prevent backtracking from some point on.
+
+cuts are denoted by the subgoal `!` which will always succeed, but will then prevent further backtracking
+the last example can be rewritten like this:
+
+```prolog
+f(X, 0) :- X #< 3, !.
+f(X, 2) :- 3 #=< X, X #< 6, !.
+f(X, 4) :- 6 #=< X. 
+```
+
+whenever the goal `f(X, Y)` is encountered, we will only test the first rule that matches. if we perform the query again, we will get the same result, but only the first rule will be attempted.
+
+<!--vert-->
+
+we *did not* change the *declarative meaning* of the code - it still performs the same function. we have changes its *imperative meaning* - it now performs its search differently.
+
+we used cuts to make the code more efficient. can we go further?
+
+if we got to the second rule in our example, surely it isn't the case that `X #< 3`, otherwise, we would have reached the cut and stopped backtracking.
+
+we can really just remove the extra checks. 
+
+<!--vert-->
+
+```prolog
+f(X, 0) :- X #< 3, !.
+f(X, 2) :- X #< 6, !.
+f(X, 4). 
+```
+
+- now, the cuts *do* affect the declarative meaning - removing the cuts will result in a different result
+- we also notice that in this situation, the order of the clauses does matter for the result (and not just for efficiency)
+- this motivates us to discuss *green* and *red* cuts
+
+<!--vert-->
+
+**green cuts** - cuts that when removed, lead to the same declarative result. they do not have an effect on the *declarative meaning*.
+
+when reading a program, we can ignore green cuts.
+
+**red cuts** - cuts that do effect the declarative meaning of the program. these cuts make programs difficult to understand and should be used with care.
+  
+<!--vert-->
+
+when the cut is encountered, it does succeed immediately, but it commits the algorithm to every choice it has made up until reaching the cut.
+
+```prolog
+H :- A1, A2, .... Am, !, B1, B2, ..., Bn.
+```
+
+when Prolog encounters the cut, the solution to `A1, ..., Am` is frozen and *all other possible solutions are discarded*.
+
+in addition, the parent goal `H` cannot be matched to any other rule.
+
+<!--vert-->
+
+we consider the following program:
+
+```prolog
+C :- P, Q, R, !, S, T, U.
+C :- V.
+A :- B, C, D.
+```
+
+and the goal `A`. 
+
+- backtracking is possible within `P`, `Q`, `R`
+- when the cut is reached, the current solution for `P`, `Q`, `R` is chosen and all other solutions are dumped
+- the alternative clause `C :- V` is also dumped
+- backtracking **is** still possible in `S`, `T`, `U`, and also in `B`, `C`, `D`
+
+<!--vert-->
+
+### examples with cuts
+
+adding to a list without duplicates:
+
+```prolog
+add(X, L, L) :- member(X, L), !.
+add(X, L, [X|L]) :- !.
+```
+
+"Mary likes all elements but snakes"
+
+```prolog
+likes(mary, X) :- snake(X), !, 1 = 0.
+likes(mary, X) :- animal(X).
+```
+
+this last example is an example of a common idiom in Prolog - negation. the cut prevents backtracking, and then we cause the goal to fail.
+
+<!--vert-->
+
+### negation
+
+the special goal `fail` always fails - it's like `1 = 0`. the special goal `true` always succeeds - it's like `1 = 1`.
+
+we define the `not` predicate:
+```prolog
+not(P) :- P, !, fail.
+not(P).
+```
+
+this allows us to define predicates like `different` which succeeds only if two terms do not match to each other:
+
+```prolog
+different(X, Y) :- not(X = Y).
+```
+
+<!--vert-->
+
+it is important to note that `not(P)` does not mean that `P` has to be false - it means that `P` cannot be proven.
+
+```prolog
+r(a).
+q(b).
+p(X) :- not(r(X)).
+```
+
+can you tell what `q(X), p(X).` will print? what about `p(X), q(X).`?
+
+NOTE: `X = b.`, `false.`
+
+
+<!--vert-->
+
+we use cuts to specify mutually exclusive rules: if `cond` then `conclusion 1`, *otherwise* `conclusion 2`.
+
+if there are no cuts in a program, we can change the order of the clauses and goals without changing the declarative meaning. we know this is not the case for programs that do have cuts.
+
+<!--vert-->
+ 
+### exercise
+
+is this a green cut or a red cut?
+
+```prolog
+min(X, Y, X) :- X #=< Y, !.
+min(X, Y, Y).
+```
+
+NOTE: red
+
