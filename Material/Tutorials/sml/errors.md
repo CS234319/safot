@@ -43,6 +43,14 @@ case "0" of
 <!--vert-->
 
 ```sml
-fun foo a:{s1: int*int, s2: int*int} = s1;
+fun foo (a: {x: int, y: int}) = x;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+type A = {x: int, y: int};
+fun foo a = #s1 a;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
