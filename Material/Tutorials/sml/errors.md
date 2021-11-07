@@ -62,3 +62,11 @@ Math.pow(2.0, power) - 1;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+<!--vert-->
+
+```sml
+fun f x = Math.sqrt x;
+if f 9.0 = f 9.0 then 1 else 0;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
