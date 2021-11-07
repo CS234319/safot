@@ -20,7 +20,7 @@ type single = Only;;
 
 Only;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 * `Only` denotes the only value in the type `single`
 * isomorphic to `unit`
@@ -32,7 +32,7 @@ note that a constructor's name must be capitalized
 ```ocaml
 type single = only;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -43,7 +43,7 @@ type bool' = True | False;;
 
 True;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -60,7 +60,7 @@ let value = function King -> Float.infinity
 
 value Bishop;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -75,7 +75,7 @@ let body, engine = 0.0122, 50.0;;
 
 a engine body;; (* oops *)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -88,7 +88,7 @@ let a (m:mass) (f:force) : acceleration = f /. m;;
 
 a engine body;; (* still oops *)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -108,7 +108,7 @@ a body engine;;
 
 a engine body;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -126,7 +126,7 @@ let area = function | (Point | Line _) -> 0.0
   | (Rectangle (w, h)) -> w *. h;;
 (*val area : shape -> float = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -141,7 +141,7 @@ type shape =
 
 let r = Rectangle {width=5.; height=6.}
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -154,7 +154,7 @@ let Line length = line;;
 
 let Circle radius = line;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -171,7 +171,7 @@ let rec length = function
   | Nil -> 0
   | (x::xs) -> 1 + length xs;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -185,7 +185,7 @@ type 'a list =
 
 "hello" :: "world" :: [];;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -203,7 +203,7 @@ hd' [1; 2; 3];;
 
 hd' [];;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -219,7 +219,7 @@ let five_or_hello = if true then five else hello;;
 
 let int_char_list = [Type1 5; Type2 'a'];;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -233,7 +233,7 @@ let tree2 = Br(2, leaf 1, leaf 3);;
 let tree5 = Br(5, leaf 6, leaf 7);;
 let tree4 = Br(4, tree2, tree5);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -242,14 +242,14 @@ let tree4 = Br(4, tree2, tree5);;
 ```ocaml
 (*val size : 'a tree -> int*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 test:
 
 ```ocaml
 size tree4;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -258,7 +258,7 @@ let rec size = function
   | Nil -> 0
   | Br(_, l, r) -> 1 + size l + size r;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -285,7 +285,7 @@ type 'a option = None | Some of 'a;;
 ```ocaml
 (*val get : ('a * 'b) tree -> 'a -> 'b option*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -297,7 +297,7 @@ let rec get tr k = match tr with
     | n when n < 0 -> get left k
     | _ -> get right k;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -306,7 +306,7 @@ let rec get tr k = match tr with
 ```ocaml
 (*val insert : ('a * 'b) tree -> 'a * 'b -> ('a * 'b) tree = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -320,4 +320,4 @@ let rec insert tr (k, v) = match tr with
     | _ ->
         Br ((nk, nv), left, insert right (k, v));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->

@@ -23,7 +23,7 @@ module MyModule = struct
     type key = int
 end;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -33,7 +33,7 @@ outside a module refer to a binding from another module by:
 MyModule.answer;;
 (*- : int = 42*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -50,7 +50,7 @@ end
 ```ocaml
 open MyModule;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 * used to get direct access to the bindings of a module
 * considered bad style
@@ -86,7 +86,7 @@ module MathLib: MATHLIB = struct
     exception DivideByZero
 end;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -103,7 +103,7 @@ module MathConstants: CONSTANTS = struct
 end;;
 (*Error: Signature mismatch*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -129,7 +129,7 @@ let word, idx = "OCaml", 2;;
 
 String.sub word idx ((String.length word) - idx);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 can be rewritten as:
 
@@ -137,7 +137,7 @@ can be rewritten as:
 let open String in
 sub word idx ((length word) - idx);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -146,7 +146,7 @@ and there's a more concise syntax
 ```ocaml
 String.(sub word idx ((length word) - idx));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -207,7 +207,7 @@ module SortedList =
       (*more functions*)
     end;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -217,7 +217,7 @@ module SortedIntList = SortedList(Int);;
 let open SortedIntList in
 add 5 (add 6 (add 2 (add 4 (add 3 (add 1 empty)))));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -225,4 +225,4 @@ add 5 (add 6 (add 2 (add 4 (add 3 (add 1 empty)))));;
 let open SortedList(String) in
 add "abc" (add "hij" (add "efg" (add "nop" (add "klm" empty))));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->

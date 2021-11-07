@@ -13,7 +13,7 @@ type point = { mutable x_coord: float; mutable y_coord: float }
 
 let p = { x_coord=0.; y_coord=0.};;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -23,7 +23,7 @@ let p = { x_coord=0.; y_coord=0.};;
 let () = p.x_coord <- 5.;;
 p;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -42,7 +42,7 @@ use `ref` to create a single mutable cell
 ```ocaml
 let x = ref 4;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 implementation:
 
@@ -58,7 +58,7 @@ use `:=` to replace the cell's contents
 x := 15;;
 x;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 implementation:
 
@@ -73,7 +73,7 @@ use `!` to get the the cell's contents
 ```ocaml
 !x;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 implementation:
 
@@ -93,7 +93,7 @@ let swap x y =
     y := !y lxor !x ;
     x := !y lxor !x;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -103,7 +103,7 @@ an expression created by `;` evaluates to the value of the last expression
 let x = ref 42;;
 x := !x * !x; !x
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -112,7 +112,7 @@ all non-final expressions should be of type `unit` otherwise you'd get a warning
 ```ocaml
 123; 456;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -139,7 +139,7 @@ done;
 
 !counter;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -169,4 +169,4 @@ let fib n = let a, b = ref 0, ref 1 in
 
 fib 7;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->

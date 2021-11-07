@@ -24,7 +24,7 @@ let area r = pi *. r *. r;;
 
 area 2.0;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -38,7 +38,7 @@ area 2.0;;
     ```ocaml
     let pi = "pi";;
     ```
-    <!-- .element: data-thebe-executable-ocaml -->
+    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -47,14 +47,14 @@ area 2.0;;
     ```ocaml
     pi;;
     ```
-    <!-- .element: data-thebe-executable-ocaml -->
+    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 * but does not affect existing uses of the name
 
     ```ocaml
     area 1.0;;
     ```
-    <!-- .element: data-thebe-executable-ocaml -->
+    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -79,7 +79,7 @@ area 2.0;;
       | 0 -> 1
       | n -> n * factorial (n - 1);;
     ```
-    <!-- .element: data-thebe-executable-ocaml -->
+    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 * note the usage of `function` instead of `fun`
 
@@ -113,7 +113,7 @@ foo(2,2);;
 foo(1,1);;
 (*- : int = 1*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -138,7 +138,7 @@ match Random.int 10 with
   | 2 -> "two"
   | n -> if n < 10 then "lots" else "lots &lots";;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -152,7 +152,7 @@ match Random.int 10 with
   | n when n < 10 -> "lots"
   | _ -> "lots &lots";;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -169,7 +169,7 @@ let (++) (x1, y1) (x2, y2) : vec = (x1 +. x2, y1 +. y2);;
 
 (3.6, 0.9) ++ (0.1, 0.2) ++ (20.0, 30.0);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -189,7 +189,7 @@ let fraction n d =
     let com = gcd n d in
     (n / com, d / com);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -199,7 +199,7 @@ let fraction n d =
 let fraction n d =
     (fun com -> (n / com, d / com)) (gcd n d);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -215,7 +215,7 @@ let sq_root a =
     else find_root next_x in
   find_root 1.0;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -233,7 +233,7 @@ let x = 3;;
 let y = 5;;
 let x = y and y = x;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -251,7 +251,7 @@ let rec sum d one = if d > 0.0
     then sum (d -. 2.0) (-. one) +. one /. d
     else 0.0;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -271,4 +271,4 @@ and h x y z = if z > 0 then f x y (z - x) else (x, y, z);;
 
 f 0 0 0;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->

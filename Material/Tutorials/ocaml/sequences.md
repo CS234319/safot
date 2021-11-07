@@ -22,7 +22,7 @@ and 'a node =
   | Nil
   | Cons of 'a * 'a t;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 * `Seq.t` is the sequence type
 * `Seq.node` is a fully evaluated sequence node
@@ -42,7 +42,7 @@ let seq23 () = Seq.Cons (2, Seq.return 3);;
 
 let seq123 () = Seq.Cons (1, seq23);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 a node holds an element and the tail of the sequence which is a sequence itself.
 
@@ -59,7 +59,7 @@ let tail xf = match xf () with
   | Nil -> raise (Failure "tail");;
 (*val tail : (unit -> 'a Seq.node) -> 'a Seq.t = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -75,7 +75,7 @@ head (from 1);;
 head (tail (from 1));;
 (*- : int = 2*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -88,7 +88,7 @@ let rec squares s () = match s() with
 head (tail (tail (tail (tail (squares (from 1))))));;
 (*- : int = 25*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -99,7 +99,7 @@ head (tail (tail (tail (tail (squares (from 1))))));;
 ```ocaml
 let ( |> ) x f = f x;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -114,7 +114,7 @@ from 1
   |> tail
   |> head;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 isn't it much nicer?
 
@@ -129,7 +129,7 @@ init 10 (fun _ -> Random.int 100)
   |> map (fun x -> x * x)
   |> sort_uniq Int.compare;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -142,7 +142,7 @@ init 10 (fun _ -> Random.int 100)
 ```ocaml
 List.to_seq [1; 2; 3];;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -151,7 +151,7 @@ List.to_seq [1; 2; 3];;
 ```ocaml
 [1; 2; 3] |> List.to_seq |> List.of_seq;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -165,7 +165,7 @@ List.to_seq [1; 2; 3];;
 let step n = if n < 0 then None else Some (n, n - 1) in
 Seq.unfold step 5 |> List.of_seq;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -180,7 +180,7 @@ let rec addq s q () = match (s(), q()) with
   | _ -> Seq.Nil;;
 (*val addq : int Seq.t -> int Seq.t -> int Seq.t = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -193,13 +193,13 @@ val append : 'a Seq.t -> 'a Seq.t -> 'a Seq.t
 ```ocaml
 let rec append =
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ```ocaml
 append (List.to_seq [1; 2; 3]) (List.to_seq [4; 5; 7])
   |> List.of_seq;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -208,7 +208,7 @@ let rec append l r = match l () with
   | Seq.Nil -> r
   | Seq.Cons(x, xf) -> fun () -> Seq.Cons(x, append xf r);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 what would `(append xq yq)` be if `xq` is infinite?
 
@@ -223,13 +223,13 @@ val interleaving : 'a Seq.t -> 'a Seq.t -> 'a Seq.t
 ```ocaml
 let rec interleaving =
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ```ocaml
 interleaving (List.to_seq [1; 2; 3]) (List.to_seq [4; 5; 7])
   |> List.of_seq;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -239,7 +239,7 @@ let rec interleaving l r = match l () with
   | Seq.Cons(x, xf) ->
       fun () -> Seq.Cons(x, interleaving r xf);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -252,14 +252,14 @@ val map : ('a -> 'b) -> 'a Seq.t -> 'b Seq.t
 ```ocaml
 let rec map =
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ```ocaml
 List.to_seq [1; 2; 3]
   |> map (( * ) 5)
   |> List.of_seq;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -268,7 +268,7 @@ let rec map f seq () = match seq () with
   | Seq.Nil -> Seq.Nil
   | Seq.Cons(x, xf) -> Seq.Cons(f x, map f xf);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -281,14 +281,14 @@ val filter : ('a -> bool) -> 'a Seq.t -> 'a Seq.t
 ```ocaml
 let rec filter =
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ```ocaml
 List.to_seq [1; 2; 3; 4; 5]
   |> filter (fun x -> x mod 2 = 1)
   |> List.of_seq;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -317,7 +317,7 @@ let rec sieve s () =;;
 
 let primes = sieve (from 2);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -330,7 +330,7 @@ let rec sieve seq () = let open Seq in
 let primes = sieve (from 2);;
 head (tail (tail (tail (tail primes))));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -348,7 +348,7 @@ let rec map_3 f seq () = let open Seq in
       then Cons (f x, map_3 f xf)
       else Cons (x, map_3 f xf);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -361,14 +361,14 @@ let rec mystery_1 f seq () = let open Seq in
         xf |> map (fun a -> f x a) |> mystery_1 f
       );;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 what would be printed?
 
 ```ocaml
 mystery_1 ( + ) (from 0) |> tail |> tail |> tail |> head;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -381,14 +381,14 @@ let rec mystery_2 f seq () = let open Seq in
         xf |> map_3 (fun a -> f x a) |> mystery_2 f
       );;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 what would be printed?
 
 ```ocaml
 mystery_2 ( + ) (from 0) |> tail |> tail |> tail |> tail |> head;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -399,7 +399,7 @@ mystery_2 ( + ) (from 0) |> tail |> tail |> tail |> tail |> head;;
 ```ocaml
 let is_empty
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -408,7 +408,7 @@ let is_empty seq = match seq () with
   | Seq.Nil -> true
   | Seq.Cons _ -> false;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -417,7 +417,7 @@ let is_empty seq = match seq () with
 ```ocaml
 
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -430,7 +430,7 @@ let rec aux seq flag () = match seq () with
       else con ();;
 let evens seq = aux seq false;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -439,14 +439,14 @@ let evens seq = aux seq false;;
 ```ocaml
 
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```ocaml
 let odds seq = aux seq true;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -456,14 +456,14 @@ let odds seq = aux seq true;;
 (*...*)
 assert ([2;1;4;3;6;5;7] = ([1;2;3;4;5;6;7] |> List.to_seq |> switch |> List.of_seq));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
 ```ocaml
 let switch seq = interleaving (evens seq) (odds seq);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -475,7 +475,7 @@ let switch seq = interleaving (evens seq) (odds seq);;
 (*...*)
 assert ([1;2;3] = ([1;2;3;4;5;6;7] |> List.to_seq |> take 3 |> List.of_seq));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -486,7 +486,7 @@ let rec take n s () = if n <= 0
       | Seq.Nil -> Seq.Nil
       | Seq.Cons (x, xf) -> Seq.Cons (x, take (n - 1) xf);;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -496,7 +496,7 @@ let rec take n s () = if n <= 0
 (*...*)
 assert ([4;5;6;7] = ([1;2;3;4;5;6;7] |> List.to_seq |> drop 3 |> List.of_seq));;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -507,4 +507,4 @@ let rec drop n s = if n <= 0
       | Seq.Nil -> fun () -> Seq.Nil
       | Seq.Cons (x, xf) -> drop (n - 1) xf;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->

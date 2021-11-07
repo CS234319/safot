@@ -27,7 +27,7 @@ match method_a problem with
   | Impossible -> "No Good"
 ;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 it can be tedious and requires explicit handling
 
@@ -57,7 +57,7 @@ exception Problem of int;;
 Problem 5;;
 (*- : exn = Problem 5*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -77,7 +77,7 @@ let whats_the_problem (Problem p) = p;;
 (*Warning 8: this pattern-matching is not exhaustive.*)
 (*val whats_the_problem : exn -> int = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -87,7 +87,7 @@ let whats_the_problem (Problem p) = p;;
 exception Exp;;
 raise Exp;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 * the expression `Exp` of type `exn` evaluates to `e`
 * `raise Exp` evaluates to an <span style="color: red;">exception packet</span> containing `e`
@@ -109,7 +109,7 @@ raise (Exn1 (raise Exp));; (* Exn1 is a constructor *)
 
 let name = raise Exp in some_expression;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -129,7 +129,7 @@ try Exp_0 with
 let rec len l = try 1 + len (tl l) with Failure _ -> 0;;
 (*val len : 'a list -> int = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -160,7 +160,7 @@ let throw _ = raise (Failure "");;
 let bar x = if x > 0 then x else raise (Failure "");;
 (*val bar : int -> int = <fun>*)
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -178,7 +178,7 @@ match method_a problem with
   | Impossible -> "No Good"
 ;;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 and now with exceptions:
 
@@ -189,24 +189,4 @@ end with
   | Failure _ -> "Both failed"
   | Impossible -> "No Good";;
 ```
-<!-- .element: data-thebe-executable-ocaml -->
-
----
-
-### TODO exam questions
-
----
-
-### standard exceptions
-
-* `Failure of string` raised by builtin functions like `List.hd`.
-  * don't inspect the string value
-  * to catch such an exception use
-
-    ```ocaml
-    try List.hd [] with Failure _ -> 0;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml -->
-* `Match_failure of (string * int * int)` raised when none of the cases of a pattern-matching apply
-* `Division_by_zero` when an integer is divided by `0`
-* see the [index of exceptions](https://ocaml.org/api/index_exceptions.html) for more
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
