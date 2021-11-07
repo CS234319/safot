@@ -113,3 +113,37 @@ fun f a:{s: int, r: int} = {s = (#s a), r = (#r a)};
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 NOTE: the type here in the constraint binds to the function - `f`, rather than to `a`, like it may seem. this apparently should not cause an issue, because that is the actual type we are returning, however, it does leave `a` without a precise type constraint and this is a problem because like before, ML cannot do partial type inferrence and it cannot conclude the exact type for `a`, just some of its fields.
+
+<!--vert-->
+
+```sml
+local
+fun rec (a, _, 0) = a | rec (a, b, n) = rec (a+b, a, n-1)
+in
+fun fib n = rec (1, 1, n)
+end;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: rec is a keyword...
+
+<!--vert-->
+
+```sml
+val x = (1 = 1) and (2 = 2);
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: `andalso` is logical AND and not `and`. also, `orelse` and not `or`
+
+<!--vert-->
+
+```sml
+val x = "Elad\n";
+fun f () = print ("My name is " ^ x);
+val x = "Yair\n";
+f (); 
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: functions freeze the values they refer to, and do not get updated when the identifier is reused.
