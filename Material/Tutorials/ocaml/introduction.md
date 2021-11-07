@@ -750,7 +750,7 @@ let foo
 |       strongly typed      |  Java  |             |     ✔    |
 | polymorphic type checking | OCaml  |      ✔      |     ✔    |
 
-and in OCaml most types are deduced automatically 😎
+and in OCaml most types are inferred automatically 😎
 
 ---
 

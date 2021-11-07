@@ -252,23 +252,3 @@ let rec sum d one = if d > 0.0
     else 0.0;;
 ```
 <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
-
-<!--vert-->
-
-### FIXME emulating `goto` statements
-
-```pascal
-var x:=0; y:=0; z:=0;
-F: x := x+1; goto G
-G: if y<z then goto F else (y:=x+y; goto H)
-H: if z>0 then (z:=z-x; goto F) else stop
-```
-
-```ocaml
-let rec f x y z = g (x + 1) y z
-and g x y z = if y < z then f x y z else h x (x + y) z
-and h x y z = if z > 0 then f x y (z - x) else (x, y, z);;
-
-f 0 0 0;;
-```
-<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
