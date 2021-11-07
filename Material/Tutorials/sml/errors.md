@@ -11,6 +11,8 @@ foo 5 -4;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: - and not ~ for negation
+
 <!--vert-->
 
 ```sml
@@ -21,6 +23,8 @@ foo 2 bar(1, 2);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: curried function application is greedy - ML reads this as 3 arguments for `foo`
+
 <!--vert-->
 
 ```sml
@@ -28,6 +32,8 @@ fun foo [] = 0
   | foo x::xs = x;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: parentheses - needs to be `(x::xs)`
 
 <!--vert-->
 
@@ -40,12 +46,16 @@ case "0" of
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: parentheses - the inner `case` needs to be `(case 0 of _ => 1)`. also notice that the error is a type error, but it's not
+
 <!--vert-->
 
 ```sml
 fun foo (a: {x: int, y: int}) = x;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: `x` is not a field. it's part of the type of `a`. the correct way is `#x a`.
 
 <!--vert-->
 
@@ -55,6 +65,9 @@ fun foo a = #s1 a;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: ML cannot do type inferrence to deduce the entire type of `a`, so it results in an error. ML cannot do partial type inferrence.
+
+
 <!--vert-->
 
 ```sml
@@ -62,11 +75,41 @@ Math.pow(2.0, power) - 1;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: type mismatch. `pow` returns `real`.
+
 <!--vert-->
 
 ```sml
 fun f x = Math.sqrt x;
-if f 9.0 = f 9.0 then 1 else 0;
+if (f 9.0 = f 9.0) then 1 else 0;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+NOTE: `real` is a not a polymorphic equality type - cannot compare `real`s
+
+<!--vert-->
+
+```sml
+fun f g x = if g = g then g x else 0;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: ditto. `g` is a function (actually, `'a -> int`) and functions are not polymorphic equality types. however, since it is first used in a comparison and only then as a function, the error will be reported in the function application and not in the equality. it actually concludes it cannot be a function, rather than concluding it cannot be a polyEqual type.
+
+<!--vert-->
+
+```sml
+fun f (a:{s: int, r: int}) = {s: (#s a), r: (#r a)};
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: `:` denotes type, we need to use `=` in the returned expression to denote a value
+
+<!--vert-->
+
+```sml
+fun f a:{s: int, r: int} = {s = (#s a), r = (#r a)};
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: the type here in the constraint binds to the function - `f`, rather than to `a`, like it may seem. this apparently should not cause an issue, because that is the actual type we are returning, however, it does leave `a` without a precise type constraint and this is a problem because like before, ML cannot do partial type inferrence and it cannot conclude the exact type for `a`, just some of its fields.
