@@ -54,3 +54,11 @@ type A = {x: int, y: int};
 fun foo a = #s1 a;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+Math.pow(2.0, power) - 1;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
