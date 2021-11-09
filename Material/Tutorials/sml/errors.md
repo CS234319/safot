@@ -125,7 +125,7 @@ end;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: rec is a keyword...
+NOTE: `rec` is a keyword...
 
 <!--vert-->
 
@@ -147,3 +147,14 @@ f ();
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 NOTE: functions freeze the values they refer to, and do not get updated when the identifier is reused.
+
+<!--vert-->
+
+```sml
+Math.pow(2.0, 3.0);
+floor(it) = 8;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: this specifically came up in the home ex. terribly annoying floating-point arithmetic error. when doing integer arithmetic, implement manually with a recursive function.
+ 
