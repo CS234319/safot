@@ -37,7 +37,6 @@
 
 * **Lecture**
     1. [Types](Lectures/slides/chapter-3.pdf)
-    2. [ML's Type System](Tutorials/theory/sml-type-system.md)
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md) --- [pdf-article](Tutorials/pdfs/articles/sml/lists.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/lists.pdf)
 * **Workshop**
@@ -51,6 +50,7 @@
 
 * **Lecture**
     1. [Advanced Typing](Lectures/slides/chapter-4.pdf)
+    2. [ML's Type System](Tutorials/theory/sml-type-system.md)
 * **Tutorial**
     1. [ML - Modules](Tutorials/sml/modules.md)
     2. [ML - Exceptions](Tutorials/sml/exceptions.md)
