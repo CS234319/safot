@@ -41,7 +41,7 @@
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md) --- [pdf-article](Tutorials/pdfs/articles/sml/lists.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/lists.pdf)
 * **Workshop**
-    1. [ML - workshop](Tutorials/sml/errors.md) --- [pdf-article](Tutorials/pdfs/articles/sml/errors.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/errors.pdf)
+    1. [ML - workshop](Tutorials/sml/errors.md) --- [pdf-article](Tutorials/pdfs/articles/sml/errors.pdf)
 * **Optional Reading**
     1. [Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
 * **Submission**: [HW1](https://docs.google.com/document/d/1SH2WwvPzrA8hcORU0aM4JIJbc_irVmN0dy1BavYUTQM/edit?usp=sharing) \[13.11 23:59\]
