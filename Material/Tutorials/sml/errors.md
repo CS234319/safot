@@ -11,7 +11,7 @@ foo 5 -4;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: - and not ~ for negation
+NOTE: we use `-` and not `~` for negation. actually, ML reads this as `(foo 5) - 4`, so that's why this error is there
 
 <!--vert-->
 
@@ -23,7 +23,7 @@ foo 2 bar(1, 2);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: curried function application is greedy - ML reads this as 3 arguments for `foo`
+NOTE: curried function application is greedy - ML reads this as 3 arguments for `foo`, and you can't pass `bar` as the second argument to `foo` - that's a type error 
 
 <!--vert-->
 
@@ -33,7 +33,7 @@ fun foo [] = 0
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: parentheses - needs to be `(x::xs)`
+NOTE: parentheses - needs to be `(x::xs)`. ML considers this to be a triple of `x`, `::`, `xs` and complains about being given a tuple and not a list.
 
 <!--vert-->
 
@@ -46,7 +46,7 @@ case "0" of
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: parentheses - the inner `case` needs to be `(case 0 of _ => 1)`. also notice that the error is a type error, but it's not
+NOTE: parentheses - the inner `case` needs to be `(case 0 of _ => 1)`. also notice that the error is a type error, but it's not to be handled as a type error. ML reads the `"2"` and later `_` case as belonging to the second case and not the first one. 
 
 <!--vert-->
 
@@ -71,7 +71,7 @@ NOTE: ML cannot do type inferrence to deduce the entire type of `a`, so it resul
 <!--vert-->
 
 ```sml
-Math.pow(2.0, power) - 1;
+Math.pow(2.0, 3.0) - 1;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -85,7 +85,7 @@ if (f 9.0 = f 9.0) then 1 else 0;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: `real` is a not a polymorphic equality type - cannot compare `real`s
+NOTE: `real` is a not a polymorphic equality type - cannot compare `real`s. this is a type error because in ML types that are able to be compared using `=` are denoted by `''a`, and `real` is `'a` but not `''a`.
 
 <!--vert-->
 
@@ -103,7 +103,7 @@ fun f (a:{s: int, r: int}) = {s: (#s a), r: (#r a)};
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: `:` denotes type, we need to use `=` in the returned expression to denote a value
+NOTE: `:` denotes type, we need to use `=` in the returned expression to denote a value. another common error: `{{(#s a), (#r a)}`
 
 <!--vert-->
 
@@ -157,4 +157,13 @@ floor(it) = 8;
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 NOTE: this specifically came up in the home ex. terribly annoying floating-point arithmetic error. when doing integer arithmetic, implement manually with a recursive function.
- 
+
+<!--vert-->
+
+```sml
+fun a() = b() and fun b() = a()
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: we don't repeat the `fun` keyword after `and`. ditto for `val`, `datatype`.
+  
