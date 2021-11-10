@@ -68,98 +68,91 @@ compound
 * **Optional Reading**
     1. [Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
 * **Submission**: [HW1](https://docs.google.com/document/d/1SH2WwvPzrA8hcORU0aM4JIJbc_irVmN0dy1BavYUTQM/edit?usp=sharing) \[13.11 23:59\]
-
 * **HW**: [HW2](???) is published \[13.11\]
-
-
 * **Highlights of Lecture**
-Recursion of concepts and their definitons in Pascal.
-  - Program is defined by definitions, procedures, functions, and 
-    commands.
-  - Functions and procedures are mutually recursive: functions can contain
-    procedures, and procedures can contain functions.
-  - Expressions are defined inductively: atomic expressions are literals, or variable references,  
-    while constructors are function calls and operators.
-  - Commands may include expressions and other commands.
-  - Definitions: each may refer to its precursors; only sensible order is label, const, type, var.
 
-Recursion of concepts and their definitions in SML: Declatations and Expressions
-  - Values: those thing passed as arguments, or returned from functions
-    * Atomic values: reference to a named value by its name, atomic values of atomic types, integer, real, etc. 
+  Recursion of concepts and their definitons in Pascal.
+  * Program is defined by definitions, procedures, functions, and commands.
+  * Functions and procedures are mutually recursive: functions can contain procedures, and procedures can contain functions.
+  * Expressions are defined inductively: atomic expressions are literals, or variable references,   while constructors are function calls and operators.
+  * Commands may include expressions and other commands.
+  * Definitions: each may refer to its precursors; only sensible order is label, const, type, var.
+
+  Recursion of concepts and their definitions in SML: Declatations and Expressions
+
+  * Values: those thing passed as arguments, or returned from functions
+    * Atomic values: reference to a named value by its name, atomic values of atomic types, integer, real, etc.
     * Compound values: tuples, etc.
-    * Recursive values: disallowed, except for recursive functions. 
+    * Recursive values: disallowed, except for recursive functions.
     * Opaque values: values which cannot be broken further, e.g., functions in SML
-  - Expressions: recipe for producing values
-    * Atomic expressions: literal, name 
-  - * Evaluating an expression: apply the recipe to produce values. 
-  - Names:
-    - Two kinds of names:
-      - Alphabetic: few reserved keywords (and, of, val, fun, fn...); all the rest are free or predefined (including int, true, ...)
-      - Symbolic (Punctuation): few reserved identifiers ( "|",  ",", ".", etc.);  all the
+  * Expressions: recipe for producing values
+    * Atomic expressions: literal, name
+    * Evaluating an expression: apply the recipe to produce values.
+  * Names:
+    * Two kinds of names:
+      * Alphabetic: few reserved keywords (and, of, val, fun, fn...); all the rest are free or predefined (including int, true, ...)
+      * Symbolic (Punctuation): few reserved identifiers ( "|",  ",", ".", etc.);  all the
         rest are free or predefined (including ">", "+", "`",, ...)
-    - Two namespaces: a name has distinct meaning (no meaning) in both namespaces. 
-        - values (including function names, constructors, and field names marked with #) 
-        - types  
-  - Declaration: are mostly binding of a name to a value,
-    - value is denoted by an expression
-    - expression is evaluated to produce value.
-    - Thus declaration may refer to expressions
-  - Expressions can be also composed from declarations, using `let`...`in`...`end`
-  - Declarations can be also composed from declarations using `local`...`in`...`end`
-  - Types: are also defined inductively, from atomic types and type constructors 
-  - Declarations can also bind names to types (in the type name space)
-  - Deferred execution: expressions that follow `=>`, or `fun ... =` are not
+    * Two namespaces: a name has distinct meaning (no meaning) in both namespaces.
+      * values (including function names, constructors, and field names marked with #)
+      * types  
+  * Declaration: are mostly binding of a name to a value,
+    * value is denoted by an expression
+    * expression is evaluated to produce value.
+    * Thus declaration may refer to expressions
+  * Expressions can be also composed from declarations, using `let`...`in`...`end`
+  * Declarations can be also composed from declarations using `local`...`in`...`end`
+  * Types: are also defined inductively, from atomic types and type constructors 
+  * Declarations can also bind names to types (in the type name space)
+  * Deferred execution: expressions that follow `=>`, or `fun ... =` are not
     evaluated immediatley. The recipe of their evaluation is recorded and encapsualted as an opaque value.
 
-Summary:
-  - Types:
-    - Atomic/Compound: Are constructed from other smaller types.
-    - Can be mutually/self recursive, using `datataype` and `and`
-  - Expressions:
-    - Atomic/Compound: Are constructed from other smaller expressions.
-    - Are not mutually/self recursive
-  - Values:
-    - Atomic/Compound: Are constructed from other smaller expressions.
-    - Cannot be recursive, except for mutually recursive functions.
-      
-    . 
+  Summary:
 
-Exercise: do the same summary for Pascal.
-    -  
-Perspective on ML:
-  - Essentially, a dying language
-  - Daughter languages: OCaml and Haskell, but also Kotlin are more successful
-  - Very clean and elegant
-  - Foundation of the Hindley-Milner type inference algorithm:
+  * Types:
+    * Atomic/Compound: Are constructed from other smaller types.
+    * Can be mutually/self recursive, using `datataype` and `and`
+  * Expressions:
+    * Atomic/Compound: Are constructed from other smaller expressions.
+    * Are not mutually/self recursive
+  * Values:
+    * Atomic/Compound: Are constructed from other smaller expressions.
+    * Cannot be recursive, except for mutually recursive functions.
+
+  Exercise: do the same summary for Pascal.
+
+  Perspective on ML:
+
+  * Essentially, a dying language
+  * Daughter languages: OCaml and Haskell, but also Kotlin are more successful
+  * Very clean and elegant
+  * Foundation of the Hindley-Milner type inference algorithm:
     * Given: a structure of nested declarations and expressions
     * Determine: the most general type for this structure.
     * HM Algorithm: Doubly exponential, but guaranteed to terminate. Not true for Java/C++.
 
-Classification of PL based on their values:
-  - Machine values: int/real/boolean/...
-  - Abstract, programmatic values: function, generator, co-routine
-  - Symbolic values: A value is symbolic if the only operation that can be done
+  Classification of PL based on their values:
+
+  * Machine values: int/real/boolean/...
+  * Abstract, programmatic values: function, generator, co-routine
+  * Symbolic values: A value is symbolic if the only operation that can be done
     on it is comparison for equality.
 
-Symbolic languages: languages whose atomic values are symbols; the only
-interesting feature then is the structure by which these symbols are organized:
-  - Formal languages over alphabet of symbols (letters); languages such as bash and Snobol
-  - Prolog (Course version): Abstract trees, given a signature, construct all trees whose labels are drawn from a signature, +  
-  - Abstract terms, same as trees, but allowing leaves to contain variables
-  - Cyclic/rational trees/terms (modern version): trees with cycles which expand to infinite trees
-  - HM-Algorithm is related to operations on such trees 
-  - List of lists / generalized trees as in Mathematica.
+  Symbolic languages: languages whose atomic values are symbols; the only
+  interesting feature then is the structure by which these symbols are organized:
 
-S-Expression: 
-  - Generalizes them all.
-  - Car/Cons/Cdr
-  - eq/atom
+  * Formal languages over alphabet of symbols (letters); languages such as bash and Snobol
+  * Prolog (Course version): Abstract trees, given a signature, construct all trees whose labels are drawn from a signature, +  
+  * Abstract terms, same as trees, but allowing leaves to contain variables
+  * Cyclic/rational trees/terms (modern version): trees with cycles which expand to infinite trees
+  * HM-Algorithm is related to operations on such trees
+  * List of lists / generalized trees as in Mathematica.
 
+  S-Expression:
 
-
-    
-
-* **Workshop**
+  * Generalizes them all.
+  * Car/Cons/Cdr
+  * eq/atom
 
 ## Week 4 \[14.11-20.11\]
 
