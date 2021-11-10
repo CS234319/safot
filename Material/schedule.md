@@ -24,28 +24,21 @@
 * **HW**: [HW1](https://docs.google.com/document/d/1SH2WwvPzrA8hcORU0aM4JIJbc_irVmN0dy1BavYUTQM/edit?usp=sharing) is published \[30.10\]
 
 * **Highlights of Lecture**
-Today's lecture started with technical problems, and time was taken to
-reiterate formalities, grading policy, bonus assignments, and the recycled
-questions promise. The four main paradigms: functional, object-oriented,
-imperative, and logic based, were discussed. The four main programming
-languages used in the course are Prolog, Pascal, ML, and Lisp.
 
-* In response to students' request, we discussed the issue of a programming
-language being universal; see these [notes](Misc/univrsal.pdf)
+  Today's lecture started with technical problems, and time was taken to reiterate formalities, grading policy, bonus assignments, and the recycled questions promise. The four main paradigms: functional, object-oriented, imperative, and logic based, were discussed. The four main programming languages used in the course are Prolog, Pascal, ML, and Lisp.
 
-* Other terms discussed: variable != value; name != named;  anonymous entities;
-anonymous variables; nested functions; anonymous types with struct` in C;
-builtin != predefined != reserved identifier; recursive structure; atomic !=
-compound
+  * In response to students' request, we discussed the issue of a programming language being universal; see these [notes](Misc/univrsal.pdf)
 
-* The semicolon in Pascal issue was discussed:
-  * Separatist grammar: ';' is a command separator, e.g., items in an SML record
-  * Lenient separatist grammar: ';' is a command separator, but there is also an empty command, e.g., Pascal
-  * Terminist grammar: ';' terminates commands
-  * Separatist terminist grammar: ';' separates commands, is optional at end (almost the same as lenient separatist)
-  * Lenient grammar: as found in Python, ';' can be omitted at eoln
-  * Go's grammar: ';' is automatically omitted at eoln
-  * SML's grammar: ';' is optional at the end of "commands"
+  * Other terms discussed: variable != value; name != named;  anonymous entities anonymous variables; nested functions; anonymous types with struct` in C; builtin != predefined != reserved identifier; recursive structure; atomic != compound
+
+  * The semicolon in Pascal issue was discussed:
+    * Separatist grammar: ';' is a command separator, e.g., items in an SML record
+    * Lenient separatist grammar: ';' is a command separator, but there is also an empty command, e.g., Pascal
+    * Terminist grammar: ';' terminates commands
+    * Separatist terminist grammar: ';' separates commands, is optional at end (almost the same as lenient separatist)
+    * Lenient grammar: as found in Python, ';' can be omitted at eoln
+    * Go's grammar: ';' is automatically omitted at eol
+    * SML's grammar: ';' is optional at the end of "commands"
 
 ## Week 2 \[31.10-6.11\]
 
@@ -102,10 +95,9 @@ compound
     * Thus declaration may refer to expressions
   * Expressions can be also composed from declarations, using `let`...`in`...`end`
   * Declarations can be also composed from declarations using `local`...`in`...`end`
-  * Types: are also defined inductively, from atomic types and type constructors 
+  * Types: are also defined inductively, from atomic types and type constructors
   * Declarations can also bind names to types (in the type name space)
-  * Deferred execution: expressions that follow `=>`, or `fun ... =` are not
-    evaluated immediatley. The recipe of their evaluation is recorded and encapsualted as an opaque value.
+  * Deferred execution: expressions that follow `=>`, or `fun ... =` are not evaluated immediatley. The recipe of their evaluation is recorded and encapsualted as an opaque value.
 
   Summary:
 
@@ -135,11 +127,9 @@ compound
 
   * Machine values: int/real/boolean/...
   * Abstract, programmatic values: function, generator, co-routine
-  * Symbolic values: A value is symbolic if the only operation that can be done
-    on it is comparison for equality.
+  * Symbolic values: A value is symbolic if the only operation that can be done on it is comparison for equality.
 
-  Symbolic languages: languages whose atomic values are symbols; the only
-  interesting feature then is the structure by which these symbols are organized:
+  Symbolic languages: languages whose atomic values are symbols; the only interesting feature then is the structure by which these symbols are organized:
 
   * Formal languages over alphabet of symbols (letters); languages such as bash and Snobol
   * Prolog (Course version): Abstract trees, given a signature, construct all trees whose labels are drawn from a signature, +  
