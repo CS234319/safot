@@ -79,6 +79,8 @@ const REVEAL_PARAMS = {
     keyboard: {
         39: 'next',
         37: 'prev'
-    }
+    },
+    maxScale: 1.0,
+    minScale: 1.0,
 };
 
