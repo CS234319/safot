@@ -17,7 +17,7 @@ end
 a module can contain any kind of binding
 
 ```sml
-module MyModule = struct
+structure MyModule = struct
     val answer = 42
     exception Failure of int
     type key = int
@@ -31,7 +31,7 @@ end;
 outside a module refer to a binding from another module by:
 
 ```sml
-MyModule.answer;;
+MyModule.answer;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -57,7 +57,7 @@ signature SIGNAME = sig
     (*types for bindings*)
 end
 
-structure ModuleName : SIGNAME = struct
+structure ModuleName :> SIGNAME = struct
     (*bindings*)
 end
 ```
@@ -89,12 +89,16 @@ end;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+<!--vert-->
+
 ```sml
 structure MathConstants :> CONSTANTS = struct
     val pi = 3.14
 end; (*ERROR*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
 
 ```sml
 structure MathConstants :> CONSTANTS = struct
@@ -170,10 +174,10 @@ end;
 <!--vert-->
 
 ```sml
-structure SortedIntList = SortedList(Int');;
+structure SortedIntList = SortedList(Int');
 
 open SortedIntList;
-add 5 (add 6 (add 2 (add 4 (add 3 (add 1 [])))));;
+add 5 (add 6 (add 2 (add 4 (add 3 (add 1 [])))));
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 

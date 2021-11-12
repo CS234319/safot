@@ -19,7 +19,6 @@ val x = ref 4;
 
 ```sml
 ref;
-(*val it = fn : 'a -> 'a ref*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -39,7 +38,6 @@ note that `:=` returns `()`
 ```sml
 val := = fn : 'a ref * 'a -> unit
 ```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
 
@@ -90,7 +88,12 @@ fun memoizer_put (memo: (''a, 'b) memoizer) x y =
         then !(#memory memo)
         else tl (!(#memory memo)))
         @ [(x, y)];
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+<!--vert-->
+
+```sml
 fun memoize (memo: (''a, 'b) memoizer) f x =
     case (List.find (fn t => x = #1 t) (!(#memory memo))) of
       SOME (_, y) => y

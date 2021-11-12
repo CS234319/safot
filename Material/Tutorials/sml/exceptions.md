@@ -37,7 +37,10 @@ sometimes we don't really know what to do with the error, so we'll simply return
 * when an error is discovered we will **raise** an exception
 * the exception will propagate up until someone **handles** it
 * the caller of a function doesn't have to check any error values
-* in pseudo code:
+
+<!--vert-->
+
+in pseudo code:
 
 ```sml
 fun inner = do_calculation
@@ -59,11 +62,9 @@ fun outer = middle(…) handle global_error;
 ```sml
 exception Failure;
 Failure;
-(*val it = Failure(-) : exn*)
 
 exception Problem of int;
 Problem;
-(*val it = fn : int -> exn*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -72,26 +73,19 @@ Problem;
 values of type `exn` have all the privileges of other values
 
 ```sml
-val x = Failure;
-(*val x = Failure(-) : exn*)
-
 val p = Problem 1;
-(*val p = Problem(-) : exn*)
-
 map Problem [0, 1, 2];
-(*val it = [Problem(-),Problem(-),Problem(-)] : exn ?.list*)
-
 fun whats_the_problem (Problem p) = p;
-(*Warning: match nonexhaustive ...*)
-(*val whats_the_problem = fn : exn -> int*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
 
 ... except
 
 ```sml
+val x = Failure;
 x = x;
-(*Error: operator and operand don't agree [equality type required]*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -135,11 +129,9 @@ exception Empty;
 
 fun hd (x::_) = x
   | hd []     = raise Empty;
-(*val hd = fn : 'a list -> 'a*)
 
 fun tl (_::xs) = xs
   | tl []      = raise Empty;
-(*val tl = fn : 'a list -> 'a list*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -186,10 +178,8 @@ Exp_0 handle Cons1 x => Exp_1
 
 ```sml
 fun throw _ = raise Empty;
-(*val throw = fn : 'a -> 'b*)
-
+exception Underflow;
 fun bar x = if x>0 then x else raise Underflow;
-(*val bar = fn : int -> int*)
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
