@@ -150,10 +150,10 @@
     1. [Advanced Typing](Lectures/slides/chapter-4.pdf)
     2. [ML's Type System](Tutorials/theory/sml-type-system.md)
 * **Tutorial**
-    1. [ML - Modules](Tutorials/sml/modules.md)
-    2. [ML - Exceptions](Tutorials/sml/exceptions.md)
-    3. [ML - References](Tutorials/sml/refs.md)
-    4. [Classification of Type Systems](Tutorials/theory/type-system-classification.md)
+    1. [ML - Modules](Tutorials/sml/modules.md) --- [pdf-article](Tutorials/pdfs/articles/sml/modules.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/modules.pdf)
+    2. [ML - Exceptions](Tutorials/sml/exceptions.md) --- [pdf-article](Tutorials/pdfs/articles/sml/exceptions.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/exceptions.pdf)
+    3. [ML - References](Tutorials/sml/refs.md) --- [pdf-article](Tutorials/pdfs/articles/sml/refs.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/refs.pdf)
+    4. [Classification of Type Systems](Tutorials/theory/type-system-classification.md) --- [pdf-article](Tutorials/pdfs/articles/theory/type-system-classification.pdf) --- [pdf-slides](Tutorials/pdfs/slides/theory/type-system-classification.pdf)
 
 ## Week 5 \[21.11-27.11\]
 
