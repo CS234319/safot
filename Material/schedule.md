@@ -61,7 +61,7 @@
 * **Optional Reading**
     1. [Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
 * **Submission**: [HW1](https://docs.google.com/document/d/1SH2WwvPzrA8hcORU0aM4JIJbc_irVmN0dy1BavYUTQM/edit?usp=sharing) \[13.11 23:59\]
-* **HW**: [HW2](???) is published \[13.11\]
+* **HW**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) is published \[13.11\]
 * **Highlights of Lecture**
 
   Recursion of concepts and their definitons in Pascal.
@@ -161,7 +161,7 @@
     1. [State and Storage](Lectures/slides/chapter-5.pdf)
 * **Tutorial**
     1. [ML - Sequences](Tutorials/sml/sequences.md)
-* **Submission**: [HW2](???) \[27.11 23:59\]
+* **Submission**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) \[27.11 23:59\]
 * **HW**: [HW3](???) is published \[27.11\]
 
 ## Week 6 \[5.12-11.12\]
