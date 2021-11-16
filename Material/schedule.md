@@ -155,6 +155,108 @@
     3. [ML - References](Tutorials/sml/refs.md) --- [pdf-article](Tutorials/pdfs/articles/sml/refs.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/refs.pdf)
     4. [Classification of Type Systems](Tutorials/theory/type-system-classification.md) --- [pdf-article](Tutorials/pdfs/articles/theory/type-system-classification.pdf) --- [pdf-slides](Tutorials/pdfs/slides/theory/type-system-classification.pdf)
 
+
+### Summary
+
+S-Expressions: full binary trees, in which leaves, and only leaves, carry symbolic tag, drawn from some alphabet. 
+*  Textual notation as dotted pairs and square brackets: 
+ `a`, `nil`, `[a.n]`, `[a.[a.n]]`, etc.
+* SML Definition
+    
+    ```sml (* Recursive structure: Expressions over alphabet *)
+    datatype 'Alphabet Sx =
+             Pair of Sx * Sx 
+        |    Atom of 'Alphabet
+
+    (* Let the alphabet of atoms be all strings *)
+    type Sx = string Sx 
+
+* Atomic values
+    ```sml
+    fun ` s = Atom s
+    val a = `"a"
+    val b = `"b"
+* Compound values
+    ```sml fun cons x = Pair x
+    val it = let
+       val s1 = cons (a,b)
+       val s2 = cons (b,a)
+       val s3 = cons(s1,a)
+       val s4 = cons(s2,b)
+    in
+        cons(s3,s4)
+    end 
+    ```
+
+### Partial functions: 
+```sml 
+    fun car (Pair(result,_)) = result
+    fun cdr (Pair(_,result)) = result
+
+    val it = car (cons(a,b))
+    val it = car `a (*Runtime error*)
+    val it = cdr (cons(a,b))
+    val it = car `a (*Runtime error*)
+```
+
+### Predicates (full functions)
+* Test for atomicity
+```sml
+ fun atom x = case x of 
+        Atom _  => true 
+      |      _  => false
+ ```
+* Equality of atoms and atoms only
+```sml
+ fun eq x = case x of 
+        (Atom(s1),Atom(s2)) => s1 = s2 
+    |   _                   => false
+
+ ```
+
+## S-Expessions and Lisp
+* Lisp is an intepreted (essentially) untyped programming language
+    - All values are S-Expessions
+    - Every function is an S-Expression
+    - Every S-Expression is a funtion (often partial functions)
+
+We need a bit of introduction before hands on with Lisp.
+
+* Designated atoms: used for predicates, since Lisp has no Bolean types
+    - `NIL` denotes end of lists, false, etc.
+    - `T` denotes the "absolute" truth
+        - any S-expressions  which is not `NIL` is considered true.
+* The List Notation (l1 l2 ... ln)
+    - `()` the empty list, aka `NIL`
+    - `(X)` a list containing `X`, aka `[X.NIL]`
+    - `(X Y )` a list containing `X`, aka `[X.[Y.NIL]]`
+* Lists of Lists
+    - The dotted pair notation is rarely used and may be ambigous if employs round brackets.
+    - Nested lists are allowed `((A X Y) (B C) (((E)))))`
+    - Every list of lists can be represented as an S-Expression
+    - Not every S-expression can be represented as list of lists, e.g., `[A.B]`
+* Lists of Lists in SML
+```sml 
+    datatype 'Alphabet List'of'Lists =
+             list of 'Alphabet List'of'Lists list
+        |    item of 'Alphabet
+```
+List of lists is essentially a tree of unbounded degree, in which each only leaves carry leabels.
+* Semantics of lists of lists: evaluation as expressions:
+    - `()` evaluates to `NIL`
+    - `a` an item which is an atom `a` evaluates to the "meaning" of `a`
+        - initially no atom has meaning
+        - for technical reasons
+            - the meaning of `NIL` is `NIL` and the meaning of `T` is `T`
+            - not an essential requirement 
+        - 
+    - `(g)` invoke 0-parameter function `g` with no arguments
+    - `(f a b)`  invoke 2-parameter function f with arguments a and b
+    - `(f (f a b) (f c d))`  invoke f on a and b, then on c and d, and then on the result of the previous two applications 
+    - `((g) h)` invoke 0-parameter function `g` with no arguments; use the result of the application as a function to apply to `h`
+
+
+
 ## Week 5 \[21.11-27.11\]
 
 * **Lecture**
