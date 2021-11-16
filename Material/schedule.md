@@ -255,6 +255,128 @@ List of lists is essentially a tree of unbounded degree, in which each only leav
     - `(f (f a b) (f c d))`  invoke f on a and b, then on c and d, and then on the result of the previous two applications 
     - `((g) h)` invoke 0-parameter function `g` with no arguments; use the result of the application as a function to apply to `h`
 
+* The list notation for experssions
+    - Lisp with symbolic values only (mini-lisp): Atoms are unbreaksable strings
+    - Common Lisp: 
+        - Atoms can be inegers, reals, characters,...
+        - Predefined functions
+    - Examples:
+        - `(* (+ 2 3) (+ 5 6))`
+        - `(cons (car x) (cdr (cdr x)))` 
+            - `x` can be an atom with some meaning...
+            - replace `x` with something such as `( () () ( () (()) ) )`?
+                - Will not work, `(() ())` cannot be evaluated, since `NIL` is not a function and cannot be applied to `NIL`
+
+### Lisp REPL: live demo
+- the function `quote`
+- the single quote ' notation
+- function `set`
+- function `defun`
+
+### Type System
+- Typically, in non-symbolic computation
+    - Simple type systems in Pascal, SML, C
+    - Challenge: Type system to support values such as functions, instances of classes, closures, inheritance.
+- Partition the set of possible values into sets, aka types.
+- A type is a:
+    - Set of values 
+    - Set of values that behave similiarly under the same operations.
+- #values in type: type be empty, singleton, two or any finite number of values, or infinite
+- #types for value: 
+    - often, only one `true` in Pascal
+    - sometimes infinite: `0` in C
+    - somtimes finite: `1` in C
+    - sometimes has one "principal type", or "most general type"
+        - type from which all other types of a value can be derived.
+        - Hindley Milner algorithm finds this type in SML and all tis daughter
+- Signficance of type:
+    - Determine which operations are allowed and which are not
+        - The "evil" rice theorem
+    - Interprestation of representation:
+        - the same 8 bits can be interprested as 
+            - integer
+            - unsigned integer
+            - index to a table (ASCII table?)
+            - truth or false
+        - Type punning; unintended interpretation of bits, e.g., union, address arithmicetic. Impossible in ML, Java; easy in Pascal (variant records) and super tempting in C (`union`, address arithmetics, casting)
+    - Overloading: for example, Julia
+
+# The  Basics of Type System (type system of mock)
+- Atomic types: int, real, ..., 
+- Type constructors: record, tuple,
+- Type rules: when are two types the same? how types are enforced? etc.
+
+# The Essential Type Constructors:
+- Tuple: denoted by '*' #(T1*T2) = #T1 * #T2
+    - Needs constructors and "de-" cosntructors.
+    - Is n=2, or is n=any?
+    - Associative? Commutative? Idempotent?
+    - if n is zero, then the unit type
+- The unit type: void in C.
+- The power set: denoted by '2^' #(2^T) = 2^(#T1)
+    - nice but rare
+- The map type denoted by '->' #(T1->T2) = #T2 ^ #T2
+    - A map can full or partial.
+    - A map can be represented by a table or by code (function)
+    - Both table and function maps may be partial
+- Map and Tuple are just like the Times and Power.
+    - `x^(a * b) = ((x ^b)^a)
+    - (a*b)->x = a->b->x
+- Branding: given a lable L and a type T, then `L of T` is a type similar to `T` bugt having a different name. (this is not type aliasing) 
+- Record: given types T1...Tn and labels L1...Ln
+    - Similar to tuple of branded types
+- UNION: No such type constructor...
+- Disjoint union: denoted sometimes by `+`
+    - given T1 and T2, assume that they are disjoint. If not make them disjoint
+    - type is union 
+    - Found in SML and duaghters, approximated by other languages
+    - Associative? Commutative? Idempotent? Arity?
+- Empty type: neutral element of disjoint union
+    - has no values
+    - cannot be found in SML
+    - similar to exceptions
+
+
+## Recursive type equations
+- For lists, trees, ...
+- Often mutually recursive, e.g., 
+    - Expression = sum of Products
+    - Product = product of Terms
+    - Term = ...
+
+
+    SML Example
+    ```
+    datatype 
+       corner = corner  of rectangle * rectangle * rectangle * rectangle
+    and
+        rectangle= rectangle of corner * corner * corner * corner
+    ```
+
+    ```
+    datatype 
+        Program = program of Definitions*Inners*Block
+    and
+        Inners = innes of Routine list
+    and 
+        Routine = function of Function | procedure of Procedure
+    and
+        Function = function of Definitions*Inners*Block
+    and 
+        Procedure = Procedure of Definitions*Inners*Block
+    and 
+        Definitions = definitions of Labels * Constants * Types * Variables
+    and 
+        block = block of statement list
+    and
+        statement = variable * expression
+    
+    ```
+
+Solving recursive type equations:
+    - bottom up approach
+    - not always possible
+    - 
 
 
 ## Week 5 \[21.11-27.11\]
