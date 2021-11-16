@@ -168,8 +168,57 @@ implement `interleaveq` that interleaves two sequences
 <!--vert-->
 
 ```sml
-fun interleaving (Nil, yq)       = yq
-  | interleaving (Cons(x,xf),yq) =
-        Cons (x, fn()=>interleaving (yq, xf()));
+fun interleaveq (Nil, yq)       = yq
+  | interleaveq (Cons(x,xf),yq) =
+        Cons (x, fn()=>interleaveq (yq, xf()));
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+...
+(*val dropq = fn: 'a seq -> int -> 'a seq*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+fun dropq _ 0 = Nil
+  | dropq Nil _ = Nil
+  | dropq (Cons(x, xf)) n = dropq (xf()) (n - 1);
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+...
+(*val seqToList = fn: 'a seq -> 'a list*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+fun seqToList Nil = []
+  | seqToList (Cons(x, xf)) = x::(seqToList (xf()));
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+...
+(*val listToSeq = fn: 'a list -> 'a seq*)
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+fun listToSeq [] = Nil
+  | listToSeq (x::xs) = Cons (x, fn () => listToSeq xs);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
