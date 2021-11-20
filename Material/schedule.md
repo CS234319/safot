@@ -378,7 +378,6 @@ Solving recursive type equations:
     - not always possible
     - 
 
-
 ## Week 5 \[21.11-27.11\]
 
 * **Lecture**
@@ -393,16 +392,16 @@ Solving recursive type equations:
 * **Lecture**
     1. [Symbolic Values and Pure Lisp](???)
 * **Tutorial**
-    1. [Automatic Memory Management](Tutorials/theory/automatic-memory-management.md)
-    2. [RTTI](Tutorials/theory/rtti.md)
-    3. [Lexical Analysis and ASTs](Tutorials/theory/lexical-analysis.md)
+    1. [mini-lisp](Tutorials/theory/mini-lisp.md)
 
 ## Week 7 \[12.12-18.12\]
 
 * **Lecture**
     1. [Symbolic Values and Pure Lisp (Cont.)](???)
 * **Tutorial**
-    1. [mini-lisp](Tutorials/theory/mini-lisp.md)
+    1. [Automatic Memory Management](Tutorials/theory/automatic-memory-management.md)
+    2. [RTTI](Tutorials/theory/rtti.md)
+    3. [Lexical Analysis and ASTs](Tutorials/theory/lexical-analysis.md)
 * **Submission**: [HW3](???) \[18.12 23:59\]
 * **HW**: [HW4](???) is published \[18.12\]
 
@@ -428,7 +427,7 @@ Solving recursive type equations:
 * **Lecture**
     1. [Commands (Cont.)](Lectures/slides/chapter-6.pdf)
 * **Tutorial**
-    1. [Prolog - Higher Order Programming](Tutorials/prolog/higher-order.md)
+    1. [Prolog - Control Predicates](Tutorials/prolog/control.md)
     2. [Prolog - Exam Questions](Tutorials/prolog/exam-questions.md)
 
 ## Week 11 \[9.1-15.11\]
@@ -453,9 +452,9 @@ Solving recursive type equations:
 ## Week 13 \[23.1-29.1\]
 
 * **Lecture**
-   1. [Real Life Programming Languages](https://docs.google.com/presentation/d/1FGUzbhURUqzL3hfzCj8m3nR1swqmpG8CYu77H4Tgm5U/edit#slide=id.gb50064ae0_0_89)
+    1. [Real Life Programming Languages](https://docs.google.com/presentation/d/1FGUzbhURUqzL3hfzCj8m3nR1swqmpG8CYu77H4Tgm5U/edit#slide=id.gb50064ae0_0_89)
 * **Tutorial**
-   1. [Exam Questions](???)
+    1. TBD
 * **Reading material**
 * **Submission**: [HW6](???) \[29.1 23:59\]
 
