@@ -222,3 +222,25 @@ fun listToSeq [] = Nil
   | listToSeq (x::xs) = Cons (x, fn () => listToSeq xs);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+![q1](../material/Tutorials/imgs/q1.png)
+
+<!--vert-->
+
+```sml
+...
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+![q2](../material/Tutorials/imgs/q2.png)
+
+<!--vert-->
+
+```sml
+...
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
