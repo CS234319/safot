@@ -383,7 +383,7 @@ Solving recursive type equations:
 * **Lecture**
     1. [State and Storage](Lectures/slides/chapter-5.pdf)
 * **Tutorial**
-    1. [ML - Sequences](Tutorials/sml/sequences.md)
+    1. [ML - Sequences](Tutorials/sml/sequences.md) --- [pdf-article](Tutorials/pdfs/articles/sml/sequences.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/sequences.pdf)
 * **Submission**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) \[27.11 23:59\]
 * **HW**: [HW3](???) is published \[27.11\]
 
