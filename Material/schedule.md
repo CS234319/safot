@@ -16,11 +16,11 @@
 
 ## Week 1 \[24.10-30.10\]
 
-* **Lecture** \[[summary](Lectures/summaries/lecture1.md)\]
+* **Lecture**
     1. [Motivation and Paradigms](Lectures/introduction.md)
     2. [Abstract Introduction](https://docs.google.com/presentation/d/1LKVaPEXuPYzI149K-68XZR-HHv6cJkOWgdBg9T98cog/edit?usp=sharing)
     3. [Quick Pascal](https://docs.google.com/presentation/d/1n_VQM6HCASj5FINurqF3wusE4fS2qqq_h7AoQvMgXzI/edit?usp=sharing)
-* **Tutorial** \[[summary](Tutorials/summaries/1.md)\]
+* **Tutorial**
     1. [ML - Introduction](Tutorials/sml/introduction.md) --- [pdf-article](Tutorials/pdfs/articles/sml/introduction.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/introduction.pdf)
     2. [ML - Functions](Tutorials/sml/functions.md) --- [pdf-article](Tutorials/pdfs/articles/sml/functions.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/functions.pdf)
 * **Reading**
@@ -435,7 +435,7 @@ Solving recursive type equations:
 * **Tutorial**
     1. TBD
 
-## Week 11 \[9.1-15.11\]
+## Week 11 \[9.1-15.1\]
 
 * **Lecture**
     1. [Advanced Constructs - Evaluation Strategies](Lectures/slides/chapter-7.pdf)
