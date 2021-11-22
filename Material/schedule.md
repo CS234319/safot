@@ -388,7 +388,7 @@ Solving recursive type equations:
 ## Week 5 \[21.11-27.11\]
 
 * **Lecture**
-    1. [Types](Tutorials/theory/sml-type-system.md)
+    1. [Types](Tutorials/theory/sml-type-system.md) --- [pdf-slides](Tutorials/pdfs/slides/theory/sml-type-system.pdf)
 * **Tutorial**
     1. [ML - Sequences](Tutorials/sml/sequences.md) --- [pdf-article](Tutorials/pdfs/articles/sml/sequences.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/sequences.pdf)
 * **Submission**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) \[27.11 23:59\]

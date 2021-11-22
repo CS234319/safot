@@ -1,6 +1,6 @@
 # why python?
 
-![python-logo](../material/Tutorials/imgs/python-logo.png)
+![python-logo](../material/Tutorials/imgs/python-logo.png) <!-- .element: width="30%" -->
 
 ---
 
