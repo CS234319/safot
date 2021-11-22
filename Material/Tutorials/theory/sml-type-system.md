@@ -1,23 +1,28 @@
-# standard ML
+# types
 
-## type system
+## type constructors
 
 ---
 
-### records
+### Types
 
-* notation: $\{ l_1: T_1,\ldots,l_n: T_n \}$
-* composition: $\{ l_1=\cdot,\ldots,l_n=\cdot \}$
-* decomposition: $\#l_i(\cdot)$
+> A type is defined as a set of values.
 
-<!--vert-->
+We will want to expand our possibilities by creating new types with existing ones. Which is why we will learn on Type Constructors.
 
-in SML:
+---
 
-```sml
-type record = {x: int, y: real};
+### what are type constructors?
+
+> type constructors are operators that take a type and return a new type
+
+---
+
+### power set
+
+```pascal
+type Alphabets = set of 'A' .. 'Z';
 ```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
 
@@ -25,7 +30,7 @@ type record = {x: int, y: real};
 
 * notation: $T_1\times \cdots \times T_n$
 * composition: $\langle\cdot,\ldots,\cdot\rangle$
-* decomposition: $\#_i(\cdot)$
+* decomposition: $i(\cdot)$
 
 <!--vert-->
 
@@ -36,32 +41,40 @@ type product = int * real * string;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
+<!--vert-->
+
+#### properties of cartesian products
+
+* commutativity - never!
+* associativity - depending on the PL semantics.
+* for example $ R\times S \times T$ and $R\times (S \times T)$ and $(R\times S) \times T$
+  * structural ✅
+  * nominal ❌
+
+---
+
+### integral exponentiation
+
+* integral exponentiation makes homogenous tuples
+* notation: $T^n = T \times \overset{\text{n times}}{\cdots} \times T$
+
 ---
 
 ### unit type
-- Is either
-  - empty record `{}`
-  - empty tuple `()`
-- Predefined name: `Unit`
-- Only value: `()`
 
----
+a type with only one value
 
-
-### disjoint union
-
-* notation: $l_1(T_1)\cup\cdots\cup l_n(T_n)$
-* composition: $l_i(\cdot)$
-* decomposition: $$
+(similar to `void` but not really)
 
 <!--vert-->
 
 in SML:
 
-```sml
-datatype ('a, 'b) union = A of 'a | B of b;
-```
-<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+* is either
+    * empty record `{}`
+    * empty tuple `()`
+* Predefined name: `Unit`
+* Only value: `()`
 
 ---
 
@@ -69,7 +82,7 @@ datatype ('a, 'b) union = A of 'a | B of b;
 
 * notation: $l(T)$
 * composition $l(\cdot)$
-* decomposition: $\#l(\cdot)$
+* decomposition: $l(\cdot)$
 
 <!--vert-->
 
@@ -91,19 +104,68 @@ fun (x: X): int = x; (*OK*)
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
-### The empty/null/bottom type
-Usually by disjoint sum of a list of zero types
-- Not in SML!
-- Datatype can never be empty
-- Milner did not like "Bottom" type; used exceptions instead
 
-Best approximation for a function that never returns:
- - Return type is `Unit`
- - Function always throws an exception
+### records
 
+* notation: $\{ l_1: T_1,\ldots,l_n: T_n \}$
+* composition: $\{ l_1=\cdot,\ldots,l_n=\cdot \}$
+* decomposition: $l_i(\cdot)$
+
+<!--vert-->
+
+in SML:
+
+```sml
+type record = {x: int, y: real};
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 ---
-### mapping
+
+### disjoint union
+
+* notation: $l_1(T_1)\cup\cdots\cup l_n(T_n)$
+* composition: $l_i(\cdot)$
+
+<!--vert-->
+
+in SML:
+
+```sml
+datatype ('a, 'b) union = A of 'a | B of b;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+an enum can be thought of as a disjoint union of branded unit types
+
+$$(l_1, \ldots, l_n) = l_1(Unit) + \ldots + l_n(Unit)$$
+
+---
+
+### The empty/null/bottom type
+
+usually by disjoint sum of a list of zero types
+
+<!--vert-->
+
+#### Not in SML!
+
+* a datatype can never be empty
+* best approximation for a function that never returns:
+  * Return type is `Unit`
+  * Function always throws an exception
+
+---
+
+### the Any/all/top type
+
+a type that contains **all** values in the language
+
+---
+
+### mapping and partial mapping
 
 * notation: $S\rightarrow T$
 
