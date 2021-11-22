@@ -1,5 +1,19 @@
 # 236319: Winter 2021/22 Schedule
 
+* [week 1](#week-1-2410-3010)
+* [week 2](#week-2-3110-611)
+* [week 3](#week-3-711-1311)
+* [week 4](#week-4-1411-2011)
+* [week 5](#week-5-2111-2711)
+* [week 6](#week-6-512-1112)
+* [week 7](#week-7-1212-1812)
+* [week 8](#week-8-1912-2512)
+* [week 9](#week-9-2612-11)
+* [week 10](#week-10-21-81)
+* [week 11](#week-11-91-1511)
+* [week 12](#week-12-161-221)
+* [week 13](#week-13-231-291)
+
 ## Week 1 \[24.10-30.10\]
 
 * **Lecture** \[[summary](Lectures/summaries/lecture1.md)\]
@@ -52,14 +66,11 @@
 
 ## Week 3 \[7.11-13.11\]
 
-* **Lecture**
-    1. [Types](Lectures/slides/chapter-3.pdf)
+* **Lecture** (see summary below)
 * **Tutorial**
     1. [ML - Lists](Tutorials/sml/lists.md) --- [pdf-article](Tutorials/pdfs/articles/sml/lists.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/lists.pdf)
 * **Workshop**
     1. [ML - workshop](Tutorials/sml/errors.md) --- [pdf-article](Tutorials/pdfs/articles/sml/errors.pdf)
-* **Optional Reading**
-    1. [Summary of Polymorphism](https://drive.google.com/file/d/0B3645jTHku6WeDF0MlpIUDh4Zlk/view?usp=sharing&resourcekey=0-fiLhA6npEgrkLQ7p4-sydQ)
 * **Submission**: [HW1](https://docs.google.com/document/d/1SH2WwvPzrA8hcORU0aM4JIJbc_irVmN0dy1BavYUTQM/edit?usp=sharing) \[13.11 23:59\]
 * **HW**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) is published \[13.11\]
 * **Highlights of Lecture**
@@ -146,15 +157,12 @@
 
 ## Week 4 \[14.11-20.11\]
 
-* **Lecture**
-    1. [Advanced Typing](Lectures/slides/chapter-4.pdf)
-    2. [ML's Type System](Tutorials/theory/sml-type-system.md)
+* **Lecture** (see summary below)
 * **Tutorial**
     1. [ML - Modules](Tutorials/sml/modules.md) --- [pdf-article](Tutorials/pdfs/articles/sml/modules.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/modules.pdf)
     2. [ML - Exceptions](Tutorials/sml/exceptions.md) --- [pdf-article](Tutorials/pdfs/articles/sml/exceptions.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/exceptions.pdf)
     3. [ML - References](Tutorials/sml/refs.md) --- [pdf-article](Tutorials/pdfs/articles/sml/refs.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/refs.pdf)
     4. [Classification of Type Systems](Tutorials/theory/type-system-classification.md) --- [pdf-article](Tutorials/pdfs/articles/theory/type-system-classification.pdf) --- [pdf-slides](Tutorials/pdfs/slides/theory/type-system-classification.pdf)
-
 
 ### Summary
 
@@ -188,7 +196,7 @@ S-Expressions: full binary trees, in which leaves, and only leaves, carry symbol
     end 
     ```
 
-### Partial functions: 
+#### Partial functions: 
 ```sml 
     fun car (Pair(result,_)) = result
     fun cdr (Pair(_,result)) = result
@@ -199,7 +207,7 @@ S-Expressions: full binary trees, in which leaves, and only leaves, carry symbol
     val it = car `a (*Runtime error*)
 ```
 
-### Predicates (full functions)
+#### Predicates (full functions)
 * Test for atomicity
 ```sml
  fun atom x = case x of 
@@ -214,7 +222,7 @@ S-Expressions: full binary trees, in which leaves, and only leaves, carry symbol
 
  ```
 
-## S-Expessions and Lisp
+#### S-Expessions and Lisp
 * Lisp is an intepreted (essentially) untyped programming language
     - All values are S-Expessions
     - Every function is an S-Expression
@@ -267,13 +275,13 @@ List of lists is essentially a tree of unbounded degree, in which each only leav
             - replace `x` with something such as `( () () ( () (()) ) )`?
                 - Will not work, `(() ())` cannot be evaluated, since `NIL` is not a function and cannot be applied to `NIL`
 
-### Lisp REPL: live demo
+##### Lisp REPL: live demo
 - the function `quote`
 - the single quote ' notation
 - function `set`
 - function `defun`
 
-### Type System
+#### Type System
 - Typically, in non-symbolic computation
     - Simple type systems in Pascal, SML, C
     - Challenge: Type system to support values such as functions, instances of classes, closures, inheritance.
@@ -301,12 +309,12 @@ List of lists is essentially a tree of unbounded degree, in which each only leav
         - Type punning; unintended interpretation of bits, e.g., union, address arithmicetic. Impossible in ML, Java; easy in Pascal (variant records) and super tempting in C (`union`, address arithmetics, casting)
     - Overloading: for example, Julia
 
-# The  Basics of Type System (type system of mock)
+#### The  Basics of Type System (type system of mock)
 - Atomic types: int, real, ..., 
 - Type constructors: record, tuple,
 - Type rules: when are two types the same? how types are enforced? etc.
 
-# The Essential Type Constructors:
+#### The Essential Type Constructors:
 - Tuple: denoted by '*' #(T1*T2) = #T1 * #T2
     - Needs constructors and "de-" cosntructors.
     - Is n=2, or is n=any?
@@ -337,7 +345,7 @@ List of lists is essentially a tree of unbounded degree, in which each only leav
     - similar to exceptions
 
 
-## Recursive type equations
+#### Recursive type equations
 - For lists, trees, ...
 - Often mutually recursive, e.g., 
     - Expression = sum of Products
@@ -376,12 +384,11 @@ List of lists is essentially a tree of unbounded degree, in which each only leav
 Solving recursive type equations:
     - bottom up approach
     - not always possible
-    - 
 
 ## Week 5 \[21.11-27.11\]
 
 * **Lecture**
-    1. [State and Storage](Lectures/slides/chapter-5.pdf)
+    1. [Types](Tutorials/theory/sml-type-system.md)
 * **Tutorial**
     1. [ML - Sequences](Tutorials/sml/sequences.md) --- [pdf-article](Tutorials/pdfs/articles/sml/sequences.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/sequences.pdf)
 * **Submission**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) \[27.11 23:59\]
@@ -399,9 +406,7 @@ Solving recursive type equations:
 * **Lecture**
     1. [Symbolic Values and Pure Lisp (Cont.)](???)
 * **Tutorial**
-    1. [Automatic Memory Management](Tutorials/theory/automatic-memory-management.md)
-    2. [RTTI](Tutorials/theory/rtti.md)
-    3. [Lexical Analysis and ASTs](Tutorials/theory/lexical-analysis.md)
+    1. [Prolog - Introduction](Tutorials/prolog/introduction.md)
 * **Submission**: [HW3](???) \[18.12 23:59\]
 * **HW**: [HW4](???) is published \[18.12\]
 
@@ -410,25 +415,25 @@ Solving recursive type equations:
 * **Lecture**
     1. [Prolog](???)
 * **Tutorial**
-    1. [Prolog - Introduction](Tutorials/prolog/introduction.md)
+    1. [Prolog - Lists](Tutorials/prolog/lists.md)
+    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
 
 ## Week 9 \[26.12-1.1\]
 
 * **Lecture**
-    1. [Commands](Lectures/slides/chapter-6.pdf)
+    1. TBD
 * **Tutorial**
-    1. [Prolog - Lists](Tutorials/prolog/lists.md)
-    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
+    1. [Prolog - Control Predicates](Tutorials/prolog/control.md)
+    2. [Prolog - Exam Questions](Tutorials/prolog/exam-questions.md)
 * **Submission**: [HW4](???) \[1.1 23:59\]
 * **HW**: [HW5](???) is published \[1.1\]
 
 ## Week 10 \[2.1-8.1\]
 
 * **Lecture**
-    1. [Commands (Cont.)](Lectures/slides/chapter-6.pdf)
+    1. TBD
 * **Tutorial**
-    1. [Prolog - Control Predicates](Tutorials/prolog/control.md)
-    2. [Prolog - Exam Questions](Tutorials/prolog/exam-questions.md)
+    1. TBD
 
 ## Week 11 \[9.1-15.11\]
 
