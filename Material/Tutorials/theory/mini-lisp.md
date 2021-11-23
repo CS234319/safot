@@ -307,6 +307,9 @@ to represent a non-empty list L:
 2. let `S1` be the S-expression repesentation of `F`
     * If `F` is an atom, then `S1` is `F`
     * Otherwise, `F` is a list, and `S1` is computed recursively
+
+<!--vert-->
+
 3. let `R` be the (possibly empty) list `(x1 ... xn)`
 4. let `S2` be the the S-expression representation of `R` (computed recursively)
 5. the S-expression representation of `L` is the dotted pair `[S1.S2]`
@@ -437,12 +440,16 @@ evaluation of expressions in C (almost always) and in LISP (typically) is done b
 ( NIL NIL NIL)
 ```
 
+<!--vert-->
+
 or, in some impelmentations
 
 ```lisp
 > (cons () (() ()))
 ( () () ())
 ```
+
+---
 
 ## Boolean values in Lisp
 
@@ -475,6 +482,8 @@ atoms with predefined meaning:
 * the meaning of atom `t` is atom `T`
 * the meaning of atoms `CAR`, `CDR` TODO
 
+<!--vert-->
+
 ### Other Atoms
 
 * most atoms have no meaning
@@ -503,16 +512,24 @@ the "semantics" of an S-expression, is the result of its "evaluation"; evaluatin
 
 1. the semantics of atom `nil` is itself, i.e., atom `NIL`
 2. the semantics of atom `t` is itself, i.e., atom `T`
-3. the semantics of several designated atoms is a function
-    1. 8 + 1 atoms designate the primitive functions of Mini-LISP
-        * `CAR`, `CDR`, `CONS`, `EQ`, `ATOM`: operators and predicates on S-expressions
-        * `SET`, `COND`, `ERROR`: to be explained later
-        * `EVAL`: a primitive function that takes an S-expression and returns its semantics, or fails.
-    2. 5 predefined functions:
-        * `NULL`: check whether an atom is `NIL`
-        * `DEFUN`, `DEFUN'`, `LAMBDA`, `NLAMBDA`: make it posssible to define new functions
-        * `QUOTE`: a function that prevents an S-expression from being evaluated
-4. the semantics of any other atom is (initially) undefined; therefore, the evaluation of any other atom fails
+
+<!--vert-->
+
+3. primitive functions
+     * `CAR`, `CDR`, `CONS`, `EQ`, `ATOM`: operators and predicates on S-expressions
+     * `SET`, `COND`, `ERROR`: to be explained later
+     * `EVAL`: a primitive function that takes an S-expression and returns its semantics, or fails.
+
+<!--vert-->
+
+4. 5 predefined functions:
+    * `NULL`: check whether an atom is `NIL`
+    * `DEFUN`, `DEFUN'`, `LAMBDA`, `NLAMBDA`: make it posssible to define new functions
+    * `QUOTE`: a function that prevents an S-expression from being evaluated
+
+<!--vert-->
+
+5. the semantics of any other atom is (initially) undefined; therefore, the evaluation of any other atom fails
 
 <!--vert-->
 
@@ -531,6 +548,8 @@ the semantics of dotted pair `[x.y]`, is the application of function `x` to S-ex
 
 semantics of `(f x y)` is the semantics of `[F.(X Y)]`, i.e., the application of function named `F` to the two arguments `X` and `Y`.
 
+<!--vert-->
+
 * `(cons t nil)` evaluates to `(T)`
 * `(car (cons t nil))` evaluates to `(CAR (T))` and then to atom `T`
 * `(cdr (cons t nil))` evaluates to `(CDR (T))` and then to the empty list `()` (which is also the atom `NIL`)
@@ -542,6 +561,8 @@ semantics of `(f x y)` is the semantics of `[F.(X Y)]`, i.e., the application of
 
 1. eager semantics: arguments are evaluated first, and then passed to function
 2. normal semantics: arguments are passed to the function as is
+
+<!--vert-->
 
 most functions are eager; exceptions are:
 
@@ -557,6 +578,9 @@ most functions are eager; exceptions are:
 * compiled languages: translate the program, then execute it
   * prime examples: Fortran, COBOL, C++, Pascal
   * (Virtual Machine/P-Code languages are similar; they  translate the program into code in intermediate langauge, then execute, e.g., Java and C#)
+
+<!--vert-->
+
 * interpreted languages:
   * read, and then inerpreted (executed immediately);
   * bash, LISP, Prolog, Smalltalk,...
@@ -697,7 +721,7 @@ the sequence of characgters in an atom is broken by
 2. the six *token* characters `( ) [ ] . '`
     * these characters are part of the LISP syntax, and are *not* ignored
 3. comments, which are sequences of characters that begin at `;` and end in either a `CR` or `LF` character
-    * *all* characters in a comments are always ignored, even if they are one of the special token chacracters
+    * *all* characters in comments are always ignored, even if they are one of the special token chacracters
 
 <!--vert-->
 
