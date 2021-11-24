@@ -41,7 +41,7 @@ Mini-LISP is a programming language designed for students of programming languag
 
 * Quick to learn and master. Inappropriate for any serious programming.
 * Captures the essence of Lisp
-* Meticiuluously, purges, eliminates, and/or ignores, anything else!
+* Meticulously, purges, eliminates, and/or ignores, anything else!
 
 <!--vert-->
 
@@ -101,15 +101,22 @@ programming in the small:
 <!--vert-->
 
 * numeric computation is computation with numbers
-* numbers are manipulated with the four basic arithmeitcal operations, comparison, etc.
-* symbolic computation is about symbols:
-  * examples of symbols: `a`, `+`, ...
-  * symbols have no intrinsic meaning
-  * meaning of symbols is determined by program
+* numbers are manipulated with arithmeitcal operations, comparison, etc.
+
+<!--vert-->
+
+symbolic computation is about symbols:
+
+* examples of symbols: `a`, `+`, ...
+* symbols have no intrinsic meaning
+* meaning of symbols is determined by program
+
+<!--vert-->
+
 * allowed operations on symbols:
   * comparison for equality
-  * assigning meeaning/binding/setting
-  * finding meaning/dereferencing/interpreting
+  * assigning meaning
+  * finding meaning
 * but, symbols can be organized in data structures...
 
 <!--vert-->
@@ -329,7 +336,7 @@ it is customary to write S-expressions as lists
 
 <!--vert-->
 
-not all S-expressions can be fully written with the list notatios
+not all S-expressions can be written in list notation
 
 1. `[a.b]` is written as `[a.b]`
 2. `[a.[[b.c].nil]]` is written as `(A [B.C])`
@@ -354,25 +361,18 @@ not all S-expressions can be fully written with the list notatios
 * obtain the right sub-tree, e.g., `CDR` of `[a.[b.[c.a]]]` is `[b.[c.a]]`
 * obtain the rest of a given list, i.e., the list without its first element, e.g., CDR of the a three item list `((A) D (B C))` is a two item list `(D (B C))`
 * fails on atoms (an empty list is an atom)
-* in other languages/libraries: `tail` / `rest` / `remainder` / ...
 
 <!--vert-->
 
 ### CONS
 
-* construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.b]` is `[A.[B.C]]
+* construct a tree out of a given left and rigt sub-tree, e.g., CONS of `a` and `[b.c]` is `[A.[B.C]]`
 * prepend a given item to a given list,  e.g., `CONS` of `A` and `(B C)` is `(A B C)`
 * never fails
-* in other langauges/libraries: `prepend` / `push` / `::` (e.g., `A::B::C`) in Standard ML
-
-<!--vert-->
-
-* `CAR` and `CDR` are historical names; acronyms of registers in an ancient IBM machine on which LISP was first implemented; `CONS` is short of 'construct' or 'constructor'
-* most Lisp dialects offer short hand functions such as `CAAR` (CAR of CAR), `CDAR` (CDR of CAR), `CADAR`, etc. In the interest of minimalizm, Mini-Lisp abstains.
 
 ---
 
-## Predicates on S-Expressions (reminiscent of numerical comparison)
+## Predicates on S-Expressions
 
 <!--vert-->
 
@@ -403,13 +403,13 @@ not all S-expressions can be fully written with the list notatios
 
 ## Lists of Lists and Expression Trees
 
-a list in Lisp is interpreted as function application; the list
+a list in Lisp is interpreted as function application
 
-   ```lisp
-   (F x1 ... xn)
-   ```
+```lisp
+(F x1 ... xn)
+```
 
-means: 'apply function F to arguments 'x1' through 'xn'. the nested list `(f (g 2 a) c)` is the LISP equivalent of `f(g(2,a),c)`.
+means: apply function F to arguments `x1` through `xn`
 
 <!--vert-->
 
@@ -425,28 +425,19 @@ is written in LISP as
 (/ (sqrt  (- (* b b) (* 4 a c))) (* 2 a))
 ```
 
-evaluation of expressions in C (almost always) and in LISP (typically) is done bottom up: evaluate the arguments, and then apply the function to these.
+evaluation of expressions in LISP (typically) is done bottom up: evaluate the arguments, and then apply the function.
 
 ---
 
 ## Meaning of atoms
 
 * most Lisp dialects, assign 'meaning' to atoms such as `2`, `/`, `*`, `sqrt`, etc. Mini-Lisp doesn't!
-* but, **all** LISP dialects, recognize the elementary functions: `CAR`, `CDR`, `CONS`, `NULL`, `ATOM`, `EQ`, ... (very few others)
-* for example, the meaning of atom `CONS` is the CONS function, e.g.,
+* but, **all** LISP dialects, recognize the elementary functions: `CAR`, `CDR`, `CONS`, `NULL`, `ATOM`, `EQ`, ...
+* for example, the meaning of the atom `CONS` is the CONS function, e.g.,
 
 ```lisp
-> (cons () (() ()))
-( NIL NIL NIL)
-```
-
-<!--vert-->
-
-or, in some impelmentations
-
-```lisp
-> (cons () (() ()))
-( () () ())
+(cons () (() ()))
+; ( NIL NIL NIL)
 ```
 
 ---
@@ -460,38 +451,15 @@ or, in some impelmentations
   * with the absence of a compelling reason, atom `T` is used to denote Boolean true
 
 ```lisp
-> (eq () ())
-T
-> (eq T NIL)
-NIL
-> (eq (T NIL) (T NIL))
-NIL
+(eq () ())
+; T
+(eq T NIL)
+; NIL
 ```
-
-<!--vert-->
-
-* the "Boolean" atoms are 't' and 'nil'; these atoms denote themselves
-* other atoms can, technically, be used  possible as (kind of variables), by letting them denote other S-expressions.
-* good LISP programs do not do that! functional programs do not use variables.
-
-<!--vert-->
-
-atoms with predefined meaning:
-
-* the meaning of atom `nil` is atom `NIL`
-* the meaning of atom `t` is atom `T`
-* the meaning of atoms `CAR`, `CDR` TODO
-
-<!--vert-->
-
-### Other Atoms
-
-* most atoms have no meaning
-* other atoms are luxury
 
 ---
 
-## Failures of computation (reminiscent of division by zero)
+## Failures of computation
 
 * `CONS`, `ATOM`, `EQ`, and `NULL` never fail
 * `CAR` and `CDR` may fail (when applied to atoms)
@@ -504,7 +472,8 @@ atoms with predefined meaning:
 
 ## The "Semantics" S-Expressions
 
-the "semantics" of an S-expression, is the result of its "evaluation"; evaluating an S-expression gives another S-expression, unless the evaluation "fails"
+* the "semantics" of an S-expression is the result of its "evaluation"
+* evaluating an S-expression gives another S-expression (unless the evaluation fails)
 
 <!--vert-->
 
@@ -524,7 +493,7 @@ the "semantics" of an S-expression, is the result of its "evaluation"; evaluatin
 
 4. 5 predefined functions:
     * `NULL`: check whether an atom is `NIL`
-    * `DEFUN`, `DEFUN'`, `LAMBDA`, `NLAMBDA`: make it posssible to define new functions
+    * `DEFUN`, `DEFUN`, `LAMBDA`, `NLAMBDA`: make it posssible to define new functions
     * `QUOTE`: a function that prevents an S-expression from being evaluated
 
 <!--vert-->
@@ -535,7 +504,7 @@ the "semantics" of an S-expression, is the result of its "evaluation"; evaluatin
 
 ### Semantics of dotted-pairs
 
-the semantics of dotted pair `[x.y]`, is the application of function `x` to S-expression `Y`
+the semantics of dotted pair `[x.y]`
 
 1. `X` must be a name of a function that takes a certain number of arguments
 2. `Y` must be a list of this many arguments
