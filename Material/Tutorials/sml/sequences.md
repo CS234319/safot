@@ -159,6 +159,8 @@ fun filterq pred Nil = Nil
 
 implement `interleaveq` that interleaves two sequences
 
+e.g.: interleaving `1,2,3,...` and `11,12,13,...` returns: `1,11,2,12,3,13,4,...`
+
 ```sml
 ...
 (*val interleaveq = fn : 'a seq * 'a seq -> 'a seq*)
@@ -175,6 +177,8 @@ fun interleaveq (Nil, yq)       = yq
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
+
+`dropq` takes a sequence `s` and a positive number `n` and returns `s` without its first `n` elements
 
 ```sml
 ...
@@ -193,6 +197,8 @@ fun dropq _ 0 = Nil
 
 <!--vert-->
 
+`seqToList` takes a sequence and returns a list of its elements
+
 ```sml
 ...
 (*val seqToList = fn: 'a seq -> 'a list*)
@@ -208,6 +214,8 @@ fun seqToList Nil = []
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
 <!--vert-->
+
+`listToSeq` takes a list and returns a sequence of its elements
 
 ```sml
 ...
@@ -236,12 +244,29 @@ fun listToSeq [] = Nil
 
 <!--vert-->
 
+```sml
+fun fraction m n =
+  if m mod n = 0
+  then Nil
+  else Cons ((m * 10 div n mod 10), fn () => fraction (m*10) n);
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
 ![q2](../material/Tutorials/imgs/q2.png)
 
 <!--vert-->
 
 ```sml
 ...
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+fun lazy_divide m n = (m div n, fraction (m mod n) n);
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -273,7 +298,10 @@ Control.Print.printDepth := 1000;
 define some trees
 
 ```sml
-...
+fun t1 () = NONE;
+fun t2 0 () = SOME (Node (0, t1, t1))
+  | t2 n () = SOME (Node (n, t2 (n div 2), t2 (n - 1)));
+fun t3 () = SOME (Node (100, t2 8, t2 7));
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -285,7 +313,6 @@ implement lazy bfs traversal of lazy trees
 ...
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
-
 
 <!--vert-->
 
