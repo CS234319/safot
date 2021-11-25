@@ -244,3 +244,59 @@ fun listToSeq [] = Nil
 ...
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+---
+
+```sml
+datatype 'a seq = Nil | Cons of 'a * (unit -> 'a seq)
+datatype 'a option = NONE | SOME of 'a;
+datatype 'a node =
+  Node of 'a * (unit -> 'a node option) * (unit -> 'a node option);
+type 'a lazy_tree = unit -> 'a node option;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+```sml
+fun take _ 0 = []
+  | take Nil _ = []
+  | take (Cons(x, xf)) n = x::(take (xf()) (n - 1));
+
+Control.Print.printLength := 1000;
+Control.Print.printDepth := 1000;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+define some trees
+
+```sml
+...
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+<!--vert-->
+
+implement lazy bfs traversal of lazy trees
+
+```sml
+...
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+
+<!--vert-->
+
+```sml
+local
+  fun aux [] [] = Nil
+    | aux [] ts = aux (map (fn t => t ()) (List.rev ts)) []
+    | aux (NONE::ns) ts = aux ns ts
+    | aux ((SOME (Node (h, l, r)))::ns) ts = Cons(h, fn () => aux ns (r::l::ts))
+in
+  fun bfs t = aux [t ()] []
+end;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
