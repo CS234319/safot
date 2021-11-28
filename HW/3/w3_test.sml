@@ -1,12 +1,13 @@
-use "w3.sml";
+use "w4.sml";
 use "utils.sml";
 
-open W3;
-
-assert (flatten [[1, 2], [], [3]] = [1, 2, 3]);
-
-assert (zip [1, 2, 3] ["a", "b", "c"] = [(1, "a"), (2, "b"), (3, "c")]);
-
-assert (zip [1, 2, ] ["a", "b", "c"] = [(1, "a"), (2, "b")]);
-
-assert (match (PTuple[Variable "x", Variable "y"]) (Tuple[Atom "s", Atom "t"]) = [("x",Atom "s"),("y",Atom "t")]);
+fun counter () = let
+  val exec_count = ref 0;
+  fun aux n = Cons (n, fn () => (
+    exec_count := 1 + !exec_count;
+    print ("exec: " ^ Int.toString (!exec_count) ^ "\n");
+    aux (n + 1)
+  ));
+in
+  W4.new (aux 0)
+end;

@@ -1,10 +1,11 @@
-datatype pattern = Wildcard | Variable of string | PAtom of string | PTuple of pattern list;
-datatype term = Atom of string | Tuple of term list;
-exception NoMatch;
+datatype 'a seq = Nil | Cons of 'a * (unit -> 'a seq);
 
-signature S3 = sig
-  val flatten : 'a list list -> 'a list
-  val zip : 'a list -> 'b list -> ('a * 'b) list
-  val unique : ''a list -> ''a list
-  val match : pattern -> term -> (string * term) list
+signature S4 = sig
+  exception SeqErr
+  type 'a biseq
+  val new : 'a seq -> 'a biseq
+  val prev : 'a biseq -> 'a biseq
+  val next : 'a biseq -> 'a biseq
+  val curr : 'a biseq -> 'a
+  val empty : 'a biseq -> bool
 end;
