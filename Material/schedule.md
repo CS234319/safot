@@ -392,7 +392,7 @@ Solving recursive type equations:
 * **Tutorial**
     1. [ML - Sequences](Tutorials/sml/sequences.md) --- [pdf-article](Tutorials/pdfs/articles/sml/sequences.pdf) --- [pdf-slides](Tutorials/pdfs/slides/sml/sequences.pdf)
 * **Submission**: [HW2](https://docs.google.com/document/d/1m7_gqrUY_r3zGYKbNkJFUOc4EVaHn_UyaKfndIQCjZA/edit?usp=sharing) \[27.11 23:59\]
-* **HW**: [HW3](???) is published \[27.11\]
+* **HW**: [HW3](https://docs.google.com/document/d/1ILdKh0F0A21O2e8EC2_uFlft2KtHNbTLKMc3uO_4hDI/edit?usp=sharing) is published \[29.11\]
 
 ## Week 6 \[5.12-11.12\]
 
@@ -407,7 +407,7 @@ Solving recursive type equations:
     1. [Symbolic Values and Pure Lisp (Cont.)](???)
 * **Tutorial**
     1. [Prolog - Introduction](Tutorials/prolog/introduction.md)
-* **Submission**: [HW3](???) \[18.12 23:59\]
+* **Submission**: [HW3](https://docs.google.com/document/d/1ILdKh0F0A21O2e8EC2_uFlft2KtHNbTLKMc3uO_4hDI/edit?usp=sharing) \[18.12 23:59\]
 * **HW**: [HW4](???) is published \[18.12\]
 
 ## Week 8 \[19.12-25.12\]
