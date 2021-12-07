@@ -9,5 +9,5 @@ fun counter () = let
     aux (n + 1)
   ));
 in
-  W4.new (aux 0)
+  W2.new (aux 0)
 end;

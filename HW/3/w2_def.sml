@@ -1,6 +1,6 @@
 datatype 'a seq = Nil | Cons of 'a * (unit -> 'a seq);
 
-signature S4 = sig
+signature S2 = sig
   exception SeqErr
   type 'a biseq
   val new : 'a seq -> 'a biseq

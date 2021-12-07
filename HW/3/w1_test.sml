@@ -1,7 +1,7 @@
 use "w1.sml";
 use "utils.sml";
 
-open W2;
+open W1;
 
 fun parse_btree s =
     let
