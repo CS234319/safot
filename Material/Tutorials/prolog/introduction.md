@@ -555,6 +555,9 @@ nuclear(X, Y) :-  % siblings
 
 nuclear(X, Y) :-
     parent(X, C), parent(Y, C).
+
+nuclear(X, Y) :-
+    (parent(X, Y); parent(Y, X)).
 ```
 
 ---
