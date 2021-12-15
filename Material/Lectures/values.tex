@@ -1,0 +1,335 @@
+\documentclass[aspectratio=169]{beamer}
+% Remove navigation bar
+\setbeamertemplate{navigation symbols}{}
+% Tikz package
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+
+\begin{document}
+\begin{frame}{Values}
+\begin{description}
+    \item [Values] runtime creatures, passed as parameter, returned from functions, stored in variable
+    \item [Types] Classification of values, mostly compile time creatures 
+    \item [Variables] Where values are stored, mostly runtime 
+\end{description}
+\end{frame}
+
+\begin{frame}{Forms of Values}
+\begin{description}
+    \item [Atomic] do not contain other values. 
+    \item [Compound] composed from other (compound or atomic) values.
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile]{Atomic Values \#1/2}
+Characterize the programming language
+\begin{description}
+\item [Numeric] extremely typifying; may be non-scalar, e.g., primitive 2D points; lots of operations.  
+    \begin{enumerate}
+        \item Only approximate the sets $\mathbb Z$ and $\mathbb S$; 
+        \item Balance efficiency (hardware match) and portability
+    \end{enumerate}
+\item [Boolean] typifying, less essential than numeric, several operations
+\item [Symbolic:] only operation is comparison, 
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile]{Atomic Values \#2/2}
+\begin{description}
+\item [Numeric] \ldots
+\item [Boolean] \ldots
+\item [Symbolic] our main interest
+\item [Meta] encapsulate meta data about the computation
+\begin{description}
+    \item Function values as in C, 
+    \begin{verbatim}
+int fibonnaci(int n) { 
+    int (*fibo)(int whatever_optional_name) = fibonnaci;
+    return n <= 2 ? 1 : fibo(n-1) + fibonacci(n-2);
+    \end{verbatim}
+    \item Closure values as in ML
+    \item Generator values as in Python
+    \item Class values as in \begin{verbatim}
+        Class<?> c = new Foo().bar().class 
+    \end{verbatim}
+    in Java
+    \item Reference values as in C++, not values, but refer to a
+    a cell in memory that contains a value.
+    \begin{verbatim}
+        max(int &a, int &b) { return a > b ? a : b; }
+    \end{verbatim}
+\end{description}
+\end{description}
+\end{frame}
+
+\begin{frame}{Compound Values}
+{Characterize the programming language}
+    \begin{itemize}
+        \item Non-Recursive: constructed by tuple, branding, disjoint union, maps (tabular, non-functions) from other values.  
+        \item Recursive (contain values of the same ``kind"): lists, lists of lists, trees and DAGs; require recursive type constructor, e.g., datatype in ML 
+        \item Circular: contain directed loops, e.g., linked lists: require recursive type constructor
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Symbolic Values}
+Atomic value, which can only compared to another atomic value;
+    \begin{itemize}
+        \item Define a set $\Sigma$ of a distinct symbols/letters
+        \item $\Sigma$ may be finite, e.g., the character type in many languages 
+        \item $\Sigma$ may be infinite (unbounded), e.g., the string type in many languages, e.g., atoms in Mini-Lisp. 
+        \item $\Sigma$ may even be a singleton; the only value of the unit type; one can design a programming language 
+        without any ``atomic value"
+    \end{itemize}
+Only operation: Given $\sigma_1, \sigma_2\in\Sigma$ determine whether $\sigma_1=\sigma_2$; in the case $\Sigma$ is a singleton, this
+operation always returns true.
+\end{frame}
+
+\begin{frame}{Symbolic Data Structures}
+Compound values; built from symbolic values; ladder of generality
+\scriptsize
+\begin{columns}
+        \column{0.5\textwidth}
+    \begin{enumerate}
+        \item $\Sigma^*$ The set of all strings (lists) of letters from the alphabet; used
+        in programming languages such as Snobol, Bash, Makefile, 
+        \begin{itemize}
+            \item $\epsilon \in \Sigma^*$
+            \item $\Sigma \subset \Sigma^*$; if $\sigma\in\Sigma$ and $\alpha\in \Sigma^*$, then $\sigma\alpha\in\Sigma^*$ 
+        \end{itemize}
+    \item $\Sigma^R$ set of all ``ropes" over $\Sigma$
+        \item $\Sigma^T$ The set of all trees over $\Sigma$, e.g., Prolog
+        \begin{itemize}
+        \item If $t_1, t_2, \ldots,t_n \in \Sigma^T$ for  $n\ge0$, 
+            and $\sigma \in \Sigma$ 
+            then $\sigma(t_1,\ldots,t_n) \in \Sigma^T$  
+        \end{itemize}
+        \item  $\Sigma^S$, trees with ``typing''/signature, define set of expressions in a typed programming language, let $ \Sigma = \Sigma_0 \cup \Sigma_1\cup\Sigma_2\cdots$ 
+         then for all $n\ge0$, $\sigma(t_1,\ldots,t_n) \in \Sigma^S$, 
+            but  only if $\sigma\in\Sigma_n$ 
+        \end{enumerate}
+        \column{0.5\textwidth}
+        \begin{enumerate}\setcounter{enumi}{4}
+        
+        \item $\Sigma^L$ set of all items and lists of items/lists, e.g., Mini-Lisp without 
+        dotted pairs
+        \begin{itemize}
+        \item $\Sigma\subset\Sigma^L$
+        \item If $s_1,\ldots,s_n \in\Sigma^L$, then the list
+            $(s_1 \ldots s_n \in \Sigma^L$.
+        \end{itemize}
+    \item $\Sigma^X$ set of all S-expressions over $T$: 
+        \begin{itemize}
+        \item $\Sigma\subset\Sigma^X$, $\epsilon\in \Sigma^X$
+        \item If $\sigma_1,\ldots,\sigma_n \in\Sigma$, then the list
+            $(\sigma_1 \ldots \sigma_n \in \Sigma^L$.
+        \end{itemize}
+    \item $\Sigma^G$ set of all directed graphs with labels from $\Sigma$ 
+        \end{enumerate}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Embedding of Symbolic Data Structure}
+Embedding, is also emulation:
+\begin{itemize}
+    \item Strings $\Sigma^*$ can emulate the alphabet $\Sigma$ (but not vice versa)
+    \item Ropes $\Sigma^R$ can emulate strings $\Sigma^*$ (and vice versa)
+    \item Trees $\Sigma^T$ can emulate ropes $\Sigma^R$ 
+    \item Signature tree $\Sigma^T$ can emulate signature trees $\Sigma^S$ (and vice versa)
+    \item List of lists/items $\Sigma^L$ contains $\Sigma^T$ 
+    \item S-expression $\Sigma^X$ can emulate $\Sigma^L$ 
+    
+\end{itemize}
+
+All these can be defined and may be useful over a singleton alphabet. 
+\end{frame}
+
+\begin{frame}{Definition of S-Expressions}
+\begin{itemize}
+\item $\epsilon \in S^X$, $\epsilon \not \in\Sigma$
+\item $\Sigma \in S^X$
+\item If $x_1,x_2\in\Sigma^S$ then $[x_1.x_2]\in S^x$ (dotted pair)
+\end{itemize}
+\end{frame}
+\begin{frame}{Embedding of Symbolic Data Structure}
+Embedding, is also emulation:
+\begin{itemize}
+    \item Strings $\Sigma^*$ can emulate the alphabet $\Sigma$ (but not vice versa)
+    \item Ropes $\Sigma^R$ can emulate strings $\Sigma^*$ (and vice versa)
+    \item Trees $\Sigma^T$ can emulate ropes $\Sigma^R$ 
+    \item Signature tree $\Sigma^T$ can emulate signature trees $\Sigma^S$ (and vice versa)
+    \item List of lists/items $\Sigma^L$ contains $\Sigma^T$ 
+    \item S-expression $\Sigma^X$ can emulate $\Sigma^L$ 
+    
+\end{itemize}
+
+All these can be defined and may be useful over a singleton alphabet. 
+
+
+\end{frame}
+
+\begin{frame}{Manipulation of S-Expressions}
+Operations:
+\begin{itemize}
+\item Cons: full binary operator 
+\item Car, Cdr: partial unary operators; ``failure'' is a meta-value
+\end{itemize}
+Predicates
+\begin{itemize}
+\item Atom: determine whether $x$ is an atom  
+\item Eq: treat two atoms as symbol and check for equality
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Semantics of S-Expressions}
+Recursive definition, if expression $x\in S^X$ is
+\scriptsize
+\begin{itemize}
+\item $x = \epsilon\not\in\Sigma$ (\texttt{NIL} in Lisp): semantics is $\epsilon$ 
+    (\texttt{NIL} in Lisp)
+    
+\item $x = \sigma\in\Sigma$,  atom: look it up in a symbol table (initially very minimal, or even empty) 
+\item Cons of $x_1$ and $x_2$, i.e., $x= [x_1,x_2]$, apply semantics of $x_1$ as function to evaluated argument $x_2$
+\item Recursion stops if the function or atom are pre-defined; very small set of pre-defined functions and atoms.
+\end{itemize}
+In $\Sigma^L$ , given $\ell\in\Sigma^*$
+\begin{enumerate}
+\item $\ell = \epsilon\not\in\Sigma$, the empty list;  semantics is $\epsilon$ 
+    is as in $S^X$
+\item $\ell = \sigma\in\Sigma$,  semantics  is as in $S^X$, lookup
+\item Non-empty list $(s_0,s_1,\ldots s_n$ (where $n\ge0$),
+    then apply function $s_0$ to list of arguments $(s_1,\ldots s_n$ (where $n\ge0$),
+\end{enumerate}
+In trees , e.g., evaluation of expression in C, Pascal, etc.
+\begin{enumerate}
+\item if $t=\sigma\in\Sigma^T$, lookup as in $S^X$
+        \item If $t= \sigma(t_1,\ldots,t_n) \in \Sigma^T$ semantics
+        of function $\sigma$ (as found in lookup) applied to $t_1,\ldots,t_n$
+\end{enumerate}
+Main concept: function \emph{application}; parameter passing to function application
+make it possible define and then to lookup functions/atoms/symbols which are not pre-defined.
+\end{frame}
+
+\begin{frame}{The Evaluation Function}
+Computes the semantics of an S-expression
+\begin{itemize}
+    \item A mathematical function over the set $\Sigma^X$
+    \item Returns another value in $\Sigma^X$
+    \item Not all $x\in S^X$ have semantics
+    \item Can be implemented by a function/functions in a programming 
+    \item Mathematically partial function: value may be undefined 
+    on some $x\in\S^X$; only two outcomes:
+    \begin{enumerate}
+        \item Another member of $S^X$
+        \item Failure
+    \end{enumerate}
+        There is no notion of order of evaluation
+    \item In programming language may fail, invoking the function: many outcomes:
+    \begin{enumerate}
+        \item Another member of $S^X$
+        \item Failure with an error message (there could be many different errors)
+    \end{enumerate}
+        Order of evaluation may matter may matter
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Evaluation Algorithm in C}
+Some atoms are pre-defined.
+\begin{verbatim}
+  S eval(S s) { 
+    return s.atom() ? lookup(s) : apply(s.car(), s.cdr();
+  }
+}
+\end{verbatim}
+Structure of functions: a list of 3 items:
+    \begin{enumerate}
+        \item Special tag, identifying function type
+        \begin{itemize} 
+           \item Is this function atomic (pre-defined), or should it searched.
+           \item Is this function (pseudo) normal, or it is strict
+        \end{itemize} 
+        \item Arguments:
+        \begin{itemize} 
+           \item List of atoms: names of arguments
+           \item Single atom: name of list of arguments 
+        \end{itemize} 
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{The Application Algorithm in C}
+\begin{verbatim}
+S apply(S f, S actuals) {
+    S before = alist;
+    S lambda = f.eval(); 
+    S result = apply(lambda.$1$(), lambda.$2$(), lambda.$3$(), actuals);
+    alist = before;
+    return result;
+  }
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Auxiliary Apply}
+\begin{verbatim}
+  S apply(S tag, S formals, S body, S actuals) {
+    S arguments = map(actuals, normal(tag) ? identity : eval);
+    if (formals.atom())   
+      bind_item(formals, arguments);
+    else { M("list of arguments",actuals);
+      align(formals, actuals, MISSING_ARGUMENT, REDUNDANT_ARGUMENT);
+      bind_list(formals, arguments);
+    }
+    return (native(tag) ? exec : eval)(body);
+  }
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Aligning Lists}
+\begin{verbatim}
+    S align(S s1, S s2, S e1, S e2) { return  
+      s1.null()  &&  s2.null() ?  NIL0 : 
+     !s1.null()  &&  s2.null() ? s1.error(e1) : 
+      s1.null()  && !s2.null() ? s2.error(e2) : 
+        align(s1.cdr(), s2.cdr(), e1, e2);  
+    }
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Binding L}
+\begin{verbatim}
+    void bind_list(S formals, S arguments) {
+      if (formals.null() || arguments.null()) return; 
+      bind_item(formals.car(), arguments.car());
+      bind_list(formals.cdr(), arguments.cdr());
+    }
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{The A List and Item Binding}
+\begin{verbatim}
+  extern S alist = NIL;
+  extern S bind_item(S k, S v) { return alist = k.cons(v).cons(alist), v; }
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{The A List and Item Binding}
+\begin{verbatim}
+  extern S lookup(S id) { 
+    for (S s = alist; s.pair(); s = s.cdr())
+        if (s.car().car().eq(id))
+          return s.car().cdr(); 
+    return lookup(id, globals); 
+  } 
+  
+  extern S lookup(S id, S list) {
+    return 
+      list.null() ?  id.error(UNDEFINED_ATOM): 
+      list.car().car().eq(id) ? list.car().cdr() : 
+      lookup(id, list.cdr()); 
+  }
+\end{verbatim}
+\end{frame}
+\end{document}
+
+ 

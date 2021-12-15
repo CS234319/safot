@@ -45,37 +45,30 @@ namespace Engine {
   }
 
   using namespace Inner;
+
   S apply(S tag, S formals, S body, S actuals) {
-    ENTER(D(tag,formals, body));
     check(actuals, BAD_ARGUMENTS);
     S arguments = INVOKE(map(actuals, normal(tag) ? identity : eval));
     if (formals.atom())   
       entry(formals, arguments);
-    else { M("list of arguments",actuals);
+    else { 
       check(formals, BAD_PARAMETERS);
       align(formals, actuals, MISSING_ARGUMENT, REDUNDANT_ARGUMENT);
       bind(formals, arguments);
     }
-    return INVOKE( (native(tag) ? exec : eval)(body));
+    return (native(tag) ? exec : eval)(body));
   }
 
   S apply(S f, S actuals) {
     S before = alist;
-    Frame::NAME.record(f);
-    Frame::ACTUALS.record(actuals);
-    S lambda = Frame::LAMBDA.record(f.eval()); 
+    S lambda = f.eval(); 
     lambda.n3() || f.error(BAD_FUNCTION).t();
-    S result = INVOKE(apply(lambda.$1$(), lambda.$2$(), lambda.$3$(), actuals));
+    S result = apply(lambda.$1$(), lambda.$2$(), lambda.$3$(), actuals);
     alist = before;
     return result;
   }
 
   S eval(S s) { 
-    ENTER(M(">>", s));
-    D(alist);
-    D(globals);
-    const S result = INVOKE(s.atom() ? lookup(s) : apply(s.car(), s.cdr())); 
-    EXIT(M("<<", s, result));
-    return result;
+    return s.atom() ? lookup(s) : apply(s.car(), s.cdr()); 
   }
 }
