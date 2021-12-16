@@ -406,7 +406,7 @@ Solving recursive type equations:
 * **Lecture**
     1. [Symbolic Values and Pure Lisp (Cont.)](???)
 * **Tutorial**
-    1. [Prolog - Introduction](Tutorials/prolog/introduction.md)
+    1. [Prolog - Introduction](Tutorials/prolog/introduction.md) --- [pdf-slides](https://github.com/CS234319/safot/blob/master/Material/Tutorials/pdfs/slides/prolog/introduction.pdf)
 * **Submission**: [HW3](https://docs.google.com/document/d/1ILdKh0F0A21O2e8EC2_uFlft2KtHNbTLKMc3uO_4hDI/edit?usp=sharing) \[18.12 23:59\]
 * **HW**: [HW4](???) is published \[18.12\]
 
