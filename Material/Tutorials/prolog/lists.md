@@ -60,6 +60,13 @@ length([_|Tail], N) :-
 #### is_list/1 (predefined)
 
 ```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
+
+```prolog
 is_list([]).
 is_list([X|Xs]) :- is_list(Xs).
 ```
@@ -67,6 +74,13 @@ is_list([X|Xs]) :- is_list(Xs).
 <!--vert-->
 
 #### member/2 (predefined)
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
 
 ```prolog
 member(X, [X|Xs]).
@@ -78,6 +92,13 @@ member(X, [Y|Ys]) :- member(X, Ys).
 #### prefix/2
 
 ```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
+
+```prolog
 prefix([], L).
 prefix([X|Xs], [X|Ys]) :- prefix(Xs, Ys).
 ```
@@ -85,6 +106,13 @@ prefix([X|Xs], [X|Ys]) :- prefix(Xs, Ys).
 <!--vert-->
 
 #### suffix/2
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
 
 ```prolog
 suffix(Xs, Xs).
@@ -102,6 +130,13 @@ del(X, L, R)
 `R` is `L` without one of the occurrences of `X`
 
 ```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
+
+```prolog
 del(X, [X|Xs], Xs).
 del(X, [Y|Ys], [Y,Zs]) :- del(X, Ys, Zs).
 ```
@@ -111,12 +146,26 @@ del(X, [Y|Ys], [Y,Zs]) :- del(X, Ys, Zs).
 #### insert/3
 
 ```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
+
+```prolog
 insert(X, L, R) :- del(X, R, L).
 ```
 
 <!--vert-->
 
 #### append/3
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
 
 ```prolog
 append([], Ys, Ys).
@@ -128,12 +177,26 @@ append([X|Xs], Ys, [X|Zs]) :- append(Xs, Ys, Zs).
 #### define member/2 using append/3
 
 ```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
+
+```prolog
 member(X, Xs) :- append(_, [X|_], Xs).
 ```
 
 <!--vert-->
 
 #### sublist/2
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
 
 ```prolog
 sublist(Xs, Ys) :-
@@ -156,6 +219,13 @@ sublist(Xs, Ys) :-
 <!--vert-->
 
 #### permutation/2
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
 
 ```prolog
 permutation([], []).
