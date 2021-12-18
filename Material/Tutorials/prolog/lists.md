@@ -53,10 +53,6 @@ length([_|Tail], N) :-
 
 ---
 
-### TODO: CLP(FD) with lists
-
----
-
 ### list predicates
 
 <!--vert-->
