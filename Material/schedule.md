@@ -397,14 +397,14 @@ Solving recursive type equations:
 ## Week 6 \[5.12-11.12\]
 
 * **Lecture**
-    1. [Symbolic Values and Pure Lisp](???)
+    1. TBD
 * **Tutorial**
     1. [mini-lisp](Tutorials/theory/mini-lisp.md)
 
 ## Week 7 \[12.12-18.12\]
 
 * **Lecture**
-    1. [Symbolic Values and Pure Lisp (Cont.)](???)
+    1. TBD
 * **Tutorial**
     1. [Prolog - Introduction](Tutorials/prolog/introduction.md) --- [pdf-slides](https://github.com/CS234319/safot/blob/master/Material/Tutorials/pdfs/slides/prolog/introduction.pdf)
 * **Submission**: [HW3](https://docs.google.com/document/d/1ILdKh0F0A21O2e8EC2_uFlft2KtHNbTLKMc3uO_4hDI/edit?usp=sharing) \[18.12 23:59\]
@@ -413,7 +413,7 @@ Solving recursive type equations:
 ## Week 8 \[19.12-25.12\]
 
 * **Lecture**
-    1. [Prolog](???)
+    1. TBD
 * **Tutorial**
     1. [Prolog - Lists](Tutorials/prolog/lists.md)
     2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
@@ -433,7 +433,7 @@ Solving recursive type equations:
 * **Lecture**
     1. TBD
 * **Tutorial**
-    1. TBD
+    1. [MiniLisp](Tutorials/minilisp/eval.pdf)
 
 ## Week 11 \[9.1-15.1\]
 
