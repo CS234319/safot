@@ -23,22 +23,22 @@ dotted pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr ש�
 נשתמש ב-error כדי להגדיר את הפונקציה \E|bind|. זוהי פונקציה רקורסיבית אשר תשמש כחלק
 ממימוש אלגוריתם השיערוך בליספ. תפקידה במנגנון הוא בשיערוך של ביטוי המכיל הפעלה
 של פונקציה, כמו למשל בביטוי
-\begin{LISP}
+\begin{MINI}
   (exists name '(atom car cdr cond cons eq error eval set))
-\end{LISP}
+\end{MINI}
 שנתקלנו בו קודם במימוש של is-atomic באמצעות \E|exists|. בקריאה ל-exists,
 יש לקשור בין \E|x| ו-\E|xs|, שמות הפרמטרים הפורמליים לפונקציה, ובין ערכי
 הארגומנטים האקטואליים. בהפעלה זו ערכי הארגומנטים הם:
 \begin{itemize}
   ✦ \E|name|, או, ליתר דיוק, ביטוי ה-\E|S| שאותו מציין האטום \E|name|.
   ✦ הרשימה
-  \begin{LISP}
+  \begin{MINI}
     (atom car cdr cond cons eq error eval set)
-  \end{LISP}
+  \end{MINI}
   או ליתר דיוק הביטוי המתקבל מתוצאת השיערוך של
-  \begin{LISP}
+  \begin{MINI}
   '(atom car cdr cond cons eq error eval set)
-  \end{LISP}
+  \end{MINI}
 \end{itemize}
 
 הפונקציה bind אחראית לביצוע קישור זה בזמן הפעלה של פונקציה בתהליך השיערוך.
@@ -177,7 +177,7 @@ bind מחזירה רשימת קישורים חדשה, המכילה רשימה ש
 עלינו עוד להדגים כיצד נעשית קריאה לפונקציה. לשם כך, נשתמש בפונקציה המוגדרת מראש
 defun, המשמשת להגדרת פונקציות חדשות, כדי להגדיר את הפונקציה הרקורסיבית append
 המוסיפה פריט בסופה של רשימה 
-\begin{LISP}
+\begin{MINI}
 (defun append(x xs) ; append item x to end of list of xs
   (cond ((null xs) ; no more xs, recursion base¢…¢
           (cons x nil)) ; ¢…¢ return a list containing x
@@ -185,17 +185,17 @@ defun, המשמשת להגדרת פונקציות חדשות, כדי להגדי�
           (cons
             (car xs) ; prepend first of xs to¢…¢
             (append x (cdr xs)))))) ; ¢…¢ result of recursive call on remaining xs
-\end{LISP}
+\end{MINI}
 
 לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
 ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
-\begin{LISP}
+\begin{MINI}
 (lambda (x xs)
   (cond ((null xs) (cons x nil))
         (t (cons
               (car xs)
               (append x (cdr xs))))))
-\end{LISP}
+\end{MINI}
 
 וקישור זה יתווסף לתחילת ה-\E|a-list|. ויזואלית,
 אם ה-a-list נראתה טרם ההגדרה כך,
@@ -254,38 +254,38 @@ defun, המשמשת להגדרת פונקציות חדשות, כדי להגדי�
   \end{tikzpicture}
 \end{LTR}
 בקריאה ל-append כמו
-\begin{LISP}
+\begin{MINI}
 (append 'a '(b c))
-\end{LISP}
+\end{MINI}
 
 פונקציית השיערוך תאתר בתוך ה-a-list את ביטוי ה-$λ$ הקשור לפונקציה, כלומר
 את הביטוי
-\begin{LISP}
+\begin{MINI}
 (lambda
   (x xs)
   (cond ((null xs) (x))
         (t (cons
               (car x)
               (append x (cdr xs))))))
-\end{LISP}
+\end{MINI}
 ותפרק אותו לשלושת
-מרכיביו: האטום lambda המזהה את הביטוי, רשימת הפרמטרים הפורמליים \lisp{(x xs)}
+מרכיביו: האטום lambda המזהה את הביטוי, רשימת הפרמטרים הפורמליים \mini{(x xs)}
 והביטוי לחישוב,
-\begin{LISP}
+\begin{MINI}
 (cond ((null xs) (x))
       (t (cons
             (car x)
             (append x (cdr xs)))))
-\end{LISP}
+\end{MINI}
 אותו נסמן לרגע ב-$ϕ$. הקריאה לפונקציה append מתבצעת על ידי שיערוך הפרמטרים
-האקטואליים, כלומר שיערוך של הפרמטר \lisp{'a} לכדי הערך \lisp{A} ושיערוך של
-הפרמטר \lisp{'(b c)} לכדי הערך \lisp{(B C)}, ולאחר מכן חישוב הביטוי~$ϕ$ בתנאים
-שבהם הפרמטר x משתערך לאטום \lisp{a} והפרמטר xs משתערך לרשימה \lisp{(b c)}.
+האקטואליים, כלומר שיערוך של הפרמטר \mini{'a} לכדי הערך \mini{A} ושיערוך של
+הפרמטר \mini{'(b c)} לכדי הערך \mini{(B C)}, ולאחר מכן חישוב הביטוי~$ϕ$ בתנאים
+שבהם הפרמטר x משתערך לאטום \mini{a} והפרמטר xs משתערך לרשימה \mini{(b c)}.
 
 קריאה לפונקציה בפרוצדורת השיערוך בליספ נעשית באמצעות יצירת קישורים בין שמות
 הפרמטרים הפורמליים וערכי הפרמטרים האקטואליים (פרמטרים אקטואליים נקראים גם
 \ע|ארגומנטים|). במקרה של הפונקציה append מתווספים שני \E|dotted pairs|
-\lisp{(x.a)} ו-\lisp{(xs.(b c))} ל-\E|a-list|.
+\mini{(x.a)} ו-\mini{(xs.(b c))} ל-\E|a-list|.
 ויזואלית, ה-a-list תראה כך
 \begin{LTR}
   \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
@@ -323,7 +323,7 @@ defun, המשמשת להגדרת פונקציות חדשות, כדי להגדי�
 
 כאשר הפונקציה append קוראת לעצמה רקורסיבית בפעם הראשונה, יתבצע קישור נוסף בין
 הפרמטרים האקטואליים והפורמליים, וגם זאת על ידי תוספת של שני \E|dotted pairs| נוספים:
-\lisp{(x.a)} ו-\lisp{(xs.(c))}.
+\mini{(x.a)} ו-\mini{(xs.(c))}.
 
 לאחר ביצוע קישורים אלו, ה-a-list תראה כך
 \begin{LTR}
@@ -363,7 +363,7 @@ defun, המשמשת להגדרת פונקציות חדשות, כדי להגדי�
 כלומר הקישורים החדשים יסתירו את הקישורים הקודמים.
 
 בקריאה הרקורסיבית השניה של append לעצמה, יווצרו שני קישורים נוספים,
-\lisp{(x.a)} ו-\lisp{(xs.())}, וה-a-list תראה כך
+\mini{(x.a)} ו-\mini{(xs.())}, וה-a-list תראה כך
 \begin{LTR}
   \usetikzlibrary{chains,arrows}
   \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
@@ -512,9 +512,9 @@ evaluate המקבלת ביטוי~\E|S|, וסביבה במבנה של \E|a-list|,
 ארגומנטים שיש להעביר לפונקציה. אם ה-car הוא שם של פונקציה אטומית, נדרש טיפול
 מיוחד, ואז evaluate קוראת לפונקציה evaluate-atomic אשר מבצעת זאת.
 בכל מקרה אחר, evaluate מוצאת את הפונקציה אותה יש להפעיל על ידי השיערוך
-\begin{LISP}
+\begin{MINI}
 (evaluate (car S-expression) a-list)
-\end{LISP}
+\end{MINI}
 קריאה רקורסיבית זו תחזיר את ביטוי ה-$λ$ אותו יש להפעיל על הפרמטרים. evaluate
 גם מחשבת את הפרמטרים באמצעות הקריאה-\T|(cdr S-expression)|, וקוראת לפונקציה
 apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.

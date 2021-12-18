@@ -10,15 +10,13 @@ LATEX_COMMAND  =  lualatex
 LATEX_FLAGS    =  -shell-escape -file-line-error- -synctex=1 # -halt-on-error
 LATEX          = $(LATEX_COMMAND) $(LATEX_FLAGS)
 LOCALTEXMF     =  ~/texmf   #  Comment or  change  if necessary.
-MAIN           =  mini-lisp
+MAIN           =  00
 SOURCES        =  $(wildcard *.sty *.tex) $(LISTINGS) Makefile
 TARGETS        =  $(MAIN).pdf 
 TMP 					 := $(shell mktemp -d)
 
 
 
-mini-lisp.pdf: mini-lisp.tex
-	latexmk mini-lisp.pdf
 
 latex:
 
@@ -183,3 +181,5 @@ G1 := $(shell ls -ls $(garbage)| tee  $(TMP)/files.lst | awk "{t+=$$$$6}END{prin
 garbage+:=$(wildcard  00/ )
 LATEX_COMMAND=xelatex
 
+mini-lisp.pdf: mini-lisp.tex
+	latexmk mini-lisp.pdf

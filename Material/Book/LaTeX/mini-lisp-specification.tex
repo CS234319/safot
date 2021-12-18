@@ -102,8 +102,8 @@
 \begin{enumerate}
 ✦ ארבעה סימני פיסוק:~$⌘[$,~$⌘]$,~$⌘($, ו-$⌘)$.
 ✦ שני אופרטורים: האופרטור הבינארי \E|dot|, אשר מסומן בנקודה ($⌘.$), אשר
-  הוא שם אחר לפונקציה הדו-מקומית \lisp{cons}, והאופרטור האונארי \E|quote|
-  המסומן בסימן המרכאה ($⌘'$), אשר הוא שם אחר לפונקצית הספריה החד-מקומית \lisp{quote}
+  הוא שם אחר לפונקציה הדו-מקומית \mini{cons}, והאופרטור האונארי \E|quote|
+  המסומן בסימן המרכאה ($⌘'$), אשר הוא שם אחר לפונקצית הספריה החד-מקומית \mini{quote}
 ✦ מספר בלתי חסום של אטומים, אשר ניתן לחשוב עליהם הן כמזהים והן כמילולונים.
 \end{enumerate}
 
@@ -134,11 +134,11 @@
 
 §§ קדימויות ואסוציאטיביות 
 הדקדוק~\ref{eq:eval} הוא אמנם דקדוק מדויק של מיני-ליספ, אך הוא אינו חד משמעי.
-ניתן לגזור מהדקדוק את התכנית \lisp{a.b.c} בשני אופנים שונים:
+ניתן לגזור מהדקדוק את התכנית \mini{a.b.c} בשני אופנים שונים:
 \begin{enumerate}
 ✦ \ע|גזירה שמאלית ביותר| (\E|left most derivation|) בה מחליפים בכל פעם את
   המשתנה הדקדוקי השמאלי ביותר. \פנה|איור:שמאלית| מתאר גזירה זו, ואת עץ
-  הגזירה של התכנית \lisp{a.b.c} הנוצר ממנה.
+  הגזירה של התכנית \mini{a.b.c} הנוצר ממנה.
 
 \begin{figure}[H]
   \caption[גזירה שמאלית ביותר]{גזירה שמאלית ביותר של התכנית \LR{a.b.c} על פי הדקדוק הרב-משמעי של
@@ -190,7 +190,7 @@
 
 ✦ \ע|גזירה ימנית ביותר| (\E|right most derivation|) בה מחליפים בכל פעם את
 המשתנה הדקדוקי הימני ביותר: \פנה|איור:שמאלית| מתאר גזירה זו, ואת עץ הגזירה של
-התכנית \lisp{a.b.c} הנוצר ממנה.
+התכנית \mini{a.b.c} הנוצר ממנה.
 
 \begin{figure}[H]
   \caption[גזירה ימנית ביותר]{
@@ -245,9 +245,9 @@
 \end{quote}
 \end{enumerate}
 
-התכנית \lisp{'a.b} מדגימה דו משמעות מסוג אחר: בגזירה שמאלית ביותר נקבל כי
-האופרטור quote מופעל על האטום \lisp{a}; בגזירה ימנית ביותר, האופרטור מופעל על
-הזוג \lisp{a.b}.
+התכנית \mini{'a.b} מדגימה דו משמעות מסוג אחר: בגזירה שמאלית ביותר נקבל כי
+האופרטור quote מופעל על האטום \mini{a}; בגזירה ימנית ביותר, האופרטור מופעל על
+הזוג \mini{a.b}.
 
 כדי להימנע מדו-משמעות נשכתב את הדקדוק כך:
 \newcommand \Or{\;|\;}
@@ -282,9 +282,9 @@
 האטום 42 הוא סדרה (בת שתי אותיות) שאין לה משמעות משלה. הא, ותו לא! במיני-ליספ
 לאטום זה יכול לקבל משמעות בשתי דרכים: אם באמצעות קריאה לפונקציה
 \E|set|,
-\begin{LISP}
+\begin{MINI}
 (set '42 'answer)
-\end{LISP}
+\end{MINI}
 ואם בדרך של קריאה לפונקציה, בה נעשית קשירה של שמות פרמטרים לערכי הארגומנטים
 שבהפעלה. אטום מציין את ערכו אחד הפרמטרים. כאשר ניתנת לאטום משמעות כזו, ניתן
 לחשוב עליו כמזהה או אף כמשתנה. אולם, במיני-ליספ אין לאטום כל משמעות אלא אם כן
@@ -352,75 +352,75 @@
     atom/1                                            &
     eager                                             &
     בדיקה אם הפרמטר הוא אטום                        &
-    \lisp{(atom nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom t)}~$⇒$ \lisp{T} \newline
-    \lisp{(atom '(a a))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(atom 'a)}~$⇒$ \lisp{T} ⏎
+    \mini{(atom nil)}~$⇒$ \mini{T} \newline
+    \mini{(atom t)}~$⇒$ \mini{T} \newline
+    \mini{(atom '(a a))}~$⇒$ \mini{NIL} \newline
+    \mini{(atom 'a)}~$⇒$ \mini{T} ⏎
 
     \rownumber                                        &
     car/1                                             &
     eager                                             &
     חילוץ האיבר הראשון ברשימה                         &
-    \lisp{(car '(b.a))}~$⇒$ \lisp{B.A} \newline
-    \lisp{(car '(b a))}~$⇒$ \lisp{B} \newline
-    \lisp{(car '(a))}~$⇒$ \lisp{A} \newline
-    \lisp{(car 'a)}~$⇒$ \text{✗} \newline
-    \lisp{(car t)}~$⇒$ \text{✗} \newline
-    \lisp{(car ())}~$⇒$ \text{✗} ⏎
+    \mini{(car '(b.a))}~$⇒$ \mini{B.A} \newline
+    \mini{(car '(b a))}~$⇒$ \mini{B} \newline
+    \mini{(car '(a))}~$⇒$ \mini{A} \newline
+    \mini{(car 'a)}~$⇒$ \text{✗} \newline
+    \mini{(car t)}~$⇒$ \text{✗} \newline
+    \mini{(car ())}~$⇒$ \text{✗} ⏎
 
     \rownumber                                        &
     cdr/1                                             &
     eager                                             &
     חילוץ שארית הרשימה, כלומר הרשימה ללא האיבר הראשון &
-    \lisp{(cdr '(a.b))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cdr '(a b))}~$⇒$ \lisp{(b)} \newline
-    \lisp{(cdr '(b))}~$⇒$ \lisp{NIL} \newline
-    \lisp{(cdr t)}~$⇒$ ✗ \newline
-    \lisp{(cdr ())}~$⇒$ ✗ \newline
-    \lisp{(cdr nil)}~$⇒$ ✗ ⏎
+    \mini{(cdr '(a.b))}~$⇒$ \mini{NIL} \newline
+    \mini{(cdr '(a b))}~$⇒$ \mini{(b)} \newline
+    \mini{(cdr '(b))}~$⇒$ \mini{NIL} \newline
+    \mini{(cdr t)}~$⇒$ ✗ \newline
+    \mini{(cdr ())}~$⇒$ ✗ \newline
+    \mini{(cdr nil)}~$⇒$ ✗ ⏎
 
     \rownumber                                        &
     cond/*                                    &
     normal                                            &
     הכללה של פקודת \E|if|. &
-    \lisp{(cond (t 'A))}~$⇒$ \lisp{A} \newline
-    \lisp{(cond (nil 'A) (t 'B))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \lisp{B} \newline
-    \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \lisp{nil}\newline
-    \lisp{(cond)}~$⇒$ \lisp{nil} ⏎
+    \mini{(cond (t 'A))}~$⇒$ \mini{A} \newline
+    \mini{(cond (nil 'A) (t 'B))}~$⇒$ \mini{B} \newline
+    \mini{(cond (nil 'A) (t 'B) (t 'C))}~$⇒$ \mini{B} \newline
+    \mini{(cond (nil 'A) (nil 'B) (nil 'C))}~$⇒$ \mini{nil}\newline
+    \mini{(cond)}~$⇒$ \mini{nil} ⏎
 
     \rownumber                                        &
     cons/2                                            &
     eager                                             &
     הוספת איבר בתחילת רשימה                           &
-    \lisp{(cons 'a '(b c))}~$⇒$ \lisp{(A B C)} \newline
-    \lisp{(cons 'b nil)}~$⇒$ \lisp{(B)} \newline
-    \lisp{(cons 'a 'b)}~$⇒$ \lisp{(A.B)} ⏎
+    \mini{(cons 'a '(b c))}~$⇒$ \mini{(A B C)} \newline
+    \mini{(cons 'b nil)}~$⇒$ \mini{(B)} \newline
+    \mini{(cons 'a 'b)}~$⇒$ \mini{(A.B)} ⏎
 
     \rownumber                                        &
     eq/2                                              &
     eager                                             &
     בדיקה אם שני הפרמטרים הם אטומים השווים זה לזה     &
-    \lisp{(eq t t)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq t nil)}~$⇒$ \lisp{NIL} \newline
-    \lisp{(eq nil nil)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq 'a 'a)}~$⇒$ \lisp{T} \newline
-    \lisp{(eq '(a a) '(a a))}~$⇒$ \lisp{NIL} ⏎
+    \mini{(eq t t)}~$⇒$ \mini{T} \newline
+    \mini{(eq t nil)}~$⇒$ \mini{NIL} \newline
+    \mini{(eq nil nil)}~$⇒$ \mini{T} \newline
+    \mini{(eq 'a 'a)}~$⇒$ \mini{T} \newline
+    \mini{(eq '(a a) '(a a))}~$⇒$ \mini{NIL} ⏎
 
     \rownumber                                        &
     error/*                                   &
     eager                                             &
     הדפסת כל הפרמטרים ועצירת ביצוע התכנית             &
-    \lisp{(error)}~$⇒$ ✗ \newline
-    \lisp{(error A)}~$⇒$ ✗ \newline
-    \lisp{(error 'my-message-on X)}~$⇒$ ✗ ⏎
+    \mini{(error)}~$⇒$ ✗ \newline
+    \mini{(error A)}~$⇒$ ✗ \newline
+    \mini{(error 'my-message-on X)}~$⇒$ ✗ ⏎
 
     \rownumber                                        &
     set/2                                             &
     eager                                             &
     יצירת קישור בין אטום ובין ביטוי~\E|S|. &
-    \lisp{(set 'a '(b c))}~$⇒$ \lisp{(b c)}\newline
-    \lisp{(set 'b nil)}~$⇒$ \lisp{NIL}
+    \mini{(set 'a '(b c))}~$⇒$ \mini{(b c)}\newline
+    \mini{(set 'b nil)}~$⇒$ \mini{NIL}
     \label{atomic:count}
  ⏎
     \bottomrule
@@ -454,7 +454,7 @@
   \כיתוב|הפונקציות המוגדרות מראש במיני-ליספ|
   \תגית|טבלה:מראש|
   \footnotesize
-  \def\lisp#1{#1}
+  \def\mini#1{#1}
   \setlength{\tabcolsep}{1pt}%
   \rowcolors{2}{blue!10}{white}%
   \begin{tabularx}\textwidth{>{\scriptsize}r>{\setLR\scriptsize}c>{\scriptsize}c

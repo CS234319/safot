@@ -56,7 +56,7 @@ Note: Common Lisp language is (mostly) a superset of Mini Lisp.
   \end{itemize}
 \end{block}
 \begin{block}{In this course…}
-  We implement function \lisp{eval} using atomic and library functions only.
+  We implement function \mini{eval} using atomic and library functions only.
 \end{block}
 \end{frame}
 
@@ -76,26 +76,26 @@ Note: Common Lisp language is (mostly) a superset of Mini Lisp.
     \begin{description}
       \item[car/1] Quiz:
         \begin{itemize}
-          \item \lisp{(car '(b.a))}?
-          \item \lisp{(car '(b a))}?
-          \item \lisp{(car '(a))}?
-          \item \lisp{(car 'a)}?
-          \item \lisp{(car ())}?
+          \item \mini{(car '(b.a))}?
+          \item \mini{(car '(b a))}?
+          \item \mini{(car '(a))}?
+          \item \mini{(car 'a)}?
+          \item \mini{(car ())}?
         \end{itemize}
       \item[cdr/1] Quiz:
         \begin{itemize}
-          \item \lisp{(cdr '(a.b))}?
-          \item \lisp{(cdr '(a b))}?
-          \item \lisp{(cdr '(b))}?
-          \item \lisp{(cdr t)}?
-          \item \lisp{(cdr ())}?
-          \item \lisp{(cdr nil)}?
+          \item \mini{(cdr '(a.b))}?
+          \item \mini{(cdr '(a b))}?
+          \item \mini{(cdr '(b))}?
+          \item \mini{(cdr t)}?
+          \item \mini{(cdr ())}?
+          \item \mini{(cdr nil)}?
         \end{itemize}
       \item[cons/2] Quiz:
         \begin{itemize}
-          \item \lisp{(cons 'a '(b c))}?
-          \item \lisp{(cons 'b nil)}?
-          \item \lisp{(cons 'a 'b)}?
+          \item \mini{(cons 'a '(b c))}?
+          \item \mini{(cons 'b nil)}?
+          \item \mini{(cons 'a 'b)}?
         \end{itemize}
 \end{description}
 \end{frame}
@@ -104,26 +104,26 @@ Note: Common Lisp language is (mostly) a superset of Mini Lisp.
     \begin{description}
       \item[atom/1] Quiz:
         \begin{itemize}
-          \item \lisp{(atom nil)}?
-          \item \lisp{(atom t)}?
-          \item \lisp{(atom '(a a))}?
-          \item \lisp{(atom 'a)}?
+          \item \mini{(atom nil)}?
+          \item \mini{(atom t)}?
+          \item \mini{(atom '(a a))}?
+          \item \mini{(atom 'a)}?
         \end{itemize}
       \item[eq/1] Quiz:
         \begin{itemize}
-          \item \lisp{(eq t t)}?
-          \item \lisp{(eq t nil)}?
-          \item \lisp{(eq nil nil)}?
-          \item \lisp{(eq 'a 'a)}?
-          \item \lisp{(eq '(a a) '(a a))}?
+          \item \mini{(eq t t)}?
+          \item \mini{(eq t nil)}?
+          \item \mini{(eq nil nil)}?
+          \item \mini{(eq 'a 'a)}?
+          \item \mini{(eq '(a a) '(a a))}?
         \end{itemize}
       \item[cond/n] Quiz:
         \begin{itemize}
-          \item \lisp{(cond (t 'A))}?
-          \item \lisp{(cond (nil 'A) (t 'B))}?
-          \item \lisp{(cond (nil 'A) (t 'B) (t 'C))}?
-          \item \lisp{(cond (nil 'A) (nil 'B) (nil 'C))}?
-          \item \lisp{(cond)}?
+          \item \mini{(cond (t 'A))}?
+          \item \mini{(cond (nil 'A) (t 'B))}?
+          \item \mini{(cond (nil 'A) (t 'B) (t 'C))}?
+          \item \mini{(cond (nil 'A) (nil 'B) (nil 'C))}?
+          \item \mini{(cond)}?
         \end{itemize}
 \end{description}
 \end{frame}
@@ -132,14 +132,14 @@ Note: Common Lisp language is (mostly) a superset of Mini Lisp.
 \begin{description}
       \item[set/2] Quiz:
         \begin{itemize}
-          \item \lisp{(set 'a '(b c))}?
-          \item \lisp{(set 'b nil)}?
+          \item \mini{(set 'a '(b c))}?
+          \item \mini{(set 'b nil)}?
         \end{itemize}
       \item[error/2] Quiz:
         \begin{itemize}
-          \item \lisp{(error)}?
-          \item \lisp{(error A)}?
-          \item \lisp{(error 'my-error 'message)}?
+          \item \mini{(error)}?
+          \item \mini{(error A)}?
+          \item \mini{(error 'my-error 'message)}?
         \end{itemize}
 \end{description}
 \end{frame}
@@ -273,7 +273,7 @@ Predefined atoms, are just like functions that take no argument,
 \end{block}
 
 \begin{block}{Note}
-  \lisp{(quote X)} is equivalent to \lisp{'X}.
+  \mini{(quote X)} is equivalent to \mini{'X}.
 \end{block}
 \end{frame}
 

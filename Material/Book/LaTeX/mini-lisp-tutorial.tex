@@ -34,10 +34,10 @@
 אטומים המוגדרים מראש בשפה. במיני-ליספ מספיק להניח כי ה-\E|a-list| מכילה קישורים
 בעבור שני האטומים שבקבוצה~$\mathcal B$ בלבד, כלומר הרשימה תיתן משמעות ל-\E|t| ו-\E|nil|.
 התוכן המינימלי של ה-\E|a-list| הוא
-\begin{LISP}
+\begin{MINI}
 ((t.t)
      (nil.nil))
-\end{LISP}
+\end{MINI}
 
 הפריט הראשון ברשימה הוא dotted pair הקובע שהמשמעות של האטום \T|t| היא אטום זה
 עצמו. הפריט השני ברשימה קובע שמשמעותו של האטום \T|nil| היא אטום זה עצמו גם כן.
@@ -83,9 +83,9 @@ FOO
 (BAR BAZ)
 \end{SAMPLE}
 נשים לב לכך שהשיערוך של הביטוי
-\begin{LISP}
+\begin{MINI}
 (set (quote foo) (quote (bar baz)))
-\end{LISP}
+\end{MINI}
 אינו במטרה לחשב ערך כלשהו, אלא במטרה לקשור שם לערך. נזכר שבאופן כללי פעולת
 השיערוך בליספ כוללת שלושה סוגים של פעולות: מציאת משמעות של שם, הגדרת משמעות של
 שם, וחישוב שהוא הפעלת פונקציה על ביטוי~\E|S| או ביטויי~\E|S|. בכל זאת, כל
@@ -105,18 +105,18 @@ FOO
 
 הפונקציה set מוסיפה זוג לתחילת ה-\E|a-list|: לכן, אם התוכן של רשימת
 ה-\E|a-list| לפני הקריאה ל-set היה
-\begin{LISP}
+\begin{MINI}
 ((t.t)
      (nil.nil))
-\end{LISP}
+\end{MINI}
 
 \pagebreak[3]
 אזי אחרי הקריאה תוכן רשימה זו יהיה
-\begin{LISP}
+\begin{MINI}
 ((foo.(bar baz))
      (t.t)
      (nil.nil))
-\end{LISP}
+\end{MINI}
 
 ויזואלית, נשרטט את רשימת ה-\E|a-list| לפני הקריאה כך,
 \begin{LTR}
@@ -183,12 +183,12 @@ FOO
 (BAZ)
 \end{SAMPLE}
 הרי התוכן של ה-a-list יהיה
-\begin{LISP}
+\begin{MINI}
 ((foo.((baz)))
      (foo.(bar baz))
      (t.t)
      (nil.nil))
-\end{LISP}
+\end{MINI}
 וויזואלית כך,
 \begin{LTR}
   \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
@@ -261,13 +261,13 @@ FOO
 'FOO
 \end{SAMPLE}
 גם סימן המרכאה לציון quote גם הוא יכול להיות מקונן, ואת הביטוי
-\begin{LISP}
+\begin{MINI}
 (quote ((quote a) (quote b)))
-\end{LISP}
+\end{MINI}
 ניתן לכתוב בקיצור כך
-\begin{LISP}
+\begin{MINI}
 '('a 'b)
-\end{LISP}
+\end{MINI}
 גם אם לא נשתמש בסימן ה-\E|quote| האינטרפרטר יעשה זאת בעבורינו:
 המקרים שבהם יש צורך להשתמש בפונקציה quote מקוננת אינם נפוצים, אולם הם מופיעים
 מדי פעם.
@@ -286,12 +286,12 @@ FOO
 הפונקציה defun מאפשרת להגדיר פונקציות חדשות. נגדיר לדוגמה פונקציה בשם mirror
 המקבלת פרמטר x שהוא ביטוי~\E|S| מורכב, ומחזירה ביטוי מורכב אחר שבו ה-car וה-cdr
 שב-x הוחלפו.
-\begin{LISP}
+\begin{MINI}
 (defun mirror ; define a new function named mirror
   (x) ; which expects a single parameter, named x
   (cons (cdr x) (car x)); and whose body is this S-expression
 )
-\end{LISP}
+\end{MINI}
 אנו רואים שהפונקציה defun מקבלת שלושה פרמטרים: שם הפונקציה אותה יש להגדיר,
 רשימת הפרמטרים ה\ע|פורמליים| לפונקציה, וגוף הפונקציה. הדוגמה גם מראה שהערות
 בליספ מתחילות בסימן~";" (נקודה ופסיק) ונמשכות עד סוף השורה.
@@ -306,17 +306,17 @@ FOO
 מקובל לקרוא ל-\E|a-list| גם סביבה \E|(environment)|. הסביבה היא אוסף של קישורים
 בין שמות למשמעותם, והיא זו שנותנת משמעות לשמות. ראינו כבר שהפונקציה \E|set|
 מוסיפה קישור לסביבה. גם הפונקציה \E|defun| מוסיפה קישור לסביבה: שיערוך הביטוי
-\begin{LISP}
+\begin{MINI}
 (defun mirror (x) (cons (cdr x) (car x)))
-\end{LISP}
+\end{MINI}
 מביא לקשירה בין השם mirror ובין מימוש הפונקציה. שיערוך הביטוי \T|(mirror
 '(a.b))| משתמש בשם זה, למציאת מימוש הפונקציה.
 
 המימוש של פונקציה כולל את ביטוי ה-\E|S| המהווה את גוף הפונקציה. בדוגמה שלנו ביטוי
 זה הוא
-\begin{LISP}
+\begin{MINI}
 (cons (cdr x) (car x))
-\end{LISP}
+\end{MINI}
 אבל, מלבד גוף הפונקציה המימוש כולל גם את רשימת הפרמטרים. כל \ע|פרמטר|
 הוא אטום, אשר בזמן הפעלת הפונקציה יוחלף בביטוי-\E|S|. האטום מהווה לכן את שמו של
 הביטוי. הביטוי המחליף את האטום קרוי \ע|ארגומנט|. כיוון שערכם של הפרמטרים
@@ -330,9 +330,9 @@ FOO
 
 הצירוף של גוף הפונקציה ושמות הפרמטרים אליה נקרא ביטוי-$λ$. ביטוי כזה
 מייצג פונקציה אנונימית. ביטוי ה-$λ$ בעבור mirror הוא
-\begin{LISP}
+\begin{MINI}
   (lambda (x) (cons (cdr x) (car x)))
-\end{LISP}
+\end{MINI}
 
 באופן כללי ביטוי~$λ$ הוא רשימה בת שלושה פריטים בדיוק:
 \ספרר
@@ -342,7 +342,7 @@ FOO
 לפונקציה.
 ✦ גוף הפונקציה, כלומר הביטוי שהשיערוך שלו אחרי הקשירה בין הפרמטרים
 הפורמליים לאקטואליים, יתן את ערכה של הפונקציה. בביטוי שלמעלה גוף הפונקציה הוא
-\lisp{(cons (cdr x) (car x))}.
+\mini{(cons (cdr x) (car x))}.
 ===
 
 נשים לב ששם הפונקציה אינו חלק מביטוי ה-$λ$, שכן ביטוי זה מציין פונקציה
@@ -352,38 +352,38 @@ FOO
 באמצעות ה-\E|a-list|:
 
 אם תוכן ה-\E|a-list| הוא
-\begin{LISP}
+\begin{MINI}
 (
   (foo.(bar baz))
   (t.t)
   (nil.nil)
 )
-\end{LISP}
+\end{MINI}
 אז לאחר שיערוך הביטוי
-\begin{LISP}
+\begin{MINI}
 (defun mirror (x)
   (cons (cdr x) (car x)))
-\end{LISP}
+\end{MINI}
 תוכן ה-\E|a-list| יהיה
-\begin{LISP}
+\begin{MINI}
 ((mirror.
         (lambda (x)
         (cons (cdr x) (car x))))
      (foo.(bar baz))
      (t.t)
      (nil.nil))
-\end{LISP}
+\end{MINI}
 
 ניתן במיני-ליספ לייצר ביטוי-$λ$ מבלי להשתמש ב-\E|defun|, בשימוש בפונקציה
 \E|quote|,
-\begin{LISP}
+\begin{MINI}
   '(lambda (x) (cons (cdr x) (car x)))
-\end{LISP}
+\end{MINI}
 ולכן ניתן להגדיר את הפונקציה mirror תוך שימוש ב-set במקום ב-\E|defun|,
-\begin{LISP}
+\begin{MINI}
 (set mirror
   '(lambda (x) (cons (cdr x) (car x))))
-\end{LISP}
+\end{MINI}
 לחילופין, ניתן להשתמש בפונקציה lambda המקבלת שני פרמטרים: הראשון שבהם הוא רשימה
 של אטומים, המייצגים את שמות הפרמטרים הפורמליים לפונקציה, והשני הוא גוף הפונקציה
 אשר אותו יש לשערך בקריאה לפונקציה, בסביבה הכוללת קישורים בין הפרמטרים הפורמליים
@@ -394,10 +394,10 @@ FOO
 (LAMBDA (X) (CONS (CDR X) (CAR X)))
 \end{SAMPLE}
 ניתן לחקות את הפעולה של defun באמצעות set ושימוש בביטויי~$λ$.
-\begin{LISP}
+\begin{MINI}
 (set mirror
   (lambda (x) (cons (cdr x) (car x))))
-\end{LISP}
+\end{MINI}
 לאחר הקישור בין השם mirror ובין ביטוי ה-$λ$ המתאר את מימוש הפונקציה \E|mirror|,
 האטום mirror ישוערך לביטוי~$λ$ זה. בקריאה \T|(mirror '(a.b))| תוחלף המילה
 mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור בין הפרמטרים האקטואליים
@@ -432,22 +432,22 @@ mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור 
 
 נשתמש ב-cond כדי להגדיר פונקציה zcar המחזירה את ה-car של הפרמטר אם
 הוא ביטוי מורכב, ואת הפרמטר עצמו אם הוא אטום
-\begin{LISP}
+\begin{MINI}
 (defun zcar(x)
   (cond ; check a number of options
     ((atom x) x) ; if parameter x is an atom, return it
     (t (car x)) ; else, if 'T' (all other cases), return its car
 ))
-\end{LISP}
+\end{MINI}
 גוף הפונקציה zcar הוא הביטוי
-\begin{LISP}
+\begin{MINI}
   (cond ((atom x) x) (t (car x)))
-\end{LISP}
+\end{MINI}
 שהוא קריאה לפונקציה cond עם שני פרמטרים שכל אחד מהם הוא רשימה בת שני איברים:
 \begin{LTR}
   \begin{itemize}
-    ✦ \lisp{((atom x) x)}
-    ✦ \lisp{(t car(x))}
+    ✦ \mini{((atom x) x)}
+    ✦ \mini{(t car(x))}
   \end{itemize}
 \end{LTR}
 cond היא פונקציה רב מקומית המקבלת מספר כלשהו של פרמטרים שכל אחד מהם נקרא
@@ -466,21 +466,21 @@ cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השי�
 ✦ אם cond ממצה את רשימת ה-\E|test-forms| מבלי להיתקל באף \E|test-condition|
 שמתקיים, הרי cond מחזירה את הערך \E|nil|.
 ===
-על פי תיאור זה של הפונקציה \E|cond|, הביטוי \begin{LISP}
+על פי תיאור זה של הפונקציה \E|cond|, הביטוי \begin{MINI}
   (cond ((atom x) x) (t (car x)))
-\end{LISP}
+\end{MINI}
 שבגוף הפונקציה zcar ישוערך לכן ל-x אם x הוא אטום, ול-\E|car| של \E|x|, אם~x
 איננו אטום.
 
 מקובל להשתמש תמיד באטום \E|t| דווקא כדי לציין את התנאי שמתקיים תמיד, כלומר חלק
 ה-else של פקודת ה-\E|if|, אבל טכנית ניתן היה להגדיר את zcar תוך שימוש בביטוי
 אחר שערכו אינו \E|nil|, למשל
-\begin{LISP}
+\begin{MINI}
 (defun zcar(x)
   (cond ((atom x) x) ('(any S expression) (car x))))
-\end{LISP}
+\end{MINI}
 הנה דוגמה נוספת בה cond מופעלת עם מספר רב יותר של test-forms
-\begin{LISP}
+\begin{MINI}
 (defun is-atomic(name) ; determine whether name denotes a atomic function
   (cond ((eq name 'atom) t)
         ((eq name 'car) t)
@@ -492,7 +492,7 @@ cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השי�
         ((eq name 'eval) t)
         ((eq name 'set) t)
         (t nil)))
-\end{LISP}
+\end{MINI}
 הפונקציה is-atomic משתמשת בסידרה של test-forms כדי לבדוק אם הפרמטר שלה הוא
 אטום המציין פונקציה אטומית. אם תנאי זה מתקיים, הפונקציה מחזירה את האטום
 \E|t|. (מסיבות טכניות אנו מניחים כאן שגם \T|eval| היא פונקציה אטומית.)
@@ -515,13 +515,13 @@ cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-for
 במימוש זה, אטום הוא שמה של פונקציה אטומית אם הוא מצוי בתוך רשימה של האטומים
 המציינות פונקציה אטומית. הפונקציה exists עצמה אינה מצויה במיני-ליספ, אבל
 קל לממש אותה ברקורסיה.
-\begin{LISP}
+\begin{MINI}
 (defun exists (x xs) ; determine whether atom x is in list xs
   (cond ; three case to consider
     ((eq xs nil) nil) ; (i) list of xs is exhausted
     ((eq x (car xs)) t) ; (ii) item x is first in xs
     (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
-\end{LISP}
+\end{MINI}
 הפונקציה \T|exists| מקבלת שני פרמטרים: הפרמטר הראשון הוא אטום, המסומן ב-\T|x|
 והפרמטר השני הוא רשימה של אטומים המסומנת ב־\T|xs|. על פי הגדרה זו, הפונקציה
 \T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת ב-\T|xs|,
@@ -607,9 +607,9 @@ command)| של שפות אחרות. למעשה, cond מכלילה את האופ�
 
 הפונקציה quote שבמיני-ליספ אינה אטומית שכן ניתן להגדיר אותה באמצעות ביטוי
 ה-nlambda הפשוט הבא
-\begin{LISP}
+\begin{MINI}
 (nlambda (x) x)
-\end{LISP}
+\end{MINI}
 לא ניתן להגדיר פונקציות שהן normal באמצעות \E|defun|, אך ניתן להוסיף את הפונקציה
 quote לרשימת ה-a-list באמצעות set
 \begin{LIBRARY}
@@ -627,9 +627,9 @@ quote לרשימת ה-a-list באמצעות set
 \end{LIBRARY}
 כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters
 ו-\E|body|. הפונקציה אינה משערכת פרמטרים אלו ומחזירה ביטוי lambda המוגדר על ידם
-\begin{LISP}
+\begin{MINI}
   ('lambda parameters body)
-\end{LISP}
+\end{MINI}
 גם הפונקציה nlambda מסייעת להגדרת ביטויי nlambda באופן דומה, וניתן להגדירה
 באמצעות
 \begin{LIBRARY}
@@ -638,17 +638,17 @@ quote לרשימת ה-a-list באמצעות set
 כלומר, גם הפונקציה nlambda היא פונקציה שמקבלת שני פרמטרים שאינם משוערכים
 (\E|parameters| ו-\E|body|) ומחזירה ביטוי nlambda המוגדר על ידי
 שני הפרמטרים הללו
-\begin{LISP}
+\begin{MINI}
   ('nlambda parameters body)
-\end{LISP}
+\end{MINI}
 לאחר הגדרה זו של הפונקציה nlambda הכתיב
-\begin{LISP}
+\begin{MINI}
   (nlambda x y)
-\end{LISP}
+\end{MINI}
 זהה לכתיב
-\begin{LISP}
+\begin{MINI}
   ('nlambda x y)
-\end{LISP}
+\end{MINI}
 ללא תלות בערכיהם של x ו-\E|y|.
 
 ניתן גם להגדיר את הפונקציה defun באמצעות ביטוי nlambda
@@ -669,37 +669,37 @@ quote לרשימת ה-a-list באמצעות set
 \E|lambda|.
 
 לאחר שהגדרנו את הפונקציה ndefun נוכל להגדיר את quote באמצעותה
-\begin{LISP}
+\begin{MINI}
 (ndefun quote(x) x)
-\end{LISP}
+\end{MINI}
 הפונקציות \E|quote|, \E|defun|, \E|ndefun|, \E|lambda| ו-\E|nlambda| אינן
 משערכות את הפרמטרים שלהן אף פעם. כאשר יש צורך בשיערוך הפרמטרים ניתן לקרוא
 לפונקציה \E|eval|. נגדיר לדוגמה את הפונקציה setq אשר מאפשרת לקשור ערך לאטום ללא
 צורך לבצע quoting על שם האטום
-\begin{LISP}
+\begin{MINI}
 (ndefun setq(a value)
   (set a (eval value)))
-\end{LISP}
+\end{MINI}
 השימוש בסמנטיקה שהיא normal אינו מתעורר רק בהגדרת פונקציות כמו quote ו-defun
 המשמשות לביצוע הגדרות. נגדיר למשל את הפונקציה \T|?:| אשר מתנהגת באופן דומה
 לאופרטור בשם זה בשפת~\CPL
-\begin{LISP}
+\begin{MINI}
 (ndefun ?: (condition true-value false-value)
   (cond ((eval condition) (eval true-value))
         (t (eval false-value))))
-\end{LISP}
-כדוגמה נוספת, נגדיר פונקציות \lisp{||} ו-\lisp{&&} הדומות לאופרטורים בשמות אלו
+\end{MINI}
+כדוגמה נוספת, נגדיר פונקציות \mini{||} ו-\mini{&&} הדומות לאופרטורים בשמות אלו
 בשפת~\CPL, כלומר חישוב של הפונקציות הבוליאניות של and ו-or בשיטה הידועה בשם
 \E|short-circuit|: ראשית שיערוך של הפרמטר הראשון, ואם זה קובע את תוצאת הפונקציה
 הבוליאנית, הימנעות משיערוך הפרמטר השני. אחרת, ערכה של הפונקציה הבוליאנית הוא תוצאת
 שיערוך הפרמטר השני
-\begin{LISP}
+\begin{MINI}
 (ndefun && (x y)
   (cond ((eval x) (eval y))
         (t nil)))
 (ndefun || (x y)
   (cond ((eval x) t)
         (t (eval y))))
-\end{LISP}
+\end{MINI}
 
 

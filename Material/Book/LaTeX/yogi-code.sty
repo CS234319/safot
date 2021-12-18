@@ -109,13 +109,13 @@
 % General style for numbered displayed code. Same as "display" style,
 % but with minimal spacing for the numbering.
 \lstdefinestyle{numbered}{
-    style=display,
-    numbers=left,
-    stepnumber=1,
-    numbersep=2pt,
-    xleftmargin=3ex,
-    numberblanklines=false,
-    numberstyle=\tiny\bf,
+  style=display,
+  numbers=left,
+  stepnumber=1,
+  numbersep=2pt,
+  xleftmargin=3ex,
+  numberblanklines=false,
+  numberstyle=\tiny\bf,
 }
 
 
@@ -125,10 +125,32 @@
   keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
 }
 
+\lstnewenvironment{MINI}[1][]{%
+  \pagebreak[3]%
+  \lstset{language=Mini,style=display,#1}
+  \ensureLTR
+}{\pagebreak[3]}%
+
+\newcommand\mi[1]{%
+  \begingroup
+  \lstset{language=Mini,style=inline}%
+  \LR{\lstinline/##1/}%
+  \endgroup
+}
+
+\newcommand\mini[1]{%
+  \begingroup
+  \lstset{language=Mini,style=inline}%
+  \LR{\lstinline/##1/}%
+  \endgroup
+}
+
+
+
 \lstdefinelanguage{Chic}{
   language=C++,
   keywords=[3]{Integer},
-  keywords=[2]{Var, Let},
+  keywords=[2]{Variable, Value},
   keywords=[1]{goto,try,catch,return}
 }
 
@@ -304,8 +326,6 @@ recover,
 % #3 Name of the environment of the newly defined language.
 %	#4 Name of the command for inlining language code.
 %	#5 Name of the short version of the command for inlining language code.
-
-\newLanguage{Mini}{}{LISP}{lisp}{ls}
 
 \newLanguage{Ada}{}{ADA}{ada}{adaShort}
 \newLanguage{[AspectJ]Java}{morekeywords={remotecall,shakein,declare,precedence,parents}}{AJ}{aj}{ajx}
