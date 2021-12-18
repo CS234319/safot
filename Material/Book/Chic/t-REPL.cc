@@ -5,7 +5,7 @@
 #import  <fcntl.h>
 #import  <stdio.h>
 #import  "gtest/gtest.h"
-#import  "repl.h"
+#import  "REPL.h"
 #import  "builtin.h"
 #import  "recorder.h"
 #import  "read.h"

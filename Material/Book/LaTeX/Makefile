@@ -10,15 +10,21 @@ LATEX_COMMAND  =  lualatex
 LATEX_FLAGS    =  -shell-escape -file-line-error- -synctex=1 # -halt-on-error
 LATEX          = $(LATEX_COMMAND) $(LATEX_FLAGS)
 LOCALTEXMF     =  ~/texmf   #  Comment or  change  if necessary.
-MAIN           =  00
+MAIN           =  mini-lisp
 SOURCES        =  $(wildcard *.sty *.tex) $(LISTINGS) Makefile
 TARGETS        =  $(MAIN).pdf 
 TMP 					 := $(shell mktemp -d)
 
 
+
+mini-lisp.pdf: mini-lisp.tex
+	latexmk mini-lisp.pdf
+
 latex:
 
 .PHONY: help
+
+
 
 help:     
 	@echo $(if $(need-help),,Type \'$(MAKE) help\' to get help)

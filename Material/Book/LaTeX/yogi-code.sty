@@ -390,14 +390,12 @@ recover,
 
 \lstdefinelanguage{Chic}{
   language=C++,
-  deletecomment=[s]{/*}{*/},
   keywords=[3]{Integer},
-  keywords=[2]{Var, Let},
+  keywords=[2]{Variable, Value},
   keywords=[1]{goto,try,catch,return},
-  escapeinside={/**}{*/},
-  escapebegin={/** \bgroup\fixNewLine\renewcommand\baselinestretch{1.1}
-  \commentsfont\color{commentColor!40!black}\slshape},
-  escapeend={\egroup*/}
+  rangeprefix=|\ ,
+  rangesuffix=\ |,
+  deletecomment=[s]{/*}{*/},
 }
 
 \lstdefinestyle{excerpt}{

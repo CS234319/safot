@@ -8,17 +8,16 @@
 
 const S __00(list(__0)), __12(list(__1,__2)), __123(list(__1,__2,__3));
 
-namespace Engine {
-  namespace Inner {
+namespace Engine::Builtins {
+  namespace {
     S evaluate_cond(S s) {  
     D(s);
     return s.null() ?  s :
         s.car().atom() ? s.car().error(COND):
          s.car().car().eval().t() ? s.car().cdr().car().eval():
            evaluate_cond(s.cdr()) ;
+    }
   }
-}
-using namespace Inner;
 
 /** An anonymous static singleton encapsulates initialization */
 namespace {
@@ -67,10 +66,8 @@ extern S builtin() {
 
 extern S t(S s) { return s.t() ? T : NIL; }  
 namespace {
-  inline S v1() { return alist.car().cdr(); } 
-  inline S v2() { return alist.cdr().car().cdr(); } 
-  inline S v3() { return alist.cdr().cdr().car().cdr(); } 
  // Elementary: 
+ using namespace Engine::alist;
   inline S atom() { return t(v1().atom()); }
   inline S car() { return v1().car(); }
   inline S cdr() { return v1().cdr(); }
@@ -85,15 +82,15 @@ namespace {
         v1().cdr().null() ? v1().car().error(ERROR) : /* Empty list, or not a list at all */  
         v1().cdr().error(v1().car()); 
   }
-  inline S set() { return Engine::set(v2(), v1()); }
+  inline S set() { alist::globals::set(v2(), v1()); }
   // Library I: 
   inline S null() { return t(v1().null()); } 
   inline S quote() {  return v1(); } 
   // Library II: 
   inline S lambda() { return list(LAMBDA, v2(), v1()); }
   inline S nlambda() {  return list(NLAMBDA, v2(), v1()); }
-  inline S defun() { return Engine::set(v3(), lambda()); }
-  inline S ndefun() { return Engine::set(v3(), nlambda()); }
+  inline S defun() { return alist::globals::set(v3(), lambda()); }
+  inline S ndefun() { return alist::globals::set(v3(), nlambda()); }
 }
 
 extern S exec(S key) {
@@ -121,7 +118,7 @@ extern S exec(S key) {
       { NLAMBDA, nlambda }, 
     // Backdoor functions
       { GLOBALS, Dump::globals },
-      { RESET, Engine::reset },
+      { RESET, Engine::alist::reset },
     // 1 end marker
       { NIL, 0}
     };

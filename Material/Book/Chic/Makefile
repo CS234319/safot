@@ -11,7 +11,7 @@ HEADERS 	= $(sort $(filter %.h,$(shell cat .depend)))
 
 MINI-LISP = 00 dump $(REPL)  
 TESTER    = atoms t-main dump $(TESTS) $(REPL)
-REPL      = repl $(READ) $(EVALUATE) $(PRINT)
+REPL      = REPL $(READ) $(EVALUATE) $(PRINT)
 EVALUATE  = $(ENGINE) $(MACHINE) 
 
 MACHINE  	=  fluentons S pairs strings
@@ -21,7 +21,7 @@ READ      =  parser read stack tokenizer
 
 TESTS += dump test t-a-list t-alist-global-local t-apply t-ast t-basics t-book t-defun 
 TESTS += t-error t-kernel t-eval t-eval-atomic t-eval-cond t-evaluate-primitive t-fluentons t-pairs 
-TESTS += t-parser t-repl t-stack t-strings t-tokenizer
+TESTS += t-parser t-REPL t-stack t-strings t-tokenizer
 
 t: $(addsuffix .o,$(TESTER)) 
 	$(CXX) $(LDFLAGS) -o $@ $^ -lgtest -lpthread # Link all objects

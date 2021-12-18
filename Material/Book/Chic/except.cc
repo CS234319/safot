@@ -7,7 +7,7 @@
 extern bool die(Pair p) { 
   err(), print("Error "), print(p.cdr), print(" on "), println(p.car), out();
   Dump::calls(); 
-  Engine::clear();
+  Engine::alist::clear();
   throw p;
 }
 
@@ -16,7 +16,7 @@ extern bool die(S s) {
   err(); 
   print("Error "), println(s), out();
   Dump::calls(); 
-  Engine::clear();
+  Engine::alist::clear();
   throw s;
 }
 

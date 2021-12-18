@@ -13,7 +13,14 @@
 #define construct
 #define destruct ~
 #define by(...) :__VA_ARGS__{}
-#define Var
+#define Var auto
+
+#define Value const auto
+#define Variable auto 
+
+#define collaterally(x,y) ((x),(y),0)
+
+#define assert(x) ( (x) ?  1 : 0 )
 
 #define array(name,type,min,max) \
     static type buffer##__LINE__[(max)-(min)+1]; \
