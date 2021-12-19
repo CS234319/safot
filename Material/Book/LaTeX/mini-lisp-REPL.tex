@@ -1,4 +1,4 @@
-\begin{adjustbox}{max width=0.9\textwidth,center}
+\begin{adjustbox}{max width=\textwidth,center}
   \begin{minipage}\textwidth
     \begin{LTR}
       \def\codesize{\normalsize}
@@ -10,16 +10,16 @@
         frame=none,
         backgroundcolor=\color{white},
         escapeinside={/**}{*/},
-        escapebegin={/** \bgroup\fixNewLine\renewcommand\baselinestretch{1.1}
-            \commentsfont\color{commentColor!10!black}\slshape},
-        escapeend={\egroup*/},
+        escapebegin={\bgroup\fixNewLine\renewcommand\baselinestretch{1.1}
+            \commentsfont\color{black}\slshape},
+        escapeend={\egroup},
       ]{../Chic/repl.cc}
     \end{LTR}
   \end{minipage}
 \end{adjustbox}
 \par
-\begin{adjustbox}{max width=0.9\textwidth,center}
-  \begin{minipage}{1.5\textwidth}
+\begin{adjustbox}{max width=\textwidth,center}
+  \begin{minipage}{1.15\textwidth}
     \begin{LTR}
       \def\codesize{\small}
       \lstinputlisting[

@@ -127,16 +127,15 @@
 
 \lstnewenvironment{MINI}[1][]{%
   \pagebreak[3]%
-  \lstset{language=Mini,style=display,#1}
+  \lstset{language=Mini,style=display,#1}%
   \ensureLTR
 }{\pagebreak[3]}%
 
-\newcommand\mi[1]{%
-  \begingroup
-  \lstset{language=Mini,style=inline}%
-  \LR{\lstinline/##1/}%
-  \endgroup
-}
+\lstnewenvironment{SAMPLE}[1][]{%
+  \ensureLTR
+  \pagebreak[3]%
+  \lstset{language=Mini,style=display,#1}%
+}{\pagebreak[3]}%
 
 \newcommand\mini[1]{%
   \begingroup
@@ -144,8 +143,6 @@
   \LR{\lstinline/##1/}%
   \endgroup
 }
-
-
 
 \lstdefinelanguage{Chic}{
   language=C++,
@@ -390,7 +387,6 @@ recover,
 \newcommand\jtlstr[1]{\text{\lstinline[style=JTLstring]{#1}}}
 
 \lstnewenvironment{JTLstr}{\lstset{style=JTLstring}}{}
-\lstnewenvironment{SAMPLE}{\lstset{language=Mini}}{}
 
 
 \lstnewenvironment{SQLprog}{\lstset{style=SQL}}{}

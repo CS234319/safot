@@ -69,7 +69,7 @@
 %\numberwithin{equation}{section}
 %\numberwithin{figure}{section}
 
-\graphicspath{{Images/}}
+\graphicspath{Images/}
 
 \setmainlanguage{hebrew}
 \setmainfont{Linux Libertine O}
@@ -77,6 +77,9 @@
 \setotherlanguage{arabic}
 
 \newfontfamily\hebrewfont[Script=Hebrew]{David CLM}
+\usepackage{enumitem}
+\setlist[itemize,1]{label={\fontfamily{cmr}\fontencoding{T1}\selectfont\textbullet}}
+
 
 
 % Hebrew Font: Use precisely one option
@@ -116,7 +119,7 @@
 }%
 
 \def\E|#1|{{\LR{#1}}}
-\def\T|#1|{{\mini{#1}}}
+\def\T|#1|{{\LR{\mini{#1}}}}
 
 \def\ע|#1|{{\bfseries#1}}
 \def\פנה|#1|{\cref{#1}}

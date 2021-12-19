@@ -23,9 +23,10 @@
 }{%
   \csname endfilecontents*\endcsname%
   \pagebreak[3]%
-  \LTR
+  \bgroup
+  \ensureLTR
   \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{olive!10}]{\fileName}%
-  \endLTR
+  \egroup
   \pagebreak[3]%
   \openin\tempFile=\fileName
   \begingroup\endlinechar=-1%
@@ -49,10 +50,15 @@
 }{%
   \csname endfilecontents*\endcsname%
   \pagebreak[3]%
-  \LTR
-  \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{orange!20}]{\fileName}%
-  \endLTR
+  \bgroup
+  \ensureLTR
+  \lstinputlisting[language=Mini,style=display,backgroundcolor=\color{orange!10}]{\fileName}%
+  \egroup
+  jjljllj
+  שלום כיתה א
   \pagebreak[3]%
+  שלום כיתה אחרי שבירת עמוד
+\\
   \newread \tempFile % open the file to read from
   \openin \tempFile=\fileName
   \begingroup\endlinechar=-1
