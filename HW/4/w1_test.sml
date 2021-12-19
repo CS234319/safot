@@ -1,14 +1,23 @@
 use "w1.sml";
-use "utils.sml";
 
-open W1;
+open AST;
 
-val d = insert empty 2 #"b";
-val d = insert d 1 #"a";
-val d = insert d 3 #"c";
+val ~ = Atom;
+val $ = List;
+fun ` x = List [~"QUOTE", x]
+fun (x + y) = S_Expression.Cons (x, y);
+val ! = S_Expression.Atom;
 
-assert ((noexcept (fn () => find d 2)) = #"b");
+val QUOTE = ~"QUOTE";
+val CONS = ~"CONS";
+val ATOM = ~"ATOM";
+val EQ = ~"EQ";
+val NIL = ~"NIL";
+val T = ~"T";
+val A = ~"A";
+val B = ~"B";
 
-except (fn () => find d 4);
+fun eval x = SOME (W1.eval (A_List.make ()) x) handle W1.Error => NONE;
 
-except (fn () => remove empty "s");
+val test_1 = eval ($[CONS, `A, `B]) = SOME (!"A" + !"B");
+val test_2 = eval ($[CONS, `A, $[ATOM, `B]]) = SOME (!"A" + !"T");
