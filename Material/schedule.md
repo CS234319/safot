@@ -413,7 +413,7 @@ Solving recursive type equations:
 ## Week 8 \[19.12-25.12\]
 
 * **Lecture**
-    1. TBD
+    1. [Elad's lecture](Tutorials/pdfs/slides/theory/rehearsal-lecture.pdf)
 * **Tutorial**
     1. [Prolog - Lists](Tutorials/prolog/lists.md)
     2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
