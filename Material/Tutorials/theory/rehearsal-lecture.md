@@ -198,7 +198,9 @@ languages with nominal equivalence: Java, Pascal, and more.
 
 <!--vert-->
 
-### evaluation methods
+# evaluation methods
+
+<!--vert-->
 
 we'll now discuss another topic in PLs: evaluation methods.
 
@@ -262,6 +264,149 @@ NOTE: assuming == evaluates its left argument first, "b\na\nb\n" will be printed
 
 <!--vert-->
 
+# minilisp
+
+<!--vert-->
+
+s-expression: either an atom, or a pair of s-expressions `(a.b)`
+
+decomposition:
+
+```lisp
+(car (a.b)) ; returns a
+(cdr (a.b)) ; returns b
+```
+
+trying to use `car` or `cdr` on an atom will throw an error
+
+a special atom: `NIL` 
+
+<!--vert-->
+
+- a list in minilisp is an s-expression with a special form
+
+- it is either `NIL`, or `(a.l)`, where `a` is an atom and `l` is a list
+
+- not all s-expressions are lists
+
+- list notation: `(a b c)`
+
+<!--vert-->
+
+in minilisp, the atom `t` represents the boolean value `true`, and the atom `NIL` represents the boolean value `false`
+
+for example, the function `atom` checks if its argument is an atom:
+
+```lisp
+(atom NIL) ; returns t
+(atom a) ; returns t
+(atom (a.b)) ; returns NIL
+```
+
+<!--vert-->
+
+the function `eq` checks if its arguments are atoms that are equal:
+
+```lisp
+(eq a a) ; returns t
+(eq a b) ; returns NIL
+(eq (a.b) (a.b)) ; returns NIL
+```
+
+<!--vert-->
+
+the function `null` checks if its argument is `NIL`:
+```lisp
+(null NIL) ; returns t
+(null (a.b)) ; returns NIL
+(null a) ; returns NIL
+```
+
+<!--vert-->
+
+the function `cond` returns the `cdr` of its first argument whose `car` is `t`
+
+```lisp
+(cond (nil (a.b)) (t (c.d)) (t (e.f))) ; returns (c.d)
+```
+
+<!--vert-->
+
+### list evaluation in minilisp
+
+in minilisp, by default, every list will be interpreted as a function call.
+
+the list `(a b c)` will be interpreted as applying the function `a` on the list `(b c)`
+
+in general, for the list `l`, apply the function `(car l)` on arguments `(cdr l)`
+
+<!--vert-->
+
+for example, the list `(+ 1 2)` in lisp will evaluate to 3
+
+if we don't want this to happen, we put a quote before the list: `'(+ 1 2)`. now it's just a list
+
+<!--vert-->
+
+the function `set` creates a binding between an atom and an S-Expression:
+
+```lisp
+(set 'a '(c d)) ; creates a binding between 'a and (c d)
+```
+
+<!--vert-->
+
+the function `defun` defines a function with a name, arguments, and body:
+
+```lisp
+(defun f x (x.x)) ; creates a function f that receives an argument x and returns (x.x)
+```
+
+<!--vert-->
+
+### exercise
+
+define the function `exists `in minilisp that takes an atom and a list and checks if the atom is in the list
+
+example:
+
+```lisp
+(exists 'a '(a b c)) ; returns t
+(exists 'd '(a b c)) ; returns NIL
+```
+
+<!--vert-->
+
+```lisp
+
+```
+<!-- .element: data-thebe-executable-sml -->
+
+NOTE: ```(defun exists (x xs) (cond ((eq xs nil) nil) ((eq x (car xs)) t) (t (exists x (cdr xs))))) ```
+
+<!--vert-->
+### exercise
+
+define the function `equals_full` that takes two s-expressions and checks if they are equal structurally
+
+example:
+
+```lisp
+(equals_full '(a b c) '(a b c)) ; returns t
+(equals_full '(a b c) '(a b d)) ; returns NIL
+```
+
+<!--vert-->
+
+```lisp
+
+```
+<!-- .element: data-thebe-executable-sml -->
+
+NOTE: ```(defun equals_full (x y) (cond ((eq x y) t) ((atom x) NIL) ((atom y) NIL) ((equals_full (car x) (car y)) (equals_full (cdr x) (cdr y))))) ```
+
+<!--vert-->
+
 # SML exam questions
 
 <!--vert-->
@@ -273,7 +418,7 @@ consider the following declarations given in ML. what will ML respond to these d
 <!--vert-->
 
 ```SML
-fun f a b = f b a
+fun f a b = f b a;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
@@ -298,7 +443,19 @@ fun f a b c = (a b (raise E1(5))) handle E1(x) => x + c;
 ```
 <!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
 
-NOTE: val f = fn : ('a -> 'b -> int) -> 'a -> int -> int
+NOTE: exception E1 of int, val f = fn : ('a -> 'b -> int) -> 'a -> int -> int
+
+<!--vert-->
+
+(not in the original exam)
+
+```SML
+exception E1 of int;
+fun f (E1(x)) = if x = 1 then raise E1(x + 1) else x;
+```
+<!-- .element: data-thebe-executable-sml data-language="text/x-ocaml" -->
+
+NOTE: exception E1 of int, val f = fn : exn -> int, match nonexhaustive
 
 <!--vert-->
 
