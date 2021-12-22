@@ -136,10 +136,12 @@ X in 0..sup, indomain(X).
 
 <!--vert-->
 
-`label` is just like `indomain` but for more than one variable
+`label` is just like `indomain` but for a list of variables
 
 ```prolog
+:- use_module(library(clpfd)).
 
+0 #=< N, N #< 17, 0 #< A, 0 #< B, N * N #= A * A + B * B, label([N, A, B]).
 ```
 
 ---
@@ -165,6 +167,13 @@ you can use the predicate `repeat/3`. `repeat(N, C, L)` is true iff:
 
 * `N` is a conrete non-negative integer
 * `L` is a list of `N` `C`s
+
+<!--vert-->
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
 
 <!--vert-->
 
