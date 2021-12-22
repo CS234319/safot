@@ -138,7 +138,7 @@ del(X, L, R)
 
 ```prolog
 del(X, [X|Xs], Xs).
-del(X, [Y|Ys], [Y,Zs]) :- del(X, Ys, Zs).
+del(X, [Y|Ys], [Y|Zs]) :- del(X, Ys, Zs).
 ```
 
 <!--vert-->
