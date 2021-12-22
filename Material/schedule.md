@@ -415,8 +415,8 @@ Solving recursive type equations:
 * **Lecture**
     1. [Elad's lecture](Tutorials/pdfs/slides/theory/rehearsal-lecture.pdf)
 * **Tutorial**
-    1. [Prolog - Lists](Tutorials/prolog/lists.md)
-    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
+    1. [Prolog - Lists](Tutorials/prolog/lists.md) --- [pdf-slides](Tutorials/pdfs/slides/prolog/lists.pdf)
+    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md) --- [pdf-slides](Tutorials/pdfs/slides/prolog/clp.pdf)
 
 ## Week 9 \[26.12-1.1\]
 
