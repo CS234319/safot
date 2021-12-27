@@ -134,6 +134,16 @@ X in 0..sup, indomain(X).
 % ERROR: Arguments are not sufficiently instantiated
 ```
 
+<!--vert-->
+
+`label` is just like `indomain` but for a list of variables
+
+```prolog
+:- use_module(library(clpfd)).
+
+0 #=< N, N #< 17, 0 #< A, 0 #< B, N * N #= A * A + B * B, label([N, A, B]).
+```
+
 ---
 
 ### question
@@ -153,11 +163,22 @@ change(21, [10, 5, 1, 1, 1, 1, 1, 1]).
 
 <!--vert-->
 
+you can use the predicate `repeat/3`. `repeat(N, C, L)` is true iff:
+
+* `N` is a conrete non-negative integer
+* `L` is a list of `N` `C`s
+
+<!--vert-->
+
+```prolog
+...
+```
+<!-- .element: data-codeblock-editable data-language="text/x-prolog" -->
+
+<!--vert-->
+
 ```prolog
 :- use_module(library(clpfd)).
-
-repeat(0, _, []) :- !.
-repeat(N, C, [C|L]) :- N1 #= N - 1, repeat(N1, C, L).
 
 build([], []).
 build([[N,C]|T], L) :- repeat(N, C, Xs), build(T, Ys), append(Xs, Ys, L).

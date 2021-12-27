@@ -1,0 +1,438 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{yogi-code}[2011/02/01 v0.3
+  Print out code excerpts in various programming languages
+]
+
+\RequirePackage{amstext}
+\RequirePackage{times}
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+
+% \RequirePackage{yogi-lines}
+
+\providecommand\kk[1]{\textcolor{keywordColor}{\text{\textup{\textbf{\texttt{#1}}}}}}
+\providecommand\cc[1]{\textcolor{Sepia}{\text{\textup{\textbf{\texttt{#1}}}}}}
+
+\newcommand\@codedisplayspace{2pt}
+
+\DeclareOption{terse}{}
+\DeclareOption{verbose}{}
+\newcommand\codesize\scriptsize
+\DeclareOption{normalsize}{\renewcommand\codesize\normalsize}
+\DeclareOption{small}{\renewcommand\codesize\small}
+\DeclareOption{large}{\renewcommand\codesize\large}
+\DeclareOption{Large}{\renewcommand\codesize\Large}
+\DeclareOption{LARGE}{\renewcommand\codesize\LARGE}
+\DeclareOption{huge}{\renewcommand\codesize\huge}
+\DeclareOption{Huge}{\renewcommand\codesize\Huge}
+\DeclareOption{scriptsize}{\renewcommand\codesize\scriptsize}
+\DeclareOption{footnotesize}{\renewcommand\codesize\footnotesize}
+\DeclareOption{tiny}{\renewcommand\codesize\tiny}
+\DeclareOption{dense}{\renewcommand\@codedisplayspace{0pt}}
+\newcommand\inlinesize{\normalsize}
+\ProcessOptions
+
+\providecommand\ensureLR[1]{\ifdefined\LR\LR{#1}\else{#1}\fi}
+\providecommand\ensureLTR{\ifdefined\setLTR\setLTR\fi}
+
+\lstset{defaultdialect=[GNU]C++}
+
+% These two macros are defined for quick and trouble free placement of short
+% code and keywords of any programming language within the document.
+
+
+\ifdefined\LR
+  \def\@LR#1{\LR{#1}}%
+\else
+  \def\@LR#1{#1}%
+\fi
+
+  \def\cd#1{\begingroup
+          \listingsfont
+          \inlinesize
+          \upshape
+          \@LR{#1}%
+          \endgroup
+          }
+                                                
+\newcommand\kw[1]{\cd{\textbf{#1}}}
+                 
+
+
+% Begin with generating a general purpose code style. Use a mono-spaced font
+% for everything but comments.  Keywords are bold face, strings are in italics,
+% while comments are in italics roman font. The escape character is back-quote.
+
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{annotationColor}{rgb}{0.39,0.39,0.39}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{commentColor}{rgb}{0.25,0.50,0.37}
+\definecolor{javadocColor}{rgb}{0.25,0.37,0.75}
+\definecolor{jTagColor}{rgb}{0.50,0.62,0.75}
+\definecolor{eTagColor}{rgb}{0.50,0.62,0.75}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47} 
+\definecolor{darkblue}{rgb}{0.1,0.1,0.9}
+
+\lstdefinestyle{code}{
+    keepspaces=true,
+    basicstyle={\listingsfont\codesize},
+    stringstyle={\listingsfont\itshape\color{stringColor}\codesize},
+    commentstyle={\commentsfont\slshape\color{commentColor}\codesize},
+    keywordstyle={\listingsfont\bfseries\color{keywordColor}\codesize},
+    keywordstyle={[2]\listingsfont\bfseries\color{red!80!black}\codesize},
+    keywordstyle={[3]\listingsfont\bfseries\color{blue!80!black}\codesize},
+    showstringspaces=false,
+    backgroundcolor=\color{yellow!20},
+    frame=lines,
+    escapechar=¢,
+}
+\lstdefinestyle{inline}{
+    basicstyle={\listingsfont\inlinesize},
+    stringstyle={\listingsfont\itshape\inlinesize},
+    commentstyle={\commentsfont\slshape\inlinesize},
+    keywordstyle={\listingsfont\bfseries\inlinesize},
+    showstringspaces=false,
+    escapechar=⌘,
+}
+
+% Second general style for displayed code. Same as "code" style, but with
+% minimal spacing around the displayed code
+
+\lstdefinestyle{display}{
+    style=code,
+    columns={[c]fullflexible},
+    xleftmargin=1ex,
+    aboveskip=\@codedisplayspace,
+    belowskip=\@codedisplayspace,
+}
+
+% General style for numbered displayed code. Same as "display" style,
+% but with minimal spacing for the numbering.
+\lstdefinestyle{numbered}{
+  style=display,
+  numbers=left,
+  stepnumber=1,
+  numbersep=2pt,
+  xleftmargin=3ex,
+  numberblanklines=false,
+  numberstyle=\tiny\bf,
+}
+
+
+\lstdefinelanguage{Mini}{
+  language=Lisp,
+  keywords=[1]{atom,car,cdr,cond,cons,eq,error,eval,set},
+  keywords=[2]{quote,defun,lambda,nlambda,nil,t,null,ndefun},
+}
+
+\lstnewenvironment{MINI}[1][]{%
+  \pagebreak[3]%
+  \lstset{language=Mini,style=display,#1}%
+  \ensureLTR
+}{\pagebreak[3]}%
+
+\lstnewenvironment{SAMPLE}[1][]{%
+  \ensureLTR
+  \pagebreak[3]%
+  \lstset{language=Mini,style=display,#1}%
+}{\pagebreak[3]}%
+
+\newcommand\mini[1]{%
+  \begingroup
+  \lstset{language=Mini,style=inline}%
+  \LR{\lstinline/##1/}%
+  \endgroup
+}
+
+\lstdefinelanguage{Chic}{
+  language=C++,
+  keywords=[3]{Integer},
+  keywords=[2]{Variable, Value},
+  keywords=[1]{goto,try,catch,return}
+}
+
+
+\lstdefinelanguage{Go}{
+  % Keywords as defined in the BNF
+  morekeywords=[1]{break,default,func,interface,%
+    case,defer,go,map,struct,chan,else,goto,package,%
+    switch,const,fallthrough,if,range,type,continue,%
+    for,import,return,var,select},
+  % Special identifiers, builtin functions
+  morekeywords=[2]{make,new,nil,len,cap,copy,cmplx,%
+    real,imag,panic,recover,print,println,iota,close,%
+    closed,_},
+  % Basic types
+  morekeywords=[3]{%
+    string,int,uint,uintptr,double,float,complex,byte,%
+    int8,int16,int32,int64,int128,%
+    uint8,uint16,uint32,uint64,uint128,%
+    float32,float64,complex64,complex128},
+  % Strings : "toto", 'toto', `toto`
+  morestring=[b]{"},
+  morestring=[b]{'},
+  morestring=[b]{`},
+  % Comments : /* comment */ and // comment
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  % Options
+  sensitive=true
+}
+
+
+\lstdefinelanguage{Go}{
+  % Keywords as defined in the BNF
+  morekeywords=[1]{break,default,func,interface,%
+    case,defer,go,map,struct,chan,else,goto,package,%
+    switch,const,fallthrough,if,range,type,continue,%
+    for,import,return,var,select},
+  % Special identifiers, builtin functions
+  morekeywords=[2]{make,new,nil,len,cap,copy,cmplx,%
+    real,imag,panic,recover,print,println,iota,close,%
+    closed,_},
+  % Basic types
+  morekeywords=[3]{%
+    string,int,uint,uintptr,double,float,complex,byte,%
+    int8,int16,int32,int64,int128,%
+    uint8,uint16,uint32,uint64,uint128,%
+    float32,float64,complex64,complex128},
+  % Strings : "toto", 'toto', `toto`
+  morestring=[b]{"},
+  morestring=[b]{'},
+  morestring=[b]{`},
+  % Comments : /* comment */ and // comment
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  % Options
+  sensitive=true
+}
+
+
+%	#1 Language name, as it is known to the listing package.
+%	#2 Changes to the language definition, as in the listing package 
+% #3 Name of the environment of the newly defined language.
+%	#4 Name of the command for inlining language code.
+%	#5 Name of the short version of the command for inlining language code.
+\def\newLanguage#1#2#3#4#5{%
+  \lstnewenvironment{#3}[1][]{%
+    \pagebreak[3]%
+    \lstset{language=#1,style=display,##1}
+    \ensureLTR
+  }{\pagebreak[3]}%
+  \lstnewenvironment{#3n}[1][]{%
+   \ensureLTR\lstset{language=#1,style=display,style=numbered,##1}
+  }{}%
+  \lstnewenvironment{#3e}[1][]{%
+ \pagebreak[3]
+\ensureLTR\lstset{language=#1,style=display,numbers=none,##1}}{\pagebreak[3]}%
+	\expandafter\newcommand\csname#4\endcsname[1]{%
+	  \begingroup
+	  \lstset{language=#1,style=inline}%
+    \LR{\lstinline/##1/}%
+	  \endgroup
+	  }
+	\expandafter\newcommand\csname#5\endcsname[1]{%
+	  \begingroup
+	  \lstset{language=#1,style=inline}%
+	  \ensureLTR\lstinline!##1!%
+	  \endgroup
+	  }%
+}
+\lstdefinelanguage{Golang}{
+   % Keywords as defined in the BNF
+  morekeywords=[1]{break,default,func,interface,%
+    case,defer,go,map,struct,chan,else,goto,package,%
+    switch,const,fallthrough,if,range,type,continue,%
+    for,import,return,var,select},
+   sensitive=true,%
+   morecomment=[l]{//},%
+   morecomment=[s]{/*}{*/},%
+   morestring=[b]',%
+   morestring=[b]",%
+   morestring=[s]{`}{`},%
+  % Predefined constants 
+  morekeywords=[2]{
+    true,
+    false,
+    nil,
+    _
+  },
+  % Predefined types
+  morekeywords=[3]{%
+ComplexType,
+FloatType,
+IntegerType,
+Type,
+bool,
+byte,
+complex128,
+complex64,
+error,
+float32,
+float64,
+int,
+int16,
+int32,
+int64,
+int8,
+rune,
+string,
+uint,
+uint16,
+uint32,
+uint64,
+uint8,
+uintptr,
+},
+ % Predefined functions
+ morekeywords=[4]{%
+append,
+cap,
+close,
+complex,
+copy,
+delete,
+imag,
+len,
+make,
+new,
+panic,
+print,
+println,
+real,
+recover,
+},
+  % Strings : "toto", 'toto', `toto`
+  morestring=[b]{"},
+  morestring=[b]{'},
+  morestring=[b]{`},
+  % Comments : /* comment */ and // comment
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  % Options
+  sensitive=true
+}
+
+
+%---- Concrete Common Languages (Sorted Alphabetically --------------
+
+
+
+%	#1 Language name, as it is known to the listing package.
+%	#2 Changes to the language definition, as in the listing package 
+% #3 Name of the environment of the newly defined language.
+%	#4 Name of the command for inlining language code.
+%	#5 Name of the short version of the command for inlining language code.
+
+\newLanguage{Ada}{}{ADA}{ada}{adaShort}
+\newLanguage{[AspectJ]Java}{morekeywords={remotecall,shakein,declare,precedence,parents}}{AJ}{aj}{ajx}
+\newLanguage{AWK}{}{AWKPROG}{awk}{aw}
+\newLanguage{}{}{BNF}{bnf}{bn}
+\newLanguage{[GNU]C++}{%
+   directivestyle={\listingsfont\bfseries\codesize\color{olive},
+   backgroundcolor=\color{maroon!20},
+}}{CPP}{cpp}{cp}
+\newLanguage{[Sharp]C}{morekeywords={select,in,from,where,var}}{CSHARP}{csharp}{csharpShort}
+\newLanguage{Cobol}{}{COBOL}{cobol}{cobolShort}
+\newLanguage{Python}{}{PYTHON}{python}{py}
+\newLanguage{Go}{}{GO}{go}{gocd}
+\newLanguage{}{}{DATALOG}{datalog}{dlog}
+\newLanguage{Eiffel}{morekeywords={create,factory,note}}{EIFFEL}{eiffel}{eiff}
+\newLanguage{HTML}{alsoletter={-}}{HTML}{html}{htm}
+\newLanguage{Java}{}{JAVA}{java}{ja}
+\newLanguage{}{}{NONE}{none}{non}
+\newLanguage{Oberon-2}{}{OBERON}{oberon}{ob}
+\newLanguage{Pascal}{}{PASCAL}{pascal}{pas}
+\newLanguage{XML}{alsoletter={-}}{XML}{xml}{xm}
+
+\lstdefinestyle{SQL}{
+    language={SQL},
+    style=display,
+    morekeywords={REFERENCES},
+}
+
+
+%--------------- Java Dialects -------------------
+\lstdefinestyle{AJ}{
+    style=numbered,
+    escapechar=¢
+}
+
+
+
+\lstdefinestyle{JTL}{
+    language={[JTL]Java},
+    style=code,
+    stringstyle={\codesize\sf},
+    escapechar=¢
+}
+
+\lstdefinestyle{JTLstring}{
+    language={},
+    basicstyle={\sf\codesize\color{Brown}},
+    xleftmargin=1ex,
+    aboveskip=2pt,belowskip=2pt,
+}
+
+% Macro \cpp is used for long inlined C++ code, i.e., inlined code which does
+% not need a "~" before it.  In contrast, macro \cp, which is identical to
+% \cpp, should be used for shorter C++ text, as in, e.g., "variable~\cp{i}" as
+% the example indicates, one should have a non-breaking space before \cp. This
+% is easy to achieve with a global search and replace of " \cp{" to "~\cp{".
+
+
+% Same for Java inlined code. \java is intended for the long version
+
+\newcommand\sql[1]{\text{\lstinline[style=SQL]{#1}}}
+\newcommand\jtlstr[1]{\text{\lstinline[style=JTLstring]{#1}}}
+
+\lstnewenvironment{JTLstr}{\lstset{style=JTLstring}}{}
+
+
+\lstnewenvironment{SQLprog}{\lstset{style=SQL}}{}
+\lstnewenvironment{SQLe}{\lstset{style=SQL,numbers=none}}{}
+
+%%% =========================== SNIP SNIP NEW STUFF=== 
+{%
+    \makeatletter
+    \catcode13=13\relax% Make ASCII 13 active to define it next
+    \gdef\fixNewLine{\def^^M{\space}}
+}
+
+\lstset{%
+  rangeprefix=\{,rangesuffix=\},
+  includerangemarker=false,
+}
+
+\lstdefinelanguage{Chic}{
+  language=C++,
+  keywords=[3]{Integer},
+  keywords=[2]{Variable, Value},
+  keywords=[1]{goto,try,catch,return},
+  rangeprefix=|\ ,
+  rangesuffix=\ |,
+  deletecomment=[s]{/*}{*/},
+}
+
+\lstdefinestyle{excerpt}{
+  language=Chic,
+%  backgroundcolor=\color{white},
+%  style=display, 
+%  basicstyle={\listingsfont\normalsize},
+}
+
+\lstdefinestyle{interaction}{%
+  style=display,
+  frame=none,
+  language=Pascal,
+  backgroundcolor=\color{purple!10},
+  deletekeywords={to,do,of,and,then,for},
+}
+
+\lstset{%
+  rangeprefix=\{,rangesuffix=\},
+%  language=Chic,
+  style=display,
+  backgroundcolor=\color{RoyalBlue!10},
+  includerangemarker=false,
+}

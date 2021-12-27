@@ -555,6 +555,9 @@ nuclear(X, Y) :-  % siblings
 
 nuclear(X, Y) :-
     parent(X, C), parent(Y, C).
+
+nuclear(X, Y) :-
+    (parent(X, Y); parent(Y, X)).
 ```
 
 ---
@@ -607,7 +610,7 @@ tree_max(node(N, Tl, nil), M) :-
 tree_max(node(N, Tl, Tr), M) :-
     tree_max(Tl, Ml),
     tree_max(Tr, Mr),
-    M is max(N, Ml, Mr).
+    M is max(N, max(Ml, Mr)).
 ```
 
 <!--vert-->

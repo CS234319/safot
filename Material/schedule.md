@@ -397,35 +397,34 @@ Solving recursive type equations:
 ## Week 6 \[5.12-11.12\]
 
 * **Lecture**
-    1. [Symbolic Values and Pure Lisp](???)
+    1. TBD
 * **Tutorial**
     1. [mini-lisp](Tutorials/theory/mini-lisp.md)
 
 ## Week 7 \[12.12-18.12\]
 
 * **Lecture**
-    1. [Symbolic Values and Pure Lisp (Cont.)](???)
+    1. TBD
 * **Tutorial**
-    1. [Prolog - Introduction](Tutorials/prolog/introduction.md)
+    1. [Prolog - Introduction](Tutorials/prolog/introduction.md) --- [pdf-slides](https://github.com/CS234319/safot/blob/master/Material/Tutorials/pdfs/slides/prolog/introduction.pdf)
 * **Submission**: [HW3](https://docs.google.com/document/d/1ILdKh0F0A21O2e8EC2_uFlft2KtHNbTLKMc3uO_4hDI/edit?usp=sharing) \[18.12 23:59\]
-* **HW**: [HW4](???) is published \[18.12\]
+* **HW**: [HW4](https://docs.google.com/document/d/1D01bTGCuLY0fZd-Gv_8ZtaHnMCnOAaIPUduWJYaTKlc/edit) is published \[19.12\]
 
 ## Week 8 \[19.12-25.12\]
 
 * **Lecture**
-    1. [Prolog](???)
+    1. [Elad's lecture](Tutorials/pdfs/slides/theory/rehearsal-lecture.pdf)
 * **Tutorial**
-    1. [Prolog - Lists](Tutorials/prolog/lists.md)
-    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md)
+    1. [Prolog - Lists](Tutorials/prolog/lists.md) --- [pdf-slides](Tutorials/pdfs/slides/prolog/lists.pdf)
+    2. [Prolog - CLP(FD)](Tutorials/prolog/clp.md) --- [pdf-slides](Tutorials/pdfs/slides/prolog/clp.pdf)
 
 ## Week 9 \[26.12-1.1\]
 
 * **Lecture**
     1. TBD
 * **Tutorial**
-    1. [Prolog - Control Predicates](Tutorials/prolog/control.md)
-    2. [Prolog - Exam Questions](Tutorials/prolog/exam-questions.md)
-* **Submission**: [HW4](???) \[1.1 23:59\]
+    1. [Prolog - Control Predicates](Tutorials/prolog/control-predicates.md) --- [pdf-slides](Tutorials/pdfs/slides/prolog/control-predicates.pdf)
+* **Submission**: [HW4](https://docs.google.com/document/d/1D01bTGCuLY0fZd-Gv_8ZtaHnMCnOAaIPUduWJYaTKlc/edit) \[3.1 23:59\]
 * **HW**: [HW5](???) is published \[1.1\]
 
 ## Week 10 \[2.1-8.1\]
@@ -433,14 +432,16 @@ Solving recursive type equations:
 * **Lecture**
     1. TBD
 * **Tutorial**
-    1. TBD
+    1. [MiniLisp](Tutorials/minilisp/eval.pdf)
 
 ## Week 11 \[9.1-15.1\]
 
 * **Lecture**
     1. [Advanced Constructs - Evaluation Strategies](Lectures/slides/chapter-7.pdf)
 * **Tutorial**
-    1. TBD
+    1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
+    2. [Python Generators](Tutorials/python/generators.md)
+    3. TBD
 * **Submission**: [HW5](???) \[15.11 23:59\]
 * **HW**: [HW6](???) is published \[15.11\]
 
@@ -450,9 +451,7 @@ Solving recursive type equations:
     1. [Advanced Constructs - Closures](Lectures/slides/chapter-7.pdf)
     2. [Advanced Constructs - Beyond Closures](Lectures/slides/chapter-7.pdf)
 * **Tutorial**
-    1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
-    2. [Python Generators](Tutorials/python/generators.md)
-    3. TBD
+    1. TBD
 
 ## Week 13 \[23.1-29.1\]
 

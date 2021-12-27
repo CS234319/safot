@@ -1,0 +1,99 @@
+\documentclass[12pt,reqno,fleqn]{book}
+\usepackage{00}
+\מאומה
+\כותרת{
+  \fontsize{120}{140}\selectfont
+     פרקים בשפות תכנות
+}
+\מחבר{
+יוסי גיל ⏎
+הפקולטה למדעי המחשב⏎
+הטכניון - מכון טכנולוגי לישראל⏎
+}
+
+\begin{document}
+\frontmatter
+\maketitle
+\input contents
+\mainmatter\def \body#1{%
+  \begin{multicols}{2}%
+  \minitoc%
+  \minilof%
+  \minilot%
+  \end{multicols}%
+  \input{#1}%
+}
+
+℆ על התחום 
+\body{motivation}
+
+℆ טכניקות לניתוח שפות תכנות
+\body{techniques}
+
+℆ ניתוח לקסיקלי 
+\body{lexical}
+
+℆ רקע מתימטי
+\body{background}
+
+℆מבני נתונים סימבוליים
+\body{symbolic}
+
+
+℆ליספ, ביטויי S ושיערוך
+\body{evaluation}
+
+℆מיני-ליספ
+\body{mini-lisp}
+
+℆ מאוניברסליות לאלגנטיות 
+כל שפות התכנות המעניינות הן אוניברסלית, אך ישנן שפות שהאוניברסליות שלהן מעניינת
+במיוחד.
+\body{universal}
+
+℆ שעשועים רקורסיביים  
+\body{recursion-games}
+
+℆ הידור והרצה של תכניות Java
+\body{JVM}
+
+
+℆ קידוד תווים
+\body{character-encoding}
+\end{document}
+\סוף{מסמך}
+℆ דקדוקי עניות
+\body{lexical}
+\input{steps-ex}
+
+\החל{multicols}{2}
+\מאומה \גודל␣הערת␣שוליים
+\printglossary[type=hebeng]
+\סוף{multicols}
+\clearpage
+\החל{multicols}{2}
+\setLTR
+\מאומה \גודל␣הערת␣שוליים
+\printglossary[type=engheb]
+\סוף{multicols}
+\חומר␣אחורי
+
+\סוף{מסמך}
+
+℆ השם ופשרו}
+\body{binding}
+
+℆ ערכים}
+\body{values}
+℆ מקרה לדוגמה: שפת פסקל}
+\body{pascal}
+℆ \chapter{יצוג אריתמטי של מצביעים}
+℆ יצוג אריתמטי של טיפוסים}
+\body{arithmetics}
+
+
+\החל{מובאה}
+\setLTR\cpp{cat << EOF}
+\סוף{מובאה}
+
+

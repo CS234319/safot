@@ -1,0 +1,705 @@
+§§ הסביבה וה-\E|association list|.
+
+השיערוך של ביטויי-\E|S| מוגדר רקורסיבית. בסיס הרקורסיה הוא בשיערוך של אטומים.
+שיערוך של אטום אינו נדרש לבצע חישוב, אלא רק למצוא את משמעותו של האטום הנתון.
+אטום בליספ הוא מזהה \E|(identifier)|, וכמו בשפות תכנות אחרות, משמעותו של המזהה
+נמצאת בטבלת הסמלים \E|(symbol table)|. טבלת הסמלים היא מבנה נתונים הקושר בין
+שמות ובין משמעותם, ומציאת המשמעות נעשית על ידי חיפוש בטבלה זו.
+
+טבלת הסמלים בליספ בנויה במבנה נתונים הידוע בשם \E|association list|
+או בקיצור \E|a-list|. ה-\E|a-list| היא רשימה של פריטים אשר כל אחד מהם מבטא
+קישור של שם לערך. כל פריט הוא dotted pair אשר ה-car שלו הוא שם (המיוצג כאטום)
+ואילו ה-cdr של הפריט הוא משמעותו של השם (שהיא~\E|S-Expression|, אטומי או מורכב.
+אם משמעותו של האטום foo היא העץ~$ϕ$ אז הפריט הנשמר ב-\E|a-list|
+הוא~\E|$(\text{foo}.ϕ)$|. הקישור בין השם והביטוי מתבטא בעובדה ששני אלו מחוברים
+ברשומת \E|cons|.
+
+בשפת מיני-ליספ, הסביבה מיוצגת ברשימה הקרויה-\E|a-list| המנוהלת כמחסנית, כלומר
+פריטים מתווספים ומוסרים ממנה רק בתחילתה. החיפוש אחר משמעות ברשימה נעשה סדרתית,
+בסריקה המתחילה בתחילת הרשימה. חיפוש המשמעות של האטום foo נעצר בזוג הראשון שבו
+מרכיב השם הוא \E|foo|. החיפוש נכשל אם לא נמצא זוג כזה. כל הפעולות על הסביבה
+נעשות בזמן שיערוך התכנית.
+
+מעיון חוזר בדוגמה למעלה ניתן להסיק כי הסביבה בנויה גם בשפת~\CPL כמעין מחסנית
+של מילונים. פתיחה של בלוק בסימן \texttt{❴} מוסיפה מילון חדש בראש מחסנית. הגדרה
+של שם מתווספת לסביבה, באמצעות עדכון המילון שבראש המחסנית. הגדרות אלו מוסרות
+מהסביבה עם סיום הבלוק, כלומר בסימן \texttt{❵}, אשר גורם לסילוק המילון שבראש המחסנית.
+
+ישנם הבדלים טכניים לא מעטים בין הסביבה של~\CPL וזו של מיני-ליספ, אולם ישנו הבדל
+מהותי אחד בין השתיים: פעולות על הסביבה במיני-ליספ נעשות בזמן שיערוך, הכולל בתוכו
+מרכיב של חישוב. בניגוד לכך, הפעולות על הסביבה ב-\CPL, ובכלל הוספת שמות לסביבה,
+וחיפוש שמות בתוכה, נעשים בזמן הידור, ועוד טרם להרצה.
+
+כאשר האינטרפרטר של ליספ מתחיל את פעולתו, ה-\E|a-list| מכילה קישורים בעבור כמה
+אטומים המוגדרים מראש בשפה. במיני-ליספ מספיק להניח כי ה-\E|a-list| מכילה קישורים
+בעבור שני האטומים שבקבוצה~$\mathcal B$ בלבד, כלומר הרשימה תיתן משמעות ל-\E|t| ו-\E|nil|.
+התוכן המינימלי של ה-\E|a-list| הוא
+\begin{MINI}
+((t.t)
+     (nil.nil))
+\end{MINI}
+
+הפריט הראשון ברשימה הוא dotted pair הקובע שהמשמעות של האטום \T|t| היא אטום זה
+עצמו. הפריט השני ברשימה קובע שמשמעותו של האטום \T|nil| היא אטום זה עצמו גם כן.
+
+לפיכך, כאשר האינטרפרטר של ליספ יקרא את האטום \T|t| הוא ידפיס בתגובה \T|T|,
+וכאשר הוא יקרא את האטום \T|nil| הוא ידפיס בתגובה \T|NIL|.
+\begin{SAMPLE}
+> t
+T
+> nil
+NIL
+\end{SAMPLE}
+
+§§ הפונקציה set
+הפונקציה \T|set| שבליספ היא פונקציה אטומית המקבלת שני פרמטרים, שהראשון בהם
+הוא אטום, והשני הוא ביטוי~\E|S| כלשהו. הפונקציה מוסיפה ל-\E|a-list| פריט שהוא
+dotted pair המבטא קישור בין האטום לביטוי. במרבית הניבים של ליספ יש ואריאנטים
+רבים של \T|set| אולם במיני-ליספ נסתפק ב-\T|set| בלבד.
+
+אם נזין לאינטרפרטר של ליספ את הביטוי
+\begin{SAMPLE}
+> (set foo (bar baz))
+\end{SAMPLE}
+כבקשה לקשור את האטום \T|foo| לרשימה \T|(bar baz)|, הרי ניתקל בשגיאות, שכן
+האינטרפרטר ינסה לשערך את שני הארגומנטים של הפונקציה \E|set| טרם שהוא יפעיל
+פונקציה זו. אלא ששיערוך זה יכשל, שכן לאף אחד משלושת האטומים המופיעים בקריאה
+ל-set אין משמעות מלכתחילה.
+
+בכדי להתגבר על מכשלה זו יש להשתמש בפונקציה \T|quote|, פונקציה של ארגומנט אחד
+אשר \ע|אינה| משערכת את הארגומנט שלה, אלא מחזירה אותו כמו שהוא.
+כך למשל
+\begin{SAMPLE}
+> (quote foo)
+FOO
+> (quote (bar baz))
+(BAR BAZ)
+\end{SAMPLE}
+קשירת האטום \T|foo| לרשימה \T|(bar baz)| יכול להעשות באמצעות
+\begin{SAMPLE}
+> (set (quote foo) (quote (bar baz)))
+(BAR BAZ)
+> foo
+(BAR BAZ)
+\end{SAMPLE}
+נשים לב לכך שהשיערוך של הביטוי
+\begin{MINI}
+(set (quote foo) (quote (bar baz)))
+\end{MINI}
+אינו במטרה לחשב ערך כלשהו, אלא במטרה לקשור שם לערך. נזכר שבאופן כללי פעולת
+השיערוך בליספ כוללת שלושה סוגים של פעולות: מציאת משמעות של שם, הגדרת משמעות של
+שם, וחישוב שהוא הפעלת פונקציה על ביטוי~\E|S| או ביטויי~\E|S|. בכל זאת, כל
+פונקציה בליספ חייבת להחזיר ערך.
+
+במקרה של הפונקציה set הערך המוחזר הוא ערכו של הפרמטר השני שלה. בתגובה לקלט
+\begin{LTR}
+\begin{quote}
+\T|(set (quote foo) (quote (bar baz)))|
+\end{quote}
+\end{LTR}
+האינטרפרטר ידפיס את הערך \LR{\T|(BAR BAZ)|}:
+\begin{SAMPLE}
+> (set (quote foo) (quote (bar baz)))
+(BAR BAZ)
+\end{SAMPLE}
+
+הפונקציה set מוסיפה זוג לתחילת ה-\E|a-list|: לכן, אם התוכן של רשימת
+ה-\E|a-list| לפני הקריאה ל-set היה
+\begin{MINI}
+((t.t)
+     (nil.nil))
+\end{MINI}
+
+\pagebreak[3]
+אזי אחרי הקריאה תוכן רשימה זו יהיה
+\begin{MINI}
+((foo.(bar baz))
+     (t.t)
+     (nil.nil))
+\end{MINI}
+
+ויזואלית, נשרטט את רשימת ה-\E|a-list| לפני הקריאה כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+    \node[above=of h] (A) {a-list};
+    \draw[->] (A.south)--(h);
+  \end{tikzpicture}
+\end{LTR}
+ואחרי השיערוך של הביטוי
+{\setLTR
+\begin{quote}
+  \T|(set (quote foo) (quote (bar baz)))|
+\end{quote}
+}
+תראה ה-\E|a-list| כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        g/foo/(bar baz),
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {g/h,h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+    \node[above=of g] (A) {a-list};
+    \draw[->] (A.south)--(g);
+  \end{tikzpicture}
+\end{LTR}
+שפת מיני-ליספ יכולה לאתחל את ה-a-list באמצעות
+\begin{LIBRARY}
+(set (quote t) (quote t))
+(set (quote nil) (quote nil))
+\end{LIBRARY}
+לא ניתן \ע|להסיר| פריטים מתוך ה-\E|a-list|. אבל, ניתן \ע|להסתיר| קישור באמצעות
+הוספת פריט לרשימה, אשר יסתיר את הקישור הקודם. בפרט, אם נכתוב כעת
+\begin{SAMPLE}
+> (set (quote foo) (quote ((baz))))
+(BAZ)
+\end{SAMPLE}
+הרי התוכן של ה-a-list יהיה
+\begin{MINI}
+((foo.((baz)))
+     (foo.(bar baz))
+     (t.t)
+     (nil.nil))
+\end{MINI}
+וויזואלית כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        f/foo/((baz)),
+        g/foo/(bar baz),
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+    \node[on chain,font=\tt\scriptsize] (j) {nil};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {f/g, g/h,h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+    \node[above=of f] (A) {a-list};
+    \draw[->] (A.south)--(f);
+  \end{tikzpicture}
+\end{LTR}
+ואם ננסה לשערך את \T|foo| לאחר ההסתרה הזו, נקבל את הערך הנוצר מהקישור החדש
+\begin{SAMPLE}
+> foo
+((BAZ))
+\end{SAMPLE}
+וזאת משום שהחיפוש ב-a-list מתחיל מתחילתה, ועוצר במקום הראשון שבו הוא מצליח.
+
+§§ סימן ה-\E|quote| לסימון הפונקציה quote
+\תגית|פרק:quote|
+
+כתיב מקוצר לביטוי
+\begin{LTR}
+\begin{quote}
+  \setLTR \[
+    \text{(\E|quote~$s$|)}
+\] \end{quote}
+\end{LTR}
+המפעיל את הפונקציה quote על הביטוי~$s$, הוא \[
+  's
+\] כלומר סימן מרכאה בודד
+לפני הביטוי~$s$. הטיפול בכתיב זה נעשה על ידי
+ה-Reader וה-Printer של ליספ, והם אינם חלק מהמשערך של השפה.
+הכתיב המקוצר פועל כאשר הביטוי~$s$ הוא אטום בודד, למשל,
+\begin{SAMPLE}
+> 'foo
+FOO
+> (quote 'foo)
+'FOO
+\end{SAMPLE}
+וגם כאשר~$s$ הוא ביטוי מורכב כגון
+\begin{SAMPLE}
+> '(a (b c))
+(A (B C))
+\end{SAMPLE}
+הקריאה ל-\E|set| בשימוש בכתיב המקוצר היא אכן קצרה יותר,
+\begin{SAMPLE}
+> (set 'foo '(bar baz))
+(BAR BAZ)
+> foo
+(BAR BAZ)
+\end{SAMPLE}
+הכתיב המקוצר של הפונקציה quote יכול להיות מקונן, כלומר הביטוי המורכב עליו
+מופעלת \E|quote| יכול להכיל הפעלה של \E|quote| בעצמו:
+\begin{SAMPLE}
+> '(quote foo)
+'FOO
+\end{SAMPLE}
+גם סימן המרכאה לציון quote גם הוא יכול להיות מקונן, ואת הביטוי
+\begin{MINI}
+(quote ((quote a) (quote b)))
+\end{MINI}
+ניתן לכתוב בקיצור כך
+\begin{MINI}
+'('a 'b)
+\end{MINI}
+גם אם לא נשתמש בסימן ה-\E|quote| האינטרפרטר יעשה זאת בעבורינו:
+המקרים שבהם יש צורך להשתמש בפונקציה quote מקוננת אינם נפוצים, אולם הם מופיעים
+מדי פעם.
+\begin{SAMPLE}
+> (quote (quote ((quote a) (quote b))))
+'('a 'b)
+\end{SAMPLE}
+
+
+
+§
+§ ביטויי~$λ$
+מתכנת בליספ יכול להוסיף פריטים לטבלת הסמלים באמצעות הפונקציות \E|set|
+ו-\E|defun|.
+
+הפונקציה defun מאפשרת להגדיר פונקציות חדשות. נגדיר לדוגמה פונקציה בשם mirror
+המקבלת פרמטר x שהוא ביטוי~\E|S| מורכב, ומחזירה ביטוי מורכב אחר שבו ה-car וה-cdr
+שב-x הוחלפו.
+\begin{MINI}
+(defun mirror ; define a new function named mirror
+  (x) ; which expects a single parameter, named x
+  (cons (cdr x) (car x)); and whose body is this S-expression
+)
+\end{MINI}
+אנו רואים שהפונקציה defun מקבלת שלושה פרמטרים: שם הפונקציה אותה יש להגדיר,
+רשימת הפרמטרים ה\ע|פורמליים| לפונקציה, וגוף הפונקציה. הדוגמה גם מראה שהערות
+בליספ מתחילות בסימן~";" (נקודה ופסיק) ונמשכות עד סוף השורה.
+
+אחרי הגדרה זו של \E|mirror| באמצעות \E|defun|, נוכל להשתמש בפונקציה החדשה
+שהגדרנו כך:
+\begin{SAMPLE}
+> (mirror '(a.b))
+(B.A)
+\end{SAMPLE}
+
+מקובל לקרוא ל-\E|a-list| גם סביבה \E|(environment)|. הסביבה היא אוסף של קישורים
+בין שמות למשמעותם, והיא זו שנותנת משמעות לשמות. ראינו כבר שהפונקציה \E|set|
+מוסיפה קישור לסביבה. גם הפונקציה \E|defun| מוסיפה קישור לסביבה: שיערוך הביטוי
+\begin{MINI}
+(defun mirror (x) (cons (cdr x) (car x)))
+\end{MINI}
+מביא לקשירה בין השם mirror ובין מימוש הפונקציה. שיערוך הביטוי \T|(mirror
+'(a.b))| משתמש בשם זה, למציאת מימוש הפונקציה.
+
+המימוש של פונקציה כולל את ביטוי ה-\E|S| המהווה את גוף הפונקציה. בדוגמה שלנו ביטוי
+זה הוא
+\begin{MINI}
+(cons (cdr x) (car x))
+\end{MINI}
+אבל, מלבד גוף הפונקציה המימוש כולל גם את רשימת הפרמטרים. כל \ע|פרמטר|
+הוא אטום, אשר בזמן הפעלת הפונקציה יוחלף בביטוי-\E|S|. האטום מהווה לכן את שמו של
+הביטוי. הביטוי המחליף את האטום קרוי \ע|ארגומנט|. כיוון שערכם של הפרמטרים
+אינו ידוע בזמן הגדרה של פונקציה. לעיתים משתמשים במונח \ע|פרמטרים פורמליים|.
+הארגומנטים נקראים לעיתים גם \ע|פרמטרים אקטואליים|.
+
+בפונקציה mirror יש פרמטר אחד אשר מיוצג ברשימה \T|(x)|. שמות הפרמטרים הפורמליים
+קובעים כיצד יש לחשב את גוף הפונקציה: בכל מקום שבגוף הפונקציה מופיע שם של פרמטר
+פורמלי. בזמן הקריאה לפונקציה וחישוב הגוף יש להחליף שם זה בארגומנט האקטואלי,
+כלומר, הערך המחושב.
+
+הצירוף של גוף הפונקציה ושמות הפרמטרים אליה נקרא ביטוי-$λ$. ביטוי כזה
+מייצג פונקציה אנונימית. ביטוי ה-$λ$ בעבור mirror הוא
+\begin{MINI}
+  (lambda (x) (cons (cdr x) (car x)))
+\end{MINI}
+
+באופן כללי ביטוי~$λ$ הוא רשימה בת שלושה פריטים בדיוק:
+\ספרר
+✦ האטום \T|lambda| המזהה את הרשימה כביטוי~$λ$.
+✦ רשימה של אטומים, המייצגת את שמות הפרמטרים הפורמליים לפונקציה. בביטוי שלמעלה,
+זו רשימה המכילה איבר אחד בלבד, האטום \E|x|, שהוא שמו של הפרמטר הפורמלי
+לפונקציה.
+✦ גוף הפונקציה, כלומר הביטוי שהשיערוך שלו אחרי הקשירה בין הפרמטרים
+הפורמליים לאקטואליים, יתן את ערכה של הפונקציה. בביטוי שלמעלה גוף הפונקציה הוא
+\mini{(cons (cdr x) (car x))}.
+===
+
+נשים לב ששם הפונקציה אינו חלק מביטוי ה-$λ$, שכן ביטוי זה מציין פונקציה
+\ע|אנונימית|. הפונקציה defun יוצרת ביטוי-$λ$ וקושרת אותו לשם הפונקציה המוגדרת.
+מסיבות של יעילות, מרבית המימושים של ליספ מנהלים את הקישורים בין שמות הפונקציות
+ובין הגוף שלהן באמצעות מנגנונים יעודיים. במיני-ליספ הקישורים הללו מנוהלים
+באמצעות ה-\E|a-list|:
+
+אם תוכן ה-\E|a-list| הוא
+\begin{MINI}
+(
+  (foo.(bar baz))
+  (t.t)
+  (nil.nil)
+)
+\end{MINI}
+אז לאחר שיערוך הביטוי
+\begin{MINI}
+(defun mirror (x)
+  (cons (cdr x) (car x)))
+\end{MINI}
+תוכן ה-\E|a-list| יהיה
+\begin{MINI}
+((mirror.
+        (lambda (x)
+        (cons (cdr x) (car x))))
+     (foo.(bar baz))
+     (t.t)
+     (nil.nil))
+\end{MINI}
+
+ניתן במיני-ליספ לייצר ביטוי-$λ$ מבלי להשתמש ב-\E|defun|, בשימוש בפונקציה
+\E|quote|,
+\begin{MINI}
+  '(lambda (x) (cons (cdr x) (car x)))
+\end{MINI}
+ולכן ניתן להגדיר את הפונקציה mirror תוך שימוש ב-set במקום ב-\E|defun|,
+\begin{MINI}
+(set mirror
+  '(lambda (x) (cons (cdr x) (car x))))
+\end{MINI}
+לחילופין, ניתן להשתמש בפונקציה lambda המקבלת שני פרמטרים: הראשון שבהם הוא רשימה
+של אטומים, המייצגים את שמות הפרמטרים הפורמליים לפונקציה, והשני הוא גוף הפונקציה
+אשר אותו יש לשערך בקריאה לפונקציה, בסביבה הכוללת קישורים בין הפרמטרים הפורמליים
+ובין האקטואליים. תוצאת השיערוך של קריאה לפונקציה lambda היא ביטוי~\E|S| שנראה
+בדיוק כמו הקריאה לפונקציה.
+\begin{SAMPLE}
+> (lambda (x) (cons (cdr x) (car x)))
+(LAMBDA (X) (CONS (CDR X) (CAR X)))
+\end{SAMPLE}
+ניתן לחקות את הפעולה של defun באמצעות set ושימוש בביטויי~$λ$.
+\begin{MINI}
+(set mirror
+  (lambda (x) (cons (cdr x) (car x))))
+\end{MINI}
+לאחר הקישור בין השם mirror ובין ביטוי ה-$λ$ המתאר את מימוש הפונקציה \E|mirror|,
+האטום mirror ישוערך לביטוי~$λ$ זה. בקריאה \T|(mirror '(a.b))| תוחלף המילה
+mirror בביטוי זה, אשר מגדיר כיצד לבצע את הקישור בין הפרמטרים האקטואליים
+והפורמליים.
+
+ניתן גם לקרוא לפונקציה מבלי לנקוב בשמה, אלא תוך שימוש בביטוי המתאר את המימוש
+שלה:
+\pagebreak[3]
+\begin{SAMPLE}
+> (
+    '(lambda (x)
+      (cons (cdr x) (car x)))
+    '(a.b)
+)
+(B.A)
+\end{SAMPLE}
+ניתן להשמיט את סימן ה-\E|quote|, ולנצל את העובדה שהאטום \T|lambda| אינו רק
+הפתיח של ביטוי~$λ$ אלא גם פונקציה המחזירה ביטוי כזה,
+\begin{SAMPLE}
+> (
+    (lambda (x) (cons (cdr x) (car x)))
+    '(a.b)
+)
+(B.A)
+\end{SAMPLE}
+
+§§ שיערוך מותנה ורקורסיה
+
+שיערוך מותנה פירושו שהשיערוך מתבצע כאשר תנאי מסוים מתקיים, והוא אינו מתבצע
+כאשר התנאי אינו מתקיים. בליספ שיערוך מותנה מתבצע באמצעות הפונקציה \E|cond|
+אשר מכלילה את פקודות ה-if וה-switch שיש בשפת-\E|\CPL|.
+
+נשתמש ב-cond כדי להגדיר פונקציה zcar המחזירה את ה-car של הפרמטר אם
+הוא ביטוי מורכב, ואת הפרמטר עצמו אם הוא אטום
+\begin{MINI}
+(defun zcar(x)
+  (cond ; check a number of options
+    ((atom x) x) ; if parameter x is an atom, return it
+    (t (car x)) ; else, if 'T' (all other cases), return its car
+))
+\end{MINI}
+גוף הפונקציה zcar הוא הביטוי
+\begin{MINI}
+  (cond ((atom x) x) (t (car x)))
+\end{MINI}
+שהוא קריאה לפונקציה cond עם שני פרמטרים שכל אחד מהם הוא רשימה בת שני איברים:
+\begin{LTR}
+  \begin{itemize}
+    ✦ \mini{((atom x) x)}
+    ✦ \mini{(t car(x))}
+  \end{itemize}
+\end{LTR}
+cond היא פונקציה רב מקומית המקבלת מספר כלשהו של פרמטרים שכל אחד מהם נקרא
+\E|test-form|. כל \E|test-form| הוא רשימה בת שני פריטים שכל אחד מהם הוא ביטוי~\E|S|
+אשר עשוי להיות משוערך במהלך פעולתה של \E|cond|. הפריט הראשון ב-\E|test-form|
+נקרא test-condition והפריט השני נקרא \E|test-value|.
+
+הפונקציה cond עוברת על ה-test-forms שקיבלה כפרמטרים לפי סדרם, ובכל אחד כזה היא
+משערכת את ה-\E|test-condition|.
+\אבגד
+✦ אם תוצאת השיערוך היא \E|nil|, כלומר ה-test-condition אינו מתקיים, אזי cond
+\ע|אינה| משערכת את ה-\E|test-value|, וממשיכה ל-test-form הבא.
+✦ אם לעומת זאת תוצאת השיערוך אינה \E|nil|, כלומר ה-test-condition מתקיים, אזי
+cond משערכת את ה-\E|test-value|, ומחזירה את תוצאת השיערוך הזו, \ע|מבלי|
+להמשיך לשאר ה-\E|test-forms|.
+✦ אם cond ממצה את רשימת ה-\E|test-forms| מבלי להיתקל באף \E|test-condition|
+שמתקיים, הרי cond מחזירה את הערך \E|nil|.
+===
+על פי תיאור זה של הפונקציה \E|cond|, הביטוי \begin{MINI}
+  (cond ((atom x) x) (t (car x)))
+\end{MINI}
+שבגוף הפונקציה zcar ישוערך לכן ל-x אם x הוא אטום, ול-\E|car| של \E|x|, אם~x
+איננו אטום.
+
+מקובל להשתמש תמיד באטום \E|t| דווקא כדי לציין את התנאי שמתקיים תמיד, כלומר חלק
+ה-else של פקודת ה-\E|if|, אבל טכנית ניתן היה להגדיר את zcar תוך שימוש בביטוי
+אחר שערכו אינו \E|nil|, למשל
+\begin{MINI}
+(defun zcar(x)
+  (cond ((atom x) x) ('(any S expression) (car x))))
+\end{MINI}
+הנה דוגמה נוספת בה cond מופעלת עם מספר רב יותר של test-forms
+\begin{MINI}
+(defun is-atomic(name) ; determine whether name denotes a atomic function
+  (cond ((eq name 'atom) t)
+        ((eq name 'car) t)
+        ((eq name 'cdr) t)
+        ((eq name 'cond) t)
+        ((eq name 'cons) t)
+        ((eq name 'eq) t)
+        ((eq name 'error) t)
+        ((eq name 'eval) t)
+        ((eq name 'set) t)
+        (t nil)))
+\end{MINI}
+הפונקציה is-atomic משתמשת בסידרה של test-forms כדי לבדוק אם הפרמטר שלה הוא
+אטום המציין פונקציה אטומית. אם תנאי זה מתקיים, הפונקציה מחזירה את האטום
+\E|t|. (מסיבות טכניות אנו מניחים כאן שגם \T|eval| היא פונקציה אטומית.)
+האטום \E|nil| יוחזר בכל מקרה שהפרמטר אינו אטום, או שהוא אטום שאינו מציין
+פונקציה אטומית. לשם כך, משתמשת
+is-atomic בפונקציה \T|eq|, שהיא פונקציה אטומית, המשמשת לבדיקה אם הפרמטרים
+שלה הם שני אטומים השווים זה לזה.
+
+כדאי לשים לב לכך שה-test-form האחרון שברשימה (כלומר הרשימה \T|(t nil)|) מיותר,
+שהרי אם אף אחד מה-test-conditions שב-test-forms שקדמו לו אינו מתקיים, ממילא
+cond תחזיר \E|nil|. בכל זאת, מקובל להוסיף את ה-test-form \T|(t nil)| אף אם אינו
+נחוץ, כדי להדגיש שערך ברירת המחדל הוא \E|nil|.
+
+דרך קצרה יותר להגדיר את הפונקציה is-atomic היא באמצעות בדיקה אם הפרמטר
+שלה מצוי ברשימה המכילה את שמות כל הפונקציות האטומיות
+\begin{KERNEL}
+(defun is-atomic(name); determine whether name denotes an atomic function
+  (exists name '(atom car cdr cond cons eq error eval set)))
+\end{KERNEL}
+במימוש זה, אטום הוא שמה של פונקציה אטומית אם הוא מצוי בתוך רשימה של האטומים
+המציינות פונקציה אטומית. הפונקציה exists עצמה אינה מצויה במיני-ליספ, אבל
+קל לממש אותה ברקורסיה.
+\begin{MINI}
+(defun exists (x xs) ; determine whether atom x is in list xs
+  (cond ; three case to consider
+    ((eq xs nil) nil) ; (i) list of xs is exhausted
+    ((eq x (car xs)) t) ; (ii) item x is first in xs
+    (t (exists x (cdr xs))))) ; (iii) otherwise, search recursively for x on rest of xs
+\end{MINI}
+הפונקציה \T|exists| מקבלת שני פרמטרים: הפרמטר הראשון הוא אטום, המסומן ב-\T|x|
+והפרמטר השני הוא רשימה של אטומים המסומנת ב־\T|xs|. על פי הגדרה זו, הפונקציה
+\T|exists| מקבלת אטום המסומן ב-\T|x| ורשימה של אטומים המסומנת ב-\T|xs|,
+ומחזירה~t אם האטום x מצוי בין פריטי הרשימה-\T|xs| ו-\T|nil| אחרת.
+
+חישוב רקורסיבי דורש תמיד בדיקה של תנאי בכדי להבחין בין שני מצבים בהם עשוי
+להיתקל החישוב: המצב של בסיס הרקורסיה, אשר בו \ע|לא ניתן| לבצע קריאות רקורסיביות
+נוספות, והמצב הכללי אשר בו \ע|קיימת אפשרות| להפעלה רקורסיבית נוספת. פעמים רבות
+התנאי הוא משולש ומבחין בין שלושה מצבים: המצב של בסיס הרקורסיה, המצב של עצירה
+מוקדמת של החישוב הרקורסיבי, אשר בו האפשרות להפעלה רקורסיבית נוספת \ע|אינה
+מנוצלת|, והמצב בו \ע|נדרשת| הפעלה רקורסיבית נוספת בכדי לסיים את החישוב.
+.
+הפונקציה \T|exists| משתמשת בתנאי משולש כזה, ומעבירה לכן ל-\T|cond| שלושה
+\E|test-forms|:
+\ספרר
+✦ \T|((eq xs nil) t)| כלומר, אם רשימת ה-\T|xs| ריקה, ברור ש-\T|s| אינו מצוי
+בתוכה ואז \T|exists| מחזירה \T|nil|. תנאי זה מתאר את המצב הראשון, של בסיס
+הרקורסיה. אם תנאי זה אינו מתקיים, \T|exists| עוברת לבדוק את התנאי הבא:
+
+✦ \T|((eq x (car xs)) t)| כלומר, הפונקציה בוחנת את הפריט הראשון ברשימה \T|xs|,
+על ידי חישוב הביטוי \T|(car xs)| (מובטח שחישוב \T|(car xs)| יצליח שכן
+ה-\E|test-form| הקודם שבו נבדק אם הרשימה ריקה נכשל) ומשווה אותו ל-\T|x|. אם
+מתקיים שיוויון, החיפוש הצליח. במצב זה של עצירה מוקדמת, הפונצקיה-\T|exists|
+מחזירה \T|t| מבלי להידרש לקריאות רקורסיביות נוספות.
+
+במקרה שו ההשוואה נכשלת, השיערוך ממשיך ל-\E|test-form| הבא.
+
+✦ \T|(t (exists x (car xs)))|, כלומר, במקרה שהרשימה \T|xs| אינה ריקה, ו-\T|x|
+אינו שווה לפריט הראשון שב-\T|xs|, הפונקציה \T|exists| קוראת לעצמה רקורסיבית
+לחיפוש של \T|x| בשארית הרשימה אשר מתקבלת מחישוב \T|(cdr xs)|.
+===
+הבדיקה אם הרשימה ריקה נעשית באמצעות חישוב התנאי \T|(eq xs nil)|. השוואה של אטום
+ל-nil היא נפוצה בחישובים רקורסיביים. מיני-ליספ מגדירה פונקציה הנקראת null
+המיועדת לשם ביצוע השוואה זו:
+\begin{LIBRARY}
+(defun null(x) (eq x nil))
+\end{LIBRARY}
+
+ניזכר שהפונקציה eq היא פונקציה אטומית, במובן זה שלא ניתן לממש אותה באמצעות
+פונקציות אחרות, שהרי מלבד פונקציה זו, אין אף פונקציה אטומית שמאפשרת לבדוק את
+תוכנו של אטום. לעומת זאת, הפונקציה null שבמיני-ליספ ניתנת להגדרה
+באמצעות eq, והיא אכן נמנית ברשימת הפונקציות המוגדרות מראש.
+
+מימוש exists באמצעות null יראה כך
+\begin{KERNEL}
+(defun exists (x xs) ; determine whether atom x is in list xs
+  (cond ; Three cases to consider:
+    ((null xs) xs) ; (i) list of xs is exhausted
+    ((eq x (car xs)) t) ; (ii) item x is first in xs
+    (t (exists x (cdr xs))))) ; (iii) otherwise, recurse on rest of xs
+\end{KERNEL}
+
+אנו מבדילים בין שני סוגים של סמנטיקות של שיערוך של פונקציה:
+\begin{description}
+  ✦ [eager] בקריאה לפונקציה כגון set שהסמנטיקה שלה היא \E|eager|, הארגומנטים
+  לפונקציה משוערכים \ע|טרם| הקריאה לפונקציה, ורק ערכי השיערוך מועברים לפונקציה.
+  הפונקציה אינה יכולה לדעת מה היו ערכי הארגומנטים לפני ששוערכו.
+
+  פונקציות בעלות סמנטיקה שהיא eager מיוצגות על ידי ביטוי~$λ$ שהאטום הראשון שבו
+  הוא \T|lambda|.
+
+  ✦ [normal] לעומת זאת, בקריאה לפונקציה כגון quote שהסמנטיקה שלה היא
+  \E|normal|, הארגומנטים לפונקציה \ע|אינם| משוערכים טרם הקריאה לפונקציה,
+  והפונקציה יכולה לבחור אם לשערך את הארגומנטים.
+
+  פונקציות בעלות סמנטיקה שהיא normal מיוצגות על ידי ביטוי~$λ$ שהאטום הראשון שבו
+  הוא האטום \T|nlambda|.†{%
+  שימוש זה ב-nlambda היה קיים במימושים הראשונים של ליספ, אולם ברוב המימושים המודרניים
+  הוא בוטל מסיבות של יעילות. במקומו, נוסף מה שקוראים מקרו \E|(macro)|
+  שהוא דומה אך לא זהה ל-\E|nlambda|.}
+
+  כלומר, אנו מבחינים בין שני סוגים של ביטויי~\E|$λ$| בליספ: כאלו שמשערכים את
+  הפרמטרים שלהם לפני הפעלתם והמסומנים על ידי האטום \T|lambda| וכאלו שאינם עושים
+  זאת, והמסומנים על ידי האטום \T|nlambda|.
+\end{description}
+
+הסמנטיקה של \ע|כל הפונקציות| וכמעט כל האופרטורים בשפות כמו \E|\CPL|, היא
+\E|eager|. כמפורט ב\פנה|טבלה:אטומיות| שבהמשך, הסמנטיקה של כל הפונקציות
+האטומיות של מיני-ליספ היא \E|eager|, זאת מלבד הפונקציה \E|cond|, אשר הסמנטיקה
+שלה היא \E|normal|. הסיבה לכך היא ש-cond מדמה במיני-ליספ את פקודת התנאי \E|(if
+command)| של שפות אחרות. למעשה, cond מכלילה את האופרטור הטרנארי
+\LR{\texttt{$·$?$·$:$·$}}, כך שיוכל לבדוק מספר תנאים, ולא תנאי אחד בלבד.
+
+הפונקציה quote שבמיני-ליספ אינה אטומית שכן ניתן להגדיר אותה באמצעות ביטוי
+ה-nlambda הפשוט הבא
+\begin{MINI}
+(nlambda (x) x)
+\end{MINI}
+לא ניתן להגדיר פונקציות שהן normal באמצעות \E|defun|, אך ניתן להוסיף את הפונקציה
+quote לרשימת ה-a-list באמצעות set
+\begin{LIBRARY}
+(set 'quote '(nlambda (x) x))
+\end{LIBRARY}
+כפי שראינו מיני-ליספ מגדירה גם פונקציה lambda שהסמנטיקה שלה היא normal המאפשרת
+ליצור ביטוי~$λ$ מבלי להשתמש ב-quote
+\begin{SAMPLE}
+> (lambda (x) (cons (cdr x) (car x)))
+(LAMBDA (X) (CONS (CDR X) (CAR X)))
+\end{SAMPLE}
+נוכל לכן להגדיר את הפונקציה lambda באמצעות
+\begin{LIBRARY}
+(set 'lambda '(nlambda(parameters body) ('lambda parameters body)))
+\end{LIBRARY}
+כלומר, הפונקציה lambda היא פונקציה שמקבלת שני פרמטרים: parameters
+ו-\E|body|. הפונקציה אינה משערכת פרמטרים אלו ומחזירה ביטוי lambda המוגדר על ידם
+\begin{MINI}
+  ('lambda parameters body)
+\end{MINI}
+גם הפונקציה nlambda מסייעת להגדרת ביטויי nlambda באופן דומה, וניתן להגדירה
+באמצעות
+\begin{LIBRARY}
+(set 'nlambda '(nlambda (parameters body) ('nlambda parameters body)))
+\end{LIBRARY}
+כלומר, גם הפונקציה nlambda היא פונקציה שמקבלת שני פרמטרים שאינם משוערכים
+(\E|parameters| ו-\E|body|) ומחזירה ביטוי nlambda המוגדר על ידי
+שני הפרמטרים הללו
+\begin{MINI}
+  ('nlambda parameters body)
+\end{MINI}
+לאחר הגדרה זו של הפונקציה nlambda הכתיב
+\begin{MINI}
+  (nlambda x y)
+\end{MINI}
+זהה לכתיב
+\begin{MINI}
+  ('nlambda x y)
+\end{MINI}
+ללא תלות בערכיהם של x ו-\E|y|.
+
+ניתן גם להגדיר את הפונקציה defun באמצעות ביטוי nlambda
+\begin{LIBRARY}
+(set 'defun '(nlambda (name parameters body)
+  (set name (lambda parameters body))))
+\end{LIBRARY}
+כלומר, הפונקציה defun היא ביטוי nlambda אשר מקבל שלושה פרמטרים: \E|name|,
+\E|parameters| ו-\E|body|, ואשר קושר (באמצעות \E|set|) את הפרמטר אל ביטוי
+ה-lambda המוגדר על ידי שני הפרמטרים האחרים, והכל מבלי לשערך את הפרמטרים שלו.
+
+ניתן גם להגדיר את הפונקציה ndefun המגדירה פונקציה שהסמנטיקה שלה היא normal
+\begin{LIBRARY}
+(set 'ndefun '(nlambda (name parameters body)
+    (set name (nlambda parameters body))))
+\end{LIBRARY}
+גוף ההגדרה זהה לזה של defun אלא ש-ndefun יוצרת ביטוי nlambda במקום ביטוי
+\E|lambda|.
+
+לאחר שהגדרנו את הפונקציה ndefun נוכל להגדיר את quote באמצעותה
+\begin{MINI}
+(ndefun quote(x) x)
+\end{MINI}
+הפונקציות \E|quote|, \E|defun|, \E|ndefun|, \E|lambda| ו-\E|nlambda| אינן
+משערכות את הפרמטרים שלהן אף פעם. כאשר יש צורך בשיערוך הפרמטרים ניתן לקרוא
+לפונקציה \E|eval|. נגדיר לדוגמה את הפונקציה setq אשר מאפשרת לקשור ערך לאטום ללא
+צורך לבצע quoting על שם האטום
+\begin{MINI}
+(ndefun setq(a value)
+  (set a (eval value)))
+\end{MINI}
+השימוש בסמנטיקה שהיא normal אינו מתעורר רק בהגדרת פונקציות כמו quote ו-defun
+המשמשות לביצוע הגדרות. נגדיר למשל את הפונקציה \T|?:| אשר מתנהגת באופן דומה
+לאופרטור בשם זה בשפת~\CPL
+\begin{MINI}
+(ndefun ?: (condition true-value false-value)
+  (cond ((eval condition) (eval true-value))
+        (t (eval false-value))))
+\end{MINI}
+כדוגמה נוספת, נגדיר פונקציות \mini{||} ו-\mini{&&} הדומות לאופרטורים בשמות אלו
+בשפת~\CPL, כלומר חישוב של הפונקציות הבוליאניות של and ו-or בשיטה הידועה בשם
+\E|short-circuit|: ראשית שיערוך של הפרמטר הראשון, ואם זה קובע את תוצאת הפונקציה
+הבוליאנית, הימנעות משיערוך הפרמטר השני. אחרת, ערכה של הפונקציה הבוליאנית הוא תוצאת
+שיערוך הפרמטר השני
+\begin{MINI}
+(ndefun && (x y)
+  (cond ((eval x) (eval y))
+        (t nil)))
+(ndefun || (x y)
+  (cond ((eval x) t)
+        (t (eval y))))
+\end{MINI}
+
+

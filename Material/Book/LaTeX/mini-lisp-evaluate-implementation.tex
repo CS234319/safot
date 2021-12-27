@@ -1,0 +1,665 @@
+§§ חיפוש שמות, קישור לשמות, וטיפול בשגיאות
+כזכור, ה-a-list היא רשימה של \E|dotted pairs| שכל אחד מהם הוא קישור בין שם לערך.
+נגדיר פונקציה רקורסיבית, \E|lookup| אשר מקבלת שני פרמטרים: id שהוא אטום,
+ו-a-list, שהיא רשימה במבנה של \E|a-list| כפי שהצגנו אותו, כלומר סדרה של
+dotted pairs אשר ה-car של כל אחד מהם הוא אטום, וה-cdr שלו הוא משמעותו של האטום:
+\begin{KERNEL}
+(defun lookup (id a-list) ; lookup id in an a-list
+  (cond ; Three cases to consider:
+    ((null a-list) ; (i) a-list was exhausted.
+      (error UNDEFINED id))
+    ((eq id (car (car a-list))) ; (ii) found in first dotted pair
+      (cdr (car a-list))) ; return value part of dotted pair
+    (t (lookup id (cdr a-list))))) ; (iii) otherwise, recursive call on remainder of a-list
+\end{KERNEL}
+גם בפונקציה lookup אנו רואים קריאה רקורסיבית עם cond המתפצל לשלושה מקרים: במקר
+ה
+של רשימה ריקה הפונקציה נכשלת, במקרה שראש הרשימה מתאים לתנאי, הפונקציה מצליחה.
+הפונקציה קוראת לעצמה רקורסיבית בכל מקרה אחר.
+
+בהגדרת lookup נעשה שימוש בפונקציה אטומית נוספת, \E|error|. פונקציה זו
+מדפיסה את כל הפרמטרים שלה וגורמת לאינטרפרטר לעבור לסבב הבא של לולאת ה-\E|REPL|.
+
+נשתמש ב-error כדי להגדיר את הפונקציה \E|bind|. זוהי פונקציה רקורסיבית אשר תשמש כחלק
+ממימוש אלגוריתם השיערוך בליספ. תפקידה במנגנון הוא בשיערוך של ביטוי המכיל הפעלה
+של פונקציה, כמו למשל בביטוי
+\begin{MINI}
+  (exists name '(atom car cdr cond cons eq error eval set))
+\end{MINI}
+שנתקלנו בו קודם במימוש של is-atomic באמצעות \E|exists|. בקריאה ל-exists,
+יש לקשור בין \E|x| ו-\E|xs|, שמות הפרמטרים הפורמליים לפונקציה, ובין ערכי
+הארגומנטים האקטואליים. בהפעלה זו ערכי הארגומנטים הם:
+\begin{itemize}
+  ✦ \E|name|, או, ליתר דיוק, ביטוי ה-\E|S| שאותו מציין האטום \E|name|.
+  ✦ הרשימה
+  \begin{MINI}
+    (atom car cdr cond cons eq error eval set)
+  \end{MINI}
+  או ליתר דיוק הביטוי המתקבל מתוצאת השיערוך של
+  \begin{MINI}
+  '(atom car cdr cond cons eq error eval set)
+  \end{MINI}
+\end{itemize}
+
+הפונקציה bind אחראית לביצוע קישור זה בזמן הפעלה של פונקציה בתהליך השיערוך.
+בפרט, bind מקבלת שתי רשימות באורך שווה: רשימת פרמטרים (פורמליים) (\E|formals|)
+ורשימה ערכים---הארגומנטים (\E|actuals|). פרמטר שלישי ל-\E|bind| הוא רשימה קיימת
+של קישורים, כלומר רשימה במבנה של \E|a-list|.
+
+bind מחזירה רשימת קישורים חדשה, המכילה רשימה של קישורים בין פרמטרים וארגומנטים,
+ובהמשכה, רשימת הקישורים ההתחלתית, שהועברה כפרמטר שלישי ל-bind. כל קישור כזה הוא
+זוג, אשר ה-car שלו הוא הפרמטר, אטום של מיני-ליספ, וה-cdr שלו הוא הארגומנט, ביטוי-\E|S|
+שערכו נקבע בזמן ההפעלה, אשר אותו מציין הפרמטר.
+
+\begin{KERNEL}
+(defun bind (formals actuals a-list) ; Bind parameters to arguments, and prepend to a-list
+  (cond ((null formals) ; no more formals left
+        (cond ((null actuals) a-list) ; no more actuals left, binding done-- return a-list
+              (t (error missing-formals)))) ; more actuals than formals
+        ((null actuals) ; formals is not nil but actuals is, i.e., more formals than actuals
+          (error missing-actuals))
+        (t ; both formals and actuals are not empty
+          (cons ; create new binding and prepend it to result of recursive call
+            (cons (car formals) (car actuals)) ; new dotted pair defines single binding
+            (bind (cdr formals) (cdr actuals) a-list))))) ; recursive call
+\end{KERNEL}
+
+§§ שיערוך של ביטויי~\E|S|
+\begin{minipage}{0.9\textwidth}
+  \centering
+\newcommand\exception[1]{{\textcolor{red}{#1}}}
+\begin{mdframed}[backgroundcolor=Lavender!20]
+  \footnotesize
+  בהינתן ביטוי מורכב \E|$s$|, אלגוריתם השיערוך של ליספ מנסה
+  להציג אותו כרשימה בת~$n+1$ איברים \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+\] \begin{enumerate}
+    ✦ \exception{
+      אם הביטוי אינו רשימה, כלומר, אם הביטוי הנתון הוא \E|dotted pair| (כמו
+      \E|(a.b)| למשל) השיערוך נכשל.}
+    ✦ אם הרשימה ריקה, תוצאת השיערוך היא האטום \T|nil|.
+    ✦ אחרת, המשערך מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
+    לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך של~$s$ מתבצע
+    על פי הסתכלות זו:
+    \begin{quote}
+      \begin{enumerate}
+        ✦ \ע|שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל.|
+        \begin{itemize}
+          ✦ \exception{אם השיערוך של~$s₀$ נכשל, אזי גם השיערוך של~$s$ נכשל.}
+          ✦ אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
+          ✦ \exception{השיערוך של~$s$ נכשל אם~$s₀'$ אינו פונקציה.}
+          ✦ \exception{השיערוך של~$s$ נכשל גם אם~$s₀'$ הוא פונקציה, אך כזו
+            שאינה מצפה ל-$n$ ארגומנטים בדיוק.}
+        \end{itemize}
+        ✦ \ע|שיערוך הארגומנטים.|
+        \begin{itemize}
+          ✦ המשערך ממשיך כעת לשערך רקורסיבית את הארגומנטים לפונקציה~$s₀'$,
+          הלא הם הביטוים~\E|$s₁$,…,$sₙ$|. נסמן את תוצאות השיערוך הללו
+          ב-\E|$s₁'$,…,$sₙ'$|.
+
+          ✦ \exception{אם השיערוך הרקורסיבי של אחד מבין
+            הביטוים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$ כולו
+            נכשל.}
+        \end{itemize}
+
+        ✦ \ע|הפעלת הפונקציה על הארגומנטים.|
+
+        \begin{itemize}
+          ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$
+          על~$n$ הביטוים \E|$s₁'$,…,~$sₙ'$|.
+
+          ✦ \exception{אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.}
+        \end{itemize}
+      \end{enumerate}
+    \end{quote}
+  \end{enumerate}
+\end{mdframed}
+\end{minipage}
+
+\begin{minipage}{0.9\textwidth}
+  \centering
+\newcommand\exception[1]{{\textcolor{red}{#1}}}
+\begin{mdframed}[backgroundcolor=Lavender!20]
+  \footnotesize
+  בהינתן ביטוי מורכב \E|$s$|, אלגוריתם השיערוך של ליספ מנסה
+  להציג אותו כרשימה בת~$n+1$ איברים \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+\] \begin{enumerate}
+    ✦ \exception{
+      אם הביטוי אינו רשימה, כלומר, אם הביטוי הנתון הוא \E|dotted pair| (כמו
+      \E|(a.b)| למשל) השיערוך נכשל.}
+    ✦ אם הרשימה ריקה, תוצאת השיערוך היא האטום \T|nil|.
+    ✦ אחרת, המשערך מסתכל על הרשימה כעל עץ שיערוך, כלומר כעל קריאה
+    לפונקציה~$s₀$ המקבלת~$n$ ארגומנטים \E|$s₁$,…,$sₙ$|, והשיערוך של~$s$ מתבצע
+    על פי הסתכלות זו:
+    \begin{quote}
+      \begin{enumerate}
+        ✦ \ע|שיערוך רקורסיבי של~$s₀$, הפונקציה אותה יש להפעיל.|
+        \begin{itemize}
+          ✦ \exception{אם השיערוך של~$s₀$ נכשל, אזי גם השיערוך של~$s$ נכשל.}
+          ✦ אחרת, שיערוך זה מחזיר ביטוי~\E|S| שנסמן~$s₀'$.
+          ✦ \exception{השיערוך של~$s$ נכשל אם~$s₀'$ אינו פונקציה.}
+          ✦ \exception{השיערוך של~$s$ נכשל גם אם~$s₀'$ הוא פונקציה, אך כזו
+            שאינה מצפה ל-$n$ ארגומנטים בדיוק.}
+        \end{itemize}
+        ✦ \ע|שיערוך הארגומנטים.|
+        \begin{itemize}
+          ✦ המשערך ממשיך כעת לשערך רקורסיבית את הארגומנטים לפונקציה~$s₀'$,
+          הלא הם הביטוים~\E|$s₁$,…,$sₙ$|. נסמן את תוצאות השיערוך הללו
+          ב-\E|$s₁'$,…,$sₙ'$|.
+
+          ✦ \exception{אם השיערוך הרקורסיבי של אחד מבין
+            הביטוים~\E|$s₁$,…,~$sₙ$| נכשל, אז גם השיערוך של הביטוי~$s$ כולו
+            נכשל.}
+        \end{itemize}
+
+        ✦ \ע|הפעלת הפונקציה על הארגומנטים.|
+
+        \begin{itemize}
+          ✦ תוצאת השיערוך של הביטוי~$s$ היא תוצאת הקריאה לפונקציה~$s₀'$
+          על~$n$ הביטוים \E|$s₁'$,…,~$sₙ'$|.
+
+          ✦ \exception{אם הפעלה זו נכשלת, השיערוך של הביטוי~$s$ כולו נכשל.}
+        \end{itemize}
+      \end{enumerate}
+    \end{quote}
+  \end{enumerate}
+\end{mdframed}
+\end{minipage}
+
+§§ שיערוך ביטוי מורכב וקריאה לפונקציה
+
+תיארנו למעלה כיצד נעשה שיערוך של אטום. נותר לתאר כיצד מתבצע השיערוך של ביטוי
+מורכב. בתמצית, שיערוך של ביטוי מורכב נעשה התייחסות ל-\E|CAR| של הביטוי כפונקציה
+שאותה יש להפעיל על ה-\E|CDR| של הביטוי. הפעלה זו מתייחסת ל-\E|CDR| של הביטוי
+כרשימת הארגומנטים שיש להעביר לפונקציה שב-\E|CAR|.
+
+עלינו עוד להדגים כיצד נעשית קריאה לפונקציה. לשם כך, נשתמש בפונקציה המוגדרת מראש
+defun, המשמשת להגדרת פונקציות חדשות, כדי להגדיר את הפונקציה הרקורסיבית append
+המוסיפה פריט בסופה של רשימה 
+\begin{MINI}
+(defun append(x xs) ; append item x to end of list of xs
+  (cond ((null xs) ; no more xs, recursion base¢…¢
+          (cons x nil)) ; ¢…¢ return a list containing x
+        (t ; recursive call
+          (cons
+            (car xs) ; prepend first of xs to¢…¢
+            (append x (cdr xs)))))) ; ¢…¢ result of recursive call on remaining xs
+\end{MINI}
+
+לאחר ביצוע הגדרה זו, כלומר לאחר שיערוך הביטוי מעלה, יווצר קישור בין השם append
+ובין גוף הפונקציה \E|append|, כלומר ביטוי ה-$λ$
+\begin{MINI}
+(lambda (x xs)
+  (cond ((null xs) (cons x nil))
+        (t (cons
+              (car xs)
+              (append x (cdr xs))))))
+\end{MINI}
+
+וקישור זה יתווסף לתחילת ה-\E|a-list|. ויזואלית,
+אם ה-a-list נראתה טרם ההגדרה כך,
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+        h/t/t,
+        i/nil/nil
+      } {%
+        \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+        \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+        \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+      }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of h] (A) {a-list};
+    \draw[->] (A.south)--(h);
+  \end{tikzpicture}
+\end{LTR}
+אזי, אחרי ההגדרה של append ה-a-list תראה כך
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond ⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of g] (A) {a-list};
+    \draw[->] (A.south)--(g);
+  \end{tikzpicture}
+\end{LTR}
+בקריאה ל-append כמו
+\begin{MINI}
+(append 'a '(b c))
+\end{MINI}
+
+פונקציית השיערוך תאתר בתוך ה-a-list את ביטוי ה-$λ$ הקשור לפונקציה, כלומר
+את הביטוי
+\begin{MINI}
+(lambda
+  (x xs)
+  (cond ((null xs) (x))
+        (t (cons
+              (car x)
+              (append x (cdr xs))))))
+\end{MINI}
+ותפרק אותו לשלושת
+מרכיביו: האטום lambda המזהה את הביטוי, רשימת הפרמטרים הפורמליים \mini{(x xs)}
+והביטוי לחישוב,
+\begin{MINI}
+(cond ((null xs) (x))
+      (t (cons
+            (car x)
+            (append x (cdr xs)))))
+\end{MINI}
+אותו נסמן לרגע ב-$ϕ$. הקריאה לפונקציה append מתבצעת על ידי שיערוך הפרמטרים
+האקטואליים, כלומר שיערוך של הפרמטר \mini{'a} לכדי הערך \mini{A} ושיערוך של
+הפרמטר \mini{'(b c)} לכדי הערך \mini{(B C)}, ולאחר מכן חישוב הביטוי~$ϕ$ בתנאים
+שבהם הפרמטר x משתערך לאטום \mini{a} והפרמטר xs משתערך לרשימה \mini{(b c)}.
+
+קריאה לפונקציה בפרוצדורת השיערוך בליספ נעשית באמצעות יצירת קישורים בין שמות
+הפרמטרים הפורמליים וערכי הפרמטרים האקטואליים (פרמטרים אקטואליים נקראים גם
+\ע|ארגומנטים|). במקרה של הפונקציה append מתווספים שני \E|dotted pairs|
+\mini{(x.a)} ו-\mini{(xs.(b c))} ל-\E|a-list|.
+ויזואלית, ה-a-list תראה כך
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=2.5ex]
+    \foreach \x/\y/\z in {%
+    e/x/a,
+    f/xs/(b c),
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {e/f, f/g, g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of e] (A) {a-list};
+    \draw[->] (A.south)--(e);
+  \end{tikzpicture}
+\end{LTR}
+לאחר הקריאה לפונקציה, יש לשחזר את ערכה של ה-a-list לערכה המקורי טרם הקריאה לה.
+
+כאשר הפונקציה append קוראת לעצמה רקורסיבית בפעם הראשונה, יתבצע קישור נוסף בין
+הפרמטרים האקטואליים והפורמליים, וגם זאת על ידי תוספת של שני \E|dotted pairs| נוספים:
+\mini{(x.a)} ו-\mini{(xs.(c))}.
+
+לאחר ביצוע קישורים אלו, ה-a-list תראה כך
+\begin{LTR}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+    \foreach \x/\y/\z in {%
+    c/x/a,
+    d/xs/(c),
+    e/x/a,
+    f/xs/(b c),
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {c/d, d/e, e/f, f/g, g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of c] (A) {a-list};
+    \draw[->] (A.south)--(c);
+  \end{tikzpicture}
+\end{LTR}
+כלומר הקישורים החדשים יסתירו את הקישורים הקודמים.
+
+בקריאה הרקורסיבית השניה של append לעצמה, יווצרו שני קישורים נוספים,
+\mini{(x.a)} ו-\mini{(xs.())}, וה-a-list תראה כך
+\begin{LTR}
+  \usetikzlibrary{chains,arrows}
+  \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+          draw,minimum height=3ex, fill=blue!20,rectangle split horizontal}, >=stealth, start chain, node distance=3ex]
+
+    \foreach \x/\y/\z in {%
+    a/x/a,
+    b/xs/(),
+    c/x/a,
+    d/xs/(c),
+    e/x/a,
+    f/xs/(b c),
+    g/append/{%
+    (lambda⏎
+    \quad (x xs)⏎
+    \quad (cond⏎
+    \quad\quad((null xs) (x))⏎
+    \quad\quad (t (cons (car x) ⏎
+    \quad\quad\quad\quad\quad\quad(append x (cdr xs))))))},
+    h/t/t,
+    i/nil/nil
+    } {%
+    \node[on chain, list,font=\tt\scriptsize] (\x) {\y};
+    \node[below=4 ex of \x.one,anchor=north west,align=left,font=\tt\scriptsize,color=red] (temp) {\z};
+    \draw[->,bend left] (\x.one south) .. controls+(270:0.3) and+(120:0.6) .. (temp.north west);
+    }
+
+    \node[on chain] (j) {\huge$⋯$};
+    \draw[*->] let \p1=(i.two), \p2=(j.center) in (\x1,\y2)--(j);
+
+    \foreach \a/\b in {a/b, b/c, c/d, d/e, e/f, f/g, g/h, h/i} {%
+        \draw[*->] let \p1=(\a.two), \p2=(\b.center) in (\x1,\y2)--(\b);
+      }
+
+    \node[above=of a] (A) {a-list};
+    \draw[->] (A.south)--(a);
+  \end{tikzpicture}
+\end{LTR}
+כאמור, בכל פעם שבה הפונקציה append חוזרת מקריאה רקורסיבית, ה-a-list ישוחזר,
+ושני הקישורים בין הפרמטרים פורמליים לאקטואליים שנעשו למען הקריאה הרקורסיבית
+יוסרו ממנו.
+
+§§ שיערוך דחוי
+אלגוריתם השיערוך כפי שתואר עד כה אינו מספיק כדי לשערך את העץ ב\פנה|איור:עץ|
+כהלכה. הסיבה היא שהאופרטור הטרנארי \LR{\texttt{$·$?$·$:$·$}} אשר מצוי בשורש העץ, מחשב את
+הארגומנט
+הראשון שלו, ובהתאם לתוצאת החישוב, מחשב את הארגומנט השני או השלישי, אבל לא את
+שניהם גם יחד. למימוש של האופרטור הטרנארי
+
+בפרוצדורת השיערוך שתוארה למעלה, יש לחשב את כל הארגומנטים לפונקציה
+(או אופרטור), טרם שמפעילים את הפונקציה עצמה.
+
+אלגוריתם השיערוך הפשוט גם אינו מתאים לפונקציות כגון quote ו-lambda אשר אינן
+משערכות את הפרמטרים שלהן כלל. הפרוצדורה גם אינה מתאימה לפונקציות כגון cond בהן
+השיערוך של חלקים מגוף הפונקציה תלוי בערכים המחושבים בחלקים אחרים של הגוף.
+
+נתקן את אלגוריתם השיערוך כך שיתמוך בפונקציות שהן \E|normal|, על ידי הוספת התנאי
+הבא:
+\begin{mdframed}[backgroundcolor=Lavender!20]
+  \footnotesize
+  בשיערוך הביטוי \[
+    s=(s₀\;\;s₁\;\;⋯\;\;sₙ).
+\] אם שיערוך הביטוי~$s₀$ מחזיר פונקציה שהיא
+  normal כלומר ביטוי~$λ$ שהאטום הראשון שבו הוא nlambda (ולא \E|lambda|) אזי יש
+  להעביר לפונקציה זו כארגומנטים את הביטוים~\E|$s₁$,…,$sₙ$| ולא את הערכים
+  המשוערכים שלהם~\E|$s₁'$,…,$sₙ'$|.
+\end{mdframed}
+
+§§ הפונקציה eval והסביבה
+
+בנוסף לפונקציות האטומיות ולפונקציות המוגדרות מראש, שפת מיני-ליספ תומכת, כמו
+מרבית הניבים של ליספ, כפונקציה \E|eval| אשר מקבלת ביטוי~\E|S| ומשערכת אותו.
+הפונקציה eval גם היא נחשבת, מסיבות טכניות, לפונקציה אטומית. אנחנו נדגים כיצד
+ניתן לממש אותה באמצעות מימוש פונקציה דומה \E|evaluate| כפונקצית ספרייה.
+
+ישנו הבדל קטן בין \E|eval|, הפונקציה האטומית של ליספ, ובין \E|evaluate|, אותה
+נממש כפונקציית ספרייה. שתי הפונקציות מקבלות ביטוי-\E|S| ומשערכות אותו, אלא
+שהפונקציה \E|evaluate| מקבלת פרמטר נוסף, המתאר את הקישורים שנעשו בתכנית עד כה.
+לאוסף זה של ההגדרות, קוראים \ע|סביבה|. הסביבה ממומשת בשפת ליספ באמצעות
+מבנה נתונים הקרוי \E|a-list|. הפונקציה eval משתמשת אף היא בסביבה, אלא שבתוך
+המימוש של מיני-ליספ, אין צורך להעביר את הסביבה כפרמטר: רשימת ה-\E|a-list| נגישה
+לפונקציה \E|eval| כמין משתנה גלובלי, אותו אין צורך להעביר כפרמטר מפורש, וניתן
+לשנותו מכל נקודה בתכנית. העדר הצורך להעביר את ה-\E|a-list| כפרמטר ל-eval הוא זה
+אשר מבחין בינה ובין \E|evaluate| אשר אין לה גישה לערכים גלובליים, ועל כן היא
+נדרשת לקבל את הסביבה, המיוצגת באמצעות-\E|a-list| כפרמטר.
+
+המימוש של האלגוריתם שמאחורי \E|eval| (כלומר המימוש של הפונקציה \E|evaluate|)
+נעשה כולו במיני-ליספ, תוך שימוש בפונקציות אטומיות או פונקציות מוגדרות מראש, אשר
+כאמור גם הן ממומשות באמצעות הפונקציות האטומיות. מימוש זה הוא פשוט וקצר יחסית
+ועולה לכדי פחות ממאה שורות קוד.
+
+§§ הפונקציות evaluate ו-apply
+
+מתברר שאפשר לממש את אלגוריתם השיערוך גם בליספ עצמה. לשם כך נגדיר פונקציה
+evaluate המקבלת ביטוי~\E|S|, וסביבה במבנה של \E|a-list|, ואשר משערכת את הביטוי
+בהתאם לקישורים שבסביבה הנתונה. הפונקציה evaluate קוראת לעצמה ברקורסיה כדי לשערך
+את מרכיבי הביטוי.
+
+כאשר evaluate תזהה ביטוי~$λ$ היא תקרא לפונקצית עזר apply אשר גם אותה נגדיר
+בהמשך, ואשר אחראית להפעיל ביטוי~$λ$ על הפרמטרים המועברים לו. אם ביטוי ה-$λ$ הוא
+\E|eager|, אז apply תקרא ל-evaluate כדי לשערך את הפרמטרים.
+
+מבנה הקריאות והרקורסיות ההדדיות שבמימוש של evaluate ופונקציות העזר שלה מתואר
+ב\פנה|איור:שיערוך|.
+\begin{figure}[H]
+ \scriptsize
+  \centering
+  \input Forests/eval-call-graph.tikz 
+  \caption[רקורסיות הדדיות במימוש של eval]{רקורסיות הדדיות בין הפונקציה evaluate ופונקציות העזר שלה}
+  \תגית|איור:שיערוך|
+\end{figure}
+
+אנו רואים באיור גם ש-apply קוראת לפונקציה הרקורסיבית bind (שאותה כבר הגדרנו),
+וזאת כדי לקשור בין הפרמטרים הפורמליים והאקטואליים. האיור מראה גם ש-evaluate
+משתמשת בכמה פונקציות נוספות שהוצגו כבר: הפונקציה הרקורסיבית lookup כדי לשערך את
+ערכו של אטום, ו-is-atomic הקוראת ל-exists הרקורסיבית כדי לזהות אטומים המזהים
+פונקצית אטומיות.
+
+בנוסף לכל הפונקציות הללו, evaluate נעזרת גם בפונקציה \E|evaluate-atomic|, אשר
+מצידה משתמשת בכמה פונקציות עזר משלה, בהמשך כדי לממש את הפונקציות האטומיות שבהם
+משתמשת מיני-ליספ. שיערוך של אטומים, יחד עם מימוש הפונקציות האטומיות, מהווה את
+בסיס הרקורסיה של \E|evaluate|. השיערוך של כל ביטוי~\E|S|, מורכב ככל שיהיה
+מתורגם על ידי evaluate לסדרה מתאימה של שיערוך של אטומים והפעלות של פונקציות
+אטומיות.
+
+הגוף של evaluate עצמה הוא קצר, והוא מבוסס על אבחנה בין שלוש אפשרויות שונות ביחס
+לביטוי אותו היא נדרש לשערך.
+
+\minipage\textwidth
+\begin{KERNEL}
+(defun evaluate(S-expression a-list) ; evaluate S-expression in environment defined by an a-list
+  (cond ((atom S-expression) ; recursion base: lookup of atom in a-list
+          (lookup S-expression a-list))
+        ((is-atomic (car S-expression)) ; case of handling atomic functions
+          (evaluate-atomic S-expression a-list))
+        (t ; recursive step---lambda applied to parameters
+          (apply (evaluate (car S-expression) a-list) ; find lambda expression
+                  (cdr S-expression) ; find actual parameters
+                  a-list))))
+\end{KERNEL}
+\endminipage
+
+אם הביטוי ש-evaluate מקבלת הוא אטום, evaluate מפעילה את \E|lookup| כדי למצוא את
+הערך הקשור אליו ברשימת ה-\E|a-list|. אם לעומת הביטוי הוא ביטוי מורכב, אזי
+\E|dotted pair| אשר ה-car שלו הוא פונקציה, וה-cdr שלו הוא רשימה של
+ארגומנטים שיש להעביר לפונקציה. אם ה-car הוא שם של פונקציה אטומית, נדרש טיפול
+מיוחד, ואז evaluate קוראת לפונקציה evaluate-atomic אשר מבצעת זאת.
+בכל מקרה אחר, evaluate מוצאת את הפונקציה אותה יש להפעיל על ידי השיערוך
+\begin{MINI}
+(evaluate (car S-expression) a-list)
+\end{MINI}
+קריאה רקורסיבית זו תחזיר את ביטוי ה-$λ$ אותו יש להפעיל על הפרמטרים. evaluate
+גם מחשבת את הפרמטרים באמצעות הקריאה-\T|(cdr S-expression)|, וקוראת לפונקציה
+apply אשר מפעילה את ביטוי ה-$λ$ על הפרמטרים.
+
+הפונקציה apply מצידה מפרקת את ביטוי ה-$λ$ לשלושת מרכיביו (תגית, רשימת פרמטרים
+וביטוי לחישוב), ומעבירה מרכיבים אלו לפונקצית העזר apply-decomposed-lambda
+\begin{KERNEL}
+(defun apply(lambda-expression actuals a-list)
+  (apply-decomposed-lambda
+    (car lambda-expression) ; tag=lambda or nlambda
+    (car (cdr lambda-expression)); list of formal parameters
+    (car (cdr (cdr lambda-expression))); body
+    actuals
+    a-list))
+\end{KERNEL}
+הפונקציה apply-decomposed-lambda משערכת את גוף הפונקציה, בסביבה הכוללת קישור בין
+הפרמטרים הפורמליים לאקטואליים. קישור זה נעשה באמצעות הפונקציה bind אותה כבר
+הגדרנו.
+\begin{KERNEL}
+(defun apply-decomposed-lambda(tag formals body actuals a-list)
+  (evaluate body
+    (cond ((eq tag 'nlambda) (bind formals actuals a-list))
+          ((eq tag 'lambda) (bind formals (evaluate-list actuals a-list) a-list))
+          (t (error unknown-lambda tag))
+)))
+\end{KERNEL}
+
+האבחנה בין הסוגים השונים של ביטוי ה-$λ$, נעשית באופן הבא בפונקציה
+apply-decomposed-lambda
+\begin{itemize}
+  ✦
+  אם התגית של ביטוי ה-$λ$ היא האטום nlambda הקישור נעשה
+  ללא שיערוך הפרמטרים
+  האקטואליים.
+  ✦ אם לעומת זאת התגית היא האטום lambda הקישור בין הפרמטרים הפורמליים
+  לאקטואליים נעשה לאחר שיערוך של הפרמטרים האקטואליים באמצעות הפונקציה
+  \E|evalauate-list|. ✦
+  אם התגית אינה אף אחד משני האטומים הללו השיערוך נכשל.
+\end{itemize}
+
+ההגדרה של הפונקציה evaluate-list המיועדת לשיערוך רשימת הפרמטרים האקטואליים היא
+באמצעות הפעלה רקורסיבית של evaluate על כל אחד מאיברי הרשימה, ושרשור התוצאות
+לכדי רשימה אחת.
+\begin{KERNEL}
+(defun evaluate-list(S-expressions a-list)
+  (cond ((null S-expressions) nil) ; no more S-expressions to evaluate
+    (t (cons
+          (evaluate (car S-expressions) a-list) ; evaluate first S-Expression
+          (evaluate-list (cdr S-expressions) a-list))))) ; recursive call on remainder
+\end{KERNEL}
+
+§§ מימוש הפונקציות האטומיות של מיני-ליספ בתוך הפונקציה evaluate
+תיארנו את הפונקציה evaluate המממשת את מרבית הפעולות שבאלגוריתם השיערוך של ליספ.
+נותר עוד לתאר את המימוש של הפונקציה evaluate-atomic אשר נועדה לטיפול ב-8
+הפונקציות האטומיות של השפה.
+
+נעיין ראשית ב\פנה|טבלה:אטומיות| המפרטת את כל שנדרש כדי \ע|להשתמש| בפונקציות
+הללו.
+
+מימוש הפונקציות האטומיות בתוך evaluate נדרש לקיים את המפרט שבטבלה. כמובן, לא
+ניתן לממש את הפונקציות האטומיות עצמן. תפקידה של הפונקציה evaluate הוא לזהות
+שהיא נדרשת לשערך פונקציה אטומית, ואז להעביר את המשימה לפונקציה האטומית המתאימה.
+מרביתה של הפונקציה evaluate-atomic היא פעולות הכנה לקראת המטרה העיקרית שלנו:
+\begin{quote}
+  מימוש הפונקציות האטומיות בעבור פונקצית הספרייה evaluate וזאת בתוך הפונקציה
+  \E|evaluate-atomic|.
+\end{quote}
+
+הצעד הראשון במימוש של evaluate-atomic הוא פירוק הביטוי אותו יש לשערך לשני
+חלקים: שם הפונקציה האטומית, והפרמטרים לפונקציה זו.
+\begin{KERNEL}
+(defun evaluate-atomic (S-expression a-list)
+  (apply-atomic (car S-expression) (cdr S-expression) a-list))
+\end{KERNEL}
+
+הפונקציה evaluate-atomic צריכה לטפל בכל הפונקציות האטומיות, כמו גם בפונקציה
+eval אשר אינה אטומית, אבל עדיין לא טופלה. אנו רואים \פנה|טבלה:אטומיות| ש-cond
+היא הפונקציה היחידה מבין כל אלו שהסמנטיקה שלה היא \E|normal|.
+
+\minipage\textwidth
+במימוש של הפונקציה \E|apply-atomic| נפריד ראשית בין cond ובין כל שאר הפונקציות
+האטומיות.
+\begin{KERNEL}
+(defun apply-atomic (atomic actuals a-list)
+  (cond ((eq 'cond atomic) ; special case: cond has normal semantics
+            (evaluate-cond actuals a-list)) ; don't evaluate actuals
+        (t (apply-eager-atomic ; all other atomics are eager
+              atomic (evaluate-list actuals a-list) a-list))))
+\end{KERNEL}
+\endminipage
+
+במקרה ששם הפונקציה האטומית cond נשתמש בפונקצית עזר, \E|evaluate-cond|. במקרה
+שהשם הוא אחר, נמשיך עם הפונקציה \E|apply-eager-atomic|.
+
+המימוש של evaluate-cond הוא ברקורסיה פשוטה על רשימת ה-test-forms
+\begin{KERNEL}
+(defun evaluate-cond(test-forms a-list)
+  (cond ((null test-forms) nil) ; if no more test-forms, return nil
+        ((evaluate (car (car test-forms)) a-list) ; evaluate condition part of the first test-form
+        (evaluate (car (cdr (car test-forms))) a-list)) ; if true, evaluate value part (second part) of the first test-form
+        (t (evaluate-cond (cdr test-forms) a-list)))) ; otherwise, recurse on rest of test-forms
+\end{KERNEL}
+
+כדי לטפל בשאר הפונקציות שב\פנה|טבלה:אטומיות| ובפונקציה eval נשים לב לכך שכל אלו
+מלבד eval אינן נדרשות יותר ל-a-list וכולן, לבד מ-error מצפות לפרמטר אחד או שני
+פרמטרים.
+
+הפונקציה apply-eager-atomic מטפלת במקרים המיוחדים של \E|eval| ושל \E|error|
+ומעבירה את המשך הטיפול ל-apply-trivial-atomic
+\begin{KERNEL}
+(defun apply-eager-atomic (atomic actuals a-list)
+  (cond
+    ((eq atomic 'error) (error actuals))
+    ((eq atomic 'eval) (evaluate (car actuals) a-list))
+    ((null (cdr actuals)) (apply-trivial-atomic atomic (car actuals) NIL)) ;~1 arguments atomic
+    (t (apply-trivial-atomic atomic (car actuals) (car (cdr actuals)))) ;~2 arguments atomic
+))
+\end{KERNEL}
+
+כעת הפונקציה apply-trivial-atomic משתמשת ב-cond כדי לטפל בששת הפונקציות האטומיות שנותרו:
+\begin{KERNEL}
+(defun apply-trivial-atomic (atomic first second)
+  (cond ((eq atomic 'atom) (atom first))
+        ((eq atomic 'car) (car first))
+        ((eq atomic 'cdr) (cdr first))
+        ((eq atomic 'cons) (cons first second))
+        ((eq atomic 'eq) (eq first second))
+        ((eq atomic 'set) (set first second))
+        (t (error something-went-wrong atomic))))
+\end{KERNEL}
+
+§§ הקוד המלא של evaluate ופונקציות העזר שלה
+\תגית|פרק:eval|
+
+\immediate \closeout \kernelFile
+\begin{LTR}
+  \lstinputlisting[language=Mini,style=display,
+    numbers=left,
+    stepnumber=1,
+    numbersep=2pt,
+    xleftmargin=3ex,
+    numberblanklines=false,
+    numberstyle=\tiny\bf,
+    backgroundcolor=\color{olive!10}
+  ]{\jobname.kernel.lisp}
+\end{LTR}
+
+

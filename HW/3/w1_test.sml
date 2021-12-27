@@ -22,6 +22,6 @@ val t = parse_btree "a-b-_-_-c-d-_-_-e-_-_";
 
 val t' = parse_btree "aa-bb-_-_-cc-dd-_-_-ee-_-_";
 
-assert (tree_map (fn x => x ^ x) t = t');
+assert (map t (fn x => x ^ x) = t');
 
-assert (tree_flatten t = ["a", "b", "c", "d", "e"]);
+assert (flatten t = ["a", "b", "c", "d", "e"]);
