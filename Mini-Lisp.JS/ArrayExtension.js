@@ -18,7 +18,7 @@ Array.prototype.findLastIndex = function(fn) {
 }
 
 Array.prototype.findSecondLast = function(fn) {
-	const lastIndex = this.findLastIndex(s => s.didMatchEnclosures)
+	const lastIndex = this.findLastIndex(fn)
 	return lastIndex > 0 ? this[lastIndex - 1] : undefined
 }
 

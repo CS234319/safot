@@ -103,7 +103,8 @@ class SArrayElement extends Element {
 	constructor(sArray) {
 		super(sArray)
 		this.didMatchEnclosures = this.value.some(s => s.didMatchEnclosures)
-		this.value.findSecondLast()?.cancelMatchedEnclosures()
+		this.value.findSecondLast(s => s.didMatchEnclosures)
+			?.cancelMatchedEnclosures()
 	}
 
 	predefineSymbolsColor(color, symbolValues) {

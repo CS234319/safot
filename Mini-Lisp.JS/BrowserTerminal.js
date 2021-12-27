@@ -32,11 +32,13 @@ module.exports = class BrowserTerminal {
 							href="jquery.terminal.css"/>')
 
 		this.repl = new REPLInstigator(this, this)
+		this.isCursorDisabled = false
 
 		const self = this
 		$(function($, undefined) {
 			self.terminal = $(`#${id}`).terminal(function(line) {
 				self.repl.feedLine(line)
+				self.isCursorDisabled = false
 			}, config)
 		})
 	}
@@ -60,22 +62,22 @@ module.exports = class BrowserTerminal {
 	}
 
 	updateCommandFormat(str, command) {
-			const fullCommand = command + str
-			const numLines = fullCommand.split('\n').length
-			const firstIndex = this.terminal.last_index() - numLines + 2
-			const formatted = this.format(fullCommand).split(/\[\[[^\]]*\]\n\]/)
-			const formattedCommandLines = formatted.slice(0, numLines - 1)
-			const formattedStr = formatted[numLines - 1]
-			
-			formattedCommandLines.forEach((line, i) => {
-				const lineIndex = firstIndex + i
-				const prompt = i
-					? promptConfig.duringCommand 
-					: promptConfig.newCommand
-				this.terminal.update(lineIndex, prompt + line, { formatters: false })
-			})
+		const fullCommand = command + str
+		const numLines = fullCommand.split('\n').length
+		const firstIndex = this.terminal.last_index() - numLines + 2
+		const formatted = this.format(fullCommand).split(/\[\[[^\]]*\]\n\]/)
+		const formattedCommandLines = formatted.slice(0, numLines - 1)
+		const formattedStr = formatted[numLines - 1]
+		
+		formattedCommandLines.forEach((line, i) => {
+			const lineIndex = firstIndex + i
+			const prompt = i
+				? promptConfig.duringCommand 
+				: promptConfig.newCommand
+			this.terminal.update(lineIndex, prompt + line, { formatters: false })
+		})
 
-			return formattedStr
+		return formattedStr
 	}
 
 	format(str) {
@@ -131,8 +133,15 @@ module.exports = class BrowserTerminal {
 		}
 
 		$.terminal.defaults.keydown = event => {
-			if (event.code === 'Backspace') {
-				this.handleBackspace()
+			switch (event.code) {
+				case 'Backspace':
+					this.handleBackspace()
+					break
+				case 'Enter':
+					this.handleEnter()
+					break
+				default:
+					break
 			}
 		}
 	}
@@ -181,6 +190,10 @@ module.exports = class BrowserTerminal {
 		this.terminal.set_position(finalCursorPosition)
 	}
 
+	handleEnter() {
+		this.isCursorDisabled = true
+	}
+
 	/* Completions */
 	initCompletions() {
 		this.completions = []
@@ -208,15 +221,17 @@ module.exports = class BrowserTerminal {
 
 	/* Formatter Delegate Auxiliary */
 	getCursorPositionInCommand()  {
-		return 	(this.getCommand()?.length ?? 0) + 
-				(this.terminal.cmd().position())
+		return 	(this.isCursorDisabled ? null : 
+				(this.getCommand()?.length ?? 0) + 
+				(this.terminal.cmd().position()))
 				
 	}
 
 	/* Formatter Delegate */
 	matchEnclosures(lEncPos, rEncPos) {
 		const cursorPos = this.getCursorPositionInCommand()
-		if (cursorPos < lEncPos || 
+		if (!cursorPos ||
+			cursorPos < lEncPos || 
 			cursorPos > rEncPos) {
 			return null
 		}
