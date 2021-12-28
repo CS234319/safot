@@ -60,7 +60,7 @@ f(1, Y), 2 #< Y.
 
 <!--vert-->
 
-we notice the goal fails: the only option for `Y #>= 4` is `Y = 6` but that requires `X #>= 6` to succeed. therefore, this goal fails.
+we notice the goal fails: the only option for `2 #< Y` is `Y = 4` but that requires `X #>= 6` to succeed. therefore, this goal fails.
 
 these rules are disjoint - at most one of them will succeed. if a goal matches one of the rules and fails, there's no use in trying the rest of the rules.
 
