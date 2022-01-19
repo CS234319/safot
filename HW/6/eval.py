@@ -71,7 +71,7 @@ def eval_rec(a_list: A_List, ast: AST) -> S_Expression:
             else:
                 expr = eval_rec(a_list, f)
                 if is_a_user_defined_function(expr):
-                    eval_call(a_list, expr, args)
+                    return eval_call(a_list, expr, args)
         raise NotAFunction
 
 
