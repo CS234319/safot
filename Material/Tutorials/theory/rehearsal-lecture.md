@@ -1,20 +1,22 @@
 # rehearsal lecture
 
-## 21/12/2021
+## 23/01/2022
 
 ---
 
 ### criteria for evaluation of a type system
 
 these are the criteria we use to evaluate a type system of a new language we encounter:
-1. existence
-2. sophistication
-3. orthogonality
-4. strength
-5. time of enforcement
-6. responsibility for typing
-7. equivalence
-8. flexibility
+1. existence and sophistication
+2. orthogonality
+3. strength
+
+<!--vert-->
+
+4. time of enforcement
+5. responsibility for typing
+6. equivalence
+7. flexibility
 
 <!--vert-->
 
@@ -34,21 +36,24 @@ NOTE: compare nonexistence of a type system to existence of a dynamic type syste
 
 type systems differ in their sophistication level - how complex a type can we construct?
 
-1. no typing - as we saw
-2. degenerate typing - only a few predefined types
-3. non-recursive type systems - basic types can be defined by the programmer, but they cannot be recursive
+1. degenerate typing/no typing - only a few predefined types, or none at all
+2. non-recursive type systems - basic types can be defined by the programmer, but they cannot be recursive
 
 <!--vert-->
 
-4. recursive type systems - basic types can be defined by the programmer, including using recursion
-5. functions are **first-class values** - like in ML, we'll see
-6. highly advanced type constructors - desirable features like generics, user-defined overloading, inheritance, etc.
+3. recursive type systems - basic types can be defined by the programmer, including using recursion
+4. functions are **first-class values** - like in ML, we'll see
+5. highly advanced type constructors - a relative term used to describe languages that have desirable features like generics, user-defined overloading, inheritance, etc.
 
 <!--vert-->
 
 definition: we say a certain type of a programming language comprises **first-class values** if its values can be passed to functions, stored in variables, returned from functions, etc. otherwise, we say the type has **second-class values**.
 
-in Pascal, functions are not first-class values.
+<!--vert-->
+
+typically, examples of types with first-class values are `int`, `float`, `bool`, etc.
+
+in Pascal, functions are not first-class values, because for example you can't return them from functions.
 
 <!--vert-->
 
@@ -70,7 +75,7 @@ Pascal has a power-set type constructors, that receives a type and returns the t
 
 <!--vert-->
 
-indeed, `set of Boolean` and `set of Char` is defined in Pascal, but `set of Integer` is not. in fact, the power set operator only works for types with up to 256 values.
+indeed, `set of Boolean` and `set of Char` are defined in Pascal, but `set of Integer` is not. in fact, the power set operator only works for types with up to 256 values.
 
 this makes Pascal's type system a non-orthogonal type system.
 
@@ -82,6 +87,8 @@ ML's type system is orthogonal.
 
 how easy is it to break the association between the stream of bits that is a value, and the type of that value?
 
+<!--vert-->
+
 in C it is very easy:
 ```C
 int x = 5;
@@ -91,9 +98,13 @@ printf("%lf", *(double*)&x);
 
 try doing it in ML!
 
+this is called *type punning*.
+
 <!--vert-->
 
 definition: we say a language has **strong typing** if its type system makes it impossible to break the association of a value with its type or subject a value to an operation which is not acceptable for its type.
+
+<!--vert-->
 
 definition: we say a language has **weak typing** if it's relatively easy for a programmer to break or ignore the association between a value and its type.
 
@@ -181,6 +192,8 @@ for example, if two Java classes `A` and `B` have the same methods and fields, i
 
 definition: if in a language, two types can be considered equivalent if they have the same legal operations (same "structure"), we say the language has **structural equivalence**.
 
+<!--vert-->
+
 definition: if in a language, two types are equivalent only if they are defined in the same location (i.e. they are the same type), we say the language has **nominal equivalence**.
 
 <!--vert-->
@@ -193,8 +206,80 @@ languages with nominal equivalence: Java, Pascal, and more.
 
 ### flexibility
 
-- not yet discussed - in a few words, it's the ability of the programmer to use advanced constructs like polymorphism and coercion.
-- you'll see it later
+languages vary in how flexible their type systems are. this is reflected in programmers' ability to use two main constructs:
+
+- universal polymorphism - not discussed today, things like generics.
+- ad-hoc polymorphism - overloading and coercion
+
+<!--vert-->
+
+### coercion
+
+notice how, in every C function that receives a `double` parameter, we can also pass an `int`.
+so, every C function of ints is *polymorphic* - it has many types.
+
+for example, consider the following C function: ```double f(int x) { return x; }```. `f(5);` is a valid call and returns `5.0`.
+
+<!--vert-->
+
+definition: **coercion** is a conversion between values of one type to another which occurs implicitly - automatically.
+
+most languages have built-in coercions, but not all.
+most languages do not have user-defined coercion (programmers cannot define more coercions for their own types).
+
+<!--vert-->
+
+- ML does not have coercion at all.
+
+- C and Java have pre-defined coercions.
+
+- C++ has user-defined coercions.
+
+<!--vert-->
+
+sometimes coercions can be chained, for example, here is a coercion chain in C++:
+
+```C++
+unsigned char → char → int → long → double → long double`
+```
+
+<!--vert-->
+
+### overloading
+
+coercion refers to automatic generation of new types for functions. *overloading* refers to manual generation of new types for functions.
+
+<!--vert-->
+
+for example, consider the following Java functions:
+```Java
+public static void println(double x) { System.out.println(x); }
+public static void println(String x) { System.out.println(x); }
+```
+
+on what types of values can these functions be called?
+of course, `double` and `String`, but also `int`, `long`, and `float` (because of coercion).
+
+<!--vert-->
+
+the two functions `println: String->void`, `println: double->void` are two different functions, but they have the same name.
+we could have given them different meanings, too.
+
+<!--vert-->
+
+most languages have both built-in and user-defined overloading, for example Java and C++.
+some languages have only built-in overloading, for example, ML. 
+
+overloading in ML is very limited: just `op+ : int*int->int` and `op+ : double*double->double` and the likes.
+
+attempting to define another function in ML with the same name would just override the old function.
+
+<!--vert-->
+
+### overloading vs coercion
+
+- overloading: a small number of distinct functions with the same name. semantic similarity is programmer-defined (programmers are responsible for making the functions do the same thing).
+- coercion: many types for the same function caused by implicit conversions between function arguments. semantic similarity is defined outside the function (it's a property of the type).
 
 <!--vert-->
 
@@ -242,7 +327,7 @@ in SML sequences, the values are not calculated until they are needed.
 
 <!--vert-->
 
-one last piece of the puzzle - normal evaluation
+another evaluation method is normal evaluation. 
 
 definition: we say a language uses **normal evaluation** if when evaluating a function call, the formal parameters in the function definition are replaced by the arguments of the function. this is similar to lazy evaluation, but parameters can be evaluated more than once.
 
@@ -261,6 +346,23 @@ public static int f(int a, int b) {
 what will `f(a(), b());` print under a normal evaluation order?
 
 NOTE: assuming == evaluates its left argument first, "b\na\nb\n" will be printed.
+
+<!--vert-->
+
+one last piece of the puzzle is **short-circuit evaluation**.
+
+it is *only* applicable to AND and OR operators. 
+
+- for AND, if the first argument is false, the second argument is never evaluated.
+- for OR, if the first argument is true, the second argument is never evaluated.
+
+<!--vert-->
+
+it is a form of lazy evaluation.
+
+for example, `true || f(x)` will never call `f(x)`, and same for `false && f(x)`.
+
+however, `f(x) || true` will call `f(x)`, and same for `f(x) && false`.
 
 <!--vert-->
 
