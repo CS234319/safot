@@ -425,7 +425,7 @@ Solving recursive type equations:
 * **Tutorial**
     1. [Prolog - Control Predicates](Tutorials/prolog/control-predicates.md) --- [pdf-slides](Tutorials/pdfs/slides/prolog/control-predicates.pdf)
 * **Submission**: [HW4](https://docs.google.com/document/d/1D01bTGCuLY0fZd-Gv_8ZtaHnMCnOAaIPUduWJYaTKlc/edit) \[3.1 23:59\]
-* **HW**: [HW5](???) is published \[1.1\]
+* **HW**: [HW5](https://docs.google.com/document/d/1EyajoFoeNgjcxlvSeI0MS3d4AuwKAW4lfZAsCDkx3g8/edit?usp=sharing) is published \[2.1\]
 
 ## Week 10 \[2.1-8.1\]
 
@@ -437,30 +437,25 @@ Solving recursive type equations:
 ## Week 11 \[9.1-15.1\]
 
 * **Lecture**
-    1. [Advanced Constructs - Evaluation Strategies](Lectures/slides/chapter-7.pdf)
+    1. TBD
 * **Tutorial**
-    1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md)
-    2. [Python Generators](Tutorials/python/generators.md)
-    3. TBD
-* **Submission**: [HW5](???) \[15.11 23:59\]
-* **HW**: [HW6](???) is published \[15.11\]
+    1. [Lexical and Dynamic Scoping](Tutorials/theory/scoping.md) --- [pdf-slides](Tutorials/pdfs/slides/theory/scoping.pdf)
+    2. [Python Generators](Tutorials/python/generators.md) --- [pdf-slides](Tutorials/pdfs/slides/python/generators.pdf)
+* **Submission**: [HW5](https://docs.google.com/document/d/1EyajoFoeNgjcxlvSeI0MS3d4AuwKAW4lfZAsCDkx3g8/edit?usp=sharing) \[16.11 23:59\]
+* **HW**: [HW6](https://docs.google.com/document/d/1pQEy-bS61h4dby4zdjIyt0w7EU-wAHFxroeDhLaSEdk/edit?usp=sharing) is published \[15.11\]
 
 ## Week 12 \[16.1-22.1\]
 
 * **Lecture**
-    1. [Advanced Constructs - Closures](Lectures/slides/chapter-7.pdf)
-    2. [Advanced Constructs - Beyond Closures](Lectures/slides/chapter-7.pdf)
+    1. Typing: chapters [3](Lectures/slides/chapter-3) and [4](Lectures/slides/chapter-4)
 * **Tutorial**
-    1. TBD
+    1. [Exam Questions](Tutorials/pdfs/slides/exam-questions.pdf)
 
 ## Week 13 \[23.1-29.1\]
 
 * **Lecture**
     1. [Real Life Programming Languages](https://docs.google.com/presentation/d/1FGUzbhURUqzL3hfzCj8m3nR1swqmpG8CYu77H4Tgm5U/edit#slide=id.gb50064ae0_0_89)
-* **Tutorial**
-    1. TBD
-* **Reading material**
-* **Submission**: [HW6](???) \[29.1 23:59\]
+* **Submission**: [HW6](https://docs.google.com/document/d/1pQEy-bS61h4dby4zdjIyt0w7EU-wAHFxroeDhLaSEdk/edit?usp=sharing) \[29.1 23:59\]
 
 ## Extra curricular
 

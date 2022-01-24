@@ -41,13 +41,13 @@ prints `x = "A"`
 #### example
 
 ```lisp
-(defvar x 10)
+(set 'x '10)
 
 (defun foo (x) (bar))
 
 (defun bar () (print x))
 
-(foo 5)
+(foo '5)
 ; 5
 ```
 
