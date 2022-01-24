@@ -55,7 +55,6 @@ module.exports = class Environment {
 	}
 
 	applyPrimitive(primitive, args, evaluator) {
-		const savedAList = this._alist
 		this._pushInvocation(primitive.getName(), args)
 
 		try {
