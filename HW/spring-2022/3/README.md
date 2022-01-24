@@ -15,14 +15,6 @@
 
 ## wet
 
-* unless stated otherwise you may only use material from tutorials 1-6
-* for each exercise `i`:
-  * the solution to the exercise should be in `wi.ml`
-  * you are provided with 2 files:
-    1. `wi/def.ml` - add `open Def` at the top of `wi.ml`
-    2. `wi/test.ml` - run this file to test your solution
-  * `wi.ml` should contain a module `Wi` that matches the signature `Si`
-
 ### exercise 1
 
 in this exercise you'll implement a dictionary in OCaml. a dictionary associates a key with a single value.
@@ -49,7 +41,7 @@ in this exercise you'll implement a dictionary in OCaml. a dictionary associates
 
 ### exercise 2
 
-you are given a definition of a tree type. implement the following **tail-recursive** functions.
+you are given a definition of a tree type in `d2.ml`. implement the following **tail-recursive** functions.
 
 1. the function `flatten` takes a tree and returns a preorder traversal of it as a list.
 
@@ -78,13 +70,13 @@ you are given a definition of a tree type. implement the following **tail-recurs
 
 in this exercise you'll implement simple pattern matching.
 
-you are provided with the definitions of `pattern` and `term` in `w3_def.ml`.
+you are provided with the definitions of `pattern` and `term` in `d3.ml`.
 
 1. implement `flatten` that takes a list of lists and returns all elements in these lists in a singe list. in other words `flatten` flattens the list.
 2. implement `zip` that takes two lists `[x1; x2; ...]` and `[y1; y2; ...]` and returns the list `[(x1, y1); (x2, y2); ...]`. the returned list is of the same length as the shorter list.
 3. implement `map2` that takes a function `f` and two lists `[x1; x2; ...]` and `[y1; y2; ...]` and returns the list `[(f x1 y1); (f x2 y2); ...]`. the returned list is of the same length as the shorter list.
 4. implement `unique` that takes a list and returns it without duplicate elements.
-5. implement `match` that takes a pattern and a term and returns the terms matching the variables in the pattern. `match` should return a list where each element is a pair of a variable name and a matching term. each variable should appear exactly once. if the given pattern and term don't match raise `NoMatch`.
+5. implement `match_` that takes a pattern and a term and returns the terms matching the variables in the pattern. `match_` should return a list where each element is a pair of a variable name and a matching term. each variable should appear exactly once. if the given pattern and term don't match raise `NoMatch`.
 
 ### exercise 4
 
@@ -92,37 +84,12 @@ in this exercise you'll implement a bi-directional sequence (hereafter: biseq).
 
 a biseq wraps a sequence and allows going forward or back in it. informally, the biseq caches the sequence's elements so that each element is computed at most once. we call the number of elements a biseq passed its `index` (it starts at `0`).
 
-define the following in `W4`:
+define the following in `q4.ml`:
 
 1. define the type `biseq` - the type of biseq's
 2. define an exception `SeqErr`
-3. define the function `new` that takes a sequence and returns the corresponding biseq
+3. define the function `make` that takes a sequence and returns the corresponding biseq
 4. define the function `prev` that takes a biseq and returns an identical biseq but with its index decremented. if its index is `0` raise `SeqErr`.
 5. define the function `next` that takes a biseq and returns an identical biseq but with its index incremented. if its index is at the end of the sequence raise `SeqErr`
 6. define the function `curr` that takes a biseq and returns the `index`-th element of the sequence.
 7. define the function `empty` that takes a biseq and returns `true` iff its index is at the end of the sequence.
-
-example:
-
-```ocaml
-use "w4.ml";
-use "w4_test.ml";
-open W4;
-
-val x = counter ();
-val x = next x; (*exec: 1*)
-val x = next x; (*exec: 2*)
-val x = prev x;
-val x = next x;
-val x = next x; (*exec: 3*)
-print (Int.toString (curr x) ^ "\n"); (*3*)
-```
-
-the code above should print:
-
-```text
-exec: 1
-exec: 2
-exec: 3
-3
-```

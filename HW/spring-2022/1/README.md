@@ -31,7 +31,7 @@
 
 #### project structure
 
-* clone the git repo [programming-languages](https://link_to_repo)
+* clone the git repo [safot](https://github.com/CS234319/safot)
 * this assignment's root directory is `HW/1/`
 * the directory structure is:
   * `sol/` - where your solutions go
