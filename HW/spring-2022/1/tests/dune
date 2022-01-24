@@ -1,0 +1,17 @@
+(test
+ (name test2)
+ (libraries sol)
+ (modules test2)
+)
+
+(test
+ (name test3)
+ (libraries sol)
+ (modules test3)
+)
+
+(test
+ (name test4)
+ (libraries sol)
+ (modules test4)
+)
