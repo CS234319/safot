@@ -4,48 +4,60 @@
 
 ---
 
+### online material
+
+* basic - [OCaml from the Very Beginning](https://johnwhitington.net/ocamlfromtheverybeginning/index.html) - all chapters
+* advanced - [Real World OCaml](https://dev.realworldocaml.org/toc.html) chapter 1-6
+* reference - [The OCaml Manual](https://ocaml.org/manual/index.html)
+
+---
+
 ### basic usage
 
-* REPL - `utop` or `ocaml`
-* prompt (#)
+* REPL - `utop`
+* prompt `utop #`
 * double-semicolon terminated
 
 ```text
-    OCaml version 4.12.0
-# 5 + 3;;
+────────┬─────────────────────────────────────────────────────────────┬───────
+        │ Welcome to utop version 2.9.0 (using OCaml version 4.12.0)! │
+        └─────────────────────────────────────────────────────────────┘
+
+Type #utop_help for help about using utop.
+
+─( 13:10:14 )─< command 0 >────────────────────────────────────{ counter: 0 }─
+utop # 5 + 3;;
 - : int = 8
 ```
 
 <!--vert-->
 
-### load from file
+### execute a file
 
-* create a file named `myfile.ml`
-* start OCaml and
+start `utop` and
 
-    ```ocaml
-    #use "myfile.ml";;
-    ```
+```ocaml
+#use "myfile.ml";;
+```
 
-* or:
+or run:
 
-    ```bash
-    ocaml myfile.ml
-    ```
+```bash
+ocaml myfile.ml
+```
 
 <!--vert-->
 
 ### REPL
 
-* OCaml can be used through a REPL
-* expressions followed by **two semicolons** yield a response
+expressions followed by **two semicolons** yield a response
 
-    ```ocaml
-    2 + 2;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+2 + 2;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
-* the response is the computed value and its type
+the response is the computed value and its type
 
 <!--vert-->
 
@@ -103,42 +115,42 @@ h''3_H
 
 ### special names
 
-* permitted over the characters:
+permitted over the characters:
 
-    ```ocaml
-    ~ ! ? $ & * + - / = > @ ^ | % < : #
-    ```
+```ocaml
+~ ! ? $ & * + - / = > @ ^ | % < : #
+```
 
-* can't start with:
+can't start with:
 
-    ```ocaml
-    ~ ! ? : .
-    ```
+```ocaml
+~ ! ? : .
+```
 
-* should not be one of:
+should not be one of:
 
-    ```ocaml
-    !=    #     &     &&    *     +     -     ~
-    -.    ->    .     ..    .~    :     ::    |
-    <     <-    =     >     ?     :>    :=    ||
-    ```
+```ocaml
+!=    #     &     &&    *     +     -     ~
+-.    ->    .     ..    .~    :     ::    |
+<     <-    =     >     ?     :>    :=    ||
+```
 
 <!--vert-->
 
-* to name something with a symbolic name use parentheses:
+to name something with a symbolic name use parentheses:
 
-    ```ocaml
-    let ( +-+-+ ) = 1415;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+let ( +-+-+ ) = 1415;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
-* used mainly for defining operators (more on that later...)
+used mainly for defining operators (more on that later...)
 
-    ```ocaml
-    let (<->) x y = x * x + y * y;;
-    3 <-> 4;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+let (<->) x y = x * x + y * y;;
+3 <-> 4;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -151,12 +163,11 @@ exception   external    false       for         fun
 functor     if          in          include     inherit
 land        lazy        let         lor         lsl
 lxor        match       method      mod         module
-new         nonrec      object      of          open 
+new         when        object      of          open 
 private     rec         sig         struct      then
 true        try         type        val         virtual
 while       with        class       end         function
 initializer lsr         mutable     or          to
-when
 ```
 
 ---
@@ -522,33 +533,26 @@ let sq (x: int) = x * x;;
 
 <!--vert-->
 
-* the result of the function is the result of evaluating the **expression** of the function body with the actual parameter
-* `int->int` is the standard mathematical notation for a function type that takes an integer and returns an integer
+* the result of the function is the result of evaluating the **expression** of the function body with the actual parameters
+* `int->int` is a notation for a function type that takes an integer and returns an integer
 
 ---
 
-### applying a function
+### calling a function
 
-* simple function call
+simple function call
 
-    ```ocaml
-    sq 3;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+sq 3;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
-* when a function is called the parameter is evaluated and then passed to the function
+when a function is called the parameter is evaluated and then passed to the function
 
-    ```ocaml
-    sq (sq 3);;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
-
-* note that parentheses are optional
-
-    ```ocaml
-    sq (3);;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+sq (sq 3);;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -561,11 +565,11 @@ let sq (x: int) = x * x;;
 ```ocaml
 let a = (3., 4.);;
 
-let lengthvec ((x, y): float * float) = sqrt(x *. x +. y *. y);;
+let normal ((x, y): float * float) = sqrt(x *. x +. y *. y);;
 
-lengthvec a;;
+normal a;;
 
-lengthvec (5.0, 12.0);;
+normal (5.0, 12.0);;
 ```
 <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
@@ -599,48 +603,52 @@ let factorial n =
 
 ### functions as values
 
-* anonymous functions with `fun` notation
+anonymous functions with `fun` notation
 
-    ```ocaml
-    fun (x:int) -> x * x;;
+```ocaml
+fun (x:int) -> x * x;;
 
-    (fun (x:int) -> x * x) 3;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+(fun (x:int) -> x * x) 3;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
-* the following declarations are identical
+the following declarations are identical
 
-    ```ocaml
-    let sq (x:int) = x * x;;
-    let sq = fun (x:int) -> x * x;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+let sq (x:int) = x * x;;
+let sq = fun (x:int) -> x * x;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
 ### returning functions
 
-* functions can also be __returned__ from other functions
+functions can also be **returned** from other functions
 
-    ```ocaml
-    let inttwice (f: (int->int)) = fun x -> f (f x);;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+```ocaml
+let inttwice (f: (int->int)) = fun x -> f (f x);;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
-* `->` is right associative so its type is equivalent to:
+<!--vert-->
 
-    ```ocaml
-    val inttwice : (int -> int) -> (int -> int)
-    ```
+`->` is right associative so its type is equivalent to:
 
-* example
+```ocaml
+val inttwice : (int -> int) -> (int -> int)
+```
 
-    ```ocaml
-    let f = inttwice (fun x -> x*x);;
+<!--vert-->
 
-    f 3;;
-    ```
-    <!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
+example
+
+```ocaml
+let f = inttwice (fun x -> x*x);;
+
+f 3;;
+```
+<!-- .element: data-thebe-executable-ocaml data-language="text/x-ocaml" -->
 
 ---
 
@@ -911,7 +919,7 @@ prefix "Dr. " "Tomer";;
 
 ### exam questions
 
-#### what will be printed?
+#### what will be printed? (2)
 
 <!--vert-->
 
@@ -951,19 +959,17 @@ let rec f4 f = f f4;;
 
 <!--vert-->
 
-### GCD - C vs. OCaml
+### GCD - Python vs. OCaml
 
-an imperative C program:
+an imperative python program:
 
-```c
-int gcd(int m, int n) {
-    while (m != 0) {
-        int tmp = m;
-        m = n % m;
-        n = tmp;
-    }
-    return n;
-}
+```python
+def gcd(m, n):
+    while m != 0:
+        tmp = m
+        m = n % m
+        n = tmp
+    return n
 ```
 
 a functional program in OCaml:

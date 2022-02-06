@@ -219,7 +219,7 @@ let sq_root a =
 
 ---
 
-### simultaneous declarations (collateral)
+### simultaneous declarations
 
 ```ocaml
 let ID1 = E1 and ... and IDn = En

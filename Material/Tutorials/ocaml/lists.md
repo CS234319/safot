@@ -4,7 +4,7 @@
 
 ---
 
-a list is an __immutable__ finite sequence of elements
+a list is an **immutable** finite sequence of elements
 
 ```ocaml
 ([3; 5; 9]: int list);;

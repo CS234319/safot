@@ -58,6 +58,8 @@ function thebe_init_all(sub, port) {
         thebe_init("javascript", "javascript", port);
     } else if (sub === "python") {
         thebe_init("python3", "python", port);
+    } else if (sub == "ocaml") {
+        thebe_init("ocaml-jupyter", "ocaml", port);
     }
     for (const cb of document.querySelectorAll("[data-codeblock-editable]")) {
         make_codeblock_editable(cb);

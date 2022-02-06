@@ -8,7 +8,7 @@
 
 * general purpose 👨‍💻
 * easy to learn 🤯
-* clean syntax ♻️
+* clean syntax ♻
 * huge standard library 🧰
 
 ---
@@ -80,7 +80,7 @@ Java programming = wage slavery
 
 ---
 
-Google ❤️ Python
+Google ❤ Python
 
 > “Python where we can, C++ where we must.”
 
@@ -92,7 +92,7 @@ Google ❤️ Python
 * data science & ML 📊
 * natural language processing 💬
 * web development 🌐
-* even embedded programming! 🖨️ (MicroPython)
+* even embedded programming! 🖨 (MicroPython)
 
 ---
 
