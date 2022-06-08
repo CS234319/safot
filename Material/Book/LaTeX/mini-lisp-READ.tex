@@ -1,0 +1,35 @@
+\begin{adjustbox}{max width=\textwidth,center}
+  \begin{minipage}\textwidth
+    \begin{LTR}
+      \def\codesize{\normalsize}
+      \lstinputlisting[
+        language=Chic,
+        linerange=A-B,
+        includerangemarker=false,
+        mathescape=false,
+        frame=none,
+        backgroundcolor=\color{white},
+        escapeinside={/**}{*/},
+        escapebegin={\bgroup\fixNewLine\renewcommand\baselinestretch{1.1}
+            \commentsfont\color{black}\slshape},
+        escapeend={\egroup},
+      ]{../Chic/repl.cc}
+    \end{LTR}
+  \end{minipage}
+\end{adjustbox}
+\par
+\begin{adjustbox}{max width=\textwidth,center}
+  \begin{minipage}{1.15\textwidth}
+    \begin{LTR}
+      \def\codesize{\small}
+      \lstinputlisting[
+        language=Chic,
+        linerange=B-C,
+        includerangemarker=false,
+        mathescape=true,
+        frame=none,
+        backgroundcolor=\color{white},
+      ]{../Chic/repl.cc}
+    \end{LTR}
+  \end{minipage}
+\end{adjustbox}
