@@ -8,27 +8,34 @@ static S eval(S s) { try { return s.eval(); } catch (Pair $x$) { throw s; } }
 #define forever    for (;;) 
 #define whatever   ... 
 #define relax      0
+#define loop       goto
 
 #define EOF ((char *)0)
 
 struct panic{};
 
+/*| Z |*/
+/** Prompt for input and read it line by line, until a valid
+S-expression is found and returned; panics on EOF. */
+/*| W |*/
 S read() { 
-    Start: collaterally( Parser::reset(), prompt(">") );
-      forever {
-        Value line = readln(); 
-        if (line == EOF) throw panic(); 
-        switch (Parser::supply(line), Parser::status()) {
-          case Parser::ready: 
-            prompt("-"); continue;               // More input must be waiting 
-          case Parser::accept: 
-            return Parser::result();   
-          default:                            assert(Parser::status() == Parser::reject);
-            collaterally( prompt("?\n"), Parser::reset() );
-              continue;   // Admonish programmer; continue
-        }
-      }
+  Prompt:   collaterally( Parser::reset(), prompt(">") );
+  Consume:  {
+    Value line = readln(); 
+    if (line == EOF) throw panic(); 
+    Parser::supply(line); 
+    switch (Parser::status()) {
+      case Parser::ready: 
+        prompt("-"); loop Consume;    // More input must be waiting 
+      case Parser::accept: 
+        return Parser::result();   
+      default:                            assert(Parser::status() == Parser::reject);
+        collaterally( prompt("?\n"), Parser::reset() );
+        loop Consume;   // Admonish programmer; continue
+    }
+  }
 }
+/*| X |*/
 
 /*| A |*/
 /** REPL realizes its acronym---the famous 

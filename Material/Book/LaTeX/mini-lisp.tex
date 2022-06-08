@@ -1,4 +1,15 @@
-\def\Title{שפת מיני-ליספ וכתיבת המשערך שלה בה עצמה}
+\def\Title{מיני-ליספ, שפת ליספ מיניאטורית ליספ וכתיבת המשערך שלה בה עצמה
+  \\
+  \begin{LTR}
+    \Huge \E|Mini-Lisp|\\
+    \Large\itshape \E|a Miniature Lisp and Using it to Implementing its own Evaluator|
+  \\
+\normalsize \itshape Joseph (Yossi) Gil \\
+\normalsize \itshape The Department of Computer Science \\
+\normalsize \itshape The Technion---Israel Institute of Technology \\
+\normalsize \itshape Haifa, Israel
+\end{LTR}
+}
 \input{wrap}
 
 \providecommand{\TopAlign}[1]{\adjustbox{valign=t}{#1}}
@@ -11,10 +22,54 @@
         \def^^M{\space}%
     }%
 }
+\begin{LTR}
+\paragraph{Presentation}
+
+Who?
+\begin{itemize}
+\item Joseph Gil, The Technion
+\item Last LISP program written: 1982
+\item I use VIM
+\item Research: distributed programming, databases, image processing, type
+theory, geometric design, OOP design and implementation, lower bounds and complexity,
+  software modelling, IDEs, … 
+\end{itemize}
+
+
+LISP? $μ$-LISP? 
+\begin{itemize}
+\item No numbers, strings, characters; symbolic computation only
+\item No I/O: totally useless 
+\item No macros: We do these by hand
+\item Lexical scoping: Why not? Where else?
+\item Functions and variables are the same
+\end{itemize}
+
+Reference Manual
+\begin{itemize}
+\item ``Primitives'': car/cdr/cons, atom/eq, cond, set, error
+\\{\small\itshape (car of nil is error)}
+\item ``Library'': t/nil/null, defun/ndefun, lambda/nlambda, quote
+\item  EVAL!
+\item Implementations: JavaScript and Chic (C/C++/Literate programmin)
+\end{itemize}
+
+What's next
+\begin{itemize}
+\item The BOOK 
+\item Boot strapping
+\item IBM 360 implementation
+\end{itemize}
+\end{LTR}
+
 
 § מבוא למיני-ליספ 
 \תגית|פרק:מיני|
 \input mini-lisp-aa
+
+§ ביטויי S 
+\תגית|פרק:S|
+\input evaluation-S.tex
 
 § שימוש במיני-ליספ 
 \תגית|פרק:שימוש|
@@ -30,3 +85,4 @@
 
 § תרגילים
 \input lisp-exercises
+

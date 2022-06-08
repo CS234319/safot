@@ -7,22 +7,36 @@
 
 
 \begin{document}
-\begin{frame}{Values}
+\begin{frame}[fragile]{Values}{What are Values?}
+\texttt{int i = 2;}\\
+\begin{verbatim}
+int main(int ac, const char *av[], const char *const *envp) {
+    return ((const char *)main)[
+        (long long signed int)main^ (unsigned) (
+            ac * (long)(av) +
+                (double) (char) (short) (long) (long long) envp
+    )];
+}
+\end{verbatim}
+
 \begin{description}
-    \item [Values] runtime creatures, passed as parameter, returned from functions, stored in variable
-    \item [Types] Classification of values, mostly compile time creatures 
-    \item [Variables] Where values are stored, mostly runtime 
+    \item [Values] runtime creatures, passed as parameter, returned from functions, stored in variables, e.g., \texttt2
+    \item [Function values] special kind of values, e.g,
+    \item [Types] Classification of values, mostly compile time creatures, e.g., \texttt{int}
+    \item [Variables] Where values are stored, mostly runtime, e.g. \texttt{i}
+        \item [Dynamic Typing] roughly, types are attached to values and managed at run time
+        \item
 \end{description}
 \end{frame}
 
 \begin{frame}{Forms of Values}
 \begin{description}
-    \item [Atomic] do not contain other values. 
-    \item [Compound] composed from other (compound or atomic) values.
+    \item [Atomic] do not contain other values: \texttt{2}
+    \item [Compound] composed from other (compound or atomic) values, e.g., instance of a \texttt{struct} type, an array in Pascal, tuples in SML etc.
 \end{description}
 \end{frame}
 
-\begin{frame}[fragile]{Atomic Values \#1/2}
+\begin{frame}[fragile]{Atomic Values}
 Characterize the programming language
 \begin{description}
 \item [Numeric] extremely typifying; may be non-scalar, e.g., primitive 2D points; lots of operations.  
@@ -31,7 +45,54 @@ Characterize the programming language
         \item Balance efficiency (hardware match) and portability
     \end{enumerate}
 \item [Boolean] typifying, less essential than numeric, several operations
-\item [Symbolic:] only operation is comparison, 
+\item [Symbolic:] only operation is comparison. Related terms alphabet
+    \begin{itemize}
+     \item Any values in $\Sigma = \{a,b,c\}$
+     \item Bit values, drwan from  $\Sigma_2 = \{0,1\}$
+     \item The \texttt{ok} value (also written \texttt{()}); the only
+        value of the unit type.
+    \end{itemize}
+\end{description}
+\end{frame}
+
+\begin{frame}[fragile]{Atomic ``Meta'' Values \#2/2}
+\begin{description}
+\item [Numeric], [Boolean] \ldots
+\item [Symbolic] our main interest
+\item [Meta] encapsulate meta data about the computation
+  \end{description}
+\begin{columns}
+
+\begin{column}{0.4\textwidth}
+\begin{description}
+    \item Function values as in C
+    \item Values of Lambda expressions as in Mini-Lisp
+    \item Values which are closures as in ML
+    \item Values which are generators as in Python
+        \item Reference values as in C++, not values, but refer to a
+    a cell in memory that contains a value.
+    \item Class values as in Java
+    \end{description}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{verbatim}
+int fibonnaci(int n) {
+    int (*fibo)(int whatever_optional_name) = fibonnaci;
+    return n <= 2 ? 1 : fibo(n-1) + fibonacci(n-2);
+}
+\end{verbatim}
+
+
+\begin{verbatim}
+Class<?> c = new Foo().bar().class
+\end{verbatim}
+
+
+\begin{verbatim}
+max(int &a, int &b) { return a > b ? a : b; }
+\end{verbatim}
+\end{column}
+\end{columns}
 \end{description}
 \end{frame}
 

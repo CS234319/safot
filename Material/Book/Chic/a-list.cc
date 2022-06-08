@@ -73,6 +73,7 @@ namespace Engine::alist {
   extern S restore(S previous){  return top = previous; }
   extern S push(S k, S v) { return top = k.cons(v).cons(top), v; }
 }
+
 namespace Engine {
   namespace Dictionary {
     extern S reset() { return alist::clear(), globals::clear(); }
